@@ -1,0 +1,160 @@
+{% extends "kerko/layout.html.jinja2" %}
+{% from 'bootstrap/form.html' import render_field, form_errors %}
+{% from "kerko/_facet.html.jinja2" import facet %}
+
+{%- set show_print_link = config.KERKO_PRINT_CITATIONS_MAX_COUNT == 0 or total_count <= config.KERKO_PRINT_CITATIONS_MAX_COUNT %}
+{%- set show_print_link = config.KERKO_PRINT_CITATIONS_LINK and show_print_link %}
+
+{%- block metas %}
+    {{- super() }}
+    {%- include "kerko/_search-metas.html.jinja2" %}
+{%- endblock metas %}
+
+{%- block content_header %}
+    <div class="h2 py-3 mb-0 row">
+        <h1 class="h2 col-auto mr-auto d-inline">{% if is_searching %}{{ _("Your search") }}{% else %}{{ _("Search") }}{% endif %}</h1>
+        {%- if is_searching or facet_results %}
+            <div class="col-auto ml-auto text-right">
+                {%- if is_searching %}
+                    <div class="d-inline-block d-print-none">
+                        <a class="btn btn-danger" href="{{ url_for('kerko.search') }}">
+                            {%- block reset_search_icon -%}
+                                <span class="fas fa-trash-alt"></span>
+                            {%- endblock reset_search_icon -%}
+                            {%- block reset_search_text %}
+                                {{ _("Reset search") -}}
+                            {%- endblock reset_search_text -%}
+                        </a>
+                    </div>
+                {%- endif %}
+                {%- if facet_results %}
+                    <div class="d-inline-block d-lg-none d-print-none">
+                        <a id="drawer-open" class="btn btn-primary" href="#">
+                            {%- block drawer_open_icon -%}
+                                <span class="fas fa-filter"></span>
+                            {%- endblock drawer_open_icon -%}
+                            {%- block drawer_open_text %}
+                                {{ _("Refine") -}}
+                            {%- endblock drawer_open_text -%}
+                        </a>
+                    </div>
+                {%- endif %}
+            </div>
+        {%- endif %}
+    </div>
+{%- endblock content_header %}
+
+{%- block content_inner %}
+    {%- block search_criteria %}
+        <div class="card breadbox">
+            <div class="card-body">
+                {%- include "kerko/_breadbox.html.jinja2" %}
+                {%- include "kerko/_search-form.html.jinja2" %}
+            </div>
+        </div>
+    {%- endblock search_criteria %}
+    {%- block search_results %}
+        <div class="h2 py-3 mb-0 row">
+            <div class="col-auto mr-auto">
+                <h2 class="d-inline">{{ title }}</h2>
+                {%- if search_results %}
+                    <span class="badge badge-light">{% trans count=total_count, count_formatted=total_count_formatted|safe %}{{ count_formatted }} resource{% pluralize %}{{ count_formatted }} resources{% endtrans %}</span>
+                {%- endif %}
+            </div>
+            {%- if search_results %}
+                <div class="col-auto ml-auto text-right">
+                    {%- if show_print_link %}
+                        <div class="d-inline-block d-print-none">
+                            <a id="print-link" class="btn btn-light" href="#" data-url="{{ print_url }}">
+                                {%- block print_icon -%}
+                                    <span class="fas fa-print"></span>
+                                {%- endblock print_icon -%}
+                                {%- block print_text %}
+                                    {% trans count=total_count, count_formatted=total_count_formatted|safe %}Print this citation{% pluralize %}Print {{ count_formatted }} citations{% endtrans %}
+                                {%- endblock print_text -%}
+                            </a>
+                        </div>
+                    {%- endif %}
+                    <div class="d-inline-block d-print-none">
+                        {%- include "kerko/_sorter.html.jinja2" %}
+                    </div>
+                </div>
+            {%- endif %}
+        </div>
+        {%- if search_results %}
+            {%- include "kerko/_pager.html.jinja2" %}
+            <ul class="list-unstyled">
+                {%- for result in search_results %}
+                    <li class="search-item">
+                        {%- if print_preview -%}
+                            {{ result.bib|safe }}
+                        {%- else -%}
+                            <a href="{{ result.url }}">{{ result.bib|safe }}</a>{{ result.coins|safe }}
+                        {%- endif -%}
+                        {%- if config.KERKO_RESULTS_ABSTRACT %}
+                            <p class="search-abstract">{{ result.data['abstractNote']|striptags|urlize(target='_blank') }}</p>
+                        {%- endif %}
+                    </li>
+                {%- endfor %}
+            </ul>
+            {%- include "kerko/_pager.html.jinja2" %}
+        {%- else %}
+            {%- trans %}
+                <p>Suggestions:</p>
+                <ul>
+                    <li>Make sure that all words are spelled correctly.</li>
+                    <li>Try different words.</li>
+                    <li>Try more general terms.</li>
+                </ul>
+            {%- endtrans %}
+        {%- endif %}
+        {% if config.DEBUG %}{% trans time="%.2f"|format(time) %}Processing time: {{time}} seconds{% endtrans %}{% endif %}
+    {%- endblock search_results %}
+{%- endblock content_inner %}
+
+{% block sidebar_attributes %}{% if facet_results %}id="drawer" class="drawer col-12 col-lg-4 order-lg-1"{% else %}{{ super() }}{% endif %}{% endblock %}
+
+{%- block sidebar_inner %}
+    {%- block facet_results %}
+        {%- if facet_results %}
+            <div class="h2 py-3 mb-0 row">
+                <h2 class="col-auto mr-auto d-inline d-print-none">{{ _("Refine") }}</h2>
+                <div class="col-auto ml-auto text-right d-lg-none d-print-none">
+                    <a id="drawer-close" class="btn btn-dark" href="#" title="{{ _('Close refine panel') }}">
+                        {%- block drawer_close_icon -%}
+                            <span class="fas fa-times"></span>
+                        {%- endblock drawer_close_icon -%}
+                        {%- block drawer_close_text %}
+                            <span class="sr-only sr-only-focusable">{{ _("Close refine panel") -}}</span>
+                        {%- endblock drawer_close_text -%}
+                    </a>
+                </div>
+            </div>
+            <div class="d-print-none">
+                {%- for f in config.KERKO_COMPOSER.get_ordered_facets() %}
+                    {{- facet(
+                            f.title,
+                            f.missing_label,
+                            facet_results[f.key],
+                            collapsible=config.KERKO_FACET_COLLAPSING and f.collapsible,
+                            collapse_id='facet-' + f.filter_key,
+                            collapsed=not f.key in active_facets
+                        )
+                    }}
+                {%- endfor %}
+            </div>
+        {%- endif %}
+    {%- endblock facet_results %}
+{%- endblock sidebar_inner %}
+
+{%- block body_scripts %}
+    {{- super() }}
+    {%- block kerko_drawer_js %}
+        <script src="{{ url_for('kerko.static', filename='kerko/js/drawer.js') }}"></script>
+    {%- endblock kerko_drawer_js %}
+    {%- block kerko_print_js %}
+        {%- if show_print_link %}
+            <script src="{{ url_for('kerko.static', filename='kerko/js/print.js') }}"></script>
+        {%- endif %}
+    {%- endblock kerko_print_js %}
+{%- endblock body_scripts %}

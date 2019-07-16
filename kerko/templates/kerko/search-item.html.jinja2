@@ -1,0 +1,50 @@
+{% extends "kerko/item.html.jinja2" %}
+
+{%- block metas %}
+    {{- super() }}
+    {%- include "kerko/_search-metas.html.jinja2" %}
+{%- endblock metas %}
+
+{%- block content_header %}
+    <div class="h3 py-3 mb-0 row">
+        <h1 class="h3 col-auto mr-auto d-inline">
+            {%- if is_searching %}
+                {{- _("Your search") }}
+            {%- else %}
+                {{- _("Full bibliography") }}
+            {%- endif -%}
+        </h1>
+        {%- if back_url %}
+            <div class="col-auto ml-auto text-right d-print-none">
+                <a class="btn btn-primary" href="{{ back_url }}">
+                    {%- block search_back_icon -%}
+                        <span class="fas fa-arrow-left"></span>
+                    {%- endblock search_back_icon -%}
+                    {%- block search_back_text %}
+                        {{ _("Return to list of results") -}}
+                    {%- endblock search_back_text -%}
+                </a>
+            </div>
+        {%- endif %}
+    </div>
+{%- endblock content_header %}
+
+{%- block content_inner %}
+    {%- block search_criteria %}
+        {%- if is_searching %}
+            <div class="card breadbox">
+                <div class="card-body">
+                    {%- include "kerko/_breadbox.html.jinja2" %}
+                </div>
+            </div>
+        {%- endif %}
+    {%- endblock search_criteria %}
+    {%- block search_results %}
+        {%- include "kerko/_pager.html.jinja2" %}
+        <h2 class="py-3 mb-0">{{ title }}</h2>
+    {%- endblock search_results %}
+    {{- super() }}
+    {%- if item %}
+        {%- include "kerko/_pager.html.jinja2" %}
+    {%- endif %}
+{%- endblock content_inner %}

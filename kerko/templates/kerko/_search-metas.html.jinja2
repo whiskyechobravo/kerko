@@ -1,0 +1,11 @@
+{%- if is_searching %}
+    <meta name="robots" content="noindex">  {#- Prevent robots from indexing search result pages, which would generate lots of duplicate content. #}
+{%- endif %}
+{%- if pager %}
+    {%- if pager.previous %}
+        <link rel="prev" href="{{ pager.previous.url }}">
+    {%- endif %}
+    {%- if pager.next %}
+        <link rel="next" href="{{ pager.next.url }}">
+    {%- endif %}
+{%- endif %}

@@ -1,0 +1,34 @@
+{#- The bare minimum for a page. No layout at this point. -#}
+{%- block doc -%}
+<!doctype html>
+<html {%- block html_attributes %}{% if locale %} lang="{{ locale }}"{% endif %} class="no-js"{% endblock %}>
+    {%- block head %}
+        <head {% block head_attributes %}{% endblock %}>
+            {%- block metas %}
+                <meta charset="utf-8"> {# CAUTION: Keep this within the first 1024 characters. #}
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            {%- endblock metas %}
+            <title>{% block meta_title_inner %}{{ config.KERKO_TITLE|striptags|escape }}{% endblock meta_title_inner %}</title>
+            {%- block styles %}
+            {%- endblock styles %}
+            {%- block head_scripts %}
+                {#- Replace the 'no-js' class with 'js' on the root element. -#}
+                <script>
+                    var re = new RegExp('(^|\\s)no-js(\\s|$)');
+                    document.documentElement.className = document.documentElement.className.replace(re, '$1js$2');
+                </script>
+            {%- endblock head_scripts %}
+            {%- block favicon %}
+            {%- endblock favicon %}
+        </head>
+    {%- endblock head %}
+    {%- block body %}
+        <body {% block body_attributes %}{% endblock %}>
+            {%- block body_inner %}
+            {%- endblock body_inner %}
+            {%- block body_scripts %}
+            {%- endblock body_scripts %}
+        </body>
+    {%- endblock body %}
+</html>
+{%- endblock doc -%}

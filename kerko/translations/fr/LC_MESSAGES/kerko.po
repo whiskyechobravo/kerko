@@ -1,0 +1,300 @@
+# French translations for Kerko.
+# Copyright (C) 2019 Kerko Contributors
+# This file is distributed under the same license as the Kerko project.
+# David Lesieur <kerko@whiskyechobravo.com>, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Kerko 0.3.dev0\n"
+"Report-Msgid-Bugs-To: kerko@whiskyechobravo.com\n"
+"POT-Creation-Date: 2019-07-09 11:36-0400\n"
+"PO-Revision-Date: 2019-06-27 14:43-0400\n"
+"Last-Translator: David Lesieur <kerko@whiskyechobravo.com>\n"
+"Language: fr\n"
+"Language-Team: fr <kerko@whiskyechobravo.com>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.6.0\n"
+
+#: kerko/codecs.py:85
+msgid "yes"
+msgstr "oui"
+
+#: kerko/codecs.py:85
+msgid "no"
+msgstr "non"
+
+#: kerko/codecs.py:194
+msgid "In {}"
+msgstr "En {}"
+
+#: kerko/codecs.py:195
+msgid "Between {} and {}"
+msgstr "Entre {} et {}"
+
+#: kerko/composer.py:89
+msgid "In any field"
+msgstr "Dans tous les champs"
+
+#: kerko/composer.py:90
+msgid "Any field"
+msgstr "Tous les champs"
+
+#: kerko/composer.py:97
+msgid "In authors/contributors"
+msgstr "Dans les auteurs/contributeurs"
+
+#: kerko/composer.py:98 kerko/templates/kerko/item.html.jinja2:51
+msgid "Author/contributor"
+msgid_plural "Authors/contributors"
+msgstr[0] "Auteur/contributeur"
+msgstr[1] "Auteurs/contributeurs"
+
+#: kerko/composer.py:105
+msgid "In titles"
+msgstr "Dans les titres"
+
+#: kerko/composer.py:106
+msgid "Title"
+msgstr "Titre"
+
+#: kerko/composer.py:1046
+msgid "Topic"
+msgstr "Sujet"
+
+#: kerko/composer.py:1066 kerko/templates/kerko/item.html.jinja2:48
+msgid "Resource type"
+msgstr "Type de ressource"
+
+#: kerko/composer.py:1083
+msgid "Publication year"
+msgstr "Année de publication"
+
+#: kerko/composer.py:1089
+msgid "Unknown"
+msgstr "Inconnue"
+
+#: kerko/composer.py:1100
+msgid "Online resource"
+msgstr "Ressource en ligne"
+
+#: kerko/composer.py:1124
+msgid "Relevance"
+msgstr "Pertinence"
+
+#: kerko/composer.py:1134
+msgid "Newest first"
+msgstr "Date décroissante"
+
+#: kerko/composer.py:1147
+msgid "Oldest first"
+msgstr "Date croissante"
+
+#: kerko/composer.py:1159
+msgid "Author A-Z"
+msgstr "Auteur A-Z"
+
+#: kerko/composer.py:1171
+msgid "Author Z-A"
+msgstr "Auteur Z-A"
+
+#: kerko/composer.py:1184
+msgid "Title A-Z"
+msgstr "Titre A-Z"
+
+#: kerko/composer.py:1196
+msgid "Title Z-A"
+msgstr "Titre Z-A"
+
+#: kerko/views.py:81
+msgid "Result"
+msgid_plural "Results"
+msgstr[0] "Résultat"
+msgstr[1] "Résultats"
+
+#: kerko/templates/kerko/search-item.html.jinja2:14 kerko/views.py:83
+msgid "Full bibliography"
+msgstr "Bibliographie complète"
+
+#: kerko/views.py:85
+msgid "Your search did not match any resources"
+msgstr "Aucune ressource ne correspond à vos critères de recherche"
+
+#: kerko/templates/kerko/_breadbox.html.jinja2:14
+msgid "Remove the '{}' search term"
+msgstr "Retirer le terme '{}'"
+
+#: kerko/templates/kerko/_facet.html.jinja2:7
+msgid "Add the '{}' filter"
+msgstr "Ajouter le filtre '{}'"
+
+#: kerko/templates/kerko/_facet.html.jinja2:8
+msgid "Remove the '{}' filter"
+msgstr "Retirer le filtre '{}'"
+
+#: kerko/templates/kerko/_facet.html.jinja2:79
+#: kerko/templates/kerko/_facet.html.jinja2:81
+msgid "Toggle filters display"
+msgstr "Basculer l'affichage des filtres"
+
+#: kerko/templates/kerko/_pager.html.jinja2:2
+msgid "Search results pagination"
+msgstr "Pagination des résultats de recherche"
+
+#: kerko/templates/kerko/_pager.html.jinja2:6
+#: kerko/templates/kerko/_pager.html.jinja2:11
+msgid "Previous page"
+msgstr "Page précédente"
+
+#: kerko/templates/kerko/_pager.html.jinja2:18
+#: kerko/templates/kerko/_pager.html.jinja2:30
+#: kerko/templates/kerko/_pager.html.jinja2:36
+#: kerko/templates/kerko/_pager.html.jinja2:42
+#: kerko/templates/kerko/_pager.html.jinja2:54
+#, python-format
+msgid "Page %(page_num)s"
+msgstr "Page %(page_num)s"
+
+#: kerko/templates/kerko/_pager.html.jinja2:61
+#: kerko/templates/kerko/_pager.html.jinja2:66
+msgid "Next page"
+msgstr "Page suivante"
+
+#: kerko/templates/kerko/_search-form.html.jinja2:7
+msgid "Search within results for..."
+msgstr "Chercher parmi les résultats..."
+
+#: kerko/templates/kerko/_search-form.html.jinja2:7
+msgid "Search for..."
+msgstr "Chercher les mots-clés..."
+
+#: kerko/templates/kerko/_search-form.html.jinja2:16
+msgid "Submit"
+msgstr "Soumettre"
+
+#: kerko/templates/kerko/_sorter.html.jinja2:4
+#, python-format
+msgid "Sort by: %(sort_option)s"
+msgstr "Trier par: %(sort_option)s"
+
+#: kerko/templates/kerko/_sorter.html.jinja2:8
+#, python-format
+msgid "Sort by %(sort_option)s"
+msgstr "Sort by %(sort_option)s"
+
+#: kerko/templates/kerko/item.html.jinja2:26
+msgid "Permanent link to this bibliographic record"
+msgstr "Lien permanent vers cette notice bibliographique"
+
+#: kerko/templates/kerko/item.html.jinja2:43
+msgid "Print"
+msgstr "Imprimer"
+
+#: kerko/templates/kerko/item.html.jinja2:48
+msgid "Search this resource type"
+msgstr "Chercher ce type de ressource"
+
+#: kerko/templates/kerko/item.html.jinja2:56
+msgid "Search this author/contributor"
+msgstr "Chercher cet auteur/contributeur"
+
+#: kerko/templates/kerko/item.html.jinja2:74
+msgid "Notes"
+msgstr "Notes"
+
+#: kerko/templates/kerko/item.html.jinja2:75
+msgid "Citation"
+msgstr "Référence"
+
+#: kerko/templates/kerko/item.html.jinja2:84
+msgid "Search with the '{}' filter"
+msgstr "Chercher avec le filtre '{}'"
+
+#: kerko/templates/kerko/item.html.jinja2:94
+msgid "Link to this record"
+msgstr "Lien vers cette notice"
+
+#: kerko/templates/kerko/item.html.jinja2:96
+#: kerko/templates/kerko/search.html.jinja2:111
+#, python-format
+msgid "Processing time: %(time)s seconds"
+msgstr "Temps de traitement: %(time)s seconds"
+
+#: kerko/templates/kerko/layout.html.jinja2:41
+msgid "Toggle navigation"
+msgstr "Basculer la navigation"
+
+#: kerko/templates/kerko/layout.html.jinja2:50
+msgid "Bibliography"
+msgstr "Bibliographie"
+
+#: kerko/templates/kerko/layout.html.jinja2:75
+msgid "Remove this message"
+msgstr "Retirer ce message"
+
+#: kerko/templates/kerko/layout.html.jinja2:101
+msgid "Powered by {zotero} and {kerko}."
+msgstr "Propulsé par {zotero} et {kerko}."
+
+#: kerko/templates/kerko/search-item.html.jinja2:12
+#: kerko/templates/kerko/search.html.jinja2:15
+msgid "Your search"
+msgstr "Votre recherche"
+
+#: kerko/templates/kerko/search-item.html.jinja2:24
+msgid "Return to list of results"
+msgstr "Retourner à la liste des résultats"
+
+#: kerko/templates/kerko/search.html.jinja2:15
+msgid "Search"
+msgstr "Recherche"
+
+#: kerko/templates/kerko/search.html.jinja2:25
+msgid "Reset search"
+msgstr "Réinitialiser la recherche"
+
+#: kerko/templates/kerko/search.html.jinja2:37
+#: kerko/templates/kerko/search.html.jinja2:121
+msgid "Refine"
+msgstr "Affiner"
+
+#: kerko/templates/kerko/search.html.jinja2:61
+#, python-format
+msgid "%(count_formatted)s resource"
+msgid_plural "%(count_formatted)s resources"
+msgstr[0] "%(count_formatted)s ressource"
+msgstr[1] "%(count_formatted)s ressources"
+
+#: kerko/templates/kerko/search.html.jinja2:73
+#, python-format
+msgid "Print this citation"
+msgid_plural "Print %(count_formatted)s citations"
+msgstr[0] "Imprimer cette référence"
+msgstr[1] "Imprimer %(count_formatted)s références"
+
+#: kerko/templates/kerko/search.html.jinja2:102
+msgid ""
+"\n"
+"                <p>Suggestions:</p>\n"
+"                <ul>\n"
+"                    <li>Make sure that all words are spelled "
+"correctly.</li>\n"
+"                    <li>Try different words.</li>\n"
+"                    <li>Try more general terms.</li>\n"
+"                </ul>"
+msgstr ""
+"\n"
+"                <p>Suggestions :</p>\n"
+"                <ul>\n"
+"                    <li>Vérifiez que tous les mots sont orthographiés "
+"correctement.</li>\n"
+"                    <li>Essayez des termes différents.</li>\n"
+"                    <li>Essayez des termes plus généraux.</li>\n"
+"                </ul>"
+
+#: kerko/templates/kerko/search.html.jinja2:123
+#: kerko/templates/kerko/search.html.jinja2:128
+msgid "Close refine panel"
+msgstr "Fermer le panneau d'affinement"

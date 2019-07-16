@@ -1,0 +1,14 @@
+{%- if sorter %}
+    <div class="dropdown">
+        <button class="btn btn-secondary btn-light dropdown-toggle" type="button" id="sort-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {% trans sort_option=sorter.active %}Sort by: {{ sort_option }}{% endtrans %}
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" aria-labeledby="sort-options">
+            {%- for item in sorter['items'] -%}
+                <a class="dropdown-item{% if item.label == sorter.active %} active{% endif %}" href="{{ item.url }}" title="{% trans sort_option=item.label|escape %}Sort by {{ sort_option }}{% endtrans %}" rel="nofollow">
+                    {{- item.label -}}
+                </a>
+            {%- endfor %}
+        </div>
+    </div>
+{%- endif %}

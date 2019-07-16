@@ -1,0 +1,73 @@
+{%- if pager %}
+    <nav class="my-4 d-print-none" aria-label="{{ _('Search results pagination') }}">
+        <ul class="pagination mb-0 flex-wrap">
+            {%- if pager.previous %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ pager.previous.url }}" rel="prev" title="{{ _('Previous page') }}">
+                        {%- block pager_previous_icon -%}
+                            <span class="fas fa-angle-left"></span>
+                        {%- endblock -%}
+                        {%- block pager_previous_text -%}
+                            <span class="sr-only sr-only-focusable">{{ _('Previous page') }}</span>
+                        {%- endblock -%}
+                    </a>
+                </li>
+            {%- endif %}
+            {%- if pager.first and pager.first != pager.current and pager.first not in pager.before %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ pager.first.url }}" title="{% trans page_num=pager.first.page_num_formatted %}Page {{ page_num }}{% endtrans %}">
+                        {{- pager.first.page_num_formatted|safe -}}
+                    </a>
+                </li>
+                {%- if pager.first.page_num + 1 < pager.before[0].page_num %}
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                {%- endif %}
+            {%- endif %}
+            {%- for e in pager.before %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ e.url }}" title="{% trans page_num=e.page_num_formatted %}Page {{ page_num }}{% endtrans %}">
+                        {{- e.page_num_formatted|safe -}}
+                    </a>
+                </li>
+            {%- endfor %}
+            <li class="page-item active">
+                <a class="page-link" href="{{ pager.current.url }}" title="{% trans page_num=pager.current.page_num_formatted %}Page {{ page_num }}{% endtrans %}">
+                    {{- pager.current.page_num_formatted|safe -}}
+                </a>
+            </li>
+            {%- for e in pager.after %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ e.url }}" title="{% trans page_num=e.page_num_formatted %}Page {{ page_num }}{% endtrans %}">
+                        {{- e.page_num_formatted|safe -}}
+                    </a>
+                </li>
+            {%- endfor %}
+            {%- if pager.last and pager.last != pager.current and pager.last not in pager.after %}
+                {%- if pager.last.page_num - 1 > pager.after[-1].page_num %}
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                {%- endif %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ pager.last.url }}" title="{% trans page_num=pager.last.page_num_formatted %}Page {{ page_num }}{% endtrans %}">
+                        {{- pager.last.page_num_formatted|safe -}}
+                    </a>
+                </li>
+            {%- endif %}
+            {%- if pager.next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ pager.next.url }}" rel="next" title="{{ _('Next page') }}">
+                        {%- block pager_next_icon -%}
+                            <span class="fas fa-angle-right"></span>
+                        {%- endblock -%}
+                        {%- block pager_next_text -%}
+                            <span class="sr-only sr-only-focusable">{{ _('Next page') }}</span>
+                        {%- endblock -%}
+                    </a>
+                </li>
+            {%- endif %}
+        </ul>
+    </nav>
+{%- endif %}

@@ -1,0 +1,120 @@
+{% extends 'kerko/base.html.jinja2' %}
+
+{%- block meta_title_inner -%}
+    {%- if title %}{{ title|striptags|escape }} | {% endif %}{{ super() -}}
+{%- endblock %}
+
+{%- block metas %}
+    {{- super() }}
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="generator" content="Kerko">
+{%- endblock metas %}
+
+{%- block styles %}
+    {{- super() }}
+    {%- block bootstrap_css %}
+        {%- if bootstrap %}
+            {{ bootstrap.load_css(version=config.KERKO_BOOTSTRAP_VERSION) }}
+        {%- endif %}
+    {%- endblock bootstrap_css %}
+    {%- block fontawesome_css %}
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/solid.css" integrity="sha384-ioUrHig76ITq4aEJ67dHzTvqjsAP/7IzgwE7lgJcg2r7BRNGYSK0LwSmROzYtgzs" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/regular.css" integrity="sha384-hCIN6p9+1T+YkCd3wWjB5yufpReULIPQ21XA/ncf3oZ631q2HEhdC7JgKqbk//4+" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/fontawesome.css" integrity="sha384-sri+NftO+0hcisDKgr287Y/1LVnInHJ1l+XC7+FOabmTTIK0HnE2ID+xxvJ21c5J" crossorigin="anonymous">
+    {%- endblock fontawesome_css %}
+    {%- block kerko_css %}
+        <link rel="stylesheet" href="{{ url_for('kerko.static', filename='kerko/css/styles.css') }}?201907051138">
+    {%- endblock kerko_css %}
+{%- endblock styles %}
+
+{%- block body_inner %}
+    {%- block header %}
+        <header {% block header_attributes %}{% endblock %}>
+            {%- block header_inner %}
+                {%- block navbar %}
+                    <nav class="navbar navbar-expand-md navbar-dark bg-dark d-print-none">
+                        <div class="container">
+                            {%- block navbar_brand %}
+                                {%- include "kerko/_navbar_brand.html.jinja2" %}
+                            {%- endblock navbar_brand %}
+                            {%- block navbar_toggler %}
+                                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-content" aria-controls="navbar-content" aria-expanded="false" aria-label="{{ _('Toggle navigation') }}">
+                                    <span class="navbar-toggler-icon"></span>
+                                </button>
+                            {%- endblock navbar_toggler %}
+                            {%- block navbar_content %}
+                                <div id="navbar-content" class="collapse navbar-collapse">
+                                    <ul class="navbar-nav ml-auto justify-content-end font-weight-bold">
+                                        {%- block navbar_items %}
+                                            {%- include "kerko/_navbar_items.html.jinja2" %}
+                                        {%- endblock navbar_items %}
+                                    </ul>
+                                </div>
+                            {%- endblock navbar_content %}
+                        </div>
+                    </nav>
+                {%- endblock navbar %}
+            {%- endblock header_inner %}
+        </header>
+    {%- endblock header %}
+    {%- block main %}
+        <main {% block main_attributes %}class="container"{% endblock %}>
+            {%- block main_inner %}
+                <div {% block main_inner_attributes %}class="row"{% endblock %}>
+                    {%- block content %}
+                        <div {% block content_attributes %}class="col-12 {% if self.sidebar_inner() %}col-lg-8 order-lg-4{% endif %}"{% endblock %}>
+                            {%- block content_header %}
+                                <h1 class="h2 py-3">{{ title }}</h1>
+                            {%- endblock content_header %}
+                            {%- block messages %}
+                                {%- with messages = get_flashed_messages(with_categories=true) %}
+                                    {%- for category, message in messages %}
+                                        <div class="alert alert-{{ category }}">
+                                            <a class="close" title="{{ _('Remove this message') }}" href="#" data-dismiss="alert">&times;</a>
+                                            {{ message }}
+                                        </div>
+                                    {%- endfor %}
+                                {%- endwith %}
+                            {%- endblock messages %}
+                            {%- block content_inner %}
+                            {%- endblock content_inner %}
+                        </div>
+                    {%- endblock content %}
+                    {%- block sidebar %}
+                        {%- if self.sidebar_inner() %}
+                            <div {% block sidebar_attributes %}class="col-12 col-lg-4 order-lg-1"{% endblock %}>
+                                {%- block sidebar_inner %}
+                                {%- endblock sidebar_inner %}
+                            </div>
+                        {%- endif %}
+                    {%- endblock sidebar %}
+                </div>
+            {%- endblock main_inner %}
+        </main>
+    {%- endblock main %}
+    {%- block footer %}
+        <footer {% block footer_attributes %}class="bg-dark text-white"{% endblock %}>
+            {%- block footer_inner %}
+                <div class="text-center pt-3 pb-3">
+                    {{ _('Powered by {zotero} and {kerko}.').format(
+                        zotero='<a href="https://zotero.org">Zotero</a>',
+                        kerko='<a href="https://github.com/whiskyechobravo/kerko">Kerko</a>') }}
+                </div>
+            {%- endblock footer_inner %}
+        </footer>
+    {%- endblock footer %}
+{%- endblock body_inner %}
+
+{%- block body_scripts %}
+    {{- super() }}
+    {%- block bootstrap_js %}
+        {%- if bootstrap %}
+            {{ bootstrap.load_js(
+                version=config.KERKO_BOOTSTRAP_VERSION,
+                jquery_version=config.KERKO_JQUERY_VERSION,
+                popper_version=config.KERKO_POPPER_VERSION,
+                with_jquery=config.KERKO_WITH_JQUERY,
+                with_popper=config.KERKO_WITH_POPPER) }}
+        {%- endif %}
+    {%- endblock bootstrap_js %}
+{%- endblock body_scripts %}

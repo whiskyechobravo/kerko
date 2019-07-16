@@ -1,0 +1,56 @@
+# Byte-compiled / optimized / caches.
+.cache
+.mypy_cache/
+__pycache__/
+*.py[cod]
+
+# C extensions.
+*.so
+
+# Distribution / packaging.
+.Python
+env/
+build/
+dist/
+eggs/
+.eggs/
+*.egg
+*.egg-info/
+
+# Unit test / coverage reports.
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+nosetests.xml
+coverage.xml
+*.cover
+
+# Translations.
+*.mo
+*.pot
+
+# Logs.
+*.log
+
+# Sphinx documentation.
+docs/_build/
+
+# DotEnv configuration.
+.env
+
+# Development tools / IDEs.
+.idea
+.vscode/
+*.code-workspace
+.spyproject/
+*.swo
+*.swp
+
+# OS-specific files.
+.DS_Store
+
+# Backup files.
+*~
+*.bak
+*.old

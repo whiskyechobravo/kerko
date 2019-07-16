@@ -1,0 +1,22 @@
+{%- if search_results|length > 0 %}
+    <form method="post" {% block search_form_attributes %}class="form d-print-none"{% endblock %}>
+        {{- form.hidden_tag() }}
+        {{- form_errors(form, hiddens='only') }}
+        <div class="input-group">
+            {#- TODO: Handle form.scope.errors and form.keywords.errors -#}
+            {%- set placeholder = _("Search within results for...") if is_searching else _("Search for...") %}
+            {{- form.keywords(class_="form-control flex-grow-1", placeholder=placeholder) }}
+            {{- form.scope(class_="flex-grow-0 custom-select w-40") }}
+            <div class="input-group-append">
+                <button id="submit" type="submit" {% block search_button_attributes %}class="btn btn-primary"{% endblock %}>
+                    {%- block search_button_icon -%}
+                        <span class="fas fa-search"></span>
+                    {%- endblock search_button_icon -%}
+                    {%- block search_button_text %}
+                        <span class="sr-only sr-only-focusable">{{ _("Submit") }}</span>
+                    {%- endblock search_button_text -%}
+                </button>
+            </div>
+        </div>
+    </form>
+{%- endif %}

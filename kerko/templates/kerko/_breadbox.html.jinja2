@@ -1,0 +1,35 @@
+{%- from "kerko/_facet.html.jinja2" import facet -%}
+
+{%- if breadbox %}
+    {%- if breadbox.keywords %}
+        {%- for scope in config.KERKO_COMPOSER.get_ordered_scopes() %}
+            {{- facet(
+                    scope.breadbox_label,
+                    '',
+                    breadbox.keywords[scope.key],
+                    wrap_class='row mb-3',
+                    heading_tag='div',
+                    heading_class='col-md-4 col-xl-3 font-weight-bold break-word text-md-right',
+                    body_class='col-md-8 col-xl-9',
+                    list_class_top='list-unstyled mb-0',
+                    remove_link_title=_("Remove the '{}' search term")
+                )
+            }}
+        {%- endfor %}
+    {%- endif %}
+    {%- if breadbox.filters %}
+        {%- for f in config.KERKO_COMPOSER.get_ordered_facets() %}
+            {{- facet(
+                    f.title,
+                    f.missing_label,
+                    breadbox.filters[f.key],
+                    wrap_class='row mb-3',
+                    heading_tag='div',
+                    heading_class='col-md-4 col-xl-3 font-weight-bold break-word text-md-right',
+                    body_class='col-md-8 col-xl-9',
+                    list_class_top='list-unstyled mb-0'
+                )
+            }}
+        {%- endfor %}
+    {%- endif %}
+{%- endif %}

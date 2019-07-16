@@ -1,0 +1,12 @@
+[MESSAGES CONTROL]
+
+disable=fixme,
+        missing-docstring,
+        too-many-lines
+
+enable=unused-import
+
+
+[BASIC]
+
+good-names=a,b,c,d,e,f,fq,g,h,i,j,k,m,n,p,q,r,s,t,u,v,w,x,y,_

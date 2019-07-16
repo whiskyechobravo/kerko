@@ -1,0 +1,107 @@
+{% extends "kerko/layout.html.jinja2" %}
+{% from "kerko/_facet.html.jinja2" import facet, facet_items %}
+
+{% macro field(label_text, value_text, field_class=None) %}
+    {%- if value_text %}
+        <div class="row mb-3 {{ field_class if field_class }}">
+            <div class="col-md-4 col-lg-3 font-weight-bold break-word text-md-right">{{ label_text }}</div>
+            <div class="col-md-8 col-lg-9 break-word">{{ value_text }}</div>
+        </div>
+    {%- endif %}
+{%- endmacro %}
+
+{% macro facet_field(label_text, value_text, key, add_link_title=None) %}
+    {#- Display a field using its facet, if available, otherwise fallback to a regular field display. #}
+    {%- if key in config.KERKO_COMPOSER.facets and key in item.facet_results %}
+        {%- set f = config.KERKO_COMPOSER.facets[key] %}
+        {#- We have a matching facet, display its link. #}
+        {{- field(f.title, facet_items(f.missing_label, item.facet_results[f.key], expand=True, checkboxes=False, list_tag='div', item_tag='div', add_link_title=add_link_title)) }}
+    {%- else %}
+        {#- There is matching facet, just display its value. #}
+        {{- field(label_text, value_text) }}
+    {%- endif %}
+{%- endmacro %}
+
+{% macro permalink(url) -%}
+    <a rel="bookmark" title="{{ _('Permanent link to this bibliographic record') }}" href="{{ url }}">{{ url }}</a>
+{%- endmacro -%}
+
+{%- block metas %}
+    {{- super() }}
+    <link rel="bookmark" title="{{ title|striptags|escape }}" href="{{ item_url }}">
+{%- endblock metas %}
+
+{%- block content_inner %}
+    <div>
+        {%- if config.KERKO_PRINT_ITEM_LINK %}
+            <div class="d-flex justify-content-end d-print-none">
+                <a id="print-link" class="btn btn-light" href="#">
+                    {%- block print_icon -%}
+                        <span class="fas fa-print"></span>
+                    {%- endblock print_icon -%}
+                    {%- block print_text %}
+                        {{ _("Print") }}
+                    {%- endblock print_text -%}
+                </a>
+            </div>
+        {%- endif %}
+        {{- facet_field(_("Resource type"), item.item_type, 'facet_item_type', add_link_title=_("Search this resource type")) }}
+        {%- if item.data.creators %}
+            <div class="row">
+                <div class="col-md-4 col-lg-3 font-weight-bold break-word text-md-right">{% trans count=item.data.creators|length %}Author/contributor{% pluralize %}Authors/contributors{% endtrans %}</div>
+                <div class="col-md-8 col-lg-9 break-word">
+                    <ul class="list-unstyled">
+                        {%- for creator in item.data.creators %}
+                            <li>
+                                {%- if creator.url %}<a href="{{ creator.url }}" title="{{ _('Search this author/contributor') }}">{% endif %}
+                                {{- creator.display|striptags }}
+                                {%- if creator.url %}</a>{% endif %}
+                                {%- if creator.label %}
+                                    ({{ creator.label }})
+                                {%- endif %}
+                            </li>
+                        {%- endfor %}
+                    </ul>
+                </div>
+            </div>
+        {%- endif %}
+        {#- Display item fields in proper order. #}
+        {%- for f in item.item_fields %}
+            {%- if item.data[f.field] %}
+                {{- field(f.localized, item.data[f.field]|striptags|urlize(target='_blank')) }}
+            {%- endif %}
+        {%- endfor %}
+        {{- field(_("Notes"), item.notes|join('')|safe) if item.notes }}
+        {{- field(_("Citation"), item.bib|safe) }}
+        {%- if item.facet_results %}
+            {%- for f in config.KERKO_COMPOSER.facets.values() if f.item_view and f.key in item.facet_results %}
+                {{- facet(
+                        f.title,
+                        f.missing_label,
+                        item.facet_results[f.key],
+                        expand=True,
+                        checkboxes=False,
+                        add_link_title=_("Search with the '{}' filter"),
+                        wrap_class='row mb-3',
+                        heading_tag='div',
+                        heading_class='col-md-4 col-lg-3 font-weight-bold break-word text-md-right',
+                        body_class='col-md-8 col-lg-9 break-word',
+                        list_class_top='list-unstyled mb-0'
+                    )
+                }}
+            {%- endfor %}
+        {%- endif %}
+        {{- field(_("Link to this record"), permalink(item_url)) }}
+    </div>
+    {% if config.DEBUG %}{% trans time="%.2f"|format(time) %}Processing time: {{time}} seconds{% endtrans %}{% endif %}
+    {{- item.coins|safe }}
+{%- endblock content_inner %}
+
+{%- block body_scripts %}
+    {{- super() }}
+    {%- block kerko_print_js %}
+        {%- if config.KERKO_PRINT_ITEM_LINK %}
+            <script src="{{ url_for('kerko.static', filename='kerko/js/print.js') }}"></script>
+        {%- endif %}
+    {%- endblock kerko_print_js %}
+{%- endblock body_scripts %}

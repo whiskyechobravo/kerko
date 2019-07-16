@@ -1,0 +1,82 @@
+.list-no-bullets {
+  list-style-type: none;
+}
+.no-decorate:hover,
+.no-decorate:focus {
+  text-decoration: none;
+}
+:hover > .parent-decorate,
+:focus > .parent-decorate {
+  text-decoration: underline;
+}
+.no-js .print-link {
+  display: none;
+}
+.collapse-toggle > .fas.collapse-icon:before {
+  content: "\f107";  /* fa-angle-down */
+}
+.collapse-toggle.collapsed > .fas.collapse-icon:before {
+  content: "\f104";  /* fa-angle-left */
+}
+.break-word {
+  word-wrap: break-word;  /* Older, non-standard name for overflow-wrap. */
+  overflow-wrap: break-word;
+}
+.breadbox > .card-body > .row:last-child > * > ul {
+  margin-bottom: 0;
+}
+@media print {
+  .row {
+    /*
+      Fix for truncated pages in Firefox (issue with display: flex).
+      Ref: https://bugzilla.mozilla.org/show_bug.cgi?id=939897
+      Breaks column layouts, but we can live with that.
+    */
+    display: block !important;
+  }
+}
+.w-40 {
+  width: 40% !important;
+}
+.navbar-brand {
+  white-space: normal;
+}
+.search-item {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+.search-abstract {
+  padding-left: 2em;
+  margin-top: .5em;
+  margin-bottom: 1.5em;
+}
+main {
+  min-height: calc(100vh - 7rem);
+}
+@media screen and (max-width: 991.98px) {  /* <lg */
+  html, body {
+    /* Make sure no one can scroll horizontally and see off-canvas elements. */
+    width: 100%;
+    position: relative;
+    overflow-x: hidden;
+  }
+  .drawer {
+    display: block;
+    flex: none;
+    position: absolute !important;
+    right: -100%;
+    z-index: 100;
+    width: 400px;
+    max-width: 75vw;
+    border-top: 1px solid #0000001a;
+    border-left: 1px solid #0000001a;
+    border-bottom: 1px solid #0000001a;
+    border-radius: .25rem 0 0 .25rem;
+    background: #f8f9fa;  /* bg-light */
+    transition: right 0.5s ease-out;
+  }
+  .drawer.show {
+    right: 0;
+    transition: right 0.5s ease-out;
+  }
+}
