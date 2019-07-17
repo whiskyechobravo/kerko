@@ -164,9 +164,10 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
    ```
 
    The `SECRET_KEY` variable is required for generating secure tokens in web
-   forms. It is usually set in an environment variable rather than in Python
-   code (the latter usually goes in a code repository, making its value not so
-   secret), but here we're taking the minimal route!
+   forms. It should be a secure, random value and it really has to be secret. It
+   is usually set in an environment variable rather than in Python code, to make
+   sure it never ends up in a code repository. But here we're taking the minimal
+   route!
 
    The `KERKO_ZOTERO_API_KEY`, `KERKO_ZOTERO_LIBRARY_ID` and
    `KERKO_ZOTERO_LIBRARY_TYPE` variables are required for Kerko to be able to
