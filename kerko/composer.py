@@ -31,10 +31,10 @@ class Composer:
             exclude_default_fields=None,
             exclude_default_facets=None,
             exclude_default_sorts=None,
-            default_item_whitelist_tag_re='',
-            default_item_blacklist_tag_re=r'^_',
-            default_note_whitelist_tag_re='',
-            default_note_blacklist_tag_re=r'^_',
+            default_tag_whitelist_re='',
+            default_tag_blacklist_re=r'^_',
+            default_note_whitelist_re='',
+            default_note_blacklist_re=r'^_',
     ):  # pylint: disable=too-many-arguments
         """
         Initialize the object.
@@ -49,22 +49,42 @@ class Composer:
             to exclude from those created by default. If that list contains the
             value '*', no scope will be added by default. Caution: default
             fields are expecting those scopes to exist. You'll have to add them
-            manually or alter the fields.
+            manually or alter the fields. Please refer to the implementation of
+            ``init_default_scopes()`` for the list of default scopes.
 
         :param list exclude_default_fields: List of fields (identified by key)
             to exclude from those created by default. If that list contains the
             value '*', no field will be created by default. Caution: some
             default fields are required by Kerko. If those are excluded, you'll
-            have to add them manually.
+            have to add them manually. Please refer to the implementation of
+            ``init_default_fields()`` for the list of default fields.
 
         :param list exclude_default_facets: List of facets (identified by key)
             to exclude from those created by default. If that list contains the
-            value '*', no facet will be created by default.
+            value '*', no facet will be created by default. Please refer to the
+            implementation of ``init_default_facets()`` for the list of default
+            facets.
 
         :param list exclude_default_sorts: List of sorts (identified by key) to
             exclude from those created by default. If that list contains the
             value '*', no sort will be created by default and you'll have to
-            manually add at least one sort.
+            manually add at least one sort. Please refer to the implementation
+            of ``init_default_sorts()`` for the list of default sorts.
+
+        :param str default_tag_whitelist_re: Regex to use to whitelist tags. See
+            ``extractors.BaseTagsExtractor``.
+
+        :param str default_tag_blacklist_re: Regex to use to blacklist tags. See
+            ``extractors.BaseTagsExtractor``. The default value causes any tag
+            that begins with an underscore ('_') to be ignored.
+
+        :param str default_note_whitelist_re: Regex to use to whitelist notes
+            based on their tags. See ``extractors.BaseNotesExtractor``.
+
+        :param str default_note_blacklist_re: Regex to use to blacklist notes
+            based on their tags. See ``extractors.BaseNotesExtractor``. By
+            default, any note having at least one tag that begins with an
+            underscore ('_') is ignored.
         """
         if not whoosh.lang.has_stemmer(whoosh_language):
             whoosh_language = 'en'
@@ -94,10 +114,10 @@ class Composer:
         self.exclude_default_fields = exclude_default_fields or []
         self.exclude_default_facets = exclude_default_facets or []
         self.exclude_default_sorts = exclude_default_sorts or []
-        self.default_item_whitelist_tag_re = default_item_whitelist_tag_re
-        self.default_item_blacklist_tag_re = default_item_blacklist_tag_re
-        self.default_note_whitelist_tag_re = default_note_whitelist_tag_re
-        self.default_note_blacklist_tag_re = default_note_blacklist_tag_re
+        self.default_tag_whitelist_re = default_tag_whitelist_re
+        self.default_tag_blacklist_re = default_tag_blacklist_re
+        self.default_note_whitelist_re = default_note_whitelist_re
+        self.default_note_blacklist_re = default_note_blacklist_re
         self.init_default_scopes()
         self.init_default_fields()
         self.init_default_facets()
@@ -1062,8 +1082,8 @@ class Composer:
                     field_type=self.secondary_title_field_type,
                     scopes=['all'],
                     extractor=extractors.TagsTextExtractor(
-                        whitelist_re=self.default_item_whitelist_tag_re,
-                        blacklist_re=self.default_item_blacklist_tag_re
+                        whitelist_re=self.default_tag_whitelist_re,
+                        blacklist_re=self.default_tag_blacklist_re
                     )
                 )
             )
@@ -1074,8 +1094,8 @@ class Composer:
                     field_type=self.text_field_type,
                     scopes=['all'],
                     extractor=extractors.NotesTextExtractor(
-                        whitelist_re=self.default_note_whitelist_tag_re,
-                        blacklist_re=self.default_note_blacklist_tag_re
+                        whitelist_re=self.default_note_whitelist_re,
+                        blacklist_re=self.default_note_blacklist_re
                     )
                 )
             )
@@ -1120,8 +1140,8 @@ class Composer:
                     key='notes',
                     field_type=STORED,
                     extractor=extractors.RawNotesExtractor(
-                        whitelist_re=self.default_note_whitelist_tag_re,
-                        blacklist_re=self.default_note_blacklist_tag_re
+                        whitelist_re=self.default_note_whitelist_re,
+                        blacklist_re=self.default_note_blacklist_re
                     )
                 )
             )
@@ -1188,8 +1208,8 @@ class Composer:
                     weight=100,
                     field_type=ID(stored=True),
                     extractor=extractors.TagsFacetExtractor(
-                        whitelist_re=self.default_item_whitelist_tag_re,
-                        blacklist_re=self.default_item_blacklist_tag_re
+                        whitelist_re=self.default_tag_whitelist_re,
+                        blacklist_re=self.default_tag_blacklist_re
                     ),
                     codec=codecs.BaseFacetCodec(),
                     missing_label=None,
