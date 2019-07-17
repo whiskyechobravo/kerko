@@ -60,8 +60,8 @@ The following features are implemented in Kerko:
   boosted when a term appears in specific fields, e.g., DOI, ISBN, ISSN, title,
   author/contributor).
 * Facets: allow filtering by topic (Zotero tag), by resource type (Zotero item
-  type), by publication year. Application may be configured to add facets based
-  on collections and subcollections; in this case, any top-level collection can
+  type), by publication year. An application may define facets modeled on
+  collections and subcollections; in this case, any top-level collection can
   represent a facet, and each subcollection a value within the facet. Using
   Zotero's ability to assign any given item to multiple collections, a faceted
   classification scheme can be modeled (including hierarchies within facets).
@@ -91,10 +91,8 @@ The following features are implemented in Kerko:
 
 ## Demo site
 
-A demo KerkoApp installation is available at
-https://demo.kerko.whiskyechobravo.com. You may also visit
-https://www.zotero.org/groups/2348869/kerko_demo/items to view its source data
-on zotero.org.
+A [demo site][KerkoApp_demo] is available for you to try. You may also view the
+[Zotero library][Zotero_demo] that contains the source data for the demo site.
 
 
 ## Requirements
@@ -492,6 +490,7 @@ tool.
 [Kerko_email]: mailto:kerko@whiskyechobravo.com
 [Kerko_issues]: https://github.com/whiskyechobravo/kerko/issues
 [KerkoApp]: https://github.com/whiskyechobravo/kerkoapp
+[KerkoApp_demo]: https://demo.kerko.whiskyechobravo.com
 [Popper.js]: https://popper.js.org/
 [Python]: https://www.python.org/
 [Pyzotero]: https://pypi.org/project/Pyzotero/
@@ -502,6 +501,7 @@ tool.
 [Whoosh]: https://pypi.org/project/Whoosh/
 [WTForms]: https://pypi.org/project/WTForms/
 [Zotero]: https://www.zotero.org/
+[Zotero_demo]: https://www.zotero.org/groups/2348869/kerko_demo/items
 [Zotero_desktop]: https://www.zotero.org/download/
 [Zotero_locales]: https://github.com/citation-style-language/locales
 [Zotero_styles]: https://www.zotero.org/styles/
