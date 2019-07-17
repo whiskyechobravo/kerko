@@ -7,7 +7,7 @@ with the [Zotero] reference manager.
 
 ## How it works
 
-Kerko is implemented in [Python] as a Flask [blueprint](Flask_blueprint) and, as
+Kerko is implemented in [Python] as a Flask [blueprint][Flask_blueprint] and, as
 such, cannot do much unless it is incorporated into a Flask application. A
 sample application is available, [KerkoApp], which anyone with basic
 requirements could deploy directly on a web server. It is common, however, to
@@ -17,7 +17,7 @@ one section of a larger website.
 
 Kerko does not provide any tools for managing bibliographic records. Instead, a
 well-established reference management software, Zotero, is used for that
-purpose. The [Zotero desktop application](Zotero_desktop) provides powerful
+purpose. The [Zotero desktop application][Zotero_desktop] provides powerful
 tools to individuals or teams for managing bibliographic data, which it stores
 in the cloud on zotero.org. Kerko can be configured to automatically synchronize
 its search index from zotero.org on a regular basis, ensuring that visitors get
@@ -68,7 +68,7 @@ The following features are implemented in Kerko:
 * Language support: the default user interface is in English, but some
   translations are provided, and it can be translated using standard
   gettext-compatible tools (see the **Translating** section). Also to consider:
-  [locales supported by Zotero](Zotero_locales) (which provides the names of
+  [locales supported by Zotero][Zotero_locales] (which provides the names of
   fields, item types, and author types), and languages supported by Whoosh: ar,
   da, nl, en, fi, fr, de, hu, it, no, pt, ro, ru, es, sv, tr.
 * Responsive design: the simple default implementation works on large monitors
@@ -78,13 +78,13 @@ The following features are implemented in Kerko:
 * Semantic markup: users may easily import citations into their own reference
   manager software, either from search results pages or individual bibliographic
   record pages, both of which embed bibliographic metadata (using the [OpenURL
-  COinS](COinS) model). Zotero Connector, for example, will automatically detect
+  COinS][COinS] model). Zotero Connector, for example, will automatically detect
   the metadata present in the page, but that applies to [many other reference
-  management software](COinS_clients) as well.
+  management software][COinS_clients] as well.
 * Printing: stylesheets are provided for printing individual bibliographic
   records as well as lists of search results. When printing search results, all
   results get printed (not just the current page of results).
-* Modularity: although a [standalone application](KerkoApp) is available, Kerko
+* Modularity: although a [standalone application][KerkoApp] is available, Kerko
   is designed not as a standalone application, but to be part of a larger Flask
   application.
 
@@ -101,9 +101,9 @@ on zotero.org.
 
 Kerko requires Python 3.6 or later.
 
-It has only been tested under Linux (so far). If you run it on other platforms,
+It has only been tested under Linux (so far). If you run it on other platforms
 (with or without encountering compatibility issues), please [let us
-know](Kerko_issues).
+know][Kerko_issues].
 
 
 ### Dependencies
@@ -135,7 +135,7 @@ templates (but could be completely removed or replaced by your application):
 
 This section only applies if you intend to integrate Kerko into your own
 application. If you are more interested into the standalone KerkoApp
-application, please refer to its [installation instructions](KerkoApp).
+application, please refer to its [installation instructions][KerkoApp].
 
 We'll assume that you have some familiarity with Flask and suggest steps for
 building a minimal app, let's call it `hello_kerko.py`, to get you started.
@@ -193,8 +193,8 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
    bootstrap = Bootstrap(app)
    ```
 
-   See the respective docs for [Flask-BabelEx](Flask-BabelEx_documentation) and
-   [Bootstrap-Flask](Bootstrap-Flask_documentation) for more details.
+   See the respective docs for [Flask-BabelEx][Flask-BabelEx_documentation] and
+   [Bootstrap-Flask][Bootstrap-Flask_documentation] for more details.
 
 
 4. Instanciate the Kerko blueprint and register it in your app:
@@ -262,7 +262,8 @@ override their default value:
   to `data/kerko`.
 * `BABEL_DEFAULT_LOCALE`: The default language of the user interface. Defaults
   to `'en'`. Your application may set this variable and/or implement a locale
-  selector function to override it (see the [Flask-BabelEx documentation](Flask-BabelEx_documentation)).
+  selector function to override it (see the [Flask-BabelEx
+  documentation][Flask-BabelEx_documentation]).
 * `KERKO_USE_TRANSLATIONS`: Use translations provided by the Kerko package.
   Defaults to `True`. When this is set to `False`, translations may be provided
   by the application's own translation catalog.
@@ -277,7 +278,7 @@ override their default value:
 * `KERKO_PAGE_LEN`: The number of search results per page. Defaults to `20`.
 * `KERKO_CSL_STYLE`: The citation style to use for formatted references. Can be
   either the file name (without the `.csl` extension) of one of the styles in the
-  [Zotero Styles Repository](Zotero_styles) (e.g., `apa`) or the URL of a remote
+  [Zotero Styles Repository][Zotero_styles] (e.g., `apa`) or the URL of a remote
   CSL file. Defaults to `'apa'`.
 * `KERKO_RESULTS_ABSTRACT`: Show abstracts in search result pages. Defaults to
   `False`.
@@ -381,7 +382,7 @@ translation** section.
 
 ### Reporting issues
 
-Issues may be submitted on [Kerko's issue tracker](Kerko_issues). Please
+Issues may be submitted on [Kerko's issue tracker][Kerko_issues]. Please
 consider the following guidelines:
 
 * Make sure that the same issue has not already been reported or fixed in the
@@ -395,7 +396,7 @@ consider the following guidelines:
 
 ### Submitting code changes
 
-Pull requests may be submitted against [Kerko's repository](Kerko). Please
+Pull requests may be submitted against [Kerko's repository][Kerko]. Please
 consider the following guidelines:
 
 * Consider using [Yapf](https://github.com/google/yapf) to autoformat your code
@@ -415,7 +416,7 @@ Some guidelines:
 * All messages of the PO file must be translated.
 
 Please submit your translation as a pull request against [Kerko's
-repository](Kerko), or by [e-mail](Kerko_email), with the PO file included as an
+repository][Kerko], or by [e-mail][Kerko_email], with the PO file included as an
 attachment (**do not** copy the PO file's content into an e-mail's body, since
 that could introduce formatting or encoding issues).
 
@@ -430,7 +431,7 @@ development of the project.
 If you need professionnal support related to Kerko, have requirements not
 currently implemented in Kerko, want to make sure that some Kerko issue
 important to you gets resolved, or if you just like our work and want to hire
-us for different project, please [e-mail us](Kerko_email).
+us for an unrelated project, please [e-mail us][Kerko_email].
 
 
 ## Project background
