@@ -10,10 +10,10 @@ with the [Zotero] reference manager.
 Kerko is implemented in [Python] as a Flask [blueprint][Flask_blueprint] and, as
 such, cannot do much unless it is incorporated into a Flask application. A
 sample application is available, [KerkoApp], which anyone with basic
-requirements could deploy directly on a web server. It is common, however, to
-integrate Kerko into a larger application, either derived from KerkoApp or
-custom-built for specific needs. The Kerko-powered bibliography might be just
-one section of a larger website.
+requirements could deploy directly on a web server. It is expected, however,
+that Kerko will usually be integrated into a larger application, either derived
+from KerkoApp or custom-built to specific needs. The Kerko-powered bibliography
+might be just one section of a larger website.
 
 Kerko does not provide any tools for managing bibliographic records. Instead, a
 well-established reference management software, Zotero, is used for that
@@ -21,7 +21,7 @@ purpose. The [Zotero desktop application][Zotero_desktop] provides powerful
 tools to individuals or teams for managing bibliographic data, which it stores
 in the cloud on zotero.org. Kerko can be configured to automatically synchronize
 its search index from zotero.org on a regular basis, ensuring that visitors get
-an up-to-date even if it is changing frequently.
+an up-to-date bibliography even if it is changing frequently.
 
 The combination of Kerko and Zotero gives you the best of both worlds: a
 user-friendly interface for end-users of the bibliography, and a powerful
@@ -42,35 +42,37 @@ The following features are implemented in Kerko:
   facets, to refine or broaden their results. Since both modes are integrated
   into a single interface, it is possible to combine them.
 * Search syntax: boolean operators (AND, OR, NOT; AND is implicit between any
-  two terms separated by a whitespace), logical grouping (with parenthesis),
+  two terms separated by a whitespace), logical grouping (with parentheses),
   sequence of words (with double quotes (")).
 * Search is case-insentitive, accents are folded, and punctuation is ignored. To
   further improve recall (albeit at the cost of precision), stemming is also
-  performed on terms from most text fields (e.g., title, abstract, notes). It
+  performed on terms from most text fields, e.g., title, abstract, notes. It
   relieves the user from having to specify all variants of a word when
   searching; for example, terms such as "search", "searches", and "searching"
   all return the same results. The [Snowball] algorithm is used for that
   purpose.
 * Sort options: by relevance score (only applicable with text search), by
   publication date, by author, by title.
-* Relevance scoring: provided by the [Whoosh] library and based on a score
-  computed with the [BM25F] algorithm, which determines how important a term is
-  to a document in the whole collection of documents, while taking into account
-  its relation to document structure (most fields are neutral, but the score is
-  boosted when a term appears in specific fields, e.g., DOI, ISBN, ISSN, title,
-  author/contributor).
+* Relevance scoring: provided by the [Whoosh] library and based on the [BM25F]
+  algorithm, which determines how important a term is to a document in the
+  context of the whole collection of documents, while taking into account its
+  relation to document structure (in this regard most fields are neutral, but
+  the score is boosted when a term appears in specific fields, e.g., DOI, ISBN,
+  ISSN, title, author/contributor).
 * Facets: allow filtering by topic (Zotero tag), by resource type (Zotero item
-  type), by publication year. An application may define facets modeled on
-  collections and subcollections; in this case, any top-level collection can
-  represent a facet, and each subcollection a value within the facet. Using
-  Zotero's ability to assign any given item to multiple collections, a faceted
-  classification scheme can be modeled (including hierarchies within facets).
-* Language support: the default user interface is in English, but some
-  translations are provided, and it can be translated using standard
-  gettext-compatible tools (see the **Translating** section). Also to consider:
-  [locales supported by Zotero][Zotero_locales] (which provides the names of
-  fields, item types, and author types), and languages supported by Whoosh: ar,
-  da, nl, en, fi, fr, de, hu, it, no, pt, ro, ru, es, sv, tr.
+  type), by publication year. Moreover, an application may define facets modeled
+  on collections and subcollections; in this case, any collection can be
+  represented as a facet, and each subcollection as a value within that facet.
+  Using Zotero's ability to assign any given item to multiple collections, a
+  faceted classification scheme can be modeled (including hierarchies within
+  facets).
+* Language support: the default user interface is in English, but [some
+  translations][Kerko_translations] are provided. Additional translations may be
+  created using gettext-compatible tools; see the **Translating Kerko** section
+  below. Also to consider: [locales supported by Zotero][Zotero_locales] (which
+  provides the names of fields, item types and author types displayed by Kerko),
+  and languages supported by Whoosh (which provides the search capabilities):
+  ar, da, nl, en, fi, fr, de, hu, it, no, pt, ro, ru, es, sv, tr.
 * Responsive design: the simple default implementation works on large monitors
   as well as on small screens. It is based on [Bootstrap].
 * Customizable front-end: applications may partly or fully replace the default
@@ -79,8 +81,8 @@ The following features are implemented in Kerko:
   manager software, either from search results pages or individual bibliographic
   record pages, both of which embed bibliographic metadata (using the [OpenURL
   COinS][COinS] model). Zotero Connector, for example, will automatically detect
-  the metadata present in the page, but that applies to [many other reference
-  management software][COinS_clients] as well.
+  the metadata present in the page, but similar behavior applies to [many other
+  reference management software][COinS_clients] as well.
 * Printing: stylesheets are provided for printing individual bibliographic
   records as well as lists of search results. When printing search results, all
   results get printed (not just the current page of results).
@@ -120,7 +122,7 @@ The following packages will be automatically installed when installing Kerko:
 * [Whoosh]: pure Python full-text indexing and searching library.
 * [WTForms]: web forms validation and rendering library.
 
-The following external resources are loaded from CDNs by Kerko's default
+The following front-end resources are loaded from CDNs by Kerko's default
 templates (but could be completely removed or replaced by your application):
 
 * [Bootstrap]: front-end component library for web applications.
@@ -167,7 +169,7 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
    forms. It should be a secure, random value and it really has to be secret. It
    is usually set in an environment variable rather than in Python code, to make
    sure it never ends up in a code repository. But here we're taking the minimal
-   route!
+   route and thus are cutting some corners!
 
    The `KERKO_ZOTERO_API_KEY`, `KERKO_ZOTERO_LIBRARY_ID` and
    `KERKO_ZOTERO_LIBRARY_TYPE` variables are required for Kerko to be able to
@@ -192,7 +194,7 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
    bootstrap = Bootstrap(app)
    ```
 
-   See the respective docs for [Flask-BabelEx][Flask-BabelEx_documentation] and
+   See the respective docs of [Flask-BabelEx][Flask-BabelEx_documentation] and
    [Bootstrap-Flask][Bootstrap-Flask_documentation] for more details.
 
 
@@ -208,8 +210,8 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
    Kerko.
 
 
-5. In the same directory as `hello_kerko.py` with the virtualenv active, run the
-   following shell command:
+5. In the same directory as `hello_kerko.py` with your virtualenv active, run
+   the following shell command:
 
    ```bash
    export FLASK_APP=hello_kerko.py
@@ -355,16 +357,17 @@ Create or update the PO template (POT) file:
 python setup.py extract_messages
 ```
 
-Create a new PO file (for a new locale) based on the POT file:
+Create a new PO file (for a new locale) based on the POT file. Replace
+`YOUR_LOCALE` with the appropriate language code, e.g., `de`, `es`, `fr`:
 
 ```bash
-python setup.py init_catalog --locale <your_locale>
+python setup.py init_catalog --locale YOUR_LOCALE
 ```
 
 Update an existing PO file based on the POT file:
 
 ```bash
-python setup.py update_catalog --locale <your_locale>
+python setup.py update_catalog --locale YOUR_LOCALE
 ```
 
 Compile MO files:
@@ -398,8 +401,8 @@ consider the following guidelines:
 Pull requests may be submitted against [Kerko's repository][Kerko]. Please
 consider the following guidelines:
 
-* Consider using [Yapf](https://github.com/google/yapf) to autoformat your code
-  (with option `--style='{based_on_style: facebook, column_limit: 100}'`). Many
+* Use [Yapf](https://github.com/google/yapf) to autoformat your code (with
+  option `--style='{based_on_style: facebook, column_limit: 100}'`). Many
   editors provide Yapf integration.
 * Include a string like "Fixes #123" in your commit message (where 123 is the
   issue you fixed). See [Closing issues using
@@ -429,8 +432,8 @@ development of the project.
 
 If you need professionnal support related to Kerko, have requirements not
 currently implemented in Kerko, want to make sure that some Kerko issue
-important to you gets resolved, or if you just like our work and want to hire
-us for an unrelated project, please [e-mail us][Kerko_email].
+important to you gets resolved, or if you just like our work and would like to
+hire us for an unrelated project, please [e-mail us][Kerko_email].
 
 
 ## Project background
@@ -460,11 +463,11 @@ the following projects:
 
 ### Etymology
 
-The name "Zotero" reportedly derives from the Albanian word _zotëroj_, which
+The name _Zotero_ reportedly derives from the Albanian word _zotëroj_, which
 means "to learn something extremely well, that is to master or acquire a skill
 in learning" (Source: [Etymology of Zotero](http://ideophone.org/zotero-etymology/)).
 
-The name "Kerko" is a nod to Zotero as it takes a similar etymological route: it
+The name _Kerko_ is a nod to Zotero as it takes a similar etymological route: it
 derives from the Albanian word _kërkoj_, which means "to ask, to request, to
 seek, to look for, to demand, to search" and seems fit to describe a search
 tool.
@@ -490,6 +493,7 @@ tool.
 [Kerko]: https://github.com/whiskyechobravo/kerko
 [Kerko_email]: mailto:kerko@whiskyechobravo.com
 [Kerko_issues]: https://github.com/whiskyechobravo/kerko/issues
+[Kerko_translations]: https://github.com/whiskyechobravo/kerko/tree/master/kerko/translations
 [KerkoApp]: https://github.com/whiskyechobravo/kerkoapp
 [KerkoApp_demo]: https://demo.kerko.whiskyechobravo.com
 [Popper.js]: https://popper.js.org/
