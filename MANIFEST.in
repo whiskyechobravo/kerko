@@ -5,4 +5,3 @@ recursive-include kerko/static *
 recursive-include kerko/templates *
 recursive-include kerko/translations *
 global-exclude *.pot
-global-exclude *.mo
