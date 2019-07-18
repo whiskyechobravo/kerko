@@ -10,7 +10,7 @@ from environs import Env
 from flask import Blueprint
 from flask_babelex import Domain
 
-__version__ = '0.3alpha1'
+__version__ = '0.3alpha2.dev'
 
 babel_domain = Domain(
     pathlib.Path(__file__).parent / 'translations',
