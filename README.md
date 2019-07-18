@@ -66,6 +66,9 @@ The following features are implemented in Kerko:
   Using Zotero's ability to assign any given item to multiple collections, a
   faceted classification scheme can be modeled (including hierarchies within
   facets).
+* Citation styles: any from the [Zotero Style Repository][Zotero_styles], or
+  custom stylesheet defined in the [Citation Style Language][CSL] (stylesheet
+  must be accessible by URL).
 * Language support: the default user interface is in English, but [some
   translations][Kerko_translations] are provided. Additional translations may be
   created using gettext-compatible tools; see the **Translating Kerko** section
@@ -481,6 +484,7 @@ tool.
 [Bootstrap-Flask_documentation]: https://bootstrap-flask.readthedocs.io/en/latest/basic.html
 [COinS]: https://en.wikipedia.org/wiki/COinS
 [COinS_clients]: https://en.wikipedia.org/wiki/COinS#Client_tools
+[CSL]: https://citationstyles.org/
 [environs]: https://pypi.org/project/environs/
 [Flask]: https://pypi.org/project/Flask/
 [Flask_blueprint]: https://flask.palletsprojects.com/en/1.1.x/blueprints/
