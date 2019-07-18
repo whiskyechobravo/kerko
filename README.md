@@ -211,7 +211,7 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
 
 
 5. In the same directory as `hello_kerko.py` with your virtualenv active, run
-   the following shell command:
+   the following shell commands:
 
    ```bash
    export FLASK_APP=hello_kerko.py
