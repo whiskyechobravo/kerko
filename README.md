@@ -275,10 +275,10 @@ override their default value:
   You may refer to Whoosh's source to get the list of supported languages
   (`whoosh.lang.languages`) and the list of languages that support stemming
   (`whoosh.lang.has_stemmer()`).
-* `KERKO_ZOTERO_LOCALE`: The locale to use with Zotero API calls. This
-  dictates the language of Zotero item types, fields and creator types. Defaults
-  to `'en-US'`. Supported locales are listed at https://api.zotero.org/schema,
-  under "locales".
+* `KERKO_ZOTERO_LOCALE`: The locale to use with Zotero API calls. This dictates
+  the locale of Zotero item types, field names, creator types and citations.
+  Defaults to `'en-US'`. Supported locales are listed at
+  https://api.zotero.org/schema, under "locales".
 * `KERKO_PAGE_LEN`: The number of search results per page. Defaults to `20`.
 * `KERKO_CSL_STYLE`: The citation style to use for formatted references. Can be
   either the file name (without the `.csl` extension) of one of the styles in the
