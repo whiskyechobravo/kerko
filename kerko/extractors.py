@@ -137,7 +137,7 @@ class CreatorTypesExtractor(Extractor):
                         break
             if item_creator_types:
                 document[spec.key] = spec.encode(item_creator_types)
-            else:
+            elif item_context.data.get('creators', False):
                 self.warning("Missing creator types", item_context)
         else:
             self.warning("Missing itemType", item_context)
