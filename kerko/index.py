@@ -59,7 +59,11 @@ def update_index():
             t for t in library_context.item_types.keys()
             if t not in ['note', 'attachment']
         ]
-        for item, notes in zotero.Items(zotero_credentials, allowed_item_types):
+        formats = {
+            spec.extractor.format
+            for spec in list(composer.fields.values()) + list(composer.facets.values())
+        }
+        for item, notes in zotero.Items(zotero_credentials, allowed_item_types, list(formats)):
             count += 1
             document = {}
             item_context = ItemContext(item, notes)

@@ -1111,7 +1111,7 @@ class Composer:
                 FieldSpec(
                     key='bib',
                     field_type=STORED,
-                    extractor=extractors.ItemExtractor('bib')
+                    extractor=extractors.ItemExtractor('bib', format_='bib')
                 )
             )
         # OpenURL Coins.
@@ -1120,7 +1120,7 @@ class Composer:
                 FieldSpec(
                     key='coins',
                     field_type=STORED,
-                    extractor=extractors.ItemExtractor('coins')
+                    extractor=extractors.ItemExtractor('coins', format_='coins')
                 )
             )
         # Raw item data.

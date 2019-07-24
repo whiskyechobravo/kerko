@@ -201,17 +201,22 @@ class Items:
     of the item's child notes (also dicts as returned by Zotero).
     """
 
-    def __init__(self, zotero_credentials, item_types=None):
+    def __init__(self, zotero_credentials, item_types=None, formats=None):
         """
         Construct the iterable.
 
         :param zotero.Zotero zotero_credentials: The Zotero instance.
 
-        :param list item_types: List of desired Zotero item types. If None, all
-            items will be retrieved.
+        :param Iterable item_types: Iterable of desired Zotero item types. If
+            None, all items will be retrieved.
+
+        :param Iterable formats: Iterable of format values for the Zotero read.
+            Defaults to `['data']`. See available formats on
+            https://www.zotero.org/support/dev/web_api/v3/basics#parameters_for_format_json.
         """
         self.zotero_credentials = zotero_credentials
         self.item_type_filter = ' || '.join(item_types) if item_types else None
+        self.include = ','.join(formats or ['data'])
         self.start = current_app.config['KERKO_ZOTERO_START']
         self.zotero_batch = []
         self.iterator = iter(self.zotero_batch)
@@ -243,7 +248,7 @@ class Items:
             limit=limit,
             sort='dateModified',
             direction='asc',
-            include='data,coins,bib',
+            include=self.include,
             style=current_app.config['KERKO_CSL_STYLE'],
             itemType=self.item_type_filter
         )
@@ -255,6 +260,7 @@ class Items:
         zotero_item = next(self.iterator)
         notes = []
         if zotero_item.get('meta', {}).get('numChildren', 0):
+            # TODO: Only extract notes if the Composer instance has fields that require them.
             notes = [n for n in ChildNotes(self.zotero_credentials, zotero_item['key'])]
         self.start += 1
         return zotero_item, notes
@@ -269,9 +275,10 @@ class ChildNotes:
     returned by Zotero.
     """
 
-    def __init__(self, zotero_credentials, item_key):
+    def __init__(self, zotero_credentials, item_key, formats=None):
         self.zotero_credentials = zotero_credentials
         self.item_key = item_key
+        self.include = ','.join(formats or ['data'])
         self.start = 0
         self.zotero_batch = []
         self.iterator = iter(self.zotero_batch)
@@ -304,7 +311,7 @@ class ChildNotes:
             limit=limit,
             sort='dateModified',
             direction='asc',
-            include='data',
+            include=self.include,
             itemType='note',
         )
         if not self.zotero_batch:

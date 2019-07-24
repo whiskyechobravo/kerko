@@ -60,6 +60,14 @@ def _parse_zotero_date(text):
 
 class Extractor(ABC):
 
+    def __init__(self, format_='data'):
+        """
+        Initialize the extractor.
+
+        :param str format_: Format required when performing the Zotero read.
+        """
+        self.format = format_
+
     @abstractmethod
     def extract(self, document, spec, item_context, library_context):
         """Extract a value from context and store it in document using spec."""
@@ -72,7 +80,13 @@ class Extractor(ABC):
 
 class KeyExtractor(Extractor):  # pylint: disable=abstract-method
 
-    def __init__(self, key):
+    def __init__(self, key, **kwargs):
+        """
+        Initialize the extractor.
+
+        :param str key: Key of the element to extract from the Zotero item.
+        """
+        super().__init__(**kwargs)
         self.key = key
 
 
@@ -192,7 +206,7 @@ class CollectionNamesExtractor(Extractor):
 
 class BaseTagsExtractor(Extractor):
 
-    def __init__(self, whitelist_re='', blacklist_re=''):
+    def __init__(self, whitelist_re='', blacklist_re='', **kwargs):
         """
         Initialize the extractor.
 
@@ -204,6 +218,7 @@ class BaseTagsExtractor(Extractor):
             will be ignored by the extractor. If empty, all tags will be
             accepted unless `whitelist_re` is set and they do not match it.
         """
+        super().__init__(**kwargs)
         self.whitelist = re.compile(whitelist_re) if whitelist_re else None
         self.blacklist = re.compile(blacklist_re) if blacklist_re else None
 
@@ -233,7 +248,7 @@ class TagsTextExtractor(BaseTagsExtractor):
 
 class BaseNotesExtractor(Extractor):
 
-    def __init__(self, whitelist_re='', blacklist_re=''):
+    def __init__(self, whitelist_re='', blacklist_re='', **kwargs):
         """
         Initialize the extractor.
 
@@ -247,6 +262,7 @@ class BaseNotesExtractor(Extractor):
             notes will be accepted unless `whitelist_re` is set and causes some
             to be rejected.
         """
+        super().__init__(**kwargs)
         self.whitelist = re.compile(whitelist_re) if whitelist_re else None
         self.blacklist = re.compile(blacklist_re) if blacklist_re else None
 
