@@ -104,10 +104,6 @@ A [demo site][KerkoApp_demo] is available for you to try. You may also view the
 
 Kerko requires Python 3.6 or later.
 
-It has only been tested under Linux (so far). If you run it on other platforms
-(with or without encountering compatibility issues), please [let us
-know][Kerko_issues].
-
 
 ### Dependencies
 
