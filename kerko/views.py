@@ -1,7 +1,7 @@
 import time
 
 from babel.numbers import format_number
-from flask import abort, current_app, redirect, request, render_template, url_for
+from flask import abort, current_app, make_response, redirect, request, render_template, url_for
 from flask_babelex import get_locale, gettext, ngettext
 
 from . import babel_domain, blueprint
@@ -19,8 +19,8 @@ def search():
 
     if current_app.config['KERKO_USE_TRANSLATIONS']:
         babel_domain.as_default()
-    criteria = Criteria(request)
 
+    criteria = Criteria(request)
     form = SearchForm()
     if form.validate_on_submit():
         url = criteria.build_add_keywords_url(
@@ -100,8 +100,8 @@ def item(item_id):
 
     if current_app.config['KERKO_USE_TRANSLATIONS']:
         babel_domain.as_default()
-    result = run_query_unique('id', item_id)
 
+    result = run_query_unique('id', item_id)
     if not result:
         abort(404)
 
@@ -115,3 +115,28 @@ def item(item_id):
         time=time.process_time() - start_time,
         locale=get_locale(),
     )
+
+
+@blueprint.route('/<string:item_id>/<string:citation_format_key>')
+def citation_download(item_id, citation_format_key):
+    if current_app.config['KERKO_USE_TRANSLATIONS']:
+        babel_domain.as_default()
+
+    result = run_query_unique('id', item_id)
+    if not result:
+        abort(404)
+
+    citation_format = current_app.config['KERKO_COMPOSER'].citation_formats.get(citation_format_key)
+    if not citation_format:
+        abort(404)
+
+    content = result.get(citation_format.field.key)
+    if not content:
+        abort(404)
+
+    response = make_response(content)
+    response.headers['Content-Disposition'] = \
+        f'attachment; filename={item_id}.{citation_format.extension}'
+    response.headers['Content-Type'] = \
+        f'{citation_format.mime_type}; charset=utf-8'
+    return response

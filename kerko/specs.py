@@ -413,3 +413,37 @@ class SortSpec:
         if self.fields:
             return [spec.key for spec in self.fields]
         return None
+
+
+class CitationFormatSpec:
+    """
+    Specifies a citation format.
+
+    This is a configuration element, with no effect on the search index schema.
+    """
+
+    def __init__(self, key, field, label, help_text, weight, extension, mime_type):
+        """
+        Initialize a citation format.
+
+        :param str key: Key of this citation format.
+
+        :param FieldSpec field: `FieldSpec` instance associated to this citation
+            format.
+
+        :param str label: Label of this citation format.
+
+        :param int weight: Determine the position of this citation format
+            relative to the others in lists.
+
+        :param str extension: File extension of this citation format.
+
+        :param str mime_type: MIME type of this citation format.
+        """
+        self.key = key
+        self.field = field
+        self.label = label
+        self.help_text = help_text
+        self.weight = weight
+        self.extension = extension
+        self.mime_type = mime_type

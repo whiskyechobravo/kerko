@@ -2,12 +2,12 @@ from flask_babelex import lazy_gettext as _
 import whoosh
 from whoosh.analysis import CharsetFilter, LowercaseFilter, StemFilter
 from whoosh.analysis.tokenizers import RegexTokenizer
-from whoosh.fields import columns, Schema, BOOLEAN, COLUMN, ID, NUMERIC, TEXT, STORED
+from whoosh.fields import BOOLEAN, COLUMN, ID, NUMERIC, STORED, TEXT, Schema, columns
 from whoosh.query import Prefix, Term
 from whoosh.support.charset import accent_map
 
 from . import codecs, extractors
-from .specs import ScopeSpec, FieldSpec, FlatFacetSpec, TreeFacetSpec, SortSpec
+from .specs import CitationFormatSpec, FieldSpec, FlatFacetSpec, ScopeSpec, SortSpec, TreeFacetSpec
 
 
 class Composer:
@@ -31,6 +31,7 @@ class Composer:
             exclude_default_fields=None,
             exclude_default_facets=None,
             exclude_default_sorts=None,
+            exclude_default_citation_formats=None,
             default_tag_whitelist_re='',
             default_tag_blacklist_re=r'^_',
             default_note_whitelist_re='',
@@ -71,6 +72,13 @@ class Composer:
             manually add at least one sort. Please refer to the implementation
             of ``init_default_sorts()`` for the list of default sorts.
 
+        :param list exclude_default_citation_formats: List of citation formats
+            (identified by key) to exclude from those created by default. If
+            that list contains the value '*', no citation format will be created
+            by default. Please refer to the implementation of
+            ``init_default_citation_formats()`` for the list of default citation
+            formats.
+
         :param str default_tag_whitelist_re: Regex to use to whitelist tags. See
             ``extractors.BaseTagsExtractor``.
 
@@ -110,10 +118,12 @@ class Composer:
         self.fields = {}
         self.facets = {}
         self.sorts = {}
+        self.citation_formats = {}
         self.exclude_default_scopes = exclude_default_scopes or []
         self.exclude_default_fields = exclude_default_fields or []
         self.exclude_default_facets = exclude_default_facets or []
         self.exclude_default_sorts = exclude_default_sorts or []
+        self.exclude_default_citation_formats = exclude_default_citation_formats or []
         self.default_tag_whitelist_re = default_tag_whitelist_re
         self.default_tag_blacklist_re = default_tag_blacklist_re
         self.default_note_whitelist_re = default_note_whitelist_re
@@ -122,6 +132,7 @@ class Composer:
         self.init_default_fields()
         self.init_default_facets()
         self.init_default_sorts()
+        self.init_default_citation_formats()
 
     def init_default_scopes(self):
         if '*' in self.exclude_default_scopes:
@@ -1123,6 +1134,24 @@ class Composer:
                     extractor=extractors.ItemExtractor('coins', format_='coins')
                 )
             )
+        # RIS.
+        if 'ris' not in self.exclude_default_fields:
+            self.add_field(
+                FieldSpec(
+                    key='ris',
+                    field_type=STORED,
+                    extractor=extractors.ItemExtractor('ris', format_='ris')
+                )
+            )
+        # BibTeX.
+        if 'bibtex' not in self.exclude_default_fields:
+            self.add_field(
+                FieldSpec(
+                    key='bibtex',
+                    field_type=STORED,
+                    extractor=extractors.ItemExtractor('bibtex', format_='bibtex')
+                )
+            )
         # Raw item data.
         if 'data' not in self.exclude_default_fields:
             self.add_field(
@@ -1377,6 +1406,40 @@ class Composer:
                 )
             )
 
+    def init_default_citation_formats(self):
+        """
+        Initialize a set of default `CitationFormatSpec` instances.
+
+        These rely on `FieldSpec` instances, which must have been added first.
+        """
+        if '*' in self.exclude_default_citation_formats:
+            return
+
+        if 'ris' not in self.exclude_default_citation_formats:
+            self.add_citation_format(
+                CitationFormatSpec(
+                    key='ris',
+                    field=self.fields['ris'],
+                    label=_("RIS"),
+                    help_text=_("Recommended format for most reference management software"),
+                    weight=10,
+                    extension='ris',
+                    mime_type='application/x-research-info-systems'
+                )
+            )
+        if 'bibtex' not in self.exclude_default_citation_formats:
+            self.add_citation_format(
+                CitationFormatSpec(
+                    key='bibtex',
+                    field=self.fields['bibtex'],
+                    label=_("BibTeX"),
+                    help_text=_("Recommended format for BibTeX-specific software"),
+                    weight=20,
+                    extension='bib',
+                    mime_type='application/x-bibtex'
+                )
+            )
+
     def add_scope(self, scope):
         self.scopes[scope.key] = scope
 
@@ -1410,6 +1473,12 @@ class Composer:
 
     def remove_sort(self, key):
         del self.sorts[key]
+
+    def add_citation_format(self, citation_format):
+        self.citation_formats[citation_format.key] = citation_format
+
+    def remove_citation_format(self, key):
+        del self.citation_formats[key]
 
     def get_ordered_specs(self, attr):
         """

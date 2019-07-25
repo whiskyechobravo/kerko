@@ -38,6 +38,18 @@
     <a rel="bookmark" title="{{ _('Permanent link to this bibliographic record') }}" href="{{ url }}">{{ url }}</a>
 {%- endmacro -%}
 
+{% macro citation_download_links(item) %}
+    <ul class="list-unstyled mb-0">
+        {%- for citation_format in config.KERKO_COMPOSER.get_ordered_specs('citation_formats') %}
+            <li>
+                <a href="{{ url_for('kerko.citation_download', item_id=item.id, citation_format_key=citation_format.key) }}">
+                    {{- citation_format.label -}}
+                </a> ({{ citation_format.help_text }})
+            </li>
+        {%- endfor %}
+    </ul>
+{%- endmacro -%}
+
 {%- block metas %}
     {{- super() }}
     <link rel="bookmark" title="{{ title|striptags|escape }}" href="{{ item_url }}">
@@ -85,6 +97,9 @@
         {%- endfor %}
         {{- field(_("Notes"), item.notes|join('')|safe) if item.notes }}
         {{- field(_("Citation"), item.bib|safe) }}
+        {%- if config.KERKO_COMPOSER.citation_formats %}
+            {{- field(_("Download citation"), citation_download_links(item)|safe) }}
+        {%- endif %}
         {%- if item.facet_results %}
             {%- for f in config.KERKO_COMPOSER.facets.values() if f.item_view and f.key in item.facet_results %}
                 {{- facet(
