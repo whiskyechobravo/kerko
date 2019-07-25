@@ -15,7 +15,19 @@
     {%- if key in config.KERKO_COMPOSER.facets and key in item.facet_results %}
         {%- set f = config.KERKO_COMPOSER.facets[key] %}
         {#- We have a matching facet, display its link. #}
-        {{- field(f.title, facet_items(f.missing_label, item.facet_results[f.key], expand=True, checkboxes=False, list_tag='div', item_tag='div', add_link_title=add_link_title)) }}
+        {{- field(
+                f.title,
+                facet_items(
+                    f.missing_label,
+                    item.facet_results[f.key],
+                    expand=True,
+                    checkboxes=False,
+                    list_tag='div',
+                    item_tag='div',
+                    add_link_title=add_link_title
+                )
+            )
+        }}
     {%- else %}
         {#- There is matching facet, just display its value. #}
         {{- field(label_text, value_text) }}
