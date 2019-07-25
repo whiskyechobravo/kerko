@@ -58,7 +58,7 @@ class Criteria:
         composer = current_app.config['KERKO_COMPOSER']
         # Use the first enabled sort as default.
         default_sort = None
-        for sort_spec in composer.get_ordered_sorts():
+        for sort_spec in composer.get_ordered_specs('sorts'):
             if sort_spec.is_allowed(criteria=self):
                 default_sort = sort_spec.key
                 break

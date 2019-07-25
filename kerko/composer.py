@@ -1383,10 +1383,6 @@ class Composer:
     def remove_scope(self, key):
         del self.scopes[key]
 
-    def get_ordered_scopes(self):
-        """Return a list of all scope specifications, sorted by weight."""
-        return sorted(self.scopes.values(), key=lambda spec: spec.weight)
-
     def add_field(self, field):
         self.fields[field.key] = field
         self.schema.add(field.key, field.field_type)
@@ -1403,10 +1399,6 @@ class Composer:
         self.schema.remove(key)
         del self.facets[key]
 
-    def get_ordered_facets(self):
-        """Return a list of all facet specifications, sorted by weight."""
-        return sorted(self.facets.values(), key=lambda spec: spec.weight)
-
     def get_facet_by_filter_key(self, filter_key, default=None):
         for spec in self.facets.values():
             if spec.filter_key == filter_key:
@@ -1419,6 +1411,11 @@ class Composer:
     def remove_sort(self, key):
         del self.sorts[key]
 
-    def get_ordered_sorts(self):
-        """Return a list of all sort specifications, sorted by weight."""
-        return sorted(self.sorts.values(), key=lambda spec: spec.weight)
+    def get_ordered_specs(self, attr):
+        """
+        Return a list of specifications, sorted by weight.
+
+        :param str attr: Attribute name of the specification dict. The
+            specifications must themselves have a `weight` attribute.
+        """
+        return sorted(getattr(self, attr).values(), key=lambda spec: spec.weight)

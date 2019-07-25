@@ -7,7 +7,7 @@ def build_sorter(criteria):
         'active': composer.sorts[criteria.sort].label,
         'items': [],
     }
-    for sort_spec in composer.get_ordered_sorts():
+    for sort_spec in composer.get_ordered_specs('sorts'):
         if sort_spec.is_allowed(criteria):
             sorter['items'].append({
                 'label': sort_spec.label,

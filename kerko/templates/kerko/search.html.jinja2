@@ -131,7 +131,7 @@
                 </div>
             </div>
             <div class="d-print-none">
-                {%- for f in config.KERKO_COMPOSER.get_ordered_facets() %}
+                {%- for f in config.KERKO_COMPOSER.get_ordered_specs('facets') %}
                     {{- facet(
                             f.title,
                             f.missing_label,

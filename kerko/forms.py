@@ -13,5 +13,5 @@ class SearchForm(FlaskForm):
         super().__init__(**kwargs)
         self.scope.choices = [
             (s.key, s.selector_label)
-            for s in current_app.config['KERKO_COMPOSER'].get_ordered_scopes()
+            for s in current_app.config['KERKO_COMPOSER'].get_ordered_specs('scopes')
         ]
