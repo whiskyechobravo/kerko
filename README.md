@@ -86,6 +86,8 @@ The following features are implemented in Kerko:
   COinS][COinS] model). Zotero Connector, for example, will automatically detect
   the metadata present in the page, but similar behavior applies to [many other
   reference management software][COinS_clients] as well.
+* Citation downloads: users may download individual citations in RIS and BibTeX
+  formats.
 * Printing: stylesheets are provided for printing individual bibliographic
   records as well as lists of search results. When printing search results, all
   results get printed (not just the current page of results).
