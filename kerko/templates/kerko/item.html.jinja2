@@ -98,7 +98,7 @@
         {{- field(_("Notes"), item.notes|join('')|safe) if item.notes }}
         {{- field(_("Citation"), item.bib|safe) }}
         {%- if config.KERKO_COMPOSER.citation_formats %}
-            {{- field(_("Download citation"), citation_download_links(item)|safe) }}
+            {{- field(_("Download citation"), citation_download_links(item)|safe, field_class='d-print-none') }}
         {%- endif %}
         {%- if item.facet_results %}
             {%- for f in config.KERKO_COMPOSER.facets.values() if f.item_view and f.key in item.facet_results %}
