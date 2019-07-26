@@ -50,6 +50,10 @@
   margin-top: .5em;
   margin-bottom: 1.5em;
 }
+.dropdown-width-300 {
+  width: 300px;
+  max-width: 90vw;
+}
 main {
   min-height: calc(100vh - 7rem);
 }

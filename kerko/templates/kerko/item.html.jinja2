@@ -38,18 +38,6 @@
     <a rel="bookmark" title="{{ _('Permanent link to this bibliographic record') }}" href="{{ url }}">{{ url }}</a>
 {%- endmacro -%}
 
-{% macro citation_download_links(item) %}
-    <ul class="list-unstyled mb-0">
-        {%- for citation_format in config.KERKO_COMPOSER.get_ordered_specs('citation_formats') %}
-            <li>
-                <a href="{{ url_for('kerko.citation_download', item_id=item.id, citation_format_key=citation_format.key) }}" rel="nofollow">
-                    {{- citation_format.label -}}
-                </a> ({{ citation_format.help_text }})
-            </li>
-        {%- endfor %}
-    </ul>
-{%- endmacro -%}
-
 {%- block metas %}
     {{- super() }}
     <link rel="bookmark" title="{{ title|striptags|escape }}" href="{{ item_url }}">
@@ -57,8 +45,9 @@
 
 {%- block content_inner %}
     <div>
+        <div class="col-auto ml-auto text-right">
         {%- if config.KERKO_PRINT_ITEM_LINK %}
-            <div class="d-flex justify-content-end d-print-none">
+                <div class="d-inline-block d-print-none mb-1">
                 <a id="print-link" class="btn btn-light" href="#">
                     {%- block print_icon -%}
                         <span class="fas fa-print"></span>
@@ -69,6 +58,30 @@
                 </a>
             </div>
         {%- endif %}
+            {%- if config.KERKO_COMPOSER.citation_formats %}
+                <div class="d-inline-block d-print-none mb-1">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary btn-light dropdown-toggle" type="button" id="download-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {%- block download_icon -%}
+                                <span class="fas fa-download"></span>
+                            {%- endblock download_icon -%}
+                            {%- block download_text %}
+                                {{ _("Download") }}
+                            {%- endblock download_text -%}
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labeledby="download-options">
+                            {%- for citation_format in config.KERKO_COMPOSER.get_ordered_specs('citation_formats') %}
+                                <a class="dropdown-item" href="{{ url_for('kerko.citation_download', item_id=item.id, citation_format_key=citation_format.key) }}" rel="nofollow" title="{% trans download_option=citation_format.label|escape %}Download in {{ download_option }} format{% endtrans %}">
+                                    {{- citation_format.label -}}
+                                </a>
+                                <p class="px-4 pb-4 text-muted">{{ citation_format.help_text }}</p>
+                            {%- endfor %}
+                        </div>
+                    </div>
+                </div>
+            {%- endif %}
+        </div>
+
         {{- facet_field(_("Resource type"), item.item_type, 'facet_item_type', add_link_title=_("Search this resource type")) }}
         {%- if item.data.creators %}
             <div class="row">
@@ -97,9 +110,6 @@
         {%- endfor %}
         {{- field(_("Notes"), item.notes|join('')|safe) if item.notes }}
         {{- field(_("Citation"), item.bib|safe) }}
-        {%- if config.KERKO_COMPOSER.citation_formats %}
-            {{- field(_("Download citation"), citation_download_links(item)|safe, field_class='d-print-none') }}
-        {%- endif %}
         {%- if item.facet_results %}
             {%- for f in config.KERKO_COMPOSER.facets.values() if f.item_view and f.key in item.facet_results %}
                 {{- facet(
