@@ -4,7 +4,7 @@
 {% macro field(label_text, value_text, field_class=None) %}
     {%- if value_text %}
         <div class="row mb-3 {{ field_class if field_class }}">
-            <div class="col-md-4 col-lg-3 font-weight-bold break-word text-md-right">{{ label_text }}</div>
+            <div class="col-md-4 col-lg-3 font-weight-bold break-word text-md-right text-print-left">{{ label_text }}</div>
             <div class="col-md-8 col-lg-9 break-word">{{ value_text }}</div>
         </div>
     {%- endif %}
@@ -46,18 +46,18 @@
 {%- block content_inner %}
     <div>
         <div class="col-auto ml-auto text-right">
-        {%- if config.KERKO_PRINT_ITEM_LINK %}
+            {%- if config.KERKO_PRINT_ITEM_LINK %}
                 <div class="d-inline-block d-print-none mb-1">
-                <a id="print-link" class="btn btn-light" href="#">
-                    {%- block print_icon -%}
-                        <span class="fas fa-print"></span>
-                    {%- endblock print_icon -%}
-                    {%- block print_text %}
-                        {{ _("Print") }}
-                    {%- endblock print_text -%}
-                </a>
-            </div>
-        {%- endif %}
+                    <a id="print-link" class="btn btn-light" href="#">
+                        {%- block print_icon -%}
+                            <span class="fas fa-print"></span>
+                        {%- endblock print_icon -%}
+                        {%- block print_text %}
+                            {{ _("Print") }}
+                        {%- endblock print_text -%}
+                    </a>
+                </div>
+            {%- endif %}
             {%- if config.KERKO_COMPOSER.citation_formats %}
                 <div class="d-inline-block d-print-none mb-1">
                     <div class="dropdown">
@@ -85,7 +85,7 @@
         {{- facet_field(_("Resource type"), item.item_type, 'facet_item_type', add_link_title=_("Search this resource type")) }}
         {%- if item.data.creators %}
             <div class="row">
-                <div class="col-md-4 col-lg-3 font-weight-bold break-word text-md-right">{% trans count=item.data.creators|length %}Author/contributor{% pluralize %}Authors/contributors{% endtrans %}</div>
+                <div class="col-md-4 col-lg-3 font-weight-bold break-word text-md-right text-print-left">{% trans count=item.data.creators|length %}Author/contributor{% pluralize %}Authors/contributors{% endtrans %}</div>
                 <div class="col-md-8 col-lg-9 break-word">
                     <ul class="list-unstyled">
                         {%- for creator in item.data.creators %}
@@ -121,7 +121,7 @@
                         add_link_title=_("Search with the '{}' filter"),
                         wrap_class='row mb-3',
                         heading_tag='div',
-                        heading_class='col-md-4 col-lg-3 font-weight-bold break-word text-md-right',
+                        heading_class='col-md-4 col-lg-3 font-weight-bold break-word text-md-right text-print-left',
                         body_class='col-md-8 col-lg-9 break-word',
                         list_class_top='list-unstyled mb-0'
                     )

@@ -34,6 +34,9 @@
     */
     display: block !important;
   }
+  .text-md-right.text-print-left {
+    text-align: left !important;
+  }
 }
 .w-40 {
   width: 40% !important;
