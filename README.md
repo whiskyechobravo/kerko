@@ -22,8 +22,8 @@ tools to individuals or teams for managing bibliographic data, which it stores
 in the cloud on zotero.org. Kerko can be configured to automatically synchronize
 its search index from zotero.org on a regular basis, ensuring that visitors get
 an up-to-date bibliography even if it is changing frequently. When users
-interact with a Kerko application, all the data comes from Kerko's own search
-index; it is only at indexing time that Kerko contacts zotero.org.
+interact with the Kerko application component, Kerko gets all its data from its
+own search index; it is only at indexing time that Kerko contacts zotero.org.
 
 The combination of Kerko and Zotero gives you the best of both worlds: a
 user-friendly interface for end-users of the bibliography, and a powerful
