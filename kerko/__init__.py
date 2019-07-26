@@ -59,6 +59,8 @@ def init_default_config(state):
     state.app.config.setdefault('KERKO_PRINT_ITEM_LINK', False)
     state.app.config.setdefault('KERKO_PRINT_CITATIONS_LINK', False)
     state.app.config.setdefault('KERKO_PRINT_CITATIONS_MAX_COUNT', 0)
+    state.app.config.setdefault('KERKO_DOWNLOAD_CITATIONS_LINK', True)
+    state.app.config.setdefault('KERKO_DOWNLOAD_CITATIONS_MAX_COUNT', 0)
     state.app.config.setdefault('KERKO_USE_TRANSLATIONS', True)
 
     state.app.config.setdefault('KERKO_BOOTSTRAP_VERSION', '4.3.1')

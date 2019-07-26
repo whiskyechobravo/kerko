@@ -89,6 +89,10 @@ def search():
         search_results=search_results,
         print_url=criteria.build_url(page_len='all', print_preview=True),
         print_preview=criteria.print_preview,
+        download_urls={
+            key: criteria.build_download_url(key)
+            for key in current_app.config['KERKO_COMPOSER'].citation_formats.keys()
+        },
         time=time.process_time() - start_time,
         **context
     )
@@ -137,6 +141,35 @@ def citation_download(item_id, citation_format_key):
     response = make_response(content)
     response.headers['Content-Disposition'] = \
         f'attachment; filename={item_id}.{citation_format.extension}'
+    response.headers['Content-Type'] = \
+        f'{citation_format.mime_type}; charset=utf-8'
+    return response
+
+
+@blueprint.route('/download/<string:citation_format_key>/')
+def search_download(citation_format_key):
+    citation_format = current_app.config['KERKO_COMPOSER'].citation_formats.get(citation_format_key)
+    if not citation_format:
+        abort(404)
+
+    criteria = Criteria(request)
+    criteria.page_len = None
+
+    search_results, _, total_count, _ = run_query(  # TODO: Avoid building facet results.
+        criteria, return_fields=[citation_format.field.key]
+    )
+
+    if total_count == 0:
+        abort(404)
+
+    citations = [result.get(citation_format.field.key, '') for result in search_results]
+    response = make_response(
+        citation_format.group_format.format(
+            citation_format.group_item_delimiter.join(citations)
+        )
+    )
+    response.headers['Content-Disposition'] = \
+        f'attachment; filename=bibliography.{citation_format.extension}'  # TODO: Make filename configurable.
     response.headers['Content-Type'] = \
         f'{citation_format.mime_type}; charset=utf-8'
     return response

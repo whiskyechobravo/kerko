@@ -86,8 +86,10 @@ The following features are implemented in Kerko:
   COinS][COinS] model). Zotero Connector, for example, will automatically detect
   the metadata present in the page, but similar behavior applies to [many other
   reference management software][COinS_clients] as well.
-* Citation downloads: users may download individual citations in RIS and BibTeX
-  formats.
+* Exporting: users may export individual citations as well as complete
+  bibliographies corresponding to search results. By default, download links are
+  provided for the RIS and BibTeX formats, but applications may be configured to
+  export [any format supported by the Zotero API][Zotero_export].
 * Printing: stylesheets are provided for printing individual bibliographic
   records as well as lists of search results. When printing search results, all
   results get printed (not just the current page of results).
@@ -291,6 +293,10 @@ override their default value:
   pages. Defaults to `False`.
 * `KERKO_PRINT_CITATIONS_MAX_COUNT`: Limit over which the print button should
   be hidden from search results pages. Defaults to `0` (i.e. no limit).
+* `KERKO_DOWNLOAD_CITATIONS_LINK`: Provide a download button on search results
+  pages. Defaults to `True`.
+* `KERKO_DOWNLOAD_CITATIONS_MAX_COUNT`: Limit over which the download button
+  should be hidden from search results pages. Defaults to `0` (i.e. no limit).
 * `KERKO_ZOTERO_MAX_ATTEMPTS`: Maximum number of tries after the Zotero API
   has returned an error or not responded during indexing. Defaults to `10`.
 * `KERKO_ZOTERO_WAIT`: Time to wait (in seconds) between failed attempts to
@@ -508,5 +514,6 @@ tool.
 [Zotero]: https://www.zotero.org/
 [Zotero_demo]: https://www.zotero.org/groups/2348869/kerko_demo/items
 [Zotero_desktop]: https://www.zotero.org/download/
+[Zotero_export]: https://www.zotero.org/support/dev/web_api/v3/basics#export_formats
 [Zotero_locales]: https://github.com/citation-style-language/locales
 [Zotero_styles]: https://www.zotero.org/styles/

@@ -422,7 +422,18 @@ class CitationFormatSpec:
     This is a configuration element, with no effect on the search index schema.
     """
 
-    def __init__(self, key, field, label, help_text, weight, extension, mime_type):
+    def __init__(
+            self,
+            key,
+            field,
+            label,
+            help_text,
+            weight,
+            extension,
+            mime_type,
+            group_format='{}',
+            group_item_delimiter=''
+    ):
         """
         Initialize a citation format.
 
@@ -439,6 +450,11 @@ class CitationFormatSpec:
         :param str extension: File extension of this citation format.
 
         :param str mime_type: MIME type of this citation format.
+
+        :param str group_format: Format string for wrapping multiple entries.
+
+        :param str group_item_delimiter: Delimiter string to insert between
+            entries.
         """
         self.key = key
         self.field = field
@@ -447,3 +463,5 @@ class CitationFormatSpec:
         self.weight = weight
         self.extension = extension
         self.mime_type = mime_type
+        self.group_format = group_format
+        self.group_item_delimiter = group_item_delimiter
