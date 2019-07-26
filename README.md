@@ -164,23 +164,21 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
    app.config['KERKO_COMPOSER'] = Composer()
    ```
 
-   The `SECRET_KEY` variable is required for generating secure tokens in web
-   forms. It should be a secure, random value and it really has to be secret. It
-   is usually set in an environment variable rather than in Python code, to make
-   sure it never ends up in a code repository. But here we're taking the minimal
-   route and thus are cutting some corners!
-
-   The `KERKO_ZOTERO_API_KEY`, `KERKO_ZOTERO_LIBRARY_ID` and
-   `KERKO_ZOTERO_LIBRARY_TYPE` variables are required for Kerko to be able to
-   access your Zotero library. See the **Configuration variables** section for
-   details on how to properly set these variables.
-
-   The `KERKO_COMPOSER` variable, on the other hand, specifies key elements
-   needed by Kerko, e.g., fields for display and search, facets for filtering.
-   These are defined by instanciating the `Composer` class. Your application may
-   manipulate the resulting object at configuration time to add, remove or alter
-   fields, facets, sort options or search scopes. See the **Kerko Recipes**
-   section for some examples.
+   * `SECRET_KEY`: This variable is required for generating secure tokens in web
+     forms. It should have a secure, random value and it really has to be
+     secret. It is usually set in an environment variable rather than in Python
+     code, to make sure it never ends up in a code repository. But here we're
+     taking the minimal route and thus are cutting some corners!
+   * `KERKO_ZOTERO_API_KEY`, `KERKO_ZOTERO_LIBRARY_ID` and
+     `KERKO_ZOTERO_LIBRARY_TYPE`: These variables are required for Kerko to be
+     able to access your Zotero library. See the **Configuration variables**
+     section for details on how to properly set these variables.
+   * `KERKO_COMPOSER`: This variable specifies key elements needed by Kerko,
+     e.g., fields for display and search, facets for filtering. These are
+     defined by instanciating the `Composer` class. Your application may
+     manipulate the resulting object at configuration time to add, remove or
+     alter fields, facets, sort options or search scopes. See the **Kerko
+     Recipes** section for some examples.
 
 
 3. Also configure the Flask-BabelEx and Bootstrap-Flask extensions:
