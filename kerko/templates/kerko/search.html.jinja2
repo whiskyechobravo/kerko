@@ -117,7 +117,7 @@
                                     <a class="dropdown-item" href="{{ download_urls[citation_format.key] }}" rel="nofollow" title="{% trans download_option=citation_format.label|escape %}Download in {{ download_option }} format{% endtrans %}">
                                         {{- citation_format.label -}}
                                     </a>
-                                    <p class="px-4 pb-4 text-muted">{{ citation_format.help_text }}</p>
+                                    <p class="px-4 text-muted">{{ citation_format.help_text }}</p>
                                 {%- endfor %}
                             </div>
                         </div>
