@@ -122,7 +122,7 @@ def item(item_id):
 
 
 @blueprint.route('/<string:item_id>/<string:citation_format_key>')
-def citation_download(item_id, citation_format_key):
+def item_citation_download(item_id, citation_format_key):
     if current_app.config['KERKO_USE_TRANSLATIONS']:
         babel_domain.as_default()
 
@@ -147,7 +147,7 @@ def citation_download(item_id, citation_format_key):
 
 
 @blueprint.route('/download/<string:citation_format_key>/')
-def search_download(citation_format_key):
+def search_citation_download(citation_format_key):
     citation_format = current_app.config['KERKO_COMPOSER'].citation_formats.get(citation_format_key)
     if not citation_format:
         abort(404)
