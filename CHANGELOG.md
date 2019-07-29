@@ -17,7 +17,8 @@ Bug fixes:
 
 Other changes:
 
-* Move print button to bottom of page (next to the new download dropdown).
+* Move print button to bottom of search pages (next to the new download
+  dropdown).
 * Improve documentation.
 * Compile message catalog before building sdist and wheel.
 * _Backwards incompatible_: Method `kerko.composer.Composer.get_ordered_specs()`
