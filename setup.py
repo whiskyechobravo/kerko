@@ -81,7 +81,7 @@ setup(
         'Babel>=2.6.0',
     ],
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
         "Framework :: Flask",
         "Intended Audience :: Developers",
