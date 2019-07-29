@@ -12,7 +12,8 @@ Features:
 Bug fixes:
 
 * Fix bad alignment of field names in print mode.
-* Remove warning when indexing an item with no authors (#1).
+* Remove warning when indexing an item with no authors
+  ([#1](https://github.com/whiskyechobravo/kerko/issues/1)).
 
 Other changes:
 
