@@ -59,24 +59,36 @@ def load_item(zotero_credentials, item_key):
 @retry_zotero
 def load_item_types(zotero_credentials):
     """Return all Zotero item types."""
+    current_app.logger.info("Requesting all item types...")
     return zotero_credentials.item_types()
 
 
 @retry_zotero
 def load_item_fields(zotero_credentials):
     """Return all Zotero fields."""
+    current_app.logger.info("Requesting all fields...")
     return zotero_credentials.item_fields()
 
 
 @retry_zotero
 def load_item_type_fields(zotero_credentials, item_type):
     """Return all Zotero fields for a given item type."""
+    current_app.logger.info(
+        "Requesting fields for items of type '{item_type}'...".format(
+            item_type=item_type
+        )
+    )
     return zotero_credentials.item_type_fields(item_type)
 
 
 @retry_zotero
 def load_item_type_creator_types(zotero_credentials, item_type):
     """List all Zotero creator types for a given item type."""
+    current_app.logger.info(
+        "Requesting creator types for items of type '{item_type}'...".format(
+            item_type=item_type
+        )
+    )
     return zotero_credentials.item_creator_types(item_type)
 
 
@@ -139,6 +151,11 @@ class Collections:
 
     @retry_zotero
     def load_collections(self, zotero_credentials, top_level):
+        current_app.logger.info(
+            "Requesting {which} collections...".format(
+                which='top-level' if top_level else 'all'
+            )
+        )
         start = 0
         if top_level:
             method = zotero_credentials.collections_top
@@ -238,8 +255,7 @@ class Items:
     def _next_batch(self):
         limit = current_app.config['KERKO_ZOTERO_BATCH_SIZE']
         current_app.logger.info(
-            "Requesting up to {limit} Zotero items"
-            " starting at position {start}...".format(
+            "Requesting up to {limit} items starting at position {start}...".format(
                 limit=limit, start=self.start
             )
         )
