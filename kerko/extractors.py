@@ -11,7 +11,7 @@ from flask import current_app, Markup
 from .text import id_normalize, sort_normalize
 
 
-PHRASE_BREAKER = ' ZZZZZ '  # Some token unlikely to be searched.
+RECORD_SEPARATOR = '\x1e'
 
 
 class ItemContext:
@@ -179,14 +179,7 @@ class CreatorsExtractor(Extractor):
                 elif lastname:
                     creators.append(lastname)
         if creators:
-            # Whoosh does not support multivalue fields. And joining multiple
-            # values with spaces risks creating phrases matches based on
-            # consecutive words. Joining them with an unlikely string
-            # (here PHRASE_BREAKER) prevents that.
-            # TODO: Avoid this hack by implementing a custom Whoosh field type
-            # which could take a list (like the ID field type does) and support
-            # phrase search.
-            document[spec.key] = spec.encode(PHRASE_BREAKER.join(creators))
+            document[spec.key] = spec.encode(RECORD_SEPARATOR.join(creators))
 
 
 class CollectionNamesExtractor(Extractor):
@@ -201,7 +194,7 @@ class CollectionNamesExtractor(Extractor):
                     if name:
                         names.add(name)
         if names:
-            document[spec.key] = spec.encode(PHRASE_BREAKER.join(names))
+            document[spec.key] = spec.encode(RECORD_SEPARATOR.join(names))
 
 
 class BaseTagsExtractor(Extractor):
@@ -243,7 +236,7 @@ class TagsTextExtractor(BaseTagsExtractor):
     """Extract item tags for text search."""
 
     def to_document(self, document, spec, tags):
-        document[spec.key] = spec.encode(PHRASE_BREAKER.join(tags))
+        document[spec.key] = spec.encode(RECORD_SEPARATOR.join(tags))
 
 
 class BaseNotesExtractor(Extractor):
@@ -293,7 +286,7 @@ class NotesTextExtractor(BaseNotesExtractor):
 
     def to_document(self, document, spec, notes):
         document[spec.key] = spec.encode(
-            PHRASE_BREAKER.join([Markup(n).striptags() for n in notes])
+            RECORD_SEPARATOR.join([Markup(n).striptags() for n in notes])
         )
 
 

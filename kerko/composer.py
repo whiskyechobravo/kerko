@@ -1,3 +1,5 @@
+import re
+
 from flask_babelex import lazy_gettext as _
 import whoosh
 from whoosh.analysis import CharsetFilter, LowercaseFilter, StemFilter
@@ -5,6 +7,7 @@ from whoosh.analysis.tokenizers import RegexTokenizer
 from whoosh.fields import BOOLEAN, COLUMN, ID, NUMERIC, STORED, TEXT, Schema, columns
 from whoosh.query import Prefix, Term
 from whoosh.support.charset import accent_map
+from whoosh.util.text import rcompile
 
 from . import codecs, extractors
 from .specs import CitationFormatSpec, FieldSpec, FlatFacetSpec, ScopeSpec, SortSpec, TreeFacetSpec
@@ -104,12 +107,29 @@ class Composer:
         if not whoosh.lang.has_stemmer(whoosh_language):
             whoosh_language = 'en'
 
+        # When combining multiple strings into a single text field, the last
+        # token of each string becomes adjacent to the first token of the next
+        # string. This may cause phrase searches to match those tokens as if
+        # they were neighbors, even though they were not in the source data. To
+        # prevent this, we join the strings with the record separator character
+        # and treat that character as a token. This solution is imperfect,
+        # however, as the issue may still arise when a slop factor is applied to
+        # the phrase search.
+        token_pattern = rcompile(r"\w+(\.?\w+)*|" + re.escape(extractors.RECORD_SEPARATOR))
+
         # Replace the standard analyzer with one that has no stop words (helping
         # people who do phrase searches without specifying actual phrase queries).
-        self.text_chain = RegexTokenizer() | StemFilter(lang=whoosh_language) | CharsetFilter(accent_map) | LowercaseFilter()
+        self.text_chain = \
+            RegexTokenizer(expression=token_pattern) | \
+            StemFilter(lang=whoosh_language) | \
+            CharsetFilter(accent_map) | \
+            LowercaseFilter()
 
         # Same for names, but without stemming.
-        self.name_chain = RegexTokenizer() | CharsetFilter(accent_map) | LowercaseFilter()
+        self.name_chain = \
+            RegexTokenizer(expression=token_pattern) | \
+            CharsetFilter(accent_map) | \
+            LowercaseFilter()
 
         # Common schema field types.
         self.id_field_type = ID(field_boost=50.0)
