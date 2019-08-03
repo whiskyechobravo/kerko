@@ -146,26 +146,24 @@ class Composer:
         self.facets = {}
         self.sorts = {}
         self.citation_formats = {}
-        self.exclude_default_scopes = exclude_default_scopes or []
-        self.exclude_default_fields = exclude_default_fields or []
-        self.exclude_default_facets = exclude_default_facets or []
-        self.exclude_default_sorts = exclude_default_sorts or []
-        self.exclude_default_citation_formats = exclude_default_citation_formats or []
         self.default_tag_whitelist_re = default_tag_whitelist_re
         self.default_tag_blacklist_re = default_tag_blacklist_re
         self.default_note_whitelist_re = default_note_whitelist_re
         self.default_note_blacklist_re = default_note_blacklist_re
-        self.init_default_scopes()
-        self.init_default_fields()
-        self.init_default_facets()
-        self.init_default_sorts()
-        self.init_default_citation_formats()
+        self.init_default_scopes(exclude_default_scopes)
+        self.init_default_fields(exclude_default_fields)
+        self.init_default_facets(exclude_default_facets)
+        self.init_default_sorts(exclude_default_sorts)
+        self.init_default_citation_formats(exclude_default_citation_formats)
 
-    def init_default_scopes(self):
-        if '*' in self.exclude_default_scopes:
+    def init_default_scopes(self, exclude=None):
+        if exclude is None:
+            exclude = []
+
+        if '*' in exclude:
             return
 
-        if 'all' not in self.exclude_default_scopes:
+        if 'all' not in exclude:
             self.add_scope(
                 ScopeSpec(
                     key='all',
@@ -174,7 +172,7 @@ class Composer:
                     weight=0,
                 )
             )
-        if 'creator' not in self.exclude_default_scopes:
+        if 'creator' not in exclude:
             self.add_scope(
                 ScopeSpec(
                     key='creator',
@@ -183,7 +181,7 @@ class Composer:
                     weight=100,
                 )
             )
-        if 'title' not in self.exclude_default_scopes:
+        if 'title' not in exclude:
             self.add_scope(
                 ScopeSpec(
                     key='title',
@@ -193,12 +191,15 @@ class Composer:
                 )
             )
 
-    def init_default_fields(self):
-        if '*' in self.exclude_default_fields:
+    def init_default_fields(self, exclude=None):
+        if exclude is None:
+            exclude = []
+
+        if '*' in exclude:
             return
 
         # Document id for the search index, matching the Zotero item id.
-        if 'id' not in self.exclude_default_fields:
+        if 'id' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='id',
@@ -207,7 +208,7 @@ class Composer:
                 )
             )
         # Label of this item's type.
-        if 'item_type' not in self.exclude_default_fields:
+        if 'item_type' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='item_type',
@@ -228,7 +229,7 @@ class Composer:
         # rank at the top of results.
         #
 
-        if 'z_DOI' not in self.exclude_default_fields:
+        if 'z_DOI' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_DOI',
@@ -237,7 +238,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('DOI')
                 )
             )
-        if 'z_ISBN' not in self.exclude_default_fields:
+        if 'z_ISBN' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_ISBN',
@@ -246,7 +247,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('ISBN')
                 )
             )
-        if 'z_ISSN' not in self.exclude_default_fields:
+        if 'z_ISSN' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_ISSN',
@@ -260,7 +261,7 @@ class Composer:
         # Secondary identifiers, for keyword search. Moderately boosted.
         #
 
-        if 'z_applicationNumber' not in self.exclude_default_fields:
+        if 'z_applicationNumber' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_applicationNumber',
@@ -269,7 +270,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('applicationNumber')
                 )
             )
-        if 'z_billNumber' not in self.exclude_default_fields:
+        if 'z_billNumber' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_billNumber',
@@ -278,7 +279,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('billNumber')
                 )
             )
-        if 'z_callNumber' not in self.exclude_default_fields:
+        if 'z_callNumber' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_callNumber',
@@ -287,7 +288,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('callNumber')
                 )
             )
-        if 'z_codeNumber' not in self.exclude_default_fields:
+        if 'z_codeNumber' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_codeNumber',
@@ -296,7 +297,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('codeNumber')
                 )
             )
-        if 'z_docketNumber' not in self.exclude_default_fields:
+        if 'z_docketNumber' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_docketNumber',
@@ -305,7 +306,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('docketNumber')
                 )
             )
-        if 'z_documentNumber' not in self.exclude_default_fields:
+        if 'z_documentNumber' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_documentNumber',
@@ -314,7 +315,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('documentNumber')
                 )
             )
-        if 'z_patentNumber' not in self.exclude_default_fields:
+        if 'z_patentNumber' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_patentNumber',
@@ -323,7 +324,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('patentNumber')
                 )
             )
-        if 'z_priorityNumbers' not in self.exclude_default_fields:
+        if 'z_priorityNumbers' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_priorityNumbers',
@@ -332,7 +333,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('priorityNumbers')
                 )
             )
-        if 'z_publicLawNumber' not in self.exclude_default_fields:
+        if 'z_publicLawNumber' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_publicLawNumber',
@@ -341,7 +342,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('publicLawNumber')
                 )
             )
-        if 'z_reportNumber' not in self.exclude_default_fields:
+        if 'z_reportNumber' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_reportNumber',
@@ -355,7 +356,7 @@ class Composer:
         # Title fields, for keyword search.
         #
 
-        if 'z_nameOfAct' not in self.exclude_default_fields:
+        if 'z_nameOfAct' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_nameOfAct',
@@ -364,7 +365,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('nameOfAct')
                 )
             )
-        if 'z_shortTitle' not in self.exclude_default_fields:
+        if 'z_shortTitle' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_shortTitle',
@@ -373,7 +374,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('shortTitle')
                 )
             )
-        if 'z_subject' not in self.exclude_default_fields:
+        if 'z_subject' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_subject',
@@ -382,7 +383,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('subject')
                 )
             )
-        if 'z_title' not in self.exclude_default_fields:
+        if 'z_title' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_title',
@@ -396,7 +397,7 @@ class Composer:
         # Container titles, for keyword search.
         #
 
-        if 'z_blogTitle' not in self.exclude_default_fields:
+        if 'z_blogTitle' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_blogTitle',
@@ -405,7 +406,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('blogTitle')
                 )
             )
-        if 'z_bookTitle' not in self.exclude_default_fields:
+        if 'z_bookTitle' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_bookTitle',
@@ -414,7 +415,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('bookTitle')
                 )
             )
-        if 'z_code' not in self.exclude_default_fields:
+        if 'z_code' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_code',
@@ -423,7 +424,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('code')
                 )
             )
-        if 'z_conferenceName' not in self.exclude_default_fields:
+        if 'z_conferenceName' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_conferenceName',
@@ -432,7 +433,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('conferenceName')
                 )
             )
-        if 'z_dictionaryTitle' not in self.exclude_default_fields:
+        if 'z_dictionaryTitle' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_dictionaryTitle',
@@ -441,7 +442,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('dictionaryTitle')
                 )
             )
-        if 'z_encyclopediaTitle' not in self.exclude_default_fields:
+        if 'z_encyclopediaTitle' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_encyclopediaTitle',
@@ -450,7 +451,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('encyclopediaTitle')
                 )
             )
-        if 'z_forumTitle' not in self.exclude_default_fields:
+        if 'z_forumTitle' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_forumTitle',
@@ -459,7 +460,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('forumTitle')
                 )
             )
-        if 'z_meetingName' not in self.exclude_default_fields:
+        if 'z_meetingName' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_meetingName',
@@ -468,7 +469,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('meetingName')
                 )
             )
-        if 'z_proceedingsTitle' not in self.exclude_default_fields:
+        if 'z_proceedingsTitle' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_proceedingsTitle',
@@ -477,7 +478,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('proceedingsTitle')
                 )
             )
-        if 'z_programTitle' not in self.exclude_default_fields:
+        if 'z_programTitle' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_programTitle',
@@ -486,7 +487,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('programTitle')
                 )
             )
-        if 'z_publicationTitle' not in self.exclude_default_fields:
+        if 'z_publicationTitle' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_publicationTitle',
@@ -495,7 +496,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('publicationTitle')
                 )
             )
-        if 'z_section' not in self.exclude_default_fields:
+        if 'z_section' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_section',
@@ -504,7 +505,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('section')
                 )
             )
-        if 'z_series' not in self.exclude_default_fields:
+        if 'z_series' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_series',
@@ -513,7 +514,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('series')
                 )
             )
-        if 'z_seriesTitle' not in self.exclude_default_fields:
+        if 'z_seriesTitle' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_seriesTitle',
@@ -522,7 +523,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('seriesTitle')
                 )
             )
-        if 'z_session' not in self.exclude_default_fields:
+        if 'z_session' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_session',
@@ -531,7 +532,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('session')
                 )
             )
-        if 'z_websiteTitle' not in self.exclude_default_fields:
+        if 'z_websiteTitle' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_websiteTitle',
@@ -545,7 +546,7 @@ class Composer:
         # Name fields, for keyword search. Exempt from stemming.
         #
 
-        if 'z_archive' not in self.exclude_default_fields:
+        if 'z_archive' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_archive',
@@ -554,7 +555,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('archive')
                 )
             )
-        if 'z_archiveLocation' not in self.exclude_default_fields:
+        if 'z_archiveLocation' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_archiveLocation',
@@ -563,7 +564,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('archiveLocation')
                 )
             )
-        if 'z_assignee' not in self.exclude_default_fields:
+        if 'z_assignee' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_assignee',
@@ -572,7 +573,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('assignee')
                 )
             )
-        if 'z_audioFileType' not in self.exclude_default_fields:
+        if 'z_audioFileType' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_audioFileType',
@@ -581,7 +582,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('audioFileType')
                 )
             )
-        if 'z_audioRecordingFormat' not in self.exclude_default_fields:
+        if 'z_audioRecordingFormat' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_audioRecordingFormat',
@@ -590,7 +591,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('audioRecordingFormat')
                 )
             )
-        if 'z_caseName' not in self.exclude_default_fields:
+        if 'z_caseName' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_caseName',
@@ -599,7 +600,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('caseName')
                 )
             )
-        if 'z_committee' not in self.exclude_default_fields:
+        if 'z_committee' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_committee',
@@ -608,7 +609,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('committee')
                 )
             )
-        if 'z_company' not in self.exclude_default_fields:
+        if 'z_company' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_company',
@@ -617,7 +618,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('company')
                 )
             )
-        if 'z_country' not in self.exclude_default_fields:
+        if 'z_country' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_country',
@@ -626,7 +627,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('country')
                 )
             )
-        if 'z_court' not in self.exclude_default_fields:
+        if 'z_court' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_court',
@@ -635,7 +636,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('court')
                 )
             )
-        if 'z_distributor' not in self.exclude_default_fields:
+        if 'z_distributor' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_distributor',
@@ -644,7 +645,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('distributor')
                 )
             )
-        if 'z_institution' not in self.exclude_default_fields:
+        if 'z_institution' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_institution',
@@ -653,7 +654,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('institution')
                 )
             )
-        if 'z_issuingAuthority' not in self.exclude_default_fields:
+        if 'z_issuingAuthority' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_issuingAuthority',
@@ -662,7 +663,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('issuingAuthority')
                 )
             )
-        if 'z_journalAbbreviation' not in self.exclude_default_fields:
+        if 'z_journalAbbreviation' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_journalAbbreviation',
@@ -671,7 +672,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('journalAbbreviation')
                 )
             )
-        if 'z_label' not in self.exclude_default_fields:
+        if 'z_label' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_label',
@@ -680,7 +681,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('label')
                 )
             )
-        if 'z_legislativeBody' not in self.exclude_default_fields:
+        if 'z_legislativeBody' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_legislativeBody',
@@ -689,7 +690,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('legislativeBody')
                 )
             )
-        if 'z_libraryCatalog' not in self.exclude_default_fields:
+        if 'z_libraryCatalog' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_libraryCatalog',
@@ -698,7 +699,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('libraryCatalog')
                 )
             )
-        if 'z_network' not in self.exclude_default_fields:
+        if 'z_network' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_network',
@@ -707,7 +708,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('network')
                 )
             )
-        if 'z_place' not in self.exclude_default_fields:
+        if 'z_place' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_place',
@@ -716,7 +717,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('place')
                 )
             )
-        if 'z_programmingLanguage' not in self.exclude_default_fields:
+        if 'z_programmingLanguage' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_programmingLanguage',
@@ -725,7 +726,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('programmingLanguage')
                 )
             )
-        if 'z_publisher' not in self.exclude_default_fields:
+        if 'z_publisher' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_publisher',
@@ -734,7 +735,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('publisher')
                 )
             )
-        if 'z_reporter' not in self.exclude_default_fields:
+        if 'z_reporter' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_reporter',
@@ -743,7 +744,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('reporter')
                 )
             )
-        if 'z_studio' not in self.exclude_default_fields:
+        if 'z_studio' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_studio',
@@ -752,7 +753,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('studio')
                 )
             )
-        if 'z_system' not in self.exclude_default_fields:
+        if 'z_system' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_system',
@@ -761,7 +762,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('system')
                 )
             )
-        if 'z_university' not in self.exclude_default_fields:
+        if 'z_university' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_university',
@@ -770,7 +771,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('university')
                 )
             )
-        if 'z_videoRecordingFormat' not in self.exclude_default_fields:
+        if 'z_videoRecordingFormat' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_videoRecordingFormat',
@@ -784,7 +785,7 @@ class Composer:
         # Date fields, for keyword search.
         #
 
-        if 'z_dateDecided' not in self.exclude_default_fields:
+        if 'z_dateDecided' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_dateDecided',
@@ -793,7 +794,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('dateDecided')
                 )
             )
-        if 'z_dateEnacted' not in self.exclude_default_fields:
+        if 'z_dateEnacted' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_dateEnacted',
@@ -802,7 +803,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('dateEnacted')
                 )
             )
-        if 'z_date' not in self.exclude_default_fields:
+        if 'z_date' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_date',
@@ -811,7 +812,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('date')
                 )
             )
-        if 'z_filingDate' not in self.exclude_default_fields:
+        if 'z_filingDate' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_filingDate',
@@ -820,7 +821,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('filingDate')
                 )
             )
-        if 'z_issueDate' not in self.exclude_default_fields:
+        if 'z_issueDate' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_issueDate',
@@ -834,7 +835,7 @@ class Composer:
         # Text fields, for keyword search.
         #
 
-        if 'z_abstractNote' not in self.exclude_default_fields:
+        if 'z_abstractNote' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_abstractNote',
@@ -843,7 +844,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('abstractNote')
                 )
             )
-        if 'z_artworkMedium' not in self.exclude_default_fields:
+        if 'z_artworkMedium' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_artworkMedium',
@@ -852,7 +853,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('artworkMedium')
                 )
             )
-        if 'z_artworkSize' not in self.exclude_default_fields:
+        if 'z_artworkSize' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_artworkSize',
@@ -861,7 +862,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('artworkSize')
                 )
             )
-        if 'z_codeVolume' not in self.exclude_default_fields:
+        if 'z_codeVolume' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_codeVolume',
@@ -870,7 +871,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('codeVolume')
                 )
             )
-        if 'z_edition' not in self.exclude_default_fields:
+        if 'z_edition' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_edition',
@@ -879,7 +880,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('edition')
                 )
             )
-        if 'z_episodeNumber' not in self.exclude_default_fields:
+        if 'z_episodeNumber' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_episodeNumber',
@@ -888,7 +889,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('episodeNumber')
                 )
             )
-        if 'z_genre' not in self.exclude_default_fields:
+        if 'z_genre' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_genre',
@@ -897,7 +898,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('genre')
                 )
             )
-        if 'z_history' not in self.exclude_default_fields:
+        if 'z_history' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_history',
@@ -906,7 +907,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('history')
                 )
             )
-        if 'z_interviewMedium' not in self.exclude_default_fields:
+        if 'z_interviewMedium' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_interviewMedium',
@@ -915,7 +916,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('interviewMedium')
                 )
             )
-        if 'z_issue' not in self.exclude_default_fields:
+        if 'z_issue' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_issue',
@@ -924,7 +925,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('issue')
                 )
             )
-        if 'z_language' not in self.exclude_default_fields:
+        if 'z_language' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_language',
@@ -933,7 +934,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('language')
                 )
             )
-        if 'z_legalStatus' not in self.exclude_default_fields:
+        if 'z_legalStatus' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_legalStatus',
@@ -942,7 +943,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('legalStatus')
                 )
             )
-        if 'z_letterType' not in self.exclude_default_fields:
+        if 'z_letterType' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_letterType',
@@ -951,7 +952,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('letterType')
                 )
             )
-        if 'z_manuscriptType' not in self.exclude_default_fields:
+        if 'z_manuscriptType' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_manuscriptType',
@@ -960,7 +961,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('manuscriptType')
                 )
             )
-        if 'z_mapType' not in self.exclude_default_fields:
+        if 'z_mapType' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_mapType',
@@ -969,7 +970,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('mapType')
                 )
             )
-        if 'z_postType' not in self.exclude_default_fields:
+        if 'z_postType' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_postType',
@@ -978,7 +979,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('postType')
                 )
             )
-        if 'z_presentationType' not in self.exclude_default_fields:
+        if 'z_presentationType' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_presentationType',
@@ -987,7 +988,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('presentationType')
                 )
             )
-        if 'z_references' not in self.exclude_default_fields:
+        if 'z_references' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_references',
@@ -996,7 +997,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('references')
                 )
             )
-        if 'z_reporterVolume' not in self.exclude_default_fields:
+        if 'z_reporterVolume' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_reporterVolume',
@@ -1005,7 +1006,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('reporterVolume')
                 )
             )
-        if 'z_reportType' not in self.exclude_default_fields:
+        if 'z_reportType' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_reportType',
@@ -1014,7 +1015,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('reportType')
                 )
             )
-        if 'z_rights' not in self.exclude_default_fields:
+        if 'z_rights' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_rights',
@@ -1023,7 +1024,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('rights')
                 )
             )
-        if 'z_seriesNumber' not in self.exclude_default_fields:
+        if 'z_seriesNumber' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_seriesNumber',
@@ -1032,7 +1033,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('seriesNumber')
                 )
             )
-        if 'z_seriesText' not in self.exclude_default_fields:
+        if 'z_seriesText' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_seriesText',
@@ -1041,7 +1042,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('seriesText')
                 )
             )
-        if 'z_thesisType' not in self.exclude_default_fields:
+        if 'z_thesisType' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_thesisType',
@@ -1050,7 +1051,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('thesisType')
                 )
             )
-        if 'z_versionNumber' not in self.exclude_default_fields:
+        if 'z_versionNumber' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_versionNumber',
@@ -1059,7 +1060,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('versionNumber')
                 )
             )
-        if 'z_volume' not in self.exclude_default_fields:
+        if 'z_volume' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_volume',
@@ -1068,7 +1069,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor('volume')
                 )
             )
-        if 'z_websiteType' not in self.exclude_default_fields:
+        if 'z_websiteType' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='z_websiteType',
@@ -1095,7 +1096,7 @@ class Composer:
         #
 
         # Creators, exempt from stemming.
-        if 'text_creator' not in self.exclude_default_fields:
+        if 'text_creator' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='text_creator',
@@ -1104,7 +1105,7 @@ class Composer:
                     extractor=extractors.CreatorsExtractor()
                 )
             )
-        if 'text_collections' not in self.exclude_default_fields:
+        if 'text_collections' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='text_collections',
@@ -1113,7 +1114,7 @@ class Composer:
                     extractor=extractors.CollectionNamesExtractor()
                 )
             )
-        if 'text_tags' not in self.exclude_default_fields:
+        if 'text_tags' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='text_tags',
@@ -1125,7 +1126,7 @@ class Composer:
                     )
                 )
             )
-        if 'text_notes' not in self.exclude_default_fields:
+        if 'text_notes' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='text_notes',
@@ -1144,7 +1145,7 @@ class Composer:
         #
 
         # Formatted citation.
-        if 'bib' not in self.exclude_default_fields:
+        if 'bib' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='bib',
@@ -1153,7 +1154,7 @@ class Composer:
                 )
             )
         # OpenURL Coins.
-        if 'coins' not in self.exclude_default_fields:
+        if 'coins' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='coins',
@@ -1162,7 +1163,7 @@ class Composer:
                 )
             )
         # RIS.
-        if 'ris' not in self.exclude_default_fields:
+        if 'ris' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='ris',
@@ -1171,7 +1172,7 @@ class Composer:
                 )
             )
         # BibTeX.
-        if 'bibtex' not in self.exclude_default_fields:
+        if 'bibtex' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='bibtex',
@@ -1180,7 +1181,7 @@ class Composer:
                 )
             )
         # Raw item data.
-        if 'data' not in self.exclude_default_fields:
+        if 'data' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='data',
@@ -1190,7 +1191,7 @@ class Composer:
                 )
             )
         # Child notes of the item.
-        if 'notes' not in self.exclude_default_fields:
+        if 'notes' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='notes',
@@ -1202,7 +1203,7 @@ class Composer:
                 )
             )
         # Fields and labels for this item type, for convenient access.
-        if 'item_fields' not in self.exclude_default_fields:
+        if 'item_fields' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='item_fields',
@@ -1212,7 +1213,7 @@ class Composer:
                 )
             )
         # Creator types for this item type, for convenient access.
-        if 'creator_types' not in self.exclude_default_fields:
+        if 'creator_types' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='creator_types',
@@ -1226,7 +1227,7 @@ class Composer:
         # Fields for sorting.
         #
 
-        if 'sort_title' not in self.exclude_default_fields:
+        if 'sort_title' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='sort_title',
@@ -1234,7 +1235,7 @@ class Composer:
                     extractor=extractors.SortItemDataExtractor('title'),
                 )
             )
-        if 'sort_creator' not in self.exclude_default_fields:
+        if 'sort_creator' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='sort_creator',
@@ -1242,7 +1243,7 @@ class Composer:
                     extractor=extractors.SortCreatorExtractor(),
                 )
             )
-        if 'sort_date' not in self.exclude_default_fields:
+        if 'sort_date' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='sort_date',
@@ -1251,11 +1252,14 @@ class Composer:
                 )
             )
 
-    def init_default_facets(self):
-        if '*' in self.exclude_default_facets:
+    def init_default_facets(self, exclude=None):
+        if exclude is None:
+            exclude = []
+
+        if '*' in exclude:
             return
 
-        if 'facet_tag' not in self.exclude_default_facets:
+        if 'facet_tag' not in exclude:
             self.add_facet(
                 FlatFacetSpec(
                     key='facet_tag',
@@ -1276,7 +1280,7 @@ class Composer:
                     query_class=Term
                 )
             )
-        if 'facet_item_type' not in self.exclude_default_facets:
+        if 'facet_item_type' not in exclude:
             self.add_facet(
                 FlatFacetSpec(
                     key='facet_item_type',
@@ -1294,7 +1298,7 @@ class Composer:
                     query_class=Prefix
                 )
             )
-        if 'facet_year' not in self.exclude_default_facets:
+        if 'facet_year' not in exclude:
             self.add_facet(
                 TreeFacetSpec(
                     key='facet_year',
@@ -1312,7 +1316,7 @@ class Composer:
                     query_class=Prefix
                 )
             )
-        if 'facet_link' not in self.exclude_default_facets:
+        if 'facet_link' not in exclude:
             self.add_facet(
                 FlatFacetSpec(
                     key='facet_link',
@@ -1331,16 +1335,19 @@ class Composer:
                 )
             )
 
-    def init_default_sorts(self):
+    def init_default_sorts(self, exclude=None):
         """
         Initialize a set of default `SortSpec` instances.
 
         These rely on `FieldSpec` instances, which must have been added first.
         """
-        if '*' in self.exclude_default_sorts:
+        if exclude is None:
+            exclude = []
+
+        if '*' in exclude:
             return
 
-        if 'score' not in self.exclude_default_sorts:
+        if 'score' not in exclude:
             self.add_sort(
                 SortSpec(
                     key='score',
@@ -1351,7 +1358,7 @@ class Composer:
                     is_allowed=lambda criteria: criteria.has_keyword_search()
                 )
             )
-        if 'date_desc' not in self.exclude_default_sorts:
+        if 'date_desc' not in exclude:
             self.add_sort(
                 SortSpec(
                     key='date_desc',
@@ -1365,7 +1372,7 @@ class Composer:
                     reverse=True
                 )
             )
-        if 'date_asc' not in self.exclude_default_sorts:
+        if 'date_asc' not in exclude:
             self.add_sort(
                 SortSpec(
                     key='date_asc',
@@ -1378,7 +1385,7 @@ class Composer:
                     ]
                 )
             )
-        if 'author_asc' not in self.exclude_default_sorts:
+        if 'author_asc' not in exclude:
             self.add_sort(
                 SortSpec(
                     key='author_asc',
@@ -1391,7 +1398,7 @@ class Composer:
                     ]
                 )
             )
-        if 'author_desc' not in self.exclude_default_sorts:
+        if 'author_desc' not in exclude:
             self.add_sort(
                 SortSpec(
                     key='author_desc',
@@ -1405,7 +1412,7 @@ class Composer:
                     reverse=True
                 )
             )
-        if 'title_asc' not in self.exclude_default_sorts:
+        if 'title_asc' not in exclude:
             self.add_sort(
                 SortSpec(
                     key='title_asc',
@@ -1418,7 +1425,7 @@ class Composer:
                     ]
                 )
             )
-        if 'title_desc' not in self.exclude_default_sorts:
+        if 'title_desc' not in exclude:
             self.add_sort(
                 SortSpec(
                     key='title_desc',
@@ -1433,16 +1440,19 @@ class Composer:
                 )
             )
 
-    def init_default_citation_formats(self):
+    def init_default_citation_formats(self, exclude=None):
         """
         Initialize a set of default `CitationFormatSpec` instances.
 
         These rely on `FieldSpec` instances, which must have been added first.
         """
-        if '*' in self.exclude_default_citation_formats:
+        if exclude is None:
+            exclude = []
+
+        if '*' in exclude:
             return
 
-        if 'ris' not in self.exclude_default_citation_formats:
+        if 'ris' not in exclude:
             self.add_citation_format(
                 CitationFormatSpec(
                     key='ris',
@@ -1454,7 +1464,7 @@ class Composer:
                     mime_type='application/x-research-info-systems'
                 )
             )
-        if 'bibtex' not in self.exclude_default_citation_formats:
+        if 'bibtex' not in exclude:
             self.add_citation_format(
                 CitationFormatSpec(
                     key='bibtex',
