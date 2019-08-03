@@ -43,17 +43,37 @@ The following features are implemented in Kerko:
   bibliography or discover new topics may choose to navigate along the proposed
   facets, to refine or broaden their results. Since both modes are integrated
   into a single interface, it is possible to combine them.
-* Search syntax: boolean operators (AND, OR, NOT; AND is implicit between any
-  two terms separated by a whitespace), logical grouping (with parentheses),
-  sequence of words (with double quotes (")).
-* Search is case-insentitive, accents are folded, and punctuation is ignored. To
-  further improve recall (albeit at the cost of precision), stemming is also
-  performed on terms from most text fields, e.g., title, abstract, notes. It
-  relieves the user from having to specify all variants of a word when
-  searching; for example, terms such as "search", "searches", and "searching"
-  all return the same results. The [Snowball] algorithm is used for that
-  purpose.
-* Sort options: by relevance score (only applicable with text search), by
+* Keyword search features:
+  * Boolean operators:
+    * `AND`: matches items that contain all specified terms. This is the default
+      relation between terms when no operator is specified, e.g., `a b` is the
+      same as `a AND b`.
+    * `OR`: matches items that contain any of the specified terms, e.g., `a OR
+      b`.
+    * `NOT`: excludes items that match the term, e.g., `NOT a`.
+    * Boolean operators must be specified in uppercase and may be translated in
+      other languages.
+  * Logical grouping (with parentheses), e.g., `(a OR b) AND c`.
+  * Sequence of words (with double quotes), e.g., `"a b c"`. The default
+    difference between word positions is 1, meaning that an item will match if
+    it contains the words next to each other, but a different maximum distance
+    may be selected (with the tilde character), e.g. `"web search"~2` allows up
+    to 1 word between `web` and `search`, meaning it could match `web site
+    search` as well as `web search`.
+  * Term boosting (with the caret), e.g., `faceted^2 search browsing^0.5`
+    specifies that `faceted` is twice as important as `search` when computing
+    the relevance score of results, while `browsing` is half as important.
+    Boosting may be applied to a logical grouping, e.g., `(a b)^3 c`.
+  * Keyword search is case-insentitive, accents are folded, and punctuation is
+    ignored. To further improve recall (albeit at the cost of precision),
+    stemming is also performed on terms from most text fields, e.g., title,
+    abstract, notes. Stemming relieves the user from having to specify all
+    variants of a word when searching, e.g., terms such as `search`, `searches`,
+    and `searching` all return the same results. The [Snowball] algorithm is
+    used for that purpose.
+  * Field search: users may target all fields, author/contributor fields only,
+    or titles only. Applications may provide additional choices.
+* Sort options: by relevance score (only applicable with keyword search), by
   publication date, by author, by title.
 * Relevance scoring: provided by the [Whoosh] library and based on the [BM25F]
   algorithm, which determines how important a term is to a document in the
