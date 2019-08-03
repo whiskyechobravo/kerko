@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kerko 0.3.dev0\n"
 "Report-Msgid-Bugs-To: kerko@whiskyechobravo.com\n"
-"POT-Creation-Date: 2019-07-26 17:47-0400\n"
-"PO-Revision-Date: 2019-07-26 17:47-0400\n"
+"POT-Creation-Date: 2019-08-03 11:23-0400\n"
+"PO-Revision-Date: 2019-08-03 11:23-0400\n"
 "Last-Translator: David Lesieur <kerko@whiskyechobravo.com>\n"
 "Language: fr\n"
 "Language-Team: fr <kerko@whiskyechobravo.com>\n"
@@ -34,97 +34,109 @@ msgstr "En {}"
 msgid "Between {} and {}"
 msgstr "Entre {} et {}"
 
-#: kerko/composer.py:145
+#: kerko/composer.py:172
 msgid "In any field"
 msgstr "Dans tous les champs"
 
-#: kerko/composer.py:146
+#: kerko/composer.py:173
 msgid "Any field"
 msgstr "Tous les champs"
 
-#: kerko/composer.py:154
+#: kerko/composer.py:181
 msgid "In authors/contributors"
 msgstr "Dans les auteurs/contributeurs"
 
-#: kerko/composer.py:155 kerko/templates/kerko/item.html.jinja2:88
+#: kerko/composer.py:182 kerko/templates/kerko/item.html.jinja2:88
 msgid "Author/contributor"
 msgid_plural "Authors/contributors"
 msgstr[0] "Auteur/contributeur"
 msgstr[1] "Auteurs/contributeurs"
 
-#: kerko/composer.py:163
+#: kerko/composer.py:190
 msgid "In titles"
 msgstr "Dans les titres"
 
-#: kerko/composer.py:164
+#: kerko/composer.py:191
 msgid "Title"
 msgstr "Titre"
 
-#: kerko/composer.py:1235
+#: kerko/composer.py:1262
 msgid "Topic"
 msgstr "Sujet"
 
-#: kerko/composer.py:1256 kerko/templates/kerko/item.html.jinja2:85
+#: kerko/composer.py:1283 kerko/templates/kerko/item.html.jinja2:85
 msgid "Resource type"
 msgstr "Type de ressource"
 
-#: kerko/composer.py:1274
+#: kerko/composer.py:1301
 msgid "Publication year"
 msgstr "Année de publication"
 
-#: kerko/composer.py:1280
+#: kerko/composer.py:1307
 msgid "Unknown"
 msgstr "Inconnue"
 
-#: kerko/composer.py:1292
+#: kerko/composer.py:1319
 msgid "Online resource"
 msgstr "Ressource en ligne"
 
-#: kerko/composer.py:1320
+#: kerko/composer.py:1347
 msgid "Relevance"
 msgstr "Pertinence"
 
-#: kerko/composer.py:1331
+#: kerko/composer.py:1358
 msgid "Newest first"
 msgstr "Date décroissante"
 
-#: kerko/composer.py:1345
+#: kerko/composer.py:1372
 msgid "Oldest first"
 msgstr "Date croissante"
 
-#: kerko/composer.py:1358
+#: kerko/composer.py:1385
 msgid "Author A-Z"
 msgstr "Auteur A-Z"
 
-#: kerko/composer.py:1371
+#: kerko/composer.py:1398
 msgid "Author Z-A"
 msgstr "Auteur Z-A"
 
-#: kerko/composer.py:1385
+#: kerko/composer.py:1412
 msgid "Title A-Z"
 msgstr "Titre A-Z"
 
-#: kerko/composer.py:1398
+#: kerko/composer.py:1425
 msgid "Title Z-A"
 msgstr "Titre Z-A"
 
-#: kerko/composer.py:1423
+#: kerko/composer.py:1450
 msgid "RIS"
-msgstr ""
+msgstr "RIS"
 
-#: kerko/composer.py:1424
+#: kerko/composer.py:1451
 msgid "Recommended format for most reference management software"
 msgstr ""
 "Format recommandé pour la plupart des logiciels de gestion de références "
 "bibliographiques"
 
-#: kerko/composer.py:1435
+#: kerko/composer.py:1462
 msgid "BibTeX"
-msgstr ""
+msgstr "BibTeX"
 
-#: kerko/composer.py:1436
+#: kerko/composer.py:1463
 msgid "Recommended format for BibTeX-specific software"
 msgstr "Format recommandé pour les logiciels spécialement conçus pour BibTeX"
+
+#: kerko/query.py:29
+msgid "AND"
+msgstr "ET"
+
+#: kerko/query.py:30
+msgid "OR"
+msgstr "OU"
+
+#: kerko/query.py:31
+msgid "NOT"
+msgstr "SAUF"
 
 #: kerko/views.py:81
 msgid "Result"
