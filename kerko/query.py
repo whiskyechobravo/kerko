@@ -1,6 +1,9 @@
+import re
+
 from flask import current_app
+from flask_babelex import gettext
 from whoosh.qparser import MultifieldParser, QueryParser
-from whoosh.qparser.plugins import PhrasePlugin, GroupPlugin, OperatorsPlugin
+from whoosh.qparser import plugins
 from whoosh.query import And, Not, Every
 from whoosh.sorting import Facets, Count
 
@@ -18,9 +21,20 @@ def build_keywords_query(keywords):
     queries = []
     if keywords:
         composer = current_app.config['KERKO_COMPOSER']
-        text_plugins = [PhrasePlugin(),
-                        GroupPlugin(),
-                        OperatorsPlugin()]
+        text_plugins = [
+            plugins.WhitespacePlugin(),
+            plugins.PhrasePlugin(),
+            plugins.GroupPlugin(),
+            plugins.OperatorsPlugin(
+                And=r"(?<=\s)" + re.escape(gettext("AND")) + r"(?=\s)",
+                Or=r"(?<=\s)" + re.escape(gettext("OR")) + r"(?=\s)",
+                Not=r"(^|(?<=(\s|[()])))" + re.escape(gettext("NOT")) + r"(?=\s)",
+                AndNot=None,
+                AndMaybe=None,
+                Require=None
+            ),
+            plugins.BoostPlugin(),
+        ]
         for key, value in keywords.items(multi=True):
             fields = [spec.key for spec in composer.fields.values() if key in spec.scopes]
             if not fields:
