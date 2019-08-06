@@ -500,6 +500,12 @@ seek, to look for, to demand, to search" and seems fit to describe a search
 tool.
 
 
+## Powered by Kerko
+
+If you wish to share your Kerko-powered online bibliography with us all, we'll
+be happy to list it in this section. To have it added, please [e-mail
+us][Kerko_email] or submit a pull request.
+
 
 [Babel]: https://pypi.org/project/Babel/
 [BM25F]: https://en.wikipedia.org/wiki/Okapi_BM25
