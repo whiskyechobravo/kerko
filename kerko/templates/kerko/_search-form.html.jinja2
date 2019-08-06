@@ -1,12 +1,12 @@
 {%- if search_results|length > 0 %}
     <form method="post" {% block search_form_attributes %}class="form d-print-none"{% endblock %}>
         {{- form.hidden_tag() }}
-        {{- form_errors(form, hiddens='only') }}
         <div class="input-group">
-            {#- TODO: Handle form.scope.errors and form.keywords.errors -#}
             {%- set placeholder = _("Search within results for...") if is_searching else _("Search for...") %}
-            {{- form.keywords(class_="form-control flex-grow-1", placeholder=placeholder) }}
-            {{- form.scope(class_="flex-grow-0 custom-select w-40") }}
+            {%- set keywords_validation_class = " is-invalid" if 'keywords' in form.errors else "" %}
+            {%- set scope_validation_class = " is-invalid" if 'scope' in form.errors else "" %}
+            {{- form.keywords(class_="form-control flex-grow-1" + keywords_validation_class, placeholder=placeholder) }}
+            {{- form.scope(class_="flex-grow-0 custom-select w-40" + scope_validation_class) }}
             <div class="input-group-append">
                 <button id="submit" type="submit" {% block search_button_attributes %}class="btn btn-primary"{% endblock %}>
                     {%- block search_button_icon -%}
@@ -18,5 +18,12 @@
                 </button>
             </div>
         </div>
+        {%- if form.errors %}
+            {%- for key, errors in form.errors.items() %}
+                {%- for error in errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                {%- endfor %}
+            {%- endfor %}
+        {%- endif %}
     </form>
 {%- endif %}

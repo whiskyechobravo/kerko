@@ -1,4 +1,4 @@
-from wtforms import SelectField
+from wtforms import SelectField, validators
 from wtforms.fields.html5 import SearchField
 
 from flask import current_app
@@ -7,7 +7,7 @@ from flask_wtf import FlaskForm
 
 class SearchForm(FlaskForm):
     scope = SelectField()
-    keywords = SearchField()
+    keywords = SearchField(validators=[validators.optional(), validators.length(max=1000)])
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

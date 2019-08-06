@@ -1,5 +1,4 @@
 {% extends "kerko/layout.html.jinja2" %}
-{% from 'bootstrap/form.html' import render_field, form_errors %}
 {% from "kerko/_facet.html.jinja2" import facet %}
 
 {%- set show_print_link = config.KERKO_PRINT_CITATIONS_MAX_COUNT == 0 or total_count <= config.KERKO_PRINT_CITATIONS_MAX_COUNT %}
