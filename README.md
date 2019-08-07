@@ -1,5 +1,5 @@
-[![License](https://img.shields.io/pypi/l/kerko)](https://pypi.org/project/Kerko/)
-[![Version](https://img.shields.io/pypi/v/kerko?color=informational)](https://pypi.org/project/Kerko/)
+[![License](https://img.shields.io/pypi/l/kerko)][Kerko]
+[![Version](https://img.shields.io/pypi/v/kerko?color=informational)][Kerko_pypi]
 
 # Kerko
 
@@ -530,6 +530,7 @@ us][Kerko_email] or submit a pull request.
 [Kerko]: https://github.com/whiskyechobravo/kerko
 [Kerko_email]: mailto:kerko@whiskyechobravo.com
 [Kerko_issues]: https://github.com/whiskyechobravo/kerko/issues
+[Kerko_pypi]: https://pypi.org/project/Kerko/
 [Kerko_translations]: https://github.com/whiskyechobravo/kerko/tree/master/kerko/translations
 [KerkoApp]: https://github.com/whiskyechobravo/kerkoapp
 [KerkoApp_demo]: https://demo.kerko.whiskyechobravo.com
