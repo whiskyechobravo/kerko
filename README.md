@@ -1,3 +1,6 @@
+[![License](https://img.shields.io/pypi/l/kerko)](https://pypi.org/project/Kerko/)
+[![Version](https://img.shields.io/pypi/v/kerko?color=informational)](https://pypi.org/project/Kerko/)
+
 # Kerko
 
 [Kerko] is a web application component for the [Flask] framework that provides a
