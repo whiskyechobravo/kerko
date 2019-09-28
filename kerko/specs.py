@@ -338,27 +338,19 @@ class TreeFacetSpec(FacetSpec):
 
 class CollectionFacetSpec(TreeFacetSpec):
     """
-    A top-level Zotero collection can act as a facet when its key matches the
-    collection_key specified when instanciating this class. Subcollections
-    become facet values.
+    A top-level Zotero collection can act as a facet when its key matches a
+    given `collection_key`. Subcollections become facet values.
     """
 
     def __init__(self, collection_key, **kwargs):
         # Provide more convenient defaults for this type of facet.
-        if not kwargs.get('key'):
-            kwargs['key'] = 'collection_facet_' + collection_key
-        if not kwargs.get('field_type'):
-            kwargs['field_type'] = ID(stored=True)
-        if not kwargs.get('filter_key') and kwargs.get('title'):
-            kwargs['filter_key'] = slugify(kwargs.get('title'))
-        if not kwargs.get('codec'):
-            kwargs['codec'] = CollectionFacetCodec()
-        if not kwargs.get('sort_key'):
-            kwargs['sort_key'] = ['label']
-        if not kwargs.get('query_class'):
-            kwargs['query_class'] = Prefix
-        if not kwargs.get('extractor'):
-            kwargs['extractor'] = extractors.CollectionFacetTreeExtractor()
+        kwargs.setdefault('key', 'collection_facet_' + collection_key)
+        kwargs.setdefault('field_type', ID(stored=True))
+        kwargs.setdefault('filter_key', slugify(kwargs.get('title')))
+        kwargs.setdefault('codec', CollectionFacetCodec())
+        kwargs.setdefault('sort_key', ['label'])
+        kwargs.setdefault('query_class', Prefix)
+        kwargs.setdefault('extractor', extractors.CollectionFacetTreeExtractor())
         super().__init__(**kwargs)
         self.collection_key = collection_key
 

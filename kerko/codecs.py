@@ -104,8 +104,7 @@ class LabelFacetCodec(BaseFacetCodec):
 class CollectionFacetCodec(LabelFacetCodec):
 
     def __init__(self, path_separator='.', **kwargs):
-        if 'label_separator' not in kwargs:
-            kwargs['label_separator'] = ' '
+        kwargs.setdefault('label_separator', ' ')
         super().__init__(**kwargs)
         self.path_separator = path_separator
 
@@ -128,8 +127,7 @@ class CollectionFacetCodec(LabelFacetCodec):
 class ItemTypeFacetCodec(LabelFacetCodec):
 
     def __init__(self, **kwargs):
-        if 'label_separator' not in kwargs:
-            kwargs['label_separator'] = ':'
+        kwargs.setdefault('label_separator', ':')
         super().__init__(**kwargs)
 
     def encode(self, value):
