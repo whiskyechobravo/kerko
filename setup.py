@@ -72,7 +72,7 @@ setup(
         "Flask-WTF>=0.14.2",
         "Jinja2>=2.10.1",
         "Pyzotero>=1.4.1",
-        "Werkzeug>=0.15",
+        "Werkzeug>=0.15.3",
         "Whoosh>=2.7.4",
         "wrapt>=1.10.0",
         "WTForms>=2.2",
