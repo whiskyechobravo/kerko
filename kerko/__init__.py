@@ -64,7 +64,7 @@ def init_default_config(state):
     state.app.config.setdefault('KERKO_USE_TRANSLATIONS', True)
 
     state.app.config.setdefault('KERKO_BOOTSTRAP_VERSION', '4.3.1')
-    state.app.config.setdefault('KERKO_JQUERY_VERSION', '3.3.1')
+    state.app.config.setdefault('KERKO_JQUERY_VERSION', '3.4.1')
     state.app.config.setdefault('KERKO_POPPER_VERSION', '1.14.7')
     state.app.config.setdefault('KERKO_WITH_JQUERY', True)
     state.app.config.setdefault('KERKO_WITH_POPPER', True)
