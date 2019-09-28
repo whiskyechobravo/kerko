@@ -22,7 +22,6 @@ def build_keywords_query(keywords):
     if keywords:
         composer = current_app.config['KERKO_COMPOSER']
         text_plugins = [
-            plugins.WhitespacePlugin(),
             plugins.PhrasePlugin(),
             plugins.GroupPlugin(),
             plugins.OperatorsPlugin(
