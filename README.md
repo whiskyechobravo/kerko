@@ -76,21 +76,25 @@ The following features are implemented in Kerko:
     used for that purpose.
   * Field search: users may target all fields, author/contributor fields only,
     or titles only. Applications may provide additional choices.
-* Sort options: by relevance score (only applicable with keyword search), by
-  publication date, by author, by title.
+* Faceted browsing: allows filtering by topic (Zotero tag), by resource type
+  (Zotero item type), by publication year. Moreover, an application may define
+  facets modeled on collections and subcollections; in such case, any collection
+  can be represented as a facet, and each subcollection as a value within that
+  facet. By taking advantage of Zotero's ability to assign any given item to
+  multiple collections, a faceted classification scheme can be modeled
+  (including hierarchies within facets).
 * Relevance scoring: provided by the [Whoosh] library and based on the [BM25F]
   algorithm, which determines how important a term is to a document in the
   context of the whole collection of documents, while taking into account its
   relation to document structure (in this regard most fields are neutral, but
   the score is boosted when a term appears in specific fields, e.g., DOI, ISBN,
-  ISSN, title, author/contributor).
-* Facets: allow filtering by topic (Zotero tag), by resource type (Zotero item
-  type), by publication year. Moreover, an application may define facets modeled
-  on collections and subcollections; in this case, any collection can be
-  represented as a facet, and each subcollection as a value within that facet.
-  Using Zotero's ability to assign any given item to multiple collections, a
-  faceted classification scheme can be modeled (including hierarchies within
-  facets).
+  ISSN, title, author/contributor). Any keyword search asks the question "how
+  well does this document match this query clause?", which requires calculating
+  a relevance score for each document. Filtering with facets, on the other hand,
+  has no effect on the score because it asks "does this document match this
+  query clause?", which leads to a yes or no answer.
+* Sort options: by relevance score (only applicable with keyword search), by
+  publication date, by author, by title.
 * Citation styles: any from the [Zotero Style Repository][Zotero_styles], or
   custom stylesheet defined in the [Citation Style Language][CSL] (stylesheet
   must be accessible by URL).
