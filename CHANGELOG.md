@@ -14,11 +14,6 @@ Security fixes:
   Werkzeug before 0.15.3, when used with Docker, has insufficient debugger PIN
   randomness because Docker containers share the same machine id."
 
-Bug fixes:
-
-* Fix no results when search string includes a punctuation character preceded by
-  one or more whitespaces.
-
 Other changes:
 
 * Update jQuery version to 3.4.1.
