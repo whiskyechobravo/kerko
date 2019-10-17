@@ -1,5 +1,6 @@
 from datetime import datetime
 import os
+import pathlib
 import shutil
 
 from flask import current_app
@@ -10,21 +11,24 @@ from . import zotero
 from .extractors import ItemContext, LibraryContext
 
 
+def get_index_dir():
+    return pathlib.Path(current_app.config['KERKO_DATA_DIR']) / 'index'
+
+
 def open_index(auto_create=False):
-    if not current_app.config['KERKO_DATA_DIR'].exists() and auto_create:
-        os.makedirs(current_app.config['KERKO_DATA_DIR'], exist_ok=True)
-        return create_in(
-            current_app.config['KERKO_DATA_DIR'],
-            current_app.config['KERKO_COMPOSER'].schema
-        )
-    if current_app.config['KERKO_DATA_DIR'].exists():
-        return open_dir(current_app.config['KERKO_DATA_DIR'])
+    index_dir = get_index_dir()
+    if not index_dir.exists() and auto_create:
+        os.makedirs(index_dir, exist_ok=True)
+        return create_in(index_dir, current_app.config['KERKO_COMPOSER'].schema)
+    if index_dir.exists():
+        return open_dir(index_dir)
     raise FileNotFoundError
 
 
 def delete_index():
-    if current_app.config['KERKO_DATA_DIR'].exists():
-        shutil.rmtree(current_app.config['KERKO_DATA_DIR'])
+    index_dir = get_index_dir()
+    if index_dir.exists():
+        shutil.rmtree(index_dir)
 
 
 def request_library_context(zotero_credentials):

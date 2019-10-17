@@ -289,8 +289,9 @@ Any of the following variables may be added to your configuration if you wish to
 override their default value:
 
 * `KERKO_TITLE`: The title to display in web pages. Defaults to `'Kerko'`.
-* `KERKO_DATA_DIR`: The directory where to store the search index. Defaults
-  to `data/kerko`.
+* `KERKO_DATA_DIR`: The directory where to store the search index and the file
+  attachments. Defaults to `data/kerko`. Subdirectories `index` and
+  `attachments` will be created if they don't already exist.
 * `BABEL_DEFAULT_LOCALE`: The default language of the user interface. Defaults
   to `'en'`. Your application may set this variable and/or implement a locale
   selector function to override it (see the [Flask-BabelEx
