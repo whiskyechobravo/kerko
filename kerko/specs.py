@@ -6,7 +6,7 @@ from whoosh.fields import ID
 from whoosh.query import Prefix, Term
 
 from . import extractors
-from .codecs import BaseFieldCodec, BaseFacetCodec, CollectionFacetCodec
+from .codecs import IdentityFieldCodec, BaseFacetCodec, CollectionFacetCodec
 from .text import slugify, sort_normalize
 from .tree import Tree
 
@@ -62,7 +62,7 @@ class FieldSpec(BaseFieldSpec):
         """
         super().__init__(**kwargs)
         self.scopes = scopes or []
-        self.codec = codec or BaseFieldCodec()
+        self.codec = codec or IdentityFieldCodec()
 
     def encode(self, value):
         return self.codec.encode(value)

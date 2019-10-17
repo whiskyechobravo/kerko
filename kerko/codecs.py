@@ -7,13 +7,28 @@ to extracting a value and label for use in the search interface.
 
 import datetime
 import json
+from abc import ABC, abstractmethod
 
 from flask_babelex import lazy_gettext as _
 
 
-class BaseFieldCodec:
+class BaseFieldCodec(ABC):
     """
     Encode or decode a value.
+    """
+
+    @abstractmethod
+    def encode(self, value):
+        pass
+
+    @abstractmethod
+    def decode(self, encoded_value):
+        pass
+
+
+class IdentityFieldCodec(BaseFieldCodec):
+    """
+    Encode or decode a value without any transformation.
     """
 
     def encode(self, value):
@@ -23,7 +38,7 @@ class BaseFieldCodec:
         return encoded_value
 
 
-class JSONFieldCodec:
+class JSONFieldCodec(BaseFieldCodec):
     """
     Encode or decode a value to/from a JSON string.
     """
