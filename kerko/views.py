@@ -64,7 +64,7 @@ def search():
             title=search_results[0].get('data', {}).get('title', ''),
             item=search_results[0],
             item_url=url_for(
-                '.item', item_id=search_results[0]['id'], _external=True
+                '.item_view', item_id=search_results[0]['id'], _external=True
             ) if search_results[0] else '',
             back_url=criteria.build_url(page_num=list_page_num),
             time=time.process_time() - start_time,
@@ -99,23 +99,23 @@ def search():
 
 
 @blueprint.route('/<string:item_id>')
-def item(item_id):
+def item_view(item_id):
     start_time = time.process_time()
 
     if current_app.config['KERKO_USE_TRANSLATIONS']:
         babel_domain.as_default()
 
-    result = run_query_unique('id', item_id)
-    if not result:
+    item = run_query_unique('id', item_id)
+    if not item:
         abort(404)
 
-    build_creators_display(result)
-    build_fake_facet_results(result)
+    build_creators_display(item)
+    build_fake_facet_results(item)
     return render_template(
         'kerko/item.html.jinja2',
-        item=result,
-        title=result.get('data', {}).get('title', ''),
-        item_url=url_for('.item', item_id=result['id'], _external=True) if result else '',
+        item=item,
+        title=item.get('data', {}).get('title', ''),
+        item_url=url_for('.item_view', item_id=item['id'], _external=True) if item else '',
         time=time.process_time() - start_time,
         locale=get_locale(),
     )
@@ -126,15 +126,15 @@ def item_citation_download(item_id, citation_format_key):
     if current_app.config['KERKO_USE_TRANSLATIONS']:
         babel_domain.as_default()
 
-    result = run_query_unique('id', item_id)
-    if not result:
+    item = run_query_unique('id', item_id)
+    if not item:
         abort(404)
 
     citation_format = current_app.config['KERKO_COMPOSER'].citation_formats.get(citation_format_key)
     if not citation_format:
         abort(404)
 
-    content = result.get(citation_format.field.key)
+    content = item.get(citation_format.field.key)
     if not content:
         abort(404)
 
