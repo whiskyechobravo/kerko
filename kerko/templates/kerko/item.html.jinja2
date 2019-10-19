@@ -109,7 +109,7 @@
             {%- endif %}
         {%- endfor %}
         {{- field(_("Notes"), item.notes|join('')|safe) if item.notes }}
-        {{- field(_("Citation"), item.bib|safe) }}
+        {{- field(_("Citation"), ('<div class="card"><div class="card-body">' + item.bib + '</div></div>')|safe) }}
         {%- if item.facet_results %}
             {%- for f in config.KERKO_COMPOSER.facets.values() if f.item_view and f.key in item.facet_results %}
                 {{- facet(
