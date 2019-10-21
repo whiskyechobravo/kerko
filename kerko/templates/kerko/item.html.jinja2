@@ -55,7 +55,7 @@
                                     <span class="fas fa-print"></span>
                                 {%- endblock print_icon -%}
                                 {%- block print_text %}
-                                    {{ _("Print this citation") }}
+                                    {% trans count=1 %}Print this citation{% pluralize %}Print {{ count_formatted }} citations{% endtrans %} {# Note: Pluralization not useful here, but have to use the same form as elsewhere for the translation to get loaded. #}
                                 {%- endblock print_text -%}
                             </a>
                         </div>
@@ -68,7 +68,7 @@
                                         <span class="fas fa-download"></span>
                                     {%- endblock download_icon -%}
                                     {%- block download_text %}
-                                        {{ _("Download this citation") }}
+                                        {% trans count=1 %}Download this citation{% pluralize %}Download {{ count_formatted }} citations{% endtrans %} {# Note: Pluralization not useful here, but have to use the same form as elsewhere for the translation to get loaded. #}
                                     {%- endblock download_text -%}
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labeledby="download-options">
