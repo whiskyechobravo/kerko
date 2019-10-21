@@ -24,7 +24,7 @@ class Composer:
     The schema is the representation of documents and their fields in the search
     index. It is meant to be fully constructed at app configuration time and not
     changed afterwards. If schema elements need to be modified or removed, the
-    application should be stopped and the index cleaned and rebuilt.
+    application should be stopped, and the search index cleaned and rebuilt.
     """
 
     def __init__(
