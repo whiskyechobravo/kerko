@@ -48,7 +48,8 @@ def request_library_context(zotero_credentials):
     return LibraryContext(collections, item_types, item_fields, creator_types)
 
 
-def update_index():
+def sync_index():
+    """Build the search index from items retrieved from Zotero."""
     start_time = datetime.now()
 
     composer = current_app.config['KERKO_COMPOSER']
@@ -67,10 +68,10 @@ def update_index():
             spec.extractor.format
             for spec in list(composer.fields.values()) + list(composer.facets.values())
         }
-        for item, notes in zotero.Items(zotero_credentials, allowed_item_types, list(formats)):
+        for item, children in zotero.Items(zotero_credentials, allowed_item_types, list(formats)):
             count += 1
             document = {}
-            item_context = ItemContext(item, notes)
+            item_context = ItemContext(item, children)
             for spec in list(composer.fields.values()) + list(composer.facets.values()):
                 spec.extract_to_document(document, item_context, library_context)
             update_document_with_writer(writer, document, count=count)
@@ -81,6 +82,8 @@ def update_index():
     else:
         writer.commit()
         current_app.logger.info(_format_elapsed_time(count, start_time))
+    # TODO: return count of processed items
+    # TODO: move timer outside function; leave that to the caller.
 
 
 def update_document_with_writer(writer, document, count=None):

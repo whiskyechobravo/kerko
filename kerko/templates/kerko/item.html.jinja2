@@ -132,6 +132,18 @@
                 }}
             {%- endfor %}
         {%- endif %}
+        {%- if item.attachments %}
+            <div class="row">
+                <div class="col-md-4 col-lg-3 font-weight-bold break-word text-md-right text-print-left">{% trans count=item.attachments|length %}Attachment{% pluralize %}Attachments{% endtrans %}</div>
+                <div class="col-md-8 col-lg-9 break-word">
+                    <ul class="list-unstyled">
+                        {%- for attachment in item.attachments %}
+                            <li><a href="{{ url_for('kerko.item_attachment_download', item_id=item.id, attachment_id=attachment['id']) }}" title="{{ _('Download this attachment') }}"><span class="fas fa-download"></span> {{ attachment.filename }}</a></li>
+                        {%- endfor %}
+                    </ul>
+                </div>
+            </div>
+        {%- endif %}
         {{- field(_("Link to this record"), permalink(item_url)) }}
     </div>
     {% if config.DEBUG %}{% trans time="%.2f"|format(time) %}Processing time: {{time}} seconds{% endtrans %}{% endif %}

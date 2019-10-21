@@ -122,6 +122,10 @@ The following features are implemented in Kerko:
 * Printing: stylesheets are provided for printing individual bibliographic
   records as well as lists of search results. When printing search results, all
   results get printed (not just the current page of results).
+* Notes and attachments: notes and file attachments are synchronized from
+  zotero.org and made available to users of the bibliography. Regular
+  expressions may be used to include or exclude notes or attachments from the
+  bibliography based on their tags.
 * Modularity: although a [standalone application][KerkoApp] is available, Kerko
   is designed not as a standalone application, but to be part of a larger Flask
   application.
@@ -245,7 +249,7 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
 
    ```bash
    export FLASK_APP=hello_kerko.py
-   flask kerko index
+   flask kerko sync
    ```
 
    Kerko will retrieve your bibliographic data from zotero.org. If you have a

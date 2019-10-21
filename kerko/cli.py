@@ -4,7 +4,8 @@ import click
 from flask.cli import with_appcontext
 
 from . import zotero
-from .index import update_index, delete_index
+from .attachments import delete_attachments, sync_attachments
+from .index import delete_index, sync_index
 
 
 @click.group()
@@ -12,18 +13,54 @@ def cli():
     """Run a Kerko subcommand."""
 
 
-@cli.command()
+@cli.command(deprecated=True)
 @with_appcontext
-def index():
-    """Index items from the Zotero library."""
-    update_index()
+def index():  # Deprecated after version 0.4.
+    """
+    Synchronize the search index and the attachments from the Zotero library.
+
+    This command is deprecated. Use the 'sync' command.
+    """
+    sync_index()
+    sync_attachments()
 
 
 @cli.command()
+@click.argument(
+    'target',
+    default='everything',
+    type=click.Choice(['index', 'attachments', 'everything'], case_sensitive=False),
+)
 @with_appcontext
-def clean():
-    """Delete the search index data immediately."""
-    delete_index()
+def sync(target):
+    """
+    Synchronize the search index and/or the attachments from the Zotero library.
+
+    By default, both are synchronized.
+    """
+    if target in ['everything', 'index']:
+        sync_index()
+    if target in ['everything', 'attachments']:
+        sync_attachments()
+
+
+@cli.command()
+@click.argument(
+    'target',
+    default='everything',
+    type=click.Choice(['index', 'attachments', 'everything'], case_sensitive=False),
+)
+@with_appcontext
+def clean(target):
+    """
+    Delete the search index and/or the attachments immediately.
+
+    By default, both are cleaned.
+    """
+    if target in ['everything', 'index']:
+        delete_index()
+    if target in ['everything', 'attachments']:
+        delete_attachments()
 
 
 @cli.command()

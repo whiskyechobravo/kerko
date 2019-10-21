@@ -214,8 +214,8 @@ class Items:
 
     Items are loaded on demand, in small batches, and cannot be accessed
     directly, but can be iterated on. Each item is represented by a (item,
-    notes) tuple, where item is a dict as returned by Zotero, and notes a list
-    of the item's child notes (also dicts as returned by Zotero).
+    children) tuple, where item is a dict as returned by Zotero, and chidren a
+    list of the child items (also dicts as returned by Zotero).
     """
 
     def __init__(self, zotero_credentials, item_types=None, formats=None):
@@ -274,26 +274,33 @@ class Items:
 
     def _next_item(self):
         zotero_item = next(self.iterator)
-        notes = []
+        children = []
         if zotero_item.get('meta', {}).get('numChildren', 0):
-            # TODO: Only extract notes if the Composer instance has fields that require them.
-            notes = [n for n in ChildNotes(self.zotero_credentials, zotero_item['key'])]
+            # TODO: Only extract item types that are required, if any, by the Composer instance's fields.
+            children = list(
+                ChildItems(
+                    self.zotero_credentials,
+                    zotero_item['key'],
+                    item_types=['note', 'attachment'],
+                )
+            )
         self.start += 1
-        return zotero_item, notes
+        return zotero_item, children
 
 
-class ChildNotes:
+class ChildItems:
     """
-    Iterable over Zotero notes that are children of an item.
+    Iterable over Zotero child items.
 
-    Notes are loaded on demand, in small batches, and cannot be accessed
-    directly, but can be iterated on. Each note is represented by a dict as
+    Children are loaded on demand, in small batches, and cannot be accessed
+    directly, but can be iterated on. Each child is represented by a dict as
     returned by Zotero.
     """
 
-    def __init__(self, zotero_credentials, item_key, formats=None):
+    def __init__(self, zotero_credentials, item_key, item_types=None, formats=None):
         self.zotero_credentials = zotero_credentials
         self.item_key = item_key
+        self.item_type_filter = ' || '.join(item_types) if item_types else None
         self.include = ','.join(formats or ['data'])
         self.start = 0
         self.zotero_batch = []
@@ -316,7 +323,7 @@ class ChildNotes:
             # Previous batch did not reach limit. No need for more batches.
             raise StopIteration
         current_app.logger.info(
-            "Requesting up to {limit} child notes for item {item_key}"
+            "Requesting up to {limit} children for item {item_key}"
             " starting at position {start}...".format(
                 limit=limit, item_key=self.item_key, start=self.start
             )
@@ -328,7 +335,7 @@ class ChildNotes:
             sort='dateModified',
             direction='asc',
             include=self.include,
-            itemType='note',
+            itemType=self.item_type_filter,
         )
         if not self.zotero_batch:
             raise StopIteration  # Empty batch, nothing more to iterate.

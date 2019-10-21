@@ -214,3 +214,29 @@ def run_query_unique(field_name, value, return_fields=None):
             if results:
                 return _get_fields(results[0], return_fields)
     return None
+
+
+def run_query_all(return_fields=None):
+    """Perform a search query to return all items (without faceting)."""
+    index = open_index()
+    if index:
+        with index.searcher() as searcher:
+            results = searcher.search(Every(), limit=None)
+            if results:
+                for hit in results:
+                    yield _get_fields(hit, return_fields)
+    return []
+
+
+def check_fields(fields):
+    """
+    Check if the specified fields exist in the schema.
+
+    :param str fields: List if field names to check.
+
+    :return list: List of fields missing from the schema, if any.
+    """
+    index = open_index()
+    if index:
+        return [name for name in fields if name not in index.schema.names()]
+    return fields

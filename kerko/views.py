@@ -1,15 +1,17 @@
 import time
 
 from babel.numbers import format_number
-from flask import abort, current_app, make_response, redirect, request, render_template, url_for
+from flask import (abort, current_app, make_response, redirect, render_template, request,
+                   send_from_directory, url_for)
 from flask_babelex import get_locale, gettext, ngettext
 
 from . import babel_domain, blueprint
+from .attachments import get_attachments_dir
 from .breadbox import build_breadbox
 from .criteria import Criteria
 from .forms import SearchForm
-from .query import run_query, run_query_unique, build_creators_display, build_fake_facet_results
 from .pager import build_pager
+from .query import build_creators_display, build_fake_facet_results, run_query, run_query_unique
 from .sorter import build_sorter
 
 
@@ -115,9 +117,39 @@ def item_view(item_id):
         'kerko/item.html.jinja2',
         item=item,
         title=item.get('data', {}).get('title', ''),
-        item_url=url_for('.item_view', item_id=item['id'], _external=True) if item else '',
+        item_url=url_for('.item_view', item_id=item_id, _external=True) if item else '',
         time=time.process_time() - start_time,
         locale=get_locale(),
+    )
+
+
+@blueprint.route('/<string:item_id>/download/<string:attachment_id>')
+def item_attachment_download(item_id, attachment_id):
+    if current_app.config['KERKO_USE_TRANSLATIONS']:
+        babel_domain.as_default()
+
+    item = run_query_unique('id', item_id)
+    if not item:
+        abort(404)
+
+    matching_attachments = list(
+        filter(lambda a: a.get('id') == attachment_id, item.get('attachments', []))
+    )
+    if not matching_attachments or len(matching_attachments) > 1:
+        abort(404)
+    attachment = matching_attachments[0]
+
+    filepath = get_attachments_dir() / attachment_id
+    if not filepath.exists():
+        abort(404)
+
+    return send_from_directory(
+        get_attachments_dir(),
+        attachment_id,
+        mimetype=attachment['mimetype'],
+        as_attachment=True,
+        attachment_filename=attachment['filename'],
+        last_modified=attachment['mtime']
     )
 
 

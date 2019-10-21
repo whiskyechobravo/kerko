@@ -17,17 +17,17 @@ RECORD_SEPARATOR = '\x1e'
 class ItemContext:
     """Contains data related to a Zotero item."""
 
-    def __init__(self, item, notes):
+    def __init__(self, item, children):
         """
         Initialize an item's data.
 
         :param dict item: An item, as returned by the Zotero API.
 
-        :param list notes: A list of dicts representing the item's child notes.
+        :param list children: A list of dicts representing the item's children.
         """
         self.item_key = item.get('key', '')  # For convenient access.
         self.item = item
-        self.notes = notes
+        self.children = children
         self.data = item.get('data', {})  # For convenient access.
 
 
@@ -104,6 +104,12 @@ class ItemDataExtractor(KeyExtractor):
     def extract(self, document, spec, item_context, library_context):
         if self.key in item_context.data:
             document[spec.key] = spec.encode(item_context.data[self.key])
+
+
+class RawDataExtractor(Extractor):
+
+    def extract(self, document, spec, item_context, library_context):
+        document[spec.key] = spec.encode(item_context.data)
 
 
 class ItemTypeLabelExtractor(Extractor):
@@ -239,68 +245,109 @@ class TagsTextExtractor(BaseTagsExtractor):
         document[spec.key] = spec.encode(RECORD_SEPARATOR.join(tags))
 
 
-class BaseNotesExtractor(Extractor):
+class BaseChildrenExtractor(Extractor):
 
-    def __init__(self, whitelist_re='', blacklist_re='', **kwargs):
+    def __init__(self, item_type, whitelist_re='', blacklist_re='', **kwargs):
         """
         Initialize the extractor.
 
-        :param str whitelist_re: Any note which does not have a tag that matches
-            this regular expression will be ignored by the extractor. If empty,
-            all notes will be accepted unless `blacklist_re` is set and causes
-            some to be rejected.
+        :param str item_type: The type of child items to extract, either 'note'
+            or 'attachment'.
 
-        :param str blacklist_re: Any note that have a tag that matches this
+        :param str whitelist_re: Any child which does not have a tag that
+            matches this regular expression will be ignored by the extractor. If
+            empty, all children will be accepted unless `blacklist_re` is set
+            and causes some to be rejected.
+
+        :param str blacklist_re: Any child that have a tag that matches this
             regular expression will be ignored by the extractor. If empty, all
-            notes will be accepted unless `whitelist_re` is set and causes some
-            to be rejected.
+            children will be accepted unless `whitelist_re` is set and causes
+            some to be rejected.
         """
         super().__init__(**kwargs)
+        self.item_type = item_type
         self.whitelist = re.compile(whitelist_re) if whitelist_re else None
         self.blacklist = re.compile(blacklist_re) if blacklist_re else None
 
     def extract(self, document, spec, item_context, library_context):
-        accepted_notes = []
-        for note in item_context.notes:
-            whitelisted = self.whitelist is None
-            blacklisted = False
-            if self.whitelist or self.blacklist:
-                for tag_data in note.get('data', {}).get('tags', []):
-                    tag = tag_data.get('tag', '').strip()
-                    if self.whitelist and self.whitelist.match(tag):
-                        whitelisted = True
-                    if self.blacklist and self.blacklist.match(tag):
-                        blacklisted = True
-            if whitelisted and not blacklisted:
-                accepted_notes.append(note.get('data', {}).get('note', ''))
-        if accepted_notes:
-            self.to_document(document, spec, accepted_notes)
+        accepted_children = []
+        for child in item_context.children:
+            if child.get('data', {}).get('itemType') == self.item_type:
+                whitelisted = self.whitelist is None
+                blacklisted = False
+                if self.whitelist or self.blacklist:
+                    for tag_data in child.get('data', {}).get('tags', []):
+                        tag = tag_data.get('tag', '').strip()
+                        if self.whitelist and self.whitelist.match(tag):
+                            whitelisted = True
+                        if self.blacklist and self.blacklist.match(tag):
+                            blacklisted = True
+                if whitelisted and not blacklisted:
+                    accepted_children.append(child)
+        if accepted_children:
+            self.to_document(document, spec, accepted_children)
 
     @abstractmethod
-    def to_document(self, document, spec, notes):
-        """Assign the extracted notes to the document."""
+    def to_document(self, document, spec, children):
+        """Assign the extracted children to the document."""
+
+
+class AttachmentsExtractor(BaseChildrenExtractor):
+    """
+    Extract attachments into a list of dicts for storage.
+
+    This extractor only extracts a subset of attachment data provided by Zotero.
+    """
+
+    def __init__(self, mime_types=None, **kwargs):
+        self.mime_types = mime_types
+        super().__init__(item_type='attachment', **kwargs)
+
+    def to_document(self, document, spec, children):
+        document[spec.key] = spec.encode(
+            [
+                {
+                    'id': a['key'],
+                    'mimetype': a['data'].get('contentType', 'octet-stream'),
+                    'filename': a['data'].get('filename', a['key']),
+                    'md5': a['data'].get('md5', ''),
+                    'mtime': a['data'].get('mtime', 0),
+                } for a in children if a.get('data') and a.get('key') and (
+                    not self.mime_types or a.get('data', {}).get(
+                        'contentType', 'octet-stream'
+                    ) in self.mime_types
+                )
+            ]
+        )
+
+
+class BaseNotesExtractor(BaseChildrenExtractor):  # pylint: disable=abstract-method
+
+    def __init__(self, **kwargs):
+        super().__init__(item_type='note', **kwargs)
 
 
 class NotesTextExtractor(BaseNotesExtractor):
     """Extract notes for text search."""
 
-    def to_document(self, document, spec, notes):
+    def to_document(self, document, spec, children):
         document[spec.key] = spec.encode(
-            RECORD_SEPARATOR.join([Markup(n).striptags() for n in notes])
+            RECORD_SEPARATOR.join(
+                [
+                    Markup(child.get('data', {}).get('note', '')).striptags()
+                    for child in children
+                ]
+            )
         )
 
 
 class RawNotesExtractor(BaseNotesExtractor):
     """Extract raw notes for storage."""
 
-    def to_document(self, document, spec, notes):
-        document[spec.key] = spec.encode(notes)
-
-
-class RawDataExtractor(Extractor):
-
-    def extract(self, document, spec, item_context, library_context):
-        document[spec.key] = spec.encode(item_context.data)
+    def to_document(self, document, spec, children):
+        document[spec.key] = spec.encode(
+            [child.get('data', {}).get('note', '') for child in children]
+        )
 
 
 def _expand_paths(path):
