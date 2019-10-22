@@ -7,7 +7,7 @@
 
 {%- block content_header %}
     <div class="h3 py-3 mb-0 row">
-        <h1 class="h3 col-auto mr-auto d-inline">
+        <h1 class="h3 col-auto mr-auto d-inline d-print-none">
             {%- if is_searching %}
                 {{- _("Your search") }}
             {%- else %}
@@ -32,7 +32,7 @@
 {%- block content_inner %}
     {%- block search_criteria %}
         {%- if is_searching %}
-            <div class="card breadbox">
+            <div class="card breadbox d-print-none">
                 <div class="card-body">
                     {%- include "kerko/_breadbox.html.jinja2" %}
                 </div>
