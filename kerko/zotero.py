@@ -20,7 +20,9 @@ def retry_zotero(wrapped, _instance, args, kwargs):
         try:
             return wrapped(*args, **kwargs)
         except (
-                requests.exceptions.ConnectionError, zotero_errors.HTTPError
+                requests.exceptions.ConnectionError,
+                zotero_errors.HTTPError,
+                zotero_errors.UnsupportedParams
         ) as e:
             current_app.logger.exception(e)
             if attempts < current_app.config['KERKO_ZOTERO_MAX_ATTEMPTS']:
