@@ -19,24 +19,14 @@
                 {%- if is_searching %}
                     <div class="d-inline-block d-print-none">
                         <a class="btn btn-danger" href="{{ url_for('kerko.search') }}">
-                            {%- block reset_search_icon -%}
-                                <span class="fas fa-trash-alt"></span>
-                            {%- endblock reset_search_icon -%}
-                            {%- block reset_search_text %}
-                                {{ _("Reset search") -}}
-                            {%- endblock reset_search_text -%}
+                            <span class="fas fa-trash-alt"></span> {{ _("Reset search") }}
                         </a>
                     </div>
                 {%- endif %}
                 {%- if facet_results %}
                     <div class="d-inline-block d-lg-none d-print-none">
                         <a id="drawer-open" class="btn btn-primary" href="#">
-                            {%- block drawer_open_icon -%}
-                                <span class="fas fa-filter"></span>
-                            {%- endblock drawer_open_icon -%}
-                            {%- block drawer_open_text %}
-                                {{ _("Refine") -}}
-                            {%- endblock drawer_open_text -%}
+                            <span class="fas fa-filter"></span> {{ _("Refine") }}
                         </a>
                     </div>
                 {%- endif %}
@@ -91,12 +81,7 @@
                 {%- if show_print_link %}
                     <div class="d-none d-md-inline-block d-print-none mb-1">
                         <a id="print-link" class="btn btn-light" href="#" rel="nofollow" data-url="{{ print_url }}">
-                            {%- block print_icon -%}
-                                <span class="fas fa-print"></span>
-                            {%- endblock print_icon -%}
-                            {%- block print_text %}
-                                {% trans count=total_count, count_formatted=total_count_formatted|safe %}Print this citation{% pluralize %}Print {{ count_formatted }} citations{% endtrans %}
-                            {%- endblock print_text -%}
+                            <span class="fas fa-print"></span> {% trans count=total_count, count_formatted=total_count_formatted|safe %}Print this citation{% pluralize %}Print {{ count_formatted }} citations{% endtrans %}
                         </a>
                     </div>
                 {%- endif %}
@@ -104,12 +89,7 @@
                     <div class="d-inline-block d-print-none mb-1">
                         <div class="dropdown">
                             <button class="btn btn-secondary btn-light dropdown-toggle" type="button" id="download-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {%- block download_icon -%}
-                                    <span class="fas fa-download"></span>
-                                {%- endblock download_icon -%}
-                                {%- block download_text %}
-                                    {% trans count=total_count, count_formatted=total_count_formatted|safe %}Download this citation{% pluralize %}Download {{ count_formatted }} citations{% endtrans %}
-                                {%- endblock download_text -%}
+                                <span class="fas fa-download"></span> {% trans count=total_count, count_formatted=total_count_formatted|safe %}Download this citation{% pluralize %}Download {{ count_formatted }} citations{% endtrans %}
                             </button>
                             <div class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labeledby="download-options">
                                 {%- for citation_format in config.KERKO_COMPOSER.get_ordered_specs('citation_formats') %}
@@ -146,12 +126,7 @@
                 <h2 class="col-auto mr-auto d-inline d-print-none">{{ _("Refine") }}</h2>
                 <div class="col-auto ml-auto text-right d-lg-none d-print-none">
                     <a id="drawer-close" class="btn btn-dark" href="#" title="{{ _('Close refine panel') }}">
-                        {%- block drawer_close_icon -%}
-                            <span class="fas fa-times"></span>
-                        {%- endblock drawer_close_icon -%}
-                        {%- block drawer_close_text %}
-                            <span class="sr-only sr-only-focusable">{{ _("Close refine panel") -}}</span>
-                        {%- endblock drawer_close_text -%}
+                        <span class="fas fa-times"></span> <span class="sr-only sr-only-focusable">{{ _("Close refine panel") -}}</span>
                     </a>
                 </div>
             </div>

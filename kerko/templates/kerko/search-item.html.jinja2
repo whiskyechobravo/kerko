@@ -17,12 +17,7 @@
         {%- if back_url %}
             <div class="col-auto ml-auto text-right d-print-none">
                 <a class="btn btn-primary" href="{{ back_url }}">
-                    {%- block search_back_icon -%}
-                        <span class="fas fa-arrow-left"></span>
-                    {%- endblock search_back_icon -%}
-                    {%- block search_back_text %}
-                        {{ _("Return to list of results") -}}
-                    {%- endblock search_back_text -%}
+                    <span class="fas fa-arrow-left"></span> {{ _("Return to list of results") }}
                 </a>
             </div>
         {%- endif %}
