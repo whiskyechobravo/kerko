@@ -89,7 +89,7 @@
             {%- include "kerko/_pager.html.jinja2" %}
             <div class="col-auto ml-auto my-4 text-right">
                 {%- if show_print_link %}
-                    <div class="d-inline-block d-print-none mb-1">
+                    <div class="d-none d-md-inline-block d-print-none mb-1">
                         <a id="print-link" class="btn btn-light" href="#" rel="nofollow" data-url="{{ print_url }}">
                             {%- block print_icon -%}
                                 <span class="fas fa-print"></span>
