@@ -47,7 +47,7 @@ msgid ""
 "Finds entries where any of the available fields contains your keywords. "
 "This is the default option."
 msgstr ""
-"Repère les références dont n'importe lequel des champs disponibles "
+"repère les références dont n'importe lequel des champs disponibles "
 "contient vos mots-clés. Ceci est l'option par défaut."
 
 #: kerko/composer.py:198
@@ -65,7 +65,7 @@ msgid ""
 "Finds entries where any of its authors' or contributors' names contains "
 "your keywords."
 msgstr ""
-"Repère les références dont n'importe lequel des noms d'auteurs ou de "
+"repère les références dont n'importe lequel des noms d'auteurs ou de "
 "contributeurs contient vos mots-clés."
 
 #: kerko/composer.py:211
@@ -78,7 +78,7 @@ msgstr "Titre"
 
 #: kerko/composer.py:214
 msgid "Finds entries whose title contains your keywords."
-msgstr "Repère les références dont le titre contient vos mots-clés."
+msgstr "repère les références dont le titre contient vos mots-clés."
 
 #: kerko/composer.py:1303
 msgid "Topic"
