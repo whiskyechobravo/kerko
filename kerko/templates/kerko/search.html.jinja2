@@ -16,6 +16,11 @@
         <h1 class="h2 col-auto mr-auto d-inline">{% if is_searching %}{{ _("Your search") }}{% else %}{{ _("Search") }}{% endif %}</h1>
         {%- if is_searching or facet_results %}
             <div class="col-auto ml-auto text-right">
+                <div class="d-inline-block d-print-none">
+                    <button class="btn btn-light" data-toggle="modal" data-target="#search-help">
+                        <span class="fa fa-question-circle"></span> {{ _("Help") }}
+                    </button>
+                </div>
                 {%- if is_searching %}
                     <div class="d-inline-block d-print-none">
                         <a class="btn btn-danger" href="{{ url_for('kerko.search') }}">
@@ -33,6 +38,9 @@
             </div>
         {%- endif %}
     </div>
+    {%- block search_help %}
+        {%- include "kerko/_search-help.html.jinja2" %}
+    {%- endblock search_help %}
 {%- endblock content_header %}
 
 {%- block content_inner %}

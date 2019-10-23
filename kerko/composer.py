@@ -185,6 +185,10 @@ class Composer:
                     selector_label=_("In any field"),
                     breadbox_label=_("Any field"),
                     weight=0,
+                    help_text=_(
+                        "Finds entries where any of the available fields contains your keywords. "
+                        "This is the default option."
+                    ),
                 )
             )
         if 'creator' not in exclude:
@@ -194,6 +198,10 @@ class Composer:
                     selector_label=_("In authors/contributors"),
                     breadbox_label=_("Author/contributor"),
                     weight=100,
+                    help_text=_(
+                        "Finds entries where any of its authors' or contributors' names contains "
+                        "your keywords."
+                    ),
                 )
             )
         if 'title' not in exclude:
@@ -203,6 +211,7 @@ class Composer:
                     selector_label=_("In titles"),
                     breadbox_label=_("Title"),
                     weight=200,
+                    help_text=_("Finds entries whose title contains your keywords."),
                 )
             )
 

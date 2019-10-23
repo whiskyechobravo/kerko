@@ -18,11 +18,12 @@ class ScopeSpec:
     This is a configuration element, with no effect on the search index schema.
     """
 
-    def __init__(self, key, selector_label, breadbox_label, weight=0):
+    def __init__(self, key, selector_label, breadbox_label, weight=0, help_text=''):
         self.key = key
         self.selector_label = selector_label
         self.breadbox_label = breadbox_label
         self.weight = weight
+        self.help_text = help_text
 
 
 class BaseFieldSpec(ABC):

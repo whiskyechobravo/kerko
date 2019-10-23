@@ -1,0 +1,70 @@
+<div class="modal fade" id="search-help" tabindex="-1" role="dialog" aria-labelledby="search-help-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                {%- block search_help_header %}
+                    <h2 class="modal-title h4" id="search-help-label">{{ _("Help") }}</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                {%- endblock search_help_header %}
+            </div>
+            <div class="modal-body">
+                {%- block search_help_inner %}
+                    <p>{{ _("The search interface is made of three sections: <strong>{}</strong>, <strong>{}</strong>, and <strong>{}</strong>. These are described in detail below.").format(_("Search"), _("Refine"), _("Results")) }}</p>
+                    <p>{{ _("You may start searching either from the <strong>{}</strong> section or from the <strong>{}</strong> section.").format(_("Search"), _("Refine")) }}</p>
+                    <h3 class="h4">{{ _("Search") }}</h3>
+                    <p>{{ _("This section shows your current search criteria and allows you to submit keywords to search in the bibliography.") }}</p>
+                    <ul>
+                        <li>{{ _("Each new submission adds the entered keywords to the list of search criteria.") }}</li>
+                        <li>{{ _("To start a new search instead of adding keywords to the current search, use the <strong>{}</strong> button, then enter your new keywords.").format(_("Reset search")) }}</li>
+                        <li>{{ _("To replace an already submitted keyword, first remove it by unchecking its checkbox, then submit a new keyword.") }}</li>
+                        {%- if config.KERKO_COMPOSER.scopes|length %}
+                            <li>{{ _("You may scope the search by selecting which fields to search, for instance:") }}</li>
+                            <ul>
+                                {%- for scope in config.KERKO_COMPOSER.scopes.values() %}
+                                    {%- if scope.help_text %}
+                                        <li><strong>{{ scope.selector_label }}</strong>{{ _(": ") }}{{ scope.help_text }}</li>
+                                    {%- endif %}
+                                {%- endfor %}
+                            </ul>
+                        {%- endif %}
+                        <li>{{ _("You may use boolean operators with your keywords. For instance:") }}</li>
+                        <ul>
+                            <li>{{ _("<strong>{and_op}</strong>: Finds entries that contain all specified terms. This is the default relation between terms when no operator is specified, e.g., <code>a b</code> is the same as <code>a {and_op} b</code>.").format(and_op=_("AND")) }}</li>
+                            <li>{{ _("<strong>{or_op}</strong>: Finds entries that contain any of the specified terms, e.g., <code>a {or_op} b</code>.").format(or_op=_("OR")) }}</li>
+                            <li>{{ _("<strong>{not_op}</strong>: Excludes entries that contain the specified terms, e.g., <code>{not_op} a</code>.").format(not_op=_("NOT")) }}</li>
+                            <li>{{ _("Boolean operators must be entered in UPPERCASE.") }}</li>
+                        </ul>
+                        <li>{{ _("You may use logical groupings (with parentheses) to eliminate ambiguities when using multiple boolean operators, e.g., <code>(a {or_op} b) {and_op} c</code>.").format(and_op=_("AND"), or_op=_("OR")) }}</li>
+                        <li>{{ _('You may require exact sequences of words (with double quotes), e.g., <code>"a b c"</code>. The default difference between word positions is 1, meaning that an entry will match if it contains the words next to each other, but a different maximum distance may be specified (with the tilde character), e.g., <code>"web search"~2</code> allows up to 1 word between <code>web</code> and <code>search</code>, meaning it could match <code>web site search</code> as well as <code>web search</code>.') }}</li>
+                        <li>{{ _("You may specify that some words are more important than others (with the caret), e.g., <code>faceted^2 search browsing^0.5</code> specifies that <code>faceted</code> is twice as important as <code>search</code> when computing the relevance score of the results, while <code>browsing</code> is half as important. Such term boosting may be applied to a logical grouping, e.g., <code>(a b)^3 c</code>.") }}</li>
+                        <li>{{ _("Keyword search is case-insentitive, accents are folded, and punctuation is ignored. Stemming is also performed on terms from most text fields, e.g., title, abstract, notes. Stemming saves you from having to specify all variants of a word when searching, e.g., terms such as <code>search</code>, <code>searches</code>, and <code>searching</code> all produce the same results.") }}</li>
+                    </ul>
+                    <h3 class="h4">{{ _("Refine") }}</h3>
+                    <p>{{ _("This section allows you to explore categories associated with the references.") }}</p>
+                    <ul>
+                        <li>{{ _("Check a category to add it to your search criteria and narrow your search. The results will only show entries that are associated with the category, and more specific terms may appear under the newly selected category.") }}</li>
+                        <li>{{ _("Uncheck a category to remove it from your search criteria and broaden your search results.") }}</li>
+                        <li>{{ _("The numbers shown next to the categories indicate how many entries are associated with each category in the current set of results. Those numbers will vary based on your search criteria to always describe what's in the current set of results. Likewise, categories and whole facets will disappear when the result set has no entry associated to them.") }}</li>
+                    </ul>
+                    <h3 class="h4">{{ _("Results") }}</h3>
+                    <p>{{ _("This section shows the search results. When no search criteria has been given, it shows the full content of the bibliography (up to {page_len} entries per page).").format(page_len=config.KERKO_PAGE_LEN) }}</p>
+                    <ul>
+                        <li>{{ _("Each entry of the results list is a link to its full bibliographic record. From the bibliographic record view, you may continue exploring the search results by going to previous or following records in your search results, or you may return to the list of results.") }}</li>
+                        {%- if config.KERKO_COMPOSER.sorts|length %}
+                            <li>{{ _("Various options are provided to let you sort the search results. One of them is the <strong>Relevance</strong> option, which ranks the results from most relevant to least relevant. The score used for ranking takes into account word frequencies as well as the fields where they appear. For instance, if a search term occurs frequently in an entry or is one of very few terms used in that entry, that entry will probably rank higher than another where the search term occurs less frequently or where lots of other words also occur. Likewise, a search term will have more effect on the scores if it is rare in the whole bibliography than if it is very common. Also, if a search term appears in, e.g., the title of an entry, it will have more effect on the score of that entry than if it appeared in a less important field such as the abstract.") }}</li>
+                            <li>{{ _("The <strong>Relevance</strong> sort is only available when keywords have been entered in the <strong>{search}</strong> section.").format(search=_("Search")) }}</li>
+                            <li>{{ _("Categories selected in the <strong>{refine}</strong> section have no effect on the relevance score. Their only effect is to filter the list of results.").format(refine=_("Refine")) }}</li>
+                        {%- endif %}
+                    <ul>
+                {%- endblock search_help_inner %}
+            </div>
+            <div class="modal-footer">
+                {%- block search_help_footer %}
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ _("Close") }}</button>
+                {%- endblock search_help_footer %}
+            </div>
+        </div>
+    </div>
+</div>
