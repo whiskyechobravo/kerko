@@ -94,6 +94,12 @@ def load_item_type_creator_types(zotero_credentials, item_type):
     return zotero_credentials.item_creator_types(item_type)
 
 
+@retry_zotero
+def retrieve_file(zotero_credentials, item_id):
+    """Retrieve the file from the given item."""
+    return zotero_credentials.file(item_id)
+
+
 class Collections:
     """
     Iterable over all collections found in Zotero.

@@ -70,7 +70,7 @@ def sync_attachments():
                 )
                 # Download attachment.
                 with open(attachments_dir / attachment['id'], 'wb') as f:
-                    f.write(zotero_credentials.file(attachment['id']))
+                    f.write(zotero.retrieve_file(zotero_credentials, attachment['id']))
             else:
                 current_app.logger.debug(
                     f"Keeping attachment {attachment['id']} (parent: {parent['id']})."
