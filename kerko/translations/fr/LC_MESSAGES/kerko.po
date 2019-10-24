@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kerko 0.3.dev0\n"
 "Report-Msgid-Bugs-To: kerko@whiskyechobravo.com\n"
-"POT-Creation-Date: 2019-10-24 12:34-0400\n"
-"PO-Revision-Date: 2019-10-24 12:34-0400\n"
+"POT-Creation-Date: 2019-10-24 15:14-0400\n"
+"PO-Revision-Date: 2019-10-24 15:14-0400\n"
 "Last-Translator: David Lesieur <kerko@whiskyechobravo.com>\n"
 "Language: fr\n"
 "Language-Team: fr <kerko@whiskyechobravo.com>\n"
@@ -248,22 +248,22 @@ msgstr ""
 #: kerko/templates/kerko/_search-help.html.jinja2:14
 #: kerko/templates/kerko/_search-help.html.jinja2:15
 #: kerko/templates/kerko/_search-help.html.jinja2:16
-#: kerko/templates/kerko/_search-help.html.jinja2:57
+#: kerko/templates/kerko/_search-help.html.jinja2:58
 #: kerko/templates/kerko/search.html.jinja2:16
 msgid "Search"
 msgstr "Rechercher"
 
 #: kerko/templates/kerko/_search-help.html.jinja2:14
 #: kerko/templates/kerko/_search-help.html.jinja2:15
-#: kerko/templates/kerko/_search-help.html.jinja2:44
-#: kerko/templates/kerko/_search-help.html.jinja2:58
+#: kerko/templates/kerko/_search-help.html.jinja2:45
+#: kerko/templates/kerko/_search-help.html.jinja2:59
 #: kerko/templates/kerko/search.html.jinja2:34
 #: kerko/templates/kerko/search.html.jinja2:134
 msgid "Explore"
 msgstr "Explorer"
 
 #: kerko/templates/kerko/_search-help.html.jinja2:14
-#: kerko/templates/kerko/_search-help.html.jinja2:51
+#: kerko/templates/kerko/_search-help.html.jinja2:52
 msgid "Results"
 msgstr "Résultats"
 
@@ -409,21 +409,31 @@ msgstr ""
 #: kerko/templates/kerko/_search-help.html.jinja2:42
 msgid ""
 "Keyword search is case-insentitive, accents are folded, and punctuation "
-"is ignored. Stemming is also performed on terms from most text fields, "
-"e.g., title, abstract, notes. Stemming saves you from having to specify "
-"all variants of a word when searching, e.g., terms such as "
-"<code>search</code>, <code>searches</code>, and <code>searching</code> "
-"all produce the same results."
+"is ignored."
 msgstr ""
 "La recherche par mots-clés est insensible à la casse et les accents et la"
-" ponctuation sont ignorés. Les terminaisons des mots sont également "
-"amputées pour la plupart des champs, tels le titre, le résumé et les "
-"notes. L'amputation des terminaisons vous évite d'avoir à prévoir toutes "
-"les formes possibles d'un mot dans vos recherches. Ainsi, les termes "
-"<code>municipal</code>, <code>municipale</code> et "
-"<code>municipaux</code>, par exemple, donneront tous le même résultat."
+" ponctuation sont ignorés."
 
-#: kerko/templates/kerko/_search-help.html.jinja2:45
+#: kerko/templates/kerko/_search-help.html.jinja2:43
+msgid ""
+"Stemming is performed on terms from most text fields, e.g., title, "
+"abstract, notes. Words are thus reduced to their root form, saving you "
+"from having to specify all variants of a word when searching, e.g., terms"
+" such as <code>search</code>, <code>searches</code>, and "
+"<code>searching</code> all produce the same results. Stemming is "
+"<em>not</em> applied to text in name fields, e.g., authors/contributors, "
+"publisher, publication."
+msgstr ""
+" Les terminaisons des mots sont amputées pour la plupart des champs, tels"
+" le titre, le résumé et les notes. L'amputation des terminaisons vous "
+"évite d'avoir à prévoir toutes les formes possibles d'un mot dans vos "
+"recherches. Ainsi, les termes <code>municipal</code>, "
+"<code>municipale</code> et <code>municipaux</code>, par exemple, "
+"donneront tous le même résultat. L'amputation des terminaisons n'est "
+"<em>pas</em> appliquée au texte des champs de noms, tels "
+"auteurs/contributeurs, éditeur, publication."
+
+#: kerko/templates/kerko/_search-help.html.jinja2:46
 msgid ""
 "This section allows you to explore categories associated with the "
 "references."
@@ -431,7 +441,7 @@ msgstr ""
 "Cette section vous permet d'explorer les catégories associées aux "
 "références."
 
-#: kerko/templates/kerko/_search-help.html.jinja2:47
+#: kerko/templates/kerko/_search-help.html.jinja2:48
 msgid ""
 "Check a category to add it to your search criteria and narrow your "
 "search. The results will only show entries that are associated with the "
@@ -444,7 +454,7 @@ msgstr ""
 "spécifiques pourrait apparaître sous la catégorie nouvellement "
 "sélectionnée."
 
-#: kerko/templates/kerko/_search-help.html.jinja2:48
+#: kerko/templates/kerko/_search-help.html.jinja2:49
 msgid ""
 "Uncheck a category to remove it from your search criteria and broaden "
 "your search results."
@@ -452,7 +462,7 @@ msgstr ""
 "Dé-cochez une catégorie pour la retirer de vos critères de recherche et "
 "élargir vos résultats de recherche."
 
-#: kerko/templates/kerko/_search-help.html.jinja2:49
+#: kerko/templates/kerko/_search-help.html.jinja2:50
 msgid ""
 "The numbers shown next to the categories indicate how many entries are "
 "associated with each category in the current set of results. Those "
@@ -468,7 +478,7 @@ msgstr ""
 " entières pourront disparaître lorsque les résultats ne contiennent "
 "aucune référence leur étant associées."
 
-#: kerko/templates/kerko/_search-help.html.jinja2:52
+#: kerko/templates/kerko/_search-help.html.jinja2:53
 msgid ""
 "This section shows the search results. When no search criteria has been "
 "given, it shows the full content of the bibliography (up to {page_len} "
@@ -478,7 +488,7 @@ msgstr ""
 "recherche n'a été fourni, elle montre toute la bibliographie (jusqu'à "
 "{page_len} références par page)."
 
-#: kerko/templates/kerko/_search-help.html.jinja2:54
+#: kerko/templates/kerko/_search-help.html.jinja2:55
 msgid ""
 "Each entry of the results list is a link to its full bibliographic "
 "record. From the bibliographic record view, you may continue exploring "
@@ -491,7 +501,7 @@ msgstr ""
 "notices précédentes ou suivantes de vos résultats de recherche, ou encore"
 " retourner à la liste des résultats."
 
-#: kerko/templates/kerko/_search-help.html.jinja2:56
+#: kerko/templates/kerko/_search-help.html.jinja2:57
 msgid ""
 "Various options are provided to let you sort the search results. One of "
 "them is the <strong>Relevance</strong> option, which ranks the results "
@@ -521,7 +531,7 @@ msgstr ""
 "référence, le score de cette référence sera plus élevé que s'il "
 "apparaissait dans un champ moins important tel le résumé."
 
-#: kerko/templates/kerko/_search-help.html.jinja2:57
+#: kerko/templates/kerko/_search-help.html.jinja2:58
 msgid ""
 "The <strong>Relevance</strong> sort is only available when keywords have "
 "been entered in the <strong>{search}</strong> section."
@@ -529,7 +539,7 @@ msgstr ""
 "Le tri par <strong>Pertinence</strong> n'est disponible que lorsque des "
 "mots-clés ont été ajoutés dans la section <strong>{search}</strong>."
 
-#: kerko/templates/kerko/_search-help.html.jinja2:58
+#: kerko/templates/kerko/_search-help.html.jinja2:59
 msgid ""
 "Categories selected in the <strong>{explore}</strong> section have no "
 "effect on the relevance score. Their only effect is to filter the list of"
@@ -539,7 +549,7 @@ msgstr ""
 "n'ont aucun effet sur le tri par pertinence. Elles ne font que filtrer la"
 " liste des résultats."
 
-#: kerko/templates/kerko/_search-help.html.jinja2:65
+#: kerko/templates/kerko/_search-help.html.jinja2:66
 msgid "Close"
 msgstr "Fermer"
 
