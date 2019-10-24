@@ -44,7 +44,7 @@ The following features are implemented in Kerko:
   expected results are able to enter keywords or a more complex query in a
   search field, while those who wish to become familiar with the content of the
   bibliography or discover new topics may choose to navigate along the proposed
-  facets, to refine or broaden their results. Since both modes are integrated
+  facets, to narrow or broaden their search. Since both modes are integrated
   into a single interface, it is possible to combine them.
 * Keyword search features:
   * Boolean operators:

@@ -31,7 +31,7 @@
                 {%- if facet_results %}
                     <div class="d-inline-block d-lg-none d-print-none">
                         <a id="drawer-open" class="btn btn-primary" href="#">
-                            <span class="fas fa-filter"></span> {{ _("Refine") }}
+                            <span class="fas fa-compass"></span> {{ _("Explore") }}
                         </a>
                     </div>
                 {%- endif %}
@@ -131,10 +131,10 @@
     {%- block facet_results %}
         {%- if facet_results %}
             <div class="h2 py-3 mb-0 row">
-                <h2 class="col-auto mr-auto d-inline d-print-none">{{ _("Refine") }}</h2>
+                <h2 class="col-auto mr-auto d-inline d-print-none">{{ _("Explore") }}</h2>
                 <div class="col-auto ml-auto text-right d-lg-none d-print-none">
-                    <a id="drawer-close" class="btn btn-dark" href="#" title="{{ _('Close refine panel') }}">
-                        <span class="fas fa-times"></span> <span class="sr-only sr-only-focusable">{{ _("Close refine panel") -}}</span>
+                    <a id="drawer-close" class="btn btn-dark" href="#" title="{{ _('Close explore panel') }}">
+                        <span class="fas fa-times"></span> <span class="sr-only sr-only-focusable">{{ _("Close explore panel") -}}</span>
                     </a>
                 </div>
             </div>
