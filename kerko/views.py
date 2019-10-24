@@ -62,7 +62,7 @@ def search():
         build_creators_display(search_results[0])
         build_fake_facet_results(search_results[0])
         return render_template(
-            'kerko/search-item.html.jinja2',
+            current_app.config['KERKO_TEMPLATE_SEARCH_ITEM'],
             title=search_results[0].get('data', {}).get('title', ''),
             item=search_results[0],
             item_url=url_for(
@@ -86,7 +86,7 @@ def search():
     else:
         context['title'] = gettext('Your search did not match any resources')
     return render_template(
-        'kerko/search.html.jinja2',
+        current_app.config['KERKO_TEMPLATE_SEARCH'],
         form=form,
         search_results=search_results,
         print_url=criteria.build_url(page_len='all', print_preview=True),
@@ -114,7 +114,7 @@ def item_view(item_id):
     build_creators_display(item)
     build_fake_facet_results(item)
     return render_template(
-        'kerko/item.html.jinja2',
+        current_app.config['KERKO_TEMPLATE_ITEM'],
         item=item,
         title=item.get('data', {}).get('title', ''),
         item_url=url_for('.item_view', item_id=item_id, _external=True) if item else '',

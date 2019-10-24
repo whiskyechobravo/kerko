@@ -1,4 +1,4 @@
-{% extends 'kerko/base.html.jinja2' %}
+{% extends config.KERKO_TEMPLATE_BASE %}
 
 {%- block meta_title_inner -%}
     {%- if title %}{{ title|striptags|escape }} | {% endif %}{{ super() -}}

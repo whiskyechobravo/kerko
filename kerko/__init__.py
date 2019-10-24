@@ -63,6 +63,12 @@ def init_default_config(state):
     state.app.config.setdefault('KERKO_DOWNLOAD_CITATIONS_MAX_COUNT', 0)
     state.app.config.setdefault('KERKO_USE_TRANSLATIONS', True)
 
+    state.app.config.setdefault('KERKO_TEMPLATE_BASE', 'kerko/base.html.jinja2')
+    state.app.config.setdefault('KERKO_TEMPLATE_LAYOUT', 'kerko/layout.html.jinja2')
+    state.app.config.setdefault('KERKO_TEMPLATE_SEARCH', 'kerko/search.html.jinja2')
+    state.app.config.setdefault('KERKO_TEMPLATE_SEARCH_ITEM', 'kerko/search-item.html.jinja2')
+    state.app.config.setdefault('KERKO_TEMPLATE_ITEM', 'kerko/item.html.jinja2')
+
     state.app.config.setdefault('KERKO_BOOTSTRAP_VERSION', '4.3.1')
     state.app.config.setdefault('KERKO_JQUERY_VERSION', '3.4.1')
     state.app.config.setdefault('KERKO_POPPER_VERSION', '1.14.7')

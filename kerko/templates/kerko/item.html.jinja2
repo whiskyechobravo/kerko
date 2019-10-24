@@ -1,4 +1,4 @@
-{% extends "kerko/layout.html.jinja2" %}
+{% extends config.KERKO_TEMPLATE_LAYOUT %}
 {% from "kerko/_facet.html.jinja2" import facet, facet_items %}
 
 {% macro field(label_text, value_text, field_class=None) %}
