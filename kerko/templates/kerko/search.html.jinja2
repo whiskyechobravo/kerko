@@ -72,7 +72,7 @@
             {%- include "kerko/_pager.html.jinja2" %}
             <ul class="list-unstyled">
                 {%- for result in search_results %}
-                    <li class="search-item">
+                    <li class="search-item break-word">
                         {%- if print_preview -%}
                             {{ result.bib|safe }}
                         {%- else -%}
