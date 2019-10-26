@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kerko 0.3.dev0\n"
 "Report-Msgid-Bugs-To: kerko@whiskyechobravo.com\n"
-"POT-Creation-Date: 2019-10-24 15:14-0400\n"
-"PO-Revision-Date: 2019-10-24 15:14-0400\n"
+"POT-Creation-Date: 2019-10-26 15:05-0400\n"
+"PO-Revision-Date: 2019-10-26 14:57-0400\n"
 "Last-Translator: David Lesieur <kerko@whiskyechobravo.com>\n"
 "Language: fr\n"
 "Language-Team: fr <kerko@whiskyechobravo.com>\n"
@@ -54,11 +54,9 @@ msgstr ""
 msgid "In authors/contributors"
 msgstr "Dans les auteurs/contributeurs"
 
-#: kerko/composer.py:199 kerko/templates/kerko/item.html.jinja2:82
-msgid "Author/contributor"
-msgid_plural "Authors/contributors"
-msgstr[0] "Auteur/contributeur"
-msgstr[1] "Auteurs/contributeurs"
+#: kerko/composer.py:199
+msgid "Author or contributor"
+msgstr "Auteur ou contributeur"
 
 #: kerko/composer.py:201
 msgid ""
@@ -484,7 +482,7 @@ msgid ""
 "given, it shows the full content of the bibliography (up to {page_len} "
 "entries per page)."
 msgstr ""
-"Cette section présente les résultats de recherche. Si aucune critère de "
+"Cette section présente les résultats de recherche. Si aucun critère de "
 "recherche n'a été fourni, elle montre toute la bibliographie (jusqu'à "
 "{page_len} références par page)."
 
@@ -592,6 +590,12 @@ msgstr "Télécharger au format %(download_option)s"
 #: kerko/templates/kerko/item.html.jinja2:79
 msgid "Search this resource type"
 msgstr "Chercher ce type de ressource"
+
+#: kerko/templates/kerko/item.html.jinja2:82
+msgid "Author/contributor"
+msgid_plural "Authors/contributors"
+msgstr[0] "Auteur/contributeur"
+msgstr[1] "Auteurs/contributeurs"
 
 #: kerko/templates/kerko/item.html.jinja2:87
 msgid "Search this author/contributor"

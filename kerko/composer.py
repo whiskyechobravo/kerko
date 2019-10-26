@@ -1,7 +1,7 @@
 import re
 
-from flask_babelex import lazy_gettext as _
 import whoosh
+from flask_babelex import lazy_gettext as _
 from whoosh.analysis import CharsetFilter, LowercaseFilter, StemFilter
 from whoosh.analysis.tokenizers import RegexTokenizer
 from whoosh.fields import BOOLEAN, COLUMN, ID, NUMERIC, STORED, TEXT, Schema, columns
@@ -196,7 +196,7 @@ class Composer:
                 ScopeSpec(
                     key='creator',
                     selector_label=_("In authors/contributors"),
-                    breadbox_label=_("Author/contributor"),
+                    breadbox_label=_("Author or contributor"),
                     weight=100,
                     help_text=_(
                         "Finds entries where any of its authors' or contributors' names contains "
