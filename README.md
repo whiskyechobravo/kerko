@@ -331,16 +331,17 @@ override their default value:
   pages. Defaults to `True`.
 * `KERKO_DOWNLOAD_CITATIONS_MAX_COUNT`: Limit over which the download button
   should be hidden from search results pages. Defaults to `0` (i.e. no limit).
-* `KERKO_TEMPLATE_SEARCH`: Jinja2 template to render for the search page with
-  list of results. Defaults to `kerko/search.html.jinja2`.
-* `KERKO_TEMPLATE_SEARCH_ITEM`: Jinja2 template to render for the search page
-  with a single bibliographic record. Defaults to `kerko/search-item.html.jinja2`.
-* `KERKO_TEMPLATE_ITEM`: Jinja2 template to render for the bibliographic record
-  view. Defaults to `kerko/item.html.jinja2`.
-* `KERKO_TEMPLATE_LAYOUT`: Jinja2 template that is extended by the search,
-  search-item, and item templates. Defaults to `kerko/layout.html.jinja2`.
-* `KERKO_TEMPLATE_BASE`: Jinja2 template that is extend by the layout template.
-  Defaults to `kerko/base.html.jinja2`.
+* `KERKO_TEMPLATE_SEARCH`: Name of the Jinja2 template to render for the search
+  page with list of results. Defaults to `kerko/search.html.jinja2`.
+* `KERKO_TEMPLATE_SEARCH_ITEM`: Name of the Jinja2 template to render for the
+  search page with a single bibliographic record. Defaults to
+  `kerko/search-item.html.jinja2`.
+* `KERKO_TEMPLATE_ITEM`: Name of the Jinja2 template to render for the
+  bibliographic record view. Defaults to `kerko/item.html.jinja2`.
+* `KERKO_TEMPLATE_LAYOUT`: Name of the Jinja2 template that is extended by the
+  search, search-item, and item templates. Defaults to `kerko/layout.html.jinja2`.
+* `KERKO_TEMPLATE_BASE`: Name of the Jinja2 template that is extended by the
+  layout template. Defaults to `kerko/base.html.jinja2`.
 * `KERKO_ZOTERO_MAX_ATTEMPTS`: Maximum number of tries after the Zotero API
   has returned an error or not responded during indexing. Defaults to `10`.
 * `KERKO_ZOTERO_WAIT`: Time to wait (in seconds) between failed attempts to
