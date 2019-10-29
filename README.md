@@ -494,21 +494,25 @@ Kerko was inspired by two prior projects:
   Montréal](https://bibliomontreal.uqam.ca/bibliographie/), developed in 2014 by
   David Lesieur and Patrick Fournier, of Whisky Echo Bravo, for the [Laboratoire
   d'histoire et de patrimoine de Montréal](https://lhpm.uqam.ca/) (Université du
-  Québec à Montréal).
+  Québec à Montréal, Canada).
 * [Bibliography on English-speaking Quebec](http://quescren.concordia.ca/),
   developed in 2017 by David Lesieur, for the [Quebec English-Speaking
   Communities Research Network
   (QUESCREN)](https://www.concordia.ca/artsci/scpa/quescren.html) (Concordia
-  University).
+  University, Canada).
 
 Later on, it became clear that other organizations needed a similar solution.
 However, software from the prior projects had to be rewritten so it could more
 easily be configured for different bibliographies from organizations with
 different needs. That led to Kerko, whose development was made possible through
-the following projects:
+the following project:
 
-* TODO: list project 1 when it's live.
-* TODO: list project 2 when it's live.
+* [Bibliographie francophone sur l'archivistique](https://bibliopiaf.ebsi.umontreal.ca/),
+  funded by the
+  [Association internationale des archives francophones (AIAF)](http://www.aiaf.org/)
+  and hosted by the
+  [École de bibliothéconomie et des sciences de l’information (EBSI)](https://ebsi.umontreal.ca/)
+  (Université de Montréal, Canada).
 
 
 ### Etymology
@@ -525,9 +529,12 @@ tool.
 
 ## Powered by Kerko
 
-If you wish to share your Kerko-powered online bibliography with us all, we'll
-be happy to list it in this section. To have it added, please [e-mail
-us][Kerko_email] or submit a pull request.
+The following online bibliographies are powered by Kerko:
+
+* [Bibliographie francophone sur l'archivistique](https://bibliopiaf.ebsi.umontreal.ca/)
+
+If you wish to add your Kerko-powered online bibliography to this list, please
+[e-mail us][Kerko_email] or submit a pull request.
 
 
 [Babel]: https://pypi.org/project/Babel/
