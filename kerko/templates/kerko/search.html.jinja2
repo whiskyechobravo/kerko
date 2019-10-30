@@ -18,20 +18,20 @@
             <div class="col-auto ml-auto text-right">
                 <div class="d-inline-block d-print-none mb-2">
                     <button class="btn btn-light" data-toggle="modal" data-target="#search-help">
-                        <span class="fa fa-question-circle"></span> {{ _("Help") }}
+                        <span class="fas fa-question-circle" aria-hidden="true"></span> {{ _("Help") }}
                     </button>
                 </div>
                 {%- if is_searching %}
                     <div class="d-inline-block d-print-none mb-2">
                         <a class="btn btn-danger" href="{{ url_for('kerko.search') }}">
-                            <span class="fas fa-trash-alt"></span> {{ _("Reset search") }}
+                            <span class="fas fa-trash-alt" aria-hidden="true"></span> {{ _("Reset search") }}
                         </a>
                     </div>
                 {%- endif %}
                 {%- if facet_results %}
                     <div class="d-inline-block d-lg-none d-print-none mb-2">
                         <a id="drawer-open" class="btn btn-primary" href="#">
-                            <span class="fas fa-compass"></span> {{ _("Explore") }}
+                            <span class="fas fa-compass" aria-hidden="true"></span> {{ _("Explore") }}
                         </a>
                     </div>
                 {%- endif %}
@@ -89,7 +89,7 @@
                 {%- if show_print_link %}
                     <div class="d-none d-md-inline-block d-print-none mb-1">
                         <a id="print-link" class="btn btn-light" href="#" rel="nofollow" data-url="{{ print_url }}">
-                            <span class="fas fa-print"></span> {% trans count=total_count, count_formatted=total_count_formatted|safe %}Print this citation{% pluralize %}Print {{ count_formatted }} citations{% endtrans %}
+                            <span class="fas fa-print" aria-hidden="true"></span> {% trans count=total_count, count_formatted=total_count_formatted|safe %}Print this citation{% pluralize %}Print {{ count_formatted }} citations{% endtrans %}
                         </a>
                     </div>
                 {%- endif %}
@@ -97,7 +97,7 @@
                     <div class="d-inline-block d-print-none mb-1">
                         <div class="dropdown">
                             <button class="btn btn-secondary btn-light dropdown-toggle" type="button" id="download-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="fas fa-download"></span> {% trans count=total_count, count_formatted=total_count_formatted|safe %}Download this citation{% pluralize %}Download {{ count_formatted }} citations{% endtrans %}
+                                <span class="fas fa-download" aria-hidden="true"></span> {% trans count=total_count, count_formatted=total_count_formatted|safe %}Download this citation{% pluralize %}Download {{ count_formatted }} citations{% endtrans %}
                             </button>
                             <div class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labeledby="download-options">
                                 {%- for citation_format in config.KERKO_COMPOSER.get_ordered_specs('citation_formats') %}

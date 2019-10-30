@@ -14,14 +14,14 @@
             {%- if item.remove_url -%}
                 <a class="no-decorate" href="{{ item.remove_url }}" title="{{ remove_link_title.format(label|striptags|escape) }}" rel="nofollow">
                     {%- if checkboxes -%}
-                        <span class="far fa-check-square"></span>
+                        <span class="far fa-check-square" aria-hidden="true"></span>
                     {%- endif %}
                     <span class="facet-item-label parent-decorate">{{ label }}</span>
                 </a>
             {%- elif item.add_url -%}
                 <a class="no-decorate" href="{{ item.add_url }}" title="{{ add_link_title.format(label|striptags|escape) }}" rel="nofollow">
                     {%- if checkboxes -%}
-                        <span class="far fa-square"></span>
+                        <span class="far fa-square" aria-hidden="true"></span>
                     {%- endif %}
                     <span class="facet-item-label parent-decorate">{{ label }}</span>
                 </a>

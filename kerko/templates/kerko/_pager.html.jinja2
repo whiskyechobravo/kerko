@@ -4,7 +4,7 @@
             {%- if pager.previous %}
                 <li class="page-item">
                     <a class="page-link" href="{{ pager.previous.url }}" rel="prev" title="{{ _('Previous page') }}">
-                        <span class="fas fa-angle-left"></span> <span class="sr-only sr-only-focusable">{{ _('Previous page') }}</span>
+                        <span class="fas fa-angle-left" aria-hidden="true"></span>
                     </a>
                 </li>
             {%- endif %}
@@ -54,7 +54,7 @@
             {%- if pager.next %}
                 <li class="page-item">
                     <a class="page-link" href="{{ pager.next.url }}" rel="next" title="{{ _('Next page') }}">
-                        <span class="fas fa-angle-right"></span> <span class="sr-only sr-only-focusable">{{ _('Next page') }}</span>
+                        <span class="fas fa-angle-right" aria-hidden="true"></span>
                     </a>
                 </li>
             {%- endif %}

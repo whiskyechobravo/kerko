@@ -8,8 +8,8 @@
             {{- form.keywords(class_="form-control flex-grow-1" + keywords_validation_class, placeholder=placeholder) }}
             {{- form.scope(class_="flex-grow-0 custom-select w-40" + scope_validation_class) }}
             <div class="input-group-append">
-                <button id="submit" type="submit" {% block search_button_attributes %}class="btn btn-primary"{% endblock %}>
-                    <span class="fas fa-search"></span> <span class="sr-only sr-only-focusable">{{ _("Submit") }}</span>
+                <button id="submit" type="submit" {% block search_button_attributes %}class="btn btn-primary"{% endblock %} title="{{ _('Search') }}">
+                    <span class="fas fa-search" aria-hidden="true"></span>
                 </button>
             </div>
         </div>
