@@ -83,5 +83,6 @@ def sync_attachments():
 
 
 def delete_attachments():
-    for filepath in get_attachments_dir().iterdir():
-        filepath.unlink()
+    if get_attachments_dir().is_dir():
+        for filepath in get_attachments_dir().iterdir():
+            filepath.unlink()
