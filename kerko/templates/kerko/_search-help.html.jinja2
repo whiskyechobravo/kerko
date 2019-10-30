@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 {%- block search_help_header %}
-                    <h2 class="modal-title h4" id="search-help-label">{{ _("Help") }}</h2>
+                    <h2 class="modal-title" id="search-help-label">{{ _("Help") }}</h2>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -13,7 +13,7 @@
                 {%- block search_help_inner %}
                     <p>{{ _("The search interface is made of three sections: <strong>{}</strong>, <strong>{}</strong>, and <strong>{}</strong>. These are described in detail below.").format(_("Search"), _("Explore"), _("Results")) }}</p>
                     <p>{{ _("You may start searching either from the <strong>{}</strong> section or from the <strong>{}</strong> section.").format(_("Search"), _("Explore")) }}</p>
-                    <h3 class="h4">{{ _("Search") }}</h3>
+                    <h3>{{ _("Search") }}</h3>
                     <p>{{ _("This section shows your current search criteria and allows you to submit keywords to search in the bibliography.") }}</p>
                     <ul>
                         <li>{{ _("Each new submission adds the entered keywords to the list of search criteria.") }}</li>
@@ -42,14 +42,14 @@
                         <li>{{ _("Keyword search is case-insentitive, accents are folded, and punctuation is ignored.") }}</li>
                         <li>{{ _("Stemming is performed on terms from most text fields, e.g., title, abstract, notes. Words are thus reduced to their root form, saving you from having to specify all variants of a word when searching, e.g., terms such as <code>search</code>, <code>searches</code>, and <code>searching</code> all produce the same results. Stemming is <em>not</em> applied to text in name fields, e.g., authors/contributors, publisher, publication.") }}</li>
                     </ul>
-                    <h3 class="h4">{{ _("Explore") }}</h3>
+                    <h3>{{ _("Explore") }}</h3>
                     <p>{{ _("This section allows you to explore categories associated with the references.") }}</p>
                     <ul>
                         <li>{{ _("Check a category to add it to your search criteria and narrow your search. The results will only show entries that are associated with the category, and more specific terms may appear under the newly selected category.") }}</li>
                         <li>{{ _("Uncheck a category to remove it from your search criteria and broaden your search results.") }}</li>
                         <li>{{ _("The numbers shown next to the categories indicate how many entries are associated with each category in the current set of results. Those numbers will vary based on your search criteria to always describe what's in the current set of results. Likewise, categories and whole facets will disappear when the result set has no entry associated to them.") }}</li>
                     </ul>
-                    <h3 class="h4">{{ _("Results") }}</h3>
+                    <h3>{{ _("Results") }}</h3>
                     <p>{{ _("This section shows the search results. When no search criteria has been given, it shows the full content of the bibliography (up to {page_len} entries per page).").format(page_len=config.KERKO_PAGE_LEN) }}</p>
                     <ul>
                         <li>{{ _("Each entry of the results list is a link to its full bibliographic record. From the bibliographic record view, you may continue exploring the search results by going to previous or following records in your search results, or you may return to the list of results.") }}</li>

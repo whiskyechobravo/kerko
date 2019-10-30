@@ -12,8 +12,8 @@
 {%- endblock metas %}
 
 {%- block content_header %}
-    <div class="h3 py-3 mb-0 row">
-        <h1 class="h3 col-auto mr-auto d-inline">{% if is_searching %}{{ _("Your search") }}{% else %}{{ _("Search") }}{% endif %}</h1>
+    <div class="h2 py-3 mb-0 row">
+        <h1 class="h2 col-auto mr-auto d-inline">{% if is_searching %}{{ _("Your search") }}{% else %}{{ _("Search") }}{% endif %}</h1>
         {%- if is_searching or facet_results %}
             <div class="col-auto ml-auto text-right">
                 <div class="d-inline-block d-print-none">
@@ -53,9 +53,9 @@
         </div>
     {%- endblock search_criteria %}
     {%- block search_results %}
-        <div class="h3 py-3 mb-0 row">
+        <div class="h2 py-3 mb-0 row">
             <div class="col-auto mr-auto">
-                <h2 class="h3 d-inline">{{ title }}</h2>
+                <h2 class="d-inline">{{ title }}</h2>
                 {%- if search_results %}
                     <span class="badge badge-light">{% trans count=total_count, count_formatted=total_count_formatted|safe %}{{ count_formatted }} resource{% pluralize %}{{ count_formatted }} resources{% endtrans %}</span>
                 {%- endif %}
@@ -130,8 +130,8 @@
 {%- block sidebar_inner %}
     {%- block facet_results %}
         {%- if facet_results %}
-            <div class="h3 py-3 mb-0 row">
-                <h2 class="h3 col-auto mr-auto d-inline d-print-none">{{ _("Explore") }}</h2>
+            <div class="h2 py-3 mb-0 row">
+                <h2 class="col-auto mr-auto d-inline d-print-none">{{ _("Explore") }}</h2>
                 <div class="col-auto ml-auto text-right d-lg-none d-print-none">
                     <a id="drawer-close" class="btn btn-dark" href="#" title="{{ _('Close explore panel') }}">
                         <span class="fas fa-times"></span> <span class="sr-only sr-only-focusable">{{ _("Close explore panel") -}}</span>
