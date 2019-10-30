@@ -59,6 +59,8 @@
 }
 main {
   min-height: calc(100vh - 7rem);
+  padding-top: 1rem;
+  padding-bottom: 3rem;
 }
 @media screen and (max-width: 991.98px) {  /* <lg */
   html, body {

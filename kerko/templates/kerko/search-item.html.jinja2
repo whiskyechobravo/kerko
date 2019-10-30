@@ -6,7 +6,7 @@
 {%- endblock metas %}
 
 {%- block content_header %}
-    <div class="h3 py-3 mb-0 row">
+    <div class="h3 my-2 row">
         <h1 class="h3 col-auto mr-auto d-inline d-print-none">
             {%- if is_searching %}
                 {{- _("Your search") }}
@@ -15,7 +15,7 @@
             {%- endif -%}
         </h1>
         {%- if back_url %}
-            <div class="col-auto ml-auto text-right d-print-none">
+            <div class="col-auto ml-auto mb-2 text-right d-print-none">
                 <a class="btn btn-primary" href="{{ back_url }}">
                     <span class="fas fa-arrow-left"></span> {{ _("Return to list of results") }}
                 </a>
@@ -27,7 +27,7 @@
 {%- block content_inner %}
     {%- block search_criteria %}
         {%- if is_searching %}
-            <div class="card breadbox d-print-none">
+            <div class="card breadbox mb-4 d-print-none">
                 <div class="card-body">
                     {%- include "kerko/_breadbox.html.jinja2" %}
                 </div>
@@ -36,7 +36,7 @@
     {%- endblock search_criteria %}
     {%- block search_results %}
         {%- include "kerko/_pager.html.jinja2" %}
-        <h2 class="py-3 mb-0">{{ title }}</h2>
+        <h2 class="mb-2">{{ title }}</h2>
     {%- endblock search_results %}
     {{- super() }}
     {%- if item %}

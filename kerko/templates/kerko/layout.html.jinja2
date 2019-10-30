@@ -23,7 +23,7 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/fontawesome.css" integrity="sha384-sri+NftO+0hcisDKgr287Y/1LVnInHJ1l+XC7+FOabmTTIK0HnE2ID+xxvJ21c5J" crossorigin="anonymous">
     {%- endblock fontawesome_css %}
     {%- block kerko_css %}
-        <link rel="stylesheet" href="{{ url_for('kerko.static', filename='kerko/css/styles.css') }}?201910241441">
+        <link rel="stylesheet" href="{{ url_for('kerko.static', filename='kerko/css/styles.css') }}?201910301037">
     {%- endblock kerko_css %}
 {%- endblock styles %}
 
@@ -64,7 +64,7 @@
                     {%- block content %}
                         <div {% block content_attributes %}class="col-12 {% if self.sidebar_inner() %}col-lg-8 order-lg-4{% endif %}"{% endblock %}>
                             {%- block content_header %}
-                                <h1 class="h2 py-3">{{ title }}</h1>
+                                <h1 class="h2 my-2">{{ title }}</h1>
                             {%- endblock content_header %}
                             {%- block messages %}
                                 {%- with messages = get_flashed_messages(with_categories=true) %}
