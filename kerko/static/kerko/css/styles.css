@@ -76,7 +76,7 @@ main {
     right: -100%;
     z-index: 100;
     width: 400px;
-    max-width: 75vw;
+    max-width: 100%;
     border-top: 1px solid #0000001a;
     border-left: 1px solid #0000001a;
     border-bottom: 1px solid #0000001a;
