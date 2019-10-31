@@ -37,6 +37,9 @@
   .text-md-right.text-print-left {
     text-align: left !important;
   }
+  .breadbox * {
+    text-decoration: none !important;
+}
 }
 .w-40 {
   width: 40% !important;
