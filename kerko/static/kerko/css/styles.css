@@ -39,7 +39,7 @@
   }
   .breadbox * {
     text-decoration: none !important;
-}
+  }
 }
 .w-40 {
   width: 40% !important;
@@ -64,31 +64,4 @@ main {
   min-height: calc(100vh - 7rem);
   padding-top: 1rem;
   padding-bottom: 3rem;
-}
-@media screen and (max-width: 991.98px) {  /* <lg */
-  html, body {
-    /* Make sure no one can scroll horizontally and see off-canvas elements. */
-    width: 100%;
-    position: relative;
-    overflow-x: hidden;
-  }
-  .drawer {
-    display: block;
-    flex: none;
-    position: absolute !important;
-    right: -100%;
-    z-index: 100;
-    width: 400px;
-    max-width: 100%;
-    border-top: 1px solid #0000001a;
-    border-left: 1px solid #0000001a;
-    border-bottom: 1px solid #0000001a;
-    border-radius: .25rem 0 0 .25rem;
-    background: #f8f9fa;  /* bg-light */
-    transition: right 0.5s ease-out;
-  }
-  .drawer.show {
-    right: 0;
-    transition: right 0.5s ease-out;
-  }
 }

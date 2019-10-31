@@ -30,9 +30,9 @@
                 {%- endif %}
                 {%- if facet_results %}
                     <div class="d-inline-block d-lg-none d-print-none mb-2">
-                        <a id="drawer-open" class="btn btn-primary" href="#">
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#facets-modal">
                             <span class="fas fa-compass" aria-hidden="true"></span> {{ _("Explore") }}
-                        </a>
+                        </button>
                     </div>
                 {%- endif %}
             </div>
@@ -125,31 +125,50 @@
     {%- endblock search_results %}
 {%- endblock content_inner %}
 
-{% block sidebar_attributes %}{% if facet_results %}id="drawer" class="drawer col-12 col-lg-4 order-lg-1"{% else %}{{ super() }}{% endif %}{% endblock %}
-
 {%- block sidebar_inner %}
     {%- block facet_results %}
         {%- if facet_results %}
-            <div class="h2 my-2 row">
-                <h2 class="col-auto mr-auto d-inline d-print-none">{{ _("Explore") }}</h2>
-                <div class="col-auto ml-auto text-right d-lg-none d-print-none">
-                    <button id="drawer-close" type="button" class="btn btn-secondary" title="{{ _('Close Explore panel') }}">
-                        <span class="fas fa-times" aria-hidden="true"></span>
-                    </button>
+            <div class="d-none d-lg-block d-print-none">
+                <h2 class="mt-2 mb-4">{{ _("Explore") }}</h2>
+                <div>
+                    {%- for f in config.KERKO_COMPOSER.get_ordered_specs('facets') %}
+                        {{- facet(
+                                f.title,
+                                f.missing_label,
+                                facet_results[f.key],
+                                collapsible=config.KERKO_FACET_COLLAPSING and f.collapsible,
+                                collapse_id='facet-' + f.filter_key,
+                                collapsed=not f.key in active_facets
+                            )
+                        }}
+                    {%- endfor %}
                 </div>
             </div>
-            <div class="d-print-none">
-                {%- for f in config.KERKO_COMPOSER.get_ordered_specs('facets') %}
-                    {{- facet(
-                            f.title,
-                            f.missing_label,
-                            facet_results[f.key],
-                            collapsible=config.KERKO_FACET_COLLAPSING and f.collapsible,
-                            collapse_id='facet-' + f.filter_key,
-                            collapsed=not f.key in active_facets
-                        )
-                    }}
-                {%- endfor %}
+            {#- Not-so-pretty: duplicate facets for Bootstrap modal used with <lg screens. #}
+            <div id="facets-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="facets-modal-label" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 id="facets-modal-label" class="modal-title">{{ _("Explore") }}</h2>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" title="{{ _('Close Explore panel') }}">
+                                <span class="fas fa-times" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            {%- for f in config.KERKO_COMPOSER.get_ordered_specs('facets') %}
+                                {{- facet(
+                                        f.title,
+                                        f.missing_label,
+                                        facet_results[f.key],
+                                        collapsible=config.KERKO_FACET_COLLAPSING and f.collapsible,
+                                        collapse_id='facet-' + f.filter_key,
+                                        collapsed=not f.key in active_facets
+                                    )
+                                }}
+                            {%- endfor %}
+                        </div>
+                    </div>
+                </div>
             </div>
         {%- endif %}
     {%- endblock facet_results %}
@@ -157,9 +176,6 @@
 
 {%- block body_scripts %}
     {{- super() }}
-    {%- block kerko_drawer_js %}
-        <script src="{{ url_for('kerko.static', filename='kerko/js/drawer.js') }}"></script>
-    {%- endblock kerko_drawer_js %}
     {%- block kerko_print_js %}
         {%- if show_print_link %}
             <script src="{{ url_for('kerko.static', filename='kerko/js/print.js') }}"></script>
