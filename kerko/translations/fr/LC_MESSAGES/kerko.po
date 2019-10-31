@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kerko 0.3.dev0\n"
 "Report-Msgid-Bugs-To: kerko@whiskyechobravo.com\n"
-"POT-Creation-Date: 2019-10-26 15:05-0400\n"
-"PO-Revision-Date: 2019-10-26 14:57-0400\n"
+"POT-Creation-Date: 2019-10-31 08:53-0400\n"
+"PO-Revision-Date: 2019-10-31 08:53-0400\n"
 "Last-Translator: David Lesieur <kerko@whiskyechobravo.com>\n"
 "Language: fr\n"
 "Language-Team: fr <kerko@whiskyechobravo.com>\n"
@@ -198,7 +198,6 @@ msgid "Search results pagination"
 msgstr "Pagination des résultats de recherche"
 
 #: kerko/templates/kerko/_pager.html.jinja2:6
-#: kerko/templates/kerko/_pager.html.jinja2:7
 msgid "Previous page"
 msgstr "Page précédente"
 
@@ -212,7 +211,6 @@ msgid "Page %(page_num)s"
 msgstr "Page %(page_num)s"
 
 #: kerko/templates/kerko/_pager.html.jinja2:56
-#: kerko/templates/kerko/_pager.html.jinja2:57
 msgid "Next page"
 msgstr "Page suivante"
 
@@ -224,14 +222,23 @@ msgstr "Chercher parmi les résultats..."
 msgid "Search for..."
 msgstr "Chercher les mots-clés..."
 
-#: kerko/templates/kerko/_search-form.html.jinja2:12
-msgid "Submit"
-msgstr "Soumettre"
+#: kerko/templates/kerko/_search-form.html.jinja2:11
+#: kerko/templates/kerko/_search-help.html.jinja2:14
+#: kerko/templates/kerko/_search-help.html.jinja2:15
+#: kerko/templates/kerko/_search-help.html.jinja2:16
+#: kerko/templates/kerko/_search-help.html.jinja2:58
+#: kerko/templates/kerko/search.html.jinja2:16
+msgid "Search"
+msgstr "Rechercher"
 
 #: kerko/templates/kerko/_search-help.html.jinja2:6
 #: kerko/templates/kerko/search.html.jinja2:21
 msgid "Help"
 msgstr "Aide"
+
+#: kerko/templates/kerko/_search-help.html.jinja2:7
+msgid "Close Help panel"
+msgstr "Fermer le panneau d'aide"
 
 #: kerko/templates/kerko/_search-help.html.jinja2:14
 msgid ""
@@ -245,18 +252,11 @@ msgstr ""
 
 #: kerko/templates/kerko/_search-help.html.jinja2:14
 #: kerko/templates/kerko/_search-help.html.jinja2:15
-#: kerko/templates/kerko/_search-help.html.jinja2:16
-#: kerko/templates/kerko/_search-help.html.jinja2:58
-#: kerko/templates/kerko/search.html.jinja2:16
-msgid "Search"
-msgstr "Rechercher"
-
-#: kerko/templates/kerko/_search-help.html.jinja2:14
-#: kerko/templates/kerko/_search-help.html.jinja2:15
 #: kerko/templates/kerko/_search-help.html.jinja2:45
 #: kerko/templates/kerko/_search-help.html.jinja2:59
 #: kerko/templates/kerko/search.html.jinja2:34
-#: kerko/templates/kerko/search.html.jinja2:134
+#: kerko/templates/kerko/search.html.jinja2:132
+#: kerko/templates/kerko/search.html.jinja2:152
 msgid "Explore"
 msgstr "Explorer"
 
@@ -547,7 +547,8 @@ msgstr ""
 "n'ont aucun effet sur le tri par pertinence. Elles ne font que filtrer la"
 " liste des résultats."
 
-#: kerko/templates/kerko/_search-help.html.jinja2:66
+#: kerko/templates/kerko/_search-help.html.jinja2:63
+#: kerko/templates/kerko/search.html.jinja2:170
 msgid "Close"
 msgstr "Fermer"
 
@@ -681,7 +682,6 @@ msgstr ""
 "                    <li>Essayez des termes plus généraux.</li>\n"
 "                </ul>"
 
-#: kerko/templates/kerko/search.html.jinja2:136
-#: kerko/templates/kerko/search.html.jinja2:137
-msgid "Close explore panel"
+#: kerko/templates/kerko/search.html.jinja2:153
+msgid "Close Explore panel"
 msgstr "Fermer le panneau d'exploration"
