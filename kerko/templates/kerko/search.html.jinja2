@@ -88,9 +88,9 @@
             <div class="col-auto ml-auto my-4 text-right">
                 {%- if show_print_link %}
                     <div class="d-none d-md-inline-block d-print-none mb-1">
-                        <a id="print-link" class="btn btn-light" href="#" rel="nofollow" data-url="{{ print_url }}">
+                        <button id="print-link" class="btn btn-light" type="button" data-url="{{ print_url }}">
                             <span class="fas fa-print" aria-hidden="true"></span> {% trans count=total_count, count_formatted=total_count_formatted|safe %}Print this citation{% pluralize %}Print {{ count_formatted }} citations{% endtrans %}
-                        </a>
+                        </button>
                     </div>
                 {%- endif %}
                 {%- if show_download_link %}
