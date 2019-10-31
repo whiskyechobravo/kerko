@@ -61,7 +61,7 @@
                                 <button class="btn btn-secondary btn-light dropdown-toggle" type="button" id="download-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="fas fa-download" aria-hidden="true"></span> {% trans count=1, count_formatted='1' %}Download this citation{% pluralize %}Download {{ count_formatted }} citations{% endtrans %} {# TODO: Remove pluralization after solving issue where translation is not loaded when the same message is sometimes pluralized, sometimes not. #}
                                 </button>
-                                <div class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labeledby="download-options">
+                                <div class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labelledby="download-options">
                                     {%- for citation_format in config.KERKO_COMPOSER.get_ordered_specs('citation_formats') %}
                                         <a class="dropdown-item" href="{{ url_for('kerko.item_citation_download', item_id=item.id, citation_format_key=citation_format.key) }}" rel="nofollow" title="{% trans download_option=citation_format.label|escape %}Download in {{ download_option }} format{% endtrans %}">
                                             {{- citation_format.label -}}

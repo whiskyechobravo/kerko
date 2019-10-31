@@ -99,7 +99,7 @@
                             <button class="btn btn-secondary btn-light dropdown-toggle" type="button" id="download-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="fas fa-download" aria-hidden="true"></span> {% trans count=total_count, count_formatted=total_count_formatted|safe %}Download this citation{% pluralize %}Download {{ count_formatted }} citations{% endtrans %}
                             </button>
-                            <div class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labeledby="download-options">
+                            <div class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labelledby="download-options">
                                 {%- for citation_format in config.KERKO_COMPOSER.get_ordered_specs('citation_formats') %}
                                     <a class="dropdown-item" href="{{ download_urls[citation_format.key] }}" rel="nofollow" title="{% trans download_option=citation_format.label|escape %}Download in {{ download_option }} format{% endtrans %}">
                                         {{- citation_format.label -}}
