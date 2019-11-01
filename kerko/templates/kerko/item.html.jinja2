@@ -40,7 +40,7 @@
 
 {%- block metas %}
     {{- super() }}
-    <link rel="bookmark" title="{{ title|striptags|escape }}" href="{{ item_url }}">
+    <link rel="canonical" title="{{ title|striptags|escape }}" href="{{ item_url }}">
 {%- endblock metas %}
 
 {%- block content_inner %}
