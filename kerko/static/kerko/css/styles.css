@@ -22,6 +22,9 @@
   word-wrap: break-word;  /* Older, non-standard name for overflow-wrap. */
   overflow-wrap: break-word;
 }
+.pre-line {
+  white-space: pre-line;
+}
 .breadbox > .card-body > .row:last-child > * > ul {
   margin-bottom: 0;
 }

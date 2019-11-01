@@ -1,11 +1,11 @@
 {% extends config.KERKO_TEMPLATE_LAYOUT %}
 {% from "kerko/_facet.html.jinja2" import facet, facet_items %}
 
-{% macro field(label_text, value_text, field_class=None) %}
+{% macro field(label_text, value_text, field_class=None, value_class=None) %}
     {%- if value_text %}
         <div class="row mb-3 {{ field_class if field_class }}">
             <div class="col-md-4 col-lg-3 font-weight-bold break-word text-md-right text-print-left">{{ label_text }}</div>
-            <div class="col-md-8 col-lg-9 break-word">{{ value_text }}</div>
+            <div class="col-md-8 col-lg-9 break-word {{ value_class if value_class }}">{{ value_text }}</div>
         </div>
     {%- endif %}
 {%- endmacro %}
@@ -99,7 +99,11 @@
         {#- Display item fields in proper order. #}
         {%- for f in item.item_fields %}
             {%- if item.data[f.field] %}
-                {{- field(f.localized, item.data[f.field]|striptags|urlize(target='_blank')) }}
+                {%- if f.field == 'abstractNote' %}
+                    {{- field(f.localized, item.data[f.field]|urlize(target='_blank'), value_class='pre-line') }}
+                {%- else %}
+                    {{- field(f.localized, item.data[f.field]|striptags|urlize(target='_blank')) }}
+                {%- endif %}
             {%- endif %}
         {%- endfor %}
         {{- field(_("Notes"), item.notes|join('')|safe) if item.notes }}
