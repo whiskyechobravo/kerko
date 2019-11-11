@@ -30,7 +30,7 @@
                 {%- endif %}
                 {%- if facet_results %}
                     <div class="d-inline-block d-lg-none d-print-none mb-2">
-                        <button class="btn btn-primary" data-toggle="modal" data-target="#facets-modal">
+                        <button id="facets-modal-toggle" class="btn btn-primary" data-target="#facets-modal">
                             <span class="fas fa-compass" aria-hidden="true"></span> {{ _("Explore") }}
                         </button>
                     </div>
@@ -134,7 +134,7 @@
         {%- if facet_results %}
             <div class="d-none d-lg-block d-print-none">
                 <h2 class="mt-2 mb-4">{{ _("Explore") }}</h2>
-                <div>
+                <div class="facets">
                     {%- for f in config.KERKO_COMPOSER.get_ordered_specs('facets') %}
                         {{- facet(
                                 f.title,
@@ -148,7 +148,6 @@
                     {%- endfor %}
                 </div>
             </div>
-            {#- Not-so-pretty: duplicate facets for Bootstrap modal used with <lg screens. #}
             <div id="facets-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="facets-modal-label" aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
                     <div class="modal-content">
@@ -159,17 +158,6 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            {%- for f in config.KERKO_COMPOSER.get_ordered_specs('facets') %}
-                                {{- facet(
-                                        f.title,
-                                        f.missing_label,
-                                        facet_results[f.key],
-                                        collapsible=config.KERKO_FACET_COLLAPSING and f.collapsible,
-                                        collapse_id='facet-' + f.filter_key,
-                                        collapsed=not f.key in active_facets
-                                    )
-                                }}
-                            {%- endfor %}
                             <div class="my-3 text-right">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ _("Close") }}</button>
                             </div>
@@ -183,6 +171,7 @@
 
 {%- block body_scripts %}
     {{- super() }}
+    <script src="{{ url_for('kerko.static', filename='kerko/js/search.js') }}"></script>
     {%- block kerko_print_js %}
         {%- if show_print_link %}
             <script src="{{ url_for('kerko.static', filename='kerko/js/print.js') }}"></script>
