@@ -253,9 +253,10 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
    ```
 
    Kerko will retrieve your bibliographic data from zotero.org. If you have a
-   large bibliography, this may take a while (and there is no progress
-   indicator). In production use, that command is usually added to the crontab
-   file for regular execution.
+   large bibliography or large attachments, this may take a while (and there is
+   no progress indicator). In production use, that command is usually added to
+   the crontab file for regular execution (with enough time between executions
+   for each to complete before the next one starts).
 
    To list all commands provided by Kerko:
 
