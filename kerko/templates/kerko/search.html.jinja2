@@ -171,7 +171,9 @@
 
 {%- block body_scripts %}
     {{- super() }}
-    <script src="{{ url_for('kerko.static', filename='kerko/js/search.js') }}"></script>
+    {%- block kerko_search_js %}
+        <script src="{{ url_for('kerko.static', filename='kerko/js/search.js') }}"></script>
+    {%- endblock kerko_search_js %}
     {%- block kerko_print_js %}
         {%- if show_print_link %}
             <script src="{{ url_for('kerko.static', filename='kerko/js/print.js') }}"></script>
