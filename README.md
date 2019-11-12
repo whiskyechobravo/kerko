@@ -319,6 +319,11 @@ override their default value:
   CSL file. Defaults to `'apa'`.
 * `KERKO_RESULTS_ABSTRACT`: Show abstracts in search result pages. Defaults to
   `False`.
+* `KERKO_RESULTS_FIELDS`: List of item fields to retrieve for use in search
+  results pages (i.e. in the `KERKO_TEMPLATE_SEARCH` template). Values are keys
+  identifying fields or facets assigned to the `kerko.composer.Composer`
+  instance. Defaults to `['id', 'bib', 'coins']`. Note that `'data'` gets
+  appended to the list if `KERKO_RESULTS_ABSTRACT` is `True`.
 * `KERKO_PAGER_LINKS`: Number of pages to show in the pager (not counting the
   current page). Defaults to `8`.
 * `KERKO_FACET_COLLAPSING`: Allow collapsible facets. Defaults to `False`.

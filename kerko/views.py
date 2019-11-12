@@ -31,8 +31,8 @@ def search():
         return redirect(url, 302)
 
     if criteria.page_len != 1:  # Note: page_len can be None (for all results).
-        return_fields = ['id', 'bib', 'coins']
-        if current_app.config['KERKO_RESULTS_ABSTRACT']:
+        return_fields = current_app.config['KERKO_RESULTS_FIELDS']
+        if current_app.config['KERKO_RESULTS_ABSTRACT'] and 'data' not in return_fields:
             return_fields.append('data')
     else:
         return_fields = None  # All fields
