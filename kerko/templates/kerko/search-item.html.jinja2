@@ -39,7 +39,5 @@
         <h2 class="mb-2">{{ title }}</h2>
     {%- endblock search_results %}
     {{- super() }}
-    {%- if item %}
-        {%- include "kerko/_pager.html.jinja2" %}
-    {%- endif %}
+    {%- include "kerko/_pager.html.jinja2" %}
 {%- endblock content_inner %}
