@@ -132,7 +132,7 @@
                 <div class="col-md-8 col-lg-9 break-word">
                     <ul class="list-unstyled">
                         {%- for attachment in item.attachments %}
-                            <li><a href="{{ url_for('kerko.item_attachment_download', item_id=item.id, attachment_id=attachment['id']) }}" title="{{ _('Download this attachment') }}"><span class="fas fa-download" aria-hidden="true"></span> {{ attachment.filename }}</a></li>
+                            <li><a href="{{ url_for('kerko.item_attachment_download', item_id=item.id, attachment_id=attachment['id']) }}" title="{{ _('Download this attachment') }}"><span class="fas fa-download d-print-none" aria-hidden="true"></span> {{ attachment.filename }}</a></li>
                         {%- endfor %}
                     </ul>
                 </div>
