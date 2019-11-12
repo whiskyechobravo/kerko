@@ -47,21 +47,42 @@ def build_keywords_query(keywords):
     return And(queries)
 
 
+def get_query_facets(filters, criteria):
+    """Return the specs of facets to be retrieved by the search query."""
+    composer = current_app.config['KERKO_COMPOSER']
+    if criteria.page_len == 1:
+        # On single-item pages, facets are displayed in the breadbox only, thus
+        # only the active facets need to be retrieved.
+        facets = []
+        if filters:
+            for filter_key, _ in filters:
+                spec = composer.get_facet_by_filter_key(filter_key)
+                if spec:
+                    facets.append(spec)
+        return facets
+    return composer.facets.values()
+
+
+def build_groupedby_query(facets):
+    """
+    Build the faceting part of a search query.
+
+    :param list facets: A list of `FacetSpec` objects.
+    """
+    groupedby = Facets()
+    for spec in facets:
+        groupedby.add_field(spec.key, allow_overlap=spec.allow_overlap)
+    return groupedby
+
+
 def build_filter_query(filters=None):
     """
-    Build groupedby and filter queries based on facet specs.
+    Build the filtering part of a search query.
 
-    :param list filter: A list of (name, values) tuples, where values is itself
-        a list.
-
-    :return: A tuple with the Facets to perform grouping on, and the terms to
-        filter on.
+    :param list filters: A list of (name, values) tuples, where `values` is
+        itself a list.
     """
     composer = current_app.config['KERKO_COMPOSER']
-    groupedby = Facets()
-    for spec in composer.facets.values():
-        groupedby.add_field(spec.key, allow_overlap=spec.allow_overlap)
-
     terms = []
     if filters:
         for filter_key, filter_values in filters:
@@ -74,7 +95,7 @@ def build_filter_query(filters=None):
                     else:
                         v = spec.codec.transform_for_query(v)
                         terms.append(spec.query_class(spec.key, v))
-    return groupedby, And(terms)
+    return And(terms)
 
 
 def _get_fields(hit, return_fields=None):
@@ -161,11 +182,11 @@ def run_query(criteria, return_fields=None):
     if index:
         with index.searcher() as searcher:
             composer = current_app.config['KERKO_COMPOSER']
+            query_facets = get_query_facets(criteria.filters.lists(), criteria)
             q = build_keywords_query(criteria.keywords)
-            g, fq = build_filter_query(criteria.filters.lists())
             search_args = {
-                'groupedby': g,
-                'filter': fq,
+                'filter': build_filter_query(criteria.filters.lists()),
+                'groupedby': build_groupedby_query(query_facets),
                 'maptype': Count,
                 'sortedby': composer.sorts[criteria.sort].get_field_keys(),
                 'reverse': composer.sorts[criteria.sort].reverse,
@@ -177,7 +198,7 @@ def run_query(criteria, return_fields=None):
                 results = searcher.search(q, **search_args)
                 if results:
                     items = [_get_fields(hit, return_fields) for hit in results]
-                    for spec in composer.facets.values():
+                    for spec in query_facets:
                         facets[spec.key] = spec.build(
                             results.groups(spec.key).items(), criteria
                         )
@@ -190,7 +211,7 @@ def run_query(criteria, return_fields=None):
                 results = searcher.search_page(q, **search_args)
                 if results:
                     items = [_get_fields(hit, return_fields) for hit in results]
-                    for spec in composer.facets.values():
+                    for spec in query_facets:
                         facets[spec.key] = spec.build(
                             results.results.groups(spec.key).items(), criteria
                         )
