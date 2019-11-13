@@ -385,6 +385,22 @@ class CollectionFacetTreeExtractor(Extractor):
             document[key] = list(ancestors)
 
 
+class InCollectionExtractor(Extractor):
+    """Extract the boolean membership of an item into a collection."""
+
+    def __init__(self, collection_key, true_only=True, **kwargs):
+        super().__init__(**kwargs)
+        self.collection_key = collection_key
+        self.true_only = true_only
+
+    def extract(self, document, spec, item_context, library_context):
+        is_in = self.collection_key in item_context.data.get('collections', [])
+        if not self.true_only:
+            document[spec.key] = spec.encode(is_in)
+        elif is_in:
+            document[spec.key] = spec.encode(True)
+
+
 class TagsFacetExtractor(BaseTagsExtractor):
     """Index the Zotero item's tags for faceting."""
 

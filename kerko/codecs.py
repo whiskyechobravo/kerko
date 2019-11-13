@@ -89,6 +89,12 @@ class BaseFacetCodec:
 
 class BooleanFacetCodec(BaseFacetCodec):
 
+    def __init__(self, true_value='t', false_value='f', true_label=_('yes'), false_label=_('no')):
+        self.true_value = true_value
+        self.false_value = false_value
+        self.true_label = true_label
+        self.false_label = false_label
+
     def decode(self, encoded_value, _default_value=None, _default_label=None):
         # Note: explicit encode not necessary as Whoosh automatically encodes
         # booleans as 't' or 'f' values. However the value returned by Whoosh
@@ -96,8 +102,10 @@ class BooleanFacetCodec(BaseFacetCodec):
         # (where it is returned as 't' or 'f') or stored document fields (where
         # it is returned as a bool). Therefore, we also check for bool values.
         if isinstance(encoded_value, bool):
-            encoded_value = 't' if encoded_value else 'f'
-        return encoded_value, (_('yes') if encoded_value == 't' else _('no'))
+            encoded_value = self.true_value if encoded_value else self.false_value
+        return encoded_value, (
+            self.true_label if encoded_value == self.true_value else self.false_label
+        )
 
 
 class LabelFacetCodec(BaseFacetCodec):
