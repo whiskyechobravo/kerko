@@ -410,7 +410,7 @@ class SortSpec:
 
 class CitationFormatSpec:
     """
-    Specifies a citation format.
+    Specifies a citation download format.
 
     This is a configuration element, with no effect on the search index schema.
     """
@@ -428,7 +428,7 @@ class CitationFormatSpec:
             group_item_delimiter=''
     ):
         """
-        Initialize a citation format.
+        Initialize a citation download format.
 
         :param str key: Key of this citation format.
 
