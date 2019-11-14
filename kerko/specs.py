@@ -458,3 +458,60 @@ class CitationFormatSpec:
         self.mime_type = mime_type
         self.group_format = group_format
         self.group_item_delimiter = group_item_delimiter
+
+
+class BadgeSpec:
+    """
+    Specifies a badge.
+
+    Badges may be displayed on items (in search results and on full
+    bibliographic record pages).
+
+    This is a configuration element, with no effect on the search index schema.
+    """
+
+    def __init__(
+            self,
+            key,
+            field,
+            activator,
+            renderer,
+            weight=0,
+    ):
+        """
+        Initialize this badge specification.
+
+        :param str key: Key of this badge.
+
+        :param FieldSpec field: `FieldSpec` instance required by this badge.
+
+        :param callable activator: Callable which, given a `FieldSpec` instance
+            and an item, must return `True` if the badge should be displayed.
+
+        :param str renderer: Renderer for this badge. The rendering context
+            provides the following variables:
+            - `field`: for the `FieldSpec` instance.
+            - `item`: the item retrieved from the search index.
+            - `mode`: a string whose value is either 'result' (if the item is
+              being viewed in a list of results), or 'item' (when viewing the
+              item's full bibliographic record).
+
+        :param int weight: Determine the position of this badge relative to the
+            others.
+        """
+        self.key = key
+        self.field = field
+        self.activator = activator
+        self.renderer = renderer
+        self.weight = weight
+
+    def render(self, item, mode):
+        """
+        Render the badge, if necessary, for the given item.
+
+        :return: The rendered badge, or `None` if the badge is not activated
+            on the item.
+        """
+        if self.activator(self.field, item):
+            return self.renderer.render(field=self.field, item=item, mode=mode)
+        return ''

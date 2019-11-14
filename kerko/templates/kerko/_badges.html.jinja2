@@ -1,0 +1,8 @@
+{% macro content_with_badges(content, item, mode) %}
+    <span class="float-right">
+        {%- for badge in config.KERKO_COMPOSER.get_ordered_specs('badges') %}
+            {{ badge.render(item, mode) }}
+        {%- endfor %}
+    </span>
+    {{- content }}
+{% endmacro %}

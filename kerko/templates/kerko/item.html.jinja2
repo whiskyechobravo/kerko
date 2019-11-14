@@ -1,4 +1,5 @@
 {% extends config.KERKO_TEMPLATE_LAYOUT %}
+{% from "kerko/_badges.html.jinja2" import content_with_badges %}
 {% from "kerko/_facet.html.jinja2" import facet, facet_items %}
 
 {% macro field(label_text, value_text, field_class=None, value_class=None) %}
@@ -132,7 +133,7 @@
                 <div class="col-md-8 col-lg-9 break-word">
                     <ul class="list-unstyled">
                         {%- for attachment in item.attachments %}
-                            <li><a href="{{ url_for('kerko.item_attachment_download', item_id=item.id, attachment_id=attachment['id']) }}" title="{{ _('Download this attachment') }}"><span class="fas fa-download d-print-none" aria-hidden="true"></span> {{ attachment.filename }}</a></li>
+                            <li><a href="{{ url_for('kerko.item_attachment_download', item_id=item.id, attachment_id=attachment['id']) }}" title="{{ _('Download this attachment') }}"><span class="fas fa-paperclip d-print-none no-decorate mr-1" aria-hidden="true"></span>{{ attachment.filename }}</a></li>
                         {%- endfor %}
                     </ul>
                 </div>
@@ -143,6 +144,12 @@
     {% if config.DEBUG %}{% trans time="%.2f"|format(time) %}Processing time: {{time}} seconds{% endtrans %}{% endif %}
     {{- item.coins|safe }}
 {%- endblock content_inner %}
+
+{%- block content_header %}
+    <h1 class="h2 my-2 clearfix">
+        {{- content_with_badges(title, item, mode='item') -}}
+    </h1>
+{%- endblock content_header %}
 
 {%- block body_scripts %}
     {{- super() }}

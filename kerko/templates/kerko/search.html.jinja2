@@ -1,4 +1,5 @@
 {% extends config.KERKO_TEMPLATE_LAYOUT %}
+{% from "kerko/_badges.html.jinja2" import content_with_badges %}
 {% from "kerko/_facet.html.jinja2" import facet %}
 
 {%- set show_print_link = config.KERKO_PRINT_CITATIONS_MAX_COUNT == 0 or total_count <= config.KERKO_PRINT_CITATIONS_MAX_COUNT %}
@@ -74,9 +75,9 @@
                 {%- for result in search_results %}
                     <li class="search-item break-word">
                         {%- if print_preview -%}
-                            {{ result.bib|safe }}
+                            {{ content_with_badges(result.bib|safe, result, mode='result') }}
                         {%- else -%}
-                            <a href="{{ result.url }}">{{ result.bib|safe }}</a>{{ result.coins|safe }}
+                            <a href="{{ result.url }}">{{ content_with_badges(result.bib|safe, result, mode='result') }}</a>{{ result.coins|safe }}
                         {%- endif -%}
                         {%- if config.KERKO_RESULTS_ABSTRACT %}
                             <p class="search-abstract">{{ result.data['abstractNote']|striptags|urlize(target='_blank') }}</p>

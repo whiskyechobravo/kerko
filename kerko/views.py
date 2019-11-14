@@ -15,6 +15,18 @@ from .query import build_creators_display, build_fake_facet_results, run_query, 
 from .sorter import build_sorter
 
 
+def get_search_return_fields(criteria):
+    if criteria.page_len != 1:  # Note: page_len can be None (for all results).
+        return_fields = current_app.config['KERKO_RESULTS_FIELDS']
+        if current_app.config['KERKO_RESULTS_ABSTRACT'] and 'data' not in return_fields:
+            return_fields.append('data')
+        for badge in current_app.config['KERKO_COMPOSER'].badges.values():
+            if badge.field.key not in return_fields:
+                return_fields.append(badge.field.key)
+        return return_fields
+    return None  # All fields.
+
+
 @blueprint.route('/', methods=['GET', 'POST'])
 def search():
     """View the results of a search."""
@@ -31,15 +43,8 @@ def search():
             value=form.keywords.data)
         return redirect(url, 302)
 
-    if criteria.page_len != 1:  # Note: page_len can be None (for all results).
-        return_fields = current_app.config['KERKO_RESULTS_FIELDS']
-        if current_app.config['KERKO_RESULTS_ABSTRACT'] and 'data' not in return_fields:
-            return_fields.append('data')
-    else:
-        return_fields = None  # All fields
-
     search_results, facet_results, total_count, page_count = run_query(
-        criteria, return_fields
+        criteria, get_search_return_fields(criteria)
     )
 
     breadbox = build_breadbox(criteria, facet_results)

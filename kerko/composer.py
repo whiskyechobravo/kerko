@@ -9,8 +9,10 @@ from whoosh.query import Prefix, Term
 from whoosh.support.charset import accent_map
 from whoosh.util.text import rcompile
 
-from . import codecs, extractors
-from .specs import CitationFormatSpec, FieldSpec, FlatFacetSpec, ScopeSpec, SortSpec, TreeFacetSpec
+from . import codecs, extractors, renderers
+from .specs import (
+    BadgeSpec, CitationFormatSpec, FieldSpec, FlatFacetSpec, ScopeSpec, SortSpec, TreeFacetSpec
+)
 
 
 class Composer:
@@ -35,6 +37,7 @@ class Composer:
             exclude_default_facets=None,
             exclude_default_sorts=None,
             exclude_default_citation_formats=None,
+            exclude_default_badges=None,
             default_tag_whitelist_re='',
             default_tag_blacklist_re=r'^_',
             default_child_whitelist_re='',
@@ -76,12 +79,17 @@ class Composer:
             manually add at least one sort. Please refer to the implementation
             of ``init_default_sorts()`` for the list of default sorts.
 
-        :param list exclude_default_citation_formats: List of citation formats
-            (identified by key) to exclude from those created by default. If
-            that list contains the value '*', no citation format will be created
-            by default. Please refer to the implementation of
+        :param list exclude_default_citation_formats: List of citation download
+            formats (identified by key) to exclude from those created by
+            default. If that list contains the value '*', no citation format
+            will be created by default. Please refer to the implementation of
             ``init_default_citation_formats()`` for the list of default citation
             formats.
+
+        :param list exclude_default_badges: List of badges (identified by key)
+            to exclude from those created by default. If that list contains the
+            value '*', no badge will be created by default. Please refer to the
+            implementation of ``init_default_badges()`` for the list of badges.
 
         :param str default_tag_whitelist_re: Regex to use to whitelist tags. See
             ``extractors.BaseTagsExtractor``. By default, all tags are accepted
@@ -157,6 +165,7 @@ class Composer:
         self.facets = {}
         self.sorts = {}
         self.citation_formats = {}
+        self.badges = {}
         self.default_tag_whitelist_re = default_tag_whitelist_re
         self.default_tag_blacklist_re = default_tag_blacklist_re
         self.default_child_whitelist_re = default_child_whitelist_re
@@ -170,6 +179,7 @@ class Composer:
         self.init_default_facets(exclude_default_facets)
         self.init_default_sorts(exclude_default_sorts)
         self.init_default_citation_formats(exclude_default_citation_formats)
+        self.init_default_badges(exclude_default_badges)
 
     def init_default_scopes(self, exclude=None):
         if exclude is None:
@@ -1514,6 +1524,29 @@ class Composer:
                 )
             )
 
+    def init_default_badges(self, exclude=None):
+        """
+        Initialize a set of default `BadgeSpec` instances.
+
+        These rely on `FieldSpec` instances, which must have been added first.
+        """
+        if exclude is None:
+            exclude = []
+
+        if '*' in exclude:
+            return
+
+        if 'attachments' not in exclude:
+            self.add_badge(
+                BadgeSpec(
+                    key='attachments',
+                    field=self.fields['attachments'],
+                    activator=lambda field, item: bool(item.get(field.key)),
+                    renderer=renderers.TemplateRenderer('kerko/_badge_attachments.html.jinja2'),
+                    weight=10,
+                )
+            )
+
     def add_scope(self, scope):
         self.scopes[scope.key] = scope
 
@@ -1553,6 +1586,12 @@ class Composer:
 
     def remove_citation_format(self, key):
         del self.citation_formats[key]
+
+    def add_badge(self, badge):
+        self.badges[badge.key] = badge
+
+    def remove_badge(self, key):
+        del self.badges[key]
 
     def get_ordered_specs(self, attr):
         """

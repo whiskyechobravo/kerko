@@ -214,8 +214,8 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
      e.g., fields for display and search, facets for filtering. These are
      defined by instanciating the `Composer` class. Your application may
      manipulate the resulting object at configuration time to add, remove or
-     alter fields, facets, sort options or search scopes. See the **Kerko
-     Recipes** section for some examples.
+     alter fields, facets, sort options, search scopes, citation download
+     formats, or badges. See the **Kerko Recipes** section for some examples.
 
 
 3. Also configure the Flask-BabelEx and Bootstrap-Flask extensions:
@@ -322,8 +322,9 @@ override their default value:
 * `KERKO_RESULTS_FIELDS`: List of item fields to retrieve for use in search
   results pages (i.e. in the `KERKO_TEMPLATE_SEARCH` template). Values are keys
   identifying fields or facets assigned to the `kerko.composer.Composer`
-  instance. Defaults to `['id', 'bib', 'coins']`. Note that `'data'` gets
-  appended to the list if `KERKO_RESULTS_ABSTRACT` is `True`.
+  instance. Defaults to `['id', 'bib', 'coins']`. Note that `'data'` gets added
+  to the list if `KERKO_RESULTS_ABSTRACT` is `True`, as well as any field that
+  is required by badges.
 * `KERKO_PAGER_LINKS`: Number of pages to show in the pager (not counting the
   current page). Defaults to `8`.
 * `KERKO_FACET_COLLAPSING`: Allow collapsible facets. Defaults to `False`.
@@ -463,6 +464,8 @@ consider the following guidelines:
 * Include a string like "Fixes #123" in your commit message (where 123 is the
   issue you fixed). See [Closing issues using
   keywords](https://help.github.com/en/articles/closing-issues-using-keywords).
+* If a Jinja2 template represents a page fragment or a collection of macros,
+  prefix its file name with the underscore character.
 
 
 ### Submitting a translation
