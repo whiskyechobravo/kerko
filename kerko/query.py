@@ -253,7 +253,7 @@ def check_fields(fields):
     """
     Check if the specified fields exist in the schema.
 
-    :param str fields: List if field names to check.
+    :param list fields: List if field names to check.
 
     :return list: List of fields missing from the schema, if any.
     """
