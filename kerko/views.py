@@ -17,6 +17,7 @@ from .sorter import build_sorter
 
 @blueprint.route('/', methods=['GET', 'POST'])
 def search():
+    """View the results of a search."""
     start_time = time.process_time()
 
     if current_app.config['KERKO_USE_TRANSLATIONS']:
@@ -102,6 +103,7 @@ def search():
 
 @blueprint.route('/<string:item_id>')
 def item_view(item_id):
+    """View a full bibliographic record."""
     start_time = time.process_time()
 
     if current_app.config['KERKO_USE_TRANSLATIONS']:
@@ -125,6 +127,7 @@ def item_view(item_id):
 
 @blueprint.route('/<string:item_id>/download/<string:attachment_id>')
 def item_attachment_download(item_id, attachment_id):
+    """Download an item attachment."""
     if current_app.config['KERKO_USE_TRANSLATIONS']:
         babel_domain.as_default()
 
@@ -155,6 +158,7 @@ def item_attachment_download(item_id, attachment_id):
 
 @blueprint.route('/<string:item_id>/<string:citation_format_key>')
 def item_citation_download(item_id, citation_format_key):
+    """Download a citation."""
     if current_app.config['KERKO_USE_TRANSLATIONS']:
         babel_domain.as_default()
 
@@ -180,6 +184,7 @@ def item_citation_download(item_id, citation_format_key):
 
 @blueprint.route('/download/<string:citation_format_key>/')
 def search_citation_download(citation_format_key):
+    """Download all citations resulting from a search."""
     citation_format = current_app.config['KERKO_COMPOSER'].citation_formats.get(citation_format_key)
     if not citation_format:
         abort(404)
