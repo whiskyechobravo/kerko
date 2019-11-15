@@ -130,7 +130,9 @@ class FacetSpec(BaseFieldSpec):
         self.allow_overlap = allow_overlap
         self.query_class = query_class or Term
         self.collapsible = collapsible
-        self.renderer = renderer or renderers.TemplateRenderer('kerko/_facet.html.jinja2')
+        self.renderer = renderer or renderers.TemplateResolverRenderer(
+            'kerko/_facet_{mode}.html.jinja2'
+        )
 
     def encode(self, value):
         return self.codec.encode(value)

@@ -1542,7 +1542,9 @@ class Composer:
                     key='attachments',
                     field=self.fields['attachments'],
                     activator=lambda field, item: bool(item.get(field.key)),
-                    renderer=renderers.TemplateRenderer('kerko/_badge_attachments.html.jinja2'),
+                    renderer=renderers.TemplateResolverRenderer(
+                        'kerko/_badge_attachments_{mode}.html.jinja2'
+                    ),
                     weight=10,
                 )
             )

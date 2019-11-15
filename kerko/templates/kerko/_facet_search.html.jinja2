@@ -1,0 +1,11 @@
+{%- from "kerko/_facets.html.jinja2" import facet %}
+
+{{- facet(
+        spec.title,
+        spec.missing_label,
+        items,
+        collapsible=config.KERKO_FACET_COLLAPSING and spec.collapsible,
+        collapse_id='facet-' + spec.filter_key,
+        collapsed=not spec.key in active_facets
+    )
+}}

@@ -1,0 +1,17 @@
+{%- from "kerko/_facets.html.jinja2" import facet %}
+
+{{- facet(
+        spec.title,
+        spec.missing_label,
+        items,
+        expand=True,
+        add_link_icon='',
+        remove_link_icon='',
+        add_link_title=_("Search with the '{}' filter"),
+        wrap_class='row mb-3',
+        heading_tag='div',
+        heading_class='col-md-4 col-lg-3 font-weight-bold break-word text-md-right text-print-left',
+        body_class='col-md-8 col-lg-9 break-word',
+        list_class_top='list-unstyled mb-0'
+    )
+}}
