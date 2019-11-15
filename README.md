@@ -197,7 +197,7 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
    app.config['SECRET_KEY'] = '_5#y2L"F4Q8z\n\xec]/'  # Replace this value.
    app.config['KERKO_ZOTERO_API_KEY'] = 'xxxxxxxxxxxxxxxxxxxxxxxx'  # Replace this value.
    app.config['KERKO_ZOTERO_LIBRARY_ID'] = '9999999'  # Replace this value.
-   app.config['KERKO_ZOTERO_LIBRARY_TYPE'] = 'group'  # Replace this value.
+   app.config['KERKO_ZOTERO_LIBRARY_TYPE'] = 'group'  # Replace this value if necessary.
    app.config['KERKO_COMPOSER'] = Composer()
    ```
 
