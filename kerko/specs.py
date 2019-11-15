@@ -5,7 +5,7 @@ from flask_babelex import get_locale
 from whoosh.fields import ID
 from whoosh.query import Prefix, Term
 
-from . import extractors
+from . import extractors, renderers
 from .codecs import IdentityFieldCodec, BaseFacetCodec, CollectionFacetCodec
 from .text import slugify, sort_normalize
 from .tree import Tree
@@ -88,14 +88,35 @@ class FacetSpec(BaseFieldSpec):
             allow_overlap=True,
             query_class=None,
             collapsible=True,
+            renderer=None,
             **kwargs
     ):
         """
         Initialize this facet specification.
 
+        :param str title: Title of the facet.
+
+        :param str filter_key: Key to use in URLs when filtering with this facet.
+
+        :param int weight: Determine the position of this facet relative to the
+            others.
+
         :param BaseFacetCodec codec: Value encoder/decoder for this facet.
 
         :param bool item_view: Show this facet on item view pages.
+
+        :param `renderers.Renderer` renderer: A renderer for this facet. The
+            rendering context provides the following variables:
+            - `spec`: The `FacetSpec` instance.
+            - `items`: The facet values retrieved by the search query.
+            - `mode`: A string whose value is one of the following:
+                - `'search'`: Displaying the facet on a search results page.
+                - `'field'`: Displaying the facet on a full bibliographic
+                  record page.
+                - `'breadbox'`: Displaying the facet as a search criteria in
+                  the breadbox.
+
+        .. seealso: Additional :meth:`BaseFieldSpec.__init__` arguments.
         """
         super().__init__(**kwargs)
         self.title = title
@@ -109,6 +130,7 @@ class FacetSpec(BaseFieldSpec):
         self.allow_overlap = allow_overlap
         self.query_class = query_class or Term
         self.collapsible = collapsible
+        self.renderer = renderer or renderers.TemplateRenderer('kerko/_facet.html.jinja2')
 
     def encode(self, value):
         return self.codec.encode(value)
@@ -181,6 +203,9 @@ class FacetSpec(BaseFieldSpec):
             ),
             reverse=self.sort_reverse
         )
+
+    def render(self, items, mode):
+        return self.renderer.render(spec=self, items=items, mode=mode)
 
 
 class FlatFacetSpec(FacetSpec):
@@ -488,13 +513,13 @@ class BadgeSpec:
         :param callable activator: Callable which, given a `FieldSpec` instance
             and an item, must return `True` if the badge should be displayed.
 
-        :param str renderer: Renderer for this badge. The rendering context
-            provides the following variables:
-            - `field`: for the `FieldSpec` instance.
-            - `item`: the item retrieved from the search index.
-            - `mode`: a string whose value is either 'result' (if the item is
-              being viewed in a list of results), or 'item' (when viewing the
-              item's full bibliographic record).
+        :param `renderers.Renderer` renderer: A renderer for this badge. The
+            rendering context provides the following variables:
+            - `field`: The `FieldSpec` instance.
+            - `item`: The item retrieved from the search index.
+            - `mode`: A string whose value is one of the following:
+                - `'result':` The item is being viewed in a list of results.
+                - `'item'`: Viewing the item's full bibliographic record.
 
         :param int weight: Determine the position of this badge relative to the
             others.
@@ -509,7 +534,7 @@ class BadgeSpec:
         """
         Render the badge, if necessary, for the given item.
 
-        :return: The rendered badge, or `None` if the badge is not activated
+        :return str: The rendered badge, or `''` if the badge is not activated
             on the item.
         """
         if self.activator(self.field, item):

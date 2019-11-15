@@ -1,6 +1,5 @@
 {% extends config.KERKO_TEMPLATE_LAYOUT %}
 {% from "kerko/_badges.html.jinja2" import content_with_badges %}
-{% from "kerko/_facet.html.jinja2" import facet %}
 
 {%- set show_print_link = config.KERKO_PRINT_CITATIONS_MAX_COUNT == 0 or total_count <= config.KERKO_PRINT_CITATIONS_MAX_COUNT %}
 {%- set show_print_link = show_print_link and config.KERKO_PRINT_CITATIONS_LINK %}
@@ -137,15 +136,7 @@
                 <h2 class="mt-2 mb-4">{{ _("Explore") }}</h2>
                 <div class="facets">
                     {%- for f in config.KERKO_COMPOSER.get_ordered_specs('facets') %}
-                        {{- facet(
-                                f.title,
-                                f.missing_label,
-                                facet_results[f.key],
-                                collapsible=config.KERKO_FACET_COLLAPSING and f.collapsible,
-                                collapse_id='facet-' + f.filter_key,
-                                collapsed=not f.key in active_facets
-                            )
-                        }}
+                        {{ f.render(facet_results[f.key], 'search') }}
                     {%- endfor %}
                 </div>
             </div>
