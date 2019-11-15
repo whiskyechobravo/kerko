@@ -43,6 +43,9 @@
   .breadbox * {
     text-decoration: none !important;
   }
+  .search-item a {
+    text-decoration: none;
+  }
 }
 .w-40 {
   width: 40% !important;
