@@ -38,8 +38,8 @@ class TemplateResolverRenderer:
 
     def render(self, **context):
         return render_template(
-            self.template.format(**{kw: context[kw]
-                                    for kw in self.fields if kw in context}), **context
+            self.template.format(**{kw: context[kw] for kw in self.fields if kw in context}),
+            **context
         )
 
 
