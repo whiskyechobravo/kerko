@@ -2,7 +2,8 @@
             missing_label,
             item,
             extra_markup,
-            checkboxes=True,
+            add_link_icon='<span class="far fa-square" aria-hidden="true"></span>',
+            remove_link_icon='<span class="far fa-check-square" aria-hidden="true"></span>',
             item_tag='li',
             add_link_title=_("Add the '{}' filter"),
             remove_link_title=_("Remove the '{}' filter")
@@ -13,16 +14,12 @@
             {%- set label = item.label or (('<em>' + missing_label + '</em>')|safe) -%}
             {%- if item.remove_url -%}
                 <a class="no-decorate" href="{{ item.remove_url }}" title="{{ remove_link_title.format(label|striptags|escape) }}" rel="nofollow">
-                    {%- if checkboxes -%}
-                        <span class="far fa-check-square" aria-hidden="true"></span>
-                    {%- endif %}
+                    {{ remove_link_icon }}
                     <span class="facet-item-label parent-decorate">{{ label }}</span>
                 </a>
             {%- elif item.add_url -%}
                 <a class="no-decorate" href="{{ item.add_url }}" title="{{ add_link_title.format(label|striptags|escape) }}" rel="nofollow">
-                    {%- if checkboxes -%}
-                        <span class="far fa-square" aria-hidden="true"></span>
-                    {%- endif %}
+                    {{ add_link_icon }}
                     <span class="facet-item-label parent-decorate">{{ label }}</span>
                 </a>
             {%- else -%}
@@ -71,6 +68,7 @@
             body_tag='div', body_class=''
         )
     -%}
+    {#- TODO: Kill this clumsy macro; just put the macro expansions in place of its calls. #}
     {%- if items %}
         <{{ wrap_tag }} {% if wrap_class %}class="{{ wrap_class }}"{% endif %}>
             <{{ heading_tag }} {% if heading_class %}class="{{ heading_class }}"{% endif %}>
