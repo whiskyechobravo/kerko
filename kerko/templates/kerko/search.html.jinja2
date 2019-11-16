@@ -13,9 +13,9 @@
 
 {%- block content_header %}
     <div class="h2 my-2 row">
-        <h1 class="h2 col-auto mr-auto d-inline">{% if is_searching %}{{ _("Your search") }}{% else %}{{ _("Search") }}{% endif %}</h1>
+        <h1 class="h2 col-auto pr-1 mr-auto d-inline">{% if is_searching %}{{ _("Your search") }}{% else %}{{ _("Search") }}{% endif %}</h1>
         {%- if is_searching or facet_results %}
-            <div class="col-auto ml-auto text-right">
+            <div class="col-auto pl-0 ml-auto text-right">
                 <div class="d-inline-block d-print-none mb-2">
                     <button class="btn btn-light" data-toggle="modal" data-target="#search-help">
                         <span class="fas fa-question-circle" aria-hidden="true"></span> {{ _("Help") }}
@@ -61,7 +61,7 @@
                 {%- endif %}
             </div>
             {%- if search_results %}
-                <div class="col-auto ml-auto mb-2 text-right">
+                <div class="col-auto pl-0 ml-auto mb-2 text-right">
                     <div class="d-inline-block d-print-none">
                         {%- include "kerko/_sorter.html.jinja2" %}
                     </div>
