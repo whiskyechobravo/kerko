@@ -49,6 +49,7 @@ def sync_attachments():
     # List all items from the search index and request their attachments, if
     # any, from Zotero
     zotero_credentials = zotero.init_zotero()
+    count = 0
     parents = run_query_all(['id', 'attachments'])
     for parent in parents:
         for attachment in parent.get('attachments', []):
@@ -75,11 +76,14 @@ def sync_attachments():
                 current_app.logger.debug(
                     f"Keeping attachment {attachment['id']} (parent: {parent['id']})."
                 )
+            count += 1
 
     # Delete remaining local files that were not referenced by any item.
     for name in local_files:
         current_app.logger.debug(f"Deleting attachment {name}, unused.")
         (attachments_dir / name).unlink()
+
+    return count
 
 
 def delete_attachments():

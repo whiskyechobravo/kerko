@@ -1,4 +1,3 @@
-from datetime import datetime
 import os
 import pathlib
 import shutil
@@ -50,8 +49,6 @@ def request_library_context(zotero_credentials):
 
 def sync_index():
     """Build the search index from items retrieved from Zotero."""
-    start_time = datetime.now()
-
     composer = current_app.config['KERKO_COMPOSER']
     zotero_credentials = zotero.init_zotero()
     library_context = request_library_context(zotero_credentials)
@@ -81,9 +78,7 @@ def sync_index():
         current_app.logger.error('An exception occurred. Could not finish updating the index.')
     else:
         writer.commit()
-        current_app.logger.info(_format_elapsed_time(count, start_time))
-    # TODO: return count of processed items
-    # TODO: move timer outside function; leave that to the caller.
+    return count
 
 
 def update_document_with_writer(writer, document, count=None):
@@ -115,15 +110,3 @@ def update_document(document):
     index = open_index()
     with index.writer(limitmb=256) as writer:
         update_document_with_writer(writer, document)
-
-
-def _format_elapsed_time(count, start_time):
-    elapsed_time = int(round((datetime.now() - start_time).total_seconds()))
-    elapsed_min, elapsed_sec = elapsed_time // 60, elapsed_time % 60
-    s = ('{num} items indexed in' if count else '{num} items indexed in').format(num=count)
-    if elapsed_min > 0:
-        s += (' {num} minute' if elapsed_min else ' {num} minutes').format(num=elapsed_min)
-        s += (' {num:02} second' if elapsed_sec else ' {num:02d} seconds').format(num=elapsed_sec)
-    else:
-        s += (' {num} second' if elapsed_sec else ' {num} seconds').format(num=elapsed_sec)
-    return s

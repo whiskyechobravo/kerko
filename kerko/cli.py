@@ -1,6 +1,8 @@
 import pprint
+from datetime import datetime
 
 import click
+from flask import current_app
 from flask.cli import with_appcontext
 
 from . import zotero
@@ -39,9 +41,13 @@ def sync(target):
     By default, both are synchronized.
     """
     if target in ['everything', 'index']:
-        sync_index()
+        start_time = datetime.now()
+        count = sync_index()
+        current_app.logger.info(_format_elapsed_time('item(s)', count, start_time))
     if target in ['everything', 'attachments']:
-        sync_attachments()
+        start_time = datetime.now()
+        count = sync_attachments()
+        current_app.logger.info(_format_elapsed_time('attachment(s)', count, start_time))
 
 
 @cli.command()
@@ -144,3 +150,16 @@ def zotero_top_level_collections():
     collections = zotero.Collections(credentials, top_level=True)
     for c in collections:
         print(f"{c.get('key')} {c.get('data', {}).get('name', '')}")
+
+
+def _format_elapsed_time(subject, count, start_time):
+    elapsed_time = int(round((datetime.now() - start_time).total_seconds()))
+    elapsed_min, elapsed_sec = elapsed_time // 60, elapsed_time % 60
+    s = ('{num} {subject} processed in'
+         if count else '{num} {subject} processed in').format(num=count, subject=subject)
+    if elapsed_min > 0:
+        s += (' {num} minute' if elapsed_min else ' {num} minutes').format(num=elapsed_min)
+        s += (' {num:02} second' if elapsed_sec else ' {num:02d} seconds').format(num=elapsed_sec)
+    else:
+        s += (' {num} second' if elapsed_sec else ' {num} seconds').format(num=elapsed_sec)
+    return s
