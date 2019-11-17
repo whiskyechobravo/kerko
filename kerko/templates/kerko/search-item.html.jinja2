@@ -7,7 +7,7 @@
 
 {%- block content_header %}
     <div class="h3 my-2 row">
-        <h1 class="h3 col-auto mr-auto d-inline d-print-none">
+        <h1 class="h3 col-auto mr-auto pr-1 d-inline d-print-none">
             {%- if is_searching %}
                 {{- _("Your search") }}
             {%- else %}
@@ -15,7 +15,7 @@
             {%- endif -%}
         </h1>
         {%- if back_url %}
-            <div class="col-auto ml-auto mb-2 text-right d-print-none">
+            <div class="col-auto ml-auto mb-2 pl-1 text-right d-print-none">
                 <a class="btn btn-primary" href="{{ back_url }}">
                     <span class="fas fa-arrow-left" aria-hidden="true"></span> {{ _("Return to list of results") }}
                 </a>

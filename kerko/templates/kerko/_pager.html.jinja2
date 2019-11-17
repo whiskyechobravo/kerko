@@ -1,63 +1,86 @@
 {%- if pager %}
     <nav class="mb-4 d-print-none" aria-label="{{ _('Search results pagination') }}">
-        <ul class="pagination mb-0 flex-wrap">
-            {%- if pager.previous %}
-                <li class="page-item">
-                    <a class="page-link" href="{{ pager.previous.url }}" rel="prev" title="{{ _('Previous page') }}">
-                        <span class="fas fa-angle-left" aria-hidden="true"></span>
-                    </a>
-                </li>
-            {%- endif %}
-            {%- if pager.first and pager.first != pager.current and pager.first not in pager.before %}
-                <li class="page-item">
-                    <a class="page-link" href="{{ pager.first.url }}" title="{% trans page_num=pager.first.page_num_formatted %}Page {{ page_num }}{% endtrans %}">
-                        {{- pager.first.page_num_formatted|safe -}}
-                    </a>
-                </li>
-                {%- if pager.first.page_num + 1 < pager.before[0].page_num %}
-                    <li class="page-item disabled">
-                        <span class="page-link">...</span>
+        <div class="d-none d-md-block">
+            <ul class="pagination mb-0 flex-wrap">
+                {%- if pager.previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ pager.previous.url }}" rel="prev" title="{{ _('Previous page') }}">
+                            <span class="fas fa-angle-left" aria-hidden="true"></span>
+                        </a>
                     </li>
                 {%- endif %}
-            {%- endif %}
-            {%- for e in pager.before %}
-                <li class="page-item">
-                    <a class="page-link" href="{{ e.url }}" title="{% trans page_num=e.page_num_formatted %}Page {{ page_num }}{% endtrans %}">
-                        {{- e.page_num_formatted|safe -}}
+                {%- if pager.first and pager.first != pager.current and pager.first not in pager.before %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ pager.first.url }}" title="{% trans page_num=pager.first.page_num_formatted %}Page {{ page_num }}{% endtrans %}">
+                            {{- pager.first.page_num_formatted|safe -}}
+                        </a>
+                    </li>
+                    {%- if pager.first.page_num + 1 < pager.before[0].page_num %}
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                    {%- endif %}
+                {%- endif %}
+                {%- for e in pager.before %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ e.url }}" title="{% trans page_num=e.page_num_formatted %}Page {{ page_num }}{% endtrans %}">
+                            {{- e.page_num_formatted|safe -}}
+                        </a>
+                    </li>
+                {%- endfor %}
+                <li class="page-item active">
+                    <a class="page-link" href="{{ pager.current.url }}" title="{% trans page_num=pager.current.page_num_formatted %}Page {{ page_num }}{% endtrans %}">
+                        {{- pager.current.page_num_formatted|safe -}}
                     </a>
                 </li>
-            {%- endfor %}
-            <li class="page-item active">
-                <a class="page-link" href="{{ pager.current.url }}" title="{% trans page_num=pager.current.page_num_formatted %}Page {{ page_num }}{% endtrans %}">
-                    {{- pager.current.page_num_formatted|safe -}}
-                </a>
-            </li>
-            {%- for e in pager.after %}
-                <li class="page-item">
-                    <a class="page-link" href="{{ e.url }}" title="{% trans page_num=e.page_num_formatted %}Page {{ page_num }}{% endtrans %}">
-                        {{- e.page_num_formatted|safe -}}
-                    </a>
-                </li>
-            {%- endfor %}
-            {%- if pager.last and pager.last != pager.current and pager.last not in pager.after %}
-                {%- if pager.last.page_num - 1 > pager.after[-1].page_num %}
-                    <li class="page-item disabled">
-                        <span class="page-link">...</span>
+                {%- for e in pager.after %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ e.url }}" title="{% trans page_num=e.page_num_formatted %}Page {{ page_num }}{% endtrans %}">
+                            {{- e.page_num_formatted|safe -}}
+                        </a>
+                    </li>
+                {%- endfor %}
+                {%- if pager.last and pager.last != pager.current and pager.last not in pager.after %}
+                    {%- if pager.last.page_num - 1 > pager.after[-1].page_num %}
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                    {%- endif %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ pager.last.url }}" title="{% trans page_num=pager.last.page_num_formatted %}Page {{ page_num }}{% endtrans %}">
+                            {{- pager.last.page_num_formatted|safe -}}
+                        </a>
                     </li>
                 {%- endif %}
-                <li class="page-item">
-                    <a class="page-link" href="{{ pager.last.url }}" title="{% trans page_num=pager.last.page_num_formatted %}Page {{ page_num }}{% endtrans %}">
-                        {{- pager.last.page_num_formatted|safe -}}
-                    </a>
+                {%- if pager.next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ pager.next.url }}" rel="next" title="{{ _('Next page') }}">
+                            <span class="fas fa-angle-right" aria-hidden="true"></span>
+                        </a>
+                    </li>
+                {%- endif %}
+            </ul>
+        </div>
+        <div class="d-md-none">
+            <ul class="pagination mb-0 flex-wrap">
+                {%- if pager.previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ pager.previous.url }}" rel="prev" title="{{ _('Previous page') }}">
+                            <span class="fas fa-angle-left" aria-hidden="true"></span>
+                        </a>
+                    </li>
+                {%- endif %}
+                <li class="page-item disabled">
+                    <span class="page-link">{% trans current=pager.current.page_num_formatted|safe, total=page_count_formatted|safe %}Page {{ current }} of {{ total }}{% endtrans %}</span>
                 </li>
-            {%- endif %}
-            {%- if pager.next %}
-                <li class="page-item">
-                    <a class="page-link" href="{{ pager.next.url }}" rel="next" title="{{ _('Next page') }}">
-                        <span class="fas fa-angle-right" aria-hidden="true"></span>
-                    </a>
-                </li>
-            {%- endif %}
-        </ul>
+                {%- if pager.next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ pager.next.url }}" rel="next" title="{{ _('Next page') }}">
+                            <span class="fas fa-angle-right" aria-hidden="true"></span>
+                        </a>
+                    </li>
+                {%- endif %}
+            </ul>
+        </div>
     </nav>
 {%- endif %}
