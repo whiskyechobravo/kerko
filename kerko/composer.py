@@ -31,6 +31,7 @@ class Composer:
 
     def __init__(
             self,
+            *,
             whoosh_language='en',
             exclude_default_scopes=None,
             exclude_default_fields=None,
