@@ -43,10 +43,9 @@
   .text-md-right.text-print-left {
     text-align: left !important;
   }
-  .breadbox * {
-    text-decoration: none !important;
-  }
-  .search-item a {
+  .breadbox a,
+  .search-item a,
+  .item-content a {
     text-decoration: none;
   }
 }
