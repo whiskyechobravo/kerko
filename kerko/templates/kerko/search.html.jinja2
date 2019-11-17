@@ -21,18 +21,18 @@
                         <span class="fas fa-question-circle" aria-hidden="true"></span> {{ _("Help") }}
                     </button>
                 </div>
-                {%- if is_searching %}
-                    <div class="d-inline-block d-print-none mb-2">
-                        <a class="btn btn-danger" href="{{ url_for('kerko.search') }}">
-                            <span class="fas fa-trash-alt" aria-hidden="true"></span> {{ _("Reset search") }}
-                        </a>
-                    </div>
-                {%- endif %}
                 {%- if facet_results %}
                     <div class="d-inline-block d-lg-none d-print-none mb-2">
                         <button id="facets-modal-toggle" class="btn btn-primary" data-target="#facets-modal">
                             <span class="fas fa-compass" aria-hidden="true"></span> {{ _("Explore") }}
                         </button>
+                    </div>
+                {%- endif %}
+                {%- if is_searching %}
+                    <div class="d-inline-block d-print-none mb-2">
+                        <a class="btn btn-danger" href="{{ url_for('kerko.search') }}">
+                            <span class="fas fa-trash-alt" aria-hidden="true"></span> {{ _("Reset search") }}
+                        </a>
                     </div>
                 {%- endif %}
             </div>
