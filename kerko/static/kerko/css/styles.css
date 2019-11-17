@@ -25,8 +25,11 @@
 .pre-line {
   white-space: pre-line;
 }
-.breadbox > .card-body > .row:last-child > * > ul {
-  margin-bottom: 0;
+.breadbox > .card-body > * {
+    margin-top: 1rem;
+}
+.breadbox > .card-body > *:first-child {
+    margin-top: 0;
 }
 @media print {
   .row {
