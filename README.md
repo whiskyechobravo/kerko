@@ -281,42 +281,40 @@ a slightly more complete example.
 
 The variables below are required and have no default values:
 
+* `KERKO_COMPOSER`: An instance of the `kerko.composer.Composer` class.
+* `KERKO_ZOTERO_API_KEY`: The API key associated to the library on zotero.org.
+  You have to [create that key](https://www.zotero.org/settings/keys/new).
 * `KERKO_ZOTERO_LIBRARY_ID`: Your personal _userID_ for API calls, as given
   [on zotero.org](https://www.zotero.org/settings/keys) (you must be logged-in
   on zotero.org).
 * `KERKO_ZOTERO_LIBRARY_TYPE`: The type of library on zotero.org (either
   `'user'` for your main personal library, or `'group'` for a group library).
-* `KERKO_ZOTERO_API_KEY`: The API key associated to the library on zotero.org.
-  You have to [create that key](https://www.zotero.org/settings/keys/new).
-* `KERKO_COMPOSER`: An instance of the `kerko.composer.Composer` class.
 
 Any of the following variables may be added to your configuration if you wish to
 override their default value:
 
-* `KERKO_TITLE`: The title to display in web pages. Defaults to `'Kerko'`.
-* `KERKO_DATA_DIR`: The directory where to store the search index and the file
-  attachments. Defaults to `data/kerko`. Subdirectories `index` and
-  `attachments` will be created if they don't already exist.
-* `BABEL_DEFAULT_LOCALE`: The default language of the user interface. Defaults
-  to `'en'`. Your application may set this variable and/or implement a locale
-  selector function to override it (see the [Flask-BabelEx
-  documentation][Flask-BabelEx_documentation]).
-* `KERKO_USE_TRANSLATIONS`: Use translations provided by the Kerko package.
-  Defaults to `True`. When this is set to `False`, translations may be provided
-  by the application's own translation catalog.
-* `KERKO_WHOOSH_LANGUAGE`: The language of search requests. Defaults to `'en'`.
-  You may refer to Whoosh's source to get the list of supported languages
-  (`whoosh.lang.languages`) and the list of languages that support stemming
-  (`whoosh.lang.has_stemmer()`).
-* `KERKO_ZOTERO_LOCALE`: The locale to use with Zotero API calls. This dictates
-  the locale of Zotero item types, field names, creator types and citations.
-  Defaults to `'en-US'`. Supported locales are listed at
-  https://api.zotero.org/schema, under "locales".
-* `KERKO_PAGE_LEN`: The number of search results per page. Defaults to `20`.
 * `KERKO_CSL_STYLE`: The citation style to use for formatted references. Can be
   either the file name (without the `.csl` extension) of one of the styles in the
   [Zotero Styles Repository][Zotero_styles] (e.g., `apa`) or the URL of a remote
   CSL file. Defaults to `'apa'`.
+* `KERKO_DATA_DIR`: The directory where to store the search index and the file
+  attachments. Defaults to `data/kerko`. Subdirectories `index` and
+  `attachments` will be created if they don't already exist.
+* `KERKO_DOWNLOAD_CITATIONS_LINK`: Provide a citation download button on search
+  results pages. Defaults to `True`.
+* `KERKO_DOWNLOAD_CITATIONS_MAX_COUNT`: Limit over which the citation download
+  button should be hidden from search results pages. Defaults to `0` (i.e. no
+  limit).
+* `KERKO_FACET_COLLAPSING`: Allow collapsible facets. Defaults to `False`.
+* `KERKO_PAGE_LEN`: The number of search results per page. Defaults to `20`.
+* `KERKO_PAGER_LINKS`: Number of pages to show in the pager (not counting the
+  current page). Defaults to `8`.
+* `KERKO_PRINT_ITEM_LINK`: Provide a print button on item pages. Defaults to
+  `False`.
+* `KERKO_PRINT_CITATIONS_LINK`: Provide a print button on search results
+  pages. Defaults to `False`.
+* `KERKO_PRINT_CITATIONS_MAX_COUNT`: Limit over which the print button should
+  be hidden from search results pages. Defaults to `0` (i.e. no limit).
 * `KERKO_RESULTS_ABSTRACT`: Show abstracts in search result pages. Defaults to
   `False`.
 * `KERKO_RESULTS_FIELDS`: List of item fields to retrieve for use in search
@@ -325,19 +323,6 @@ override their default value:
   instance. Defaults to `['id', 'bib', 'coins']`. Note that `'data'` gets added
   to the list if `KERKO_RESULTS_ABSTRACT` is `True`, as well as any field that
   is required by badges.
-* `KERKO_PAGER_LINKS`: Number of pages to show in the pager (not counting the
-  current page). Defaults to `8`.
-* `KERKO_FACET_COLLAPSING`: Allow collapsible facets. Defaults to `False`.
-* `KERKO_PRINT_ITEM_LINK`: Provide a print button on item pages. Defaults to
-  `False`.
-* `KERKO_PRINT_CITATIONS_LINK`: Provide a print button on search results
-  pages. Defaults to `False`.
-* `KERKO_PRINT_CITATIONS_MAX_COUNT`: Limit over which the print button should
-  be hidden from search results pages. Defaults to `0` (i.e. no limit).
-* `KERKO_DOWNLOAD_CITATIONS_LINK`: Provide a download button on search results
-  pages. Defaults to `True`.
-* `KERKO_DOWNLOAD_CITATIONS_MAX_COUNT`: Limit over which the download button
-  should be hidden from search results pages. Defaults to `0` (i.e. no limit).
 * `KERKO_TEMPLATE_SEARCH`: Name of the Jinja2 template to render for the search
   page with list of results. Defaults to `kerko/search.html.jinja2`.
 * `KERKO_TEMPLATE_SEARCH_ITEM`: Name of the Jinja2 template to render for the
@@ -349,17 +334,35 @@ override their default value:
   search, search-item, and item templates. Defaults to `kerko/layout.html.jinja2`.
 * `KERKO_TEMPLATE_BASE`: Name of the Jinja2 template that is extended by the
   layout template. Defaults to `kerko/base.html.jinja2`.
+* `KERKO_TITLE`: The title to display in web pages. Defaults to `'Kerko'`.
+* `KERKO_ZOTERO_BATCH_SIZE`: Number of items to request on each call to the
+  Zotero API. Defaults to `100` (which is the maximum currently allowed by the
+  API).
 * `KERKO_ZOTERO_MAX_ATTEMPTS`: Maximum number of tries after the Zotero API
   has returned an error or not responded during indexing. Defaults to `10`.
 * `KERKO_ZOTERO_WAIT`: Time to wait (in seconds) between failed attempts to
   call the Zotero API. Defaults to `120`.
-* `KERKO_ZOTERO_BATCH_SIZE`: Number of items to request on each call to the
-  Zotero API. Defaults to `100` (which is the maximum currently allowed by the
-  API).
-* `KERKO_ZOTERO_START`: Skip items, start at the specified position. Defaults
-  to `0`. Useful only for development/tests.
-* `KERKO_ZOTERO_END`: Load items from Zotero until the specified position.
-  Defaults to `0` (no limit). Useful only for development/tests.
+* Localization-related variables:
+  * `BABEL_DEFAULT_LOCALE`: The default language of the user interface. Defaults
+    to `'en'`. Your application may set this variable and/or implement a locale
+    selector function to override it (see the [Flask-BabelEx
+    documentation][Flask-BabelEx_documentation]).
+  * `KERKO_USE_TRANSLATIONS`: Use translations provided by the Kerko package.
+    Defaults to `True`. When this is set to `False`, translations may be
+    provided by the application's own translation catalog.
+  * `KERKO_WHOOSH_LANGUAGE`: The language of search requests. Defaults to
+    `'en'`. You may refer to Whoosh's source to get the list of supported
+    languages (`whoosh.lang.languages`) and the list of languages that support
+    stemming (`whoosh.lang.has_stemmer()`).
+  * `KERKO_ZOTERO_LOCALE`: The locale to use with Zotero API calls. This
+    dictates the locale of Zotero item types, field names, creator types and
+    citations. Defaults to `'en-US'`. Supported locales are listed at
+    https://api.zotero.org/schema, under "locales".
+* Development/test-related variables:
+  * `KERKO_ZOTERO_START`: Skip items, start at the specified position. Defaults
+    to `0`. Useful only for development/tests.
+  * `KERKO_ZOTERO_END`: Load items from Zotero until the specified position.
+    Defaults to `0` (no limit). Useful only for development/tests.
 
 
 ## Kerko Recipes
