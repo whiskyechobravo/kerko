@@ -10,14 +10,6 @@ with the [Zotero] reference manager.
 
 ## How it works
 
-Kerko is implemented in [Python] as a Flask [blueprint][Flask_blueprint] and, as
-such, cannot do much unless it is incorporated into a Flask application. A
-sample application is available, [KerkoApp], which anyone with basic
-requirements could deploy directly on a web server. It is expected, however,
-that Kerko will usually be integrated into a larger application, either derived
-from KerkoApp or custom-built to specific needs. The Kerko-powered bibliography
-might be just one section of a larger website.
-
 Kerko does not provide any tools for managing bibliographic records. Instead, a
 well-established reference management software, Zotero, is used for that
 purpose. The [Zotero desktop application][Zotero_desktop] provides powerful
@@ -32,6 +24,20 @@ The combination of Kerko and Zotero gives you the best of both worlds: a
 user-friendly interface for end-users of the bibliography, and a powerful
 bibliographic reference management tool for working on the bibliography's
 content.
+
+Kerko is implemented in [Python] as a Flask [blueprint][Flask_blueprint] and, as
+such, cannot do much unless it is incorporated into a Flask application. A
+sample application is available, [KerkoApp], which anyone with basic
+requirements could deploy directly on a web server. It is expected, however,
+that Kerko will usually be integrated into a larger application, either derived
+from KerkoApp or custom-built to specific needs. The Kerko-powered bibliography
+might be just one section of a larger website.
+
+
+## Demo site
+
+A [demo site][KerkoApp_demo] is available for you to try. You may also view the
+[Zotero library][Zotero_demo] that contains the source data for the demo site.
 
 
 ## Features
@@ -129,12 +135,6 @@ The following features are implemented in Kerko:
 * Modularity: although a [standalone application][KerkoApp] is available, Kerko
   is designed not as a standalone application, but to be part of a larger Flask
   application.
-
-
-## Demo site
-
-A [demo site][KerkoApp_demo] is available for you to try. You may also view the
-[Zotero library][Zotero_demo] that contains the source data for the demo site.
 
 
 ## Requirements
