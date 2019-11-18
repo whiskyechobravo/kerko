@@ -38,7 +38,7 @@ def sync(target):
     """
     Synchronize the search index and/or the attachments from the Zotero library.
 
-    By default, both are synchronized.
+    By default, everything is synchronized.
     """
     if target in ['everything', 'index']:
         start_time = datetime.now()
