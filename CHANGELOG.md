@@ -1,6 +1,6 @@
 # Changelog
 
-## HEAD (development version)
+## 0.5 (2019-11-19)
 
 *Warning:* Upgrading from version 0.4 or earlier will require that you clean and
 re-sync your existing search index. Use the following commands:
