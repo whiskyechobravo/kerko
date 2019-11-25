@@ -3,41 +3,43 @@
 
 # Kerko
 
-[Kerko] is a web application component for the [Flask] framework that provides a
-user-friendly search and browsing interface for sharing a bibliography managed
-with the [Zotero] reference manager.
+[Kerko] is a web application component implemented in [Python] for the [Flask]
+framework that provides a user-friendly search and browsing interface for
+sharing a bibliography managed with the [Zotero] reference manager.
+
+The combination of Kerko and Zotero gives you the best of both worlds: a rich
+but easy to use web interface for end-users of the bibliography, and a
+well-established and powerful bibliographic reference management tool for
+individuals or teams working on the bibliography's content.
 
 
 ## How it works
 
-Kerko does not provide any tools for managing bibliographic records. Instead, a
-well-established reference management software, Zotero, is used for that
-purpose. The [Zotero desktop application][Zotero_desktop] provides powerful
-tools to individuals or teams for managing bibliographic data, which it stores
-in the cloud on zotero.org. Kerko can be configured to automatically synchronize
-its search index from zotero.org on a regular basis, ensuring that visitors get
-an up-to-date bibliography even if it is changing frequently. When users
-interact with the Kerko application component, Kerko gets all its data from its
-own search index; it is only at indexing time that Kerko contacts zotero.org.
+A Kerko-powered bibliography is managed using Zotero, and stored in the cloud on
+zotero.org, while Kerko itself is incorporated into an application which is
+installed on a web server. The bibliographic references may reside in a Zotero
+group library, where multiple users may collaborate to manage the content, or in
+a Zotero private library. On the web server, Kerko maintains a search index,
+which is a copy of the Zotero library that is optimized for search. When users
+interact with the web application, Kerko gets all the required data from that
+search index, without ever contacting zotero.org. It is through a scheduled
+task, which runs at regular intervals, that Kerko automatically brings its
+search index up to date by using the [Zotero Web API][Zotero_web_api] to
+retrieve the latest data from zotero.org.
 
-The combination of Kerko and Zotero gives you the best of both worlds: a
-user-friendly interface for end-users of the bibliography, and a powerful
-bibliographic reference management tool for working on the bibliography's
-content.
-
-Kerko is implemented in [Python] as a Flask [blueprint][Flask_blueprint] and, as
-such, cannot do much unless it is incorporated into a Flask application. A
-sample application is available, [KerkoApp], which anyone with basic
-requirements could deploy directly on a web server. It is expected, however,
-that Kerko will usually be integrated into a larger application, either derived
-from KerkoApp or custom-built to specific needs. The Kerko-powered bibliography
-might be just one section of a larger website.
+As a Flask [blueprint][Flask_blueprint], Kerko only works when incorporated into
+a Flask application. A sample application is available, [KerkoApp], which anyone
+with basic requirements could deploy directly on a web server. It is expected,
+however, that Kerko will often be integrated into a larger application, either
+derived from KerkoApp or custom-built to specific needs. The Kerko-powered
+bibliography might be just one section of a larger website.
 
 
 ## Demo site
 
-A [demo site][KerkoApp_demo] is available for you to try. You may also view the
-[Zotero library][Zotero_demo] that contains the source data for the demo site.
+A [KerkoApp]-based [demo site][KerkoApp_demo] is available for you to try. You
+may also view the [Zotero library][Zotero_demo] that contains the source data
+for the demo site.
 
 
 ## Features
@@ -584,7 +586,7 @@ If you wish to add your Kerko-powered online bibliography to this list, please
 [WTForms]: https://pypi.org/project/WTForms/
 [Zotero]: https://www.zotero.org/
 [Zotero_demo]: https://www.zotero.org/groups/2348869/kerko_demo/items
-[Zotero_desktop]: https://www.zotero.org/download/
 [Zotero_export]: https://www.zotero.org/support/dev/web_api/v3/basics#export_formats
 [Zotero_locales]: https://github.com/citation-style-language/locales
 [Zotero_styles]: https://www.zotero.org/styles/
+[Zotero_web_api]: https://www.zotero.org/support/dev/web_api/start
