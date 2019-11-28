@@ -13,7 +13,7 @@
 
 {%- block content_header %}
     <div class="my-2 row">
-        <h1 class="{% block search_heading_classes %}h2 col-auto pr-1 mr-auto d-inline{% endblock %}">{% if is_searching %}{{ _("Your search") }}{% else %}{{ _("Search") }}{% endif %}</h1>
+        <h1 class="{% block search_heading_classes %}h2 col-auto pr-1 mr-auto d-inline{% endblock %}{% if not is_searching %} d-print-none{% endif %}">{% if is_searching %}{{ _("Your search") }}{% else %}{{ _("Search") }}{% endif %}</h1>
         {%- if is_searching or facet_results %}
             <div class="col-auto pl-0 ml-auto text-right">
                 <div class="{% block help_link_wrapper_classes %}d-inline-block d-print-none mt-1 mb-2{% endblock %}">
@@ -45,7 +45,7 @@
 
 {%- block content_inner %}
     {%- block search_criteria %}
-        <div class="{% block search_criteria_wrapper_classes %}card breadbox mb-4{% endblock %}">
+        <div class="{% block search_criteria_wrapper_classes %}card breadbox mb-4{% endblock %}{% if not is_searching %} d-print-none{% endif %}">
             <div class="card-body">
                 {%- include "kerko/_breadbox.html.jinja2" %}
                 {%- include "kerko/_search-form.html.jinja2" %}
