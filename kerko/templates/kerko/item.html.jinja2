@@ -51,16 +51,16 @@
             <div class="row">
                 <div class="col-auto ml-auto text-right">
                     {%- if config.KERKO_PRINT_ITEM_LINK %}
-                        <div class="d-none d-md-inline-block d-print-none mb-2">
-                            <button id="print-link" class="btn btn-light" type="button">
+                        <div class="{% block print_link_wrapper_classes %}d-none d-md-inline-block d-print-none mb-2{% endblock %}">
+                            <button id="print-link" class="{% block print_btn_classes %}btn btn-light{% endblock %}" type="button">
                                 <span class="fas fa-print" aria-hidden="true"></span> {% trans count=1, count_formatted='1' %}Print this citation{% pluralize %}Print {{ count_formatted }} citations{% endtrans %} {# TODO: Remove pluralization after solving issue where translation is not loaded when the same message is sometimes pluralized, sometimes not. #}
                             </button>
                         </div>
                     {%- endif %}
                     {%- if config.KERKO_COMPOSER.citation_formats %}
-                        <div class="d-inline-block d-print-none mb-2">
+                        <div class="{% block download_link_wrapper_classes %}d-inline-block d-print-none mb-2{% endblock %}">
                             <div class="dropdown">
-                                <button class="btn btn-secondary btn-light dropdown-toggle" type="button" id="download-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button class="{% block download_btn_classes %}btn btn-secondary btn-light dropdown-toggle{% endblock %}" type="button" id="download-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="fas fa-download" aria-hidden="true"></span> {% trans count=1, count_formatted='1' %}Download this citation{% pluralize %}Download {{ count_formatted }} citations{% endtrans %} {# TODO: Remove pluralization after solving issue where translation is not loaded when the same message is sometimes pluralized, sometimes not. #}
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labelledby="download-options">
@@ -134,7 +134,7 @@
 {%- endblock content_inner %}
 
 {%- block content_header %}
-    <h1 class="h2 my-2 clearfix">
+    <h1 class="{% block item_heading_classes %}h2 my-2 clearfix{% endblock %}">
         {{- content_with_badges(title, item, mode='item') -}}
     </h1>
 {%- endblock content_header %}

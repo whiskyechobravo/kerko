@@ -64,7 +64,7 @@
                     {%- block content %}
                         <div {% block content_attributes %}class="col-12 {% if self.sidebar_inner() %}col-lg-8 order-lg-4{% endif %}"{% endblock %}>
                             {%- block content_header %}
-                                <h1 class="h2 my-2">{{ title }}</h1>
+                                <h1 class="{% block content_heading_classes %}h2 my-2{% endblock %}">{{ title }}</h1>
                             {%- endblock content_header %}
                             {%- block messages %}
                                 {%- with messages = get_flashed_messages(with_categories=true) %}
