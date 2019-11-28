@@ -379,13 +379,13 @@ TODO
   more impact on response times. For the best response times, it is recommended
   to limit the number of distinct facet values to a few hundreds.
 * Kerko can only manage a single bibliography per application.
-* Although Kerko might be integrated in a multilingual web application were the
+* Although Kerko can be integrated in a multilingual web application were the
   visitor may select a language, Zotero does not provide a way to manage tags or
   collections in multiple languages. Thus, there is no easy way for Kerko to
   provide those names in the user's language.
 * Whoosh does not provide much out-of-the-box support for non-Western languages.
   Therefore, search might not work very well with such languages.
-* No other referencement management tool than Zotero may serve as a back-end for
+* Zotero is the sole referencement management tool supported as a back-end to
   Kerko.
 
 
