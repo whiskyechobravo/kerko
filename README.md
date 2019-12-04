@@ -134,6 +134,8 @@ The following features are implemented in Kerko:
   zotero.org and made available to users of the bibliography. Regular
   expressions may be used to include or exclude notes or attachments from the
   bibliography based on their tags.
+* Badges: an icon is displayed on items that have one or more attachments. This
+  behavior can be changed and it is possible to define custom badges.
 * Modularity: although a [standalone application][KerkoApp] is available, Kerko
   is designed not as a standalone application, but to be part of a larger Flask
   application.
