@@ -36,7 +36,7 @@ def search():
         babel_domain.as_default()
 
     criteria = Criteria(request)
-    form = SearchForm()
+    form = SearchForm(csrf_enabled=False)
     if form.validate_on_submit():
         url = criteria.build_add_keywords_url(
             scope=form.scope.data,
