@@ -155,11 +155,10 @@ def zotero_top_level_collections():
 def _format_elapsed_time(subject, count, start_time):
     elapsed_time = int(round((datetime.now() - start_time).total_seconds()))
     elapsed_min, elapsed_sec = elapsed_time // 60, elapsed_time % 60
-    s = ('{num} {subject} processed in'
-         if count else '{num} {subject} processed in').format(num=count, subject=subject)
+    s = '{n} {subject} processed in'.format(n=count, subject=subject)
     if elapsed_min > 0:
-        s += (' {num} minute' if elapsed_min else ' {num} minutes').format(num=elapsed_min)
-        s += (' {num:02} second' if elapsed_sec else ' {num:02d} seconds').format(num=elapsed_sec)
+        s += (' {n} minutes' if elapsed_min > 1 else ' {n} minute').format(n=elapsed_min)
+        s += (' {n:02} seconds' if elapsed_sec > 1 else ' {n:02d} second').format(n=elapsed_sec)
     else:
-        s += (' {num} second' if elapsed_sec else ' {num} seconds').format(num=elapsed_sec)
+        s += (' {n} seconds' if elapsed_sec > 1 else ' {n} second').format(n=elapsed_sec)
     return s
