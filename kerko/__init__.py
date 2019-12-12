@@ -6,7 +6,6 @@ on Zotero.
 
 import pathlib
 
-from environs import Env
 from flask import Blueprint
 from flask_babelex import Domain
 
@@ -16,7 +15,6 @@ babel_domain = Domain(
     pathlib.Path(__file__).parent / 'translations',
     domain='kerko'
 )
-env = Env()
 
 
 def init_default_config(state):
@@ -28,6 +26,7 @@ def init_default_config(state):
     - `KERKO_ZOTERO_LIBRARY_ID`
     - `KERKO_ZOTERO_LIBRARY_TYPE`
     - `KERKO_ZOTERO_API_KEY`
+    - `KERKO_DATA_DIR`
 
     The following settings are used with Bootstrap-Flask to load CDN-based
     resources. Alternatively, one may set `BOOTSTRAP_SERVE_LOCAL=True` to use
@@ -40,10 +39,7 @@ def init_default_config(state):
     - `KERKO_WITH_JQUERY`
     - `KERKO_WITH_POPPER`
     """
-    app_dir = pathlib.Path(env.str('FLASK_APP')).parent.absolute()
-
     state.app.config.setdefault('KERKO_TITLE', 'Kerko')
-    state.app.config.setdefault('KERKO_DATA_DIR', app_dir / 'data' / 'kerko')
     state.app.config.setdefault('KERKO_WHOOSH_LANGUAGE', 'en')
     state.app.config.setdefault('KERKO_ZOTERO_LOCALE', 'en-US')
     state.app.config.setdefault('KERKO_ZOTERO_START', 0)

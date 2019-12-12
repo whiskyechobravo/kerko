@@ -286,6 +286,9 @@ a slightly more complete example.
 The variables below are required and have no default values:
 
 * `KERKO_COMPOSER`: An instance of the `kerko.composer.Composer` class.
+* `KERKO_DATA_DIR`: The directory where to store the search index and the file
+  attachments. Subdirectories `index` and `attachments` will be created if they
+  don't already exist.
 * `KERKO_ZOTERO_API_KEY`: The API key associated to the library on zotero.org.
   You have to [create that key](https://www.zotero.org/settings/keys/new).
 * `KERKO_ZOTERO_LIBRARY_ID`: Your personal _userID_ for API calls, as given
@@ -301,9 +304,6 @@ override their default value:
   either the file name (without the `.csl` extension) of one of the styles in the
   [Zotero Styles Repository][Zotero_styles] (e.g., `apa`) or the URL of a remote
   CSL file. Defaults to `'apa'`.
-* `KERKO_DATA_DIR`: The directory where to store the search index and the file
-  attachments. Defaults to `data/kerko`. Subdirectories `index` and
-  `attachments` will be created if they don't already exist.
 * `KERKO_DOWNLOAD_CITATIONS_LINK`: Provide a citation download button on search
   results pages. Defaults to `True`.
 * `KERKO_DOWNLOAD_CITATIONS_MAX_COUNT`: Limit over which the citation download

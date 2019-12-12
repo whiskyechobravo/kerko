@@ -66,7 +66,6 @@ setup(
     install_requires=[
         "Babel>=2.6.0",
         "Bootstrap-Flask>=1.0.10",
-        "environs>=5.0.0",
         "Flask>=1.0.2",
         "Flask-BabelEx>=0.9.3",
         "Flask-WTF>=0.14.2",
