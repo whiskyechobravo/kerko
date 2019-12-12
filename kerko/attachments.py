@@ -1,5 +1,4 @@
 import hashlib
-import os
 import pathlib
 
 from flask import current_app
@@ -14,7 +13,7 @@ def get_attachments_dir():
 
 def md5_checksum(path):
     # Hash file in 8k blocks to avoid reading it all in memory.
-    with open(path, 'rb') as f:
+    with path.open('rb') as f:
         md5_hash = hashlib.md5()
         while True:
             data = f.read(8192)
@@ -32,7 +31,7 @@ def sync_attachments():
     it always makes sense to synchronize the search index beforehand.
     """
     attachments_dir = get_attachments_dir()
-    os.makedirs(attachments_dir, exist_ok=True)
+    attachments_dir.mkdir(parents=True, exist_ok=True)
     local_files = {p.name for p in attachments_dir.iterdir()}
 
     missing_fields = check_fields(['id', 'attachments'])
@@ -70,7 +69,7 @@ def sync_attachments():
                     f"Requesting attachment {attachment['id']} (parent: {parent['id']})..."
                 )
                 # Download attachment.
-                with open(attachments_dir / attachment['id'], 'wb') as f:
+                with filepath.open('wb') as f:
                     f.write(zotero.retrieve_file(zotero_credentials, attachment['id']))
             else:
                 current_app.logger.debug(
@@ -87,6 +86,8 @@ def sync_attachments():
 
 
 def delete_attachments():
-    if get_attachments_dir().is_dir():
-        for filepath in get_attachments_dir().iterdir():
+    attachments_dir = get_attachments_dir()
+    if attachments_dir.is_dir():
+        for filepath in attachments_dir.iterdir():
             filepath.unlink()
+        attachments_dir.rmdir()
