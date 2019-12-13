@@ -27,12 +27,15 @@ task, which runs at regular intervals, that Kerko automatically brings its
 search index up to date by using the [Zotero Web API][Zotero_web_api] to
 retrieve the latest data from zotero.org.
 
-As a Flask [blueprint][Flask_blueprint], Kerko only works when incorporated into
-a Flask application. A sample application is available, [KerkoApp], which anyone
-with basic requirements could deploy directly on a web server. It is expected,
-however, that Kerko will often be integrated into a larger application, either
-derived from KerkoApp or custom-built to specific needs. The Kerko-powered
-bibliography might be just one section of a larger website.
+As a Flask [blueprint][Flask_blueprint] (a "blueprint" is Flask's term for what
+some other systems call a plugin or an extension), Kerko only works when
+incorporated into a Flask application. However, a sample stand-alone application
+is available, [KerkoApp], which is pre-built with Kerko and ready to be deployed
+on a web server. KerkoApp might work for you if you like the default appearance
+and if the provided configuration options are sufficient for your needs,
+otherwise you should probably consider building a custom application. In a
+custom application, the Kerko-powered bibliography might be just one section of
+a larger website.
 
 
 ## Demo site
