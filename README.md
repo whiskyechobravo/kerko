@@ -112,10 +112,11 @@ The following features are implemented in Kerko:
 * Language support: the default user interface is in English, but [some
   translations][Kerko_translations] are provided. Additional translations may be
   created using gettext-compatible tools; see the **Translating Kerko** section
-  below. Also to consider: [locales supported by Zotero][Zotero_locales] (which
-  provides the names of fields, item types and author types displayed by Kerko),
-  and languages supported by Whoosh (which provides the search capabilities):
-  ar, da, nl, en, fi, fr, de, hu, it, no, pt, ro, ru, es, sv, tr.
+  below. Also to consider: locales supported by the [Zotero Data
+  Schema][Zotero_schema] (which provides the names of fields, item types and
+  author types displayed by Kerko); languages supported by Whoosh (which
+  provides the search capabilities), i.e., ar, da, nl, en, fi, fr, de, hu, it,
+  no, pt, ro, ru, es, sv, tr.
 * Responsive design: the simple default implementation works on large monitors
   as well as on small screens. It is based on [Bootstrap].
 * Customizable front-end: applications may partly or fully replace the default
@@ -592,6 +593,6 @@ If you wish to add your Kerko-powered online bibliography to this list, please
 [Zotero]: https://www.zotero.org/
 [Zotero_demo]: https://www.zotero.org/groups/2348869/kerko_demo/items
 [Zotero_export]: https://www.zotero.org/support/dev/web_api/v3/basics#export_formats
-[Zotero_locales]: https://github.com/citation-style-language/locales
+[Zotero_schema]: https://api.zotero.org/schema
 [Zotero_styles]: https://www.zotero.org/styles/
 [Zotero_web_api]: https://www.zotero.org/support/dev/web_api/start
