@@ -281,8 +281,9 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
 7. Open http://127.0.0.1:5000/bibliography/ in your browser and explore the
    bibliography.
 
-You have just built a really minimal application for Kerko. Check [KerkoApp] for
-a slightly more complete example.
+You have just built a really minimal application for Kerko. This code example is
+available at [KerkoStart]. See also [KerkoApp] for a slightly more complete
+example.
 
 
 ## Configuration variables
@@ -581,6 +582,7 @@ If you wish to add your Kerko-powered online bibliography to this list, please
 [Kerko_translations]: https://github.com/whiskyechobravo/kerko/tree/master/kerko/translations
 [KerkoApp]: https://github.com/whiskyechobravo/kerkoapp
 [KerkoApp_demo]: https://demo.kerko.whiskyechobravo.com
+[KerkoStart]: https://github.com/whiskyechobravo/kerkostart
 [Popper.js]: https://popper.js.org/
 [Python]: https://www.python.org/
 [Pyzotero]: https://pypi.org/project/Pyzotero/
