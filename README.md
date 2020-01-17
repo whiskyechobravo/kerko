@@ -316,7 +316,7 @@ override their default value:
 * `KERKO_FACET_COLLAPSING`: Allow collapsible facets. Defaults to `False`.
 * `KERKO_PAGE_LEN`: The number of search results per page. Defaults to `20`.
 * `KERKO_PAGER_LINKS`: Number of pages to show in the pager (not counting the
-  current page). Defaults to `8`.
+  current page). Defaults to `4`.
 * `KERKO_PRINT_ITEM_LINK`: Provide a print button on item pages. Defaults to
   `False`.
 * `KERKO_PRINT_CITATIONS_LINK`: Provide a print button on search results
