@@ -1,3 +1,5 @@
+[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/whiskyechobravo/kerko) 
+
 [![License](https://img.shields.io/pypi/l/kerko)][Kerko]
 [![Version](https://img.shields.io/pypi/v/kerko?color=informational)][Kerko_pypi]
 
