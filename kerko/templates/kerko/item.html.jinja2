@@ -101,7 +101,7 @@
         {#- Display item fields in proper order. #}
         {%- for f in item.item_fields %}
             {%- if item.data[f.field] %}
-                {%- if f.field == 'abstractNote' %}
+                {%- if f.field == 'abstractNote' or f.field == 'extra' %}
                     {{- field(f.localized, item.data[f.field]|urlize(target='_blank'), value_class='pre-line') }}
                 {%- else %}
                     {{- field(f.localized, item.data[f.field]|striptags|urlize(target='_blank')) }}
