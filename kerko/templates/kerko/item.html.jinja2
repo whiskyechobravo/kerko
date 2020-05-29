@@ -1,5 +1,5 @@
 {% extends config.KERKO_TEMPLATE_LAYOUT %}
-{% from "kerko/_badges.html.jinja2" import content_with_badges %}
+{% from "kerko/_badges.html.jinja2" import badges %}
 {% from "kerko/_facets.html.jinja2" import facet_items %}
 
 {% macro field(label_text, value_text, field_class=None, value_class=None) %}
@@ -157,7 +157,8 @@
 
 {%- block content_header %}
     <h1 class="{% block item_heading_classes %}h2 my-2 clearfix{% endblock %}">
-        {{- content_with_badges(title, item, mode='item') -}}
+        {{- badges(item, mode='item') -}}
+        {{- title -}}
     </h1>
 {%- endblock content_header %}
 

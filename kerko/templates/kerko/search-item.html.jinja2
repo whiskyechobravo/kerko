@@ -37,7 +37,8 @@
     {%- block search_results %}
         {%- include "kerko/_pager.html.jinja2" %}
         <h2 class="{% block item_heading_classes %}mb-3 clearfix{% endblock %}">
-            {{- content_with_badges(title, item, mode='item') -}}
+            {{- badges(item, mode='item') -}}
+            {{- title -}}
         </h2>
     {%- endblock search_results %}
     {{- super() }}
