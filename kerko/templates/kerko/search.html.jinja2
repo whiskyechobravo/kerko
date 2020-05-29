@@ -80,39 +80,37 @@
                             {{- badges(result, mode='result') -}}
                             {{- result.bib|safe -}}
                         {%- else -%}
-                            <span class="float-right d-print-none ml-2">
-                                <a class="btn btn-primary" href="{{ result.url }}" title="{{ _('View details') }}">
-                                    <span class="fas fa-plus text-white" aria-hidden="true"></span>
-                                    <span class="sr-only sr-only-focusable">{{ _('View details') }}</span>
+                            <div class="d-flex flex-row justify-content-end">
+                                <a class="d-block mw-100" href="{{ result.url }}" title="{{ _('View details') }}">
+                                    {{- badges(result, mode='result') -}}
+                                    {{- result.bib|safe -}}
                                 </a>
-                            </span>
-                            {%- if result.attachments|length > 1 %}
-                                <span class="float-right d-print-none ml-2">
-                                    <span class="dropdown">
-                                        <button class="{% block attachment_links_btn_classes %}btn btn-light dropdown-toggle{% endblock %}" type="button" id="attachment-options-{{ result.id|escape }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ _('Read document') }}">
-                                            <span class="fas fa-file" aria-hidden="true"></span>
-                                            {{ _('Read') }}
-                                        </button>
-                                        <span class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labelledby="attachment-options-{{ result.id|escape }}">
-                                            {%- for attachment in result.attachments %}
-                                                <a class="dropdown-item" href="{{ url_for('kerko.item_attachment_download', item_id=result.id, attachment_id=attachment['id'], attachment_filename=attachment['filename']) }}"{% if config.KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW %} target="_blank"{% endif %} title="{{ _('Read this document') }}">
-                                                    {{- attachment.filename }}
-                                                </a>
-                                            {%- endfor %}
-                                        </span>
-                                    </span>
-                                </span>
-                            {%- elif result.attachments|length == 1 %}
-                                <span class="float-right d-print-none ml-2">
-                                    <a class="{% block attachment_link_btn_classes %}btn btn-light{% endblock %}" href="{{ url_for('kerko.item_attachment_download', item_id=result.id, attachment_id=result.attachments[0]['id'], attachment_filename=result.attachments[0]['filename']) }}"{% if config.KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW %} target="_blank"{% endif %} title="{{ _('Read document') }}">
-                                        <span class="fas fa-file" aria-hidden="true"></span>
-                                        {{ _('Read') }}
-                                    </a>
-                                </span>
-                            {%- endif %}
-                            {{- badges(result, mode='result') -}}
-                            {{- result.bib|safe -}}
-                            {{- result.coins|safe -}}
+                                {%- if result.attachments|length > 1 %}
+                                    <div class="d-print-none ml-2">
+                                        <div class="dropdown">
+                                            <button class="{% block attachment_links_btn_classes %}btn btn-primary dropdown-toggle text-nowrap{% endblock %}" type="button" id="attachment-options-{{ result.id|escape }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ _('Read document') }}">
+                                                <span class="fas fa-file text-white" aria-hidden="true"></span>
+                                                <span class="d-none d-md-inline text-white">{{ _('Read') }}</span>
+                                            </button>
+                                            <span class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labelledby="attachment-options-{{ result.id|escape }}">
+                                                {%- for attachment in result.attachments %}
+                                                    <a class="dropdown-item" href="{{ url_for('kerko.item_attachment_download', item_id=result.id, attachment_id=attachment['id'], attachment_filename=attachment['filename']) }}"{% if config.KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW %} target="_blank"{% endif %} title="{{ _('Read this document') }}">
+                                                        {{- attachment.filename }}
+                                                    </a>
+                                                {%- endfor %}
+                                            </span>
+                                        </div>
+                                    </div>
+                                {%- elif result.attachments|length == 1 %}
+                                    <div class="d-print-none ml-2">
+                                        <a class="{% block attachment_link_btn_classes %}btn btn-primary text-nowrap{% endblock %}" href="{{ url_for('kerko.item_attachment_download', item_id=result.id, attachment_id=result.attachments[0]['id'], attachment_filename=result.attachments[0]['filename']) }}"{% if config.KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW %} target="_blank"{% endif %} title="{{ _('Read document') }}">
+                                            <span class="fas fa-file text-white" aria-hidden="true"></span>
+                                            <span class="d-none d-md-inline text-white">{{ _('Read') }}</span>
+                                        </a>
+                                    </div>
+                                {%- endif %}
+                                <span>{{- result.coins|safe -}}</span>
+                            </div>
                         {%- endif -%}
                         {%- if config.KERKO_RESULTS_ABSTRACT %}
                             <p class="search-abstract">{{ result.data['abstractNote']|striptags|urlize(target='_blank') }}</p>
