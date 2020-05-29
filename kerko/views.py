@@ -130,9 +130,16 @@ def item_view(item_id):
     )
 
 
-@blueprint.route('/<string:item_id>/download/<string:attachment_id>')
-def item_attachment_download(item_id, attachment_id):
-    """Download an item attachment."""
+@blueprint.route('/<string:item_id>/download/<string:attachment_id>/')
+@blueprint.route('/<string:item_id>/download/<string:attachment_id>/<string:attachment_filename>')
+def item_attachment_download(item_id, attachment_id, attachment_filename=None):
+    """
+    Download an item attachment.
+
+    If the URL does not specify the attachment's filename or provides the wrong
+    filename, a redirect is performed to a corrected URL so that the client gets
+    a proper filename.
+    """
     if current_app.config['KERKO_USE_TRANSLATIONS']:
         babel_domain.as_default()
 
@@ -151,13 +158,20 @@ def item_attachment_download(item_id, attachment_id):
     if not filepath.exists():
         abort(404)
 
+    if attachment_filename != attachment['filename']:
+        return redirect(
+            url_for(
+                'kerko.item_attachment_download',
+                item_id=item_id,
+                attachment_id=attachment_id,
+                attachment_filename=attachment['filename'],
+            ), 301
+        )
+
     return send_from_directory(
         get_attachments_dir(),
         attachment_id,
         mimetype=attachment['mimetype'],
-        as_attachment=True,
-        attachment_filename=attachment['filename'],
-        last_modified=attachment['mtime']
     )
 
 
