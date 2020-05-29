@@ -40,14 +40,12 @@ def sync(target):
 
     By default, everything is synchronized.
     """
+    start_time = datetime.now()
     if target in ['everything', 'index']:
-        start_time = datetime.now()
         sync_index()
-        current_app.logger.info(_format_elapsed_time(start_time))
     if target in ['everything', 'attachments']:
-        start_time = datetime.now()
         sync_attachments()
-        current_app.logger.info(_format_elapsed_time(start_time))
+    current_app.logger.info(_format_elapsed_time(start_time))
 
 
 @cli.command()
