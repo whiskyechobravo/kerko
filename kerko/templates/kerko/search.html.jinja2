@@ -151,6 +151,9 @@
                             {%- endif %}
                         </div>
                     </div>
+                    <div class="text-right mb-4 mt-2 text-muted">
+                        {{ _("Last update from database: {}").format(last_sync) }}
+                    </div>
                 {%- endif %}
             {%- endblock search_results_footer %}
         {%- else %}

@@ -177,9 +177,11 @@ def run_query(criteria, return_fields=None):
     facets = {}
     total = 0
     page_count = 0
+    last_sync = None
 
     index = open_index()
     if index:
+        last_sync = index.last_modified()
         with index.searcher() as searcher:
             composer = current_app.config['KERKO_COMPOSER']
             query_facets = get_query_facets(criteria.filters.lists(), criteria)
@@ -218,7 +220,7 @@ def run_query(criteria, return_fields=None):
                     total = results.total
                     page_count = results.pagecount
 
-    return items, facets, total, page_count
+    return items, facets, total, page_count, last_sync
 
 
 def run_query_unique(field_name, value, return_fields=None):

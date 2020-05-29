@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 
 from babel.numbers import format_number
 from flask import (abort, current_app, make_response, redirect, render_template, request,
@@ -43,7 +44,7 @@ def search():
             value=form.keywords.data)
         return redirect(url, 302)
 
-    search_results, facet_results, total_count, page_count = run_query(
+    search_results, facet_results, total_count, page_count, last_sync = run_query(
         criteria, get_search_return_fields(criteria)
     )
 
@@ -61,6 +62,7 @@ def search():
         'page_len': criteria.page_len,
         'is_searching': criteria.has_keyword_search() or criteria.has_filter_search(),
         'locale': get_locale(),
+        'last_sync': datetime.fromtimestamp(last_sync).strftime('%Y-%m-%d %H:%M'),
     }
 
     if criteria.page_len == 1 and total_count != 0:
@@ -211,7 +213,7 @@ def search_citation_download(citation_format_key):
     criteria = Criteria(request)
     criteria.page_len = None
 
-    search_results, _, total_count, _ = run_query(  # TODO: Avoid building facet results.
+    search_results, _, total_count, _, _ = run_query(  # TODO: Avoid building facet results.
         criteria, return_fields=[citation_format.field.key]
     )
 
