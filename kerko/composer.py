@@ -1534,24 +1534,7 @@ class Composer:
 
         These rely on `FieldSpec` instances, which must have been added first.
         """
-        if exclude is None:
-            exclude = []
-
-        if '*' in exclude:
-            return
-
-        if 'attachments' not in exclude:
-            self.add_badge(
-                BadgeSpec(
-                    key='attachments',
-                    field=self.fields['attachments'],
-                    activator=lambda field, item: bool(item.get(field.key)),
-                    renderer=renderers.TemplateResolverRenderer(
-                        'kerko/_badge_attachments_{mode}.html.jinja2'
-                    ),
-                    weight=10,
-                )
-            )
+        pass
 
     def add_scope(self, scope):
         self.scopes[scope.key] = scope

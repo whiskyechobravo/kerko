@@ -77,10 +77,42 @@
                 {%- for result in search_results %}
                     <li class="search-item break-word">
                         {%- if print_preview -%}
-                            {{- badges(result, mode='result') }}
-                            {{- result.bib|safe }}
+                            {{- badges(result, mode='result') -}}
+                            {{- result.bib|safe -}}
                         {%- else -%}
-                            <a href="{{ result.url }}">{{ badges(result, mode='result') }}{{ result.bib|safe }}</a>{{ result.coins|safe }}
+                            <span class="float-right d-print-none ml-2">
+                                <a class="btn btn-primary" href="{{ result.url }}" title="{{ _('View details') }}">
+                                    <span class="fas fa-plus text-white" aria-hidden="true"></span>
+                                    <span class="sr-only sr-only-focusable">{{ _('View details') }}</span>
+                                </a>
+                            </span>
+                            {%- if result.attachments|length > 1 %}
+                                <span class="float-right d-print-none ml-2">
+                                    <span class="dropdown">
+                                        <button class="{% block attachment_links_btn_classes %}btn btn-light dropdown-toggle{% endblock %}" type="button" id="attachment-options-{{ result.id|escape }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ _('Get attachment') }}">
+                                            <span class="fas fa-paperclip" aria-hidden="true"></span>
+                                            <span class="sr-only sr-only-focusable">{{ _('Get attachment') }}</span>
+                                        </button>
+                                        <span class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labelledby="attachment-options-{{ result.id|escape }}">
+                                            {%- for attachment in result.attachments %}
+                                                <a class="dropdown-item" href="{{ url_for('kerko.item_attachment_download', item_id=result.id, attachment_id=attachment['id'], attachment_filename=attachment['filename']) }}"{% if config.KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW %} target="_blank"{% endif %} title="{{ _('Get this attachment') }}">
+                                                    {{- attachment.filename }}
+                                                </a>
+                                            {%- endfor %}
+                                        </span>
+                                    </span>
+                                </span>
+                            {%- elif result.attachments|length == 1 %}
+                                <span class="float-right d-print-none ml-2">
+                                    <a class="{% block attachment_link_btn_classes %}btn btn-light{% endblock %}" href="{{ url_for('kerko.item_attachment_download', item_id=result.id, attachment_id=result.attachments[0]['id'], attachment_filename=result.attachments[0]['filename']) }}"{% if config.KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW %} target="_blank"{% endif %} title="{{ _('Get attachment') }}">
+                                        <span class="fas fa-paperclip" aria-hidden="true"></span>
+                                        <span class="sr-only sr-only-focusable">{{ _('Get attachment') }}</span>
+                                    </a>
+                                </span>
+                            {%- endif %}
+                            {{- badges(result, mode='result') -}}
+                            {{- result.bib|safe -}}
+                            {{- result.coins|safe -}}
                         {%- endif -%}
                         {%- if config.KERKO_RESULTS_ABSTRACT %}
                             <p class="search-abstract">{{ result.data['abstractNote']|striptags|urlize(target='_blank') }}</p>
