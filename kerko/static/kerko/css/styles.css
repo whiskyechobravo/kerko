@@ -68,6 +68,9 @@
   width: 300px;
   max-width: 90vw;
 }
+.dropdown-item {
+  white-space: normal;
+}
 main {
   min-height: calc(100vh - 7rem);
   padding-top: 1rem;

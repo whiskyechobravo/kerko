@@ -47,9 +47,31 @@
 
 {%- block content_inner %}
     <div class="mb-4 item-content">
-        {%- if config.KERKO_PRINT_ITEM_LINK or config.KERKO_COMPOSER.citation_formats %}
+        {%- if item.attachments or config.KERKO_PRINT_ITEM_LINK or config.KERKO_COMPOSER.citation_formats %}
             <div class="row">
                 <div class="col-auto ml-auto text-right">
+                    {%- if item.attachments|length > 1 %}
+                        <div class="{% block attachment_links_wrapper_classes %}d-inline-block d-print-none mb-2{% endblock %}">
+                            <div class="dropdown">
+                                <button class="{% block attachment_links_btn_classes %}btn btn-primary dropdown-toggle{% endblock %}" type="button" id="attachment-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="fas fa-paperclip" aria-hidden="true"></span> {{ _('Get attachment') }}
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labelledby="attachment-options">
+                                    {%- for attachment in item.attachments %}
+                                        <a class="dropdown-item" href="{{ url_for('kerko.item_attachment_download', item_id=item.id, attachment_id=attachment['id'], attachment_filename=attachment['filename']) }}"{% if config.KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW %} target="_blank"{% endif %} title="{{ _('Get this attachment') }}">
+                                            {{- attachment.filename }}
+                                        </a>
+                                    {%- endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {%- elif item.attachments|length == 1 %}
+                        <div class="{% block attachment_link_wrapper_classes %}d-inline-block d-print-none mb-2{% endblock %}">
+                            <a class="{% block attachment_link_btn_classes %}btn btn-primary{% endblock %}" href="{{ url_for('kerko.item_attachment_download', item_id=item.id, attachment_id=item.attachments[0]['id'], attachment_filename=item.attachments[0]['filename']) }}"{% if config.KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW %} target="_blank"{% endif %}>
+                                <span class="fas fa-paperclip" aria-hidden="true"></span> {{ _('Get attachment') }}
+                            </a>
+                        </div>
+                    {%- endif %}
                     {%- if config.KERKO_PRINT_ITEM_LINK %}
                         <div class="{% block print_link_wrapper_classes %}d-none d-md-inline-block d-print-none mb-2{% endblock %}">
                             <button id="print-link" class="{% block print_btn_classes %}btn btn-light{% endblock %}" type="button">
