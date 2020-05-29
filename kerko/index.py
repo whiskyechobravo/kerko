@@ -77,6 +77,7 @@ def sync_index():
         current_app.logger.error('An exception occurred. Could not finish updating the index.')
     else:
         writer.commit()
+        current_app.logger.info(f"Sync successful ({count} item(s) processed).")
     return count
 
 

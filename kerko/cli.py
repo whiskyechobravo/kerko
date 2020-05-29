@@ -42,12 +42,12 @@ def sync(target):
     """
     if target in ['everything', 'index']:
         start_time = datetime.now()
-        count = sync_index()
-        current_app.logger.info(_format_elapsed_time('item(s)', count, start_time))
+        sync_index()
+        current_app.logger.info(_format_elapsed_time(start_time))
     if target in ['everything', 'attachments']:
         start_time = datetime.now()
-        count = sync_attachments()
-        current_app.logger.info(_format_elapsed_time('attachment(s)', count, start_time))
+        sync_attachments()
+        current_app.logger.info(_format_elapsed_time(start_time))
 
 
 @cli.command()
@@ -152,13 +152,13 @@ def zotero_top_level_collections():
         print(f"{c.get('key')} {c.get('data', {}).get('name', '')}")
 
 
-def _format_elapsed_time(subject, count, start_time):
+def _format_elapsed_time(start_time):
     elapsed_time = int(round((datetime.now() - start_time).total_seconds()))
     elapsed_min, elapsed_sec = elapsed_time // 60, elapsed_time % 60
-    s = '{n} {subject} processed in'.format(n=count, subject=subject)
+    s = 'Command execution time: '
     if elapsed_min > 0:
-        s += (' {n} minutes' if elapsed_min > 1 else ' {n} minute').format(n=elapsed_min)
-        s += (' {n:02} seconds' if elapsed_sec > 1 else ' {n:02d} second').format(n=elapsed_sec)
+        s += ('{n} minutes' if elapsed_min > 1 else '{n} minute').format(n=elapsed_min)
+        s += ('{n:02} seconds' if elapsed_sec > 1 else '{n:02d} second').format(n=elapsed_sec)
     else:
-        s += (' {n} seconds' if elapsed_sec > 1 else ' {n} second').format(n=elapsed_sec)
+        s += ('{n} seconds' if elapsed_sec > 1 else '{n} second').format(n=elapsed_sec)
     return s

@@ -82,6 +82,7 @@ def sync_attachments():
         current_app.logger.debug(f"Deleting attachment {name}, unused.")
         (attachments_dir / name).unlink()
 
+    current_app.logger.info(f"Sync successful ({count} attachment(s) processed).")
     return count
 
 
