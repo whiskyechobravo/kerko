@@ -54,11 +54,11 @@
                         <div class="{% block attachment_links_wrapper_classes %}d-inline-block d-print-none mb-2{% endblock %}">
                             <div class="dropdown">
                                 <button class="{% block attachment_links_btn_classes %}btn btn-primary dropdown-toggle{% endblock %}" type="button" id="attachment-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="fas fa-paperclip" aria-hidden="true"></span> {{ _('Get attachment') }}
+                                    <span class="fas fa-file" aria-hidden="true"></span> {{ _('Read document') }}
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labelledby="attachment-options">
                                     {%- for attachment in item.attachments %}
-                                        <a class="dropdown-item" href="{{ url_for('kerko.item_attachment_download', item_id=item.id, attachment_id=attachment['id'], attachment_filename=attachment['filename']) }}"{% if config.KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW %} target="_blank"{% endif %} title="{{ _('Get this attachment') }}">
+                                        <a class="dropdown-item" href="{{ url_for('kerko.item_attachment_download', item_id=item.id, attachment_id=attachment['id'], attachment_filename=attachment['filename']) }}"{% if config.KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW %} target="_blank"{% endif %} title="{{ _('Read this document') }}">
                                             {{- attachment.filename }}
                                         </a>
                                     {%- endfor %}
@@ -68,7 +68,7 @@
                     {%- elif item.attachments|length == 1 %}
                         <div class="{% block attachment_link_wrapper_classes %}d-inline-block d-print-none mb-2{% endblock %}">
                             <a class="{% block attachment_link_btn_classes %}btn btn-primary{% endblock %}" href="{{ url_for('kerko.item_attachment_download', item_id=item.id, attachment_id=item.attachments[0]['id'], attachment_filename=item.attachments[0]['filename']) }}"{% if config.KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW %} target="_blank"{% endif %}>
-                                <span class="fas fa-paperclip" aria-hidden="true"></span> {{ _('Get attachment') }}
+                                <span class="fas fa-file" aria-hidden="true"></span> {{ _('Read document') }}
                             </a>
                         </div>
                     {%- endif %}
@@ -139,11 +139,11 @@
         {%- endif %}
         {%- if item.attachments %}
             <div class="row">
-                <div class="col-md-4 col-lg-3 font-weight-bold break-word text-md-right text-print-left">{% trans count=item.attachments|length %}Attachment{% pluralize %}Attachments{% endtrans %}</div>
+                <div class="col-md-4 col-lg-3 font-weight-bold break-word text-md-right text-print-left">{% trans count=item.attachments|length %}Document{% pluralize %}Documents{% endtrans %}</div>
                 <div class="col-md-8 col-lg-9 break-word">
                     <ul class="list-unstyled">
                         {%- for attachment in item.attachments %}
-                            <li><a href="{{ url_for('kerko.item_attachment_download', item_id=item.id, attachment_id=attachment['id'], attachment_filename=attachment['filename']) }}"{% if config.KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW %} target="_blank"{% endif %} title="{{ _('Download this attachment') }}"><span class="fas fa-paperclip d-print-none no-decorate mr-1" aria-hidden="true"></span>{{ attachment.filename }}</a></li>
+                            <li><a href="{{ url_for('kerko.item_attachment_download', item_id=item.id, attachment_id=attachment['id'], attachment_filename=attachment['filename']) }}"{% if config.KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW %} target="_blank"{% endif %} title="{{ _('Read this document') }}"><span class="fas fa-file d-print-none no-decorate mr-1" aria-hidden="true"></span>{{ attachment.filename }}</a></li>
                         {%- endfor %}
                     </ul>
                 </div>
