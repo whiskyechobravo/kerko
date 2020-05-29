@@ -309,6 +309,8 @@ override their default value:
   either the file name (without the `.csl` extension) of one of the styles in the
   [Zotero Styles Repository][Zotero_styles] (e.g., `apa`) or the URL of a remote
   CSL file. Defaults to `'apa'`.
+* `KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW`: Open attachments in new windows, i.e.,
+  add the `target="_blank"` attribute to attachment links. Defaults to `False`.
 * `KERKO_DOWNLOAD_CITATIONS_LINK`: Provide a citation download button on search
   results pages. Defaults to `True`.
 * `KERKO_DOWNLOAD_CITATIONS_MAX_COUNT`: Limit over which the citation download

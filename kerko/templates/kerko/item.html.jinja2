@@ -121,7 +121,7 @@
                 <div class="col-md-8 col-lg-9 break-word">
                     <ul class="list-unstyled">
                         {%- for attachment in item.attachments %}
-                            <li><a href="{{ url_for('kerko.item_attachment_download', item_id=item.id, attachment_id=attachment['id'], attachment_filename=attachment['filename']) }}" title="{{ _('Download this attachment') }}"><span class="fas fa-paperclip d-print-none no-decorate mr-1" aria-hidden="true"></span>{{ attachment.filename }}</a></li>
+                            <li><a href="{{ url_for('kerko.item_attachment_download', item_id=item.id, attachment_id=attachment['id'], attachment_filename=attachment['filename']) }}"{% if config.KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW %} target="_blank"{% endif %} title="{{ _('Download this attachment') }}"><span class="fas fa-paperclip d-print-none no-decorate mr-1" aria-hidden="true"></span>{{ attachment.filename }}</a></li>
                         {%- endfor %}
                     </ul>
                 </div>
