@@ -80,8 +80,8 @@
                             {{- badges(result, mode='result') -}}
                             {{- result.bib|safe -}}
                         {%- else -%}
-                            <div class="d-flex flex-row justify-content-end">
-                                <a class="d-block mw-100" href="{{ result.url }}" title="{{ _('View details') }}">
+                            <div class="d-flex">
+                                <a class="d-block mw-100 mr-auto" href="{{ result.url }}" title="{{ _('View details') }}">
                                     {{- badges(result, mode='result') -}}
                                     {{- result.bib|safe -}}
                                 </a>
