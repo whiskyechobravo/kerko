@@ -152,6 +152,7 @@
                         </div>
                     </div>
                     <div class="text-right mb-4 mt-2 text-muted">
+                        {%- if config.DEBUG %}{% trans time="%.2f"|format(time) %}Processing time: {{time}} seconds{% endtrans %} &mdash;{% endif %}
                         {{ _("Last update from database: {}").format(last_sync) }}
                     </div>
                 {%- endif %}
@@ -166,7 +167,6 @@
                 </ul>
             {%- endtrans %}
         {%- endif %}
-        {% if config.DEBUG %}{% trans time="%.2f"|format(time) %}Processing time: {{time}} seconds{% endtrans %}{% endif %}
     {%- endblock search_results %}
 {%- endblock content_inner %}
 

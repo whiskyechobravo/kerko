@@ -151,9 +151,14 @@
         {%- endif %}
         {{- field(_("Link to this record"), permalink(item_url)) }}
     </div>
-    {% if config.DEBUG %}{% trans time="%.2f"|format(time) %}Processing time: {{time}} seconds{% endtrans %}{% endif %}
     {{- item.coins|safe }}
 {%- endblock content_inner %}
+
+{%- block content_footer %}
+    {%- if config.DEBUG %}
+        <div class="text-right mb-4 mt-2 text-muted">{% trans time="%.2f"|format(time) %}Processing time: {{time}} seconds{% endtrans %}</div>
+    {%- endif %}
+{%- endblock content_footer %}
 
 {%- block content_header %}
     <h1 class="{% block item_heading_classes %}h2 my-2 clearfix{% endblock %}">
