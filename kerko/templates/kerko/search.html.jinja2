@@ -45,12 +45,14 @@
 
 {%- block content_inner %}
     {%- block search_criteria %}
-        <div class="{% block search_criteria_wrapper_classes %}card breadbox mb-4{% endblock %}{% if not is_searching %} d-print-none{% endif %}">
-            <div class="card-body">
-                {%- include "kerko/_breadbox.html.jinja2" %}
-                {%- include "kerko/_search-form.html.jinja2" %}
+        {%- if breadbox or search_results %}
+            <div class="{% block search_criteria_wrapper_classes %}card breadbox mb-4{% endblock %}{% if not is_searching %} d-print-none{% endif %}">
+                <div class="card-body">
+                    {%- include "kerko/_breadbox.html.jinja2" %}
+                    {%- include "kerko/_search-form.html.jinja2" %}
+                </div>
             </div>
-        </div>
+        {%- endif %}
     {%- endblock search_criteria %}
     {%- block search_results %}
         <div class="my-2 row">
