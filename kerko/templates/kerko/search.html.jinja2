@@ -151,7 +151,7 @@
                             {%- endif %}
                         </div>
                     </div>
-                    <div class="text-right mb-4 mt-2 text-muted">
+                    <div class="text-right mb-4 text-muted">
                         {%- if config.DEBUG %}{% trans time="%.2f"|format(time) %}Processing time: {{time}} seconds{% endtrans %} &mdash;{% endif %}
                         {{ _("Last update from database: {}").format(last_sync) }}
                     </div>
