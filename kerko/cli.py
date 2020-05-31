@@ -2,12 +2,21 @@ import pprint
 from datetime import datetime
 
 import click
+import wrapt
 from flask import current_app
 from flask.cli import with_appcontext
 
 from . import zotero
 from .attachments import delete_attachments, sync_attachments
 from .index import delete_index, sync_index
+
+
+@wrapt.decorator
+def execution_time_logger(wrapped, _instance, args, kwargs):
+    start_time = datetime.now()
+    return_value = wrapped(*args, **kwargs)
+    current_app.logger.info(_format_elapsed_time(start_time))
+    return return_value
 
 
 @click.group()
@@ -34,18 +43,17 @@ def index():  # Deprecated after version 0.4.
     type=click.Choice(['index', 'attachments', 'everything'], case_sensitive=False),
 )
 @with_appcontext
+@execution_time_logger
 def sync(target):
     """
     Synchronize the search index and/or the attachments from the Zotero library.
 
     By default, everything is synchronized.
     """
-    start_time = datetime.now()
     if target in ['everything', 'index']:
         sync_index()
     if target in ['everything', 'attachments']:
         sync_attachments()
-    current_app.logger.info(_format_elapsed_time(start_time))
 
 
 @cli.command()
@@ -153,7 +161,7 @@ def zotero_top_level_collections():
 def _format_elapsed_time(start_time):
     elapsed_time = int(round((datetime.now() - start_time).total_seconds()))
     elapsed_min, elapsed_sec = elapsed_time // 60, elapsed_time % 60
-    s = 'Command execution time: '
+    s = 'Execution time: '
     if elapsed_min > 0:
         s += ('{n} minutes' if elapsed_min > 1 else '{n} minute').format(n=elapsed_min)
         s += ('{n:02} seconds' if elapsed_sec > 1 else '{n:02d} second').format(n=elapsed_sec)
