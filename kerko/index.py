@@ -52,6 +52,7 @@ def request_library_context(zotero_credentials):
 
 def sync_index():
     """Build the search index from items retrieved from Zotero."""
+    current_app.logger.info("Starting index sync.")
     composer = current_app.config['KERKO_COMPOSER']
     zotero_credentials = zotero.init_zotero()
     library_context = request_library_context(zotero_credentials)
@@ -81,7 +82,7 @@ def sync_index():
         current_app.logger.error('An exception occurred. Could not finish updating the index.')
     else:
         writer.commit()
-        current_app.logger.info(f"Sync successful ({count} item(s) processed).")
+        current_app.logger.info(f"Index sync successful ({count} item(s) processed).")
     return count
 
 
