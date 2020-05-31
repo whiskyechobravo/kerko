@@ -2,8 +2,7 @@ import pathlib
 import shutil
 
 from flask import current_app
-from whoosh import writing
-from whoosh.index import create_in, open_dir
+import whoosh
 
 from . import zotero
 from .extractors import ItemContext, LibraryContext
@@ -15,12 +14,17 @@ def get_index_dir():
 
 def open_index(auto_create=False):
     index_dir = get_index_dir()
-    if not index_dir.exists() and auto_create:
-        index_dir.mkdir(parents=True, exist_ok=True)
-        return create_in(str(index_dir), current_app.config['KERKO_COMPOSER'].schema)
-    if index_dir.exists():
-        return open_dir(str(index_dir))
-    raise FileNotFoundError
+    try:
+        if not index_dir.exists() and auto_create:
+            index_dir.mkdir(parents=True, exist_ok=True)
+            return whoosh.index.create_in(
+                str(index_dir), current_app.config['KERKO_COMPOSER'].schema
+            )
+        if index_dir.exists():
+            return whoosh.index.open_dir(str(index_dir))
+        current_app.logger.error(f"Could not open index in directory '{index_dir}'.")
+    except whoosh.index.IndexError as e:
+        current_app.logger.error(f"Could not open index: '{e}'.")
 
 
 def delete_index():
@@ -55,7 +59,7 @@ def sync_index():
     count = 0
     writer = index.writer(limitmb=256)
     try:
-        writer.mergetype = writing.CLEAR
+        writer.mergetype = whoosh.writing.CLEAR
         allowed_item_types = [
             t for t in library_context.item_types.keys()
             if t not in ['note', 'attachment']
