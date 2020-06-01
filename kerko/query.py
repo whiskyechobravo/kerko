@@ -48,7 +48,7 @@ def build_keywords_query(keywords):
 
 
 def get_query_facets(filters, criteria):
-    """Return the specs of facets to be retrieved by the search query."""
+    """Return the specs of facets specified by the search criteria."""
     composer = current_app.config['KERKO_COMPOSER']
     if criteria.page_len == 1:
         # On single-item pages, facets are displayed in the breadbox only, thus
@@ -152,7 +152,7 @@ def build_creators_display(item):
                     )
 
 
-def build_fake_facet_results(item):
+def build_item_facet_results(item):
     """
     Prepare facet "results" describing the item.
 
@@ -169,6 +169,40 @@ def build_fake_facet_results(item):
                 fake_results = [(item[spec.key], 0)]
             # Pass an empty Criteria; the facets will provide starting points for new searches.
             item['facet_results'][spec.key] = spec.build(fake_results, criteria=Criteria())
+
+
+def build_search_facet_results(searcher, groups, criteria, query_facets):
+    """
+    Prepare facet results for the search page.
+    """
+    facets = {}
+    if groups:
+        # Build facet results from groupings obtained with the search.
+        for spec in query_facets:
+            facets[spec.key] = spec.build(groups(spec.key).items(), criteria)
+    elif criteria.has_filter_search():
+        # No groupings available even though facets are used. This usually means
+        # that the search itself had zero results, thus no facet results either.
+        # But building facet results is still desirable in order to display the
+        # active filters in the search interface. To get those, we perform a
+        # separate query for each active filter, but this time ignoring any
+        # other search criteria.
+        for filter_key in criteria.filters.keys():
+            for spec in query_facets:
+                if filter_key == spec.filter_key:
+                    results = searcher.search(
+                        Every(),
+                        filter=build_filter_query(
+                            [tuple([spec.key, criteria.filters.getlist(spec.key)])]
+                        ),
+                        groupedby=build_groupedby_query([spec]),
+                        maptype=Count,  # Not to be used, as other criteria are ignored.
+                        limit=1,  # Don't care about the documents.
+                    )
+                    facets[spec.key] = spec.build(
+                        results.groups(spec.key).items(), criteria, active_only=True
+                    )
+    return facets
 
 
 def run_query(criteria, return_fields=None):
@@ -193,17 +227,14 @@ def run_query(criteria, return_fields=None):
                 'sortedby': composer.sorts[criteria.sort].get_field_keys(),
                 'reverse': composer.sorts[criteria.sort].reverse,
             }
-
+            groups = None
             if criteria.page_len is None:  # Retrieve all results.
                 search_args['limit'] = None
 
                 results = searcher.search(q, **search_args)
                 if results:
                     items = [_get_fields(hit, return_fields) for hit in results]
-                    for spec in query_facets:
-                        facets[spec.key] = spec.build(
-                            results.groups(spec.key).items(), criteria
-                        )
+                    groups = results.groups
                     total = results.estimated_length()
                     page_count = 1
             else:  # Retrieve a range of results.
@@ -213,12 +244,10 @@ def run_query(criteria, return_fields=None):
                 results = searcher.search_page(q, **search_args)
                 if results:
                     items = [_get_fields(hit, return_fields) for hit in results]
-                    for spec in query_facets:
-                        facets[spec.key] = spec.build(
-                            results.results.groups(spec.key).items(), criteria
-                        )
+                    groups = results.results.groups
                     total = results.total
                     page_count = results.pagecount
+            facets = build_search_facet_results(searcher, groups, criteria, query_facets)
 
     return items, facets, total, page_count, last_sync
 

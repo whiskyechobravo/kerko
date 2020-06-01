@@ -169,7 +169,7 @@ class FacetSpec(BaseFieldSpec):
         """
 
     @abstractmethod
-    def build(self, results, criteria):
+    def build(self, results, criteria, active_only=False):
         """
         Construct a facet's items for display.
 
@@ -178,6 +178,9 @@ class FacetSpec(BaseFieldSpec):
 
         :param Criteria criteria: The current search criteria. If None, the
             facet will be built for performing a new search.
+
+        :param active_only: Only build the items that are related to active
+            filters, i.e., filters actually present in the search criteria.
         """
 
     def sort_items(self, items):
@@ -233,13 +236,16 @@ class FlatFacetSpec(FacetSpec):
         filters.setlist(self.filter_key, active_values)
         return filters
 
-    def build(self, results, criteria):
+    def build(self, results, criteria, active_only=False):
         items = []
         for value, count in results:
             if value or self.missing_label:
                 value, label = self.decode(value, default_value=value, default_label=value)
                 remove_url = criteria.build_remove_filter_url(self, value)
-                add_url = None if remove_url else criteria.build_add_filter_url(self, value)
+                if remove_url or active_only:
+                    add_url = None
+                else:
+                    add_url = criteria.build_add_filter_url(self, value)
                 if remove_url or add_url:  # Only items with an URL get displayed.
                     items.append({
                         'label': label,
@@ -335,13 +341,16 @@ class TreeFacetSpec(FacetSpec):
             lst.append(child['node'])
         return self.sort_items(lst)
 
-    def build(self, results, criteria):
+    def build(self, results, criteria, active_only=False):
         tree = Tree()
         for value, count in results:
             if value or self.missing_label:
                 value, label = self.decode(value, default_value=value, default_label=value)
                 remove_url = criteria.build_remove_filter_url(self, value)
-                add_url = None if remove_url else criteria.build_add_filter_url(self, value)
+                if remove_url or active_only:
+                    add_url = None
+                else:
+                    add_url = criteria.build_add_filter_url(self, value)
                 if remove_url or add_url:  # Only items with an URL get displayed.
                     if value:
                         path = value.split(sep=self.path_separator)

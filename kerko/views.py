@@ -12,7 +12,7 @@ from .breadbox import build_breadbox
 from .criteria import Criteria
 from .forms import SearchForm
 from .pager import build_pager
-from .query import build_creators_display, build_fake_facet_results, run_query, run_query_unique
+from .query import build_creators_display, build_item_facet_results, run_query, run_query_unique
 from .sorter import build_sorter
 
 
@@ -68,7 +68,7 @@ def search():
     if criteria.page_len == 1 and total_count != 0:
         list_page_num = int((criteria.page_num - 1) / current_app.config['KERKO_PAGE_LEN'] + 1)
         build_creators_display(search_results[0])
-        build_fake_facet_results(search_results[0])
+        build_item_facet_results(search_results[0])
         return render_template(
             current_app.config['KERKO_TEMPLATE_SEARCH_ITEM'],
             title=search_results[0].get('data', {}).get('title', ''),
@@ -121,7 +121,7 @@ def item_view(item_id):
         abort(404)
 
     build_creators_display(item)
-    build_fake_facet_results(item)
+    build_item_facet_results(item)
     return render_template(
         current_app.config['KERKO_TEMPLATE_ITEM'],
         item=item,

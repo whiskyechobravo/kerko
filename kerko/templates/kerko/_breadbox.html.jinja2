@@ -22,4 +22,11 @@
             {{ f.render(breadbox.filters[f.key], 'breadbox') }}
         {%- endfor %}
     {%- endif %}
+{%- elif is_searching %}
+    <div class="row">
+        <div class="col">
+            {{ _("None of your search criteria could be recognized.") }}
+            <a href="{{ url_for('kerko.search') }}">{{ _("Reset search") }}</a>.
+        </div>
+    </div>
 {%- endif %}

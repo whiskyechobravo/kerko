@@ -21,7 +21,7 @@
                         <span class="fas fa-question-circle" aria-hidden="true"></span> {{ _("Help") }}
                     </button>
                 </div>
-                {%- if facet_results %}
+                {%- if facet_results and search_results %}
                     <div class="{% block facets_link_wrapper_classes %}d-inline-block d-lg-none d-print-none mt-1 mb-2{% endblock %}">
                         <button id="facets-modal-toggle" class="{% block facets_btn_classes %}btn btn-primary{% endblock %}" data-target="#facets-modal">
                             <span class="fas fa-compass" aria-hidden="true"></span> {{ _("Explore") }}
@@ -45,14 +45,12 @@
 
 {%- block content_inner %}
     {%- block search_criteria %}
-        {%- if breadbox or search_results %}
-            <div class="{% block search_criteria_wrapper_classes %}card breadbox mb-4{% endblock %}{% if not is_searching %} d-print-none{% endif %}">
-                <div class="card-body">
-                    {%- include "kerko/_breadbox.html.jinja2" %}
-                    {%- include "kerko/_search-form.html.jinja2" %}
-                </div>
+        <div class="{% block search_criteria_wrapper_classes %}card breadbox mb-4{% endblock %}{% if not is_searching %} d-print-none{% endif %}">
+            <div class="card-body">
+                {%- include "kerko/_breadbox.html.jinja2" %}
+                {%- include "kerko/_search-form.html.jinja2" %}
             </div>
-        {%- endif %}
+        </div>
     {%- endblock search_criteria %}
     {%- block search_results %}
         <div class="my-2 row">
@@ -174,7 +172,7 @@
 
 {%- block sidebar_inner %}
     {%- block facet_results %}
-        {%- if facet_results %}
+        {%- if facet_results and search_results %}
             <div class="d-none d-lg-block d-print-none">
                 <h2 class="{% block facets_heading_classes %}mt-2 mb-4{% endblock %}">{{ _("Explore") }}</h2>
                 <div class="facets">
