@@ -161,10 +161,10 @@ def zotero_top_level_collections():
 def _format_elapsed_time(start_time):
     elapsed_time = int(round((datetime.now() - start_time).total_seconds()))
     elapsed_min, elapsed_sec = elapsed_time // 60, elapsed_time % 60
-    s = 'Execution time: '
+    s = 'Execution time:'
     if elapsed_min > 0:
-        s += ('{n} minutes' if elapsed_min > 1 else '{n} minute').format(n=elapsed_min)
-        s += ('{n:02} seconds' if elapsed_sec > 1 else '{n:02d} second').format(n=elapsed_sec)
+        s += (' {n} minutes' if elapsed_min > 1 else ' {n} minute').format(n=elapsed_min)
+        s += (' {n:02} seconds' if elapsed_sec > 1 else ' {n:02d} second').format(n=elapsed_sec)
     else:
-        s += ('{n} seconds' if elapsed_sec > 1 else '{n} second').format(n=elapsed_sec)
+        s += (' {n} seconds' if elapsed_sec > 1 else ' {n} second').format(n=elapsed_sec)
     return s
