@@ -554,6 +554,8 @@ tool.
 The following online bibliographies are powered by Kerko:
 
 * [Bibliographie francophone sur l'archivistique](https://bibliopiaf.ebsi.umontreal.ca/)
+* [Open Development & Education Evidence Library](https://docs.opendeved.net/)
+* [The EdTech Hub Evidence Library](http://docs.edtechhub.org/)
 
 If you wish to add your Kerko-powered online bibliography to this list, please
 [e-mail us][Kerko_email] or submit a pull request.
