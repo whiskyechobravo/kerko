@@ -1,5 +1,53 @@
 # Changelog
 
+## Latest
+
+Backwards incompatible changes:
+
+* Remove default value for the `KERKO_DATA_DIR` configuration variable. KerkoApp
+  users don't need to worry about this as KerkoApp takes care of it, but custom
+  apps that do not already set this variable now have to.
+
+Features:
+
+* Open PDF documents in the browser's built-in PDF viewer (instead of opening
+  the browser's file download popup).
+* Add buttons for opening documents directly from search result pages (these
+  replace the previous paperclip badges).
+* Add button at the top of item pages for opening documents (makes the
+  availability of such documents much more obvious).
+* Add the `KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW` configuration variable to
+  control whether to open documents in a new window or in the same window.
+* Display the date and time of the last successful synchronization from Zotero
+  at the bottom of search results.
+
+Bug fixes:
+
+* Preserve newlines when displaying the value of the Extra field.
+* Fix filters missing on search pages that have no results.
+* Avoid empty box in print media when there is no search criteria.
+* Avoid empty box when the search index is missing.
+* Fix pluralization in CLI time elapsed messages.
+
+Other changes:
+
+* Refer to attachments as "documents" in the interface, and replace the
+  paperclip icon with a file icon.
+* Remove CSRF token from search form. Token expiration can impede legitimate
+  users, and the token is unnecessary as the form does not change the
+  application's state.
+* Add a proper message when none of the filters provided in the URL are
+  recognized.
+* Improve documentation.
+* Add INFO-level log message to report successful synchronization from Zotero.
+* Add blocks in templates to facilitate theming.
+
+Possibly backwards incompatible changes (more or less internal API changes):
+
+* Rename the `content_with_badges` template macro as `badges`, and leave it to
+  the caller to display content.
+* Remove badges that are related to attachments.
+
 ## 0.5 (2019-11-19)
 
 *Warning:* Upgrading from version 0.4 or earlier will require that you clean and
