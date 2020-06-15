@@ -2,6 +2,11 @@
 
 ## Latest
 
+Security changes:
+
+* Fix multiple vulnerabilities to XSS attacks. **All previous versions of Kerko
+  were vulnerable, thus an upgrade is highly recommended.**
+
 Backwards incompatible changes:
 
 * Remove default value for the `KERKO_DATA_DIR` configuration variable. KerkoApp
@@ -24,6 +29,7 @@ Features:
 Bug fixes:
 
 * Preserve newlines when displaying the value of the Extra field.
+* Preserve newlines when displaying abstracts in search result pages.
 * Fix filters missing on search pages that have no results.
 * Avoid empty box in print media when there is no search criteria.
 * Avoid empty box when the search index is missing.

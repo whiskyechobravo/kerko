@@ -8,7 +8,7 @@
                 <meta charset="utf-8"> {# CAUTION: Keep this within the first 1024 characters. #}
                 <meta http-equiv="X-UA-Compatible" content="IE=edge">
             {%- endblock metas %}
-            <title>{% block meta_title_inner %}{{ config.KERKO_TITLE|striptags|escape }}{% endblock meta_title_inner %}</title>
+            <title>{% block meta_title_inner %}{{ config.KERKO_TITLE|escape }}{% endblock meta_title_inner %}</title>
             {%- block styles %}
             {%- endblock styles %}
             {%- block head_scripts %}

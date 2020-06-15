@@ -1,7 +1,7 @@
 {% extends config.KERKO_TEMPLATE_BASE %}
 
 {%- block meta_title_inner -%}
-    {%- if title %}{{ title|striptags|escape }} | {% endif %}{{ super() -}}
+    {%- if title %}{{ title|escape }} | {% endif %}{{ super() -}}
 {%- endblock %}
 
 {%- block metas %}

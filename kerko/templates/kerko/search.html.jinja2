@@ -95,7 +95,7 @@
                                             <span class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labelledby="attachment-options-{{ result.id|escape }}">
                                                 {%- for attachment in result.attachments %}
                                                     <a class="dropdown-item" href="{{ url_for('kerko.item_attachment_download', item_id=result.id, attachment_id=attachment['id'], attachment_filename=attachment['filename']) }}"{% if config.KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW %} target="_blank"{% endif %} title="{{ _('Read this document') }}">
-                                                        {{- attachment.filename }}
+                                                        {{- attachment.filename|escape }}
                                                     </a>
                                                 {%- endfor %}
                                             </span>
@@ -113,7 +113,7 @@
                             </div>
                         {%- endif -%}
                         {%- if config.KERKO_RESULTS_ABSTRACT %}
-                            <p class="search-abstract">{{ result.data['abstractNote']|striptags|urlize(target='_blank') }}</p>
+                            <p class="search-abstract pre-line">{{ result.data['abstractNote']|escape|urlize(target='_blank') }}</p>
                         {%- endif %}
                     </li>
                 {%- endfor %}

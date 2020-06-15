@@ -42,7 +42,7 @@
 
 {%- block metas %}
     {{- super() }}
-    <link rel="canonical" title="{{ title|striptags|escape }}" href="{{ item_url }}">
+    <link rel="canonical" title="{{ title|escape }}" href="{{ item_url }}">
 {%- endblock metas %}
 
 {%- block content_inner %}
@@ -59,7 +59,7 @@
                                 <div class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labelledby="attachment-options">
                                     {%- for attachment in item.attachments %}
                                         <a class="dropdown-item" href="{{ url_for('kerko.item_attachment_download', item_id=item.id, attachment_id=attachment['id'], attachment_filename=attachment['filename']) }}"{% if config.KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW %} target="_blank"{% endif %} title="{{ _('Read this document') }}">
-                                            {{- attachment.filename }}
+                                            {{- attachment.filename|escape }}
                                         </a>
                                     {%- endfor %}
                                 </div>
@@ -109,7 +109,7 @@
                         {%- for creator in item.data.creators %}
                             <li>
                                 {%- if creator.url %}<a href="{{ creator.url }}" title="{{ _('Search this author/contributor') }}">{% endif %}
-                                {{- creator.display|striptags }}
+                                {{- creator.display|escape }}
                                 {%- if creator.url %}</a>{% endif %}
                                 {%- if creator.label %}
                                     ({{ creator.label }})
@@ -123,11 +123,7 @@
         {#- Display item fields in proper order. #}
         {%- for f in item.item_fields %}
             {%- if item.data[f.field] %}
-                {%- if f.field == 'abstractNote' or f.field == 'extra' %}
-                    {{- field(f.localized, item.data[f.field]|urlize(target='_blank'), value_class='pre-line') }}
-                {%- else %}
-                    {{- field(f.localized, item.data[f.field]|striptags|urlize(target='_blank')) }}
-                {%- endif %}
+                {{- field(f.localized, item.data[f.field]|escape|urlize(target='_blank'), value_class='pre-line' if f.field == 'abstractNote' or f.field == 'extra') }}
             {%- endif %}
         {%- endfor %}
         {{- field(_("Notes"), item.notes|join('')|safe) if item.notes }}
@@ -143,7 +139,7 @@
                 <div class="col-md-8 col-lg-9 break-word">
                     <ul class="list-unstyled">
                         {%- for attachment in item.attachments %}
-                            <li><a href="{{ url_for('kerko.item_attachment_download', item_id=item.id, attachment_id=attachment['id'], attachment_filename=attachment['filename']) }}"{% if config.KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW %} target="_blank"{% endif %} title="{{ _('Read this document') }}"><span class="fas fa-file d-print-none no-decorate mr-1" aria-hidden="true"></span>{{ attachment.filename }}</a></li>
+                            <li><a href="{{ url_for('kerko.item_attachment_download', item_id=item.id, attachment_id=attachment['id'], attachment_filename=attachment['filename']) }}"{% if config.KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW %} target="_blank"{% endif %} title="{{ _('Read this document') }}"><span class="fas fa-file d-print-none no-decorate mr-1" aria-hidden="true"></span>{{ attachment.filename|escape }}</a></li>
                         {%- endfor %}
                     </ul>
                 </div>
@@ -163,7 +159,7 @@
 {%- block content_header %}
     <h1 class="{% block item_heading_classes %}h2 my-2 clearfix{% endblock %}">
         {{- badges(item, mode='item') -}}
-        {{- title -}}
+        {{- title|escape -}}
     </h1>
 {%- endblock content_header %}
 
