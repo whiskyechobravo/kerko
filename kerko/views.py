@@ -62,7 +62,9 @@ def search():
         'page_len': criteria.page_len,
         'is_searching': criteria.has_keyword_search() or criteria.has_filter_search(),
         'locale': get_locale(),
-        'last_sync': datetime.fromtimestamp(last_sync).strftime('%Y-%m-%d %H:%M') if last_sync else '',
+        'last_sync': datetime.fromtimestamp(
+            last_sync, tz=datetime.now().astimezone().tzinfo
+        ).strftime('%Y-%m-%d %H:%M %Z') if last_sync else '',
     }
 
     if criteria.page_len == 1 and total_count != 0:
