@@ -1,6 +1,6 @@
 # Changelog
 
-## Latest
+## 0.6 (2020-06-15)
 
 Security changes:
 
