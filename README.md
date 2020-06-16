@@ -197,6 +197,8 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
    `app` object, as in the example below:
 
    ```python
+   import pathlib
+
    from flask import Flask
    from kerko.composer import Composer
 
@@ -205,6 +207,7 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
    app.config['KERKO_ZOTERO_API_KEY'] = 'xxxxxxxxxxxxxxxxxxxxxxxx'  # Replace this value.
    app.config['KERKO_ZOTERO_LIBRARY_ID'] = '9999999'  # Replace this value.
    app.config['KERKO_ZOTERO_LIBRARY_TYPE'] = 'group'  # Replace this value if necessary.
+   app.config['KERKO_DATA_DIR'] = str(pathlib.Path(__file__).parent / 'data' / 'kerko')
    app.config['KERKO_COMPOSER'] = Composer()
    ```
 
@@ -217,6 +220,9 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
      `KERKO_ZOTERO_LIBRARY_TYPE`: These variables are required for Kerko to be
      able to access your Zotero library. See the **Configuration variables**
      section for details on how to properly set these variables.
+   * `KERKO_DATA_DIR`: This variable specifies the directory where to store the
+     search index and the file attachments. If the specified directory doesn't
+     already exists, Kerko will try to create it.
    * `KERKO_COMPOSER`: This variable specifies key elements needed by Kerko,
      e.g., fields for display and search, facets for filtering. These are
      defined by instanciating the `Composer` class. Your application may
