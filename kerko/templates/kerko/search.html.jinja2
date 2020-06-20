@@ -1,5 +1,6 @@
 {% extends config.KERKO_TEMPLATE_LAYOUT %}
-{% from "kerko/_badges.html.jinja2" import badges %}
+{%- from "kerko/_attributes.html.jinja2" import title_aria_label %}
+{%- from "kerko/_badges.html.jinja2" import badges %}
 
 {%- set show_print_link = config.KERKO_PRINT_CITATIONS_MAX_COUNT == 0 or total_count <= config.KERKO_PRINT_CITATIONS_MAX_COUNT %}
 {%- set show_print_link = show_print_link and config.KERKO_PRINT_CITATIONS_LINK %}
@@ -186,13 +187,13 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h2 id="facets-modal-label" class="modal-title">{{ _("Explore") }}</h2>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal" title="{{ _('Close Explore panel') }}" aria-label="{{ _('Close Explore panel') }}">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" {{ title_aria_label(_('Close Explore panel')) }}>
                                 <span class="fas fa-times" aria-hidden="true"></span>
                             </button>
                         </div>
                         <div class="modal-body">
                             <div class="my-3 text-right">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ _("Close") }}</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="{{ _('Close Explore panel') }}">{{ _("Close") }}</button>
                             </div>
                         </div>
                     </div>

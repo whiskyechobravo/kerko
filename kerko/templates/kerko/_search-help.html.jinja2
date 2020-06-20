@@ -1,10 +1,12 @@
+{%- from "kerko/_attributes.html.jinja2" import title_aria_label %}
+
 <div class="modal fade" id="search-help" tabindex="-1" role="dialog" aria-labelledby="search-help-label" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 {%- block search_help_header %}
                     <h2 class="modal-title" id="search-help-label">{{ _("Help") }}</h2>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" title="{{ _('Close Help panel') }}" aria-label="{{ _('Close Help panel') }}">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" {{ title_aria_label(_('Close Help panel')) }}>
                         <span class="fas fa-times" aria-hidden="true"></span>
                     </button>
                 {%- endblock search_help_header %}
@@ -60,7 +62,7 @@
                         {%- endif %}
                     </ul>
                     <div class="my-3 text-right">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ _("Close") }}</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="{{ _('Close Help panel') }}">{{ _("Close") }}</button>
                     </div>
                 {%- endblock search_help_inner %}
             </div>

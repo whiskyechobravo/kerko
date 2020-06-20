@@ -1,3 +1,5 @@
+{%- from "kerko/_attributes.html.jinja2" import title_aria_label %}
+
 {%- if search_results|length > 0 %}
     <form method="post" role="search" {% block search_form_attributes %}class="form d-print-none"{% endblock %}>
         {{- form.hidden_tag() }}
@@ -10,8 +12,8 @@
             <label for="{{ form.scope.id }}" class="sr-only">{{ _('Search in...') }}</label>
             {{- form.scope(class_="flex-grow-0 custom-select w-40" + scope_validation_class) }}
             <div class="input-group-append">
-                <button id="submit" type="submit" {% block search_button_attributes %}class="{% block search_btn_classes %}btn btn-primary{% endblock %}"{% endblock %} title="{{ _('Search') }}">
-                    <span class="fas fa-search" aria-hidden="true"></span><span class="sr-only">{{ _('Search') }}</span>
+                <button id="submit" type="submit" {% block search_button_attributes %}class="{% block search_btn_classes %}btn btn-primary{% endblock %}"{% endblock %} {{ title_aria_label(_('Search')) }}>
+                    <span class="fas fa-search" aria-hidden="true"></span>
                 </button>
             </div>
         </div>

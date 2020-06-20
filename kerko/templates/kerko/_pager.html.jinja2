@@ -1,15 +1,17 @@
+{%- from "kerko/_attributes.html.jinja2" import title_aria_label %}
+
 {%- macro page_prev_item(url) %}
     <li class="page-item">
-        <a class="page-link" href="{{ url }}" rel="prev" title="{{ _('Previous page') }}">
-            <span class="fas fa-angle-left" aria-hidden="true"></span><span class="sr-only">{{ _('Previous page') }}</span>
+        <a class="page-link" href="{{ url }}" rel="prev" {{ title_aria_label(_('Previous page')) }}>
+            <span class="fas fa-angle-left" aria-hidden="true"></span>
         </a>
     </li>
 {%- endmacro %}
 
 {%- macro page_next_item(url) %}
     <li class="page-item">
-        <a class="page-link" href="{{ url }}" rel="next" title="{{ _('Next page') }}">
-            <span class="fas fa-angle-right" aria-hidden="true"></span><span class="sr-only">{{ _('Next page') }}</span>
+        <a class="page-link" href="{{ url }}" rel="next" {{ title_aria_label(_('Next page')) }}>
+            <span class="fas fa-angle-right" aria-hidden="true"></span>
         </a>
     </li>
 {%- endmacro %}
@@ -20,7 +22,7 @@
 
 {%- macro page_num_item(url, page_num, last=False) %}
     <li class="page-item">
-        <a class="page-link" href="{{ url }}" title="{{ page_num_label(page_num, last=last) }}" aria-label="{{ page_num_label(page_num, last=last) }}">
+        <a class="page-link" href="{{ url }}" {{ title_aria_label(page_num_label(page_num, last=last)) }}>
             {{- page_num|safe -}}
         </a>
     </li>
@@ -28,7 +30,7 @@
 
 {%- macro page_active_item(page_num) %}
     <li class="page-item active">
-        <span class="page-link" title="{{ page_num_label(page_num, active=True) }}" aria-label="{{ page_num_label(page_num, active=True) }}" aria-current="page">
+        <span class="page-link" aria-current="page" {{ title_aria_label(page_num_label(page_num, active=True)) }}>
             {{- page_num|safe -}}
         </span>
     </li>
