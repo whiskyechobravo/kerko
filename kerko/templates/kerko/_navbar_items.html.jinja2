@@ -1,3 +1,4 @@
-<li class="nav-item {% if request.endpoint == 'kerko.search' %}active{% endif %}">
-    <a class="nav-link" href="{{ url_for('kerko.search') }}">{{ _('Bibliography') }}</a>
+{%- set in_bibliography = (request.endpoint == 'kerko.search') %}
+<li class="nav-item {% if in_bibliography %}active{% endif %}">
+    <a class="nav-link" href="{{ url_for('kerko.search') }}" {% if in_bibliography %}aria-current="true"{% endif %}>{{ _('Bibliography') }}</a>
 </li>
