@@ -101,7 +101,7 @@
             </div>
         {%- endif %}
 
-        {{- facet_field(_("Resource type"), item.item_type, 'facet_item_type', add_link_title=_("Search this resource type")) }}
+        {{- facet_field(_("Resource type"), item.item_type, 'facet_item_type', add_link_title=_("Search the '{}' resource type").format(item.item_type)) }}
         {%- if item.data.creators %}
             <div class="row">
                 <div class="col-md-4 col-lg-3 font-weight-bold break-word text-md-right text-print-left">{% trans count=item.data.creators|length %}Author/contributor{% pluralize %}Authors/contributors{% endtrans %}</div>
@@ -109,7 +109,7 @@
                     <ul class="list-unstyled">
                         {%- for creator in item.data.creators %}
                             <li>
-                                {%- if creator.url %}<a href="{{ creator.url }}" title="{{ _('Search this author/contributor') }}">{% endif %}
+                                {%- if creator.url %}<a href="{{ creator.url }}" {{ title_aria_label(_('Search \'{}\'').format(creator.display|escape)) }}>{% endif %}
                                 {{- creator.display|escape }}
                                 {%- if creator.url %}</a>{% endif %}
                                 {%- if creator.label %}
