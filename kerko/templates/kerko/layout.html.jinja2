@@ -1,4 +1,5 @@
 {% extends config.KERKO_TEMPLATE_BASE %}
+{% from "kerko/_attributes.html.jinja2" import title_aria_label %}
 
 {%- block meta_title_inner -%}
     {%- if title %}{{ title|escape }} | {% endif %}{{ super() -}}
@@ -70,7 +71,7 @@
                                 {%- with messages = get_flashed_messages(with_categories=true) %}
                                     {%- for category, message in messages %}
                                         <div class="alert alert-{{ category }}">
-                                            <a class="close" title="{{ _('Remove this message') }}" href="#" data-dismiss="alert">&times;</a>
+                                            <a class="close" {{ title_aria_label(_('Remove this message')) }} href="#" data-dismiss="alert">&times;</a>
                                             {{ message }}
                                         </div>
                                     {%- endfor %}
