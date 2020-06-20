@@ -1,8 +1,24 @@
 # Changelog
 
+## Latest
+
+Other changes:
+
+* Improve accessibility based on WCAG recommendations and WAI-ARIA standards:
+  * Add labels to search form elements.
+  * Add landmark role `search` to the search form.
+  * Make the purpose of various links more obvious through improved or added
+    labels.
+  * Add the `aria-label` attribute to many elements.
+  * Add text to indicate the current value of widgets.
+  * Add the `aria-current` attribute to indicate the current value of widgets.
+  * Remove useless link to the current page from the pagination widget.
+* Show timezone abbreviation along with time of last update from Zotero.
+* Fix broken "Getting started" example in README.
+
 ## 0.6 (2020-06-15)
 
-Security changes:
+Security fixes:
 
 * Fix multiple vulnerabilities to XSS attacks. **All previous versions of Kerko
   were vulnerable, thus an upgrade is highly recommended.**
