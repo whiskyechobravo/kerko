@@ -13,6 +13,8 @@ Other changes:
   * Add text to indicate the current value of widgets.
   * Add the `aria-current` attribute to indicate the current value of widgets.
   * Remove useless link to the current page from the pagination widget.
+* Redirect to the parent item's page when the user tries to request an
+  attachment that no longer exists.
 * Show timezone abbreviation along with time of last update from Zotero.
 * Fix broken "Getting started" example in README.
 

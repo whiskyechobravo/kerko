@@ -2,8 +2,10 @@ import time
 from datetime import datetime
 
 from babel.numbers import format_number
-from flask import (abort, current_app, make_response, redirect, render_template, request,
-                   send_from_directory, url_for)
+from flask import (
+    abort, current_app, flash, make_response, redirect, render_template, request,
+    send_from_directory, url_for
+)
 from flask_babelex import get_locale, gettext, ngettext
 
 from . import babel_domain, blueprint
@@ -155,7 +157,13 @@ def item_attachment_download(item_id, attachment_id, attachment_filename=None):
         filter(lambda a: a.get('id') == attachment_id, item.get('attachments', []))
     )
     if not matching_attachments or len(matching_attachments) > 1:
-        abort(404)
+        flash(
+            gettext(
+                "The document you have requested has been removed. "
+                "Please check below for the latest documents available."
+            ), 'warning'
+        )
+        return redirect(url_for('kerko.item_view', item_id=item_id), 301)
     attachment = matching_attachments[0]
 
     filepath = get_attachments_dir() / attachment_id
