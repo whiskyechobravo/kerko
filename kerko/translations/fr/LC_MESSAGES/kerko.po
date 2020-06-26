@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Kerko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-20 16:35-0400\n"
-"PO-Revision-Date: 2020-06-20 16:35-0400\n"
+"POT-Creation-Date: 2020-06-26 18:46-0400\n"
+"PO-Revision-Date: 2020-06-26 18:46-0400\n"
 "Last-Translator: David Lesieur <kerko@whiskyechobravo.com>\n"
 "Language: fr\n"
 "Language-Team: fr <kerko@whiskyechobravo.com>\n"
@@ -158,19 +158,25 @@ msgstr "OU"
 msgid "NOT"
 msgstr "SAUF"
 
-#: kerko/views.py:93
+#: kerko/views.py:95
 msgid "Result"
 msgid_plural "Results"
 msgstr[0] "Résultat"
 msgstr[1] "Résultats"
 
-#: kerko/templates/kerko/search-item.html.jinja2:14 kerko/views.py:95
+#: kerko/templates/kerko/search-item.html.jinja2:14 kerko/views.py:97
 msgid "Full bibliography"
 msgstr "Bibliographie complète"
 
-#: kerko/views.py:97
+#: kerko/views.py:99
 msgid "Your search did not match any resources"
 msgstr "Aucune ressource ne correspond à vos critères de recherche"
+
+#: kerko/views.py:161
+msgid ""
+"The document you have requested has been removed. Please check below for "
+"the latest documents available."
+msgstr "Le document demandé a été supprimé. Voyez ci-dessous pour les plus récents documents disponibles."
 
 #: kerko/templates/kerko/_breadbox.html.jinja2:15
 msgid "Remove the '{}' search term"
@@ -202,7 +208,7 @@ msgstr "Retirer le filtre '{}'"
 msgid "Toggle filters display"
 msgstr "Basculer l'affichage des filtres"
 
-#: kerko/templates/kerko/_navbar_items.html.jinja2:2
+#: kerko/templates/kerko/_navbar_items.html.jinja2:3
 msgid "Bibliography"
 msgstr "Bibliographie"
 
@@ -575,7 +581,6 @@ msgid "Close"
 msgstr "Fermer"
 
 #: kerko/templates/kerko/_sorter.html.jinja2:4
-#, python-format
 msgid "Sort by {sort_option}"
 msgstr "Trier par {sort_option}"
 
@@ -588,7 +593,6 @@ msgid "Sort by..."
 msgstr "Trier par..."
 
 #: kerko/templates/kerko/_sorter.html.jinja2:11
-#, python-format
 msgid "Sort by: {sort_option}"
 msgstr "Trier par: {sort_option}"
 
@@ -628,7 +632,6 @@ msgstr[1] "Télécharger %(count_formatted)s références"
 
 #: kerko/templates/kerko/item.html.jinja2:91
 #: kerko/templates/kerko/search.html.jinja2:144
-#, python-format
 msgid "Download in {download_option} format"
 msgstr "Télécharger au format {download_option}"
 
