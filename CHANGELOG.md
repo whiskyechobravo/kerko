@@ -2,6 +2,10 @@
 
 ## Latest
 
+Bug fixes:
+
+* Fix unhandled exception during sync if an attachment cannot be downloaded.
+
 Other changes:
 
 * Improve accessibility based on WCAG recommendations and WAI-ARIA standards:

@@ -69,9 +69,15 @@ def sync_attachments():
                 current_app.logger.debug(
                     f"Requesting attachment {attachment['id']} (parent: {parent['id']})..."
                 )
-                # Download attachment.
-                with filepath.open('wb') as f:
-                    f.write(zotero.retrieve_file(zotero_credentials, attachment['id']))
+                try:
+                    # Download attachment.
+                    with filepath.open('wb') as f:
+                        f.write(zotero.retrieve_file(zotero_credentials, attachment['id']))
+                except zotero.zotero_errors.PyZoteroError as e:
+                    current_app.logger.exception(
+                        f"Unexpected error while attempting to download attachment "
+                        f"{attachment['id']} (parent: {parent['id']}): {e}"
+                    )
             else:
                 current_app.logger.debug(
                     f"Keeping attachment {attachment['id']} (parent: {parent['id']})."
