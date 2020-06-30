@@ -514,6 +514,11 @@ important to you gets resolved, or if you just like our work and would like to
 hire us for an unrelated project, please [e-mail us][Kerko_email].
 
 
+## Changelog
+
+For a summary of changes by release version, see the [changelog](CHANGELOG.md).
+
+
 ## Project background
 
 Kerko was inspired by two prior projects:
