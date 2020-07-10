@@ -2,6 +2,11 @@
 
 ## Latest
 
+Backwards incompatible changes:
+
+* All arguments to the `Extractor` class' or its subclasses' `__init__()`
+  method must now be specified as keyword arguments.
+
 Bug fixes:
 
 * Fix unhandled exception during sync if an attachment cannot be downloaded.

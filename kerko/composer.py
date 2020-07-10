@@ -240,7 +240,7 @@ class Composer:
                 FieldSpec(
                     key='id',
                     field_type=ID(unique=True, stored=True),
-                    extractor=extractors.ItemExtractor('key')
+                    extractor=extractors.ItemExtractor(key='key')
                 )
             )
         # Label of this item's type.
@@ -271,7 +271,7 @@ class Composer:
                     key='z_DOI',
                     field_type=self.id_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('DOI')
+                    extractor=extractors.ItemDataExtractor(key='DOI')
                 )
             )
         if 'z_ISBN' not in exclude:
@@ -280,7 +280,7 @@ class Composer:
                     key='z_ISBN',
                     field_type=self.id_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('ISBN')
+                    extractor=extractors.ItemDataExtractor(key='ISBN')
                 )
             )
         if 'z_ISSN' not in exclude:
@@ -289,7 +289,7 @@ class Composer:
                     key='z_ISSN',
                     field_type=self.id_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('ISSN')
+                    extractor=extractors.ItemDataExtractor(key='ISSN')
                 )
             )
 
@@ -303,7 +303,7 @@ class Composer:
                     key='z_applicationNumber',
                     field_type=self.secondary_id_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('applicationNumber')
+                    extractor=extractors.ItemDataExtractor(key='applicationNumber')
                 )
             )
         if 'z_billNumber' not in exclude:
@@ -312,7 +312,7 @@ class Composer:
                     key='z_billNumber',
                     field_type=self.secondary_id_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('billNumber')
+                    extractor=extractors.ItemDataExtractor(key='billNumber')
                 )
             )
         if 'z_callNumber' not in exclude:
@@ -321,7 +321,7 @@ class Composer:
                     key='z_callNumber',
                     field_type=self.secondary_id_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('callNumber')
+                    extractor=extractors.ItemDataExtractor(key='callNumber')
                 )
             )
         if 'z_codeNumber' not in exclude:
@@ -330,7 +330,7 @@ class Composer:
                     key='z_codeNumber',
                     field_type=self.secondary_id_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('codeNumber')
+                    extractor=extractors.ItemDataExtractor(key='codeNumber')
                 )
             )
         if 'z_docketNumber' not in exclude:
@@ -339,7 +339,7 @@ class Composer:
                     key='z_docketNumber',
                     field_type=self.secondary_id_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('docketNumber')
+                    extractor=extractors.ItemDataExtractor(key='docketNumber')
                 )
             )
         if 'z_documentNumber' not in exclude:
@@ -348,7 +348,7 @@ class Composer:
                     key='z_documentNumber',
                     field_type=self.secondary_id_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('documentNumber')
+                    extractor=extractors.ItemDataExtractor(key='documentNumber')
                 )
             )
         if 'z_patentNumber' not in exclude:
@@ -357,7 +357,7 @@ class Composer:
                     key='z_patentNumber',
                     field_type=self.secondary_id_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('patentNumber')
+                    extractor=extractors.ItemDataExtractor(key='patentNumber')
                 )
             )
         if 'z_priorityNumbers' not in exclude:
@@ -366,7 +366,7 @@ class Composer:
                     key='z_priorityNumbers',
                     field_type=self.secondary_id_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('priorityNumbers')
+                    extractor=extractors.ItemDataExtractor(key='priorityNumbers')
                 )
             )
         if 'z_publicLawNumber' not in exclude:
@@ -375,7 +375,7 @@ class Composer:
                     key='z_publicLawNumber',
                     field_type=self.secondary_id_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('publicLawNumber')
+                    extractor=extractors.ItemDataExtractor(key='publicLawNumber')
                 )
             )
         if 'z_reportNumber' not in exclude:
@@ -384,7 +384,7 @@ class Composer:
                     key='z_reportNumber',
                     field_type=self.secondary_id_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('reportNumber')
+                    extractor=extractors.ItemDataExtractor(key='reportNumber')
                 )
             )
 
@@ -398,7 +398,7 @@ class Composer:
                     key='z_nameOfAct',
                     field_type=self.title_field_type,
                     scopes=['all', 'title'],
-                    extractor=extractors.ItemDataExtractor('nameOfAct')
+                    extractor=extractors.ItemDataExtractor(key='nameOfAct')
                 )
             )
         if 'z_shortTitle' not in exclude:
@@ -407,7 +407,7 @@ class Composer:
                     key='z_shortTitle',
                     field_type=self.title_field_type,
                     scopes=['all', 'title'],
-                    extractor=extractors.ItemDataExtractor('shortTitle')
+                    extractor=extractors.ItemDataExtractor(key='shortTitle')
                 )
             )
         if 'z_subject' not in exclude:
@@ -416,7 +416,7 @@ class Composer:
                     key='z_subject',
                     field_type=self.title_field_type,
                     scopes=['all', 'title'],
-                    extractor=extractors.ItemDataExtractor('subject')
+                    extractor=extractors.ItemDataExtractor(key='subject')
                 )
             )
         if 'z_title' not in exclude:
@@ -425,7 +425,7 @@ class Composer:
                     key='z_title',
                     field_type=self.title_field_type,
                     scopes=['all', 'title'],
-                    extractor=extractors.ItemDataExtractor('title')
+                    extractor=extractors.ItemDataExtractor(key='title')
                 )
             )
 
@@ -439,7 +439,7 @@ class Composer:
                     key='z_blogTitle',
                     field_type=self.secondary_title_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('blogTitle')
+                    extractor=extractors.ItemDataExtractor(key='blogTitle')
                 )
             )
         if 'z_bookTitle' not in exclude:
@@ -448,7 +448,7 @@ class Composer:
                     key='z_bookTitle',
                     field_type=self.secondary_title_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('bookTitle')
+                    extractor=extractors.ItemDataExtractor(key='bookTitle')
                 )
             )
         if 'z_code' not in exclude:
@@ -457,7 +457,7 @@ class Composer:
                     key='z_code',
                     field_type=self.secondary_title_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('code')
+                    extractor=extractors.ItemDataExtractor(key='code')
                 )
             )
         if 'z_conferenceName' not in exclude:
@@ -466,7 +466,7 @@ class Composer:
                     key='z_conferenceName',
                     field_type=self.secondary_title_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('conferenceName')
+                    extractor=extractors.ItemDataExtractor(key='conferenceName')
                 )
             )
         if 'z_dictionaryTitle' not in exclude:
@@ -475,7 +475,7 @@ class Composer:
                     key='z_dictionaryTitle',
                     field_type=self.secondary_title_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('dictionaryTitle')
+                    extractor=extractors.ItemDataExtractor(key='dictionaryTitle')
                 )
             )
         if 'z_encyclopediaTitle' not in exclude:
@@ -484,7 +484,7 @@ class Composer:
                     key='z_encyclopediaTitle',
                     field_type=self.secondary_title_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('encyclopediaTitle')
+                    extractor=extractors.ItemDataExtractor(key='encyclopediaTitle')
                 )
             )
         if 'z_forumTitle' not in exclude:
@@ -493,7 +493,7 @@ class Composer:
                     key='z_forumTitle',
                     field_type=self.secondary_title_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('forumTitle')
+                    extractor=extractors.ItemDataExtractor(key='forumTitle')
                 )
             )
         if 'z_meetingName' not in exclude:
@@ -502,7 +502,7 @@ class Composer:
                     key='z_meetingName',
                     field_type=self.secondary_title_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('meetingName')
+                    extractor=extractors.ItemDataExtractor(key='meetingName')
                 )
             )
         if 'z_proceedingsTitle' not in exclude:
@@ -511,7 +511,7 @@ class Composer:
                     key='z_proceedingsTitle',
                     field_type=self.secondary_title_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('proceedingsTitle')
+                    extractor=extractors.ItemDataExtractor(key='proceedingsTitle')
                 )
             )
         if 'z_programTitle' not in exclude:
@@ -520,7 +520,7 @@ class Composer:
                     key='z_programTitle',
                     field_type=self.secondary_title_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('programTitle')
+                    extractor=extractors.ItemDataExtractor(key='programTitle')
                 )
             )
         if 'z_publicationTitle' not in exclude:
@@ -529,7 +529,7 @@ class Composer:
                     key='z_publicationTitle',
                     field_type=self.secondary_title_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('publicationTitle')
+                    extractor=extractors.ItemDataExtractor(key='publicationTitle')
                 )
             )
         if 'z_section' not in exclude:
@@ -538,7 +538,7 @@ class Composer:
                     key='z_section',
                     field_type=self.secondary_title_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('section')
+                    extractor=extractors.ItemDataExtractor(key='section')
                 )
             )
         if 'z_series' not in exclude:
@@ -547,7 +547,7 @@ class Composer:
                     key='z_series',
                     field_type=self.secondary_title_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('series')
+                    extractor=extractors.ItemDataExtractor(key='series')
                 )
             )
         if 'z_seriesTitle' not in exclude:
@@ -556,7 +556,7 @@ class Composer:
                     key='z_seriesTitle',
                     field_type=self.secondary_title_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('seriesTitle')
+                    extractor=extractors.ItemDataExtractor(key='seriesTitle')
                 )
             )
         if 'z_session' not in exclude:
@@ -565,7 +565,7 @@ class Composer:
                     key='z_session',
                     field_type=self.secondary_title_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('session')
+                    extractor=extractors.ItemDataExtractor(key='session')
                 )
             )
         if 'z_websiteTitle' not in exclude:
@@ -574,7 +574,7 @@ class Composer:
                     key='z_websiteTitle',
                     field_type=self.secondary_title_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('websiteTitle')
+                    extractor=extractors.ItemDataExtractor(key='websiteTitle')
                 )
             )
 
@@ -588,7 +588,7 @@ class Composer:
                     key='z_archive',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('archive')
+                    extractor=extractors.ItemDataExtractor(key='archive')
                 )
             )
         if 'z_archiveLocation' not in exclude:
@@ -597,7 +597,7 @@ class Composer:
                     key='z_archiveLocation',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('archiveLocation')
+                    extractor=extractors.ItemDataExtractor(key='archiveLocation')
                 )
             )
         if 'z_assignee' not in exclude:
@@ -606,7 +606,7 @@ class Composer:
                     key='z_assignee',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('assignee')
+                    extractor=extractors.ItemDataExtractor(key='assignee')
                 )
             )
         if 'z_audioFileType' not in exclude:
@@ -615,7 +615,7 @@ class Composer:
                     key='z_audioFileType',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('audioFileType')
+                    extractor=extractors.ItemDataExtractor(key='audioFileType')
                 )
             )
         if 'z_audioRecordingFormat' not in exclude:
@@ -624,7 +624,7 @@ class Composer:
                     key='z_audioRecordingFormat',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('audioRecordingFormat')
+                    extractor=extractors.ItemDataExtractor(key='audioRecordingFormat')
                 )
             )
         if 'z_caseName' not in exclude:
@@ -633,7 +633,7 @@ class Composer:
                     key='z_caseName',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('caseName')
+                    extractor=extractors.ItemDataExtractor(key='caseName')
                 )
             )
         if 'z_committee' not in exclude:
@@ -642,7 +642,7 @@ class Composer:
                     key='z_committee',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('committee')
+                    extractor=extractors.ItemDataExtractor(key='committee')
                 )
             )
         if 'z_company' not in exclude:
@@ -651,7 +651,7 @@ class Composer:
                     key='z_company',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('company')
+                    extractor=extractors.ItemDataExtractor(key='company')
                 )
             )
         if 'z_country' not in exclude:
@@ -660,7 +660,7 @@ class Composer:
                     key='z_country',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('country')
+                    extractor=extractors.ItemDataExtractor(key='country')
                 )
             )
         if 'z_court' not in exclude:
@@ -669,7 +669,7 @@ class Composer:
                     key='z_court',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('court')
+                    extractor=extractors.ItemDataExtractor(key='court')
                 )
             )
         if 'z_distributor' not in exclude:
@@ -678,7 +678,7 @@ class Composer:
                     key='z_distributor',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('distributor')
+                    extractor=extractors.ItemDataExtractor(key='distributor')
                 )
             )
         if 'z_institution' not in exclude:
@@ -687,7 +687,7 @@ class Composer:
                     key='z_institution',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('institution')
+                    extractor=extractors.ItemDataExtractor(key='institution')
                 )
             )
         if 'z_issuingAuthority' not in exclude:
@@ -696,7 +696,7 @@ class Composer:
                     key='z_issuingAuthority',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('issuingAuthority')
+                    extractor=extractors.ItemDataExtractor(key='issuingAuthority')
                 )
             )
         if 'z_journalAbbreviation' not in exclude:
@@ -705,7 +705,7 @@ class Composer:
                     key='z_journalAbbreviation',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('journalAbbreviation')
+                    extractor=extractors.ItemDataExtractor(key='journalAbbreviation')
                 )
             )
         if 'z_label' not in exclude:
@@ -714,7 +714,7 @@ class Composer:
                     key='z_label',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('label')
+                    extractor=extractors.ItemDataExtractor(key='label')
                 )
             )
         if 'z_legislativeBody' not in exclude:
@@ -723,7 +723,7 @@ class Composer:
                     key='z_legislativeBody',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('legislativeBody')
+                    extractor=extractors.ItemDataExtractor(key='legislativeBody')
                 )
             )
         if 'z_libraryCatalog' not in exclude:
@@ -732,7 +732,7 @@ class Composer:
                     key='z_libraryCatalog',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('libraryCatalog')
+                    extractor=extractors.ItemDataExtractor(key='libraryCatalog')
                 )
             )
         if 'z_network' not in exclude:
@@ -741,7 +741,7 @@ class Composer:
                     key='z_network',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('network')
+                    extractor=extractors.ItemDataExtractor(key='network')
                 )
             )
         if 'z_place' not in exclude:
@@ -750,7 +750,7 @@ class Composer:
                     key='z_place',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('place')
+                    extractor=extractors.ItemDataExtractor(key='place')
                 )
             )
         if 'z_programmingLanguage' not in exclude:
@@ -759,7 +759,7 @@ class Composer:
                     key='z_programmingLanguage',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('programmingLanguage')
+                    extractor=extractors.ItemDataExtractor(key='programmingLanguage')
                 )
             )
         if 'z_publisher' not in exclude:
@@ -768,7 +768,7 @@ class Composer:
                     key='z_publisher',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('publisher')
+                    extractor=extractors.ItemDataExtractor(key='publisher')
                 )
             )
         if 'z_reporter' not in exclude:
@@ -777,7 +777,7 @@ class Composer:
                     key='z_reporter',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('reporter')
+                    extractor=extractors.ItemDataExtractor(key='reporter')
                 )
             )
         if 'z_studio' not in exclude:
@@ -786,7 +786,7 @@ class Composer:
                     key='z_studio',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('studio')
+                    extractor=extractors.ItemDataExtractor(key='studio')
                 )
             )
         if 'z_system' not in exclude:
@@ -795,7 +795,7 @@ class Composer:
                     key='z_system',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('system')
+                    extractor=extractors.ItemDataExtractor(key='system')
                 )
             )
         if 'z_university' not in exclude:
@@ -804,7 +804,7 @@ class Composer:
                     key='z_university',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('university')
+                    extractor=extractors.ItemDataExtractor(key='university')
                 )
             )
         if 'z_videoRecordingFormat' not in exclude:
@@ -813,7 +813,7 @@ class Composer:
                     key='z_videoRecordingFormat',
                     field_type=self.name_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('videoRecordingFormat')
+                    extractor=extractors.ItemDataExtractor(key='videoRecordingFormat')
                 )
             )
 
@@ -827,7 +827,7 @@ class Composer:
                     key='z_dateDecided',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('dateDecided')
+                    extractor=extractors.ItemDataExtractor(key='dateDecided')
                 )
             )
         if 'z_dateEnacted' not in exclude:
@@ -836,7 +836,7 @@ class Composer:
                     key='z_dateEnacted',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('dateEnacted')
+                    extractor=extractors.ItemDataExtractor(key='dateEnacted')
                 )
             )
         if 'z_date' not in exclude:
@@ -845,7 +845,7 @@ class Composer:
                     key='z_date',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('date')
+                    extractor=extractors.ItemDataExtractor(key='date')
                 )
             )
         if 'z_filingDate' not in exclude:
@@ -854,7 +854,7 @@ class Composer:
                     key='z_filingDate',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('filingDate')
+                    extractor=extractors.ItemDataExtractor(key='filingDate')
                 )
             )
         if 'z_issueDate' not in exclude:
@@ -863,7 +863,7 @@ class Composer:
                     key='z_issueDate',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('issueDate')
+                    extractor=extractors.ItemDataExtractor(key='issueDate')
                 )
             )
 
@@ -877,7 +877,7 @@ class Composer:
                     key='z_abstractNote',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('abstractNote')
+                    extractor=extractors.ItemDataExtractor(key='abstractNote')
                 )
             )
         if 'z_artworkMedium' not in exclude:
@@ -886,7 +886,7 @@ class Composer:
                     key='z_artworkMedium',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('artworkMedium')
+                    extractor=extractors.ItemDataExtractor(key='artworkMedium')
                 )
             )
         if 'z_artworkSize' not in exclude:
@@ -895,7 +895,7 @@ class Composer:
                     key='z_artworkSize',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('artworkSize')
+                    extractor=extractors.ItemDataExtractor(key='artworkSize')
                 )
             )
         if 'z_codeVolume' not in exclude:
@@ -904,7 +904,7 @@ class Composer:
                     key='z_codeVolume',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('codeVolume')
+                    extractor=extractors.ItemDataExtractor(key='codeVolume')
                 )
             )
         if 'z_edition' not in exclude:
@@ -913,7 +913,7 @@ class Composer:
                     key='z_edition',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('edition')
+                    extractor=extractors.ItemDataExtractor(key='edition')
                 )
             )
         if 'z_episodeNumber' not in exclude:
@@ -922,7 +922,7 @@ class Composer:
                     key='z_episodeNumber',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('episodeNumber')
+                    extractor=extractors.ItemDataExtractor(key='episodeNumber')
                 )
             )
         if 'z_genre' not in exclude:
@@ -931,7 +931,7 @@ class Composer:
                     key='z_genre',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('genre')
+                    extractor=extractors.ItemDataExtractor(key='genre')
                 )
             )
         if 'z_history' not in exclude:
@@ -940,7 +940,7 @@ class Composer:
                     key='z_history',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('history')
+                    extractor=extractors.ItemDataExtractor(key='history')
                 )
             )
         if 'z_interviewMedium' not in exclude:
@@ -949,7 +949,7 @@ class Composer:
                     key='z_interviewMedium',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('interviewMedium')
+                    extractor=extractors.ItemDataExtractor(key='interviewMedium')
                 )
             )
         if 'z_issue' not in exclude:
@@ -958,7 +958,7 @@ class Composer:
                     key='z_issue',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('issue')
+                    extractor=extractors.ItemDataExtractor(key='issue')
                 )
             )
         if 'z_language' not in exclude:
@@ -967,7 +967,7 @@ class Composer:
                     key='z_language',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('language')
+                    extractor=extractors.ItemDataExtractor(key='language')
                 )
             )
         if 'z_legalStatus' not in exclude:
@@ -976,7 +976,7 @@ class Composer:
                     key='z_legalStatus',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('legalStatus')
+                    extractor=extractors.ItemDataExtractor(key='legalStatus')
                 )
             )
         if 'z_letterType' not in exclude:
@@ -985,7 +985,7 @@ class Composer:
                     key='z_letterType',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('letterType')
+                    extractor=extractors.ItemDataExtractor(key='letterType')
                 )
             )
         if 'z_manuscriptType' not in exclude:
@@ -994,7 +994,7 @@ class Composer:
                     key='z_manuscriptType',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('manuscriptType')
+                    extractor=extractors.ItemDataExtractor(key='manuscriptType')
                 )
             )
         if 'z_mapType' not in exclude:
@@ -1003,7 +1003,7 @@ class Composer:
                     key='z_mapType',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('mapType')
+                    extractor=extractors.ItemDataExtractor(key='mapType')
                 )
             )
         if 'z_postType' not in exclude:
@@ -1012,7 +1012,7 @@ class Composer:
                     key='z_postType',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('postType')
+                    extractor=extractors.ItemDataExtractor(key='postType')
                 )
             )
         if 'z_presentationType' not in exclude:
@@ -1021,7 +1021,7 @@ class Composer:
                     key='z_presentationType',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('presentationType')
+                    extractor=extractors.ItemDataExtractor(key='presentationType')
                 )
             )
         if 'z_references' not in exclude:
@@ -1030,7 +1030,7 @@ class Composer:
                     key='z_references',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('references')
+                    extractor=extractors.ItemDataExtractor(key='references')
                 )
             )
         if 'z_reporterVolume' not in exclude:
@@ -1039,7 +1039,7 @@ class Composer:
                     key='z_reporterVolume',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('reporterVolume')
+                    extractor=extractors.ItemDataExtractor(key='reporterVolume')
                 )
             )
         if 'z_reportType' not in exclude:
@@ -1048,7 +1048,7 @@ class Composer:
                     key='z_reportType',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('reportType')
+                    extractor=extractors.ItemDataExtractor(key='reportType')
                 )
             )
         if 'z_rights' not in exclude:
@@ -1057,7 +1057,7 @@ class Composer:
                     key='z_rights',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('rights')
+                    extractor=extractors.ItemDataExtractor(key='rights')
                 )
             )
         if 'z_seriesNumber' not in exclude:
@@ -1066,7 +1066,7 @@ class Composer:
                     key='z_seriesNumber',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('seriesNumber')
+                    extractor=extractors.ItemDataExtractor(key='seriesNumber')
                 )
             )
         if 'z_seriesText' not in exclude:
@@ -1075,7 +1075,7 @@ class Composer:
                     key='z_seriesText',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('seriesText')
+                    extractor=extractors.ItemDataExtractor(key='seriesText')
                 )
             )
         if 'z_thesisType' not in exclude:
@@ -1084,7 +1084,7 @@ class Composer:
                     key='z_thesisType',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('thesisType')
+                    extractor=extractors.ItemDataExtractor(key='thesisType')
                 )
             )
         if 'z_versionNumber' not in exclude:
@@ -1093,7 +1093,7 @@ class Composer:
                     key='z_versionNumber',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('versionNumber')
+                    extractor=extractors.ItemDataExtractor(key='versionNumber')
                 )
             )
         if 'z_volume' not in exclude:
@@ -1102,7 +1102,7 @@ class Composer:
                     key='z_volume',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('volume')
+                    extractor=extractors.ItemDataExtractor(key='volume')
                 )
             )
         if 'z_websiteType' not in exclude:
@@ -1111,7 +1111,7 @@ class Composer:
                     key='z_websiteType',
                     field_type=self.text_field_type,
                     scopes=['all'],
-                    extractor=extractors.ItemDataExtractor('websiteType')
+                    extractor=extractors.ItemDataExtractor(key='websiteType')
                 )
             )
 
@@ -1186,7 +1186,7 @@ class Composer:
                 FieldSpec(
                     key='bib',
                     field_type=STORED,
-                    extractor=extractors.ItemExtractor('bib', format_='bib')
+                    extractor=extractors.ItemExtractor(key='bib', format_='bib')
                 )
             )
         # OpenURL Coins.
@@ -1195,7 +1195,7 @@ class Composer:
                 FieldSpec(
                     key='coins',
                     field_type=STORED,
-                    extractor=extractors.ItemExtractor('coins', format_='coins')
+                    extractor=extractors.ItemExtractor(key='coins', format_='coins')
                 )
             )
         # RIS.
@@ -1204,7 +1204,7 @@ class Composer:
                 FieldSpec(
                     key='ris',
                     field_type=STORED,
-                    extractor=extractors.ItemExtractor('ris', format_='ris')
+                    extractor=extractors.ItemExtractor(key='ris', format_='ris')
                 )
             )
         # BibTeX.
@@ -1213,7 +1213,7 @@ class Composer:
                 FieldSpec(
                     key='bibtex',
                     field_type=STORED,
-                    extractor=extractors.ItemExtractor('bibtex', format_='bibtex')
+                    extractor=extractors.ItemExtractor(key='bibtex', format_='bibtex')
                 )
             )
         # Raw item data.
@@ -1281,7 +1281,7 @@ class Composer:
                 FieldSpec(
                     key='sort_title',
                     field_type=COLUMN(columns.VarBytesColumn()),
-                    extractor=extractors.SortItemDataExtractor('title'),
+                    extractor=extractors.SortItemDataExtractor(key='title'),
                 )
             )
         if 'sort_creator' not in exclude:
@@ -1373,7 +1373,7 @@ class Composer:
                     filter_key='link',
                     weight=400,
                     field_type=BOOLEAN(stored=True),
-                    extractor=extractors.ItemDataLinkFacetExtractor('url'),
+                    extractor=extractors.ItemDataLinkFacetExtractor(key='url'),
                     codec=codecs.BooleanFacetCodec(),
                     missing_label=None,
                     sort_key=['label'],

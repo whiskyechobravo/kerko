@@ -59,14 +59,27 @@ def _parse_zotero_date(text):
 
 
 class Extractor(ABC):
+    """
+    Data extractor.
 
-    def __init__(self, format_='data'):
+    An extractor can retrieve elements from ``ItemContext`` or `LibraryContext``
+    objects and add them to a document. The document is represented by a `dict`.
+    A ``BaseFieldSpec`` object provides both an ``encode()`` method that may
+    transform the data before its assignment into the document, and the key to
+    assign the resulting data to.
+    """
+
+    def __init__(self, format_='data', **kwargs):
         """
         Initialize the extractor.
 
-        :param str format_: Format required when performing the Zotero read.
+        :param str format_: Format to retrieve when performing the Zotero item
+            read, e.g., 'data', 'bib', 'ris', to ensure that the data required
+            by this extractor is available in the ``ItemContext`` object at
+            extraction time.
         """
         self.format = format_
+        assert not kwargs  # Subclasses should have consumed every keyword arg.
 
     @abstractmethod
     def extract(self, document, spec, item_context, library_context):
@@ -80,7 +93,7 @@ class Extractor(ABC):
 
 class KeyExtractor(Extractor):  # pylint: disable=abstract-method
 
-    def __init__(self, key, **kwargs):
+    def __init__(self, *, key, **kwargs):
         """
         Initialize the extractor.
 
@@ -205,7 +218,7 @@ class CollectionNamesExtractor(Extractor):
 
 class BaseTagsExtractor(Extractor):
 
-    def __init__(self, whitelist_re='', blacklist_re='', **kwargs):
+    def __init__(self, *, whitelist_re='', blacklist_re='', **kwargs):
         """
         Initialize the extractor.
 
@@ -247,7 +260,7 @@ class TagsTextExtractor(BaseTagsExtractor):
 
 class BaseChildrenExtractor(Extractor):
 
-    def __init__(self, item_type, whitelist_re='', blacklist_re='', **kwargs):
+    def __init__(self, *, item_type, whitelist_re='', blacklist_re='', **kwargs):
         """
         Initialize the extractor.
 
@@ -299,9 +312,9 @@ class AttachmentsExtractor(BaseChildrenExtractor):
     This extractor only extracts a subset of attachment data provided by Zotero.
     """
 
-    def __init__(self, mime_types=None, **kwargs):
-        self.mime_types = mime_types
+    def __init__(self, *, mime_types=None, **kwargs):
         super().__init__(item_type='attachment', **kwargs)
+        self.mime_types = mime_types
 
     def to_document(self, document, spec, children):
         document[spec.key] = spec.encode(
@@ -388,7 +401,7 @@ class CollectionFacetTreeExtractor(Extractor):
 class InCollectionExtractor(Extractor):
     """Extract the boolean membership of an item into a collection."""
 
-    def __init__(self, collection_key, true_only=True, **kwargs):
+    def __init__(self, *, collection_key, true_only=True, **kwargs):
         super().__init__(**kwargs)
         self.collection_key = collection_key
         self.true_only = true_only
