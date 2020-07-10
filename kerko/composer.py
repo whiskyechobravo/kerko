@@ -9,10 +9,8 @@ from whoosh.query import Prefix, Term
 from whoosh.support.charset import accent_map
 from whoosh.util.text import rcompile
 
-from . import codecs, extractors, renderers
-from .specs import (
-    BadgeSpec, CitationFormatSpec, FieldSpec, FlatFacetSpec, ScopeSpec, SortSpec, TreeFacetSpec
-)
+from . import codecs, extractors
+from .specs import CitationFormatSpec, FieldSpec, FlatFacetSpec, ScopeSpec, SortSpec, TreeFacetSpec
 
 
 class Composer:
