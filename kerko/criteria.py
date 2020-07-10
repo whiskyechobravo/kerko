@@ -77,6 +77,10 @@ class Criteria:
         else:
             self.print_preview = False
 
+    def fit_pager(self, page_count):
+        """Ensure that pager values fit within the given page count."""
+        self.page_num = min(self.page_num, page_count)
+
     def has_keyword_search(self):
         """Return True if criteria contains a keyword search."""
         return self.keywords is not None and any(self.keywords.values())

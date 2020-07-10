@@ -50,6 +50,7 @@ def search():
         criteria, get_search_return_fields(criteria)
     )
 
+    criteria.fit_pager(page_count)
     breadbox = build_breadbox(criteria, facet_results)
     context = {
         'facet_results': facet_results,
