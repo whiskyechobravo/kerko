@@ -5,6 +5,8 @@
 Bug fixes:
 
 * Fix unhandled exception during sync if an attachment cannot be downloaded.
+* Fix page numbers greater than the page count in search URLs generating wrong
+  page numbers for search result item URLs.
 
 Other changes:
 
