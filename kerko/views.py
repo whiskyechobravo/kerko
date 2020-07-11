@@ -123,7 +123,7 @@ def item_view(item_id):
 
     item = run_query_unique('id', item_id)
     if not item:
-        abort(404)
+        return abort(404)
 
     build_creators_display(item)
     build_item_facet_results(item)
@@ -152,7 +152,7 @@ def item_attachment_download(item_id, attachment_id, attachment_filename=None):
 
     item = run_query_unique('id', item_id)
     if not item:
-        abort(404)
+        return abort(404)
 
     matching_attachments = list(
         filter(lambda a: a.get('id') == attachment_id, item.get('attachments', []))
@@ -169,7 +169,7 @@ def item_attachment_download(item_id, attachment_id, attachment_filename=None):
 
     filepath = get_attachments_dir() / attachment_id
     if not filepath.exists():
-        abort(404)
+        return abort(404)
 
     if attachment_filename != attachment['filename']:
         return redirect(
@@ -196,15 +196,15 @@ def item_citation_download(item_id, citation_format_key):
 
     item = run_query_unique('id', item_id)
     if not item:
-        abort(404)
+        return abort(404)
 
     citation_format = current_app.config['KERKO_COMPOSER'].citation_formats.get(citation_format_key)
     if not citation_format:
-        abort(404)
+        return abort(404)
 
     content = item.get(citation_format.field.key)
     if not content:
-        abort(404)
+        return abort(404)
 
     response = make_response(content)
     response.headers['Content-Disposition'] = \
@@ -219,7 +219,7 @@ def search_citation_download(citation_format_key):
     """Download all citations resulting from a search."""
     citation_format = current_app.config['KERKO_COMPOSER'].citation_formats.get(citation_format_key)
     if not citation_format:
-        abort(404)
+        return abort(404)
 
     criteria = Criteria(request)
     criteria.page_len = None
@@ -229,7 +229,7 @@ def search_citation_download(citation_format_key):
     )
 
     if total_count == 0:
-        abort(404)
+        return abort(404)
 
     citations = [result.get(citation_format.field.key, '') for result in search_results]
     response = make_response(
