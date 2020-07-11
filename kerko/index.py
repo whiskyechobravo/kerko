@@ -12,16 +12,16 @@ def get_index_dir():
     return pathlib.Path(current_app.config['KERKO_DATA_DIR']) / 'index'
 
 
-def open_index(auto_create=False):
+def open_index(auto_create=False, write=False):
     index_dir = get_index_dir()
     try:
-        if not index_dir.exists() and auto_create:
+        if not index_dir.exists() and auto_create and write:
             index_dir.mkdir(parents=True, exist_ok=True)
             return whoosh.index.create_in(
                 str(index_dir), current_app.config['KERKO_COMPOSER'].schema
             )
         if index_dir.exists():
-            return whoosh.index.open_dir(str(index_dir))
+            return whoosh.index.open_dir(str(index_dir), readonly=not write)
         current_app.logger.error(f"Could not open index in directory '{index_dir}'.")
     except whoosh.index.IndexError as e:
         current_app.logger.error(f"Could not open index: '{e}'.")
@@ -56,7 +56,7 @@ def sync_index():
     composer = current_app.config['KERKO_COMPOSER']
     zotero_credentials = zotero.init_zotero()
     library_context = request_library_context(zotero_credentials)
-    index = open_index(auto_create=True)
+    index = open_index(auto_create=True, write=True)
     count = 0
     writer = index.writer(limitmb=256)
     try:
@@ -112,6 +112,6 @@ def update_document(document):
 
     :param document: A dict whose fields match the schema.
     """
-    index = open_index()
+    index = open_index(write=True)
     with index.writer(limitmb=256) as writer:
         update_document_with_writer(writer, document)
