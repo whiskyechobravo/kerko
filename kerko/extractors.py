@@ -92,13 +92,39 @@ class Extractor(ABC):
 
     def extract_and_encode(self, document, spec, item_context, library_context):
         extracted_value = self.extract(spec, item_context, library_context)
-        if extracted_value:
+        if extracted_value:  # FIXME: Condition should be `is not None`; False values may still need to be encoded! `extract()` methods need to be consistent in their returned values.
             self.encode(document, extracted_value, spec)
 
     def warning(self, message, item_context):
         current_app.logger.warning(
             f"{self.__class__.__name__}: {message} ({item_context.item_key})"
         )
+
+
+class TransformerExtractor(Extractor):
+    """
+    Wrap an extractor to transform data before encoding it into the document.
+    """
+
+    def __init__(self, *, extractor, transformers, **kwargs):
+        """
+        Initiatize the extractor.
+
+        :param Extractor extractor: Base extractor to wrap.
+
+        :param list transformers: List of callables that will be chained to
+            transform the extracted data. Each callable takes a value as
+            argument and returns the transformed value.
+        """
+        super().__init__(**kwargs)
+        self.extractor = extractor
+        self.transformers = transformers
+
+    def extract(self, spec, item_context, library_context):
+        value = self.extractor.extract(spec, item_context, library_context)
+        for transformer in self.transformers:
+            value = transformer(value)
+        return value
 
 
 class KeyExtractor(Extractor):  # pylint: disable=abstract-method

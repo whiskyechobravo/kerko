@@ -11,6 +11,15 @@ Backwards incompatible changes:
     and assigning it to the document.
   * All arguments to `__init__()` must now be specified as keyword arguments.
 
+Features:
+
+* If an app adds an `'alternateId'` field, URL paths of the form
+  `{url_prefix}/go?id={alternateId}` redirect the user to the item view. The app
+  must specify ``whoosh.fields.ID`` as the field type, and use a proper
+  extractor (the DOI might be a good source for an alternate ID). Multiple IDs
+  may be provided for each item. At the moment, however, Kerko doesn't expose
+  alternate IDs or their links anywhere.
+
 Bug fixes:
 
 * Fix unhandled exception during sync when an attachment cannot be downloaded.

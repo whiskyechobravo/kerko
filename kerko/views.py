@@ -242,3 +242,14 @@ def search_citation_download(citation_format_key):
     response.headers['Content-Type'] = \
         f'{citation_format.mime_type}; charset=utf-8'
     return response
+
+
+@blueprint.route('/go/')
+def item_redirect():
+    """Redirect to an item using an alternate id."""
+    id_ = request.args.get('id')
+    if id_:
+        item = run_query_unique('alternateId', id_, return_fields=['id'])
+        if item:
+            return redirect(url_for('.item_view', item_id=item['id']), 303)
+    return abort(404)
