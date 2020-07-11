@@ -4,12 +4,16 @@
 
 Backwards incompatible changes:
 
-* All arguments to the `Extractor` class' or its subclasses' `__init__()`
-  method must now be specified as keyword arguments.
+* The `Extractor` class' interface has changed (now cleaner & more consistent):
+  * The `extract()` method no longer have a `document` argument. It must now
+    return a value rather than assign it to the document.
+  * The new `encode()` class method is now responsible for encoding the value
+    and assigning it to the document.
+  * All arguments to `__init__()` must now be specified as keyword arguments.
 
 Bug fixes:
 
-* Fix unhandled exception during sync if an attachment cannot be downloaded.
+* Fix unhandled exception during sync when an attachment cannot be downloaded.
 * Fix page numbers greater than the page count in search URLs generating wrong
   page numbers for search result item URLs.
 
@@ -40,7 +44,7 @@ Backwards incompatible changes:
 
 * Remove default value for the `KERKO_DATA_DIR` configuration variable. KerkoApp
   users don't need to worry about this as KerkoApp takes care of it, but custom
-  apps that do not already set this variable now have to.
+  apps that did not already set this variable now have to.
 
 Features:
 

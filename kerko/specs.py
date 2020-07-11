@@ -40,7 +40,7 @@ class BaseFieldSpec(ABC):
 
     def extract_to_document(self, document, item_context, library_context):
         """Extract the value of this element from a Zotero item."""
-        return self.extractor.extract(document, self, item_context, library_context)
+        return self.extractor.extract_and_encode(document, self, item_context, library_context)
 
 
 class FieldSpec(BaseFieldSpec):
@@ -145,8 +145,7 @@ class FacetSpec(BaseFieldSpec):
     @abstractmethod
     def add_filter(self, value, active_filters):
         """
-        Build a query string that adds a value for this facet to the active
-        filters.
+        Build a query string that adds a value for this facet to the active filters.
 
         :param string value: The value to add to the active filters.
 
@@ -158,8 +157,7 @@ class FacetSpec(BaseFieldSpec):
     @abstractmethod
     def remove_filter(self, value, active_filters):
         """
-        Build a query string that removes a value for this facet from the active
-        filters.
+        Build a query string that removes a value for this facet from the active filters.
 
         :param string value: The value to remove from the active filters.
 
@@ -375,8 +373,10 @@ class TreeFacetSpec(FacetSpec):
 
 class CollectionFacetSpec(TreeFacetSpec):
     """
+    Specifies a facet based on a top-level Zotero collection.
+
     A top-level Zotero collection can act as a facet when its key matches a
-    given `collection_key`. Subcollections become facet values.
+    given `collection_key`. Subcollections become values within the facet.
     """
 
     def __init__(self, collection_key, **kwargs):
