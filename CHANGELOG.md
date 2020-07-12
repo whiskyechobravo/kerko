@@ -2,6 +2,14 @@
 
 ## Latest
 
+*Warning:* Upgrading from version 0.6 or earlier will require that you clean and
+re-sync your existing search index. Use the following commands:
+
+```bash
+flask kerko clean index
+flask kerko sync
+```
+
 Backwards incompatible changes:
 
 * The `Extractor` class' interface has changed (now cleaner & more consistent):
@@ -13,6 +21,7 @@ Backwards incompatible changes:
 
 Features:
 
+* The Extra field is now included when searching in all fields.
 * If an app adds an `'alternateId'` field, URL paths of the form
   `{url_prefix}/go?id={alternateId}` redirect the user to the item view. The app
   must specify ``whoosh.fields.ID`` as the field type, and use a proper

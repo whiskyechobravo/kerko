@@ -925,6 +925,15 @@ class Composer:
                     extractor=extractors.ItemDataExtractor(key='episodeNumber')
                 )
             )
+        if 'z_extra' not in exclude:
+            self.add_field(
+                FieldSpec(
+                    key='z_extra',
+                    field_type=self.text_field_type,
+                    scopes=['all'],
+                    extractor=extractors.ItemDataExtractor(key='extra')
+                )
+            )
         if 'z_genre' not in exclude:
             self.add_field(
                 FieldSpec(
