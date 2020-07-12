@@ -83,7 +83,11 @@ class Extractor(ABC):
 
     @abstractmethod
     def extract(self, spec, item_context, library_context):
-        """Retrieve the value from context."""
+        """
+        Retrieve the value from context.
+
+        :return: Extracted value, or `None` if no value could be extracted.
+        """
 
     @classmethod
     def encode(cls, document, extracted_value, spec):
@@ -92,7 +96,7 @@ class Extractor(ABC):
 
     def extract_and_encode(self, document, spec, item_context, library_context):
         extracted_value = self.extract(spec, item_context, library_context)
-        if extracted_value:  # FIXME: Condition should be `is not None`; False values may still need to be encoded! `extract()` methods need to be consistent in their returned values.
+        if extracted_value is not None:
             self.encode(document, extracted_value, spec)
 
     def warning(self, message, item_context):
@@ -276,7 +280,7 @@ class BaseTagsExtractor(Extractor):
                         (not self.whitelist or self.whitelist.match(tag)) and \
                         (not self.blacklist or not self.blacklist.match(tag)):
                     tags.add(tag)
-        return tags
+        return tags or None
 
 
 class TagsTextExtractor(BaseTagsExtractor):
@@ -326,7 +330,7 @@ class BaseChildrenExtractor(Extractor):
                             blacklisted = True
                 if whitelisted and not blacklisted:
                     accepted_children.append(child)
-        return accepted_children
+        return accepted_children or None
 
 
 class AttachmentsExtractor(BaseChildrenExtractor):
@@ -413,7 +417,7 @@ class CollectionFacetTreeExtractor(Extractor):
                     path[-1], {}
                 ).get('data', {}).get('name', '').strip()
                 encoded_ancestors[spec.key].add(spec.encode((path, label)))
-        return encoded_ancestors
+        return encoded_ancestors or None
 
     @classmethod
     def encode(cls, document, extracted_value, spec):
@@ -466,12 +470,11 @@ class YearFacetExtractor(Extractor):
             year, _month, _day = _parse_zotero_date(parsed_date)
             decade = int(int(year) / 10) * 10
             century = int(int(year) / 100) * 100
-            encoded_paths = [
+            return [
                 spec.encode(path) for path in _expand_paths(
                     [str(century), str(decade), str(year)]
                 )
-            ]
-            return encoded_paths
+            ] or None
         return None
 
     @classmethod
