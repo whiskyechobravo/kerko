@@ -40,7 +40,7 @@ class BaseFieldSpec(ABC):
 
     def extract_to_document(self, document, item_context, library_context):
         """Extract the value of this element from a Zotero item."""
-        return self.extractor.extract_and_encode(document, self, item_context, library_context)
+        return self.extractor.extract_and_store(document, item_context, library_context, self)
 
 
 class FieldSpec(BaseFieldSpec):

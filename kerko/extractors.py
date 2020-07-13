@@ -3,7 +3,6 @@ Functions for extracting data from Zotero items.
 """
 
 from abc import ABC, abstractmethod
-from collections import defaultdict
 import re
 
 from flask import current_app, Markup
@@ -58,6 +57,16 @@ def _parse_zotero_date(text):
     return year, month, day
 
 
+def encode_single(value, spec):
+    """Encode a single value."""
+    return spec.encode(value)
+
+
+def encode_multiple(value, spec):
+    """Encode items of an iterable."""
+    return [spec.encode(item) for item in value]
+
+
 class Extractor(ABC):
     """
     Data extractor.
@@ -69,7 +78,7 @@ class Extractor(ABC):
     assign the resulting data to.
     """
 
-    def __init__(self, format_='data', **kwargs):
+    def __init__(self, format_='data', encode=encode_single, **kwargs):
         """
         Initialize the extractor.
 
@@ -77,27 +86,29 @@ class Extractor(ABC):
             read, e.g., 'data', 'bib', 'ris', to ensure that the data required
             by this extractor is available in the ``ItemContext`` object at
             extraction time.
+
+        :param callable encode: Function that can encode a value using a
+            ``FieldSpec``.
         """
         self.format = format_
+        self.encode = encode
         assert not kwargs  # Subclasses should have consumed every keyword arg.
 
     @abstractmethod
-    def extract(self, spec, item_context, library_context):
+    def extract(self, item_context, library_context, spec):
         """
         Retrieve the value from context.
 
         :return: Extracted value, or `None` if no value could be extracted.
         """
 
-    @classmethod
-    def encode(cls, document, extracted_value, spec):
-        """Encode a value and store it in the document."""
-        document[spec.key] = spec.encode(extracted_value)
-
-    def extract_and_encode(self, document, spec, item_context, library_context):
-        extracted_value = self.extract(spec, item_context, library_context)
+    def extract_and_store(self, document, item_context, library_context, spec):
+        """
+        Extract value from context and store its encoded version in document.
+        """
+        extracted_value = self.extract(item_context, library_context, spec)
         if extracted_value is not None:
-            self.encode(document, extracted_value, spec)
+            document[spec.key] = self.encode(extracted_value, spec)
 
     def warning(self, message, item_context):
         current_app.logger.warning(
@@ -124,8 +135,8 @@ class TransformerExtractor(Extractor):
         self.extractor = extractor
         self.transformers = transformers
 
-    def extract(self, spec, item_context, library_context):
-        value = self.extractor.extract(spec, item_context, library_context)
+    def extract(self, item_context, library_context, spec):
+        value = self.extractor.extract(item_context, library_context, spec)
         for transformer in self.transformers:
             value = transformer(value)
         return value
@@ -146,27 +157,27 @@ class KeyExtractor(Extractor):  # pylint: disable=abstract-method
 class ItemExtractor(KeyExtractor):
     """Extract a value from an item."""
 
-    def extract(self, spec, item_context, library_context):
+    def extract(self, item_context, library_context, spec):
         return item_context.item.get(self.key)
 
 
 class ItemDataExtractor(KeyExtractor):
     """Extract a value from item data."""
 
-    def extract(self, spec, item_context, library_context):
+    def extract(self, item_context, library_context, spec):
         return item_context.data.get(self.key)
 
 
 class RawDataExtractor(Extractor):
 
-    def extract(self, spec, item_context, library_context):
+    def extract(self, item_context, library_context, spec):
         return item_context.data
 
 
 class ItemTypeLabelExtractor(Extractor):
     """Extract the label of the item's type."""
 
-    def extract(self, spec, item_context, library_context):
+    def extract(self, item_context, library_context, spec):
         item_type = item_context.data.get('itemType')
         if item_type and item_type in library_context.item_types:
             return library_context.item_types[item_type]
@@ -177,7 +188,7 @@ class ItemTypeLabelExtractor(Extractor):
 class ItemFieldsExtractor(Extractor):
     """Extract field metadata, serialized as a JSON string."""
 
-    def extract(self, spec, item_context, library_context):
+    def extract(self, item_context, library_context, spec):
         item_type = item_context.data.get('itemType')
         if item_type and item_type in library_context.item_fields:
             fields = library_context.item_fields[item_type]
@@ -194,7 +205,7 @@ class ItemFieldsExtractor(Extractor):
 class CreatorTypesExtractor(Extractor):
     """Extract creator types metadata, serialized as a JSON string."""
 
-    def extract(self, spec, item_context, library_context):
+    def extract(self, item_context, library_context, spec):
         item_type = item_context.data.get('itemType')
         if item_type and item_type in library_context.creator_types:
             library_creator_types = library_context.creator_types[item_type]
@@ -218,7 +229,7 @@ class CreatorTypesExtractor(Extractor):
 class CreatorsExtractor(Extractor):
     """Flatten and extract creator data."""
 
-    def extract(self, spec, item_context, library_context):
+    def extract(self, item_context, library_context, spec):
         creators = []
         if 'creators' in item_context.data:
             for creator in item_context.data['creators']:
@@ -242,7 +253,7 @@ class CreatorsExtractor(Extractor):
 class CollectionNamesExtractor(Extractor):
     """Extract item collections for text search."""
 
-    def extract(self, spec, item_context, library_context):
+    def extract(self, item_context, library_context, spec):
         names = set()
         if 'collections' in item_context.data:
             for k in item_context.data['collections']:
@@ -271,7 +282,7 @@ class BaseTagsExtractor(Extractor):
         self.whitelist = re.compile(whitelist_re) if whitelist_re else None
         self.blacklist = re.compile(blacklist_re) if blacklist_re else None
 
-    def extract(self, spec, item_context, library_context):
+    def extract(self, item_context, library_context, spec):
         tags = set()
         if 'tags' in item_context.data:
             for tag_data in item_context.data['tags']:
@@ -286,8 +297,8 @@ class BaseTagsExtractor(Extractor):
 class TagsTextExtractor(BaseTagsExtractor):
     """Extract item tags for text search."""
 
-    def extract(self, spec, item_context, library_context):
-        tags = super().extract(spec, item_context, library_context)
+    def extract(self, item_context, library_context, spec):
+        tags = super().extract(item_context, library_context, spec)
         return RECORD_SEPARATOR.join(tags) if tags else None
 
 
@@ -315,7 +326,7 @@ class BaseChildrenExtractor(Extractor):
         self.whitelist = re.compile(whitelist_re) if whitelist_re else None
         self.blacklist = re.compile(blacklist_re) if blacklist_re else None
 
-    def extract(self, spec, item_context, library_context):
+    def extract(self, item_context, library_context, spec):
         accepted_children = []
         for child in item_context.children:
             if child.get('data', {}).get('itemType') == self.item_type:
@@ -344,8 +355,8 @@ class AttachmentsExtractor(BaseChildrenExtractor):
         super().__init__(item_type='attachment', **kwargs)
         self.mime_types = mime_types
 
-    def extract(self, spec, item_context, library_context):
-        children = super().extract(spec, item_context, library_context)
+    def extract(self, item_context, library_context, spec):
+        children = super().extract(item_context, library_context, spec)
         return [
             {
                 'id': a['key'],
@@ -370,8 +381,8 @@ class BaseNotesExtractor(BaseChildrenExtractor):  # pylint: disable=abstract-met
 class NotesTextExtractor(BaseNotesExtractor):
     """Extract notes for text search."""
 
-    def extract(self, spec, item_context, library_context):
-        children = super().extract(spec, item_context, library_context)
+    def extract(self, item_context, library_context, spec):
+        children = super().extract(item_context, library_context, spec)
         return RECORD_SEPARATOR.join(
             [
                 Markup(child.get('data', {}).get('note', '')).striptags()
@@ -383,8 +394,8 @@ class NotesTextExtractor(BaseNotesExtractor):
 class RawNotesExtractor(BaseNotesExtractor):
     """Extract raw notes for storage."""
 
-    def extract(self, spec, item_context, library_context):
-        children = super().extract(spec, item_context, library_context)
+    def extract(self, item_context, library_context, spec):
+        children = super().extract(item_context, library_context, spec)
         return [child.get('data', {}).get('note', '') for child in children] if children else None
 
 
@@ -401,9 +412,12 @@ def _expand_paths(path):
 class CollectionFacetTreeExtractor(Extractor):
     """Index the Zotero item's collections needed for the specified facet."""
 
-    def extract(self, spec, item_context, library_context):
+    def __init__(self, encode=encode_multiple, **kwargs):
+        super().__init__(encode=encode, **kwargs)
+
+    def extract(self, item_context, library_context, spec):
         # Sets prevent duplication when multiple collections share common ancestors.
-        encoded_ancestors = defaultdict(set)
+        encoded_ancestors = set()
         for collection_key in item_context.data.get('collections', []):
             if collection_key not in library_context.collections:
                 continue  # Skip unknown collection.
@@ -416,13 +430,8 @@ class CollectionFacetTreeExtractor(Extractor):
                 label = library_context.collections.get(
                     path[-1], {}
                 ).get('data', {}).get('name', '').strip()
-                encoded_ancestors[spec.key].add(spec.encode((path, label)))
+                encoded_ancestors.add((tuple(path), label))  # Cast path to make it hashable.
         return encoded_ancestors or None
-
-    @classmethod
-    def encode(cls, document, extracted_value, spec):
-        for key, ancestors in extracted_value.items():
-            document[key] = list(ancestors)
 
 
 class InCollectionExtractor(Extractor):
@@ -433,7 +442,7 @@ class InCollectionExtractor(Extractor):
         self.collection_key = collection_key
         self.true_only = true_only
 
-    def extract(self, spec, item_context, library_context):
+    def extract(self, item_context, library_context, spec):
         is_in = self.collection_key in item_context.data.get('collections', [])
         if not self.true_only:
             return is_in
@@ -445,15 +454,14 @@ class InCollectionExtractor(Extractor):
 class TagsFacetExtractor(BaseTagsExtractor):
     """Index the Zotero item's tags for faceting."""
 
-    @classmethod
-    def encode(cls, document, extracted_value, spec):
-        document[spec.key] = [spec.encode(tag) for tag in extracted_value]
+    def __init__(self, encode=encode_multiple, **kwargs):
+        super().__init__(encode=encode, **kwargs)
 
 
 class ItemTypeFacetExtractor(Extractor):
     """Index the Zotero item's type for faceting."""
 
-    def extract(self, spec, item_context, library_context):
+    def extract(self, item_context, library_context, spec):
         item_type = item_context.data.get('itemType')
         if item_type:
             return (item_type, library_context.item_types.get(item_type, item_type))
@@ -464,27 +472,22 @@ class ItemTypeFacetExtractor(Extractor):
 class YearFacetExtractor(Extractor):
     """Index the Zotero item's publication date for faceting by year."""
 
-    def extract(self, spec, item_context, library_context):
+    def __init__(self, encode=encode_multiple, **kwargs):
+        super().__init__(encode=encode, **kwargs)
+
+    def extract(self, item_context, library_context, spec):
         parsed_date = item_context.item.get('meta', {}).get('parsedDate', '')
         if parsed_date:
             year, _month, _day = _parse_zotero_date(parsed_date)
             decade = int(int(year) / 10) * 10
             century = int(int(year) / 100) * 100
-            return [
-                spec.encode(path) for path in _expand_paths(
-                    [str(century), str(decade), str(year)]
-                )
-            ] or None
+            return _expand_paths([str(century), str(decade), str(year)])
         return None
-
-    @classmethod
-    def encode(cls, document, extracted_value, spec):
-        document[spec.key] = extracted_value
 
 
 class ItemDataLinkFacetExtractor(ItemDataExtractor):
 
-    def extract(self, spec, item_context, library_context):
+    def extract(self, item_context, library_context, spec):
         return item_context.data.get(self.key, '').strip() != ''
 
 
@@ -504,13 +507,13 @@ def _prepare_sort_text(text):
 
 class SortItemDataExtractor(ItemDataExtractor):
 
-    def extract(self, spec, item_context, library_context):
+    def extract(self, item_context, library_context, spec):
         return _prepare_sort_text(item_context.data.get(self.key, ''))
 
 
 class SortCreatorExtractor(Extractor):
 
-    def extract(self, spec, item_context, library_context):
+    def extract(self, item_context, library_context, spec):
         creators = []
 
         def append_creator(creator):
@@ -537,7 +540,7 @@ class SortCreatorExtractor(Extractor):
 
 class SortDateExtractor(Extractor):
 
-    def extract(self, spec, item_context, library_context):
+    def extract(self, item_context, library_context, spec):
         parsed_date = item_context.item.get('meta', {}).get('parsedDate', '')
         year, month, day = _parse_zotero_date(parsed_date)
         return int('{:04d}{:02d}{:02d}'.format(year, month, day))

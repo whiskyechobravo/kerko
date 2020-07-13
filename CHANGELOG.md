@@ -12,11 +12,15 @@ flask kerko sync
 
 Backwards incompatible changes:
 
-* The `Extractor` class' interface has changed (now cleaner & more consistent):
-  * The `extract()` method no longer have a `document` argument. It must now
-    return a value rather than assign it to the document.
-  * The new `encode()` class method is now responsible for encoding the value
-    and assigning it to the document.
+* The `Extractor` class' interface has changed, improving consistency and
+  separation of concerns:
+  * The `extract()` method no longer have a `document` argument, and the `spec`
+    argument is now the last one. The method now returns a value instead of
+    assigning it to the document.
+  * The new `encode()` callable attribute is now responsible for encoding the
+    value, and is set at `__init__()`.
+  * The new `extract_and_store()` method handles extraction, encoding, and
+    assignment to the document, assigning the value only when it is not `None`.
   * All arguments to `__init__()` must now be specified as keyword arguments.
 
 Features:
