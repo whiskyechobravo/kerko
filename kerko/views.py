@@ -2,10 +2,8 @@ import time
 from datetime import datetime
 
 from babel.numbers import format_number
-from flask import (
-    abort, current_app, flash, make_response, redirect, render_template, request,
-    send_from_directory, url_for
-)
+from flask import (abort, current_app, flash, make_response, redirect, render_template, request,
+                   send_from_directory, url_for)
 from flask_babelex import get_locale, gettext, ngettext
 
 from . import babel_domain, blueprint
@@ -14,7 +12,8 @@ from .breadbox import build_breadbox
 from .criteria import Criteria
 from .forms import SearchForm
 from .pager import build_pager
-from .query import build_creators_display, build_item_facet_results, run_query, run_query_unique
+from .query import (build_creators_display, build_item_facet_results, run_query, run_query_unique,
+                    run_query_unique_with_fallback)
 from .sorter import build_sorter
 
 
@@ -114,16 +113,22 @@ def search():
 
 
 @blueprint.route('/<string:item_id>')
-def item_view(item_id):
+@blueprint.route('/<string:item_id>/<string:suffix>')  # Accommodate DOIs.
+def item_view(item_id, suffix=None):
     """View a full bibliographic record."""
     start_time = time.process_time()
+    if suffix:
+        item_id = item_id + '/' + suffix
 
     if current_app.config['KERKO_USE_TRANSLATIONS']:
         babel_domain.as_default()
 
-    item = run_query_unique('id', item_id)
+    item, fellback = run_query_unique_with_fallback(['id', 'alternateId'], item_id)
     if not item:
         return abort(404)
+    item_url = url_for('.item_view', item_id=item['id'], _external=True)
+    if fellback:
+        return redirect(item_url, 301)
 
     build_creators_display(item)
     build_item_facet_results(item)
@@ -131,7 +136,7 @@ def item_view(item_id):
         current_app.config['KERKO_TEMPLATE_ITEM'],
         item=item,
         title=item.get('data', {}).get('title', ''),
-        item_url=url_for('.item_view', item_id=item_id, _external=True) if item else '',
+        item_url=item_url,
         time=time.process_time() - start_time,
         locale=get_locale(),
     )
@@ -150,7 +155,7 @@ def item_attachment_download(item_id, attachment_id, attachment_filename=None):
     if current_app.config['KERKO_USE_TRANSLATIONS']:
         babel_domain.as_default()
 
-    item = run_query_unique('id', item_id)
+    item, fellback = run_query_unique_with_fallback(['id', 'alternateId'], item_id)
     if not item:
         return abort(404)
 
@@ -164,22 +169,20 @@ def item_attachment_download(item_id, attachment_id, attachment_filename=None):
                 "Please check below for the latest documents available."
             ), 'warning'
         )
-        return redirect(url_for('kerko.item_view', item_id=item_id), 301)
+        return redirect(url_for('.item_view', item_id=item['id']), 301)
     attachment = matching_attachments[0]
 
     filepath = get_attachments_dir() / attachment_id
     if not filepath.exists():
         return abort(404)
 
-    if attachment_filename != attachment['filename']:
-        return redirect(
-            url_for(
-                'kerko.item_attachment_download',
-                item_id=item_id,
-                attachment_id=attachment_id,
-                attachment_filename=attachment['filename'],
-            ), 301
-        )
+    if fellback or attachment_filename != attachment['filename']:
+        return redirect(url_for(
+            '.item_attachment_download',
+            item_id=item['id'],
+            attachment_id=attachment_id,
+            attachment_filename=attachment['filename'],
+        ), 301)
 
     return send_from_directory(
         get_attachments_dir(),
@@ -188,13 +191,13 @@ def item_attachment_download(item_id, attachment_id, attachment_filename=None):
     )
 
 
-@blueprint.route('/<string:item_id>/<string:citation_format_key>')
+@blueprint.route('/<string:item_id>/export/<string:citation_format_key>')
 def item_citation_download(item_id, citation_format_key):
     """Download a citation."""
     if current_app.config['KERKO_USE_TRANSLATIONS']:
         babel_domain.as_default()
 
-    item = run_query_unique('id', item_id)
+    item, fellback = run_query_unique_with_fallback(['id', 'alternateId'], item_id)
     if not item:
         return abort(404)
 
@@ -206,15 +209,24 @@ def item_citation_download(item_id, citation_format_key):
     if not content:
         return abort(404)
 
+    if fellback:
+        return redirect(
+            url_for(
+                '.item_citation_download',
+                item_id=item['id'],
+                citation_format_key=citation_format_key
+            ), 301
+        )
+
     response = make_response(content)
     response.headers['Content-Disposition'] = \
-        f'attachment; filename={item_id}.{citation_format.extension}'
+        f"attachment; filename={item['id']}.{citation_format.extension}"
     response.headers['Content-Type'] = \
         f'{citation_format.mime_type}; charset=utf-8'
     return response
 
 
-@blueprint.route('/download/<string:citation_format_key>/')
+@blueprint.route('/export/<string:citation_format_key>/')
 def search_citation_download(citation_format_key):
     """Download all citations resulting from a search."""
     citation_format = current_app.config['KERKO_COMPOSER'].citation_formats.get(citation_format_key)
@@ -242,14 +254,3 @@ def search_citation_download(citation_format_key):
     response.headers['Content-Type'] = \
         f'{citation_format.mime_type}; charset=utf-8'
     return response
-
-
-@blueprint.route('/go/')
-def item_redirect():
-    """Redirect to an item using an alternate id."""
-    id_ = request.args.get('id')
-    if id_:
-        item = run_query_unique('alternateId', id_, return_fields=['id'])
-        if item:
-            return redirect(url_for('.item_view', item_id=item['id']), 303)
-    return abort(404)

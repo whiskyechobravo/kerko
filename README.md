@@ -138,6 +138,8 @@ The following features are implemented in Kerko:
   zotero.org and made available to users of the bibliography. Regular
   expressions may be used to include or exclude notes or attachments from the
   bibliography based on their tags.
+* DOI, ISBN and ISSN resolver: items that have such identifier in your library
+  can be referenced by appending their identifier to your Kerko site's base URL.
 * Badges: icons can be displayed next to items, based on custom conditions.
 * Modularity: although a [standalone application][KerkoApp] is available, Kerko
   is designed not as a standalone application, but to be part of a larger Flask

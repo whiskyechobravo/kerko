@@ -5,9 +5,9 @@ Data transformation utilities.
 import re
 
 
-def make_regex_find_transformer(regex, flags=0, group=1, max_matches=1):
+def find(regex, flags=0, group=1, max_matches=1):
     """
-    Make a callable that finds all non-overlapping matches in a given string.
+    Return a callable that finds all non-overlapping matches in a given string.
 
     :param str regex: Regular expression to search.
 
@@ -22,7 +22,7 @@ def make_regex_find_transformer(regex, flags=0, group=1, max_matches=1):
     """
     regex = re.compile(regex, flags)
 
-    def find(value):
+    def _find(value):
         if value and isinstance(value, str):
             matches = []
             for i, match in enumerate(regex.finditer(value)):
@@ -35,12 +35,12 @@ def make_regex_find_transformer(regex, flags=0, group=1, max_matches=1):
             return matches
         return [] if max_matches != 1 else ''
 
-    return find
+    return _find
 
 
-def make_split_transformer(sep=None, maxsplit=-1):
-    def split(value):
+def split(sep=None, maxsplit=-1):
+    def _split(value):
         if isinstance(value, str):
             return [v.strip() for v in value.split(sep, maxsplit)]
         return []
-    return split
+    return _split

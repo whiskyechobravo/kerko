@@ -9,7 +9,7 @@ from whoosh.query import Prefix, Term
 from whoosh.support.charset import accent_map
 from whoosh.util.text import rcompile
 
-from . import codecs, extractors
+from . import codecs, extractors, transformers
 from .specs import CitationFormatSpec, FieldSpec, FlatFacetSpec, ScopeSpec, SortSpec, TreeFacetSpec
 
 
@@ -234,13 +234,51 @@ class Composer:
         if '*' in exclude:
             return
 
-        # Document id for the search index, matching the Zotero item id.
+        # Primary item ID for the search index, matching the Zotero item key.
         if 'id' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='id',
                     field_type=ID(unique=True, stored=True),
                     extractor=extractors.ItemExtractor(key='key')
+                )
+            )
+        # Alternate IDs to search when the primary ID is not found.
+        if 'alternateId' not in exclude:
+            self.add_field(
+                FieldSpec(
+                    key='alternateId',
+                    field_type=ID,
+                    extractor=extractors.MultiExtractor(
+                        extractors=[
+                            extractors.ItemDataExtractor(key='DOI'),
+                            extractors.ItemDataExtractor(key='ISBN'),
+                            extractors.ItemDataExtractor(key='ISSN'),
+                            # Extract DOI, ISBN, ISSN from the Extra field.
+                            extractors.TransformerExtractor(
+                                extractor=extractors.ItemDataExtractor(key='extra'),
+                                transformers=[
+                                    transformers.find(
+                                        regex=r'^\s*(DOI|ISBN|ISSN):\s*(\S+)\s*$',
+                                        flags=re.IGNORECASE | re.MULTILINE,
+                                        group=2,
+                                        max_matches=0,
+                                    ),
+                                ]
+                            ),
+                            # Extract dc:replaces relations.
+                            extractors.TransformerExtractor(
+                                extractor=extractors.ItemRelationsExtractor(),
+                                transformers=[
+                                    transformers.find(
+                                        regex=r'^[a-z]+://[^/]+/groups/[0-9]+/items/([A-Z0-9]+)$',
+                                        flags=re.MULTILINE,
+                                        max_matches=0,
+                                    )
+                                ]
+                            )
+                        ]
+                    )
                 )
             )
         # Label of this item's type.

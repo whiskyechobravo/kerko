@@ -268,6 +268,20 @@ def run_query_unique(field_name, value, return_fields=None):
     return None
 
 
+def run_query_unique_with_fallback(field_names, value, return_fields=None):
+    """
+    Query multiple fields for a single item using an unique key.
+
+    :return: A tuple with the found item (or `None` if not found), and the index
+        of the field that contained a match (or `None` if not found).
+    """
+    for i, field_name in enumerate(field_names):
+        result = run_query_unique(field_name, value, return_fields)
+        if result:
+            return result, i
+    return None, None
+
+
 def run_query_all(return_fields=None):
     """Perform a search query to return all items (without faceting)."""
     index = open_index()

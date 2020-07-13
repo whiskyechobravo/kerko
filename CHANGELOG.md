@@ -12,6 +12,10 @@ flask kerko sync
 
 Backwards incompatible changes:
 
+* Citation download URLs now have the form
+  `{url_prefix}/{identifier}/export/{format}` for individual items (`'export'`
+  has been inserted), and `{url_prefix}/export/{format}/` for search result
+  pages (`'download'` has been replaced by `'export'`).
 * The `Extractor` class' interface has changed, improving consistency and
   separation of concerns:
   * The `extract()` method no longer have a `document` argument, and the `spec`
@@ -26,12 +30,15 @@ Backwards incompatible changes:
 Features:
 
 * The Extra field is now included when searching in all fields.
-* If an app adds an `'alternateId'` field, URL paths of the form
-  `{url_prefix}/go?id={alternateId}` redirect the user to the item view. The app
-  must specify ``whoosh.fields.ID`` as the field type, and use a proper
-  extractor (the DOI might be a good source for an alternate ID). Multiple IDs
-  may be provided for each item. At the moment, however, Kerko doesn't expose
-  alternate IDs or their links anywhere.
+* You no longer have to worry about broken item links in your online
+  bibliography after merging items in Zotero or restoring items from trash. If
+  an item can no longer be found at its `{url_prefix}/{identifier}` URL, older
+  keys related to the item are searched. If a match is found, the user is
+  redirected to the new URL for the item. This relies on the `dc.replaces`
+  relation that's managed internally by Zotero.
+* If the identifier provided in an `{url_prefix}/{identifier}` URL is a DOI,
+  ISBN, or ISSN found in the bibliography, the user is redirected to the
+  corresponding item's page.
 
 Bug fixes:
 
