@@ -297,21 +297,21 @@ class CollectionNamesExtractor(Extractor):
 
 class BaseTagsExtractor(Extractor):
 
-    def __init__(self, *, whitelist_re='', blacklist_re='', **kwargs):
+    def __init__(self, *, include_re='', exclude_re='', **kwargs):
         """
         Initialize the extractor.
 
-        :param str whitelist_re: Any tag that does not matches this regular
+        :param str include_re: Any tag that does not matches this regular
             expression will be ignored by the extractor. If empty, all tags will
-            be accepted unless `blacklist_re` is set and they match it.
+            be accepted unless `exclude_re` is set and they match it.
 
-        :param str blacklist_re: Any tag that matches this regular expression
+        :param str exclude_re: Any tag that matches this regular expression
             will be ignored by the extractor. If empty, all tags will be
-            accepted unless `whitelist_re` is set and they do not match it.
+            accepted unless `include_re` is set and they do not match it.
         """
         super().__init__(**kwargs)
-        self.whitelist = re.compile(whitelist_re) if whitelist_re else None
-        self.blacklist = re.compile(blacklist_re) if blacklist_re else None
+        self.include = re.compile(include_re) if include_re else None
+        self.exclude = re.compile(exclude_re) if exclude_re else None
 
     def extract(self, item_context, library_context, spec):
         tags = set()
@@ -319,8 +319,8 @@ class BaseTagsExtractor(Extractor):
             for tag_data in item_context.data['tags']:
                 tag = tag_data.get('tag', '').strip()
                 if tag and \
-                        (not self.whitelist or self.whitelist.match(tag)) and \
-                        (not self.blacklist or not self.blacklist.match(tag)):
+                        (not self.include or self.include.match(tag)) and \
+                        (not self.exclude or not self.exclude.match(tag)):
                     tags.add(tag)
         return tags or None
 
@@ -335,42 +335,42 @@ class TagsTextExtractor(BaseTagsExtractor):
 
 class BaseChildrenExtractor(Extractor):
 
-    def __init__(self, *, item_type, whitelist_re='', blacklist_re='', **kwargs):
+    def __init__(self, *, item_type, include_re='', exclude_re='', **kwargs):
         """
         Initialize the extractor.
 
         :param str item_type: The type of child items to extract, either 'note'
             or 'attachment'.
 
-        :param str whitelist_re: Any child which does not have a tag that
+        :param str include_re: Any child which does not have a tag that
             matches this regular expression will be ignored by the extractor. If
-            empty, all children will be accepted unless `blacklist_re` is set
+            empty, all children will be accepted unless `exclude_re` is set
             and causes some to be rejected.
 
-        :param str blacklist_re: Any child that have a tag that matches this
+        :param str exclude_re: Any child that have a tag that matches this
             regular expression will be ignored by the extractor. If empty, all
-            children will be accepted unless `whitelist_re` is set and causes
+            children will be accepted unless `include_re` is set and causes
             some to be rejected.
         """
         super().__init__(**kwargs)
         self.item_type = item_type
-        self.whitelist = re.compile(whitelist_re) if whitelist_re else None
-        self.blacklist = re.compile(blacklist_re) if blacklist_re else None
+        self.include = re.compile(include_re) if include_re else None
+        self.exclude = re.compile(exclude_re) if exclude_re else None
 
     def extract(self, item_context, library_context, spec):
         accepted_children = []
         for child in item_context.children:
             if child.get('data', {}).get('itemType') == self.item_type:
-                whitelisted = self.whitelist is None
-                blacklisted = False
-                if self.whitelist or self.blacklist:
+                included = self.include is None
+                excluded = False
+                if self.include or self.exclude:
                     for tag_data in child.get('data', {}).get('tags', []):
                         tag = tag_data.get('tag', '').strip()
-                        if self.whitelist and self.whitelist.match(tag):
-                            whitelisted = True
-                        if self.blacklist and self.blacklist.match(tag):
-                            blacklisted = True
-                if whitelisted and not blacklisted:
+                        if self.include and self.include.match(tag):
+                            included = True
+                        if self.exclude and self.exclude.match(tag):
+                            excluded = True
+                if included and not excluded:
                     accepted_children.append(child)
         return accepted_children or None
 

@@ -10,44 +10,14 @@ flask kerko clean index
 flask kerko sync
 ```
 
-Backwards incompatible changes:
-
-* Citation download URLs now have the form
-  `{url_prefix}/{identifier}/export/{format}` for individual items (`'export'`
-  has been inserted), and `{url_prefix}/export/{format}/` for search result
-  pages (`'download'` has been replaced by `'export'`).
-* The `Extractor` class' interface has changed, improving consistency and
-  separation of concerns:
-  * The `extract()` method no longer have a `document` argument, and the `spec`
-    argument is now the last one. The method now returns a value instead of
-    assigning it to the document.
-  * The new `encode()` callable attribute is now responsible for encoding the
-    value, and is set at `__init__()`.
-  * The new `extract_and_store()` method handles extraction, encoding, and
-    assignment to the document, assigning the value only when it is not `None`.
-  * All arguments to `__init__()` must now be specified as keyword arguments.
-
 Features:
 
 * The Extra field is now included when searching in all fields.
-* You no longer have to worry about broken item links in your online
-  bibliography after merging items in Zotero or restoring items from trash. If
-  an item can no longer be found at its `{url_prefix}/{identifier}` URL, older
-  keys related to the item are searched. If a match is found, the user is
-  redirected to the new URL for the item. This relies on the `dc.replaces`
-  relation that's managed internally by Zotero.
-* If the identifier provided in an `{url_prefix}/{identifier}` URL is a DOI,
-  ISBN, or ISSN found in the bibliography, the user is redirected to the
-  corresponding item's page.
-
-Bug fixes:
-
-* Fix unhandled exception during sync when an attachment cannot be downloaded.
-* Fix page numbers greater than the page count in search URLs generating wrong
-  page numbers for search result item URLs.
-
-Other changes:
-
+* Requests for the older URL of an item whose ID has changed, e.g., after a
+  merge in Zotero, are now automatically redirected to the item's current URL.
+  This relies on the `dc.replaces` relation that's managed internally by Zotero.
+* Items that have a DOI, ISBN or ISSN identifier can be referenced by appending
+  their identifier to your Kerko site's base URL.
 * Improve accessibility based on WCAG recommendations and WAI-ARIA standards:
   * Add labels to search form elements.
   * Add landmark role `search` to the search form.
@@ -57,10 +27,36 @@ Other changes:
   * Add text to indicate the current value of widgets.
   * Add the `aria-current` attribute to indicate the current value of widgets.
   * Remove useless link to the current page from the pagination widget.
+
+Bug fixes:
+
+* Fix unhandled exception during sync when an attachment cannot be downloaded.
+* Fix page numbers greater than the page count in search URLs generating wrong
+  page numbers for search result item URLs.
+
+Other changes:
+
 * Redirect to the parent item's page when the user tries to request an
   attachment that no longer exists.
 * Show timezone abbreviation along with time of last update from Zotero.
 * Fix broken "Getting started" example in README.
+
+Backwards incompatible changes:
+
+* The words `'blacklist'` and `'whitelist'` in variable names are replaced with
+  `'exclude'` and `'include'`.
+* Citation download URLs now have the form
+  `{url_prefix}/{itemID}/export/{format}` for individual items (`'export'` has
+  been inserted), and `{url_prefix}/export/{format}/` for search result pages
+  (`'download'` has been replaced by `'export'`).
+* The `Extractor` class' interface has changed, improving consistency and
+  separation of concerns:
+  * All arguments to `__init__()` must now be specified as keyword arguments.
+  * The `extract()` method no longer have a `document` argument, and the `spec`
+    argument is now the last one. The method now returns a value instead of
+    assigning it to the document.
+  * The new `extract_and_store()` method handles extraction, encoding, and
+    assignment to the document, assigning the value only when it is not `None`.
 
 ## 0.6 (2020-06-15)
 
