@@ -112,17 +112,14 @@ def search():
     )
 
 
-@blueprint.route('/<string:item_id>')
-@blueprint.route('/<string:item_id>/<string:suffix>')  # Accommodate DOIs.
-def item_view(item_id, suffix=None):
+@blueprint.route('/<path:item_id>')
+def item_view(item_id):
     """View a full bibliographic record."""
     start_time = time.process_time()
 
     if current_app.config['KERKO_USE_TRANSLATIONS']:
         babel_domain.as_default()
 
-    if suffix:
-        item_id = item_id + '/' + suffix
     item, fellback = run_query_unique_with_fallback(['id', 'alternateId'], item_id)
     if not item:
         return abort(404)
@@ -142,11 +139,9 @@ def item_view(item_id, suffix=None):
     )
 
 
-@blueprint.route('/<string:item_id>/download/<string:attachment_id>/')
-@blueprint.route('/<string:item_id>/download/<string:attachment_id>/<string:attachment_filename>')
-@blueprint.route('/<string:item_id>/<string:suffix>/download/<string:attachment_id>/')  # Accommodate DOIs.
-@blueprint.route('/<string:item_id>/<string:suffix>/download/<string:attachment_id>/<string:attachment_filename>')
-def item_attachment_download(item_id, attachment_id, attachment_filename=None, suffix=None):
+@blueprint.route('/<path:item_id>/download/<string:attachment_id>/')
+@blueprint.route('/<path:item_id>/download/<string:attachment_id>/<string:attachment_filename>')
+def item_attachment_download(item_id, attachment_id, attachment_filename=None):
     """
     Download an item attachment.
 
@@ -157,8 +152,6 @@ def item_attachment_download(item_id, attachment_id, attachment_filename=None, s
     if current_app.config['KERKO_USE_TRANSLATIONS']:
         babel_domain.as_default()
 
-    if suffix:
-        item_id = item_id + '/' + suffix
     item, fellback = run_query_unique_with_fallback(['id', 'alternateId'], item_id)
     if not item:
         return abort(404)
@@ -195,15 +188,12 @@ def item_attachment_download(item_id, attachment_id, attachment_filename=None, s
     )
 
 
-@blueprint.route('/<string:item_id>/export/<string:citation_format_key>')
-@blueprint.route('/<string:item_id>/<string:suffix>/export/<string:citation_format_key>')  # Accommodate DOIs.
-def item_citation_download(item_id, citation_format_key, suffix=None):
+@blueprint.route('/<path:item_id>/export/<string:citation_format_key>')
+def item_citation_download(item_id, citation_format_key):
     """Download a citation."""
     if current_app.config['KERKO_USE_TRANSLATIONS']:
         babel_domain.as_default()
 
-    if suffix:
-        item_id = item_id + '/' + suffix
     item, fellback = run_query_unique_with_fallback(['id', 'alternateId'], item_id)
     if not item:
         return abort(404)
