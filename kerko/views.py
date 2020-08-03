@@ -12,7 +12,7 @@ from .breadbox import build_breadbox
 from .criteria import Criteria
 from .forms import SearchForm
 from .pager import build_pager
-from .query import (build_creators_display, build_item_facet_results, run_query, run_query_unique,
+from .query import (build_creators_display, build_item_facet_results, run_query,
                     run_query_unique_with_fallback)
 from .sorter import build_sorter
 
