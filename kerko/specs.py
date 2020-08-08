@@ -541,6 +541,12 @@ class BadgeSpec:
         self.renderer = renderer
         self.weight = weight
 
+    def is_active(self, item):
+        """
+        Return `True` is this badge is active for the given item.
+        """
+        return self.activator(self.field, item)
+
     def render(self, item, mode):
         """
         Render the badge, if necessary, for the given item.
@@ -548,6 +554,6 @@ class BadgeSpec:
         :return str: The rendered badge, or `''` if the badge is not activated
             on the item.
         """
-        if self.activator(self.field, item):
+        if self.is_active(item):
             return self.renderer.render(field=self.field, item=item, mode=mode)
         return ''
