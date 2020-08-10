@@ -64,7 +64,7 @@ msgid ""
 "your keywords."
 msgstr ""
 "Findet Einträge, bei denen der Name eines ihrer Autoren oder Mitwirkenden "
-"ihre Suchbegriffe enthält".
+"ihre Suchbegriffe enthält."
 
 #: kerko/composer.py:223
 msgid "In titles"
@@ -505,7 +505,7 @@ msgstr ""
 "zugeordnet sind. Diese Zahlen hängen von Ihren Suchkriterien ab, so dass sie "
 "immer anzeigen, was in den aktuellen Ergebnissen enthalten ist. Ebenso können "
 "ganze Kategorien und Facetten verschwinden, wenn die Suchergebnisse keine "
-"damit verbundenen Einträge enthalten"."
+"damit verbundenen Einträge enthalten."
 
 #: kerko/templates/kerko/_search-help.html.jinja2:55
 msgid ""
