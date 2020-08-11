@@ -1,0 +1,744 @@
+# German translations for Kerko.
+# Copyright (C) 2020 Kerko Contributors
+# This file is distributed under the same license as the Kerko project.
+# Sven Rothe <mmoole@gmail.com>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Kerko 0.6\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-08-08 23:17+0200\n"
+"PO-Revision-Date: 2020-08-08 23:17+0200\n"
+"Last-Translator: Sven Rothe <mmoole@gmail.com>\n"
+"Language: de\n"
+"Language-Team: de <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.8.0\n"
+
+#: kerko/codecs.py:92
+msgid "yes"
+msgstr "ja"
+
+#: kerko/codecs.py:92
+msgid "no"
+msgstr "nein"
+
+#: kerko/codecs.py:215
+msgid "In {}"
+msgstr "In {}"
+
+#: kerko/codecs.py:216
+msgid "Between {} and {}"
+msgstr "Zwischen {} und {}"
+
+#: kerko/composer.py:197
+msgid "In any field"
+msgstr "In allen Feldern"
+
+#: kerko/composer.py:198
+msgid "Any field"
+msgstr "Alle Felder"
+
+#: kerko/composer.py:200
+msgid ""
+"Finds entries where any of the available fields contains your keywords. "
+"This is the default option."
+msgstr ""
+"Findet Einträge bei denen irgendeines der verfügbaren Felder Ihre Suchbegriffe enthält. "
+"Dies ist die Standardeinstellung."
+
+#: kerko/composer.py:210
+msgid "In authors/contributors"
+msgstr "In Autoren/Mitwirkende"
+
+#: kerko/composer.py:211
+msgid "Author or contributor"
+msgstr "Autor oder Mitwirkende"
+
+#: kerko/composer.py:213
+msgid ""
+"Finds entries where any of its authors' or contributors' names contains "
+"your keywords."
+msgstr ""
+"Findet Einträge, bei denen der Name eines ihrer Autoren oder Mitwirkenden "
+"ihre Suchbegriffe enthält."
+
+#: kerko/composer.py:223
+msgid "In titles"
+msgstr "In Titeln"
+
+#: kerko/composer.py:224
+msgid "Title"
+msgstr "Titel"
+
+#: kerko/composer.py:226
+msgid "Finds entries whose title contains your keywords."
+msgstr "Findet Einträge, deren Titel Ihre Suchbegriffe enthält."
+
+#: kerko/composer.py:1362
+msgid "Topic"
+msgstr "Thema"
+
+#: kerko/composer.py:1383 kerko/templates/kerko/item.html.jinja2:104
+msgid "Resource type"
+msgstr "Eintragsart"
+
+#: kerko/composer.py:1401
+msgid "Publication year"
+msgstr "Erscheinungsjahr"
+
+#: kerko/composer.py:1407
+msgid "Unknown"
+msgstr "Unbekannt"
+
+#: kerko/composer.py:1419
+msgid "Online resource"
+msgstr "Online-Quelle"
+
+#: kerko/composer.py:1450
+msgid "Relevance"
+msgstr "Relevanz"
+
+#: kerko/composer.py:1461
+msgid "Newest first"
+msgstr "Neueste zuerst"
+
+#: kerko/composer.py:1475
+msgid "Oldest first"
+msgstr "Älteste zuerst"
+
+#: kerko/composer.py:1488
+msgid "Author A-Z"
+msgstr "Autor A-Z"
+
+#: kerko/composer.py:1501
+msgid "Author Z-A"
+msgstr "Autor Z-A"
+
+#: kerko/composer.py:1515
+msgid "Title A-Z"
+msgstr "Titel A-Z"
+
+#: kerko/composer.py:1528
+msgid "Title Z-A"
+msgstr "Titel Z-A"
+
+#: kerko/composer.py:1556
+msgid "RIS"
+msgstr "RIS"
+
+#: kerko/composer.py:1557
+msgid "Recommended format for most reference management software"
+msgstr "Empfohlenes Format für die meisten Literaturverwaltungsprogramme"
+
+#: kerko/composer.py:1568
+msgid "BibTeX"
+msgstr "BibTeX"
+
+#: kerko/composer.py:1569
+msgid "Recommended format for BibTeX-specific software"
+msgstr "Empfohlenes Format für BibTeX-fähige software"
+
+#: kerko/query.py:28 kerko/templates/kerko/_search-help.html.jinja2:36
+#: kerko/templates/kerko/_search-help.html.jinja2:41
+msgid "AND"
+msgstr "UND"
+
+#: kerko/query.py:29 kerko/templates/kerko/_search-help.html.jinja2:37
+#: kerko/templates/kerko/_search-help.html.jinja2:41
+msgid "OR"
+msgstr "ODER"
+
+#: kerko/query.py:30 kerko/templates/kerko/_search-help.html.jinja2:38
+msgid "NOT"
+msgstr "NICHT"
+
+#: kerko/views.py:95
+msgid "Result"
+msgid_plural "Results"
+msgstr[0] "Ergebnis"
+msgstr[1] "Ergebnisse"
+
+#: kerko/templates/kerko/search-item.html.jinja2:14 kerko/views.py:97
+msgid "Full bibliography"
+msgstr "Vollständige Literaturliste"
+
+#: kerko/views.py:99
+msgid "Your search did not match any resources"
+msgstr "Ihre Suche ergab keine Treffer"
+
+#: kerko/views.py:164
+msgid ""
+"The document you have requested has been removed. Please check below for "
+"the latest documents available."
+msgstr ""
+"Das von Ihnen angeforderte Dokument wurde entfernt. Bitte prüfen Sie unten, ob "
+"neuere Dokumente verfügbar sind."
+
+#: kerko/templates/kerko/_breadbox.html.jinja2:15
+msgid "Remove the '{}' search term"
+msgstr "Entfernen Sie diesen Suchbegriff '{}'"
+
+#: kerko/templates/kerko/_breadbox.html.jinja2:28
+msgid "None of your search criteria could be recognized."
+msgstr "Keiner Ihrer Suchkbegriffe konnte erkannt werden."
+
+#: kerko/templates/kerko/_breadbox.html.jinja2:29
+#: kerko/templates/kerko/_search-help.html.jinja2:22
+#: kerko/templates/kerko/search.html.jinja2:35
+msgid "Reset search"
+msgstr "Suche zurücksetzen"
+
+#: kerko/templates/kerko/_facet_field.html.jinja2:10
+msgid "Search with the '{}' filter"
+msgstr "Suche mit dem '{}'-Filter"
+
+#: kerko/templates/kerko/_facets.html.jinja2:10
+msgid "Add the '{}' filter"
+msgstr "'{}' als Filter hinzufügen"
+
+#: kerko/templates/kerko/_facets.html.jinja2:11
+msgid "Remove the '{}' filter"
+msgstr "Den Filter nach '{}' entfernen"
+
+#: kerko/templates/kerko/_facets.html.jinja2:79
+msgid "Toggle filters display"
+msgstr "Filteranzeige umschalten"
+
+#: kerko/templates/kerko/_navbar_items.html.jinja2:3
+msgid "Bibliography"
+msgstr "Literaturliste"
+
+#: kerko/templates/kerko/_pager.html.jinja2:5
+msgid "Previous page"
+msgstr "Vorherige Seite"
+
+#: kerko/templates/kerko/_pager.html.jinja2:13
+msgid "Next page"
+msgstr "Nächste Seite"
+
+#: kerko/templates/kerko/_pager.html.jinja2:20
+#, python-format
+msgid "Page %(page_num)s"
+msgstr "Seite %(page_num)s"
+
+#: kerko/templates/kerko/_pager.html.jinja2:20
+msgid "Current page"
+msgstr "Aktuelle Seite"
+
+#: kerko/templates/kerko/_pager.html.jinja2:20
+msgid "Last page"
+msgstr "Letzte Seite"
+
+#: kerko/templates/kerko/_pager.html.jinja2:46
+msgid "Search results pagination"
+msgstr "Paginierung der Suchergebnisse"
+
+#: kerko/templates/kerko/_pager.html.jinja2:89
+#, python-format
+msgid "Page %(current)s of %(total)s"
+msgstr "Seite %(current)s von %(total)s"
+
+#: kerko/templates/kerko/_search-form.html.jinja2:7
+msgid "Search within results for..."
+msgstr "Suche innerhalb der Ergebnisse nach..."
+
+#: kerko/templates/kerko/_search-form.html.jinja2:7
+msgid "Search for..."
+msgstr "Suche nach..."
+
+#: kerko/templates/kerko/_search-form.html.jinja2:12
+msgid "Search in..."
+msgstr "Suche in..."
+
+#: kerko/templates/kerko/_search-form.html.jinja2:15
+#: kerko/templates/kerko/_search-help.html.jinja2:16
+#: kerko/templates/kerko/_search-help.html.jinja2:17
+#: kerko/templates/kerko/_search-help.html.jinja2:18
+#: kerko/templates/kerko/_search-help.html.jinja2:60
+#: kerko/templates/kerko/search.html.jinja2:17
+msgid "Search"
+msgstr "Suche"
+
+#: kerko/templates/kerko/_search-help.html.jinja2:8
+#: kerko/templates/kerko/search.html.jinja2:22
+msgid "Help"
+msgstr "Hilfe"
+
+#: kerko/templates/kerko/_search-help.html.jinja2:9
+#: kerko/templates/kerko/_search-help.html.jinja2:65
+msgid "Close Help panel"
+msgstr "Hilfe-Panel schließen"
+
+#: kerko/templates/kerko/_search-help.html.jinja2:16
+msgid ""
+"The search interface is made of three sections: <strong>{}</strong>, "
+"<strong>{}</strong>, and <strong>{}</strong>. These are described in "
+"detail below."
+msgstr ""
+"Die Suchoberfläche besteht aus drei Bereichen: <strong>{}</strong>, "
+"<strong>{}</strong>, und <strong>{}</strong>. Diese sind unten "
+"in Einzelheiten beschrieben."
+
+#: kerko/templates/kerko/_search-help.html.jinja2:16
+#: kerko/templates/kerko/_search-help.html.jinja2:17
+#: kerko/templates/kerko/_search-help.html.jinja2:47
+#: kerko/templates/kerko/_search-help.html.jinja2:61
+#: kerko/templates/kerko/search.html.jinja2:28
+#: kerko/templates/kerko/search.html.jinja2:178
+#: kerko/templates/kerko/search.html.jinja2:189
+msgid "Explore"
+msgstr "Erkunden"
+
+#: kerko/templates/kerko/_search-help.html.jinja2:16
+#: kerko/templates/kerko/_search-help.html.jinja2:54
+msgid "Results"
+msgstr "Ergebnisse"
+
+#: kerko/templates/kerko/_search-help.html.jinja2:17
+msgid ""
+"You may start searching either from the <strong>{}</strong> section or "
+"from the <strong>{}</strong> section."
+msgstr ""
+"Sie können die Suche entweder aus dem Abschnitt <strong>{}</strong> oder "
+"<strong>{}</strong> beginnen."
+
+#: kerko/templates/kerko/_search-help.html.jinja2:19
+msgid ""
+"This section shows your current search criteria and allows you to submit "
+"keywords to search in the bibliography."
+msgstr ""
+"Dieser Abschnitt zeigt Ihre aktuellen Suchkriterien an und ermöglicht Ihnen "
+"die Eingabe von Suchbegriffen für die Suche in der Literaturdatenbank."
+
+#: kerko/templates/kerko/_search-help.html.jinja2:21
+msgid ""
+"Each new submission adds the entered keywords to the list of search "
+"criteria."
+msgstr ""
+"Jede neue Eingabe ergänzt die eingegebenen Begriffe in den "
+"Suchkriterien."
+
+#: kerko/templates/kerko/_search-help.html.jinja2:22
+msgid ""
+"To start a new search instead of adding keywords to the current search, "
+"use the <strong>{}</strong> button, then enter your new keywords."
+msgstr ""
+"Um eine neue Suche zu starten, anstatt weitere Suchbegriffe zur aktuellen "
+"Suche hinzuzufügen, verwenden Sie die Schaltfläche <strong>{}</strong> und "
+"geben Sie dann Ihre neuen Suchbegriffe ein."
+
+#: kerko/templates/kerko/_search-help.html.jinja2:23
+msgid ""
+"To replace an already submitted keyword, first remove it by unchecking "
+"its checkbox, then submit a new keyword."
+msgstr ""
+"Um ein bereits eingegebenes Suchwort zu ersetzen, entfernen Sie es zunächst, "
+"indem Sie auf das entsprechende Ankreuzfeld klicken, "
+"und geben Sie dann einen neuen Suchbegriff ein."
+
+#: kerko/templates/kerko/_search-help.html.jinja2:25
+msgid ""
+"You may scope the search by selecting which fields to search, for "
+"instance:"
+msgstr ""
+"Sie können die Suche eingrenzen, indem Sie auswählen, welche Felder "
+"durchsucht werden sollen, zum Beispiel:"
+
+#: kerko/templates/kerko/_search-help.html.jinja2:29
+msgid ": "
+msgstr ": "
+
+#: kerko/templates/kerko/_search-help.html.jinja2:34
+msgid "You may use boolean operators with your keywords. For instance:"
+msgstr ""
+"Sie können bei Ihren Suchbegriffen boolesche Operatoren verwenden. "
+"Zum Beispiel:"
+
+#: kerko/templates/kerko/_search-help.html.jinja2:36
+msgid ""
+"<strong>{and_op}</strong>: Finds entries that contain all specified "
+"terms. This is the default relation between terms when no operator is "
+"specified, e.g., <code>a b</code> is the same as <code>a {and_op} "
+"b</code>."
+msgstr ""
+"<strong>{and_op}</strong>: Findet Einträge, die alle angegebenen Begriffe "
+"enthalten. Dies ist die standardmäßige Verknüpfung zwischen Suchbegriffen, "
+"wenn kein Operator angegeben wird, z.B. <code>a b</code> ist das gleiche "
+"wie <code>a {and_op} b</code>."
+
+#: kerko/templates/kerko/_search-help.html.jinja2:37
+msgid ""
+"<strong>{or_op}</strong>: Finds entries that contain any of the specified"
+" terms, e.g., <code>a {or_op} b</code>."
+msgstr ""
+"<strong>{or_op}</strong>: Findet Einträge, die einen der angegebenen "
+"Begriffe enthalten, z.B. <code>a {or_op} b</code>."
+
+#: kerko/templates/kerko/_search-help.html.jinja2:38
+msgid ""
+"<strong>{not_op}</strong>: Excludes entries that contain the specified "
+"terms, e.g., <code>{not_op} a</code>."
+msgstr ""
+"<strong>{not_op}</strong>: Schließt Einträge aus, die die angegebenen "
+"Begriffe enthalten, z.B. <code>{not_op} a</code>."
+
+#: kerko/templates/kerko/_search-help.html.jinja2:39
+msgid "Boolean operators must be entered in UPPERCASE."
+msgstr "Boolesche Operatoren müssen in GROSSBUCHSTABEN eingegeben werden."
+
+#: kerko/templates/kerko/_search-help.html.jinja2:41
+msgid ""
+"You may use logical groupings (with parentheses) to eliminate ambiguities"
+" when using multiple boolean operators, e.g., <code>(a {or_op} b) "
+"{and_op} c</code>."
+msgstr ""
+"Sie können logische Gruppierungen (mit Klammern) verwenden, um "
+"Mehrdeutigkeiten zu vermeiden, wenn Sie mehrere boolesche Operatoren "
+"verwenden, z.B. <code>(a {or_op} b) {and_op} c</code>."
+
+#: kerko/templates/kerko/_search-help.html.jinja2:42
+msgid ""
+"You may require exact sequences of words (with double quotes), e.g., "
+"<code>\"a b c\"</code>. The default difference between word positions is "
+"1, meaning that an entry will match if it contains the words next to each"
+" other, but a different maximum distance may be specified (with the tilde"
+" character), e.g., <code>\"web search\"~2</code> allows up to 1 word "
+"between <code>web</code> and <code>search</code>, meaning it could match "
+"<code>web site search</code> as well as <code>web search</code>."
+msgstr ""
+"Sie können eine genaue Wortfolge (mit doppelten Anführungszeichen) "
+"eingeben, zum Beispiel <code>\"a b c\"</code>. Standardmäßig ist der "
+"Abstand zwischen den Positionen der Wörter 1, was bedeutet, dass ein "
+"Eintrag gefunden wird, wenn er die Wörter enthält und diese aufeinander "
+"folgen. Es kann ein anderer maximaler Abstand angegeben werden "
+"(mit der Tilde), z.B. <code>\"Web Suche\"~2</code> erlaubt bis zu einem "
+"Begriff zwischen <code>Web</code> und <code>Suche</code>, d.h. die "
+"Reihenfolge im Suchtreffer könnte ebenso gut <code>Web Browser Suche"
+"</code> oder <code>Web Suche</code> sein."
+
+#: kerko/templates/kerko/_search-help.html.jinja2:43
+msgid ""
+"You may specify that some words are more important than others (with the "
+"caret), e.g., <code>faceted^2 search browsing^0.5</code> specifies that "
+"<code>faceted</code> is twice as important as <code>search</code> when "
+"computing the relevance score of the results, while <code>browsing</code>"
+" is half as important. Such term boosting may be applied to a logical "
+"grouping, e.g., <code>(a b)^3 c</code>."
+msgstr ""
+"Sie können angeben, dass einige Begriffe wichtiger sind als andere "
+"(mit dem Zirkumflex-Zeichen). Zum Beispiel bedeutet "
+"<code>Web^2 Browser Suche^0.5</code>, dass <code>Web</code> bei der "
+"Berechnung der Relevanz der Ergebnisse doppelt so wichtig ist wie "
+"<code>Browser</code>, während <code>Suche</code> halb so wichtig ist. "
+"Diese Art von "
+"Gewichtung kann auf eine logische Gruppierung angewendet werden, z.B. "
+"<code>(Web Browser)^3 Suche</code>."
+
+#: kerko/templates/kerko/_search-help.html.jinja2:44
+msgid ""
+"Keyword search is case-insentitive, accents are folded, and punctuation "
+"is ignored."
+msgstr ""
+"Die Suche ignoriert Groß-/Kleinschreibung, Akzente entfallen "
+"und Zeichensetzung wird ignoriert."
+
+#: kerko/templates/kerko/_search-help.html.jinja2:45
+msgid ""
+"Stemming is performed on terms from most text fields, e.g., title, "
+"abstract, notes. Words are thus reduced to their root form, saving you "
+"from having to specify all variants of a word when searching, e.g., terms"
+" such as <code>search</code>, <code>searches</code>, and "
+"<code>searching</code> all produce the same results. Stemming is "
+"<em>not</em> applied to text in name fields, e.g., authors/contributors, "
+"publisher, publication."
+msgstr ""
+"Stemming wird auf Begriffe in den meisten Textfeldern angewendet, "
+"z.B. Titel, Zusammenfassung, Notizen. Die Wörter werden so auf ihre "
+"Stammform reduziert, was Ihnen erspart, bei der Suche alle Varianten eines "
+"Wortes angeben zu müssen, z.B. führen Begriffe wie <code>Suche</code>, "
+"<code>Suchen</code> und <code>suchend</code> alle zu den gleichen "
+"Ergebnissen. Stemming wird <em>nicht</em> auf Text in Namensfeldern "
+"angewendet, wie z.B. Autoren/Beitragende, Verlag, Publikation."
+
+#: kerko/templates/kerko/_search-help.html.jinja2:48
+msgid ""
+"This section allows you to explore categories associated with the "
+"references."
+msgstr ""
+"In diesem Bereich können Sie die mit den Referenzen verbundenen Kategorien "
+" erkunden."
+
+#: kerko/templates/kerko/_search-help.html.jinja2:50
+msgid ""
+"Check a category to add it to your search criteria and narrow your "
+"search. The results will only show entries that are associated with the "
+"category, and more specific terms may appear under the newly selected "
+"category."
+msgstr ""
+"Markieren Sie eine Kategorie, um sie zu Ihren Suchkriterien hinzuzufügen "
+"und Ihre Suche einzugrenzen. In den Ergebnissen werden nur Einträge "
+"angezeigt, die mit der Kategorie verknüpft sind, und unter der neu gewählten "
+"Kategorie können spezifischere Begriffe erscheinen."
+
+#: kerko/templates/kerko/_search-help.html.jinja2:51
+msgid ""
+"Uncheck a category to remove it from your search criteria and broaden "
+"your search results."
+msgstr ""
+"Entfernen Sie die Markierung einer Kategorie, um sie aus Ihren Suchkriterien "
+"zu entfernen und Ihre Suchergebnisse zu erweitern."
+
+#: kerko/templates/kerko/_search-help.html.jinja2:52
+msgid ""
+"The numbers shown next to the categories indicate how many entries are "
+"associated with each category in the current set of results. Those "
+"numbers will vary based on your search criteria to always describe what's"
+" in the current set of results. Likewise, categories and whole facets "
+"will disappear when the result set has no entry associated to them."
+msgstr ""
+"Die neben den Kategorien angezeigten Zahlen geben an, wie viele Einträge den "
+"einzelnen Kategorien unter Berücksichtigung der aktuellen Suchergebnisse "
+"zugeordnet sind. Diese Zahlen hängen von Ihren Suchkriterien ab, so dass sie "
+"immer anzeigen, was in den aktuellen Ergebnissen enthalten ist. Ebenso können "
+"ganze Kategorien und Facetten verschwinden, wenn die Suchergebnisse keine "
+"damit verbundenen Einträge enthalten."
+
+#: kerko/templates/kerko/_search-help.html.jinja2:55
+msgid ""
+"This section shows the search results. When no search criteria has been "
+"given, it shows the full content of the bibliography (up to {page_len} "
+"entries per page)."
+msgstr ""
+"Dieser Bereich zeigt die Suchergebnisse an. Wenn keine Suchbegriffe angegeben "
+"wurden, wird der vollständige Inhalt der Literaturdatenbank angezeigt "
+"(bis zu {page_len} Einträge pro Seite)."
+
+#: kerko/templates/kerko/_search-help.html.jinja2:57
+msgid ""
+"Each entry of the results list is a link to its full bibliographic "
+"record. From the bibliographic record view, you may continue exploring "
+"the search results by going to previous or following records in your "
+"search results, or you may return to the list of results."
+msgstr ""
+"Jeder Treffer in den Suchergebnissen ist ein Link zu seinem vollständigen "
+"Eintrag. Von der Ansicht der einzelnen Einträge aus können Sie die "
+"Suchergebnisse weiter durchsuchen, indem Sie zu den vorherigen oder "
+"nachfolgenden Treffern in Ihren Suchergebnissen gehen, oder Sie können zur "
+"Ergebnisliste zurückkehren."
+
+#: kerko/templates/kerko/_search-help.html.jinja2:59
+msgid ""
+"Various options are provided to let you sort the search results. One of "
+"them is the <strong>Relevance</strong> option, which ranks the results "
+"from most relevant to least relevant. The score used for ranking takes "
+"into account word frequencies as well as the fields where they appear. "
+"For instance, if a search term occurs frequently in an entry or is one of"
+" very few terms used in that entry, that entry will probably rank higher "
+"than another where the search term occurs less frequently or where lots "
+"of other words also occur. Likewise, a search term will have more effect "
+"on the scores if it is rare in the whole bibliography than if it is very "
+"common. Also, if a search term appears in, e.g., the title of an entry, "
+"it will have more effect on the score of that entry than if it appeared "
+"in a less important field such as the abstract."
+msgstr ""
+"Die Suchergebnisse können nach verschiedenen Kriterien sortiert werden. "
+"Eines davon ist die Option <strong>Relevanz</strong>, mit der die Ergebnisse "
+"von der höchsten bis zur niedrigsten Relevanz geordnet werden. Die für das "
+"Ranking verwendete Wertung berücksichtigt sowohl die Worthäufigkeiten "
+"als auch die Felder, in denen die Begriffe vorkommen. Wenn zum Beispiel ein "
+"Suchbegriff in einem Eintrag häufig vorkommt oder einer von sehr wenigen "
+"Begriffen ist, die dieser Eintrag enthält, wird der Eintrag wahrscheinlich "
+"höher eingestuft als ein anderer, in dem der Suchbegriff weniger häufig "
+"vorkommt oder in dem auch viele andere Wörter vorkommen. Ebenso wird ein "
+"Suchbegriff, wenn er in der gesamten Literaturdatenbank selten vorkommt, "
+"einen größeren Einfluss auf die Ergebnisse haben als wenn er sehr häufig "
+"vorkommt. Auch wenn ein Suchbegriff z.B. im Titel eines Eintrags enthalten "
+"ist, hat er mehr Einfluss auf die Bewertung dieses Eintrages, als wenn er "
+"in einem weniger wichtigen Feld wie der Zusammenfassung vorkommt."
+
+#: kerko/templates/kerko/_search-help.html.jinja2:60
+msgid ""
+"The <strong>Relevance</strong> sort is only available when keywords have "
+"been entered in the <strong>{search}</strong> section."
+msgstr ""
+"Die Sortierung nach <strong>Relevanz</strong> ist nur verfügbar, wenn "
+"Suchbegriffe in den Bereich <strong>{search}</strong> eingegeben wurden."
+
+#: kerko/templates/kerko/_search-help.html.jinja2:61
+msgid ""
+"Categories selected in the <strong>{explore}</strong> section have no "
+"effect on the relevance score. Their only effect is to filter the list of"
+" results."
+msgstr ""
+"Kategorien, die im Bereich <strong>{explore}</strong> ausgewählt wurden, "
+"haben keinen Einfluss auf die Bewertung der Relevanz. Durch sie wird "
+"lediglich die Liste der Suchergebnisse gefiltert."
+
+#: kerko/templates/kerko/_search-help.html.jinja2:65
+#: kerko/templates/kerko/search.html.jinja2:196
+msgid "Close"
+msgstr "Schließen"
+
+#: kerko/templates/kerko/_sorter.html.jinja2:4
+msgid "Sort by {sort_option}"
+msgstr "Sortieren nach {sort_option}"
+
+#: kerko/templates/kerko/_sorter.html.jinja2:5
+msgid "Current sort"
+msgstr "Aktuelle Sortierung"
+
+#: kerko/templates/kerko/_sorter.html.jinja2:10
+msgid "Sort by..."
+msgstr "Sortieren nach ..."
+
+#: kerko/templates/kerko/_sorter.html.jinja2:11
+msgid "Sort by: {sort_option}"
+msgstr "Sortieren nach: {sort_option}"
+
+#: kerko/templates/kerko/item.html.jinja2:41
+msgid "Permanent link to this bibliographic record"
+msgstr "Dauerhafter Link zu diesem Eintrag"
+
+#: kerko/templates/kerko/item.html.jinja2:58
+#: kerko/templates/kerko/search.html.jinja2:92
+msgid "Read documents"
+msgstr "Dokumente lesen"
+
+#: kerko/templates/kerko/item.html.jinja2:71
+#: kerko/templates/kerko/search.html.jinja2:107
+msgid "Read '{}'"
+msgstr "'{}' lesen"
+
+#: kerko/templates/kerko/item.html.jinja2:72
+msgid "Read document"
+msgstr "Dokument lesen"
+
+#: kerko/templates/kerko/item.html.jinja2:79
+#: kerko/templates/kerko/search.html.jinja2:132
+#, python-format
+msgid "Print this citation"
+msgid_plural "Print %(count_formatted)s citations"
+msgstr[0] "Diese Zitierung drucken"
+msgstr[1] "%(count_formatted)s als Zitierung drucken"
+
+#: kerko/templates/kerko/item.html.jinja2:87
+#: kerko/templates/kerko/search.html.jinja2:140
+#, python-format
+msgid "Download this citation"
+msgid_plural "Download %(count_formatted)s citations"
+msgstr[0] "Diese Zitierung herunterladen"
+msgstr[1] "%(count_formatted)s als Zitierung herunterladen"
+
+#: kerko/templates/kerko/item.html.jinja2:91
+#: kerko/templates/kerko/search.html.jinja2:144
+msgid "Download in {download_option} format"
+msgstr "Herunterladen im {download_option}-Format"
+
+#: kerko/templates/kerko/item.html.jinja2:104
+msgid "Search the '{}' resource type"
+msgstr "Nach Einträgen vom Typ '{}' suchen"
+
+#: kerko/templates/kerko/item.html.jinja2:107
+msgid "Author/contributor"
+msgid_plural "Authors/contributors"
+msgstr[0] "Autor(in)/Mitwirkende(r)"
+msgstr[1] "Autoren/Mitwirkende"
+
+#: kerko/templates/kerko/item.html.jinja2:112
+msgid "Search '{}'"
+msgstr "Suche nach '{}'"
+
+#: kerko/templates/kerko/item.html.jinja2:130
+msgid "Notes"
+msgstr "Notizen"
+
+#: kerko/templates/kerko/item.html.jinja2:131
+msgid "Citation"
+msgstr "Zitierung"
+
+#: kerko/templates/kerko/item.html.jinja2:139
+msgid "Document"
+msgid_plural "Documents"
+msgstr[0] "Dokument"
+msgstr[1] "Dokumente"
+
+#: kerko/templates/kerko/item.html.jinja2:149
+msgid "Link to this record"
+msgstr "Link zu diesem Eintrag"
+
+#: kerko/templates/kerko/item.html.jinja2:156
+#: kerko/templates/kerko/search.html.jinja2:156
+#, python-format
+msgid "Processing time: %(time)s seconds"
+msgstr "Verarbeitungszeit: %(time)s Sekunden"
+
+#: kerko/templates/kerko/layout.html.jinja2:42
+msgid "Toggle navigation"
+msgstr "Navigation umschalten"
+
+#: kerko/templates/kerko/layout.html.jinja2:74
+msgid "Remove this message"
+msgstr "Diese Meldung entfernen"
+
+#: kerko/templates/kerko/layout.html.jinja2:102
+msgid "Powered by {zotero} and {kerko}."
+msgstr "Ermöglicht durch {zotero} und {kerko}."
+
+#: kerko/templates/kerko/search-item.html.jinja2:12
+#: kerko/templates/kerko/search.html.jinja2:17
+msgid "Your search"
+msgstr "Ihre Suche"
+
+#: kerko/templates/kerko/search-item.html.jinja2:20
+msgid "Return to list of results"
+msgstr "Zurück zu den Suchergebnissen"
+
+#: kerko/templates/kerko/search.html.jinja2:61
+#, python-format
+msgid "%(count_formatted)s resource"
+msgid_plural "%(count_formatted)s resources"
+msgstr[0] "%(count_formatted)s Eintrag"
+msgstr[1] "%(count_formatted)s Einträge"
+
+#: kerko/templates/kerko/search.html.jinja2:85
+msgid "View details"
+msgstr "Details anzeigen"
+
+#: kerko/templates/kerko/search.html.jinja2:94
+#: kerko/templates/kerko/search.html.jinja2:109
+msgid "Read"
+msgstr "Lesen"
+
+#: kerko/templates/kerko/search.html.jinja2:157
+msgid "Last update from database: {}"
+msgstr "Letztes Update der Datenbank: {}"
+
+#: kerko/templates/kerko/search.html.jinja2:162
+msgid ""
+"\n"
+"                <p>Suggestions:</p>\n"
+"                <ul>\n"
+"                    <li>Make sure that all words are spelled "
+"correctly.</li>\n"
+"                    <li>Try different words.</li>\n"
+"                    <li>Try more general terms.</li>\n"
+"                </ul>"
+msgstr ""
+"\n"
+"                <p>Vorschläge:</p>\n"
+"                <ul>\n"
+"                    <li>Stellen Sie sicher, dass alle Wörter richtig "
+"geschrieben sind.</li>\n"
+"                    <li>Probieren Sie andere Suchbegriffe aus.</li>\n"
+"                    <li>Versuchen Sie es mit allgemeineren Suchbegriffen."
+"</li>\n"
+"                </ul>"
+
+#: kerko/templates/kerko/search.html.jinja2:190
+#: kerko/templates/kerko/search.html.jinja2:196
+msgid "Close Explore panel"
+msgstr "Den Bereich <strong>{explore}</strong> schließen"
