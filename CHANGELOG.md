@@ -39,6 +39,7 @@ Other changes:
 * Redirect to the parent item's page when the user tries to request an
   attachment that no longer exists.
 * Show timezone abbreviation along with time of last update from Zotero.
+* Add German translation. Thanks [@mmoole](https://github.com/mmoole).
 * Fix broken "Getting started" example in README.
 
 Backwards incompatible changes:
