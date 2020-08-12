@@ -1,6 +1,5 @@
 {% extends config.KERKO_TEMPLATE_LAYOUT %}
 {% from "kerko/_attributes.html.jinja2" import title_aria_label %}
-{% from "kerko/_badges.html.jinja2" import badges %}
 
 {%- set show_print_link = config.KERKO_PRINT_CITATIONS_MAX_COUNT == 0 or total_count <= config.KERKO_PRINT_CITATIONS_MAX_COUNT %}
 {%- set show_print_link = show_print_link and config.KERKO_PRINT_CITATIONS_LINK %}
@@ -75,48 +74,8 @@
                 {%- include "kerko/_pager.html.jinja2" %}
             {%- endblock pager_top %}
             <ul class="mb-4 list-unstyled">
-                {%- for result in search_results %}
-                    <li class="search-item break-word">
-                        {%- if print_preview -%}
-                            {{- badges(result, mode='result') -}}
-                            {{- result.bib|safe -}}
-                        {%- else -%}
-                            <div class="d-flex">
-                                <a class="d-block mw-100 mr-auto" href="{{ result.url }}" title="{{ _('View details') }}">
-                                    {{- badges(result, mode='result') -}}
-                                    {{- result.bib|safe -}}
-                                </a>
-                                {%- if result.attachments|length > 1 %}
-                                    <div class="d-print-none ml-2">
-                                        <div class="dropdown">
-                                            <button class="{% block attachment_links_btn_classes %}btn btn-primary dropdown-toggle text-nowrap{% endblock %}" type="button" id="attachment-options-{{ result.id|escape }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" {{ title_aria_label(_('Read documents')) }}>
-                                                <span class="fas fa-file text-white" aria-hidden="true"></span>
-                                                <span class="d-none d-md-inline text-white">{{ _('Read') }}</span>
-                                            </button>
-                                            <span class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labelledby="attachment-options-{{ result.id|escape }}">
-                                                {%- for attachment in result.attachments %}
-                                                    <a class="dropdown-item" href="{{ url_for('kerko.item_attachment_download', item_id=result.id, attachment_id=attachment['id'], attachment_filename=attachment['filename']) }}"{% if config.KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW %} target="_blank"{% endif %}>
-                                                        {{- attachment.filename|escape }}
-                                                    </a>
-                                                {%- endfor %}
-                                            </span>
-                                        </div>
-                                    </div>
-                                {%- elif result.attachments|length == 1 %}
-                                    <div class="d-print-none ml-2">
-                                        <a class="{% block attachment_link_btn_classes %}btn btn-primary text-nowrap{% endblock %}" href="{{ url_for('kerko.item_attachment_download', item_id=result.id, attachment_id=result.attachments[0]['id'], attachment_filename=result.attachments[0]['filename']) }}"{% if config.KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW %} target="_blank"{% endif %} {{ title_aria_label(_('Read \'{}\'').format(result.attachments[0]['filename']|escape)) }}>
-                                            <span class="fas fa-file text-white" aria-hidden="true"></span>
-                                            <span class="d-none d-md-inline text-white">{{ _('Read') }}</span>
-                                        </a>
-                                    </div>
-                                {%- endif %}
-                                <span>{{- result.coins|safe -}}</span>
-                            </div>
-                        {%- endif -%}
-                        {%- if config.KERKO_RESULTS_ABSTRACT %}
-                            <p class="search-abstract pre-line">{{ result.data['abstractNote']|escape|urlize(target='_blank') }}</p>
-                        {%- endif %}
-                    </li>
+                {%- for result, result_url in search_results %}
+                    {%- include "kerko/_search-result.html.jinja2" %}
                 {%- endfor %}
             </ul>
             {%- block pager_bottom %}

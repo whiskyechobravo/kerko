@@ -10,7 +10,8 @@ from whoosh.support.charset import accent_map
 from whoosh.util.text import rcompile
 
 from . import codecs, extractors, transformers
-from .specs import CitationFormatSpec, FieldSpec, FlatFacetSpec, ScopeSpec, SortSpec, TreeFacetSpec
+from .specs import (CitationFormatSpec, FieldSpec, FlatFacetSpec, RelationSpec, ScopeSpec, SortSpec,
+                    TreeFacetSpec)
 
 
 class Composer:
@@ -36,6 +37,7 @@ class Composer:
             exclude_default_facets=None,
             exclude_default_sorts=None,
             exclude_default_citation_formats=None,
+            exclude_default_relations=None,
             exclude_default_badges=None,
             default_tag_include_re='',
             default_tag_exclude_re=r'^_',
@@ -85,6 +87,12 @@ class Composer:
             will be created by default. Please refer to the implementation of
             ``init_default_citation_formats()`` for the list of default citation
             formats.
+
+        :param list exclude_default_relations: List of relation types
+            (identified by key) to exclude from those created by default. If
+            that list contains the value '*', no relation type will be created
+            by default. Please refer to the implementation of
+            ``init_default_relations()`` for the list of default relation types.
 
         :param list exclude_default_badges: List of badges (identified by key)
             to exclude from those created by default. If that list contains the
@@ -167,6 +175,7 @@ class Composer:
         self.facets = {}
         self.sorts = {}
         self.citation_formats = {}
+        self.relations = {}
         self.badges = {}
         self.default_tag_include_re = default_tag_include_re
         self.default_tag_exclude_re = default_tag_exclude_re
@@ -181,6 +190,7 @@ class Composer:
         self.init_default_facets(exclude_default_facets)
         self.init_default_sorts(exclude_default_sorts)
         self.init_default_citation_formats(exclude_default_citation_formats)
+        self.init_default_relations(exclude_default_relations)
         self.init_default_badges(exclude_default_badges)
 
     def init_default_scopes(self, exclude=None):
@@ -248,7 +258,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='alternateId',
-                    field_type=ID,
+                    field_type=ID(stored=True),
                     extractor=extractors.MultiExtractor(
                         extractors=[
                             extractors.ItemDataExtractor(key='DOI'),
@@ -268,14 +278,10 @@ class Composer:
                             ),
                             # Extract dc:replaces relations.
                             extractors.TransformerExtractor(
-                                extractor=extractors.ItemRelationsExtractor(),
-                                transformers=[
-                                    transformers.find(
-                                        regex=r'^[a-z]+://[^/]+/groups/[0-9]+/items/([A-Z0-9]+)$',
-                                        flags=re.MULTILINE,
-                                        max_matches=0,
-                                    )
-                                ]
+                                extractor=extractors.ItemRelationsExtractor(
+                                    predicate='dc:replaces'
+                                ),
+                                transformers=[transformers.find_item_id_in_zotero_uris_list]
                             )
                         ]
                     )
@@ -1223,6 +1229,38 @@ class Composer:
             )
 
         #
+        # Relation fields, searchable for internal purposes only (hence the lack
+        # of a 'scopes' parameter).
+        #
+
+        # References to items that are cited by the item.
+        if 'rel_cites' not in exclude:
+            self.add_field(
+                FieldSpec(
+                    key='rel_cites',
+                    field_type=ID(stored=True),
+                    extractor=extractors.RelationsInNotesExtractor(
+                        include_re=r'_cites',
+                        exclude_re=''
+                    )
+                )
+            )
+        # Items related through Zotero's relation field.
+        if 'rel_related' not in exclude:
+            self.add_field(
+                FieldSpec(
+                    key='rel_related',
+                    field_type=ID(stored=True),
+                    extractor=extractors.TransformerExtractor(
+                        extractor=extractors.ItemRelationsExtractor(
+                            predicate='dc:relation',
+                        ),
+                        transformers=[transformers.find_item_id_in_zotero_uris_list]
+                    )
+                )
+            )
+
+        #
         # Stored fields, not available for keyword search (hence the lack of a
         # 'scopes' parameter).
         #
@@ -1435,7 +1473,7 @@ class Composer:
         """
         Initialize a set of default `SortSpec` instances.
 
-        These rely on `FieldSpec` instances, which must have been added first.
+        These rely on `FieldSpec` instances, which must have been added beforehand.
         """
         if exclude is None:
             exclude = []
@@ -1540,7 +1578,7 @@ class Composer:
         """
         Initialize a set of default `CitationFormatSpec` instances.
 
-        These rely on `FieldSpec` instances, which must have been added first.
+        These rely on `FieldSpec` instances, which must have been added beforehand.
         """
         if exclude is None:
             exclude = []
@@ -1573,11 +1611,49 @@ class Composer:
                 )
             )
 
+    def init_default_relations(self, exclude=None):
+        """
+        Initialize a set of default `RelationSpec` instances.
+
+        These rely on `FieldSpec` instances, which must have been added beforehand.
+        """
+        if exclude is None:
+            exclude = []
+
+        if '*' in exclude:
+            return
+
+        if 'cites' not in exclude:
+            self.add_relation(
+                RelationSpec(
+                    key='cites',
+                    field=self.fields['rel_cites'],
+                    label=_("Cites"),
+                    weight=10,
+                    id_fields=[self.fields['id'], self.fields['alternateId']],
+                    reverse=True,
+                    reverse_key='isCitedBy',
+                    reverse_field_key='rev_cites',
+                    reverse_label=_("Cited by"),
+                )
+            )
+        if 'related' not in exclude:
+            self.add_relation(
+                RelationSpec(
+                    key='related',
+                    field=self.fields['rel_related'],
+                    label=_("Related"),
+                    weight=20,
+                    id_fields=[self.fields['id']],
+                    directed=False,
+                )
+            )
+
     def init_default_badges(self, exclude=None):
         """
         Initialize a set of default `BadgeSpec` instances.
 
-        These rely on `FieldSpec` instances, which must have been added first.
+        These rely on `FieldSpec` instances, which must have been added beforehand.
         """
         pass
 
@@ -1626,6 +1702,12 @@ class Composer:
 
     def remove_badge(self, key):
         del self.badges[key]
+
+    def add_relation(self, relation):
+        self.relations[relation.key] = relation
+
+    def remove_relation(self, key):
+        del self.relations[key]
 
     def get_ordered_specs(self, attr):
         """

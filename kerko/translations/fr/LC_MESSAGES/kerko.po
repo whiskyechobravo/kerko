@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Kerko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-26 18:46-0400\n"
-"PO-Revision-Date: 2020-06-26 18:46-0400\n"
+"POT-Creation-Date: 2020-08-12 12:51-0400\n"
+"PO-Revision-Date: 2020-08-12 12:51-0400\n"
 "Last-Translator: David Lesieur <kerko@whiskyechobravo.com>\n"
 "Language: fr\n"
 "Language-Team: fr <kerko@whiskyechobravo.com>\n"
@@ -34,15 +34,15 @@ msgstr "En {}"
 msgid "Between {} and {}"
 msgstr "Entre {} et {}"
 
-#: kerko/composer.py:199
+#: kerko/composer.py:207
 msgid "In any field"
 msgstr "Dans tous les champs"
 
-#: kerko/composer.py:200
+#: kerko/composer.py:208
 msgid "Any field"
 msgstr "Tous les champs"
 
-#: kerko/composer.py:202
+#: kerko/composer.py:210
 msgid ""
 "Finds entries where any of the available fields contains your keywords. "
 "This is the default option."
@@ -50,15 +50,15 @@ msgstr ""
 "repère les références dont n'importe lequel des champs disponibles "
 "contient vos mots-clés. Ceci est l'option par défaut."
 
-#: kerko/composer.py:212
+#: kerko/composer.py:220
 msgid "In authors/contributors"
 msgstr "Dans les auteurs/contributeurs"
 
-#: kerko/composer.py:213
+#: kerko/composer.py:221
 msgid "Author or contributor"
 msgstr "Auteur ou contributeur"
 
-#: kerko/composer.py:215
+#: kerko/composer.py:223
 msgid ""
 "Finds entries where any of its authors' or contributors' names contains "
 "your keywords."
@@ -66,117 +66,131 @@ msgstr ""
 "repère les références dont n'importe lequel des noms d'auteurs ou de "
 "contributeurs contient vos mots-clés."
 
-#: kerko/composer.py:225
+#: kerko/composer.py:233
 msgid "In titles"
 msgstr "Dans les titres"
 
-#: kerko/composer.py:226
+#: kerko/composer.py:234
 msgid "Title"
 msgstr "Titre"
 
-#: kerko/composer.py:228
+#: kerko/composer.py:236
 msgid "Finds entries whose title contains your keywords."
 msgstr "repère les références dont le titre contient vos mots-clés."
 
-#: kerko/composer.py:1317
+#: kerko/composer.py:1400
 msgid "Topic"
 msgstr "Sujet"
 
-#: kerko/composer.py:1338 kerko/templates/kerko/item.html.jinja2:104
+#: kerko/composer.py:1421 kerko/templates/kerko/item.html.jinja2:104
 msgid "Resource type"
 msgstr "Type de ressource"
 
-#: kerko/composer.py:1356
+#: kerko/composer.py:1439
 msgid "Publication year"
 msgstr "Année de publication"
 
-#: kerko/composer.py:1362
+#: kerko/composer.py:1445
 msgid "Unknown"
 msgstr "Inconnue"
 
-#: kerko/composer.py:1374
+#: kerko/composer.py:1457
 msgid "Online resource"
 msgstr "Ressource en ligne"
 
-#: kerko/composer.py:1405
+#: kerko/composer.py:1488
 msgid "Relevance"
 msgstr "Pertinence"
 
-#: kerko/composer.py:1416
+#: kerko/composer.py:1499
 msgid "Newest first"
 msgstr "Date décroissante"
 
-#: kerko/composer.py:1430
+#: kerko/composer.py:1513
 msgid "Oldest first"
 msgstr "Date croissante"
 
-#: kerko/composer.py:1443
+#: kerko/composer.py:1526
 msgid "Author A-Z"
 msgstr "Auteur A-Z"
 
-#: kerko/composer.py:1456
+#: kerko/composer.py:1539
 msgid "Author Z-A"
 msgstr "Auteur Z-A"
 
-#: kerko/composer.py:1470
+#: kerko/composer.py:1553
 msgid "Title A-Z"
 msgstr "Titre A-Z"
 
-#: kerko/composer.py:1483
+#: kerko/composer.py:1566
 msgid "Title Z-A"
 msgstr "Titre Z-A"
 
-#: kerko/composer.py:1511
+#: kerko/composer.py:1594
 msgid "RIS"
 msgstr "RIS"
 
-#: kerko/composer.py:1512
+#: kerko/composer.py:1595
 msgid "Recommended format for most reference management software"
 msgstr ""
 "Format recommandé pour la plupart des logiciels de gestion de références "
 "bibliographiques"
 
-#: kerko/composer.py:1523
+#: kerko/composer.py:1606
 msgid "BibTeX"
 msgstr "BibTeX"
 
-#: kerko/composer.py:1524
+#: kerko/composer.py:1607
 msgid "Recommended format for BibTeX-specific software"
 msgstr "Format recommandé pour les logiciels spécialement conçus pour BibTeX"
 
-#: kerko/query.py:28 kerko/templates/kerko/_search-help.html.jinja2:36
+#: kerko/composer.py:1631
+msgid "Cites"
+msgstr "Cite"
+
+#: kerko/composer.py:1637
+msgid "Cited by"
+msgstr "Cité par"
+
+#: kerko/composer.py:1645
+msgid "Related"
+msgstr "Connexe"
+
+#: kerko/query.py:41 kerko/templates/kerko/_search-help.html.jinja2:36
 #: kerko/templates/kerko/_search-help.html.jinja2:41
 msgid "AND"
 msgstr "ET"
 
-#: kerko/query.py:29 kerko/templates/kerko/_search-help.html.jinja2:37
+#: kerko/query.py:42 kerko/templates/kerko/_search-help.html.jinja2:37
 #: kerko/templates/kerko/_search-help.html.jinja2:41
 msgid "OR"
 msgstr "OU"
 
-#: kerko/query.py:30 kerko/templates/kerko/_search-help.html.jinja2:38
+#: kerko/query.py:43 kerko/templates/kerko/_search-help.html.jinja2:38
 msgid "NOT"
 msgstr "SAUF"
 
-#: kerko/views.py:95
+#: kerko/views.py:89
 msgid "Result"
 msgid_plural "Results"
 msgstr[0] "Résultat"
 msgstr[1] "Résultats"
 
-#: kerko/templates/kerko/search-item.html.jinja2:14 kerko/views.py:97
+#: kerko/templates/kerko/search-item.html.jinja2:15 kerko/views.py:91
 msgid "Full bibliography"
 msgstr "Bibliographie complète"
 
-#: kerko/views.py:99
+#: kerko/views.py:93
 msgid "Your search did not match any resources"
 msgstr "Aucune ressource ne correspond à vos critères de recherche"
 
-#: kerko/views.py:161
+#: kerko/views.py:163
 msgid ""
 "The document you have requested has been removed. Please check below for "
 "the latest documents available."
-msgstr "Le document demandé a été supprimé. Voyez ci-dessous pour les plus récents documents disponibles."
+msgstr ""
+"Le document demandé a été supprimé. Voyez ci-dessous pour les plus "
+"récents documents disponibles."
 
 #: kerko/templates/kerko/_breadbox.html.jinja2:15
 msgid "Remove the '{}' search term"
@@ -188,7 +202,7 @@ msgstr "Aucun de vos critères de recherche n'a pu être reconnu."
 
 #: kerko/templates/kerko/_breadbox.html.jinja2:29
 #: kerko/templates/kerko/_search-help.html.jinja2:22
-#: kerko/templates/kerko/search.html.jinja2:35
+#: kerko/templates/kerko/search.html.jinja2:34
 msgid "Reset search"
 msgstr "Réinitialiser la recherche"
 
@@ -207,6 +221,14 @@ msgstr "Retirer le filtre '{}'"
 #: kerko/templates/kerko/_facets.html.jinja2:79
 msgid "Toggle filters display"
 msgstr "Basculer l'affichage des filtres"
+
+#: kerko/templates/kerko/_item-relations.html.jinja2:20
+msgid "View all"
+msgstr "Voir tout"
+
+#: kerko/templates/kerko/_item-relations.html.jinja2:21
+msgid "View fewer"
+msgstr "Voir moins"
 
 #: kerko/templates/kerko/_navbar_items.html.jinja2:3
 msgid "Bibliography"
@@ -259,12 +281,12 @@ msgstr "Chercher dans..."
 #: kerko/templates/kerko/_search-help.html.jinja2:17
 #: kerko/templates/kerko/_search-help.html.jinja2:18
 #: kerko/templates/kerko/_search-help.html.jinja2:60
-#: kerko/templates/kerko/search.html.jinja2:17
+#: kerko/templates/kerko/search.html.jinja2:16
 msgid "Search"
 msgstr "Rechercher"
 
 #: kerko/templates/kerko/_search-help.html.jinja2:8
-#: kerko/templates/kerko/search.html.jinja2:22
+#: kerko/templates/kerko/search.html.jinja2:21
 msgid "Help"
 msgstr "Aide"
 
@@ -287,9 +309,9 @@ msgstr ""
 #: kerko/templates/kerko/_search-help.html.jinja2:17
 #: kerko/templates/kerko/_search-help.html.jinja2:47
 #: kerko/templates/kerko/_search-help.html.jinja2:61
-#: kerko/templates/kerko/search.html.jinja2:28
-#: kerko/templates/kerko/search.html.jinja2:178
-#: kerko/templates/kerko/search.html.jinja2:189
+#: kerko/templates/kerko/search.html.jinja2:27
+#: kerko/templates/kerko/search.html.jinja2:137
+#: kerko/templates/kerko/search.html.jinja2:148
 msgid "Explore"
 msgstr "Explorer"
 
@@ -576,9 +598,28 @@ msgstr ""
 " liste des résultats."
 
 #: kerko/templates/kerko/_search-help.html.jinja2:65
-#: kerko/templates/kerko/search.html.jinja2:196
+#: kerko/templates/kerko/search.html.jinja2:155
 msgid "Close"
 msgstr "Fermer"
+
+#: kerko/templates/kerko/_search-result.html.jinja2:9
+msgid "View details"
+msgstr "Voir les détails"
+
+#: kerko/templates/kerko/_search-result.html.jinja2:16
+#: kerko/templates/kerko/item.html.jinja2:58
+msgid "Read documents"
+msgstr "Lire les documents"
+
+#: kerko/templates/kerko/_search-result.html.jinja2:18
+#: kerko/templates/kerko/_search-result.html.jinja2:33
+msgid "Read"
+msgstr "Lire"
+
+#: kerko/templates/kerko/_search-result.html.jinja2:31
+#: kerko/templates/kerko/item.html.jinja2:71
+msgid "Read '{}'"
+msgstr "Lire '{}'"
 
 #: kerko/templates/kerko/_sorter.html.jinja2:4
 msgid "Sort by {sort_option}"
@@ -600,22 +641,12 @@ msgstr "Trier par: {sort_option}"
 msgid "Permanent link to this bibliographic record"
 msgstr "Lien permanent vers cette notice bibliographique"
 
-#: kerko/templates/kerko/item.html.jinja2:58
-#: kerko/templates/kerko/search.html.jinja2:92
-msgid "Read documents"
-msgstr "Lire les documents"
-
-#: kerko/templates/kerko/item.html.jinja2:71
-#: kerko/templates/kerko/search.html.jinja2:107
-msgid "Read '{}'"
-msgstr "Lire '{}'"
-
 #: kerko/templates/kerko/item.html.jinja2:72
 msgid "Read document"
 msgstr "Lire le document"
 
 #: kerko/templates/kerko/item.html.jinja2:79
-#: kerko/templates/kerko/search.html.jinja2:132
+#: kerko/templates/kerko/search.html.jinja2:91
 #, python-format
 msgid "Print this citation"
 msgid_plural "Print %(count_formatted)s citations"
@@ -623,7 +654,7 @@ msgstr[0] "Imprimer cette référence"
 msgstr[1] "Imprimer %(count_formatted)s références"
 
 #: kerko/templates/kerko/item.html.jinja2:87
-#: kerko/templates/kerko/search.html.jinja2:140
+#: kerko/templates/kerko/search.html.jinja2:99
 #, python-format
 msgid "Download this citation"
 msgid_plural "Download %(count_formatted)s citations"
@@ -631,7 +662,7 @@ msgstr[0] "Télécharger cette référence"
 msgstr[1] "Télécharger %(count_formatted)s références"
 
 #: kerko/templates/kerko/item.html.jinja2:91
-#: kerko/templates/kerko/search.html.jinja2:144
+#: kerko/templates/kerko/search.html.jinja2:103
 msgid "Download in {download_option} format"
 msgstr "Télécharger au format {download_option}"
 
@@ -667,8 +698,12 @@ msgstr[1] "Documents"
 msgid "Link to this record"
 msgstr "Lien vers cette notice"
 
-#: kerko/templates/kerko/item.html.jinja2:156
-#: kerko/templates/kerko/search.html.jinja2:156
+#: kerko/templates/kerko/item.html.jinja2:163
+msgid "Relations"
+msgstr "Relations"
+
+#: kerko/templates/kerko/item.html.jinja2:202
+#: kerko/templates/kerko/search.html.jinja2:115
 #, python-format
 msgid "Processing time: %(time)s seconds"
 msgstr "Temps de traitement: %(time)s seconds"
@@ -685,36 +720,27 @@ msgstr "Retirer ce message"
 msgid "Powered by {zotero} and {kerko}."
 msgstr "Propulsé par {zotero} et {kerko}."
 
-#: kerko/templates/kerko/search-item.html.jinja2:12
-#: kerko/templates/kerko/search.html.jinja2:17
+#: kerko/templates/kerko/search-item.html.jinja2:13
+#: kerko/templates/kerko/search.html.jinja2:16
 msgid "Your search"
 msgstr "Votre recherche"
 
-#: kerko/templates/kerko/search-item.html.jinja2:20
+#: kerko/templates/kerko/search-item.html.jinja2:21
 msgid "Return to list of results"
 msgstr "Retourner à la liste des résultats"
 
-#: kerko/templates/kerko/search.html.jinja2:61
+#: kerko/templates/kerko/search.html.jinja2:60
 #, python-format
 msgid "%(count_formatted)s resource"
 msgid_plural "%(count_formatted)s resources"
 msgstr[0] "%(count_formatted)s ressource"
 msgstr[1] "%(count_formatted)s ressources"
 
-#: kerko/templates/kerko/search.html.jinja2:85
-msgid "View details"
-msgstr "Voir les détails"
-
-#: kerko/templates/kerko/search.html.jinja2:94
-#: kerko/templates/kerko/search.html.jinja2:109
-msgid "Read"
-msgstr "Lire"
-
-#: kerko/templates/kerko/search.html.jinja2:157
+#: kerko/templates/kerko/search.html.jinja2:116
 msgid "Last update from database: {}"
 msgstr "Dernière mise à jour depuis la base de données&nbsp;: {}"
 
-#: kerko/templates/kerko/search.html.jinja2:162
+#: kerko/templates/kerko/search.html.jinja2:121
 msgid ""
 "\n"
 "                <p>Suggestions:</p>\n"
@@ -734,7 +760,7 @@ msgstr ""
 "                    <li>Essayez des termes plus généraux.</li>\n"
 "                </ul>"
 
-#: kerko/templates/kerko/search.html.jinja2:190
-#: kerko/templates/kerko/search.html.jinja2:196
+#: kerko/templates/kerko/search.html.jinja2:149
+#: kerko/templates/kerko/search.html.jinja2:155
 msgid "Close Explore panel"
 msgstr "Fermer le panneau d'exploration"

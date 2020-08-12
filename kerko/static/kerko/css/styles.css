@@ -40,6 +40,10 @@
     */
     display: block !important;
   }
+  .tab-content > .tab-pane {
+    display: block;
+    opacity: 1;
+  }
   .text-md-right.text-print-left {
     text-align: left !important;
   }
@@ -70,6 +74,18 @@
 }
 .dropdown-item {
   white-space: normal;
+}
+.more-or-less[aria-expanded="true"] span.more {
+  display: none;
+}
+.more-or-less[aria-expanded="false"] span.more {
+  display: inline;
+}
+.more-or-less[aria-expanded="true"] span.less {
+  display: inline;
+}
+.more-or-less[aria-expanded="false"] span.less {
+  display: none;
 }
 main {
   min-height: calc(100vh - 7rem);

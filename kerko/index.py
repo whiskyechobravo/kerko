@@ -34,20 +34,24 @@ def delete_index():
 
 
 def request_library_context(zotero_credentials):
-    collections = zotero.Collections(zotero_credentials)
     item_types = {
         t['itemType']: t['localized']
         for t in zotero.load_item_types(zotero_credentials)
     }
-    item_fields = {
-        t: zotero.load_item_type_fields(zotero_credentials, t)
-        for t in item_types.keys()
-    }
-    creator_types = {
-        t: zotero.load_item_type_creator_types(zotero_credentials, t)
-        for t in item_types.keys()
-    }
-    return LibraryContext(collections, item_types, item_fields, creator_types)
+    return LibraryContext(
+        zotero_credentials.library_id,
+        zotero_credentials.library_type.rstrip('s'),  # Remove 's' appended by pyzotero.
+        collections=zotero.Collections(zotero_credentials),
+        item_types=item_types,
+        item_fields={
+            t: zotero.load_item_type_fields(zotero_credentials, t)
+            for t in item_types.keys()
+        },
+        creator_types={
+            t: zotero.load_item_type_creator_types(zotero_credentials, t)
+            for t in item_types.keys()
+        }
+    )
 
 
 def sync_index():

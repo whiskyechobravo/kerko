@@ -12,21 +12,9 @@ from .breadbox import build_breadbox
 from .criteria import Criteria
 from .forms import SearchForm
 from .pager import build_pager
-from .query import (build_creators_display, build_item_facet_results, run_query,
-                    run_query_unique_with_fallback)
+from .query import (build_creators_display, build_item_facet_results, build_relations,
+                    get_search_return_fields, run_query, run_query_unique_with_fallback)
 from .sorter import build_sorter
-
-
-def get_search_return_fields(criteria):
-    if criteria.page_len != 1:  # Note: page_len can be None (for all results).
-        return_fields = current_app.config['KERKO_RESULTS_FIELDS']
-        if current_app.config['KERKO_RESULTS_ABSTRACT'] and 'data' not in return_fields:
-            return_fields.append('data')
-        for badge in current_app.config['KERKO_COMPOSER'].badges.values():
-            if badge.field.key not in return_fields:
-                return_fields.append(badge.field.key)
-        return return_fields
-    return None  # All fields.
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
@@ -46,7 +34,7 @@ def search():
         return redirect(url, 302)
 
     search_results, facet_results, total_count, page_count, last_sync = run_query(
-        criteria, get_search_return_fields(criteria)
+        criteria, get_search_return_fields(criteria.page_len)
     )
 
     criteria.fit_pager(page_count)
@@ -73,6 +61,11 @@ def search():
         list_page_num = int((criteria.page_num - 1) / current_app.config['KERKO_PAGE_LEN'] + 1)
         build_creators_display(search_results[0])
         build_item_facet_results(search_results[0])
+        build_relations(
+            search_results[0],
+            get_search_return_fields(page_len=None, exclude=['coins']),
+            sort=current_app.config['KERKO_RELATIONS_SORT']
+        )
         return render_template(
             current_app.config['KERKO_TEMPLATE_SEARCH_ITEM'],
             title=search_results[0].get('data', {}).get('title', ''),
@@ -86,11 +79,12 @@ def search():
         )
 
     if total_count > 0:
-        for i, result in enumerate(search_results):
-            result['url'] = criteria.build_url(
-                page_num=(criteria.page_num - 1) * (criteria.page_len or 0) + i + 1,
-                page_len=1
-            )
+        search_results_urls = [
+            criteria.build_url(
+                page_num=(criteria.page_num - 1) * (criteria.page_len or 0) + i + 1, page_len=1
+            ) for i, result in enumerate(search_results)
+        ]
+        search_results = zip(search_results, search_results_urls)
         if context['is_searching']:
             context['title'] = ngettext('Result', 'Results', total_count)
         else:
@@ -129,6 +123,11 @@ def item_view(item_id):
 
     build_creators_display(item)
     build_item_facet_results(item)
+    build_relations(
+        item,
+        get_search_return_fields(page_len=None, exclude=['coins']),
+        sort=current_app.config['KERKO_RELATIONS_SORT']
+    )
     return render_template(
         current_app.config['KERKO_TEMPLATE_ITEM'],
         item=item,

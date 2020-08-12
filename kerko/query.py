@@ -2,13 +2,26 @@ import re
 
 from flask import current_app
 from flask_babelex import gettext
-from whoosh.qparser import MultifieldParser, QueryParser
-from whoosh.qparser import plugins
-from whoosh.query import And, Not, Every
-from whoosh.sorting import Facets, Count
+from whoosh.qparser import MultifieldParser, QueryParser, plugins
+from whoosh.query import And, Every, Not, Or, Term
+from whoosh.sorting import Count, Facets
 
 from .criteria import Criteria
 from .index import open_index
+
+
+def get_search_return_fields(page_len, exclude=None):
+    if exclude is None:
+        exclude = []
+    if page_len != 1:  # Note: page_len can be None (for all results).
+        return_fields = [f for f in current_app.config['KERKO_RESULTS_FIELDS'] if f not in exclude]
+        if current_app.config['KERKO_RESULTS_ABSTRACT'] and 'data' not in return_fields:
+            return_fields.append('data')
+        for badge in current_app.config['KERKO_COMPOSER'].badges.values():
+            if badge.field.key not in return_fields:
+                return_fields.append(badge.field.key)
+        return return_fields
+    return None  # All fields.
 
 
 def build_keywords_query(keywords):
@@ -203,6 +216,88 @@ def build_search_facet_results(searcher, groups, criteria, query_facets):
                         results.groups(spec.key).items(), criteria, active_only=True
                     )
     return facets
+
+
+def _get_directed_relation_search_terms(item, relation):
+    """
+    Build search terms for a directed relation.
+
+    Finds items for which one of the identifiers match an identifier from the
+    current item's relation field.
+    """
+    return [
+        Term(field.key, ref) for field in relation.id_fields
+        for ref in item.get(relation.field.key, [])
+    ]
+
+
+def _get_reverse_relation_search_terms(item, relation):
+    """
+    Build search terms for a reverse relation.
+
+    Finds occurrences of one of the identifiers of the current item in the
+    relation field of other items.
+    """
+    identifiers = []
+    for id_field in relation.id_fields:
+        value = item.get(id_field.key, [])
+        if isinstance(value, str):
+            identifiers.append(value)
+        else:
+            identifiers.extend(value)
+    return [Term(relation.field.key, identifier) for identifier in identifiers]
+
+
+def build_relations(item, return_fields=None, sort=None):
+    """
+    Prepare the relational fields of the item for a given relation.
+    """
+    index = open_index()
+    if index:
+        with index.searcher() as searcher:
+            composer = current_app.config['KERKO_COMPOSER']
+            if sort in composer.sorts:
+                search_args = {
+                    'sortedby': composer.sorts[sort].get_field_keys(),
+                    'reverse': composer.sorts[sort].reverse,
+                }
+            else:
+                search_args = {}
+
+            def search_relation(search_terms, item, key):
+                """
+                Search for a relation and store the result in the given item (at key).
+                """
+                results = searcher.search(q=Or(search_terms), limit=None, **search_args)
+                if results:
+                    item[key] = [
+                        _get_fields(hit, return_fields) for hit in results
+                    ]
+                else:
+                    item[key] = []  # Replace original value of the field with the results.
+
+            for relation in composer.get_ordered_specs('relations'):
+                if relation.directed:
+                    search_relation(
+                        search_terms=_get_directed_relation_search_terms(item, relation),
+                        item=item,
+                        key=relation.field.key,
+                    )
+                else:
+                    search_relation(
+                        search_terms=(
+                            _get_directed_relation_search_terms(item, relation) +
+                            _get_reverse_relation_search_terms(item, relation)
+                        ),
+                        item=item,
+                        key=relation.field.key,
+                    )
+                if relation.reverse:
+                    search_relation(
+                        search_terms=_get_reverse_relation_search_terms(item, relation),
+                        item=item,
+                        key=relation.reverse_field_key,
+                    )
 
 
 def run_query(criteria, return_fields=None):

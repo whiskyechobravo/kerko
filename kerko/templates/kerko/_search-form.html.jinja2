@@ -1,6 +1,6 @@
 {%- from "kerko/_attributes.html.jinja2" import title_aria_label %}
 
-{%- if search_results|length > 0 %}
+{%- if search_results %}
     <form method="post" role="search" {% block search_form_attributes %}class="form d-print-none"{% endblock %}>
         {{- form.hidden_tag() }}
         <div class="input-group">

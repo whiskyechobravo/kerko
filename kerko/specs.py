@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from collections.abc import Iterable
 
 from babel.numbers import format_number
 from flask_babelex import get_locale
@@ -6,7 +7,7 @@ from whoosh.fields import ID
 from whoosh.query import Prefix, Term
 
 from . import extractors, renderers
-from .codecs import IdentityFieldCodec, BaseFacetCodec, CollectionFacetCodec
+from .codecs import BaseFacetCodec, CollectionFacetCodec, IdentityFieldCodec
 from .text import slugify, sort_normalize
 from .tree import Tree
 
@@ -494,6 +495,78 @@ class CitationFormatSpec:
         self.mime_type = mime_type
         self.group_format = group_format
         self.group_item_delimiter = group_item_delimiter
+
+
+class RelationSpec:
+    """
+    Specifies a type of relation between items.
+
+    This is a configuration element, with no effect on the search index schema.
+    """
+
+    def __init__(
+            self,
+            *,
+            key,
+            field,
+            label,
+            weight,
+            id_fields,
+            directed=True,
+            reverse=False,
+            reverse_key='',
+            reverse_field_key='',
+            reverse_label=''
+    ):
+        """
+        Initialize a relation type.
+
+        :param str key: Key of this relation type.
+
+        :param FieldSpec field: `FieldSpec` instance associated to this relation
+            type. The field will be looked up in the search index to retrieve
+            item identifiers related to a given item.
+
+        :param str label: Label of this relation type.
+
+        :param int weight: Determine the position of this relation type
+            relatively to other relation types in lists.
+
+        :paras list id_fields: List of `FieldSpec` instances representing the
+            fields to search when trying to resolve an item identifier.
+
+        :param bool directed: Whether a relation is directed (i.e.
+            bidirectional) or not.
+
+        :param bool reverse: Whether a reverse relation should be exposed. If
+            `directed` is `False`, this can only be `False` as well.
+
+        :param str reverse_key: Key of the reverse relation. Should be set only
+            if `reverse` is `True`.
+
+        :param str reverse_field_key: Field key to use for storing the reverse
+            relation. This isn't a `FieldSpec` as the field won't be looked up
+            in the search index. Instead, it will be dynamically populated with
+            items whose `field` contain a given item. Should be set only if
+            `reverse` is `True`.
+
+        :param str reverse_label: Label of the reverse relation. Should be set
+            only if `reverse` is `True`.
+        """
+        assert not reverse and not directed or directed
+        assert not reverse and not reverse_key or reverse
+        assert not reverse and not reverse_field_key or reverse
+        assert not reverse and not reverse_label or reverse
+        self.key = key
+        self.field = field
+        self.label = label
+        self.weight = weight
+        self.id_fields = id_fields
+        self.directed = directed
+        self.reverse = reverse
+        self.reverse_key = reverse_key
+        self.reverse_field_key = reverse_field_key
+        self.reverse_label = reverse_label
 
 
 class BadgeSpec:

@@ -140,8 +140,13 @@ The following features are implemented in Kerko:
   bibliography based on their tags.
 * DOI, ISBN and ISSN resolver: items that have such identifier in your library
   can be referenced by appending their identifier to your Kerko site's base URL.
+* Relations: bibliographic record pages show links to related items, if any. You
+  may define such relations using Zotero's _Related_ field. Moreover, Kerko adds
+  the _Cites_ and _Cited by_ relation types, which can be managed in Zotero
+  through notes (see the **Kerko Recipes** section below). Custom applications
+  can add more types of relations if desired.
 * Badges: icons can be displayed next to items, based on custom conditions.
-* Modularity: although a [standalone application][KerkoApp] is available, Kerko
+* Integration: although a [standalone application][KerkoApp] is available, Kerko
   is designed not as a standalone application, but to be part of a larger Flask
   application.
 
@@ -333,6 +338,8 @@ override their default value:
   pages. Defaults to `False`.
 * `KERKO_PRINT_CITATIONS_MAX_COUNT`: Limit over which the print button should
   be hidden from search results pages. Defaults to `0` (i.e. no limit).
+* `KERKO_RELATIONS_INITIAL_LIMIT`: Number of related items to show above the
+  "view all" link. Defaults to `5`.
 * `KERKO_RESULTS_ABSTRACT`: Show abstracts in search result pages. Defaults to
   `False`.
 * `KERKO_RESULTS_FIELDS`: List of item fields to retrieve for use in search
@@ -383,11 +390,6 @@ override their default value:
     Defaults to `0` (no limit). Useful only for development/tests.
 
 
-## Kerko Recipes
-
-TODO
-
-
 ## Known limitations
 
 * The system can probably handle relatively large bibliographies (it has been
@@ -418,6 +420,61 @@ TODO
   the use of Whoosh for search, for example, instead of Elasticsearch or Solr.
 * Use a classic architecture for the front-end. Keep it simple and avoid asset
   management. Some will want to replace the front-end anyway.
+
+
+## Kerko Recipes
+
+TODO: More recipes!
+
+
+### Providing _Cites_ and _Cited by_ relations
+
+Zotero allows one to link items together through its _Related_ field. However,
+such relations are not typed nor directed, making it impossible (1) to tell
+whether the relation has anything to do with citations, or (2) to distinguish
+which of two related items is the citing entity, and which is the one being
+cited. Consequently, Kerko has its own method for setting up those relations.
+
+To establish _Cites_ relations in your Zotero library, you must follow the
+procedure below:
+
+* Install the [Zutilo] plugin for Zotero. Once it is installed, go to _Tools >
+  Zutilo Preferences..._ in Zotero. Then, under _Zotero item menu_, select
+  _Zotero context menu_ next to the _Copy Zotero URIs_ menu item. This
+  configuration step only needs to be done once.
+* Select one or more items from your library that you wish to show as cited by
+  another. Right-click on one of the selected items to open the context menu,
+  and select _Copy Zotero URIs_ from that menu. This copies the references of
+  the selected items items to the clipboard.
+* Right-click the item from your library that cites the items. Select _Add Note_
+  from that item's context menu to add a child note.
+* In the note editor, paste the content of the clipboard. The note should then
+  contain a series of URIs looking like
+  `https://www.zotero.org/groups/9999999/items/ABCDEFGH` or
+  `https://www.zotero.org/users/9999999/items/ABCDEFGH`.
+* At the bottom of the note editor, click into the _Tags_ field and type
+  `_cites`. That tag that will tell Kerko that this particular note is special,
+  that it contains relations.
+
+At the next synchronization, Kerko will retrieve the references found in notes
+tagged with `_cites`. Afterwards, proper hyperlinked citations will appear in
+the _Cites_ and _Cited by_ sections of the related bibliographic records.
+
+Remarks:
+
+* Enter only the _Cites_ relations. The reverse _Cited by_ relations will be
+  inferred automatically.
+* You may only relate items that belong to the same Zotero library.
+* You may use Zotero Item Selects (URIs starting with `zotero://select/`) in the
+  notes, if you prefer those to Zotero URIs.
+* URIs must be separated by one or more whitespace character(s).
+* Hopefully, Zotero will provide nicer ways for handling [relation
+  types](https://sparontologies.github.io/cito/current/cito.html) in the future.
+  In the meantime, using child notes is how Kerko handles it. If relation types
+  are important to you, consider describing your use case in the [Zotero
+  forums](https://forums.zotero.org/discussion/1317/semantic-relations/).
+* Custom Kerko applications can provide more types of relations, if desired, in
+  addition to _Cites_ and _Cited by_.
 
 
 ## Translating Kerko
@@ -614,3 +671,4 @@ If you wish to add your Kerko-powered online bibliography to this list, please
 [Zotero_schema]: https://api.zotero.org/schema
 [Zotero_styles]: https://www.zotero.org/styles/
 [Zotero_web_api]: https://www.zotero.org/support/dev/web_api/start
+[Zutilo]: https://github.com/willsALMANJ/Zutilo
