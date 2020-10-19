@@ -27,15 +27,15 @@ task, which runs at regular intervals, that Kerko automatically brings its
 search index up to date by using the [Zotero Web API][Zotero_web_api] to
 retrieve the latest data from zotero.org.
 
-As a Flask [blueprint][Flask_blueprint] (a "blueprint" is Flask's term for what
-some other systems call a plugin or an extension), Kerko only works when
-incorporated into a Flask application. However, a sample stand-alone application
-is available, [KerkoApp], which is pre-built with Kerko and ready to be deployed
-on a web server. KerkoApp might work for you if you like the default appearance
-and if the provided configuration options are sufficient for your needs,
-otherwise you should probably consider building a custom application. In a
-custom application, the Kerko-powered bibliography might be just one section of
-a larger website.
+As a Flask [blueprint][Flask_blueprint] (a "blueprint" is Flask's term for an
+application component, similar to what some other systems might call a plugin or
+an extension), Kerko only works when incorporated into a Flask application.
+However, a sample stand-alone application is available, [KerkoApp], which is
+pre-built with Kerko and ready to be deployed on a web server. KerkoApp might
+work for you if you like the default appearance and if the provided
+configuration options are sufficient for your needs, otherwise you should
+probably consider building a custom application. In a custom application, the
+Kerko-powered bibliography might be just one section of a larger website.
 
 
 ## Demo site
@@ -418,8 +418,8 @@ override their default value:
   not needed.
 * Use pure Python dependencies to keep installation and deployment simple. Hence
   the use of Whoosh for search, for example, instead of Elasticsearch or Solr.
-* Use a classic architecture for the front-end. Keep it simple and avoid asset
-  management. Some will want to replace the front-end anyway.
+* Use a classic fullstack architecture. Keep it simple and avoid asset
+  management. Some will want to replace the templates and stylesheets anyway.
 
 
 ## Kerko Recipes
@@ -611,7 +611,8 @@ the following project:
 
 The name _Zotero_ reportedly derives from the Albanian word _zotëroj_, which
 means "to learn something extremely well, that is to master or acquire a skill
-in learning" (Source: [Etymology of Zotero](http://ideophone.org/zotero-etymology/)).
+in learning" (Source: Mark Dingemanse, 2008, [Etymology of
+Zotero](http://ideophone.org/zotero-etymology/)).
 
 The name _Kerko_ is a nod to Zotero as it takes a similar etymological route: it
 derives from the Albanian word _kërkoj_, which means "to ask, to request, to
