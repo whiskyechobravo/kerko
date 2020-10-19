@@ -90,7 +90,7 @@ class Criteria:
         return self.filters is not None and any(self.filters.values())
 
     def build_query(
-            self, keywords=None, filters=None, page_num=None, page_len=None,
+            self, *, keywords=None, filters=None, page_num=None, page_len=None,
             sort=None, print_preview=None):
         """
         Prepare a query string ready for use when generating an URL.
