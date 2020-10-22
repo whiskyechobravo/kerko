@@ -47,12 +47,12 @@
         <div class="d-none d-md-block">
             <ul class="pagination mb-0 flex-wrap">
                 {%- if pager.previous %}
-                    {{ page_prev_item(pager.previous.url) }}
+                    {{ page_prev_item(pager.previous[0].url) }}
                 {%- endif %}
 
-                {%- if pager.first and pager.first != pager.current and pager.first not in pager.before %}
-                    {{ page_num_item(pager.first.url, pager.first.page_num_formatted) }}
-                    {%- if pager.first.page_num + 1 < pager.before[0].page_num %}
+                {%- if pager.first and pager.first[0] != pager.current[0] and pager.first[0] not in pager.before %}
+                    {{ page_num_item(pager.first[0].url, pager.first[0].page_num_formatted) }}
+                    {%- if pager.first[0].page_num + 1 < pager.before[0].page_num %}
                         {{ page_ellipsis_item() }}
                     {%- endif %}
                 {%- endif %}
@@ -61,21 +61,21 @@
                     {{ page_num_item(e.url, e.page_num_formatted) }}
                 {%- endfor %}
 
-                {{ page_active_item(pager.current.page_num_formatted) }}
+                {{ page_active_item(pager.current[0].page_num_formatted) }}
 
                 {%- for e in pager.after %}
                     {{ page_num_item(e.url, e.page_num_formatted, last=(e.page_num == pager.last.page_num)) }}
                 {%- endfor %}
 
-                {%- if pager.last and pager.last != pager.current and pager.last not in pager.after %}
-                    {%- if pager.last.page_num - 1 > pager.after[-1].page_num %}
+                {%- if pager.last and pager.last[0] != pager.current[0] and pager.last[0] not in pager.after %}
+                    {%- if pager.last[0].page_num - 1 > pager.after[-1].page_num %}
                         {{ page_ellipsis_item() }}
                     {%- endif %}
-                    {{ page_num_item(pager.last.url, pager.last.page_num_formatted, last=True) }}
+                    {{ page_num_item(pager.last[0].url, pager.last[0].page_num_formatted, last=True) }}
                 {%- endif %}
 
                 {%- if pager.next %}
-                    {{ page_next_item(pager.next.url) }}
+                    {{ page_next_item(pager.next[0].url) }}
                 {%- endif %}
             </ul>
         </div>

@@ -18,11 +18,18 @@ Features:
     the `_cites` tag.
   * _Cited by_, automatically inferred from _Cites_ relations.
 * The Extra field is now included when searching in all fields.
-* Requests for the older URL of an item whose ID has changed, e.g., after a
-  merge in Zotero, are now automatically redirected to the item's current URL.
-  This relies on the `dc.replaces` relation that's managed internally by Zotero.
 * Items that have a DOI, ISBN or ISSN identifier can be referenced by appending
   their identifier to your Kerko site's base URL.
+* Requests for the older URL of an item whose ID has changed are now
+  automatically redirected to the item's current URL. This relies on the
+  `dc.replaces` relation that's managed internally by Zotero on some operations
+  such as item merges.
+* Help users who might mistakenly bookmark a search result's URL rather than the
+  item's permanent URL: Add an `id` parameter to the search result URLs, and
+  redirect the user to that item's permanent URL if the search result no longer
+  matches because of database changes.
+* Redirect to the parent item's page when the user tries to request an
+  attachment that no longer exists.
 * Improve accessibility based on WCAG recommendations and WAI-ARIA standards:
   * Add labels to search form elements.
   * Add landmark role `search` to the search form.
@@ -42,14 +49,16 @@ Bug fixes:
 
 Other changes:
 
-* Redirect to the parent item's page when the user tries to request an
-  attachment that no longer exists.
 * Show timezone abbreviation along with time of last update from Zotero.
 * Add German translation. Thanks [@mmoole](https://github.com/mmoole).
 * Fix broken "Getting started" example in README.
 
 Backwards incompatible changes:
 
+* All values of the `pager` dict passed to the `_pager.html.jinja2` template are
+  now lists. Previously, only the values at keys `'before'` and `'after'` were
+  lists; now the values at keys `'previous'`, `'first'`, `'current'`, `'last'`,
+  and `'next'` are lists as well.
 * The words `'blacklist'` and `'whitelist'` in variable names are replaced with
   `'exclude'` and `'include'`.
 * Citation download URLs now have the form

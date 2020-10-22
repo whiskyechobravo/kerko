@@ -1,4 +1,5 @@
 import time
+from copy import deepcopy
 from datetime import datetime
 
 from babel.numbers import format_number
@@ -11,7 +12,7 @@ from .attachments import get_attachments_dir
 from .breadbox import build_breadbox
 from .criteria import Criteria
 from .forms import SearchForm
-from .pager import build_pager
+from .pager import build_pager, get_page_numbers, get_sections as get_pager_sections
 from .query import (build_creators_display, build_item_facet_results, build_relations,
                     get_search_return_fields, run_query, run_query_unique_with_fallback)
 from .sorter import build_sorter
@@ -37,13 +38,19 @@ def search():
         criteria, get_search_return_fields(criteria.page_len)
     )
 
+    if criteria.page_len == 1 and criteria.id and (
+        total_count == 0 or criteria.id != search_results[0]['id']
+    ):
+        # The search result page no longer points to the desired item.
+        return redirect(url_for('.item_view', item_id=criteria.id, _external=True), 301)
+
     criteria.fit_pager(page_count)
     breadbox = build_breadbox(criteria, facet_results)
+    pager_sections = get_pager_sections(criteria.page_num, page_count)
     context = {
         'facet_results': facet_results,
         'breadbox': breadbox,
         'active_facets': breadbox['filters'].keys() if 'filters' in breadbox else [],
-        'pager': build_pager(criteria, page_count, criteria.page_len),
         'sorter': build_sorter(criteria),
         'total_count': total_count,
         'total_count_formatted': format_number(total_count, locale=get_locale()),
@@ -58,6 +65,23 @@ def search():
     }
 
     if criteria.page_len == 1 and total_count != 0:
+        # Retrieve item ids corresponding to individual result page numbers.
+        page_kwargs = {}
+        page_criteria = deepcopy(criteria)
+        for page_num in get_page_numbers(pager_sections):
+            if page_num == criteria.page_num:
+                # We already know the current page's item id. No further query necessary.
+                page_kwargs[page_num] = {'id_': search_results[0]['id']}
+            else:
+                # Run a search query to get the item id corresponding to the page number.
+                page_criteria.page_num = page_num
+                page_search_results, _, _, _, _ = run_query(
+                    page_criteria, return_fields=['id'], query_facets=False
+                )
+                if page_search_results:
+                    page_kwargs[page_num] = {'id_': page_search_results[0]['id']}
+        context['pager'] = build_pager(pager_sections, criteria, page_kwargs)
+
         list_page_num = int((criteria.page_num - 1) / current_app.config['KERKO_PAGE_LEN'] + 1)
         build_creators_display(search_results[0])
         build_item_facet_results(search_results[0])
@@ -79,9 +103,12 @@ def search():
         )
 
     if total_count > 0:
+        context['pager'] = build_pager(pager_sections, criteria)
         search_results_urls = [
             criteria.build_url(
-                page_num=(criteria.page_num - 1) * (criteria.page_len or 0) + i + 1, page_len=1
+                page_num=(criteria.page_num - 1) * (criteria.page_len or 0) + i + 1,
+                page_len=1,
+                id_=result['id'],
             ) for i, result in enumerate(search_results)
         ]
         search_results = zip(search_results, search_results_urls)

@@ -184,14 +184,14 @@ def build_item_facet_results(item):
             item['facet_results'][spec.key] = spec.build(fake_results, criteria=Criteria())
 
 
-def build_search_facet_results(searcher, groups, criteria, query_facets):
+def build_search_facet_results(searcher, groups, criteria, facet_specs):
     """
     Prepare facet results for the search page.
     """
     facets = {}
     if groups:
         # Build facet results from groupings obtained with the search.
-        for spec in query_facets:
+        for spec in facet_specs:
             facets[spec.key] = spec.build(groups(spec.key).items(), criteria)
     elif criteria.has_filter_search():
         # No groupings available even though facets are used. This usually means
@@ -201,7 +201,7 @@ def build_search_facet_results(searcher, groups, criteria, query_facets):
         # separate query for each active filter, but this time ignoring any
         # other search criteria.
         for filter_key in criteria.filters.keys():
-            for spec in query_facets:
+            for spec in facet_specs:
                 if filter_key == spec.filter_key:
                     results = searcher.search(
                         Every(),
@@ -300,7 +300,7 @@ def build_relations(item, return_fields=None, sort=None):
                     )
 
 
-def run_query(criteria, return_fields=None):
+def run_query(criteria, return_fields=None, query_facets=True):
     """Perform a search query."""
     items = []
     facets = {}
@@ -313,15 +313,16 @@ def run_query(criteria, return_fields=None):
         last_sync = index.last_modified()
         with index.searcher() as searcher:
             composer = current_app.config['KERKO_COMPOSER']
-            query_facets = get_query_facets(criteria.filters.lists(), criteria)
             q = build_keywords_query(criteria.keywords)
             search_args = {
                 'filter': build_filter_query(criteria.filters.lists()),
-                'groupedby': build_groupedby_query(query_facets),
-                'maptype': Count,
                 'sortedby': composer.sorts[criteria.sort].get_field_keys(),
                 'reverse': composer.sorts[criteria.sort].reverse,
             }
+            if query_facets:
+                facet_specs = get_query_facets(criteria.filters.lists(), criteria)
+                search_args['groupedby'] = build_groupedby_query(facet_specs)
+                search_args['maptype'] = Count
             groups = None
             if criteria.page_len is None:  # Retrieve all results.
                 search_args['limit'] = None
@@ -342,7 +343,8 @@ def run_query(criteria, return_fields=None):
                     groups = results.results.groups
                     total = results.total
                     page_count = results.pagecount
-            facets = build_search_facet_results(searcher, groups, criteria, query_facets)
+            if query_facets:
+                facets = build_search_facet_results(searcher, groups, criteria, facet_specs)
 
     return items, facets, total, page_count, last_sync
 

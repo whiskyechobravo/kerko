@@ -17,6 +17,7 @@ class Criteria:
         self._extract_pager(request)
         self._extract_sort(request)  # Must run after _extract_keywords().
         self._extract_print_preview(request)
+        self._extract_id(request)  # Must run after _extract_pager().
 
     def _extract_keywords(self, request=None):
         self.keywords = MultiDict()
@@ -77,6 +78,12 @@ class Criteria:
         else:
             self.print_preview = False
 
+    def _extract_id(self, request=None):
+        if request and self.page_len == 1:
+            self.id = request.args.get('id', None)
+        else:
+            self.id = None
+
     def fit_pager(self, page_count):
         """Ensure that pager values fit within the given page count."""
         self.page_num = min(self.page_num, page_count)
@@ -91,7 +98,7 @@ class Criteria:
 
     def build_query(
             self, *, keywords=None, filters=None, page_num=None, page_len=None,
-            sort=None, print_preview=None):
+            sort=None, print_preview=None, id_=None):
         """
         Prepare a query string ready for use when generating an URL.
 
@@ -128,6 +135,10 @@ class Criteria:
         if print_preview or self.print_preview:
             # Only set print-preview if it is enabled.
             query['print-preview'] = 't'
+        if id_ and page_len == 1:
+            # Never defaults to self.id, because new queries should never lead
+            # to the same item.
+            query['id'] = id_
         return query.to_dict(flat=False)
 
     def build_url(self, **kwargs):

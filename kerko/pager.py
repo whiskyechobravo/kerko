@@ -1,67 +1,62 @@
+from itertools import chain
+
 from babel.numbers import format_number
 from flask import current_app
 from flask_babelex import get_locale
 
 
-def build_pager(criteria, page_count, page_len):
-    """Build pager items for use in a search view."""
+def get_sections(page_num, page_count):
+    """Return dict of pager sections, where each section is a list of page numbers."""
     if page_count <= 1:
         return None
 
-    pager = {}
-    page_num = min(criteria.page_num, page_count)
+    sections = {}
+    page_num = min(page_num, page_count)
     first = max(1, int(page_num - current_app.config['KERKO_PAGER_LINKS'] / 2))
     last = min(page_count + 1, first + current_app.config['KERKO_PAGER_LINKS'] + 1)
     first = max(1, last - current_app.config['KERKO_PAGER_LINKS'] - 1)
 
     if page_num > 1:
-        p = 1
-        pager['first'] = {
-            'page_num': p,
-            'page_num_formatted': format_number(p, locale=get_locale()),
-            'url': criteria.build_url(page_num=p, page_len=page_len),
-        }
-        p = max(1, page_num - 1)
-        pager['previous'] = {
-            'page_num': p,
-            'page_num_formatted': format_number(p, locale=get_locale()),
-            'url': criteria.build_url(page_num=p, page_len=page_len),
-        }
+        sections['first'] = [1]
+        sections['previous'] = [max(1, page_num - 1)]
 
-    pager['before'] = []
-    for p in range(first, page_num):
-        pager['before'].append({
-            'page_num': p,
-            'page_num_formatted': format_number(p, locale=get_locale()),
-            'url': criteria.build_url(page_num=p, page_len=page_len),
-        })
-
-    pager['current'] = {
-        'page_num': page_num,
-        'page_num_formatted': format_number(page_num, locale=get_locale()),
-        'url': criteria.build_url(page_num=page_num, page_len=page_len),
-    }
-
-    pager['after'] = []
-    for p in range(page_num + 1, last):
-        pager['after'].append({
-            'page_num': p,
-            'page_num_formatted': format_number(p, locale=get_locale()),
-            'url': criteria.build_url(page_num=p, page_len=page_len),
-        })
+    sections['before'] = list(range(first, page_num))
+    sections['current'] = [page_num]
+    sections['after'] = list(range(page_num + 1, last))
 
     if page_num < page_count:
-        p = min(page_count, page_num + 1)
-        pager['next'] = {
-            'page_num': p,
-            'page_num_formatted': format_number(p, locale=get_locale()),
-            'url': criteria.build_url(page_num=p, page_len=page_len),
-        }
-        p = page_count
-        pager['last'] = {
-            'page_num': p,
-            'page_num_formatted': format_number(p, locale=get_locale()),
-            'url': criteria.build_url(page_num=p, page_len=page_len),
-        }
+        sections['next'] = [min(page_count, page_num + 1)]
+        sections['last'] = [page_count]
 
+    return sections
+
+
+def get_page_numbers(sections):
+    """Return distinct pages numbers used across pager sections."""
+    if sections:
+        return sorted(set(chain(*sections.values())))
+    return []
+
+
+def build_pager(sections, criteria, page_kwargs=None):
+    """
+    Build pager links for use in a search view.
+
+    :param dict page_kwargs: A dict keyed by page number, where each value is a
+        dict of extra params to pass along when building that page's URL.
+    """
+    pager = {}
+    if sections:
+        for section, pages in sections.items():
+            pager[section] = [
+                {
+                    'page_num': p,
+                    'page_num_formatted': format_number(p, locale=get_locale()),
+                    'url': criteria.build_url(
+                        page_num=p,
+                        page_len=criteria.page_len,
+                        **page_kwargs.get(p) if page_kwargs else {}
+                    )
+                } for p in pages
+            ]
     return pager
