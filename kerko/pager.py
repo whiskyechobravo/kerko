@@ -11,7 +11,7 @@ def get_sections(page_num, page_count):
         return None
 
     sections = {}
-    page_num = min(page_num, page_count)
+    page_num = min(max(page_num, 1), page_count)
     first = max(1, int(page_num - current_app.config['KERKO_PAGER_LINKS'] / 2))
     last = min(page_count + 1, first + current_app.config['KERKO_PAGER_LINKS'] + 1)
     first = max(1, last - current_app.config['KERKO_PAGER_LINKS'] - 1)
