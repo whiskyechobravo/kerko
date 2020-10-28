@@ -1,5 +1,6 @@
+import copy
+import sys
 import time
-from copy import deepcopy
 from datetime import datetime
 
 from babel.numbers import format_number
@@ -16,6 +17,12 @@ from .pager import build_pager, get_page_numbers, get_sections as get_pager_sect
 from .query import (build_creators_display, build_item_facet_results, build_relations,
                     get_search_return_fields, run_query, run_query_unique_with_fallback)
 from .sorter import build_sorter
+
+if sys.version_info < (3, 7):
+    # Workaround for 'TypeError: cannot deepcopy this pattern object' when
+    # encountering a compiled regular expression.
+    import re
+    copy._deepcopy_dispatch[type(re.compile(''))] = lambda r, _: r  # pylint: disable=protected-access
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
@@ -67,7 +74,7 @@ def search():
     if criteria.page_len == 1 and total_count != 0:
         # Retrieve item ids corresponding to individual result page numbers.
         page_kwargs = {}
-        page_criteria = deepcopy(criteria)
+        page_criteria = copy.deepcopy(criteria)
         for page_num in get_page_numbers(pager_sections):
             if page_num == criteria.page_num:
                 # We already know the current page's item id. No further query necessary.
