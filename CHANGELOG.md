@@ -42,6 +42,8 @@ Features:
 
 Bug fixes:
 
+* Fix crash when trying to sync a link attachment
+  ([#3](https://github.com/whiskyechobravo/kerko/issues/3)).
 * Fix unhandled exception during sync when an attachment cannot be downloaded.
 * Fix page numbers greater than the page count in search URLs generating wrong
   page numbers for search result item URLs.
@@ -73,6 +75,8 @@ Backwards incompatible changes:
     assigning it to the document.
   * The new `extract_and_store()` method handles extraction, encoding, and
     assignment to the document, assigning the value only when it is not `None`.
+* The `AttachmentsExtractor` class has been renamed to
+  `StoredFileAttachmentsExtractor`.
 
 Possibly backwards incompatible changes (more or less internal API changes):
 

@@ -1323,13 +1323,13 @@ class Composer:
                     )
                 )
             )
-        # Attachments of the item.
+        # File attachments of the item.
         if 'attachments' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='attachments',
                     field_type=STORED,
-                    extractor=extractors.AttachmentsExtractor(
+                    extractor=extractors.StoredFileAttachmentsExtractor(
                         mime_types=self.mime_types,
                         include_re=self.default_child_include_re,
                         exclude_re=self.default_child_exclude_re

@@ -388,31 +388,38 @@ class BaseChildrenExtractor(Extractor):
         return accepted_children or None
 
 
-class AttachmentsExtractor(BaseChildrenExtractor):
+class StoredFileAttachmentsExtractor(BaseChildrenExtractor):
     """
-    Extract attachments into a list of dicts for storage.
-
-    This extractor only extracts a subset of attachment data provided by Zotero.
+    Extract stored file attachments metadata into a list of dicts for storage.
     """
 
     def __init__(self, *, mime_types=None, **kwargs):
         super().__init__(item_type='attachment', **kwargs)
         self.mime_types = mime_types
 
+    def is_attachment(self, child):
+        if not child.get('data'):
+            return False
+        if not child.get('key'):
+            return False
+        if child['data'].get('linkMode') != 'imported_file':
+            return False
+        if self.mime_types and child['data'].get(
+                'contentType', 'octet-stream'
+        ) not in self.mime_types:
+            return False
+        return True
+
     def extract(self, item_context, library_context, spec):
         children = super().extract(item_context, library_context, spec)
         return [
             {
-                'id': a['key'],
-                'mimetype': a['data'].get('contentType', 'octet-stream'),
-                'filename': a['data'].get('filename', a['key']),
-                'md5': a['data'].get('md5', ''),
-                'mtime': a['data'].get('mtime', 0),
-            } for a in children if a.get('data') and a.get('key') and (
-                not self.mime_types or a.get('data', {}).get(
-                    'contentType', 'octet-stream'
-                ) in self.mime_types
-            )
+                'id': child['key'],
+                'mimetype': child['data'].get('contentType', 'octet-stream'),
+                'filename': child['data'].get('filename', child['key']),
+                'md5': child['data'].get('md5', ''),
+                'mtime': child['data'].get('mtime', 0),
+            } for child in children if self.is_attachment(child)
         ] if children else None
 
 
