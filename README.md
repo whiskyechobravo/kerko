@@ -134,10 +134,10 @@ The following features are implemented in Kerko:
 * Printing: stylesheets are provided for printing individual bibliographic
   records as well as lists of search results. When printing search results, all
   results get printed (not just the current page of results).
-* Notes and attachments: notes and file attachments are synchronized from
-  zotero.org and made available to users of the bibliography. Regular
-  expressions may be used to include or exclude notes or attachments from the
-  bibliography based on their tags.
+* Notes and attachments: notes, attached copies of files, and attached links to
+  URIs are synchronized from zotero.org and made available to users of the
+  bibliography. Regular expressions may be used to include or exclude such child
+  items from the bibliography, based on their tags.
 * DOI, ISBN and ISSN resolver: items that have such identifier in your library
   can be referenced by appending their identifier to your Kerko site's base URL.
 * Relations: bibliographic record pages show links to related items, if any. You

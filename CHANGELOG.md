@@ -12,12 +12,13 @@ flask kerko sync
 
 Features:
 
+* Show attached links to URIs on item pages.
 * Show relations on item pages. The relation types provided by default are:
   * _Related_, based on Zotero's _Related_ field.
   * _Cites_, managed through child notes containing Zotero URIs and tagged with
     the `_cites` tag.
   * _Cited by_, automatically inferred from _Cites_ relations.
-* The Extra field is now included when searching in all fields.
+* The Extra field is now searched when searching "in any fields".
 * Items that have a DOI, ISBN or ISSN identifier can be referenced by appending
   their identifier to your Kerko site's base URL.
 * Requests for the older URL of an item whose ID has changed are now

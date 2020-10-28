@@ -388,13 +388,19 @@ class BaseChildrenExtractor(Extractor):
         return accepted_children or None
 
 
-class StoredFileAttachmentsExtractor(BaseChildrenExtractor):
+class BaseAttachmentsExtractor(BaseChildrenExtractor):
+
+    def __init__(self, **kwargs):
+        super().__init__(item_type='attachment', **kwargs)
+
+
+class StoredFileAttachmentsExtractor(BaseAttachmentsExtractor):
     """
-    Extract stored file attachments metadata into a list of dicts for storage.
+    Extract the metadata of stored copies of files into a list of dicts.
     """
 
     def __init__(self, *, mime_types=None, **kwargs):
-        super().__init__(item_type='attachment', **kwargs)
+        super().__init__(**kwargs)
         self.mime_types = mime_types
 
     def is_attachment(self, child):
@@ -420,6 +426,34 @@ class StoredFileAttachmentsExtractor(BaseChildrenExtractor):
                 'md5': child['data'].get('md5', ''),
                 'mtime': child['data'].get('mtime', 0),
             } for child in children if self.is_attachment(child)
+        ] if children else None
+
+
+class LinkedURIAttachmentsExtractor(BaseAttachmentsExtractor):
+    """
+    Extract attached links to URIs into a list of dicts.
+    """
+
+    @staticmethod
+    def is_link(child):
+        if not child.get('data'):
+            return False
+        if not child.get('key'):
+            return False
+        if child['data'].get('linkMode') != 'linked_url':
+            return False
+        if not child['data'].get('url'):
+            return False
+        return True
+
+    def extract(self, item_context, library_context, spec):
+        children = super().extract(item_context, library_context, spec)
+        return [
+            {
+                'title': child['data'].get('title', child['data'].get('url')),
+                'url': child['data'].get('url')
+            }
+            for child in children if self.is_link(child)
         ] if children else None
 
 

@@ -1323,6 +1323,18 @@ class Composer:
                     )
                 )
             )
+        # URL attachments of the item.
+        if 'links' not in exclude:
+            self.add_field(
+                FieldSpec(
+                    key='links',
+                    field_type=STORED,
+                    extractor=extractors.LinkedURIAttachmentsExtractor(
+                        include_re=self.default_child_include_re,
+                        exclude_re=self.default_child_exclude_re
+                    )
+                )
+            )
         # File attachments of the item.
         if 'attachments' not in exclude:
             self.add_field(
