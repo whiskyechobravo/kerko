@@ -63,6 +63,20 @@ def sync_index():
     library_context = request_library_context(zotero_credentials)
     index = open_index(auto_create=True, write=True)
     count = 0
+
+    def get_children(item):
+        children = []
+        if item.get('meta', {}).get('numChildren', 0):
+            # TODO: Only extract item types that are required, if any, by the Composer instance's fields.
+            children = list(
+                zotero.ChildItems(
+                    zotero_credentials,
+                    item['key'],
+                    item_types=['note', 'attachment'],
+                )
+            )
+        return children
+
     writer = index.writer(limitmb=256)
     try:
         writer.mergetype = whoosh.writing.CLEAR
@@ -75,14 +89,16 @@ def sync_index():
             for spec in list(composer.fields.values()) + list(composer.facets.values())
         }
         gate = TagGate(composer.default_item_include_re, composer.default_item_exclude_re)
-        for item, children in zotero.Items(zotero_credentials, allowed_item_types, list(formats)):
+        for item in zotero.Items(zotero_credentials, allowed_item_types, list(formats)):
             count += 1
-            document = {}
-            item_context = ItemContext(item, children)
-            if gate.check(item_context.data):
+            if gate.check(item.get('data', {})):
+                item_context = ItemContext(item, get_children(item))
+                document = {}
                 for spec in list(composer.fields.values()) + list(composer.facets.values()):
                     spec.extract_to_document(document, item_context, library_context)
                 update_document_with_writer(writer, document, count=count)
+            else:
+                current_app.logger.debug(f"Document {count} excluded ({item['key']})")
     except Exception as e:  # pylint: disable=broad-except
         writer.cancel()
         current_app.logger.exception(e)

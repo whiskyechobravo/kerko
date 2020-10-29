@@ -282,18 +282,8 @@ class Items:
 
     def _next_item(self):
         zotero_item = next(self.iterator)
-        children = []
-        if zotero_item.get('meta', {}).get('numChildren', 0):
-            # TODO: Only extract item types that are required, if any, by the Composer instance's fields.
-            children = list(
-                ChildItems(
-                    self.zotero_credentials,
-                    zotero_item['key'],
-                    item_types=['note', 'attachment'],
-                )
-            )
         self.start += 1
-        return zotero_item, children
+        return zotero_item
 
 
 class ChildItems:
