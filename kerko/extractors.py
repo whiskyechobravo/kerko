@@ -8,6 +8,7 @@ from collections.abc import Iterable
 
 from flask import Markup, current_app
 
+from .tags import TagGate
 from .text import id_normalize, sort_normalize
 from .transformers import find_item_id_in_zotero_uris_str
 
@@ -367,24 +368,14 @@ class BaseChildrenExtractor(Extractor):
         """
         super().__init__(**kwargs)
         self.item_type = item_type
-        self.include = re.compile(include_re) if include_re else None
-        self.exclude = re.compile(exclude_re) if exclude_re else None
+        self.gate = TagGate(include_re, exclude_re)
 
     def extract(self, item_context, library_context, spec):
         accepted_children = []
         for child in item_context.children:
-            if child.get('data', {}).get('itemType') == self.item_type:
-                included = self.include is None
-                excluded = False
-                if self.include or self.exclude:
-                    for tag_data in child.get('data', {}).get('tags', []):
-                        tag = tag_data.get('tag', '').strip()
-                        if self.include and self.include.match(tag):
-                            included = True
-                        if self.exclude and self.exclude.match(tag):
-                            excluded = True
-                if included and not excluded:
-                    accepted_children.append(child)
+            if child.get('data', {}).get('itemType') == self.item_type \
+                    and self.gate.check(child.get('data', {})):
+                accepted_children.append(child)
         return accepted_children or None
 
 

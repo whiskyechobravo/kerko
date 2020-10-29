@@ -12,6 +12,8 @@ flask kerko sync
 
 Features:
 
+* Allow inclusion or exclusion of items based on their tags
+  ([#4](https://github.com/whiskyechobravo/kerko/issues/4)).
 * Show attached links to URIs on item pages.
 * Show relations on item pages. The relation types provided by default are:
   * _Related_, based on Zotero's _Related_ field.

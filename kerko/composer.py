@@ -39,6 +39,8 @@ class Composer:
             exclude_default_citation_formats=None,
             exclude_default_relations=None,
             exclude_default_badges=None,
+            default_item_include_re='',
+            default_item_exclude_re='',
             default_tag_include_re='',
             default_tag_exclude_re=r'^_',
             default_child_include_re='',
@@ -99,6 +101,19 @@ class Composer:
             value '*', no badge will be created by default. Please refer to the
             implementation of ``init_default_badges()`` for the list of default
             badges.
+
+        :param str default_item_include_re: Regex to use to include items based
+            on their tags. Any item which does not have a tag that matches this
+            regular expression will be excluded. If empty (which is the default),
+            all items will be included unless the `default_item_exclude_re`
+            argument is set and causes some to be excluded.
+
+        :param str default_item_exclude_re: Regex to use to exclude items based
+            on their tags. Any item that have a tag that matches this regular
+            expression will be excluded. If empty (which is the default), no
+            items will be excluded unless the `default_item_include_re` argument
+            is set, in which case items that don't have any tag that matches it
+            will be excluded.
 
         :param str default_tag_include_re: Regex to use to include tags. See
             ``extractors.BaseTagsExtractor``. By default, all tags are accepted.
@@ -177,6 +192,8 @@ class Composer:
         self.citation_formats = {}
         self.relations = {}
         self.badges = {}
+        self.default_item_include_re = default_item_include_re
+        self.default_item_exclude_re = default_item_exclude_re
         self.default_tag_include_re = default_tag_include_re
         self.default_tag_exclude_re = default_tag_exclude_re
         self.default_child_include_re = default_child_include_re

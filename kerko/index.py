@@ -6,6 +6,7 @@ import whoosh
 
 from . import zotero
 from .extractors import ItemContext, LibraryContext
+from .tags import TagGate
 
 
 def get_index_dir():
@@ -73,13 +74,15 @@ def sync_index():
             spec.extractor.format
             for spec in list(composer.fields.values()) + list(composer.facets.values())
         }
+        gate = TagGate(composer.default_item_include_re, composer.default_item_exclude_re)
         for item, children in zotero.Items(zotero_credentials, allowed_item_types, list(formats)):
             count += 1
             document = {}
             item_context = ItemContext(item, children)
-            for spec in list(composer.fields.values()) + list(composer.facets.values()):
-                spec.extract_to_document(document, item_context, library_context)
-            update_document_with_writer(writer, document, count=count)
+            if gate.check(item_context.data):
+                for spec in list(composer.fields.values()) + list(composer.facets.values()):
+                    spec.extract_to_document(document, item_context, library_context)
+                update_document_with_writer(writer, document, count=count)
     except Exception as e:  # pylint: disable=broad-except
         writer.cancel()
         current_app.logger.exception(e)
