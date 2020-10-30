@@ -191,9 +191,9 @@ We'll assume that you have some familiarity with Flask and suggest steps for
 building a minimal app, let's call it `hello_kerko.py`, to get you started.
 
 1. The first step is to install Kerko. As with any Python library, it is highly
-   recommended to install Kerko within a [virtualenv].
+   recommended to install Kerko within a [virtual environment][venv].
 
-   Once the virtualenv is set and active, use the following command:
+   Once the virtual environment is set and active, use the following command:
 
    ```bash
    pip install kerko
@@ -264,8 +264,8 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
    Kerko.
 
 
-5. In the same directory as `hello_kerko.py` with your virtualenv active, run
-   the following shell commands:
+5. In the same directory as `hello_kerko.py` with your virtual environment
+   active, run the following shell commands:
 
    ```bash
    export FLASK_APP=hello_kerko.py
@@ -483,8 +483,8 @@ Kerko can be translated using Babel's [setuptools
 integration](http://babel.pocoo.org/en/latest/setup.html).
 
 The following commands should be executed from the directory that contains
-`setup.py`, and the appropriate [virtualenv] must have been activated
-beforehand.
+`setup.py`, and the appropriate [virtual environment][venv] must have been
+activated beforehand.
 
 Create or update the PO template (POT) file:
 
@@ -661,7 +661,7 @@ If you wish to add your Kerko-powered online bibliography to this list, please
 [Python]: https://www.python.org/
 [Pyzotero]: https://pypi.org/project/Pyzotero/
 [Snowball]: https://snowballstem.org/
-[virtualenv]: https://virtualenv.pypa.io/en/latest/
+[venv]: https://docs.python.org/3.8/tutorial/venv.html
 [Werkzeug]: https://pypi.org/project/Werkzeug/
 [Whisky_Echo_Bravo]: https://whiskyechobravo.com
 [Whoosh]: https://pypi.org/project/Whoosh/

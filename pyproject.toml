@@ -1,0 +1,20 @@
+[build-system]
+requires = [
+    "setuptools >= 40.9.0",
+    "wheel",
+]
+build-backend = "setuptools.build_meta"
+
+[tool.pylint]
+    [tool.pylint.messages_control]
+    disable = [
+        "fixme",
+        "missing-docstring",
+        "too-many-line",
+    ]
+    enable = [
+        "unused-import",
+    ]
+
+    [tool.pylint.basic]
+    good-names = "a,b,c,d,e,f,fq,g,h,i,id,j,k,m,n,p,q,r,s,t,u,v,w,x,y,_"
