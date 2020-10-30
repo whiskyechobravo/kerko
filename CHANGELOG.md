@@ -59,6 +59,7 @@ Other changes:
 * Fix broken "Getting started" example in README.
 * Migrate most package distribution options and metadata from `setup.py` to
   `setup.cfg`.
+* Migrate project to a `src` layout.
 
 Backwards incompatible changes:
 
