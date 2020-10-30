@@ -57,6 +57,8 @@ Other changes:
 * Show timezone abbreviation along with time of last update from Zotero.
 * Add German translation. Thanks [@mmoole](https://github.com/mmoole).
 * Fix broken "Getting started" example in README.
+* Migrate most package distribution options and metadata from `setup.py` to
+  `setup.cfg`.
 
 Backwards incompatible changes:
 
