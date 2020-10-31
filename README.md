@@ -536,6 +536,8 @@ consider the following guidelines:
 Pull requests may be submitted against [Kerko's repository][Kerko]. Please
 consider the following guidelines:
 
+* Before submitting, run the tests and make sure they pass. Add tests relevant
+  to your change (those should fail if ran without your patch).
 * Use [Yapf](https://github.com/google/yapf) to autoformat your code (with
   option `--style='{based_on_style: facebook, column_limit: 100}'`). Many
   editors provide Yapf integration.
@@ -544,6 +546,33 @@ consider the following guidelines:
   keywords](https://help.github.com/en/articles/closing-issues-using-keywords).
 * If a Jinja2 template represents a page fragment or a collection of macros,
   prefix its file name with the underscore character.
+
+
+#### Running the tests
+
+Before running the tests, make sure you have an actual installation of Kerko
+that includes your changes as well as the dependencies required for testing,
+e.g., from Kerko's root directory, where `setup.cfg` resides:
+
+```bash
+pip install -e .[tests]
+```
+
+To run basic tests in your current environment:
+
+```bash
+python -m unittest
+```
+
+To run the full test suite under different environments (using the various
+Python interpreters available on your machine):
+
+```bash
+tox
+```
+
+Note: Test coverage is very low at the moment. You are welcome to contribute new
+tests!
 
 
 ### Submitting a translation
