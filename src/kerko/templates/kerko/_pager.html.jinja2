@@ -82,15 +82,15 @@
         <div class="d-md-none">
             <ul class="pagination mb-0 flex-wrap">
                 {%- if pager.previous %}
-                    {{ page_prev_item(pager.previous.url) }}
+                    {{ page_prev_item(pager.previous[0].url) }}
                 {%- endif %}
 
                 <li class="page-item disabled">
-                    <span class="page-link">{% trans current=pager.current.page_num_formatted|safe, total=page_count_formatted|safe %}Page {{ current }} of {{ total }}{% endtrans %}</span>
+                    <span class="page-link">{% trans current=pager.current[0].page_num_formatted|safe, total=page_count_formatted|safe %}Page {{ current }} of {{ total }}{% endtrans %}</span>
                 </li>
 
                 {%- if pager.next %}
-                    {{ page_next_item(pager.next.url) }}
+                    {{ page_next_item(pager.next[0].url) }}
                 {%- endif %}
             </ul>
         </div>
