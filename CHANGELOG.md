@@ -12,6 +12,7 @@ flask kerko sync
 
 Features:
 
+* Allow users to toggle the display of abstracts on search results pages.
 * Allow inclusion or exclusion of items based on their tags
   ([#4](https://github.com/whiskyechobravo/kerko/issues/4)).
 * Show attached links to URIs on item pages.
@@ -69,6 +70,9 @@ Backwards incompatible changes:
   and `'next'` are lists as well.
 * The words `'blacklist'` and `'whitelist'` in variable names are replaced with
   `'exclude'` and `'include'`.
+* The `KERKO_RESULTS_ABSTRACT` configuration variable is replaced by two
+  variables, `KERKO_RESULTS_ABSTRACTS` (note the now plural form) and
+  `KERKO_RESULTS_ABSTRACTS_TOGGLER`.
 * Citation download URLs now have the form
   `{url_prefix}/{itemID}/export/{format}` for individual items (`'export'` has
   been inserted), and `{url_prefix}/export/{format}/` for search result pages

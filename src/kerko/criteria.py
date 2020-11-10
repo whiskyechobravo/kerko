@@ -16,6 +16,7 @@ class Criteria:
         self._extract_filters(request)
         self._extract_pager(request)
         self._extract_sort(request)  # Must run after _extract_keywords().
+        self._extract_show_abstracts(request)
         self._extract_print_preview(request)
         self._extract_id(request)  # Must run after _extract_pager().
 
@@ -72,17 +73,31 @@ class Criteria:
                 or not composer.sorts[self.sort].is_allowed(criteria=self):
             self.sort = default_sort
 
-    def _extract_print_preview(self, request=None):
-        if request:
-            self.print_preview = (request.args.get('print-preview', 'f') == 't')
+    def _extract_show_abstracts(self, request=None):
+        if current_app.config['KERKO_RESULTS_ABSTRACTS_TOGGLER']:
+            self.show_abstracts = self.get_boolean_param(
+                request, param='abstracts', default=current_app.config['KERKO_RESULTS_ABSTRACTS']
+            )
         else:
-            self.print_preview = False
+            self.show_abstracts = current_app.config['KERKO_RESULTS_ABSTRACTS']
+
+    def _extract_print_preview(self, request=None):
+        self.print_preview = self.get_boolean_param(request, param='print-preview', default=False)
 
     def _extract_id(self, request=None):
         if request and self.page_len == 1:
             self.id = request.args.get('id', None)
         else:
             self.id = None
+
+    @staticmethod
+    def get_boolean_param(request, param, default):
+        if request:
+            value = request.args.get(param)
+            if value not in ['t', 'f', '0', '1']:
+                return default
+            return value in ['t', '1']
+        return default
 
     def fit_pager(self, page_count):
         """Ensure that pager values fit within the given page count."""
@@ -97,8 +112,17 @@ class Criteria:
         return self.filters is not None and any(self.filters.values())
 
     def build_query(
-            self, *, keywords=None, filters=None, page_num=None, page_len=None,
-            sort=None, print_preview=None, id_=None):
+            self,
+            *,
+            keywords=None,
+            filters=None,
+            page_num=None,
+            page_len=None,
+            sort=None,
+            show_abstracts=None,
+            print_preview=None,
+            id_=None
+    ):
         """
         Prepare a query string ready for use when generating an URL.
 
@@ -132,9 +156,13 @@ class Criteria:
             query['sort'] = sort
         elif sort is None:
             query['sort'] = self.sort
+        if show_abstracts is None:
+            show_abstracts = self.show_abstracts
+        if show_abstracts != current_app.config['KERKO_RESULTS_ABSTRACTS']:
+            query['abstracts'] = int(show_abstracts)
         if print_preview or self.print_preview:
             # Only set print-preview if it is enabled.
-            query['print-preview'] = 't'
+            query['print-preview'] = 1
         if id_ and page_len == 1:
             # Never defaults to self.id, because new queries should never lead
             # to the same item.

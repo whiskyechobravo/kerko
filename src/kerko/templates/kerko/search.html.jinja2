@@ -5,6 +5,7 @@
 {%- set show_print_link = show_print_link and config.KERKO_PRINT_CITATIONS_LINK %}
 {%- set show_download_link = config.KERKO_DOWNLOAD_CITATIONS_MAX_COUNT == 0 or total_count <= config.KERKO_DOWNLOAD_CITATIONS_MAX_COUNT %}
 {%- set show_download_link = show_download_link and config.KERKO_DOWNLOAD_CITATIONS_LINK and config.KERKO_COMPOSER.citation_formats %}
+{%- set abstracts_toggler_title = _('Hide abstracts') if show_abstracts else _('Show abstracts') %}
 
 {%- block metas %}
     {{- super() }}
@@ -70,9 +71,24 @@
             {%- endif %}
         </div>
         {%- if search_results %}
-            {%- block pager_top %}
-                {%- include "kerko/_pager.html.jinja2" %}
-            {%- endblock pager_top %}
+            {%- if pager or config.KERKO_RESULTS_ABSTRACTS_TOGGLER %}
+                <div class="row mb-2">
+                    {%- if pager %}
+                        <div class="col-auto mr-auto">
+                            {%- block pager_top %}
+                                {%- include "kerko/_pager.html.jinja2" %}
+                            {%- endblock pager_top %}
+                        </div>
+                    {%- endif %}
+                    {%- if config.KERKO_RESULTS_ABSTRACTS_TOGGLER %}
+                        <div class="col-auto ml-auto pl-0">
+                            {%- block abstracts_toggler %}
+                                <a class="btn btn-light d-print-none" href="{{ abstracts_toggler_url }}" title="{{ abstracts_toggler_title }}" aria-label="{{ abstracts_toggler_title }}">{% if show_abstracts %}<span class="fas fa-toggle-on" aria-hidden="true"></span>{% else %}<span class="fas fa-toggle-off" aria-hidden="true"></span>{% endif %} {{ _("Abstracts") }}</a>
+                            {%- endblock abstracts_toggler %}
+                        </div>
+                    {%- endif %}
+                </div>
+            {%- endif %}
             <ul class="mb-4 list-unstyled">
                 {%- for result, result_url in search_results %}
                     {%- include "kerko/_search-result.html.jinja2" %}
@@ -84,7 +100,7 @@
             {%- block search_results_footer scoped %}
                 {%- if show_print_link or show_download_link %}
                     <div class="row">
-                        <div class="col-auto ml-auto mb-4 text-right">
+                        <div class="col-auto ml-auto mt-2 mb-4 text-right">
                             {%- if show_print_link %}
                                 <div class="{% block print_link_wrapper_classes %}d-none d-md-inline-block d-print-none mb-1{% endblock %}">
                                     <button id="print-link" class="{% block print_btn_classes %}btn btn-light{% endblock %}" type="button" data-url="{{ print_url }}">

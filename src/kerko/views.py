@@ -64,6 +64,10 @@ def search():
         'page_count': page_count,
         'page_count_formatted': format_number(page_count, locale=get_locale()),
         'page_len': criteria.page_len,
+        'show_abstracts': criteria.show_abstracts,
+        'abstracts_toggler_url': criteria.build_url(
+            show_abstracts=not criteria.show_abstracts, page_num=criteria.page_num
+        ),
         'is_searching': criteria.has_keyword_search() or criteria.has_filter_search(),
         'locale': get_locale(),
         'last_sync': datetime.fromtimestamp(

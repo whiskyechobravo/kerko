@@ -15,8 +15,6 @@ def get_search_return_fields(page_len, exclude=None):
         exclude = []
     if page_len != 1:  # Note: page_len can be None (for all results).
         return_fields = [f for f in current_app.config['KERKO_RESULTS_FIELDS'] if f not in exclude]
-        if current_app.config['KERKO_RESULTS_ABSTRACT'] and 'data' not in return_fields:
-            return_fields.append('data')
         for badge in current_app.config['KERKO_COMPOSER'].badges.values():
             if badge.field.key not in return_fields:
                 return_fields.append(badge.field.key)

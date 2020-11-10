@@ -340,14 +340,15 @@ override their default value:
   be hidden from search results pages. Defaults to `0` (i.e. no limit).
 * `KERKO_RELATIONS_INITIAL_LIMIT`: Number of related items to show above the
   "view all" link. Defaults to `5`.
-* `KERKO_RESULTS_ABSTRACT`: Show abstracts in search result pages. Defaults to
-  `False`.
+* `KERKO_RESULTS_ABSTRACTS`: Show abstracts on search result pages. Defaults to
+  `False` (abstracts are hidden).
+* `KERKO_RESULTS_ABSTRACTS_TOGGLER`: Show a button letting users show or hide
+  abstracts on search results pages. Defaults to `True` (toggle is displayed).
 * `KERKO_RESULTS_FIELDS`: List of item fields to retrieve for use in search
   results pages (i.e. in the `KERKO_TEMPLATE_SEARCH` template). Values are keys
   identifying fields or facets assigned to the `kerko.composer.Composer`
-  instance. Defaults to `['id', 'bib', 'coins']`. Note that `'data'` gets added
-  to the list if `KERKO_RESULTS_ABSTRACT` is `True`, as well as any field that
-  is required by badges.
+  instance. Defaults to `['id', 'bib', 'coins', 'data']`. Be careful when
+  overriding this as the default fields may be required by some functions.
 * `KERKO_TEMPLATE_SEARCH`: Name of the Jinja2 template to render for the search
   page with list of results. Defaults to `kerko/search.html.jinja2`.
 * `KERKO_TEMPLATE_SEARCH_ITEM`: Name of the Jinja2 template to render for the
