@@ -14,7 +14,13 @@
 
 {%- block content_header %}
     <div class="my-2 row">
-        <h1 class="{% block search_heading_classes %}h2 col-auto pr-1 mr-auto d-inline{% endblock %}{% if not is_searching %} d-print-none{% endif %}">{% if is_searching %}{{ _("Your search") }}{% else %}{{ _("Search") }}{% endif %}</h1>
+        <h1 class="{% block search_heading_classes %}h2 col-auto pr-1 mr-auto d-inline{% endblock %}{% if not is_searching %} d-print-none{% endif %}">
+            {%- if is_searching %}
+                {{ _("Your search") }}
+            {%- else %}
+                {{ _("Search") }}
+            {%- endif -%}
+        </h1>
         {%- if is_searching or facet_results %}
             <div class="col-auto pl-0 ml-auto text-right">
                 <div class="{% block help_link_wrapper_classes %}d-inline-block d-print-none mt-1 mb-2{% endblock %}">
@@ -56,7 +62,8 @@
     {%- block search_results %}
         <div class="my-2 row">
             <div class="col-auto mr-auto">
-                <h2 class="{% block results_heading_classes %}d-inline mb-2{% endblock %}">{{ title }}
+                <h2 class="{% block results_heading_classes %}d-inline mb-2{% endblock %}">
+                    {{- title }}
                     {%- if search_results %}
                         <span class="badge badge-light">{% trans count=total_count, count_formatted=total_count_formatted|safe %}{{ count_formatted }} resource{% pluralize %}{{ count_formatted }} resources{% endtrans %}</span>
                     {%- endif %}
