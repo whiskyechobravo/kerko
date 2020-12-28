@@ -61,6 +61,8 @@ Other changes:
 * Migrate most package distribution options and metadata from `setup.py` to
   `setup.cfg`.
 * Migrate project to a `src` layout.
+* Use Flask-Babel instead of its fork Flask-BabelEx, now that is has merged the
+  translation domain features from Flask-BabelEx.
 
 Backwards incompatible changes:
 
