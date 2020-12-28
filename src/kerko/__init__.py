@@ -10,10 +10,7 @@ from flask import Blueprint
 from flask_babel import Domain
 
 
-babel_domain = Domain(
-    str(pathlib.Path(__file__).parent / 'translations'),
-    domain='kerko'
-)
+babel_domain = Domain(domain='kerko')
 
 
 def init_default_config(state):
@@ -76,6 +73,12 @@ def init_default_config(state):
     state.app.config.setdefault('KERKO_POPPER_VERSION', '1.16.0')
     state.app.config.setdefault('KERKO_WITH_JQUERY', True)
     state.app.config.setdefault('KERKO_WITH_POPPER', True)
+
+    # Look for translations both in Kerko's and the app's translations directories.
+    state.app.config.setdefault(
+        'BABEL_TRANSLATION_DIRECTORIES',
+        ';'.join([str(pathlib.Path(__file__).parent / 'translations'), 'translations'])
+    )
 
 
 blueprint = Blueprint(
