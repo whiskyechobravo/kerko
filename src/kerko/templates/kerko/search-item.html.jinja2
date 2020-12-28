@@ -9,11 +9,7 @@
 {%- block content_header %}
     <div class="my-2 row">
         <h1 class="{% block search_heading_classes %}h3 col-auto mr-auto pr-1 d-inline d-print-none{% endblock %}">
-            {%- if is_searching %}
-                {{- _("Your search") }}
-            {%- else %}
-                {{- _("Full bibliography") }}
-            {%- endif -%}
+            {{- search_title -}}
         </h1>
         {%- if back_url %}
             <div class="{% block back_link_wrapper_classes %}col-auto ml-auto mb-2 pl-1 text-right d-print-none{% endblock %}">

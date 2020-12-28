@@ -46,7 +46,7 @@ def search():
     )
 
     if criteria.page_len == 1 and criteria.id and (
-        total_count == 0 or criteria.id != search_results[0]['id']
+            total_count == 0 or criteria.id != search_results[0]['id']
     ):
         # The search result page no longer points to the desired item.
         return redirect(url_for('.item_view', item_id=criteria.id, _external=True), 301)
@@ -101,6 +101,10 @@ def search():
             get_search_return_fields(page_len=None, exclude=['coins']),
             sort=current_app.config['KERKO_RELATIONS_SORT']
         )
+        if context['is_searching']:
+            context['search_title'] = gettext('Your search')
+        else:
+            context['search_title'] = gettext('Full bibliography')
         return render_template(
             current_app.config['KERKO_TEMPLATE_SEARCH_ITEM'],
             title=search_results[0].get('data', {}).get('title', ''),
