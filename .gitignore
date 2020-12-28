@@ -16,6 +16,7 @@ eggs/
 .eggs/
 *.egg
 *.egg-info/
+pip-wheel-metadata/
 
 # Unit test / coverage reports.
 htmlcov/
