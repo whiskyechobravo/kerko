@@ -1,7 +1,7 @@
-import re
+import re  # pylint: disable=too-many-lines
 
 import whoosh
-from flask_babelex import lazy_gettext as _
+from flask_babel import lazy_gettext as _
 from whoosh.analysis import CharsetFilter, LowercaseFilter, StemFilter
 from whoosh.analysis.tokenizers import RegexTokenizer
 from whoosh.fields import BOOLEAN, COLUMN, ID, NUMERIC, STORED, TEXT, Schema, columns

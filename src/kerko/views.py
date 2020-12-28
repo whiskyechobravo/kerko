@@ -6,7 +6,7 @@ from datetime import datetime
 from babel.numbers import format_number
 from flask import (abort, current_app, flash, make_response, redirect, render_template, request,
                    send_from_directory, url_for)
-from flask_babelex import get_locale, gettext, ngettext
+from flask_babel import get_locale, gettext, ngettext
 
 from . import babel_domain, blueprint
 from .attachments import get_attachments_dir

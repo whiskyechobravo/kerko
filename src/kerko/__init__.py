@@ -7,11 +7,11 @@ on Zotero.
 import pathlib
 
 from flask import Blueprint
-from flask_babelex import Domain
+from flask_babel import Domain
 
 
 babel_domain = Domain(
-    pathlib.Path(__file__).parent / 'translations',
+    str(pathlib.Path(__file__).parent / 'translations'),
     domain='kerko'
 )
 

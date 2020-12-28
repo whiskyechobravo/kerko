@@ -9,7 +9,7 @@ import datetime
 import json
 from abc import ABC, abstractmethod
 
-from flask_babelex import lazy_gettext as _
+from flask_babel import lazy_gettext as _
 
 
 class BaseFieldCodec(ABC):

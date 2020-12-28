@@ -78,7 +78,7 @@ The following features are implemented in Kerko:
     specifies that `faceted` is twice as important as `search` when computing
     the relevance score of results, while `browsing` is half as important.
     Boosting may be applied to a logical grouping, e.g., `(a b)^3 c`.
-  * Keyword search is case-insentitive, accents are folded, and punctuation is
+  * Keyword search is case-insensitive, accents are folded, and punctuation is
     ignored. To further improve recall (albeit at the cost of precision),
     stemming is also performed on terms from most text fields, e.g., title,
     abstract, notes. Stemming relieves the user from having to specify all
@@ -164,7 +164,7 @@ The following packages will be automatically installed when installing Kerko:
 * [Bootstrap-Flask]: helper for integrating [Bootstrap].
 * [environs]: helper for separating configuration from code.
 * [Flask]: web application framework.
-* [Flask-BabelEx]: allows Kerko to provide its own translations, at the blueprint level.
+* [Flask-Babel]: helps Kerko provide its own translations, at the blueprint level.
 * [Flask-WTF]: simple integration of Flask and WTForms.
 * [Jinja2]: template engine.
 * [Pyzotero]: Python client for the Zotero API.
@@ -232,27 +232,27 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
      already exists, Kerko will try to create it.
    * `KERKO_COMPOSER`: This variable specifies key elements needed by Kerko,
      e.g., fields for display and search, facets for filtering. These are
-     defined by instanciating the `Composer` class. Your application may
+     defined by instantiating the `Composer` class. Your application may
      manipulate the resulting object at configuration time to add, remove or
      alter fields, facets, sort options, search scopes, citation download
      formats, or badges. See the **Kerko Recipes** section for some examples.
 
 
-3. Also configure the Flask-BabelEx and Bootstrap-Flask extensions:
+3. Also configure the Flask-Babel and Bootstrap-Flask extensions:
 
    ```python
-   from flask_babelex import Babel
+   from flask_babel import Babel
    from flask_bootstrap import Bootstrap
 
    babel = Babel(app)
    bootstrap = Bootstrap(app)
    ```
 
-   See the respective docs of [Flask-BabelEx][Flask-BabelEx_documentation] and
+   See the respective docs of [Flask-Babel][Flask-Babel_documentation] and
    [Bootstrap-Flask][Bootstrap-Flask_documentation] for more details.
 
 
-4. Instanciate the Kerko blueprint and register it in your app:
+4. Instantiate the Kerko blueprint and register it in your app:
 
    ```python
    from kerko import blueprint as kerko_blueprint
@@ -371,8 +371,8 @@ override their default value:
 * Localization-related variables:
   * `BABEL_DEFAULT_LOCALE`: The default language of the user interface. Defaults
     to `'en'`. Your application may set this variable and/or implement a locale
-    selector function to override it (see the [Flask-BabelEx
-    documentation][Flask-BabelEx_documentation]).
+    selector function to override it (see the [Flask-Babel
+    documentation][Flask-Babel_documentation]).
   * `KERKO_USE_TRANSLATIONS`: Use translations provided by the Kerko package.
     Defaults to `True`. When this is set to `False`, translations may be
     provided by the application's own translation catalog.
@@ -404,8 +404,7 @@ override their default value:
   provide those names in the user's language.
 * Whoosh does not provide much out-of-the-box support for non-Western languages.
   Therefore, search might not work very well with such languages.
-* Zotero is the sole referencement management tool supported as a back-end to
-  Kerko.
+* Zotero is the sole reference management tool supported as a back-end to Kerko.
 
 
 ## Design choices
@@ -597,7 +596,7 @@ helping others in working with the system is a lot of work, but hiring the
 original developers of Kerko can do a lot in ensuring continued support and
 development of the project.
 
-If you need professionnal support related to Kerko, have requirements not
+If you need professional support related to Kerko, have requirements not
 currently implemented in Kerko, want to make sure that some Kerko issue
 important to you gets resolved, or if you just like our work and would like to
 hire us for an unrelated project, please [e-mail us][Kerko_email].
@@ -673,8 +672,8 @@ If you wish to add your Kerko-powered online bibliography to this list, please
 [environs]: https://pypi.org/project/environs/
 [Flask]: https://pypi.org/project/Flask/
 [Flask_blueprint]: https://flask.palletsprojects.com/en/1.1.x/blueprints/
-[Flask-BabelEx]: https://pypi.org/project/Flask-BabelEx/
-[Flask-BabelEx_documentation]: https://pythonhosted.org/Flask-BabelEx/
+[Flask-Babel]: https://pypi.org/project/Flask-Babel/
+[Flask-Babel_documentation]: https://flask-babel.tkte.ch/
 [Flask-WTF]: https://pypi.org/project/Flask-WTF/
 [FontAwesome]: https://fontawesome.com/icons
 [Jinja2]: https://pypi.org/project/Jinja2/

@@ -2,7 +2,7 @@ from itertools import chain
 
 from babel.numbers import format_number
 from flask import current_app
-from flask_babelex import get_locale
+from flask_babel import get_locale
 
 
 def get_sections(page_num, page_count):

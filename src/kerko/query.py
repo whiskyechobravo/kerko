@@ -1,7 +1,7 @@
 import re
 
 from flask import current_app
-from flask_babelex import gettext
+from flask_babel import gettext
 from whoosh.qparser import MultifieldParser, QueryParser, plugins
 from whoosh.query import And, Every, Not, Or, Term
 from whoosh.sorting import Count, Facets

@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Iterable
 
 from babel.numbers import format_number
-from flask_babelex import get_locale
+from flask_babel import get_locale
 from whoosh.fields import ID
 from whoosh.query import Prefix, Term
 
