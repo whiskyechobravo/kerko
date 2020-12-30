@@ -96,11 +96,13 @@
                     {%- endif %}
                 </div>
             {%- endif %}
-            <ul class="mb-4 list-unstyled">
-                {%- for result, result_url in search_results %}
-                    {%- include "kerko/_search-result.html.jinja2" %}
-                {%- endfor %}
-            </ul>
+            {%- block search_results_list %}
+                <ul class="mb-4 list-unstyled {% if print_preview %}search-print-preview{% endif %}">
+                    {%- for result, result_url in search_results %}
+                        {%- include "kerko/_search-result.html.jinja2" %}
+                    {%- endfor %}
+                </ul>
+            {%- endblock search_results_list %}
             {%- block pager_bottom %}
                 {%- include "kerko/_pager.html.jinja2" %}
             {%- endblock pager_bottom %}
