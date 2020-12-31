@@ -11,7 +11,7 @@
     {%- else -%}
         {%- block search_item_display %}
             <div class="d-flex">
-                <a class="d-block mw-100 mr-auto" href="{{ result_url }}" title="{{ _('View details') }}">
+                <a class="{% block search_item_classes %}d-block mw-100 mr-auto{% endblock %}" href="{{ result_url }}" title="{{ _('View details') }}">
                     {{- badges(result, mode='result') -}}
                     {%- block search_item_formatted_display %}
                         {{- result.bib|safe -}}
