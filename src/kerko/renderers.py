@@ -14,17 +14,18 @@ class Renderer(ABC):
 class TemplateRenderer:
     """Render using a template file."""
 
-    def __init__(self, template):
+    def __init__(self, template, **extra_context):
         self.template = template
+        self.extra_context = extra_context
 
     def render(self, **context):
-        return render_template(self.template, **context)
+        return render_template(self.template, **context, **self.extra_context)
 
 
 class TemplateResolverRenderer:
     """Render using a template file whose name is resolved from context."""
 
-    def __init__(self, template):
+    def __init__(self, template, **extra_context):
         """
         Initialize the object.
 
@@ -34,20 +35,22 @@ class TemplateResolverRenderer:
             name.
         """
         self.template = template
+        self.extra_context = extra_context
         self.fields = re.findall(r'\{(.*?)\}', self.template)
 
     def render(self, **context):
         return render_template(
             self.template.format(**{kw: context[kw] for kw in self.fields if kw in context}),
-            **context
+            **context, **self.extra_context
         )
 
 
 class TemplateStringRenderer:
     """Render using a template string."""
 
-    def __init__(self, template_string):
+    def __init__(self, template_string, **extra_context):
         self.template_string = template_string
+        self.extra_context = extra_context
 
     def render(self, **context):
-        return render_template_string(self.template_string, **context)
+        return render_template_string(self.template_string, **context, **self.extra_context)
