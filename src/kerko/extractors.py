@@ -2,6 +2,7 @@
 Functions for extracting data from Zotero items.
 """
 
+import itertools
 import re
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
@@ -129,7 +130,7 @@ class TransformerExtractor(Extractor):
 
     def __init__(self, *, extractor, transformers, **kwargs):
         """
-        Initiatize the extractor.
+        Initialize the extractor.
 
         :param Extractor extractor: Base extractor to wrap.
 
@@ -527,13 +528,36 @@ class CollectionFacetTreeExtractor(Extractor):
 class InCollectionExtractor(Extractor):
     """Extract the boolean membership of an item into a collection."""
 
-    def __init__(self, *, collection_key, true_only=True, **kwargs):
+    def __init__(self, *, collection_key, true_only=True, check_subcollections=True, **kwargs):
+        """
+        Initialize the extractor.
+
+        :param str collection_key: Key of the collection to test item membership
+            against.
+
+        :param bool true_only: If `True` (default), extraction returns `True`
+            when an item belongs to the specified collection, or `None` when it
+            does not belong to that collection. If `False`, always return a
+            boolean.
+
+        :param bool check_subcollections: If `True` (default), membership is
+            extended to any subcollection of the specified collection.
+        """
         super().__init__(**kwargs)
         self.collection_key = collection_key
         self.true_only = true_only
+        self.check_subcollections = check_subcollections
 
     def extract(self, item_context, library_context, spec):
-        is_in = self.collection_key in item_context.data.get('collections', [])
+        item_collections = list(
+            itertools.chain(
+                *[
+                    library_context.collections.ancestors(c) if self.check_subcollections else c
+                    for c in item_context.data.get('collections', [])
+                ]
+            )
+        )
+        is_in = self.collection_key in item_collections
         if not self.true_only:
             return is_in
         if is_in:

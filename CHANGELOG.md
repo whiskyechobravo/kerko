@@ -89,6 +89,9 @@ Backwards incompatible changes:
     assignment to the document, assigning the value only when it is not `None`.
 * The `AttachmentsExtractor` class has been renamed to
   `StoredFileAttachmentsExtractor`.
+* `InCollectionExtractor` now extends collection membership to subcollections.
+  To preserve the previous behavior, set the `check_subcollections` parameter to
+  `False` when initializing the extractor.
 
 Possibly backwards incompatible changes (more or less internal API changes):
 
