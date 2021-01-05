@@ -3,19 +3,22 @@ import sys
 import time
 from datetime import datetime
 
+from babel.dates import format_datetime
 from babel.numbers import format_number
-from flask import (abort, current_app, flash, make_response, redirect, render_template, request,
-                   send_from_directory, url_for)
-from flask_babel import get_locale, gettext, ngettext
+from flask import (abort, current_app, flash, make_response, redirect,
+                   render_template, request, send_from_directory, url_for)
+from flask_babel import get_locale, get_timezone, gettext, ngettext
 
 from . import babel_domain, blueprint
 from .attachments import get_attachments_dir
 from .breadbox import build_breadbox
 from .criteria import Criteria
 from .forms import SearchForm
-from .pager import build_pager, get_page_numbers, get_sections as get_pager_sections
-from .query import (build_creators_display, build_item_facet_results, build_relations,
-                    get_search_return_fields, run_query, run_query_unique_with_fallback)
+from .pager import build_pager, get_page_numbers
+from .pager import get_sections as get_pager_sections
+from .query import (build_creators_display, build_item_facet_results,
+                    build_relations, get_search_return_fields, run_query,
+                    run_query_unique_with_fallback)
 from .sorter import build_sorter
 
 if sys.version_info < (3, 7):
@@ -72,7 +75,7 @@ def search():
         'locale': get_locale(),
         'last_sync': datetime.fromtimestamp(
             last_sync, tz=datetime.now().astimezone().tzinfo
-        ).strftime('%Y-%m-%d %H:%M %Z') if last_sync else '',
+        ) if last_sync else None,
     }
 
     if criteria.page_len == 1 and total_count != 0:

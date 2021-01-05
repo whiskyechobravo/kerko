@@ -17,4 +17,4 @@ build-backend = "setuptools.build_meta"
     ]
 
     [tool.pylint.basic]
-    good-names = "a,b,c,d,e,f,fq,g,h,i,id,j,k,m,n,p,q,r,s,t,u,v,w,x,y,_"
+    good-names = "a,b,c,d,dt,e,f,fq,g,h,i,id,j,k,m,n,p,q,r,s,t,tz,u,v,w,x,y,_"

@@ -124,7 +124,13 @@
         {#- Display item fields in proper order. #}
         {%- for f in item.item_fields %}
             {%- if item.data[f.field] %}
-                {{- field(f.localized, item.data[f.field]|escape|urlize(target='_blank'), value_class='pre-line' if f.field == 'abstractNote' or f.field == 'extra') }}
+                {%- if f.field == 'accessDate' %}
+                    {{- field(f.localized, item.data[f.field]|kerko_reformat_date(convert_tz=True)) }}
+                {%- elif f.field in ['date', 'dateDecided', 'dateEnacted', 'filingDate', 'issueDate'] %}
+                    {{- field(f.localized, item.data[f.field]|kerko_reformat_date) }}
+                {%- else %}
+                    {{- field(f.localized, item.data[f.field]|escape|urlize(target='_blank'), value_class='pre-line' if f.field == 'abstractNote' or f.field == 'extra') }}
+                {%- endif %}
             {%- endif %}
         {%- endfor %}
         {%- if item.links %}
