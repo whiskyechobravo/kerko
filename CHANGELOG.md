@@ -55,7 +55,9 @@ Bug fixes:
 
 Other changes:
 
-* Show timezone abbreviation along with time of last update from Zotero.
+* Display ISO 8601 calendar dates in a more readable format, using the
+  formatting style of the locale.
+* Show a timezone abbreviation along with time of last update from Zotero.
 * Add German translation. Thanks [@mmoole](https://github.com/mmoole).
 * Fix broken "Getting started" example in README.
 * Migrate most package distribution options and metadata from `setup.py` to
@@ -66,6 +68,11 @@ Other changes:
 
 Backwards incompatible changes:
 
+* Drop support for Python 3.6. Kerko is no longer being tested under Python 3.6.
+  Known issue with 3.6 at this point: some ISO 8601 dates cannot be parsed and
+  reformatted; instead of being displayed in a locale-sensitive manner, these
+  get displayed as is. More issues might arise in the future with Python 3.6 as
+  Kerko continues to evolve.
 * All values of the `pager` dict passed to the `_pager.html.jinja2` template are
   now lists. Previously, only the values at keys `'before'` and `'after'` were
   lists; now the values at keys `'previous'`, `'first'`, `'current'`, `'last'`,

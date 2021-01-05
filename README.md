@@ -153,7 +153,7 @@ The following features are implemented in Kerko:
 
 ## Requirements
 
-Kerko requires Python 3.6 or later.
+Kerko requires Python 3.7 or later.
 
 
 ### Dependencies
@@ -372,6 +372,10 @@ override their default value:
   * `BABEL_DEFAULT_LOCALE`: The default language of the user interface. Defaults
     to `'en'`. Your application may set this variable and/or implement a locale
     selector function to override it (see the [Flask-Babel
+    documentation][Flask-Babel_documentation]).
+  * `BABEL_DEFAULT_TIMEZONE`: The timezone to use for user facing dates.
+    Defaults to `'UTC'`. Your application may set this variable and/or implement
+    a timezone selector function to override it (see the [Flask-Babel
     documentation][Flask-Babel_documentation]).
   * `KERKO_USE_TRANSLATIONS`: Use translations provided by the Kerko package.
     Defaults to `True`. When this is set to `False`, translations may be

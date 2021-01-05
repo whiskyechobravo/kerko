@@ -137,8 +137,12 @@
                         </div>
                     </div>
                     <div class="text-right mb-4 text-muted d-print-none">
-                        {%- if config.DEBUG %}{% trans time="%.2f"|format(time) %}Processing time: {{time}} seconds{% endtrans %} &mdash;{% endif %}
-                        {{ _("Last update from database: {}").format(last_sync) }}
+                        {%- if config.DEBUG %}
+                            {% trans time="%.2f"|format(time) %}Processing time: {{ time }} seconds{% endtrans %} &mdash;
+                        {%- endif %}
+                        {%- if last_sync %}
+                            {% trans when=last_sync|kerko_format_datetime(convert_tz=True, show_tz=True) %}Last update from database: {{ when }}{% endtrans %}
+                        {%- endif %}
                     </div>
                 {%- endif %}
             {%- endblock search_results_footer %}
