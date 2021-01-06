@@ -1694,7 +1694,8 @@ class Composer:
 
     def add_field(self, field):
         self.fields[field.key] = field
-        self.schema.add(field.key, field.field_type)
+        if field.field_type:
+            self.schema.add(field.key, field.field_type)
 
     def remove_field(self, key):
         self.schema.remove(key)

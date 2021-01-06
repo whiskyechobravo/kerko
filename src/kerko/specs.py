@@ -35,6 +35,20 @@ class BaseFieldSpec(ABC):
             field_type,
             extractor,
     ):
+        """
+        Initialize this field specification.
+
+        :param str key: Unique key for referencing the field in the search index
+            schema.
+
+        :param whoosh.fields.FieldType field_type: Instance of the schema field
+            type. Set to `None` if the field's value is to be passed along with
+            documents, but not add to the schema, e.g., boost factors (see
+            `whoosh.writing.IndexWriter.add_document`).
+
+        :param kerko.extractors.Extractor extractor: Instance of the extractor
+            that will extract the field value from a Zotero item.
+        """
         self.key = key
         self.field_type = field_type
         self.extractor = extractor
