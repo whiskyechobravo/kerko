@@ -1532,7 +1532,11 @@ class Composer:
                         self.fields['sort_creator'],
                         self.fields['sort_title']
                     ],
-                    reverse=True
+                    reverse=[
+                        True,
+                        False,
+                        False,
+                    ]
                 )
             )
         if 'date_asc' not in exclude:
@@ -1572,7 +1576,11 @@ class Composer:
                         self.fields['sort_title'],
                         self.fields['sort_date'],
                     ],
-                    reverse=True
+                    reverse=[
+                        True,
+                        False,
+                        False,
+                    ],
                 )
             )
         if 'title_asc' not in exclude:
@@ -1599,7 +1607,11 @@ class Composer:
                         self.fields['sort_creator'],
                         self.fields['sort_date']
                     ],
-                    reverse=True
+                    reverse=[
+                        True,
+                        False,
+                        False,
+                    ],
                 )
             )
 

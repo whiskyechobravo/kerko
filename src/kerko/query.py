@@ -1,10 +1,11 @@
 import re
+from collections.abc import Iterable
 
 from flask import current_app
 from flask_babel import gettext
 from whoosh.qparser import MultifieldParser, QueryParser, plugins
 from whoosh.query import And, Every, Not, Or, Term
-from whoosh.sorting import Count, Facets
+from whoosh.sorting import Count, Facets, FieldFacet
 
 from .criteria import Criteria
 from .index import open_index
@@ -255,10 +256,7 @@ def build_relations(item, return_fields=None, sort=None):
         with index.searcher() as searcher:
             composer = current_app.config['KERKO_COMPOSER']
             if sort in composer.sorts:
-                search_args = {
-                    'sortedby': composer.sorts[sort].get_field_keys(),
-                    'reverse': composer.sorts[sort].reverse,
-                }
+                search_args = build_sort_args(composer.sorts[sort])
             else:
                 search_args = {}
 
@@ -298,6 +296,25 @@ def build_relations(item, return_fields=None, sort=None):
                     )
 
 
+def build_sort_args(sort_spec):
+    if not sort_spec.fields:
+        return {}
+    if isinstance(sort_spec.reverse, Iterable):
+        # Per-field reverse values require to use FieldFacet objects.
+        return {
+            'sortedby':
+                [
+                    FieldFacet(field_key, reverse=reverse)
+                    for field_key, reverse in zip(sort_spec.get_field_keys(), sort_spec.reverse)
+                ]
+        }
+    # With a single reverse value, we may specify the field names directly.
+    return {
+        'sortedby': sort_spec.get_field_keys(),
+        'reverse': sort_spec.reverse,
+    }
+
+
 def run_query(criteria, return_fields=None, query_facets=True):
     """Perform a search query."""
     items = []
@@ -314,9 +331,8 @@ def run_query(criteria, return_fields=None, query_facets=True):
             q = build_keywords_query(criteria.keywords)
             search_args = {
                 'filter': build_filter_query(criteria.filters.lists()),
-                'sortedby': composer.sorts[criteria.sort].get_field_keys(),
-                'reverse': composer.sorts[criteria.sort].reverse,
             }
+            search_args.update(build_sort_args(composer.sorts[criteria.sort]))
             if query_facets:
                 facet_specs = get_query_facets(criteria.filters.lists(), criteria)
                 search_args['groupedby'] = build_groupedby_query(facet_specs)

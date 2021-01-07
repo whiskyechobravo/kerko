@@ -43,7 +43,7 @@ class BaseFieldSpec(ABC):
 
         :param whoosh.fields.FieldType field_type: Instance of the schema field
             type. Set to `None` if the field's value is to be passed along with
-            documents, but not add to the schema, e.g., boost factors (see
+            documents, but not added to the schema, e.g., boost factors (see
             `whoosh.writing.IndexWriter.add_document`).
 
         :param kerko.extractors.Extractor extractor: Instance of the extractor
@@ -436,7 +436,10 @@ class SortSpec:
         :param int weight: Determine the position of this option relative to the
             other options.
 
-        :param bool reverse: Whether this sort option is in reverse order.
+        :param bool reverse: Whether the fields should be sorted in reverse
+            order. To provide per-field reverse settings, an iterable may be
+            supplied instead of a bool, in which case it should contain the same
+            number of elements as the `fields` parameter.
 
         :param callable is_allowed: Optional callable to determine if, given a
             criteria object, the sort option should be allowed.
@@ -445,7 +448,15 @@ class SortSpec:
         self.label = label
         self.fields = fields
         self.weight = weight
-        self.reverse = reverse
+        if isinstance(reverse, Iterable):
+            if all(reverse):
+                self.reverse = True
+            elif not any(reverse):
+                self.reverse = False
+            else:
+                self.reverse = reverse
+        else:
+            self.reverse = reverse
         self._is_allowed = is_allowed
 
     def is_allowed(self, criteria):

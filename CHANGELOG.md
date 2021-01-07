@@ -51,6 +51,10 @@ Bug fixes:
 * Fix unhandled exception during sync when an attachment cannot be downloaded.
 * Fix page numbers greater than the page count in search URLs generating wrong
   page numbers for search result item URLs.
+* Fix secondary keys getting sorted in reverse order with some sort options,
+  e.g., when sorting by newest first, results having the same date were then
+  sorted by creator name in reverse alphabetical order instead of alphabetical
+  order.
 * Fix empty HTML element taking up horizontal space when there are no badges.
 
 Other changes:
