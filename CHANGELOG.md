@@ -1,9 +1,10 @@
 # Changelog
 
-## Latest
+## 0.7 (2021-01-08)
 
 *Warning:* Upgrading from version 0.6 or earlier will require that you clean and
-re-sync your existing search index. Use the following commands:
+re-sync your existing search index. Use the following commands, then restart the
+application:
 
 ```bash
 flask kerko clean index
