@@ -1,7 +1,7 @@
 {#- The bare minimum for a page. No layout at this point. -#}
 {%- block doc -%}
 <!doctype html>
-<html {%- block html_attributes %}{% if locale %} lang="{{ locale }}"{% endif %} class="no-js"{% endblock %}>
+<html {%- block html_attributes %}{% if locale %} lang="{{ locale|replace('_', '-') }}"{% endif %} class="no-js"{% endblock %}>
     {%- block head %}
         <head {% block head_attributes %}{% endblock %}>
             {%- block metas %}
