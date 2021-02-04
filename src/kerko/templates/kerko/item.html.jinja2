@@ -55,7 +55,7 @@
                         <div class="{% block attachment_links_wrapper_classes %}d-inline-block d-print-none mb-2{% endblock %}">
                             <div class="dropdown">
                                 <button class="{% block attachment_links_btn_classes %}btn btn-primary dropdown-toggle{% endblock %}" type="button" id="attachment-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="fas fa-file" aria-hidden="true"></span> {{ _('Read documents') }}
+                                    <span class="fas fa-file" aria-hidden="true"></span> {{ _('Read documents') -}}
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labelledby="attachment-options">
                                     {%- for attachment in item.attachments %}
@@ -69,7 +69,7 @@
                     {%- elif item.attachments|length == 1 %}
                         <div class="{% block attachment_link_wrapper_classes %}d-inline-block d-print-none mb-2{% endblock %}">
                             <a class="{% block attachment_link_btn_classes %}btn btn-primary{% endblock %}" href="{{ url_for('kerko.item_attachment_download', item_id=item.id, attachment_id=item.attachments[0]['id'], attachment_filename=item.attachments[0]['filename']) }}"{% if config.KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW %} target="_blank"{% endif %} {{ title_aria_label(_('Read \'{}\'').format(item.attachments[0]['filename']|escape)) }}>
-                                <span class="fas fa-file" aria-hidden="true"></span> {{ _('Read document') }}
+                                <span class="fas fa-file" aria-hidden="true"></span> {{ _('Read document') -}}
                             </a>
                         </div>
                     {%- endif %}
@@ -84,7 +84,7 @@
                         <div class="{% block download_link_wrapper_classes %}d-inline-block d-print-none mb-2{% endblock %}">
                             <div class="dropdown">
                                 <button class="{% block download_btn_classes %}btn btn-secondary btn-light dropdown-toggle{% endblock %}" type="button" id="download-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="fas fa-download" aria-hidden="true"></span> {% trans count=1, count_formatted='1' %}Download this citation{% pluralize %}Download {{ count_formatted }} citations{% endtrans %} {# TODO: Remove pluralization after solving issue where translation is not loaded when the same message is sometimes pluralized, sometimes not. #}
+                                    <span class="fas fa-download" aria-hidden="true"></span> {% trans count=1, count_formatted='1' %}Download this citation{% pluralize %}Download {{ count_formatted }} citations{% endtrans -%} {# TODO: Remove pluralization after solving issue where translation is not loaded when the same message is sometimes pluralized, sometimes not. -#}
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labelledby="download-options">
                                     {%- for citation_format in config.KERKO_COMPOSER.get_ordered_specs('citation_formats') %}
