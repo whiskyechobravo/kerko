@@ -251,49 +251,47 @@ def build_relations(item, return_fields=None, sort=None):
     """
     Prepare the relational fields of the item for a given relation.
     """
-    index = open_index()
-    if index:
-        with index.searcher() as searcher:
-            composer = current_app.config['KERKO_COMPOSER']
-            if sort in composer.sorts:
-                search_args = build_sort_args(composer.sorts[sort])
+    with open_index().searcher() as searcher:
+        composer = current_app.config['KERKO_COMPOSER']
+        if sort in composer.sorts:
+            search_args = build_sort_args(composer.sorts[sort])
+        else:
+            search_args = {}
+
+        def search_relation(search_terms, item, key):
+            """
+            Search for a relation and store the result in the given item (at key).
+            """
+            results = searcher.search(q=Or(search_terms), limit=None, **search_args)
+            if results:
+                item[key] = [
+                    _get_fields(hit, return_fields) for hit in results
+                ]
             else:
-                search_args = {}
+                item[key] = []  # Replace original value of the field with the results.
 
-            def search_relation(search_terms, item, key):
-                """
-                Search for a relation and store the result in the given item (at key).
-                """
-                results = searcher.search(q=Or(search_terms), limit=None, **search_args)
-                if results:
-                    item[key] = [
-                        _get_fields(hit, return_fields) for hit in results
-                    ]
-                else:
-                    item[key] = []  # Replace original value of the field with the results.
-
-            for relation in composer.get_ordered_specs('relations'):
-                if relation.directed:
-                    search_relation(
-                        search_terms=_get_directed_relation_search_terms(item, relation),
-                        item=item,
-                        key=relation.field.key,
-                    )
-                else:
-                    search_relation(
-                        search_terms=(
-                            _get_directed_relation_search_terms(item, relation) +
-                            _get_reverse_relation_search_terms(item, relation)
-                        ),
-                        item=item,
-                        key=relation.field.key,
-                    )
-                if relation.reverse:
-                    search_relation(
-                        search_terms=_get_reverse_relation_search_terms(item, relation),
-                        item=item,
-                        key=relation.reverse_field_key,
-                    )
+        for relation in composer.get_ordered_specs('relations'):
+            if relation.directed:
+                search_relation(
+                    search_terms=_get_directed_relation_search_terms(item, relation),
+                    item=item,
+                    key=relation.field.key,
+                )
+            else:
+                search_relation(
+                    search_terms=(
+                        _get_directed_relation_search_terms(item, relation) +
+                        _get_reverse_relation_search_terms(item, relation)
+                    ),
+                    item=item,
+                    key=relation.field.key,
+                )
+            if relation.reverse:
+                search_relation(
+                    search_terms=_get_reverse_relation_search_terms(item, relation),
+                    item=item,
+                    key=relation.reverse_field_key,
+                )
 
 
 def build_sort_args(sort_spec):
@@ -324,58 +322,56 @@ def run_query(criteria, return_fields=None, query_facets=True):
     last_sync = None
 
     index = open_index()
-    if index:
-        last_sync = index.last_modified()
-        with index.searcher() as searcher:
-            composer = current_app.config['KERKO_COMPOSER']
-            q = build_keywords_query(criteria.keywords)
-            search_args = {
-                'filter': build_filter_query(criteria.filters.lists()),
-            }
-            search_args.update(build_sort_args(composer.sorts[criteria.sort]))
-            if query_facets:
-                facet_specs = get_query_facets(criteria.filters.lists(), criteria)
-                search_args['groupedby'] = build_groupedby_query(facet_specs)
-                search_args['maptype'] = Count
-            groups = None
-            if criteria.page_len is None:  # Retrieve all results.
-                search_args['limit'] = None
+    last_sync = index.last_modified()
 
-                results = searcher.search(q, **search_args)
-                if results:
-                    items = [_get_fields(hit, return_fields) for hit in results]
-                    groups = results.groups
-                    total = results.estimated_length()
-                    page_count = 1
-            else:  # Retrieve a range of results.
-                search_args['pagenum'] = criteria.page_num
-                search_args['pagelen'] = criteria.page_len
+    with index.searcher() as searcher:
+        composer = current_app.config['KERKO_COMPOSER']
+        q = build_keywords_query(criteria.keywords)
+        search_args = {
+            'filter': build_filter_query(criteria.filters.lists()),
+        }
+        search_args.update(build_sort_args(composer.sorts[criteria.sort]))
+        if query_facets:
+            facet_specs = get_query_facets(criteria.filters.lists(), criteria)
+            search_args['groupedby'] = build_groupedby_query(facet_specs)
+            search_args['maptype'] = Count
+        groups = None
+        if criteria.page_len is None:  # Retrieve all results.
+            search_args['limit'] = None
 
-                results = searcher.search_page(q, **search_args)
-                if results:
-                    items = [_get_fields(hit, return_fields) for hit in results]
-                    groups = results.results.groups
-                    total = results.total
-                    page_count = results.pagecount
-            if query_facets:
-                facets = build_search_facet_results(searcher, groups, criteria, facet_specs)
+            results = searcher.search(q, **search_args)
+            if results:
+                items = [_get_fields(hit, return_fields) for hit in results]
+                groups = results.groups
+                total = results.estimated_length()
+                page_count = 1
+        else:  # Retrieve a range of results.
+            search_args['pagenum'] = criteria.page_num
+            search_args['pagelen'] = criteria.page_len
+
+            results = searcher.search_page(q, **search_args)
+            if results:
+                items = [_get_fields(hit, return_fields) for hit in results]
+                groups = results.results.groups
+                total = results.total
+                page_count = results.pagecount
+        if query_facets:
+            facets = build_search_facet_results(searcher, groups, criteria, facet_specs)
 
     return items, facets, total, page_count, last_sync
 
 
 def run_query_unique(field_name, value, return_fields=None):
     """Perform a search query for a single item using an unique key."""
-    index = open_index()
-    if index:
-        with index.searcher() as searcher:
-            q = QueryParser(
-                field_name,
-                schema=current_app.config['KERKO_COMPOSER'].schema,
-                plugins=[]
-            ).parse(value)
-            results = searcher.search(q, limit=1)
-            if results:
-                return _get_fields(results[0], return_fields)
+    with open_index().searcher() as searcher:
+        q = QueryParser(
+            field_name,
+            schema=current_app.config['KERKO_COMPOSER'].schema,
+            plugins=[]
+        ).parse(value)
+        results = searcher.search(q, limit=1)
+        if results:
+            return _get_fields(results[0], return_fields)
     return None
 
 
@@ -395,13 +391,11 @@ def run_query_unique_with_fallback(field_names, value, return_fields=None):
 
 def run_query_all(return_fields=None):
     """Perform a search query to return all items (without faceting)."""
-    index = open_index()
-    if index:
-        with index.searcher() as searcher:
-            results = searcher.search(Every(), limit=None)
-            if results:
-                for hit in results:
-                    yield _get_fields(hit, return_fields)
+    with open_index().searcher() as searcher:
+        results = searcher.search(Every(), limit=None)
+        if results:
+            for hit in results:
+                yield _get_fields(hit, return_fields)
     return []
 
 
@@ -413,7 +407,4 @@ def check_fields(fields):
 
     :return list: List of fields missing from the schema, if any.
     """
-    index = open_index()
-    if index:
-        return [name for name in fields if name not in index.schema.names()]
-    return fields
+    return [name for name in fields if name not in open_index().schema.names()]

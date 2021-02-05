@@ -9,6 +9,10 @@ from .extractors import ItemContext, LibraryContext
 from .tags import TagGate
 
 
+class SearchIndexError(Exception):
+    pass
+
+
 def get_index_dir():
     return pathlib.Path(current_app.config['KERKO_DATA_DIR']) / 'index'
 
@@ -16,16 +20,27 @@ def get_index_dir():
 def open_index(auto_create=False, write=False):
     index_dir = get_index_dir()
     try:
+        search_index = None
         if not index_dir.exists() and auto_create and write:
             index_dir.mkdir(parents=True, exist_ok=True)
-            return whoosh.index.create_in(
+            search_index = whoosh.index.create_in(
                 str(index_dir), current_app.config['KERKO_COMPOSER'].schema
             )
-        if index_dir.exists():
-            return whoosh.index.open_dir(str(index_dir), readonly=not write)
-        current_app.logger.error(f"Could not open index in directory '{index_dir}'.")
-    except whoosh.index.IndexError as e:
-        current_app.logger.error(f"Could not open index: '{e}'.")
+        elif index_dir.exists():
+            search_index = whoosh.index.open_dir(str(index_dir), readonly=not write)
+
+        if search_index:
+            if write:  # In write mode, no further checks needed.
+                return search_index
+            if search_index.doc_count() > 0:  # In read mode, we expect some docs to be available.
+                return search_index
+            current_app.logger.error(f"The search index is empty in directory '{index_dir}'.")
+            raise SearchIndexError
+        current_app.logger.error(f"Could not open the search index from directory '{index_dir}'.")
+        raise SearchIndexError
+    except whoosh.index.IndexError as exc:
+        current_app.logger.error(f"Search index error in directory '{index_dir}': '{exc}'.")
+        raise SearchIndexError from exc
 
 
 def delete_index():

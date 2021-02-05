@@ -3,17 +3,18 @@ import sys
 import time
 from datetime import datetime
 
-from babel.dates import format_datetime
 from babel.numbers import format_number
 from flask import (abort, current_app, flash, make_response, redirect,
                    render_template, request, send_from_directory, url_for)
-from flask_babel import get_locale, get_timezone, gettext, ngettext
+from flask_babel import get_locale, gettext, ngettext
 
 from . import babel_domain, blueprint
 from .attachments import get_attachments_dir
 from .breadbox import build_breadbox
 from .criteria import Criteria
+from .exceptions import except_abort
 from .forms import SearchForm
+from .index import SearchIndexError
 from .pager import build_pager, get_page_numbers
 from .pager import get_sections as get_pager_sections
 from .query import (build_creators_display, build_item_facet_results,
@@ -29,6 +30,7 @@ if sys.version_info < (3, 7):
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
+@except_abort(SearchIndexError, 503)
 def search():
     """View the results of a search."""
     start_time = time.process_time()
@@ -152,6 +154,7 @@ def search():
 
 
 @blueprint.route('/<path:item_id>')
+@except_abort(SearchIndexError, 503)
 def item_view(item_id):
     """View a full bibliographic record."""
     start_time = time.process_time()
@@ -185,6 +188,7 @@ def item_view(item_id):
 
 @blueprint.route('/<path:item_id>/download/<string:attachment_id>/')
 @blueprint.route('/<path:item_id>/download/<string:attachment_id>/<string:attachment_filename>')
+@except_abort(SearchIndexError, 503)
 def item_attachment_download(item_id, attachment_id, attachment_filename=None):
     """
     Download an item attachment.
@@ -233,6 +237,7 @@ def item_attachment_download(item_id, attachment_id, attachment_filename=None):
 
 
 @blueprint.route('/<path:item_id>/export/<string:citation_format_key>')
+@except_abort(SearchIndexError, 503)
 def item_citation_download(item_id, citation_format_key):
     """Download a citation."""
     if current_app.config['KERKO_USE_TRANSLATIONS']:
@@ -268,6 +273,7 @@ def item_citation_download(item_id, citation_format_key):
 
 
 @blueprint.route('/export/<string:citation_format_key>/')
+@except_abort(SearchIndexError, 503)
 def search_citation_download(citation_format_key):
     """Download all citations resulting from a search."""
     citation_format = current_app.config['KERKO_COMPOSER'].citation_formats.get(citation_format_key)
