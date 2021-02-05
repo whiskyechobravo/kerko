@@ -309,11 +309,11 @@ The variables below are required and have no default values:
 * `KERKO_ZOTERO_API_KEY`: Your API key, as [created on
   zotero.org](https://www.zotero.org/settings/keys/new).
 * `KERKO_ZOTERO_LIBRARY_ID`: The identifier of the library to get data from. For
-  your personal library this value should be your _userID_, as found [on
-  zotero.org](https://www.zotero.org/settings/keys) (you must be logged-in). For
-  a group library this value should be the _groupID_ of the library, as found in
-  the URL of that library on zotero.org (e.g., in the group library URL
-  https://www.zotero.org/groups/2348869/kerko_demo, the _groupID_ is `2348869`).
+  your personal library this value should be your _userID_, as found on
+  https://www.zotero.org/settings/keys (you must be logged-in). For a group
+  library this value should be the _groupID_ of the library, as found in the URL
+  of that library (e.g., in https://www.zotero.org/groups/2348869/kerko_demo,
+  the _groupID_ is `2348869`).
 * `KERKO_ZOTERO_LIBRARY_TYPE`: The type of library to get data from, either
   `'user'` for your personal library, or `'group'` for a group library.
 
