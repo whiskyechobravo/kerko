@@ -1,5 +1,11 @@
 # Changelog
 
+## Latest (unreleased)
+
+Other changes:
+
+* Respond with an HTTP 503 when the search index is empty or unreadable.
+
 ## 0.7.1 (2021-02-04)
 
 Security fixes:
