@@ -1,6 +1,6 @@
 # Changelog
 
-## Latest
+## 0.7.1 (2021-02-04)
 
 Security fixes:
 
@@ -9,7 +9,7 @@ Security fixes:
 
 Bug fixes:
 
-* Fix bad locale separator in the HTML lang attribute.
+* Fix wrong locale separator in the HTML lang attribute.
 
 Other changes:
 
