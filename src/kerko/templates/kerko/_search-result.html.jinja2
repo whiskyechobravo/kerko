@@ -48,6 +48,6 @@
         {%- endblock search_item_display %}
     {%- endif -%}
     {%- if show_abstracts and result.data['abstractNote']|trim|length %}
-        <p class="search-abstract pre-line">{{ result.data['abstractNote']|escape|urlize(target='_blank')|trim }}</p>
+        <p class="search-abstract pre-line">{{ result.data['abstractNote']|truncate(500)|escape|urlize(target='_blank')|trim }}</p>
     {%- endif %}
 </li>
