@@ -11,7 +11,7 @@ from flask import Markup, current_app
 
 from .tags import TagGate
 from .text import id_normalize, sort_normalize
-from .transformers import find_item_id_in_zotero_uris_str
+from .transformers import find_item_id_in_zotero_uris_str, find_item_id_in_zotero_uri_links
 
 RECORD_SEPARATOR = '\x1e'
 
@@ -480,14 +480,17 @@ class RelationsInNotesExtractor(BaseNotesExtractor):
     """Extract item references specified in child notes."""
 
     def extract(self, item_context, library_context, spec):
-        refs = []
+        refs = set()
         children = super().extract(item_context, library_context, spec)
         if children:
             for child in children:
                 note = child.get('data', {}).get('note', '')
-                note = Markup(re.sub(r'<br\s*/>', '\n', note)).striptags()  # Strip HTML markup.
-                refs.extend(find_item_id_in_zotero_uris_str(note))
-        return refs or None
+                # Find in the href attribute of <a> elements.
+                refs.update(find_item_id_in_zotero_uri_links(note))
+                # Find in plain text.
+                note = Markup(re.sub(r'<br\s*/>', '\n', note)).striptags()
+                refs.update(find_item_id_in_zotero_uris_str(note))
+        return list(refs) or None
 
 
 def _expand_paths(path):

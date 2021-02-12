@@ -474,7 +474,9 @@ Remarks:
 * You may only relate items that belong to the same Zotero library.
 * You may use Zotero Item Selects (URIs starting with `zotero://select/`) in the
   notes, if you prefer those to Zotero URIs.
-* URIs must be separated by one or more whitespace character(s).
+* If entered as plain text, URIs must be separated by one or more whitespace
+  character(s). Alternatively, URIs may be entered in HTML links, i.e., in the
+  `href` attribute of `<a>` elements.
 * Hopefully, Zotero will provide nicer ways for handling [relation
   types](https://sparontologies.github.io/cito/current/cito.html) in the future.
   In the meantime, using child notes is how Kerko handles it. If relation types

@@ -60,13 +60,13 @@ def split(sep=None, maxsplit=-1):
 
 
 ZOTERO_URI_REGEX = (
-    r'(^|\s)(https?://(www\.)?zotero\.org/|zotero://select/)'
-    r'(library|((groups|users)/[0-9]+))/items/([A-Z0-9]+)(?=$|\s)'
+    r'(https?://(www\.)?zotero\.org/|zotero://select/)'
+    r'(library|((groups|users)/[0-9]+))/items/([A-Z0-9]+)'
 )
-ZOTERO_URI_REGEX_GROUP_ITEM_ID = 7
+ZOTERO_URI_REGEX_GROUP_ITEM_ID = 6
 
 find_item_id_in_zotero_uris_list = find(
-    regex=ZOTERO_URI_REGEX,
+    regex=r'(?:^|\s)' + ZOTERO_URI_REGEX + r'(?=$|\s)',
     flags=re.MULTILINE,
     group=ZOTERO_URI_REGEX_GROUP_ITEM_ID,
     max_matches=1,
@@ -74,8 +74,14 @@ find_item_id_in_zotero_uris_list = find(
 )
 
 find_item_id_in_zotero_uris_str = find(
-    regex=ZOTERO_URI_REGEX,
+    regex=r'(?:^|\s)' + ZOTERO_URI_REGEX + r'(?=$|\s)',
     flags=re.MULTILINE,
+    group=ZOTERO_URI_REGEX_GROUP_ITEM_ID,
+    max_matches=0,
+)
+
+find_item_id_in_zotero_uri_links = find(
+    regex=r'<a\s+(?:[^>]*?\s+)?href=["\']' + ZOTERO_URI_REGEX + r'["\']',
     group=ZOTERO_URI_REGEX_GROUP_ITEM_ID,
     max_matches=0,
 )

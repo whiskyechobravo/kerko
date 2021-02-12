@@ -6,6 +6,8 @@ Features:
 
 * Display DOI field values as hyperlinks (both in DOI fields, and in the Extra
   field when lines are prefixed with 'DOI:').
+* Allow relations in child notes to be specified as HTML links, i.e., in the
+  `href` attribute of `<a>` elements.
 
 Other changes:
 
