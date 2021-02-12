@@ -2,6 +2,11 @@
 
 ## Latest (unreleased)
 
+Features:
+
+* Display DOI field values as hyperlinks (both in DOI fields, and in the Extra
+  field when lines are prefixed with 'DOI:').
+
 Other changes:
 
 * Respond with an HTTP 503 when the search index is empty or unreadable.

@@ -128,8 +128,12 @@
                     {{- field(f.localized, item.data[f.field]|kerko_reformat_date(convert_tz=True)|escape) }}
                 {%- elif f.field in ['date', 'dateDecided', 'dateEnacted', 'filingDate', 'issueDate'] %}
                     {{- field(f.localized, item.data[f.field]|kerko_reformat_date|escape) }}
+                {%- elif f.field == 'DOI' %}
+                    {{- field(f.localized, item.data[f.field]|escape|kerko_urlize_doi(target='_blank')) }}
+                {%- elif f.field == 'extra' %}
+                    {{- field(f.localized, item.data[f.field]|escape|urlize(target='_blank')|kerko_parse_and_urlize_doi(target='_blank'), value_class='pre-line') }}
                 {%- else %}
-                    {{- field(f.localized, item.data[f.field]|escape|urlize(target='_blank'), value_class='pre-line' if f.field == 'abstractNote' or f.field == 'extra') }}
+                    {{- field(f.localized, item.data[f.field]|escape|urlize(target='_blank'), value_class='pre-line' if f.field == 'abstractNote') }}
                 {%- endif %}
             {%- endif %}
         {%- endfor %}
