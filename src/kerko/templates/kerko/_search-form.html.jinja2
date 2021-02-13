@@ -1,17 +1,21 @@
 {%- from "kerko/_attributes.html.jinja2" import title_aria_label %}
 
 {%- if search_results %}
-    <form method="post" role="search" {% block search_form_attributes %}class="form d-print-none"{% endblock %}>
+    <form method="post" role="search" {% block search_form_attributes %}class="form d-print-none px-0"{% endblock %}>
         {{- form.hidden_tag() }}
-        <div class="input-group">
-            {%- set placeholder = _("Search within results for...") if is_searching else _("Search for...") %}
-            {%- set keywords_validation_class = " is-invalid" if 'keywords' in form.errors else "" %}
-            {%- set scope_validation_class = " is-invalid" if 'scope' in form.errors else "" %}
-            <label for="{{ form.keywords.id }}" class="sr-only">{{ placeholder }}</label>
-            {{- form.keywords(class_="form-control flex-grow-1" + keywords_validation_class, placeholder=placeholder) }}
-            <label for="{{ form.scope.id }}" class="sr-only">{{ _('Search in...') }}</label>
-            {{- form.scope(class_="flex-grow-0 custom-select w-40" + scope_validation_class) }}
-            <div class="input-group-append">
+        <div class="form-row mx-n1">
+            <div class="col-12 col-md px-1 mb-2 mb-md-0">
+                {%- set placeholder = _("Search within results for...") if is_searching else _("Search for...") %}
+                {%- set keywords_validation_class = " is-invalid" if 'keywords' in form.errors else "" %}
+                {%- set scope_validation_class = " is-invalid" if 'scope' in form.errors else "" %}
+                <label for="{{ form.keywords.id }}" class="sr-only">{{ placeholder }}</label>
+                {{- form.keywords(class_="form-control" + keywords_validation_class, placeholder=placeholder) }}
+            </div>
+            <div class="col col-md-5 px-1">
+                <label for="{{ form.scope.id }}" class="sr-only">{{ _('Search in...') }}</label>
+                {{- form.scope(class_="custom-select" + scope_validation_class) }}
+            </div>
+            <div class="col-auto px-1">
                 <button id="submit" type="submit" {% block search_button_attributes %}class="{% block search_btn_classes %}btn btn-primary{% endblock %}"{% endblock %} {{ title_aria_label(_('Search')) }}>
                     <span class="fas fa-search" aria-hidden="true"></span>
                 </button>

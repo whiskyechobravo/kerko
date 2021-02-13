@@ -11,7 +11,9 @@ Features:
 
 Other changes:
 
-* Respond with an HTTP 503 when the search index is empty or unreadable.
+* On narrow screens, stack search form controls for better usability.
+* Respond with an HTTP 503 (Service Unavailable) when the search index is empty
+  or unreadable.
 
 ## 0.7.1 (2021-02-04)
 
