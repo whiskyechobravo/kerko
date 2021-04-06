@@ -56,15 +56,6 @@
 .navbar-brand {
   white-space: normal;
 }
-.search-item {
-  margin-top: 1em;
-  margin-bottom: 1em;
-}
-.search-abstract {
-  padding-left: 1em;
-  margin-top: .5em;
-  margin-bottom: 1.5em;
-}
 .dropdown-width-300 {
   width: 300px;
   max-width: 90vw;
