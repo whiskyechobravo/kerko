@@ -1,7 +1,7 @@
 {%- macro relations_list(relations) %}
     <ul class="list-unstyled">
         {%- for result in relations %}
-            {%- with result_url=url_for('.item_view', item_id=result.id, _external=True), show_abstracts=False %}
+            {%- with result_url=url_for('.item_view', item_id=result.id, _external=True), show_abstracts=False, hide_result_links=not config.KERKO_RELATIONS_LINKS %}
                 {%- include "kerko/_search-result.html.jinja2" %}
             {%- endwith %}
         {%- endfor %}

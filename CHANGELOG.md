@@ -2,8 +2,23 @@
 
 ## Latest (unreleased)
 
+*Warning:* Upgrading from version 0.7.x or earlier will require that you clean
+and re-sync your existing search index. Use the following commands, then restart
+the application:
+
+```bash
+flask kerko clean index
+flask kerko sync
+```
+
 Features:
 
+* Display "View on {hostname}" links under search result items, for quick access
+  to the items' URLs. These can be disabled by setting `KERKO_RESULTS_URL_LINKS`
+  to `False`.
+* Move the "Read" buttons under search result items, as "Read document" links.
+  These can now be disabled by setting `KERKO_RESULTS_ATTACHMENT_LINKS` to
+  `False`.
 * Display DOI field values as hyperlinks (both in DOI fields, and in the Extra
   field when lines are prefixed with 'DOI:').
 * Allow relations in child notes to be specified as HTML links, i.e., in the
@@ -14,6 +29,14 @@ Other changes:
 * On narrow screens, stack search form controls for better usability.
 * Respond with an HTTP 503 (Service Unavailable) when the search index is empty
   or unreadable.
+
+Backwards incompatible changes:
+
+* The default list for the `KERKO_RESULTS_FIELDS` setting now includes the
+  `'url'` field. If you have overridden that setting in your application and
+  `KERKO_RESULTS_URL_LINKS` is enabled, you'll probably have to add `'url'` too.
+* The structure of the `kerko/_search-result.html.jinja2` template has changed
+  somewhat. If you have overridden it, you'll need to review the changes.
 
 ## 0.7.1 (2021-02-04)
 

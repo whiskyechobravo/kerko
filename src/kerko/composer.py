@@ -1282,6 +1282,15 @@ class Composer:
         # 'scopes' parameter).
         #
 
+        # URL from Zotero's URL field.
+        if 'url' not in exclude:
+            self.add_field(
+                FieldSpec(
+                    key='url',
+                    field_type=STORED,
+                    extractor=extractors.ItemDataExtractor(key='url'),
+                )
+            )
         # Formatted citation.
         if 'bib' not in exclude:
             self.add_field(

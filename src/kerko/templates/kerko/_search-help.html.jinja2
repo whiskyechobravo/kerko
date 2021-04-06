@@ -55,7 +55,7 @@
                     <p>{{ _("This section shows the search results. When no search criteria has been given, it shows the full content of the bibliography (up to {page_len} entries per page).").format(page_len=config.KERKO_PAGE_LEN) }}</p>
                     <ul>
                         <li>{{ _("Each entry of the results list is a link to its full bibliographic record. From the bibliographic record view, you may continue exploring the search results by going to previous or following records in your search results, or you may return to the list of results.") }}</li>
-                        <li>{{ _("If a <strong>Read</strong> button appears next to a result, it indicates that one or more documents are available. You may either use the button for direct access to the documents, or access them from the bibliographic record view.") }}</li>
+                        <li>{{ _("Additional links, such as <strong>Read document</strong> or <strong>View on <em>[website name]</em></strong>, may appear under a result. These give you quick access to the resource. Those links will also be available in the full bibliographic record.") }}</li>
                         {%- if config.KERKO_RESULTS_ABSTRACTS_TOGGLER %}
                             <li>{{- _("The <strong>Abstracts</strong> button lets you toggle the display of abstracts within the list of search results. Enabling abstracts, however, will have no effect on results for which no abstract is available.") }}
                         {%- endif %}
