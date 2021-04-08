@@ -32,13 +32,17 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install tox
+      - name: Info
+        run: |
+          echo "=====  PYTHON  ====="
+          python --version
       - name: Run tests
         run: tox -e py${{ matrix.config.python }}
 
 #  lint:
 #    name: Lint
 #    runs-on: ubuntu-latest
-#    
+#
 #    steps:
 #      - name: Lint with flake8
 #        run: |
