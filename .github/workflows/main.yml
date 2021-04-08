@@ -1,0 +1,48 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: main
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    name: Test - ${{ matrix.config.python }} - ${{ matrix.config.os }}
+    runs-on: ${{ matrix.config.os }}
+
+    strategy:
+      matrix:
+        config:
+          - os: ubuntu-latest
+            python: 3.8
+          - os: ubuntu-latest
+            python: 3.9
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.config.python }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.config.python }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install tox
+      - name: Run tests
+        run: tox -e py${{ matrix.config.python }}
+
+#  lint:
+#    name: Lint
+#    runs-on: ubuntu-latest
+#    
+#    steps:
+#      - name: Lint with flake8
+#        run: |
+#          # stop the build if there are Python syntax errors or undefined names
+#          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+#          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+#          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
