@@ -82,12 +82,13 @@ def sync_index():
     def get_children(item):
         children = []
         if item.get('meta', {}).get('numChildren', 0):
-            # TODO: Only extract item types that are required, if any, by the Composer instance's fields.
+            # TODO: Extract just the item types that are required by the Composer instance's fields.
             children = list(
                 zotero.ChildItems(
                     zotero_credentials,
                     item['key'],
                     item_types=['note', 'attachment'],
+                    fulltext=current_app.config['KERKO_FULLTEXT_SEARCH']
                 )
             )
         return children

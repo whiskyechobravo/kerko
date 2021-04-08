@@ -13,6 +13,19 @@ flask kerko sync
 
 Features:
 
+* Allow full-text search of PDF attachments. This can be disabled by setting
+  `KERKO_FULLTEXT_SEARCH` to `False`. Since this feature relies on Zotero's
+  full-text indexing, you must make sure that it works in Zotero first; see
+  [Zotero's
+  documentation](https://www.zotero.org/support/searching#pdf_full-text_indexing).
+  Caution: If you have thousands of attachments, this feature can significantly
+  slow down the process of synchronizing data from zotero.org, due to Kerko
+  performing a large number of Zotero API requests (hopefully we'll fix this in
+  the future).
+* Add new search scopes "Everywhere" (to search both metadata fields and the
+  text content of attached documents) and "In documents" (to search the text
+  content of attached documents). The scope "In all fields" allows to search all
+  metadata fields, but not the text content of attached documents.
 * Display "View on {hostname}" links under search result items, for quick access
   to the items' URLs. These can be disabled by setting `KERKO_RESULTS_URL_LINKS`
   to `False`.
@@ -21,10 +34,9 @@ Features:
   `False`.
 * Display DOI field values as hyperlinks (both in DOI fields, and in the Extra
   field when lines are prefixed with 'DOI:').
-* Handle imported file attachments, such as those imported through the Zotero
-  Connector. Previously, only "attached copies of files" were supported. If your
-  Zotero library contains such attachments, you might want to review them and
-  perhaps tag them for inclusion or exclusion before upgrading Kerko.
+* Add support for imported file attachments, e.g., PDF files imported in your
+  Zotero library through the Zotero Connector. Previously, only "attached copies
+  of files" were supported.
 * Allow relations in child notes to be specified as HTML links, i.e., in the
   `href` attribute of `<a>` elements.
 

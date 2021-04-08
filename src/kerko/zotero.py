@@ -286,7 +286,7 @@ class Items:
         return zotero_item
 
 
-class ChildItems:
+class ChildItems:  # pylint: disable=too-many-instance-attributes
     """
     Iterable over Zotero child items.
 
@@ -295,11 +295,19 @@ class ChildItems:
     returned by Zotero.
     """
 
-    def __init__(self, zotero_credentials, item_key, item_types=None, formats=None):
+    def __init__(  # pylint: disable=too-many-arguments
+            self,
+            zotero_credentials,
+            item_key,
+            item_types=None,
+            formats=None,
+            fulltext=True,
+    ):
         self.zotero_credentials = zotero_credentials
         self.item_key = item_key
         self.item_type_filter = ' || '.join(item_types) if item_types else None
         self.include = ','.join(formats or ['data'])
+        self.fulltext = fulltext
         self.start = 0
         self.zotero_batch = []
         self.iterator = iter(self.zotero_batch)
@@ -313,6 +321,28 @@ class ChildItems:
                 return self._next_item()
             except StopIteration:
                 self._next_batch()
+
+    @retry_zotero
+    def _get_fulltext(self, child):
+        # Fulltext requests only work with file attachments.
+        if child['data']['itemType'] == 'attachment' and child['data']['linkMode'] != 'linked_url':
+            current_app.logger.debug(
+                "Requesting text content of attachment {child_key} (parent: {parent_key}).".format(
+                    child_key=child['key'], parent_key=child['data']['parentItem']
+                )
+            )
+            try:
+                response = self.zotero_credentials.fulltext_item(child['key'])
+                if response.get('content') and (
+                    response.get('indexedChars', 0) > 0 or response.get('indexedPages', 0) > 0
+                ):
+                    return response['content']
+            except zotero_errors.ResourceNotFound:
+                current_app.logger.info(
+                    "Text content not available for attachment {child_key} (parent: {parent_key}).".
+                    format(child_key=child['key'], parent_key=child['data']['parentItem'])
+                )
+        return ''
 
     @retry_zotero
     def _next_batch(self):
@@ -337,6 +367,11 @@ class ChildItems:
         )
         if not self.zotero_batch:
             raise StopIteration  # Empty batch, nothing more to iterate.
+        if self.fulltext:
+            for child in self.zotero_batch:
+                # Note: taking the liberty of adding the Kerko-specific
+                # 'fulltext' key to the child dict gotten from Zotero.
+                child['fulltext'] = self._get_fulltext(child)
         self.iterator = iter(self.zotero_batch)
 
     def _next_item(self):

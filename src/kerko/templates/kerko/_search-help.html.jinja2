@@ -22,7 +22,7 @@
                         <li>{{ _("To start a new search instead of adding keywords to the current search, use the <strong>{}</strong> button, then enter your new keywords.").format(_("Reset search")) }}</li>
                         <li>{{ _("To replace an already submitted keyword, first remove it by unchecking its checkbox, then submit a new keyword.") }}</li>
                         {%- if config.KERKO_COMPOSER.scopes|length %}
-                            <li>{{ _("You may scope the search by selecting which fields to search, for instance:") }}</li>
+                            <li>{{ _("You may control the extent of your search by selecting where to search. The options are:") }}</li>
                             <ul>
                                 {%- for scope in config.KERKO_COMPOSER.scopes.values() %}
                                     {%- if scope.help_text %}

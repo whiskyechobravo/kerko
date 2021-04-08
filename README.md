@@ -86,8 +86,11 @@ The following features are implemented in Kerko:
     variants of a word when searching, e.g., terms such as `search`, `searches`,
     and `searching` all return the same results. The [Snowball] algorithm is
     used for that purpose.
-  * Field search: users may target all fields, author/contributor fields only,
-    or titles only. Applications may provide additional choices.
+  * Full-text search: the text content of PDF attachments can be searched.
+  * Scope of search: users may choose to search everywhere, in
+    author/contributor names, in titles, in all fields (i.e., in metadata and
+    notes), or in documents (i.e., in the text content of attachments).
+    Applications may provide additional choices.
 * Faceted browsing: allows filtering by topic (Zotero tag), by resource type
   (Zotero item type), by publication year. Moreover, an application may define
   facets modeled on collections and subcollections; in such case, any collection
@@ -333,6 +336,12 @@ override their default value:
   button should be hidden from search results pages. Defaults to `0` (i.e. no
   limit).
 * `KERKO_FACET_COLLAPSING`: Allow collapsible facets. Defaults to `False`.
+* `KERKO_FULLTEXT_SEARCH`: Allow full-text search of PDF attachments. Defaults
+  to `True`. To get consistent results, see **Ensuring full-text indexing of
+  your attachments in Zotero** below. Caution: If you have thousands of
+  attachments, this feature can significantly slow down the process of
+  synchronizing data from zotero.org, due to Kerko performing a large number of
+  Zotero API requests (hopefully we'll fix this in the future).
 * `KERKO_PAGE_LEN`: The number of search results per page. Defaults to `20`.
 * `KERKO_PAGER_LINKS`: Number of pages to show in the pager (not counting the
   current page). Defaults to `4`.
@@ -441,7 +450,44 @@ override their default value:
 
 ## Kerko Recipes
 
-TODO: More recipes!
+*TODO: More recipes!*
+
+
+### Ensuring full-text indexing of your attachments in Zotero
+
+Kerko's full-text indexing relies on text content extracted from attachments by
+Zotero. Consequently, for Kerko's full-text search to work, you must make sure
+that full-text indexing works in Zotero first; see [Zotero's documentation on
+full-text
+indexing](https://www.zotero.org/support/searching#pdf_full-text_indexing).
+
+Individual attachments in Zotero can be indexed, partially indexed, or
+unindexed. Various conditions may cause an attachment to be partially indexed or
+unindexed, e.g., file is large, has not been processed yet, or doesn't contain
+text.
+
+Zotero shows the indexing status in the attachment's right pane. If it shows
+"Indexed: Yes", all is good. If it shows "Indexed: No" or "Indexed: Partial",
+then clicking the "Reindex Item" button (next to the indexing status) should
+ensure that the attachment gets fully indexed, that is if the file actually
+contains text. If there is no "Reindex Item" button, it probably means that
+Zotero doesn't support that file type for full-text indexing (at the moment, it
+only supports PDF and plain text files).
+
+It can be tedious to go through hundreds of attachments just to find out whether
+they are indexed or not. To make things easier, you could create a [saved
+search](https://www.zotero.org/support/searching#saved_searches) in your Zotero
+library to get an always up-to-date list of unindexed PDFs. Use the following
+search conditions:
+
+- Match *all* of the following:
+    - *Attachment File Type* — *is* — *PDF*
+    - *Attachment Content* — *does not contain* — *.* (that's a period; also
+      select *RegExp* in the small dropdown list, as that will make the period
+      match any character)
+
+Controlling the indexing status will not only improve full-text search on your
+Kerko site, but also full-text search from within Zotero!
 
 
 ### Providing _Cites_ and _Cited by_ relations

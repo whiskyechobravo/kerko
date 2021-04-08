@@ -74,6 +74,39 @@ def encode_multiple(value, spec):
     return [spec.encode(item) for item in value]
 
 
+def is_file_attachment(item, mime_types=None):
+    """
+    Return `True` if a given item is a file attachment.
+
+    :param mime_types: If a list is provided, the item must also match one of
+        the given MIME types. If empty or `None`, the MIME type is not checked.
+    """
+    if not item.get('data'):
+        return False
+    if not item.get('key'):
+        return False
+    if item['data'].get('linkMode') not in ['imported_file', 'imported_url']:
+        return False
+    if mime_types and item['data'].get('contentType', 'octet-stream') not in mime_types:
+        return False
+    return True
+
+
+def is_link_attachment(item):
+    """
+    Return `True` if a given item is a link attachment.
+    """
+    if not item.get('data'):
+        return False
+    if not item.get('key'):
+        return False
+    if item['data'].get('linkMode') != 'linked_url':
+        return False
+    if not item['data'].get('url'):
+        return False
+    return True
+
+
 class Extractor(ABC):
     """
     Data extractor.
@@ -395,19 +428,6 @@ class FileAttachmentsExtractor(BaseAttachmentsExtractor):
         super().__init__(**kwargs)
         self.mime_types = mime_types
 
-    def is_attachment(self, child):
-        if not child.get('data'):
-            return False
-        if not child.get('key'):
-            return False
-        if child['data'].get('linkMode') not in ['imported_file', 'imported_url']:
-            return False
-        if self.mime_types and child['data'].get(
-                'contentType', 'octet-stream'
-        ) not in self.mime_types:
-            return False
-        return True
-
     def extract(self, item_context, library_context, spec):
         children = super().extract(item_context, library_context, spec)
         return [
@@ -417,7 +437,7 @@ class FileAttachmentsExtractor(BaseAttachmentsExtractor):
                 'filename': child['data'].get('filename', child['key']),
                 'md5': child['data'].get('md5', ''),
                 'mtime': child['data'].get('mtime', 0),
-            } for child in children if self.is_attachment(child)
+            } for child in children if is_file_attachment(child, self.mime_types)
         ] if children else None
 
 
@@ -426,27 +446,36 @@ class LinkedURIAttachmentsExtractor(BaseAttachmentsExtractor):
     Extract attached links to URIs into a list of dicts.
     """
 
-    @staticmethod
-    def is_link(child):
-        if not child.get('data'):
-            return False
-        if not child.get('key'):
-            return False
-        if child['data'].get('linkMode') != 'linked_url':
-            return False
-        if not child['data'].get('url'):
-            return False
-        return True
+    def extract(self, item_context, library_context, spec):
+        children = super().extract(item_context, library_context, spec)
+        if children:
+            return [
+                {
+                    'title': child['data'].get('title', child['data'].get('url')),
+                    'url': child['data'].get('url')
+                }
+                for child in children if is_link_attachment(child)
+            ]
+        return None
+
+
+class AttachmentsFulltextExtractor(BaseAttachmentsExtractor):
+    """Extract the text content of attachments."""
+
+    def __init__(self, *, mime_types=None, **kwargs):
+        super().__init__(**kwargs)
+        self.mime_types = mime_types
 
     def extract(self, item_context, library_context, spec):
         children = super().extract(item_context, library_context, spec)
-        return [
-            {
-                'title': child['data'].get('title', child['data'].get('url')),
-                'url': child['data'].get('url')
-            }
-            for child in children if self.is_link(child)
-        ] if children else None
+        if children:
+            return RECORD_SEPARATOR.join(
+                [
+                    Markup(child['fulltext']).striptags() for child in children
+                    if is_file_attachment(child, self.mime_types) and child.get('fulltext')
+                ]
+            )
+        return None
 
 
 class BaseNotesExtractor(BaseChildrenExtractor):  # pylint: disable=abstract-method
@@ -460,12 +489,14 @@ class NotesTextExtractor(BaseNotesExtractor):
 
     def extract(self, item_context, library_context, spec):
         children = super().extract(item_context, library_context, spec)
-        return RECORD_SEPARATOR.join(
-            [
-                Markup(child.get('data', {}).get('note', '')).striptags()
-                for child in children
-            ]
-        ) if children else None
+        if children:
+            return RECORD_SEPARATOR.join(
+                [
+                    Markup(child['data']['note']).striptags()
+                    for child in children if child.get('data', {}).get('note')
+                ]
+            )
+        return None
 
 
 class RawNotesExtractor(BaseNotesExtractor):
@@ -473,7 +504,12 @@ class RawNotesExtractor(BaseNotesExtractor):
 
     def extract(self, item_context, library_context, spec):
         children = super().extract(item_context, library_context, spec)
-        return [child.get('data', {}).get('note', '') for child in children] if children else None
+        if children:
+            return [
+                child['data']['note']
+                for child in children if child.get('data', {}).get('note')
+            ]
+        return None
 
 
 class RelationsInNotesExtractor(BaseNotesExtractor):
