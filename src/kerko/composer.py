@@ -1367,7 +1367,7 @@ class Composer:
                 FieldSpec(
                     key='attachments',
                     field_type=STORED,
-                    extractor=extractors.StoredFileAttachmentsExtractor(
+                    extractor=extractors.FileAttachmentsExtractor(
                         mime_types=self.mime_types,
                         include_re=self.default_child_include_re,
                         exclude_re=self.default_child_exclude_re

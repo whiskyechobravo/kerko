@@ -21,6 +21,10 @@ Features:
   `False`.
 * Display DOI field values as hyperlinks (both in DOI fields, and in the Extra
   field when lines are prefixed with 'DOI:').
+* Handle imported file attachments, such as those imported through the Zotero
+  Connector. Previously, only "attached copies of files" were supported. If your
+  Zotero library contains such attachments, you might want to review them and
+  perhaps tag them for inclusion or exclusion before upgrading Kerko.
 * Allow relations in child notes to be specified as HTML links, i.e., in the
   `href` attribute of `<a>` elements.
 
@@ -37,6 +41,8 @@ Backwards incompatible changes:
   `KERKO_RESULTS_URL_LINKS` is enabled, you'll probably have to add `'url'` too.
 * The structure of the `kerko/_search-result.html.jinja2` template has changed
   somewhat. If you have overridden it, you'll need to review the changes.
+* The `StoredFileAttachmentsExtractor` class has been renamed to
+  `FileAttachmentsExtractor`.
 
 ## 0.7.1 (2021-02-04)
 

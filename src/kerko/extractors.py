@@ -386,7 +386,7 @@ class BaseAttachmentsExtractor(BaseChildrenExtractor):
         super().__init__(item_type='attachment', **kwargs)
 
 
-class StoredFileAttachmentsExtractor(BaseAttachmentsExtractor):
+class FileAttachmentsExtractor(BaseAttachmentsExtractor):
     """
     Extract the metadata of stored copies of files into a list of dicts.
     """
@@ -400,7 +400,7 @@ class StoredFileAttachmentsExtractor(BaseAttachmentsExtractor):
             return False
         if not child.get('key'):
             return False
-        if child['data'].get('linkMode') != 'imported_file':
+        if child['data'].get('linkMode') not in ['imported_file', 'imported_url']:
             return False
         if self.mime_types and child['data'].get(
                 'contentType', 'octet-stream'
