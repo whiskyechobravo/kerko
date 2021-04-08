@@ -1,5 +1,6 @@
 [![License](https://img.shields.io/pypi/l/kerko)][Kerko]
 [![Version](https://img.shields.io/pypi/v/kerko?color=informational)][Kerko_pypi]
+[![Build Status](https://github.com/whiskyechobravo/kerko/workflows/build/badge.svg)][Kerko_actions]
 
 # Kerko
 
@@ -698,6 +699,7 @@ If you wish to add your Kerko-powered online bibliography to this list, please
 [Jinja2]: https://pypi.org/project/Jinja2/
 [jQuery]: https://jquery.com/
 [Kerko]: https://github.com/whiskyechobravo/kerko
+[Kerko_actions]: https://github.com/whiskyechobravo/kerko/actions
 [Kerko_email]: mailto:kerko@whiskyechobravo.com
 [Kerko_issues]: https://github.com/whiskyechobravo/kerko/issues
 [Kerko_pypi]: https://pypi.org/project/Kerko/
