@@ -1,6 +1,6 @@
 [![License](https://img.shields.io/pypi/l/kerko)][Kerko]
 [![Version](https://img.shields.io/pypi/v/kerko?color=informational)][Kerko_pypi]
-[![Build Status](https://github.com/whiskyechobravo/kerko/workflows/build/badge.svg)][Kerko_actions]
+[![Build Status](https://github.com/whiskyechobravo/kerko/workflows/tests/badge.svg)][Kerko_actions]
 
 # Kerko
 
