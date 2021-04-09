@@ -166,12 +166,12 @@ The following packages will be automatically installed when installing Kerko:
 
 * [Babel]: utilities for internationalization and localization.
 * [Bootstrap-Flask]: helper for integrating [Bootstrap].
-* [environs]: helper for separating configuration from code.
 * [Flask]: web application framework.
 * [Flask-Babel]: helps Kerko provide its own translations, at the blueprint level.
 * [Flask-WTF]: simple integration of Flask and WTForms.
 * [Jinja2]: template engine.
 * [Pyzotero]: Python client for the Zotero API.
+* [w3lib]: URL and HTML manipulation utilities.
 * [Werkzeug]: WSGI web application library (also required by Flask).
 * [Whoosh]: pure Python full-text indexing and searching library.
 * [WTForms]: web forms validation and rendering library.
@@ -735,7 +735,6 @@ If you wish to add your Kerko-powered online bibliography to this list, please
 [COinS]: https://en.wikipedia.org/wiki/COinS
 [COinS_clients]: https://en.wikipedia.org/wiki/COinS#Client_tools
 [CSL]: https://citationstyles.org/
-[environs]: https://pypi.org/project/environs/
 [Flask]: https://pypi.org/project/Flask/
 [Flask_blueprint]: https://flask.palletsprojects.com/en/1.1.x/blueprints/
 [Flask-Babel]: https://pypi.org/project/Flask-Babel/
@@ -758,6 +757,7 @@ If you wish to add your Kerko-powered online bibliography to this list, please
 [Pyzotero]: https://pypi.org/project/Pyzotero/
 [Snowball]: https://snowballstem.org/
 [venv]: https://docs.python.org/3.8/tutorial/venv.html
+[w3lib]: https://pypi.org/project/w3lib/
 [Werkzeug]: https://pypi.org/project/Werkzeug/
 [Whisky_Echo_Bravo]: https://whiskyechobravo.com
 [Whoosh]: https://pypi.org/project/Whoosh/
