@@ -232,7 +232,7 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
      able to access your Zotero library. See the **Configuration variables**
      section for details on how to properly set these variables.
    * `KERKO_DATA_DIR`: This variable specifies the directory where to store the
-     search index and the file attachments. If the specified directory doesn't
+     search index and the file attachments. If the specified directory does not
      already exists, Kerko will try to create it.
    * `KERKO_COMPOSER`: This variable specifies key elements needed by Kerko,
      e.g., fields for display and search, facets for filtering. These are
@@ -309,7 +309,7 @@ The variables below are required and have no default values:
 * `KERKO_COMPOSER`: An instance of the `kerko.composer.Composer` class.
 * `KERKO_DATA_DIR`: The directory where to store the search index and the file
   attachments. Subdirectories `index` and `attachments` will be created if they
-  don't already exist.
+  do not already exist.
 * `KERKO_ZOTERO_API_KEY`: Your API key, as [created on
   zotero.org](https://www.zotero.org/settings/keys/new).
 * `KERKO_ZOTERO_LIBRARY_ID`: The identifier of the library to get data from. For
@@ -361,6 +361,15 @@ override their default value:
   `False` (abstracts are hidden).
 * `KERKO_RESULTS_ABSTRACTS_TOGGLER`: Show a button letting users show or hide
   abstracts on search results pages. Defaults to `True` (toggle is displayed).
+* `KERKO_RESULTS_ABSTRACTS_MAX_LENGTH`: Truncate abstracts at the given length
+  (in number of characters). If text is to be truncated in the middle of a word,
+  the whole word is discarded instead. Truncated text is appended with an
+  ellipsis sign ("..."). Defaults to `0` (abstracts get displayed in their full
+  length, without any truncation).
+* `KERKO_RESULTS_ABSTRACTS_MAX_LENGTH_LEEWAY`: If the length of an abstract only
+  exceeds `KERKO_RESULTS_ABSTRACTS_MAX_LENGTH` by this tolerance margin (in
+  number of characters), it will not be truncated. Defaults to `0` (no tolerance
+  margin).
 * `KERKO_RESULTS_ATTACHMENT_LINKS`: Provide links to attachments in search
   results. Defaults to `True`.
 * `KERKO_RESULTS_URL_LINKS`: Provide links to online resources in search
@@ -463,7 +472,7 @@ indexing](https://www.zotero.org/support/searching#pdf_full-text_indexing).
 
 Individual attachments in Zotero can be indexed, partially indexed, or
 unindexed. Various conditions may cause an attachment to be partially indexed or
-unindexed, e.g., file is large, has not been processed yet, or doesn't contain
+unindexed, e.g., file is large, has not been processed yet, or does not contain
 text.
 
 Zotero shows the indexing status in the attachment's right pane. If it shows
@@ -471,7 +480,7 @@ Zotero shows the indexing status in the attachment's right pane. If it shows
 then clicking the "Reindex Item" button (next to the indexing status) should
 ensure that the attachment gets fully indexed, that is if the file actually
 contains text. If there is no "Reindex Item" button, it probably means that
-Zotero doesn't support that file type for full-text indexing (at the moment, it
+Zotero does not support that file type for full-text indexing (at the moment, it
 only supports PDF and plain text files).
 
 It can be tedious to go through hundreds of attachments just to find out whether

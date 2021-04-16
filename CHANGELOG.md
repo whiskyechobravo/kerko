@@ -37,6 +37,9 @@ Features:
 * Add support for imported file attachments, e.g., PDF files imported in your
   Zotero library through the Zotero Connector. Previously, only "attached copies
   of files" were supported.
+* Add configuration options for truncating long abstracts in search results
+  (`KERKO_RESULTS_ABSTRACTS_MAX_LENGTH` and
+  `KERKO_RESULTS_ABSTRACTS_MAX_LENGTH_LEEWAY`).
 * Allow relations in child notes to be specified as HTML links, i.e., in the
   `href` attribute of `<a>` elements.
 

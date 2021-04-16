@@ -50,6 +50,8 @@ def init_default_config(state):
     state.app.config.setdefault('KERKO_CSL_STYLE', 'apa')
     state.app.config.setdefault('KERKO_RESULTS_ABSTRACTS', False)
     state.app.config.setdefault('KERKO_RESULTS_ABSTRACTS_TOGGLER', True)
+    state.app.config.setdefault('KERKO_RESULTS_ABSTRACTS_MAX_LENGTH', 0)
+    state.app.config.setdefault('KERKO_RESULTS_ABSTRACTS_MAX_LENGTH_LEEWAY', 0)
     state.app.config.setdefault(
         'KERKO_RESULTS_FIELDS', ['id', 'attachments', 'bib', 'coins', 'data', 'url']
     )

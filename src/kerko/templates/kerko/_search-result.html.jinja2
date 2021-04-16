@@ -24,7 +24,16 @@
         {%- endblock search_item_display %}
     {%- endif -%}
     {%- if show_abstracts and result.data['abstractNote']|trim|length %}
-        <p class="{% block search_abstract_classes %}search-abstract pre-line pl-3 my-2{% endblock %}">{{ result.data['abstractNote']|escape|urlize(target='_blank')|trim }}</p>
+        <p class="{% block search_abstract_classes %}search-abstract pre-line pl-3 my-2{% endblock %}">
+            {%- if config.KERKO_RESULTS_ABSTRACTS_MAX_LENGTH > 0 %}
+                {{- result.data['abstractNote']|truncate(
+                        config.KERKO_RESULTS_ABSTRACTS_MAX_LENGTH,
+                        leeway=config.KERKO_RESULTS_ABSTRACTS_MAX_LENGTH_LEEWAY
+                    )|escape|urlize(target='_blank')|trim -}}
+            {%- else %}
+                {{- result.data['abstractNote']|escape|urlize(target='_blank')|trim -}}
+            {%- endif %}
+        </p>
     {%- endif %}
     {%- if not hide_result_links %}
         {%- if result.attachments|length and config.KERKO_RESULTS_ATTACHMENT_LINKS or result.url|kerko_url_hostname and config.KERKO_RESULTS_URL_LINKS %}
