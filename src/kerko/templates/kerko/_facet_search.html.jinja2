@@ -6,6 +6,6 @@
         items,
         collapsible=config.KERKO_FACET_COLLAPSING and spec.collapsible,
         collapse_id='facet-' + spec.filter_key,
-        collapsed=not spec.key in active_facets
+        collapsed=not spec.key in active_facets if active_facets else True
     )
 }}
