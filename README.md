@@ -115,10 +115,10 @@ The following features are implemented in Kerko:
   must be accessible by URL).
 * Language support: the default user interface is in English, but [some
   translations][Kerko_translations] are provided. Additional translations may be
-  created using gettext-compatible tools; see the **Translating Kerko** section
-  below. Also to consider: locales supported by the [Zotero Data
-  Schema][Zotero_schema] (which provides the names of fields, item types and
-  author types displayed by Kerko); languages supported by Whoosh (which
+  created using gettext-compatible tools; see [Translating
+  Kerko](#translating-kerko). Also to consider: locales supported by the [Zotero
+  Data Schema][Zotero_schema] (which provides the names of fields, item types
+  and author types displayed by Kerko); languages supported by Whoosh (which
   provides the search capabilities), i.e., ar, da, nl, en, fi, fr, de, hu, it,
   no, pt, ro, ru, es, sv, tr.
 * Responsive design: the simple default implementation works on large monitors
@@ -147,7 +147,7 @@ The following features are implemented in Kerko:
 * Relations: bibliographic record pages show links to related items, if any. You
   may define such relations using Zotero's _Related_ field. Moreover, Kerko adds
   the _Cites_ and _Cited by_ relation types, which can be managed in Zotero
-  through notes (see the **Kerko Recipes** section below). Custom applications
+  through notes (see [Kerko Recipes](#kerko-recipes). Custom applications
   can add more types of relations if desired.
 * Badges: icons can be displayed next to items, based on custom conditions.
 * Integration: although a [standalone application][KerkoApp] is available, Kerko
@@ -229,8 +229,9 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
      taking the minimal route and thus are cutting some corners!
    * `KERKO_ZOTERO_API_KEY`, `KERKO_ZOTERO_LIBRARY_ID` and
      `KERKO_ZOTERO_LIBRARY_TYPE`: These variables are required for Kerko to be
-     able to access your Zotero library. See the **Configuration variables**
-     section for details on how to properly set these variables.
+     able to access your Zotero library. See [Configuration
+     variables](#configuration-variables) for details on how to properly set
+     these variables.
    * `KERKO_DATA_DIR`: This variable specifies the directory where to store the
      search index and the file attachments. If the specified directory does not
      already exists, Kerko will try to create it.
@@ -239,7 +240,7 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
      defined by instantiating the `Composer` class. Your application may
      manipulate the resulting object at configuration time to add, remove or
      alter fields, facets, sort options, search scopes, citation download
-     formats, or badges. See the **Kerko Recipes** section for some examples.
+     formats, or badges. See [Kerko Recipes](#kerko-recipes) for some examples.
 
 
 3. Also configure the Flask-Babel and Bootstrap-Flask extensions:
@@ -337,11 +338,12 @@ override their default value:
   limit).
 * `KERKO_FACET_COLLAPSING`: Allow collapsible facets. Defaults to `False`.
 * `KERKO_FULLTEXT_SEARCH`: Allow full-text search of PDF attachments. Defaults
-  to `True`. To get consistent results, see **Ensuring full-text indexing of
-  your attachments in Zotero** below. Caution: If you have thousands of
-  attachments, this feature can significantly slow down the process of
-  synchronizing data from zotero.org, due to Kerko performing a large number of
-  Zotero API requests (hopefully we'll fix this in the future).
+  to `True`. To get consistent results, see [Ensuring full-text indexing of your
+  attachments in
+  Zotero](#ensuring-full-text-indexing-of-your-attachments-in-zotero). Caution:
+  If you have thousands of attachments, this feature can significantly slow down
+  the process of synchronizing data from zotero.org, due to Kerko performing a
+  large number of Zotero API requests (hopefully we'll fix this in the future).
 * `KERKO_PAGE_LEN`: The number of search results per page. Defaults to `20`.
 * `KERKO_PAGER_LINKS`: Number of pages to show in the pager (not counting the
   current page). Defaults to `4`.
@@ -585,8 +587,8 @@ Compile MO files:
 python setup.py compile_catalog
 ```
 
-You are welcome to contribute your translation. See the **Submitting a
-translation** section.
+You are welcome to contribute your translation. See [Submitting a
+translation](#submitting-a-translation).
 
 
 ## Contributing
