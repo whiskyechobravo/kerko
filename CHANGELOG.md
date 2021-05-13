@@ -48,6 +48,8 @@ Other changes:
 * On narrow screens, stack search form controls for better usability.
 * Respond with an HTTP 503 (Service Unavailable) when the search index is empty
   or unreadable.
+* Make sorts more efficient by setting the `sortable` Whoosh flag on relevant
+  fields.
 
 Backwards incompatible changes:
 

@@ -1437,7 +1437,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='sort_title',
-                    field_type=COLUMN(columns.VarBytesColumn()),
+                    field_type=TEXT(phrase=False, sortable=True),
                     extractor=extractors.SortItemDataExtractor(key='title'),
                 )
             )
@@ -1445,7 +1445,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='sort_creator',
-                    field_type=COLUMN(columns.VarBytesColumn()),
+                    field_type=TEXT(phrase=False, sortable=True),
                     extractor=extractors.SortCreatorExtractor(),
                 )
             )
@@ -1453,7 +1453,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='sort_date',
-                    field_type=NUMERIC,
+                    field_type=NUMERIC(sortable=True),
                     extractor=extractors.SortDateExtractor(),
                 )
             )

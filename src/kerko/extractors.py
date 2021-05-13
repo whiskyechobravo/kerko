@@ -648,14 +648,11 @@ def _prepare_sort_text(text):
     """
     Normalize the given text for a sort field.
 
-    Sort fields are bytearrays in the schema, so the text goes through
-    str.encode().
-
     :param str text: The Unicode string to normalize.
 
     :return bytearray: The normalized text.
     """
-    return sort_normalize(Markup(text).striptags()).encode()
+    return sort_normalize(Markup(text).striptags())
 
 
 class SortItemDataExtractor(ItemDataExtractor):
@@ -674,7 +671,7 @@ class SortCreatorExtractor(Extractor):
                 _prepare_sort_text(creator.get('lastName', '')),
                 _prepare_sort_text(creator.get('firstName', '')),
                 _prepare_sort_text(creator.get('name', ''))]
-            creators.append(b' zzz '.join([p for p in creator_parts if p]))
+            creators.append(' zzz '.join([p for p in creator_parts if p]))
 
         # We treat creator types like an ordered list, where the first creator
         # type is for primary creators. Depending on the citation style, lesser
@@ -688,7 +685,7 @@ class SortCreatorExtractor(Extractor):
                     append_creator(creator)
             if creators:
                 break  # No need to include lesser creator types.
-        return b' zzzzzz '.join(creators)
+        return ' zzzzzz '.join(creators)
 
 
 class SortDateExtractor(Extractor):
