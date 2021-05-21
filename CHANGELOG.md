@@ -38,10 +38,10 @@ Features:
   `KERKO_RESULTS_ABSTRACTS_MAX_LENGTH_LEEWAY`).
 * Allow relations in child notes to be specified as HTML links, i.e., in the
   `href` attribute of `<a>` elements.
-* Standalone notes and attachments, i.e., not attached to an item, are now
-  allowed into the search index. Kerko's default views filter those out, but
-  custom applications could retrieve them if needed. Shortcoming: at the moment,
-  those attachments' files are not downloaded, nor is their full-text requested.
+* Standalone notes and attachments are now allowed into the search index. By
+  default Kerko filters them out of search results, but custom applications
+  could retrieve them if needed. Shortcoming: at the moment, standalone
+  attachment files are not downloaded.
 
 Other changes:
 
@@ -60,7 +60,7 @@ Other changes:
   'Europe/London' previously did not work, and times could not be converted
   to daylight saving times.
 
-Backwards incompatible changes:
+Possibly backwards incompatible changes (more or less internal API changes):
 
 * The default list for the `KERKO_RESULTS_FIELDS` setting now includes the
   `'url'` field. If you have overridden that setting in your application and
