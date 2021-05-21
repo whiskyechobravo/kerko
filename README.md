@@ -408,7 +408,8 @@ override their default value:
   * `BABEL_DEFAULT_TIMEZONE`: The timezone to use for user facing dates.
     Defaults to `'UTC'`. Your application may set this variable and/or implement
     a timezone selector function to override it (see the [Flask-Babel
-    documentation][Flask-Babel_documentation]).
+    documentation][Flask-Babel_documentation]). Any timezone name supported by
+    the [pytz] package should work.
   * `KERKO_USE_TRANSLATIONS`: Use translations provided by the Kerko package.
     Defaults to `True`. When this is set to `False`, translations may be
     provided by the application's own translation catalog.
@@ -841,6 +842,7 @@ If you wish to add your Kerko-powered online bibliography to this list, please
 [KerkoStart]: https://github.com/whiskyechobravo/kerkostart
 [Popper.js]: https://popper.js.org/
 [Python]: https://www.python.org/
+[pytz]: https://pypi.org/project/pytz/
 [Pyzotero]: https://pypi.org/project/Pyzotero/
 [Snowball]: https://snowballstem.org/
 [venv]: https://docs.python.org/3.8/tutorial/venv.html

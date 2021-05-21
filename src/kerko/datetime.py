@@ -57,19 +57,17 @@ def format_datetime(dt, *, convert_tz=False, show_tz=False):
     :param bool convert_tz: Whether to convert the value to Babel's timezone.
 
     :param bool show_tz: Whether to print the timezone's name in the result.
-        This can only be set to `True` when `convert_tz` is also `True`.
 
     :return str: The localized version of the datetime object.
     """
-    if show_tz and not convert_tz:
-        # Only implemented showing the timezone when converting.
-        raise ValueError
-
     parts = [
         dates.format_datetime(
             dt, format='short', tzinfo=get_timezone() if convert_tz else None, locale=get_locale()
         ),
     ]
     if show_tz:
-        parts.append(f"({get_timezone().tzname(dt)})")
+        if convert_tz:
+            parts.append(f"({dt.astimezone(get_timezone()).tzname()})")
+        else:
+            parts.append(f"({dt.tzname()})")
     return ' '.join(parts)

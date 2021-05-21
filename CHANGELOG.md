@@ -56,6 +56,9 @@ Other changes:
   makes early in the synchronization process.
 * Make sorts more efficient by setting the `sortable` Whoosh flag on relevant
   fields.
+* Support more timezone names. Timezone names such as 'US/Eastern' or
+  'Europe/London' previously did not work, and times could not be converted
+  to daylight saving times.
 
 Backwards incompatible changes:
 
