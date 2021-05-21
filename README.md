@@ -151,9 +151,11 @@ The following features are implemented in Kerko:
   can add more types of relations if desired.
 * Badges: icons can be displayed next to items, based on custom conditions.
 * Integration: although a [standalone application][KerkoApp] is available, Kerko
-  is designed not as a standalone application, but to be part of a larger Flask
+  itself is not an application, but it can be integrated into any Flask
   application.
-
+* Command line interface: Kerko provides commands for synchronizing or deleting
+  its data. These can be invoked through the `flask` command (see [Command line
+  interface](#command-line-interface-cli)).
 
 ## Requirements
 
@@ -340,10 +342,7 @@ override their default value:
 * `KERKO_FULLTEXT_SEARCH`: Allow full-text search of PDF attachments. Defaults
   to `True`. To get consistent results, see [Ensuring full-text indexing of your
   attachments in
-  Zotero](#ensuring-full-text-indexing-of-your-attachments-in-zotero). Caution:
-  If you have thousands of attachments, this feature can significantly slow down
-  the process of synchronizing data from zotero.org, due to Kerko performing a
-  large number of Zotero API requests (hopefully we'll fix this in the future).
+  Zotero](#ensuring-full-text-indexing-of-your-attachments-in-zotero).
 * `KERKO_PAGE_LEN`: The number of search results per page. Defaults to `20`.
 * `KERKO_PAGER_LINKS`: Number of pages to show in the pager (not counting the
   current page). Defaults to `4`.
@@ -426,6 +425,82 @@ override their default value:
     to `0`. Useful only for development/tests.
   * `KERKO_ZOTERO_END`: Load items from Zotero until the specified position.
     Defaults to `0` (no limit). Useful only for development/tests.
+
+**Caution:** Many of the configuration variables cause changes to the structure
+of Kerko's cache or search index. Changing those variables may require that you
+rebuild the cache or the search index, and restart the application. See the
+[command line interface](#command-line-interface-cli) for the cleaning and
+synchronization commands.
+
+
+## Synchronization process
+
+Kerko does one-way data synchronization from zotero.org through a 3-step
+process:
+
+1. Synchronize the Zotero library into a local cache.
+2. Update of the search index from the cache.
+3. Download the file attachments from Zotero.
+
+The first step performs incremental updates of the local cache. After an initial
+full update, the subsequent synchronization runs will request only new and
+updated items from Zotero. This greatly reduces the number of Zotero API calls,
+and thus the time required to complete the synchronization process.
+
+The second step reads data from the cache to update the search index. If the
+cache has changed since the last update, it performs a full update of the search
+index, otherwise it skips to the next step. Any changes to the search index are
+"committed" as a whole at the end of this step, thus up to that point any user
+using the application sees the data that was available prior to the
+synchronization run.
+
+The third and last step reads the list of file attachments from the search
+index, with their MD5 hashes. It compares those with the available local copies
+of the files, and downloads new or changed files from Zotero. It also deletes
+any local files that may no longer be used.
+
+Normally, all synchronization steps are executed. But under certain
+circumstances it can be useful to execute a given step individually. For
+example, after changing some configuration settings, one may clean just the
+search index and rebuild it from the cache (see [the command line
+interface](#command-line-interface-cli) below), which will be much faster than
+re-synchronizing from Zotero.
+
+
+## Command line interface (CLI)
+
+Kerko provides an integration with the [Flask command line interface][Flask_CLI].
+The `flask` command will work with your virtual environment active, and with the
+`FLASK_APP` environment variable set to tell it where to find your application.
+
+Some frequently used commands are:
+
+```bash
+# List all commands provided by Kerko:
+flask kerko --help
+
+# Delete all of Kerko's data.
+flask kerko clean
+
+# Get help about the clean command:
+flask kerko clean --help
+
+# Synchronize everything from Zotero.
+flask kerko sync
+
+# Get help about the sync command:
+flask kerko sync --help
+
+# Delete the cache (the next sync will perform a full update from Zotero, but
+# it will not re-download all file attachments).
+flask kerko clean cache
+
+# Delete just the search index.
+flask kerko clean index
+
+# Synchronize just the search index.
+flask kerko sync index
+```
 
 
 ## Known limitations
@@ -747,9 +822,10 @@ If you wish to add your Kerko-powered online bibliography to this list, please
 [COinS_clients]: https://en.wikipedia.org/wiki/COinS#Client_tools
 [CSL]: https://citationstyles.org/
 [Flask]: https://pypi.org/project/Flask/
-[Flask_blueprint]: https://flask.palletsprojects.com/en/1.1.x/blueprints/
+[Flask_blueprint]: https://flask.palletsprojects.com/en/latest/blueprints/
 [Flask-Babel]: https://pypi.org/project/Flask-Babel/
 [Flask-Babel_documentation]: https://flask-babel.tkte.ch/
+[Flask_CLI]: https://flask.palletsprojects.com/en/latest/cli/
 [Flask-WTF]: https://pypi.org/project/Flask-WTF/
 [FontAwesome]: https://fontawesome.com/icons
 [Jinja2]: https://pypi.org/project/Jinja2/

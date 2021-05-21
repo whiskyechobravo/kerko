@@ -6,9 +6,11 @@ import wrapt
 from flask import current_app
 from flask.cli import with_appcontext
 
-from . import zotero
-from .attachments import delete_attachments, sync_attachments
-from .index import delete_index, sync_index
+from .storage import delete_index
+from .sync import zotero
+from .sync.attachments import delete_attachments, sync_attachments
+from .sync.cache import sync_cache
+from .sync.index import sync_index
 
 
 @wrapt.decorator
@@ -28,10 +30,11 @@ def cli():
 @with_appcontext
 def index():  # Deprecated after version 0.4.
     """
-    Synchronize the search index and the attachments from the Zotero library.
+    Synchronize the cache, the search index, and the attachments.
 
     This command is deprecated. Use the 'sync' command.
     """
+    sync_cache()
     sync_index()
     sync_attachments()
 
@@ -40,16 +43,18 @@ def index():  # Deprecated after version 0.4.
 @click.argument(
     'target',
     default='everything',
-    type=click.Choice(['index', 'attachments', 'everything'], case_sensitive=False),
+    type=click.Choice(['cache', 'index', 'attachments', 'everything'], case_sensitive=False),
 )
 @with_appcontext
 @execution_time_logger
 def sync(target):
     """
-    Synchronize the search index and/or the attachments from the Zotero library.
+    Synchronize the cache, the search index, or the file attachments.
 
     By default, everything is synchronized.
     """
+    if target in ['everything', 'cache']:
+        sync_cache()
     if target in ['everything', 'index']:
         sync_index()
     if target in ['everything', 'attachments']:
@@ -60,17 +65,19 @@ def sync(target):
 @click.argument(
     'target',
     default='everything',
-    type=click.Choice(['index', 'attachments', 'everything'], case_sensitive=False),
+    type=click.Choice(['cache', 'index', 'attachments', 'everything'], case_sensitive=False),
 )
 @with_appcontext
 def clean(target):
     """
-    Delete the search index and/or the attachments immediately.
+    Delete the cache, the search index, or the attachments immediately.
 
-    By default, both are cleaned.
+    By default, everything is cleaned.
     """
+    if target in ['everything', 'cache']:
+        delete_index('cache')
     if target in ['everything', 'index']:
-        delete_index()
+        delete_index('index')
     if target in ['everything', 'attachments']:
         delete_attachments()
 

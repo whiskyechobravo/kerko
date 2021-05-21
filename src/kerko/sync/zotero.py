@@ -7,6 +7,23 @@ from flask import current_app
 from pyzotero import zotero, zotero_errors
 
 
+class LibraryContext:
+    """Contains data related to a Zotero library."""
+
+    def __init__(
+            self, library_id, library_type, *, collections, item_types, item_fields, creator_types
+    ):
+        self.library_id = library_id
+        self.library_type = library_type
+        self.collections = collections
+        self.item_types = item_types
+        self.item_fields = item_fields
+        self.creator_types = creator_types
+
+    def get_creator_types(self, item_data):
+        return self.creator_types.get(item_data.get('itemType', ''), [])
+
+
 @wrapt.decorator
 def retry_zotero(wrapped, _instance, args, kwargs):
     """
@@ -52,6 +69,32 @@ def init_zotero():
     )
 
 
+def request_library_context(zotero_credentials):
+    item_types = {
+        t['itemType']: t['localized']
+        for t in load_item_types(zotero_credentials)
+    }
+    return LibraryContext(
+        zotero_credentials.library_id,
+        zotero_credentials.library_type.rstrip('s'),  # Remove 's' appended by pyzotero.
+        collections=Collections(zotero_credentials),
+        item_types=item_types,
+        item_fields={
+            t: load_item_type_fields(zotero_credentials, t)
+            for t in item_types.keys()
+        },
+        creator_types={
+            t: load_item_type_creator_types(zotero_credentials, t)
+            for t in item_types.keys()
+        }
+    )
+
+
+@retry_zotero
+def last_modified_version(zotero_credentials):
+    return zotero_credentials.last_modified_version()
+
+
 @retry_zotero
 def load_item(zotero_credentials, item_key):
     """Return a specific item."""
@@ -75,23 +118,45 @@ def load_item_fields(zotero_credentials):
 @retry_zotero
 def load_item_type_fields(zotero_credentials, item_type):
     """Return all Zotero fields for a given item type."""
-    current_app.logger.info(
-        "Requesting fields for items of type '{item_type}'...".format(
-            item_type=item_type
-        )
-    )
+    current_app.logger.info(f"Requesting fields for items of type '{item_type}'...")
     return zotero_credentials.item_type_fields(item_type)
 
 
 @retry_zotero
 def load_item_type_creator_types(zotero_credentials, item_type):
     """List all Zotero creator types for a given item type."""
-    current_app.logger.info(
-        "Requesting creator types for items of type '{item_type}'...".format(
-            item_type=item_type
-        )
-    )
+    current_app.logger.info(f"Requesting creator types for items of type '{item_type}'...")
     return zotero_credentials.item_creator_types(item_type)
+
+
+@retry_zotero
+def load_deleted_or_trashed_items(zotero_credentials, since):
+    deleted = zotero_credentials.deleted(since=since).get('items', [])
+    trashed = [trashed['key'] for trashed in Items(zotero_credentials, since=since, trash=True)]
+    return deleted + trashed
+
+
+@retry_zotero
+def load_new_fulltext(zotero_credentials, since):
+    current_app.logger.info(f"Requesting updated text content since version {since}...")
+    items = zotero_credentials.new_fulltext(since)
+    current_app.logger.info(f"Found {len(items)} item(s) with updated text content.")
+    return items
+
+
+@retry_zotero
+def load_item_fulltext(zotero_credentials, item_key):
+    current_app.logger.debug(f"Requesting text content of item {item_key}...")
+    try:
+        response = zotero_credentials.fulltext_item(item_key)
+        if response.get('content') and (
+            response.get('indexedChars', 0) > 0 or response.get('indexedPages', 0) > 0
+        ):
+            return response['content']
+        current_app.logger.info(f"Text content empty for item {item_key}.")
+    except zotero_errors.ResourceNotFound:
+        current_app.logger.info(f"Text content not available for item {item_key}.")
+    return None
 
 
 @retry_zotero
@@ -226,22 +291,32 @@ class Items:
     list of the child items (also dicts as returned by Zotero).
     """
 
-    def __init__(self, zotero_credentials, item_types=None, formats=None):
+    def __init__(self, zotero_credentials, *, since=0, formats=None, trash=False):
         """
         Construct the iterable.
 
         :param zotero.Zotero zotero_credentials: The Zotero instance.
 
-        :param Iterable item_types: Iterable of desired Zotero item types. If
-            None, all items will be retrieved.
+        :param int since: Retrieve only items modified after this library
+            version.
 
         :param Iterable formats: Iterable of format values for the Zotero read.
             Defaults to `['data']`. See available formats on
             https://www.zotero.org/support/dev/web_api/v3/basics#parameters_for_format_json.
+
+        :param bool Trash: If `False`, all library items except those in the
+            trash are returned. If `True`, only items from the trash are
+            returned.
         """
         self.zotero_credentials = zotero_credentials
-        self.item_type_filter = ' || '.join(item_types) if item_types else None
+        self.since = since
         self.include = ','.join(formats or ['data'])
+        if trash:
+            self.method = 'trash'
+            self.method_info = 'trashed'
+        else:
+            self.method = 'items'
+            self.method_info = 'updated'
         self.start = current_app.config['KERKO_ZOTERO_START']
         self.zotero_batch = []
         self.iterator = iter(self.zotero_batch)
@@ -263,115 +338,21 @@ class Items:
     def _next_batch(self):
         limit = current_app.config['KERKO_ZOTERO_BATCH_SIZE']
         current_app.logger.info(
-            "Requesting up to {limit} items starting at position {start}...".format(
-                limit=limit, start=self.start
-            )
+            f"Requesting up to {limit} {self.method_info} items since version {self.since}, "
+            f"starting at position {self.start}..."
         )
-        self.zotero_batch = self.zotero_credentials.items(
-            start=self.start,
-            limit=limit,
-            sort='dateModified',
-            direction='asc',
-            include=self.include,
-            style=current_app.config['KERKO_CSL_STYLE'],
-            itemType=self.item_type_filter
-        )
+        params = {
+            'since': self.since,
+            'start': self.start,
+            'limit': limit,
+            'sort': 'dateModified',
+            'direction': 'asc',
+            'include': self.include,
+            'style': current_app.config['KERKO_CSL_STYLE'],
+        }
+        self.zotero_batch = getattr(self.zotero_credentials, self.method)(**params)
         if not self.zotero_batch:
             raise StopIteration  # Empty batch, nothing more to iterate on.
-        self.iterator = iter(self.zotero_batch)
-
-    def _next_item(self):
-        zotero_item = next(self.iterator)
-        self.start += 1
-        return zotero_item
-
-
-class ChildItems:  # pylint: disable=too-many-instance-attributes
-    """
-    Iterable over Zotero child items.
-
-    Children are loaded on demand, in small batches, and cannot be accessed
-    directly, but can be iterated on. Each child is represented by a dict as
-    returned by Zotero.
-    """
-
-    def __init__(  # pylint: disable=too-many-arguments
-            self,
-            zotero_credentials,
-            item_key,
-            item_types=None,
-            formats=None,
-            fulltext=True,
-    ):
-        self.zotero_credentials = zotero_credentials
-        self.item_key = item_key
-        self.item_type_filter = ' || '.join(item_types) if item_types else None
-        self.include = ','.join(formats or ['data'])
-        self.fulltext = fulltext
-        self.start = 0
-        self.zotero_batch = []
-        self.iterator = iter(self.zotero_batch)
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        while True:
-            try:
-                return self._next_item()
-            except StopIteration:
-                self._next_batch()
-
-    @retry_zotero
-    def _get_fulltext(self, child):
-        # Fulltext requests only work with file attachments.
-        if child['data']['itemType'] == 'attachment' and child['data']['linkMode'] != 'linked_url':
-            current_app.logger.debug(
-                "Requesting text content of attachment {child_key} (parent: {parent_key}).".format(
-                    child_key=child['key'], parent_key=child['data']['parentItem']
-                )
-            )
-            try:
-                response = self.zotero_credentials.fulltext_item(child['key'])
-                if response.get('content') and (
-                    response.get('indexedChars', 0) > 0 or response.get('indexedPages', 0) > 0
-                ):
-                    return response['content']
-            except zotero_errors.ResourceNotFound:
-                current_app.logger.info(
-                    "Text content not available for attachment {child_key} (parent: {parent_key}).".
-                    format(child_key=child['key'], parent_key=child['data']['parentItem'])
-                )
-        return ''
-
-    @retry_zotero
-    def _next_batch(self):
-        limit = current_app.config['KERKO_ZOTERO_BATCH_SIZE']
-        if self.zotero_batch and len(self.zotero_batch) < limit:
-            # Previous batch did not reach limit. No need for more batches.
-            raise StopIteration
-        current_app.logger.info(
-            "Requesting up to {limit} children for item {item_key}"
-            " starting at position {start}...".format(
-                limit=limit, item_key=self.item_key, start=self.start
-            )
-        )
-        self.zotero_batch = self.zotero_credentials.children(
-            self.item_key,
-            start=self.start,
-            limit=limit,
-            sort='dateModified',
-            direction='asc',
-            include=self.include,
-            itemType=self.item_type_filter,
-        )
-        if not self.zotero_batch:
-            raise StopIteration  # Empty batch, nothing more to iterate.
-        if self.fulltext:
-            for child in self.zotero_batch:
-                # Note: taking the liberty of adding the Kerko-specific
-                # 'fulltext' key to the child dict gotten from Zotero.
-                child['fulltext'] = self._get_fulltext(child)
         self.iterator = iter(self.zotero_batch)
 
     def _next_item(self):

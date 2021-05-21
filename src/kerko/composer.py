@@ -4,7 +4,7 @@ import whoosh
 from flask_babel import lazy_gettext as _
 from whoosh.analysis import CharsetFilter, LowercaseFilter, StemFilter
 from whoosh.analysis.tokenizers import RegexTokenizer
-from whoosh.fields import BOOLEAN, COLUMN, ID, NUMERIC, STORED, TEXT, Schema, columns
+from whoosh.fields import BOOLEAN, ID, NUMERIC, STORED, TEXT, Schema
 from whoosh.query import Prefix, Term
 from whoosh.support.charset import accent_map
 from whoosh.util.text import rcompile
@@ -175,16 +175,17 @@ class Composer:
             CharsetFilter(accent_map) | \
             LowercaseFilter()
 
-        # Common schema field types.
-        self.id_field_type = ID(field_boost=200.0)
-        self.secondary_id_field_type = ID(field_boost=40.0)
-        self.title_field_type = TEXT(analyzer=self.text_chain, field_boost=20.0)
-        self.secondary_title_field_type = TEXT(analyzer=self.text_chain, field_boost=8.0)
-        self.creator_name_field_type = TEXT(analyzer=self.name_chain, field_boost=8.0)
-        self.name_field_type = TEXT(analyzer=self.name_chain, field_boost=4.0)
-        self.text_field_type = TEXT(analyzer=self.text_chain, field_boost=4.0)
-        self.secondary_text_field_type = TEXT(analyzer=self.text_chain, field_boost=2.0)
-        self.tertiary_text_field_type = TEXT(analyzer=self.text_chain, field_boost=1.0)
+        # Keyword arguments for common field types. This is just a convenient
+        # way to describe the role of each boost factor and ensure consistency.
+        self.primary_id_kwargs = dict(field_boost=200.0)
+        self.secondary_id_kwargs = dict(field_boost=40.0)
+        self.primary_title_text_kwargs = dict(analyzer=self.text_chain, field_boost=20.0)
+        self.secondary_title_text_kwargs = dict(analyzer=self.text_chain, field_boost=8.0)
+        self.creator_name_text_kwargs = dict(analyzer=self.name_chain, field_boost=8.0)
+        self.name_text_kwargs = dict(analyzer=self.name_chain, field_boost=4.0)
+        self.primary_text_kwargs = dict(analyzer=self.text_chain, field_boost=4.0)
+        self.secondary_text_kwargs = dict(analyzer=self.text_chain, field_boost=2.0)
+        self.tertiary_text_kwargs = dict(analyzer=self.text_chain, field_boost=1.0)
 
         self.schema = Schema()
         self.scopes = {}
@@ -292,7 +293,7 @@ class Composer:
                 )
             )
         # Alternate IDs to search when the primary ID is not found.
-        if 'alternateId' not in exclude:
+        if 'alternateId' not in exclude:  # TODO: Replace with snake_case, for consistency.
             self.add_field(
                 FieldSpec(
                     key='alternateId',
@@ -325,12 +326,21 @@ class Composer:
                     )
                 )
             )
-        # Label of this item's type.
+        # Item type key.
         if 'item_type' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='item_type',
-                    field_type=TEXT(analyzer=self.text_chain, stored=True),
+                    field_type=ID,
+                    extractor=extractors.ItemDataExtractor(key='itemType'),
+                )
+            )
+        # Item type label.
+        if 'item_type_label' not in exclude:
+            self.add_field(
+                FieldSpec(
+                    key='item_type_label',
+                    field_type=TEXT(**self.primary_text_kwargs, stored=True),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemTypeLabelExtractor(),
                 )
@@ -338,9 +348,8 @@ class Composer:
 
         # All Zotero item fields that we want to make available to keyword
         # search are specified below, each with an appropriate analyzer chain.
-        # The full list of item fields can be obtained through the Zotero API.
-        # Keys derive from the corresponding field names in Zotero, but are
-        # prefixed with 'z_' to prevent name clashes with Kerko's own fields.
+        # The same keys as Zotero are used (hence the camelCases), but with
+        # 'z_' prefixes to prevent name clashes with other fields.
 
         #
         # Identifier fields, for keyword search. Highly boosted for matches to
@@ -351,7 +360,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_DOI',
-                    field_type=self.id_field_type,
+                    field_type=ID(**self.primary_id_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='DOI')
                 )
@@ -360,7 +369,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_ISBN',
-                    field_type=self.id_field_type,
+                    field_type=ID(**self.primary_id_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='ISBN')
                 )
@@ -369,7 +378,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_ISSN',
-                    field_type=self.id_field_type,
+                    field_type=ID(**self.primary_id_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='ISSN')
                 )
@@ -383,7 +392,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_applicationNumber',
-                    field_type=self.secondary_id_field_type,
+                    field_type=ID(**self.secondary_id_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='applicationNumber')
                 )
@@ -392,7 +401,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_billNumber',
-                    field_type=self.secondary_id_field_type,
+                    field_type=ID(**self.secondary_id_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='billNumber')
                 )
@@ -401,7 +410,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_callNumber',
-                    field_type=self.secondary_id_field_type,
+                    field_type=ID(**self.secondary_id_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='callNumber')
                 )
@@ -410,7 +419,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_codeNumber',
-                    field_type=self.secondary_id_field_type,
+                    field_type=ID(**self.secondary_id_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='codeNumber')
                 )
@@ -419,7 +428,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_docketNumber',
-                    field_type=self.secondary_id_field_type,
+                    field_type=ID(**self.secondary_id_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='docketNumber')
                 )
@@ -428,7 +437,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_documentNumber',
-                    field_type=self.secondary_id_field_type,
+                    field_type=ID(**self.secondary_id_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='documentNumber')
                 )
@@ -437,7 +446,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_patentNumber',
-                    field_type=self.secondary_id_field_type,
+                    field_type=ID(**self.secondary_id_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='patentNumber')
                 )
@@ -446,7 +455,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_priorityNumbers',
-                    field_type=self.secondary_id_field_type,
+                    field_type=ID(**self.secondary_id_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='priorityNumbers')
                 )
@@ -455,7 +464,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_publicLawNumber',
-                    field_type=self.secondary_id_field_type,
+                    field_type=ID(**self.secondary_id_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='publicLawNumber')
                 )
@@ -464,7 +473,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_reportNumber',
-                    field_type=self.secondary_id_field_type,
+                    field_type=ID(**self.secondary_id_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='reportNumber')
                 )
@@ -478,7 +487,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_nameOfAct',
-                    field_type=self.title_field_type,
+                    field_type=TEXT(**self.primary_title_text_kwargs),
                     scopes=['all', 'metadata', 'title'],
                     extractor=extractors.ItemDataExtractor(key='nameOfAct')
                 )
@@ -487,7 +496,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_shortTitle',
-                    field_type=self.title_field_type,
+                    field_type=TEXT(**self.primary_title_text_kwargs),
                     scopes=['all', 'metadata', 'title'],
                     extractor=extractors.ItemDataExtractor(key='shortTitle')
                 )
@@ -496,7 +505,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_subject',
-                    field_type=self.title_field_type,
+                    field_type=TEXT(**self.primary_title_text_kwargs),
                     scopes=['all', 'metadata', 'title'],
                     extractor=extractors.ItemDataExtractor(key='subject')
                 )
@@ -505,7 +514,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_title',
-                    field_type=self.title_field_type,
+                    field_type=TEXT(**self.primary_title_text_kwargs),
                     scopes=['all', 'metadata', 'title'],
                     extractor=extractors.ItemDataExtractor(key='title')
                 )
@@ -519,7 +528,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_blogTitle',
-                    field_type=self.secondary_title_field_type,
+                    field_type=TEXT(**self.secondary_title_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='blogTitle')
                 )
@@ -528,7 +537,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_bookTitle',
-                    field_type=self.secondary_title_field_type,
+                    field_type=TEXT(**self.secondary_title_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='bookTitle')
                 )
@@ -537,7 +546,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_code',
-                    field_type=self.secondary_title_field_type,
+                    field_type=TEXT(**self.secondary_title_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='code')
                 )
@@ -546,7 +555,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_conferenceName',
-                    field_type=self.secondary_title_field_type,
+                    field_type=TEXT(**self.secondary_title_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='conferenceName')
                 )
@@ -555,7 +564,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_dictionaryTitle',
-                    field_type=self.secondary_title_field_type,
+                    field_type=TEXT(**self.secondary_title_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='dictionaryTitle')
                 )
@@ -564,7 +573,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_encyclopediaTitle',
-                    field_type=self.secondary_title_field_type,
+                    field_type=TEXT(**self.secondary_title_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='encyclopediaTitle')
                 )
@@ -573,7 +582,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_forumTitle',
-                    field_type=self.secondary_title_field_type,
+                    field_type=TEXT(**self.secondary_title_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='forumTitle')
                 )
@@ -582,7 +591,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_meetingName',
-                    field_type=self.secondary_title_field_type,
+                    field_type=TEXT(**self.secondary_title_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='meetingName')
                 )
@@ -591,7 +600,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_proceedingsTitle',
-                    field_type=self.secondary_title_field_type,
+                    field_type=TEXT(**self.secondary_title_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='proceedingsTitle')
                 )
@@ -600,7 +609,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_programTitle',
-                    field_type=self.secondary_title_field_type,
+                    field_type=TEXT(**self.secondary_title_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='programTitle')
                 )
@@ -609,7 +618,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_publicationTitle',
-                    field_type=self.secondary_title_field_type,
+                    field_type=TEXT(**self.secondary_title_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='publicationTitle')
                 )
@@ -618,7 +627,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_section',
-                    field_type=self.secondary_title_field_type,
+                    field_type=TEXT(**self.secondary_title_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='section')
                 )
@@ -627,7 +636,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_series',
-                    field_type=self.secondary_title_field_type,
+                    field_type=TEXT(**self.secondary_title_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='series')
                 )
@@ -636,7 +645,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_seriesTitle',
-                    field_type=self.secondary_title_field_type,
+                    field_type=TEXT(**self.secondary_title_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='seriesTitle')
                 )
@@ -645,7 +654,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_session',
-                    field_type=self.secondary_title_field_type,
+                    field_type=TEXT(**self.secondary_title_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='session')
                 )
@@ -654,7 +663,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_websiteTitle',
-                    field_type=self.secondary_title_field_type,
+                    field_type=TEXT(**self.secondary_title_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='websiteTitle')
                 )
@@ -668,7 +677,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_archive',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='archive')
                 )
@@ -677,7 +686,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_archiveLocation',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='archiveLocation')
                 )
@@ -686,7 +695,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_assignee',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='assignee')
                 )
@@ -695,7 +704,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_audioFileType',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='audioFileType')
                 )
@@ -704,7 +713,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_audioRecordingFormat',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='audioRecordingFormat')
                 )
@@ -713,7 +722,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_caseName',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='caseName')
                 )
@@ -722,7 +731,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_committee',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='committee')
                 )
@@ -731,7 +740,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_company',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='company')
                 )
@@ -740,7 +749,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_country',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='country')
                 )
@@ -749,7 +758,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_court',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='court')
                 )
@@ -758,7 +767,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_distributor',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='distributor')
                 )
@@ -767,7 +776,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_institution',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='institution')
                 )
@@ -776,7 +785,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_issuingAuthority',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='issuingAuthority')
                 )
@@ -785,7 +794,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_journalAbbreviation',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='journalAbbreviation')
                 )
@@ -794,7 +803,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_label',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='label')
                 )
@@ -803,7 +812,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_legislativeBody',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='legislativeBody')
                 )
@@ -812,7 +821,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_libraryCatalog',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='libraryCatalog')
                 )
@@ -821,7 +830,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_network',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='network')
                 )
@@ -830,7 +839,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_place',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='place')
                 )
@@ -839,7 +848,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_programmingLanguage',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='programmingLanguage')
                 )
@@ -848,7 +857,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_publisher',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='publisher')
                 )
@@ -857,7 +866,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_reporter',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='reporter')
                 )
@@ -866,7 +875,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_studio',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='studio')
                 )
@@ -875,7 +884,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_system',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='system')
                 )
@@ -884,7 +893,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_university',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='university')
                 )
@@ -893,7 +902,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_videoRecordingFormat',
-                    field_type=self.name_field_type,
+                    field_type=TEXT(**self.name_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='videoRecordingFormat')
                 )
@@ -907,7 +916,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_dateDecided',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='dateDecided')
                 )
@@ -916,7 +925,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_dateEnacted',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='dateEnacted')
                 )
@@ -925,7 +934,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_date',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='date')
                 )
@@ -934,7 +943,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_filingDate',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='filingDate')
                 )
@@ -943,7 +952,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_issueDate',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='issueDate')
                 )
@@ -957,7 +966,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_abstractNote',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='abstractNote')
                 )
@@ -966,7 +975,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_artworkMedium',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='artworkMedium')
                 )
@@ -975,7 +984,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_artworkSize',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='artworkSize')
                 )
@@ -984,7 +993,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_codeVolume',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='codeVolume')
                 )
@@ -993,7 +1002,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_edition',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='edition')
                 )
@@ -1002,7 +1011,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_episodeNumber',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='episodeNumber')
                 )
@@ -1011,7 +1020,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_extra',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='extra')
                 )
@@ -1020,7 +1029,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_genre',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='genre')
                 )
@@ -1029,7 +1038,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_history',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='history')
                 )
@@ -1038,7 +1047,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_interviewMedium',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='interviewMedium')
                 )
@@ -1047,7 +1056,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_issue',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='issue')
                 )
@@ -1056,7 +1065,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_language',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='language')
                 )
@@ -1065,7 +1074,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_legalStatus',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='legalStatus')
                 )
@@ -1074,7 +1083,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_letterType',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='letterType')
                 )
@@ -1083,7 +1092,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_manuscriptType',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='manuscriptType')
                 )
@@ -1092,7 +1101,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_mapType',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='mapType')
                 )
@@ -1101,7 +1110,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_postType',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='postType')
                 )
@@ -1110,7 +1119,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_presentationType',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='presentationType')
                 )
@@ -1119,7 +1128,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_references',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='references')
                 )
@@ -1128,7 +1137,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_reporterVolume',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='reporterVolume')
                 )
@@ -1137,7 +1146,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_reportType',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='reportType')
                 )
@@ -1146,7 +1155,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_rights',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='rights')
                 )
@@ -1155,7 +1164,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_seriesNumber',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='seriesNumber')
                 )
@@ -1164,7 +1173,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_seriesText',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='seriesText')
                 )
@@ -1173,7 +1182,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_thesisType',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='thesisType')
                 )
@@ -1182,7 +1191,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_versionNumber',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='versionNumber')
                 )
@@ -1191,7 +1200,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_volume',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='volume')
                 )
@@ -1200,7 +1209,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='z_websiteType',
-                    field_type=self.text_field_type,
+                    field_type=TEXT(**self.primary_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.ItemDataExtractor(key='websiteType')
                 )
@@ -1227,7 +1236,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='text_creator',
-                    field_type=self.creator_name_field_type,
+                    field_type=TEXT(**self.creator_name_text_kwargs),
                     scopes=['all', 'metadata', 'creator'],
                     extractor=extractors.CreatorsExtractor()
                 )
@@ -1236,7 +1245,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='text_collections',
-                    field_type=self.secondary_title_field_type,
+                    field_type=TEXT(**self.secondary_title_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.CollectionNamesExtractor()
                 )
@@ -1245,7 +1254,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='text_tags',
-                    field_type=self.secondary_title_field_type,
+                    field_type=TEXT(**self.secondary_title_text_kwargs),
                     scopes=['all', 'metadata'],
                     extractor=extractors.TagsTextExtractor(
                         include_re=self.default_tag_include_re,
@@ -1257,9 +1266,9 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='text_notes',
-                    field_type=self.secondary_text_field_type,
+                    field_type=TEXT(**self.secondary_text_kwargs),
                     scopes=['all', 'metadata'],
-                    extractor=extractors.NotesTextExtractor(
+                    extractor=extractors.ChildNotesTextExtractor(
                         include_re=self.default_child_include_re,
                         exclude_re=self.default_child_exclude_re
                     )
@@ -1269,9 +1278,9 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='text_docs',
-                    field_type=self.tertiary_text_field_type,
+                    field_type=TEXT(**self.tertiary_text_kwargs),
                     scopes=['all', 'fulltext'],
-                    extractor=extractors.AttachmentsFulltextExtractor(
+                    extractor=extractors.ChildAttachmentsFulltextExtractor(
                         mime_types=self.mime_types,
                         include_re=self.default_child_include_re,
                         exclude_re=self.default_child_exclude_re
@@ -1290,7 +1299,7 @@ class Composer:
                 FieldSpec(
                     key='rel_cites',
                     field_type=ID(stored=True),
-                    extractor=extractors.RelationsInNotesExtractor(
+                    extractor=extractors.RelationsInChildNotesExtractor(
                         include_re=r'_cites',
                         exclude_re=''
                     )
@@ -1377,7 +1386,7 @@ class Composer:
                 FieldSpec(
                     key='notes',
                     field_type=STORED,
-                    extractor=extractors.RawNotesExtractor(
+                    extractor=extractors.RawChildNotesExtractor(
                         include_re=self.default_child_include_re,
                         exclude_re=self.default_child_exclude_re
                     )
@@ -1389,7 +1398,7 @@ class Composer:
                 FieldSpec(
                     key='links',
                     field_type=STORED,
-                    extractor=extractors.LinkedURIAttachmentsExtractor(
+                    extractor=extractors.ChildLinkedURIAttachmentsExtractor(
                         include_re=self.default_child_include_re,
                         exclude_re=self.default_child_exclude_re
                     )
@@ -1401,7 +1410,7 @@ class Composer:
                 FieldSpec(
                     key='attachments',
                     field_type=STORED,
-                    extractor=extractors.FileAttachmentsExtractor(
+                    extractor=extractors.ChildFileAttachmentsExtractor(
                         mime_types=self.mime_types,
                         include_re=self.default_child_include_re,
                         exclude_re=self.default_child_exclude_re
@@ -1739,7 +1748,7 @@ class Composer:
 
         These rely on `FieldSpec` instances, which must have been added beforehand.
         """
-        pass
+        # No badges by default.
 
     def add_scope(self, scope):
         self.scopes[scope.key] = scope

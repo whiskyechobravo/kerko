@@ -18,10 +18,6 @@ Features:
   full-text indexing, you must make sure that it works in Zotero first; see
   [Zotero's
   documentation](https://www.zotero.org/support/searching#pdf_full-text_indexing).
-  Caution: If you have thousands of attachments, this feature can significantly
-  slow down the process of synchronizing data from zotero.org, due to Kerko
-  performing a large number of Zotero API requests (hopefully we'll fix this in
-  the future).
 * Add new search scopes "Everywhere" (to search both metadata fields and the
   text content of attached documents) and "In documents" (to search the text
   content of attached documents). The scope "In all fields" allows to search all
@@ -42,12 +38,22 @@ Features:
   `KERKO_RESULTS_ABSTRACTS_MAX_LENGTH_LEEWAY`).
 * Allow relations in child notes to be specified as HTML links, i.e., in the
   `href` attribute of `<a>` elements.
+* Standalone notes and attachments, i.e., not attached to an item, are now
+  allowed into the search index. Kerko's default views filter those out, but
+  custom applications could retrieve them if needed. Shortcoming: at the moment,
+  those attachments' files are not downloaded, nor is their full-text requested.
 
 Other changes:
 
 * On narrow screens, stack search form controls for better usability.
 * Respond with an HTTP 503 (Service Unavailable) when the search index is empty
   or unreadable.
+* Make synchronization from Zotero much more efficient through incremental
+  updates. Instead of performing a full synchronization each time, Kerko now
+  retrieves just the newly added or updated items. This dramatically reduces the
+  number of Zotero API calls (and time) required to update Kerko's search index.
+  Note: **More work is planned** to eliminate some Zotero API calls that Kerko
+  makes early in the synchronization process.
 * Make sorts more efficient by setting the `sortable` Whoosh flag on relevant
   fields.
 
@@ -56,10 +62,23 @@ Backwards incompatible changes:
 * The default list for the `KERKO_RESULTS_FIELDS` setting now includes the
   `'url'` field. If you have overridden that setting in your application and
   `KERKO_RESULTS_URL_LINKS` is enabled, you'll probably have to add `'url'` too.
+* The schema field `item_type` has been renamed to `item_type_label`. If you
+  have custom templates, please review any use of `item.item_type`.
 * The structure of the `kerko/_search-result.html.jinja2` template has changed
   somewhat. If you have overridden it, you'll need to review the changes.
-* The `StoredFileAttachmentsExtractor` class has been renamed to
-  `FileAttachmentsExtractor`.
+* The `ItemContext` class has been eliminated. The `Extractor.extract()` method
+  now receives an item's dictionary instead of an `ItemContext` object, and if
+  an item has children these are now available directly in the item (with the
+  `children` key). If you have created custom extractor classes, their
+  `extract()` method will need to be adapted accordingly.
+* Some extractor classes have been renamed:
+    * `BaseAttachmentsExtractor` → `BaseChildAttachmentsExtractor`
+    * `BaseNotesExtractor` → `BaseChildNotesExtractor`
+    * `LinkedURIAttachmentsExtractor` → `ChildLinkedURIAttachmentsExtractor`
+    * `NotesTextExtractor` → `ChildNotesTextExtractor`
+    * `RawNotesExtractor` → `RawChildNotesExtractor`
+    * `RelationsInNotesExtractor` → `RelationsInChildNotesExtractor`
+    * `StoredFileAttachmentsExtractor` → `ChildFileAttachmentsExtractor`
 
 ## 0.7.1 (2021-02-04)
 
