@@ -118,7 +118,7 @@ class Extractor(ABC):
 
     def warning(self, message, item):
         current_app.logger.warning(
-            f"{self.__class__.__name__}: {message} ({item['key']})"
+            f"{self.__class__.__name__}: {message} ({item.get('key')})"
         )
 
 
@@ -195,13 +195,14 @@ class ItemDataExtractor(KeyExtractor):
     """Extract a value from item data."""
 
     def extract(self, item, library_context, spec):
-        return item['data'].get(self.key)
+        return item.get('data', {}).get(self.key)
 
 
 class RawDataExtractor(Extractor):
 
     def extract(self, item, library_context, spec):
-        return item['data']
+        return item.get('data')
+
 
 
 class ItemRelationsExtractor(Extractor):
@@ -212,7 +213,7 @@ class ItemRelationsExtractor(Extractor):
         self.predicate = predicate
 
     def extract(self, item, library_context, spec):
-        relations = item['data'].get('relations', {}).get(self.predicate, [])
+        relations = item.get('data', {}).get('relations', {}).get(self.predicate, [])
         if relations and isinstance(relations, str):
             relations = [relations]
         assert isinstance(relations, Iterable)
@@ -223,7 +224,7 @@ class ItemTypeLabelExtractor(Extractor):
     """Extract the label of the item's type."""
 
     def extract(self, item, library_context, spec):
-        item_type = item['data'].get('itemType')
+        item_type = item.get('data', {}).get('itemType')
         if item_type and item_type in library_context.item_types:
             return library_context.item_types[item_type]
         self.warning(f"Missing or unknown item type '{item_type}'", item)
@@ -234,7 +235,7 @@ class ItemFieldsExtractor(Extractor):
     """Extract field metadata, serialized as a JSON string."""
 
     def extract(self, item, library_context, spec):
-        item_type = item['data'].get('itemType')
+        item_type = item.get('data', {}).get('itemType')
         if item_type and item_type in library_context.item_fields:
             fields = library_context.item_fields[item_type]
             # Retain metadata for fields that are actually present in the item.
@@ -249,7 +250,7 @@ class CreatorTypesExtractor(Extractor):
     """Extract creator types metadata, serialized as a JSON string."""
 
     def extract(self, item, library_context, spec):
-        item_type = item['data'].get('itemType')
+        item_type = item.get('data', {}).get('itemType')
         if item_type and item_type in library_context.creator_types:
             library_creator_types = library_context.creator_types[item_type]
             # Retain metadata for creator types that are actually present in the item.
@@ -274,8 +275,7 @@ class CreatorsExtractor(Extractor):
 
     def extract(self, item, library_context, spec):
         creators = []
-        if 'creators' in item['data']:
-            for creator in item['data']['creators']:
+        for creator in item.get('data', {}).get('creators', []):
                 n = creator.get('name', '').strip()
                 if n:
                     creators.append(n)
@@ -298,8 +298,7 @@ class CollectionNamesExtractor(Extractor):
 
     def extract(self, item, library_context, spec):
         names = set()
-        if 'collections' in item['data']:
-            for k in item['data']['collections']:
+        for k in item.get('data', {}).get('collections', []):
                 if k in library_context.collections:
                     name = library_context.collections[k].get('data', {}).get('name', '').strip()
                     if name:
@@ -327,8 +326,7 @@ class BaseTagsExtractor(Extractor):
 
     def extract(self, item, library_context, spec):
         tags = set()
-        if 'tags' in item['data']:
-            for tag_data in item['data']['tags']:
+        for tag_data in item.get('data', {}).get('tags', []):
                 tag = tag_data.get('tag', '').strip()
                 if tag and \
                         (not self.include or self.include.match(tag)) and \
@@ -370,7 +368,7 @@ class BaseChildrenExtractor(Extractor):
 
     def extract(self, item, library_context, spec):
         accepted_children = []
-        for child in item['children']:
+        for child in item.get('children', []):
             if child.get('data', {}).get('itemType') == self.item_type \
                     and self.gate.check(child.get('data', {})):
                 accepted_children.append(child)
@@ -512,7 +510,7 @@ class CollectionFacetTreeExtractor(Extractor):
     def extract(self, item, library_context, spec):
         # Sets prevent duplication when multiple collections share common ancestors.
         encoded_ancestors = set()
-        for collection_key in item['data'].get('collections', []):
+        for collection_key in item.get('data', {}).get('collections', []):
             if collection_key not in library_context.collections:
                 continue  # Skip unknown collection.
             ancestors = library_context.collections.ancestors(collection_key)
@@ -556,7 +554,7 @@ class InCollectionExtractor(Extractor):
             itertools.chain(
                 *[
                     library_context.collections.ancestors(c) if self.check_subcollections else c
-                    for c in item['data'].get('collections', [])
+                    for c in item.get('data', {}).get('collections', [])
                 ]
             )
         )
@@ -579,7 +577,7 @@ class ItemTypeFacetExtractor(Extractor):
     """Index the Zotero item's type for faceting."""
 
     def extract(self, item, library_context, spec):
-        item_type = item['data'].get('itemType')
+        item_type = item.get('data', {}).get('itemType')
         if item_type:
             return (item_type, library_context.item_types.get(item_type, item_type))
         self.warning("Missing itemType", item)
@@ -605,7 +603,7 @@ class YearFacetExtractor(Extractor):
 class ItemDataLinkFacetExtractor(ItemDataExtractor):
 
     def extract(self, item, library_context, spec):
-        return item['data'].get(self.key, '').strip() != ''
+        return item.get('data', {}).get(self.key, '').strip() != ''
 
 
 def _prepare_sort_text(text):
@@ -622,7 +620,7 @@ def _prepare_sort_text(text):
 class SortItemDataExtractor(ItemDataExtractor):
 
     def extract(self, item, library_context, spec):
-        return _prepare_sort_text(item['data'].get(self.key, ''))
+        return _prepare_sort_text(item.get('data', {}).get(self.key, ''))
 
 
 class SortCreatorExtractor(Extractor):
@@ -643,8 +641,8 @@ class SortCreatorExtractor(Extractor):
         # only by primary creators in order to avoid sorting with data that may
         # be invisible to the user. Only when an item has no primary creator do
         # we fallback to lesser creators.
-        for creator_type in library_context.get_creator_types(item['data']):
-            for creator in item['data'].get('creators', []):
+        for creator_type in library_context.get_creator_types(item.get('data', {})):
+            for creator in item.get('data', {}).get('creators', []):
                 if creator.get('creatorType', '') == creator_type.get('creatorType'):
                     append_creator(creator)
             if creators:
