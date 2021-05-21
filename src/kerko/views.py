@@ -8,17 +8,13 @@ from flask import (abort, current_app, flash, make_response, redirect,
                    render_template, request, send_from_directory, url_for)
 from flask_babel import get_locale, gettext, ngettext
 
-from . import babel_domain, blueprint
+from . import babel_domain, blueprint, query
 from .breadbox import build_breadbox
 from .criteria import Criteria
 from .exceptions import except_abort
 from .forms import SearchForm
 from .pager import build_pager, get_page_numbers
 from .pager import get_sections as get_pager_sections
-from .query import (DEFAULT_QUERY_TERMS, build_creators_display,
-                    build_item_facet_results, build_relations,
-                    get_search_return_fields, run_query,
-                    run_query_unique_with_fallback)
 from .sorter import build_sorter
 from .storage import SearchIndexError, get_storage_dir
 
@@ -46,10 +42,11 @@ def search():
             value=form.keywords.data)
         return redirect(url, 302)
 
-    search_results, facet_results, total_count, page_count, last_sync = run_query(
+    base_filter_terms = query.build_filter_terms('item_type', exclude=['note', 'attachment'])
+    search_results, facet_results, total_count, page_count, last_sync = query.run_query(
         criteria,
-        get_search_return_fields(criteria.page_len),
-        default_terms=DEFAULT_QUERY_TERMS,
+        query.get_search_return_fields(criteria.page_len),
+        default_terms=base_filter_terms,
     )
 
     if criteria.page_len == 1 and criteria.id and (
@@ -93,24 +90,24 @@ def search():
             else:
                 # Run a search query to get the item id corresponding to the page number.
                 page_criteria.page_num = page_num
-                page_search_results, _, _, _, _ = run_query(
+                page_search_results, _, _, _, _ = query.run_query(
                     page_criteria,
                     return_fields=['id'],
                     query_facets=False,
-                    default_terms=DEFAULT_QUERY_TERMS,
+                    default_terms=base_filter_terms,
                 )
                 if page_search_results:
                     page_kwargs[page_num] = {'id_': page_search_results[0]['id']}
         context['pager'] = build_pager(pager_sections, criteria, page_kwargs)
 
         list_page_num = int((criteria.page_num - 1) / current_app.config['KERKO_PAGE_LEN'] + 1)
-        build_creators_display(search_results[0])
-        build_item_facet_results(search_results[0])
-        build_relations(
+        query.build_creators_display(search_results[0])
+        query.build_item_facet_results(search_results[0])
+        query.build_relations(
             search_results[0],
-            get_search_return_fields(page_len=None, exclude=['coins']),
+            query.get_search_return_fields(page_len=None, exclude=['coins']),
             sort=current_app.config['KERKO_RELATIONS_SORT'],
-            default_terms=DEFAULT_QUERY_TERMS,
+            default_terms=base_filter_terms,
         )
         if context['is_searching']:
             context['search_title'] = gettext('Your search')
@@ -168,10 +165,11 @@ def item_view(item_id):
     if current_app.config['KERKO_USE_TRANSLATIONS']:
         babel_domain.as_default()
 
-    item, fellback = run_query_unique_with_fallback(
+    base_filter_terms = query.build_filter_terms('item_type', exclude=['note', 'attachment'])
+    item, fellback = query.run_query_unique_with_fallback(
         ['id', 'alternateId'],
         item_id,
-        default_terms=DEFAULT_QUERY_TERMS,
+        default_terms=base_filter_terms,
     )
     if not item:
         return abort(404)
@@ -179,13 +177,13 @@ def item_view(item_id):
     if fellback:
         return redirect(item_url, 301)
 
-    build_creators_display(item)
-    build_item_facet_results(item)
-    build_relations(
+    query.build_creators_display(item)
+    query.build_item_facet_results(item)
+    query.build_relations(
         item,
-        get_search_return_fields(page_len=None, exclude=['coins']),
+        query.get_search_return_fields(page_len=None, exclude=['coins']),
         sort=current_app.config['KERKO_RELATIONS_SORT'],
-        default_terms=DEFAULT_QUERY_TERMS,
+        default_terms=base_filter_terms,
     )
     return render_template(
         current_app.config['KERKO_TEMPLATE_ITEM'],
@@ -211,10 +209,10 @@ def item_attachment_download(item_id, attachment_id, attachment_filename=None):
     if current_app.config['KERKO_USE_TRANSLATIONS']:
         babel_domain.as_default()
 
-    item, fellback = run_query_unique_with_fallback(
+    item, fellback = query.run_query_unique_with_fallback(
         ['id', 'alternateId'],
         item_id,
-        default_terms=DEFAULT_QUERY_TERMS,
+        default_terms=query.build_filter_terms('item_type', exclude=['note', 'attachment']),
     )
     if not item:
         return abort(404)
@@ -258,10 +256,10 @@ def item_citation_download(item_id, citation_format_key):
     if current_app.config['KERKO_USE_TRANSLATIONS']:
         babel_domain.as_default()
 
-    item, fellback = run_query_unique_with_fallback(
+    item, fellback = query.run_query_unique_with_fallback(
         ['id', 'alternateId'],
         item_id,
-        default_terms=DEFAULT_QUERY_TERMS,
+        default_terms=query.build_filter_terms('item_type', exclude=['note', 'attachment']),
     )
     if not item:
         return abort(404)
@@ -302,8 +300,10 @@ def search_citation_download(citation_format_key):
     criteria = Criteria(request)
     criteria.page_len = None
 
-    search_results, _, total_count, _, _ = run_query(  # TODO: Avoid building facet results.
-        criteria, return_fields=[citation_format.field.key], default_terms=DEFAULT_QUERY_TERMS,
+    search_results, _, total_count, _, _ = query.run_query(  # TODO: Avoid building facet results.
+        criteria,
+        return_fields=[citation_format.field.key],
+        default_terms=query.build_filter_terms('item_type', exclude=['note', 'attachment']),
     )
 
     if total_count == 0:

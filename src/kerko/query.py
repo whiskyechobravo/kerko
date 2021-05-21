@@ -12,12 +12,6 @@ from .criteria import Criteria
 from .storage import open_index
 
 
-DEFAULT_QUERY_TERMS = [
-    Not(Term('item_type', 'note')),
-    Not(Term('item_type', 'attachment')),
-]
-
-
 def get_search_return_fields(page_len, exclude=None):
     if exclude is None:
         exclude = []
@@ -92,6 +86,22 @@ def build_groupedby_query(facets):
     for spec in facets:
         groupedby.add_field(spec.key, allow_overlap=spec.allow_overlap)
     return groupedby
+
+
+def build_filter_terms(field_name, *, include=None, exclude=None):
+    """
+    Build Whoosh query terms that may be used to filter a search.
+
+    :param list include: List of values to allow in the search results. If
+        `None`, no inclusion term gets produced.
+
+    :param list exclude: List of values to deny from the search results. If
+        `None`, no exclusion term gets produced.
+    """
+    terms = [Or([Term(field_name, value) for value in include])] if include else []
+    if exclude:
+        terms.extend([Not(Term(field_name, value)) for value in exclude])
+    return terms
 
 
 def build_filter_query(filters=None, default_terms=None):
