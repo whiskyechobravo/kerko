@@ -2,7 +2,10 @@
 Custom filters for Jinja2 templates.
 """
 
+from __future__ import annotations
+
 import re
+import typing
 from urllib.parse import urlparse
 
 from w3lib.url import safe_url_string
@@ -10,6 +13,9 @@ from w3lib.url import safe_url_string
 from jinja2 import Markup, evalcontextfilter
 
 from .datetime import format_datetime, reformat_date
+
+if typing.TYPE_CHECKING:
+    from flask.blueprints import BlueprintSetupState
 
 
 @evalcontextfilter
@@ -43,13 +49,13 @@ def parse_and_urlize_doi(eval_ctx, text, target=None, rel=None):
     return result
 
 
-def register_filters(blueprint):
+def register_filters(state: BlueprintSetupState):
     """Add custom template filters."""
-    blueprint.add_app_template_filter(format_datetime, name='kerko_format_datetime')
-    blueprint.add_app_template_filter(reformat_date, name='kerko_reformat_date')
-    blueprint.add_app_template_filter(
+    state.blueprint.add_app_template_filter(format_datetime, name='kerko_format_datetime')
+    state.blueprint.add_app_template_filter(reformat_date, name='kerko_reformat_date')
+    state.blueprint.add_app_template_filter(
         lambda text: urlparse(text).hostname, name='kerko_url_hostname'
     )
-    blueprint.add_app_template_filter(safe_url_string, name='kerko_url_sanitize')
-    blueprint.add_app_template_filter(urlize_doi, name='kerko_urlize_doi')
-    blueprint.add_app_template_filter(parse_and_urlize_doi, name='kerko_parse_and_urlize_doi')
+    state.blueprint.add_app_template_filter(safe_url_string, name='kerko_url_sanitize')
+    state.blueprint.add_app_template_filter(urlize_doi, name='kerko_urlize_doi')
+    state.blueprint.add_app_template_filter(parse_and_urlize_doi, name='kerko_parse_and_urlize_doi')

@@ -93,7 +93,7 @@ blueprint = Blueprint(
     'kerko', __name__, static_folder='static', template_folder='templates'
 )
 blueprint.record_once(init_default_config)
-register_filters(blueprint)
+blueprint.record_once(register_filters)
 
 
 from . import views  # pylint: disable=wrong-import-position
