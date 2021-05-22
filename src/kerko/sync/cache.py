@@ -1,7 +1,5 @@
 """Synchronize the Zotero library into a local cache."""
 
-import json
-
 from flask import current_app
 from whoosh.fields import ID, NUMERIC, STORED, Schema
 from whoosh.qparser import QueryParser
@@ -62,10 +60,10 @@ def sync_cache():
                 'version': item.get('version'),
                 'parentItem': item.get('data', {}).get('parentItem', ''),
                 'itemType': item.get('data', {}).get('itemType', ''),
-                'library': json.dumps(item.get('library', {})),
-                'links': json.dumps(item.get('links', {})),
-                'meta': json.dumps(item.get('meta', {})),
-                'data': json.dumps(item.get('data', {})),
+                'library': item.get('library', {}),
+                'links': item.get('links', {}),
+                'meta': item.get('meta', {}),
+                'data': item.get('data', {}),
             }
             for format_ in formats:
                 if format_ in item:

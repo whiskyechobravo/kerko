@@ -1,7 +1,5 @@
 """Update the search index from the local cache."""
 
-import json
-
 import whoosh
 from flask import current_app
 from whoosh.query import Every, Term
@@ -34,14 +32,8 @@ def sync_index():
     def yield_items(parent_key):
         with cache.searcher() as searcher:
             results = searcher.search(Every(), filter=Term('parentItem', parent_key), limit=None)
-            if results:
-                for hit in results:
-                    item = hit.fields()
-                    item['library'] = json.loads(item['library'])
-                    item['links'] = json.loads(item['links'])
-                    item['meta'] = json.loads(item['meta'])
-                    item['data'] = json.loads(item['data'])
-                    yield item
+            for hit in results:
+                yield hit.fields()
 
     def yield_top_level_items():
         return yield_items('')
