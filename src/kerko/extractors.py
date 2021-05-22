@@ -204,7 +204,6 @@ class RawDataExtractor(Extractor):
         return item.get('data')
 
 
-
 class ItemRelationsExtractor(Extractor):
     """Extract a list of item's relations corresponding to a given predicate."""
 
@@ -276,20 +275,20 @@ class CreatorsExtractor(Extractor):
     def extract(self, item, library_context, spec):
         creators = []
         for creator in item.get('data', {}).get('creators', []):
-                n = creator.get('name', '').strip()
-                if n:
-                    creators.append(n)
-                firstname = creator.get('firstName', '').strip()
-                lastname = creator.get('lastName', '').strip()
-                if firstname and lastname:
-                    # Combine firstname and lastname in different orders to help
-                    # phrase searches.
-                    creators.append(' '.join([firstname, lastname]))
-                    creators.append(', '.join([lastname, firstname]))
-                elif firstname:
-                    creators.append(firstname)
-                elif lastname:
-                    creators.append(lastname)
+            n = creator.get('name', '').strip()
+            if n:
+                creators.append(n)
+            firstname = creator.get('firstName', '').strip()
+            lastname = creator.get('lastName', '').strip()
+            if firstname and lastname:
+                # Combine firstname and lastname in different orders to help
+                # phrase searches.
+                creators.append(' '.join([firstname, lastname]))
+                creators.append(', '.join([lastname, firstname]))
+            elif firstname:
+                creators.append(firstname)
+            elif lastname:
+                creators.append(lastname)
         return RECORD_SEPARATOR.join(creators) if creators else None
 
 
@@ -299,10 +298,10 @@ class CollectionNamesExtractor(Extractor):
     def extract(self, item, library_context, spec):
         names = set()
         for k in item.get('data', {}).get('collections', []):
-                if k in library_context.collections:
-                    name = library_context.collections[k].get('data', {}).get('name', '').strip()
-                    if name:
-                        names.add(name)
+            if k in library_context.collections:
+                name = library_context.collections[k].get('data', {}).get('name', '').strip()
+                if name:
+                    names.add(name)
         return RECORD_SEPARATOR.join(names) if names else None
 
 
@@ -327,11 +326,11 @@ class BaseTagsExtractor(Extractor):
     def extract(self, item, library_context, spec):
         tags = set()
         for tag_data in item.get('data', {}).get('tags', []):
-                tag = tag_data.get('tag', '').strip()
-                if tag and \
-                        (not self.include or self.include.match(tag)) and \
-                        (not self.exclude or not self.exclude.match(tag)):
-                    tags.add(tag)
+            tag = tag_data.get('tag', '').strip()
+            if tag and \
+                    (not self.include or self.include.match(tag)) and \
+                    (not self.exclude or not self.exclude.match(tag)):
+                tags.add(tag)
         return tags or None
 
 
