@@ -62,6 +62,7 @@ Other changes:
 * Support more timezone names. Timezone names such as 'US/Eastern' or
   'Europe/London' previously did not work, and times could not be converted
   to daylight saving times.
+* Inject blocks in item Jinja2 template to facilitate theming.
 
 Possibly backwards incompatible changes (more or less internal API changes):
 
