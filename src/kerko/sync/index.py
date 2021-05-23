@@ -2,7 +2,7 @@
 
 import whoosh
 from flask import current_app
-from whoosh.query import Every, Term
+from whoosh.query import Term
 
 from ..storage import SearchIndexError, load_object, open_index, save_object
 from ..tags import TagGate
@@ -31,7 +31,7 @@ def sync_index():
 
     def yield_items(parent_key):
         with cache.searcher() as searcher:
-            results = searcher.search(Every(), filter=Term('parentItem', parent_key), limit=None)
+            results = searcher.search(Term('parentItem', parent_key), limit=None)
             for hit in results:
                 yield hit.fields()
 
