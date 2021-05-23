@@ -13,7 +13,7 @@
     -%}
     {%- if item.label or missing_label -%}
         <{{ item_tag }}>
-            {%- set label = item.label|escape or (('<em>' + missing_label + '</em>')|safe) -%}
+            {%- set label = item.label|escape|trim(' _') or (('<em>' + missing_label + '</em>')|safe) -%}
             {%- if item.remove_url -%}
                 <a class="no-decorate" href="{{ item.remove_url }}" {{ title_aria_label(remove_link_title.format(label|striptags|escape)) }} rel="nofollow">
                     {{ remove_link_icon }}

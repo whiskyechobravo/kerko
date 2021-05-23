@@ -56,6 +56,9 @@ Other changes:
   makes early in the synchronization process.
 * Make sorts more efficient by setting the `sortable` Whoosh flag on relevant
   fields.
+* Leading and trailing underscore characters (`_`) are now trimmed from facet
+  value labels. This happens _after_ sorting the values, which means that the
+  underscore can still be used as a prefix to alter the alphabetical order.
 * Support more timezone names. Timezone names such as 'US/Eastern' or
   'Europe/London' previously did not work, and times could not be converted
   to daylight saving times.
