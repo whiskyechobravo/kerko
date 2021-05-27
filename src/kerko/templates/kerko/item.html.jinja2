@@ -50,7 +50,7 @@
     <div class="mb-4 item-content">
         {%- block item_actions %}
             {%- if item.attachments or config.KERKO_PRINT_ITEM_LINK or config.KERKO_COMPOSER.citation_formats %}
-                <div class="row">
+                <div class="row my-3">
                     <div class="col-auto ml-auto text-right">
                         {%- if item.attachments|length > 1 %}
                             <div class="{% block attachment_links_wrapper_classes %}d-inline-block d-print-none mb-2{% endblock %}">
