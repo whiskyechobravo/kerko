@@ -45,15 +45,16 @@ Features:
 
 Other changes:
 
-* On narrow screens, stack search form controls for better usability.
-* Respond with an HTTP 503 (Service Unavailable) when the search index is empty
-  or unreadable.
 * Make synchronization from Zotero much more efficient through incremental
   updates. Instead of performing a full synchronization each time, Kerko now
   retrieves just the newly added or updated items. This dramatically reduces the
   number of Zotero API calls (and time) required to update Kerko's search index.
   Note: **More work is planned** to eliminate some Zotero API calls that Kerko
   makes early in the synchronization process.
+* Add a `sync cache` command to the command line interface.
+* On narrow screens, stack search form controls for better usability.
+* Respond with an HTTP 503 (Service Unavailable) when the search index is empty
+  or unreadable.
 * Make sorts more efficient by setting the `sortable` Whoosh flag on relevant
   fields.
 * Leading and trailing underscore characters (`_`) are now trimmed from facet
@@ -63,6 +64,7 @@ Other changes:
   'Europe/London' previously did not work, and times could not be converted
   to daylight saving times.
 * Inject blocks in item Jinja2 template to facilitate theming.
+* Slightly increase some top/bottom margins.
 
 Possibly backwards incompatible changes (more or less internal API changes):
 
