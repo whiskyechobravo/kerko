@@ -52,7 +52,6 @@ class TagGate:
             a 'tag' key, whose corresponding value should be a string
             representing a tag.
         """
-
         included = [True] if not self.include_re else [False] * len(self.include_re)
         excluded = [False] if not self.exclude_re else [False] * len(self.exclude_re)
         if self.include_re:
