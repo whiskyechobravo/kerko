@@ -351,15 +351,17 @@ class BaseChildrenExtractor(Extractor):
         :param str item_type: The type of child items to extract, either 'note'
             or 'attachment'.
 
-        :param str include_re: Any child which does not have a tag that
+        :param [str,list] include_re: Any child which does not have a tag that
             matches this regular expression will be ignored by the extractor. If
-            empty, all children will be accepted unless `exclude_re` is set
-            and causes some to be rejected.
+            empty, all children will be accepted unless `exclude_re` is set and
+            causes some to be rejected. When passing a list, every pattern of
+            the list must match at least a tag for the child to be included.
 
-        :param str exclude_re: Any child that have a tag that matches this
-            regular expression will be ignored by the extractor. If empty, all
-            children will be accepted unless `include_re` is set and causes
-            some to be rejected.
+        :param [str,list] exclude_re: Any child that have a tag that matches
+            this regular expression will be ignored by the extractor. If empty,
+            all children will be accepted unless `include_re` is set and causes
+            some to be rejected. When passing a list, every pattern of the list
+            must match at least a tag for the child to be excluded.
         """
         super().__init__(**kwargs)
         self.item_type = item_type

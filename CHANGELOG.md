@@ -42,6 +42,8 @@ Features:
   default Kerko filters them out of search results, but custom applications
   could retrieve them if needed. Shortcoming: at the moment, standalone
   attachment files are not downloaded.
+* Allow inclusion or exclusion of items based on multiple tags (previously, only
+  a single pattern could be checked).
 
 Other changes:
 
