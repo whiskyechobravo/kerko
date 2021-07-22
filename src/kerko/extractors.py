@@ -226,7 +226,8 @@ class ItemTypeLabelExtractor(Extractor):
         item_type = item.get('data', {}).get('itemType')
         if item_type and item_type in library_context.item_types:
             return library_context.item_types[item_type]
-        self.warning(f"Missing or unknown item type '{item_type}'", item)
+        if item_type != 'attachment':  # Attachment has no label, no need to warn.
+            self.warning(f"Missing or unknown item type '{item_type}'", item)
         return None
 
 
@@ -240,7 +241,7 @@ class ItemFieldsExtractor(Extractor):
             # Retain metadata for fields that are actually present in the item.
             item_fields = [f for f in fields if f.get('field') in item['data']]
             return item_fields
-        else:
+        if item_type != 'attachment':  # Attachment has no field metadata, no need to warn.
             self.warning(f"Missing or unknown item type '{item_type}'", item)
         return None
 
@@ -264,7 +265,7 @@ class CreatorTypesExtractor(Extractor):
                 return item_creator_types
             if item['data'].get('creators', False):
                 self.warning(f"Missing creator types for item type '{item_type}'.", item)
-        else:
+        elif item_type != 'attachment':  # Attachment has no creator types, no need to warn.
             self.warning(f"Missing or unknown item type '{item_type}'", item)
         return None
 
