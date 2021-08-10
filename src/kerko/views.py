@@ -198,9 +198,9 @@ def item_view(item_id):
 @blueprint.route('/<path:item_id>/download/<string:attachment_id>/')
 @blueprint.route('/<path:item_id>/download/<string:attachment_id>/<string:attachment_filename>')
 @except_abort(SearchIndexError, 503)
-def item_attachment_download(item_id, attachment_id, attachment_filename=None):
+def child_attachment_download(item_id, attachment_id, attachment_filename=None):
     """
-    Download an item attachment.
+    Download a child attachment.
 
     If the URL does not specify the attachment's filename or provides the wrong
     filename, a redirect is performed to a corrected URL so that the client gets
@@ -234,18 +234,62 @@ def item_attachment_download(item_id, attachment_id, attachment_filename=None):
     if not filepath.exists():
         return abort(404)
 
-    if fellback or attachment_filename != attachment['filename']:
+    filename = attachment['data'].get('filename', item['id'])
+    if fellback or attachment_filename != filename:
         return redirect(url_for(
-            '.item_attachment_download',
+            '.child_attachment_download',
             item_id=item['id'],
             attachment_id=attachment_id,
-            attachment_filename=attachment['filename'],
+            attachment_filename=filename,
         ), 301)
 
     return send_from_directory(
         get_storage_dir('attachments'),
         attachment_id,
-        mimetype=attachment['mimetype'],
+        download_name=filename,
+        mimetype=attachment['data'].get('contentType', 'octet-stream'),
+    )
+
+
+@blueprint.route('/download/<string:item_id>/')
+@blueprint.route('/download/<string:item_id>/<string:attachment_filename>')
+@except_abort(SearchIndexError, 503)
+def standalone_attachment_download(item_id, attachment_filename=None):
+    """
+    Download a standalone attachment.
+
+    If the URL does not specify the attachment's filename or provides the wrong
+    filename, a redirect is performed to a corrected URL so that the client gets
+    a proper filename.
+    """
+    if current_app.config['KERKO_USE_TRANSLATIONS']:
+        babel_domain.as_default()
+
+    item, fellback = query.run_query_unique_with_fallback(
+        ['id', 'alternateId'],
+        item_id,
+        default_terms=query.build_filter_terms('item_type', include=['attachment']),
+    )
+    if not item:
+        return abort(404)
+
+    filepath = get_storage_dir('attachments') / item_id
+    if not filepath.exists():
+        return abort(404)
+
+    filename = item['data'].get('filename', item['id'])
+    if fellback or attachment_filename != filename:
+        return redirect(url_for(
+            '.standalone_attachment_download',
+            item_id=item['id'],
+            attachment_filename=filename,
+        ), 301)
+
+    return send_from_directory(
+        get_storage_dir('attachments'),
+        item_id,
+        download_name=filename,
+        mimetype=item['data'].get('contentType', 'octet-stream'),
     )
 
 

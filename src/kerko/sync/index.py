@@ -56,7 +56,7 @@ def sync_index():
                     spec.extract_to_document(document, item, library_context)
                 writer.update_document(**document)
                 current_app.logger.debug(
-                    f"Item {count} updated ({document.get('id', '')}): {document.get('z_title')}"
+                    f"Item {count} updated ({item['key']}, {item.get('itemType')}): {document.get('z_title')}"
                 )
             else:
                 current_app.logger.debug(f"Item {count} excluded ({item['key']})")

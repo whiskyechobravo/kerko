@@ -49,7 +49,7 @@ def is_file_attachment(item, mime_types=None):
     """
     if not item.get('data'):
         return False
-    if not item.get('key'):
+    if not item['data'].get('key'):
         return False
     if item['data'].get('linkMode') not in ['imported_file', 'imported_url']:
         return False
@@ -64,7 +64,7 @@ def is_link_attachment(item):
     """
     if not item.get('data'):
         return False
-    if not item.get('key'):
+    if not item['data'].get('key'):
         return False
     if item['data'].get('linkMode') != 'linked_url':
         return False
@@ -397,10 +397,12 @@ class ChildFileAttachmentsExtractor(BaseChildAttachmentsExtractor):
         return [
             {
                 'id': child['key'],
-                'mimetype': child['data'].get('contentType', 'octet-stream'),
-                'filename': child['data'].get('filename', child['key']),
-                'md5': child['data'].get('md5', ''),
-                'mtime': child['data'].get('mtime', 0),
+                'data': {
+                    'contentType': child['data'].get('contentType'),
+                    'filename': child['data'].get('filename'),
+                    'md5': child['data'].get('md5'),
+                    'mtime': child['data'].get('mtime'),
+                }
             } for child in children if is_file_attachment(child, self.mime_types)
         ] if children else None
 

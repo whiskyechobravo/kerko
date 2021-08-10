@@ -4,6 +4,7 @@ import hashlib
 
 from flask import current_app
 
+from ..extractors import is_file_attachment
 from ..query import check_fields, run_query_all
 from ..storage import get_storage_dir
 from . import zotero
@@ -28,7 +29,32 @@ def sync_attachments():
     Files are requested based on item data available in the search index. Thus,
     it always makes sense to synchronize the search index beforehand.
     """
+    def _sync_attachment(attachment, parent=None):
+        context = f"(parent item: {parent['id']})" if parent else '(standalone)'
+        if not attachment.get('id'):
+            current_app.logger.warning(f"An attachment lacks an id {context}. Skipped.")
+            return
+        if not attachment['data'].get('md5'):
+            current_app.logger.warning(f"Attachment {attachment['id']} lacks a checksum {context}.")
+        if attachment['id'] in local_files:
+            local_files.remove(attachment['id'])
+        filepath = attachments_dir / attachment['id']
+        if not filepath.exists() or md5_checksum(filepath) != attachment['data'].get('md5', ''):
+            current_app.logger.debug(f"Requesting attachment {attachment['id']} {context}...")
+            try:
+                # Download attachment.
+                with filepath.open('wb') as f:
+                    f.write(zotero.retrieve_file(zotero_credentials, attachment['id']))
+            except zotero.zotero_errors.PyZoteroError as e:
+                current_app.logger.exception(
+                    f"Unexpected error while attempting to download attachment "
+                    f"{attachment['id']} {context}: {e}"
+                )
+        else:
+            current_app.logger.debug(f"Keeping attachment {attachment['id']} {context}.")
+
     current_app.logger.info("Starting attachment files sync...")
+    composer = current_app.config['KERKO_COMPOSER']
     attachments_dir = get_storage_dir('attachments')
     attachments_dir.mkdir(parents=True, exist_ok=True)
     local_files = {p.name for p in attachments_dir.iterdir()}
@@ -48,39 +74,18 @@ def sync_attachments():
     # any, from Zotero
     zotero_credentials = zotero.init_zotero()
     count = 0
-    parents = run_query_all(['id', 'attachments'])
-    for parent in parents:
-        for attachment in parent.get('attachments', []):
-            if not attachment['id']:
-                current_app.logger.warning(
-                    f"A child attachment of {parent['id']} lacks an id. Skipped."
-                )
-                break
-            if not attachment['md5']:
-                current_app.logger.warning(
-                    f"A child attachment of {parent['id']} lacks a checksum."
-                )
-            if attachment['id'] in local_files:
-                local_files.remove(attachment['id'])
-            filepath = attachments_dir / attachment['id']
-            if not filepath.exists() or md5_checksum(filepath) != attachment['md5']:
-                current_app.logger.debug(
-                    f"Requesting attachment {attachment['id']} (parent: {parent['id']})..."
-                )
-                try:
-                    # Download attachment.
-                    with filepath.open('wb') as f:
-                        f.write(zotero.retrieve_file(zotero_credentials, attachment['id']))
-                except zotero.zotero_errors.PyZoteroError as e:
-                    current_app.logger.exception(
-                        f"Unexpected error while attempting to download attachment "
-                        f"{attachment['id']} (parent: {parent['id']}): {e}"
-                    )
-            else:
-                current_app.logger.debug(
-                    f"Keeping attachment {attachment['id']} (parent: {parent['id']})."
-                )
+    items = run_query_all(['id', 'item_type', 'attachments', 'data'])
+    for item in items:
+        if item['item_type'] == 'attachment' and is_file_attachment(item, composer.mime_types):
+            _sync_attachment(item)
             count += 1
+        else:
+            # Child attachments, unlike standalone attachments (above), do not
+            # need their linkMode or MIME type to be validated, because that has
+            # already been done by an extractor when writing the search index.
+            for attachment in item.get('attachments', []):
+                _sync_attachment(attachment, parent=item)
+                count += 1
 
     # Delete remaining local files that were not referenced by any item.
     for name in local_files:

@@ -338,7 +338,7 @@ class Composer:
             self.add_field(
                 FieldSpec(
                     key='item_type',
-                    field_type=ID,
+                    field_type=ID(stored=True),
                     extractor=extractors.ItemDataExtractor(key='itemType'),
                 )
             )

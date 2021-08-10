@@ -38,12 +38,16 @@ Features:
   `KERKO_RESULTS_ABSTRACTS_MAX_LENGTH_LEEWAY`).
 * Allow relations in child notes to be specified as HTML links, i.e., in the
   `href` attribute of `<a>` elements.
-* Standalone notes and attachments are now allowed into the search index. By
-  default Kerko filters them out of search results, but custom applications
-  could retrieve them if needed. Shortcoming: at the moment, standalone
-  attachment files are not downloaded.
+* Standalone notes and file attachments are now allowed into the search index.
+  Kerko filters them out of search results, but custom applications could search
+  them. A new view, `standalone_attachment_download`, lets one retrieve a
+  standalone file attachment.
 * Allow inclusion or exclusion of items based on multiple tags (previously, only
   a single pattern could be checked).
+
+Bug fixes:
+
+* Fix irrelevant sync warnings, from extractors running on attachment items.
 
 Other changes:
 
@@ -52,7 +56,8 @@ Other changes:
   retrieves just the newly added or updated items. This dramatically reduces the
   number of Zotero API calls (and time) required to update Kerko's search index.
   Note: **More work is planned** to eliminate some Zotero API calls that Kerko
-  makes early in the synchronization process.
+  still makes early in the synchronization process and that could be avoided
+  when its cache is already up-to-date.
 * Add a `sync cache` command to the command line interface.
 * On narrow screens, stack search form controls for better usability.
 * Respond with an HTTP 503 (Service Unavailable) when the search index is empty
@@ -70,6 +75,8 @@ Other changes:
 
 Possibly backwards incompatible changes (more or less internal API changes):
 
+* Require newer major versions of Flask (2.0.1), Jinja2 (3.0.1), Werkzeug
+  (2.0.1), and Click (8.0.1).
 * The default list for the `KERKO_RESULTS_FIELDS` setting now includes the
   `'url'` field. If you have overridden that setting in your application and
   `KERKO_RESULTS_URL_LINKS` is enabled, you'll probably have to add `'url'` too.
@@ -90,6 +97,8 @@ Possibly backwards incompatible changes (more or less internal API changes):
     * `RawNotesExtractor` → `RawChildNotesExtractor`
     * `RelationsInNotesExtractor` → `RelationsInChildNotesExtractor`
     * `StoredFileAttachmentsExtractor` → `ChildFileAttachmentsExtractor`
+* A view has been renamed:
+    * `item_attachment_download` → `child_attachment_download`
 
 ## 0.7.1 (2021-02-04)
 
