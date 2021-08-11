@@ -17,6 +17,14 @@
                     var re = new RegExp('(^|\\s)no-js(\\s|$)');
                     document.documentElement.className = document.documentElement.className.replace(re, '$1js$2');
                 </script>
+                {%- if config.GOOGLE_ANALYTICS_ID %}
+                    <script>
+                        window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+                        ga('create', '{{ config.GOOGLE_ANALYTICS_ID }}', 'auto');
+                        ga('send', 'pageview');
+                    </script>
+                    <script async src='https://www.google-analytics.com/analytics.js'></script>
+                {%- endif %}
             {%- endblock head_scripts %}
             {%- block favicon %}
             {%- endblock favicon %}

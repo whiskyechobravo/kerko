@@ -33,15 +33,16 @@ Features:
 * Add support for imported file attachments, e.g., PDF files imported in your
   Zotero library through the Zotero Connector. Previously, only "attached copies
   of files" were supported.
-* Add configuration options for truncating long abstracts in search results
-  (`KERKO_RESULTS_ABSTRACTS_MAX_LENGTH` and
-  `KERKO_RESULTS_ABSTRACTS_MAX_LENGTH_LEEWAY`).
-* Allow relations in child notes to be specified as HTML links, i.e., in the
-  `href` attribute of `<a>` elements.
 * Standalone notes and file attachments are now allowed into the search index.
   Kerko filters them out of search results, but custom applications could search
   them. A new view, `standalone_attachment_download`, lets one retrieve a
   standalone file attachment.
+* Add configuration options for truncating long abstracts in search results
+  (`KERKO_RESULTS_ABSTRACTS_MAX_LENGTH` and
+  `KERKO_RESULTS_ABSTRACTS_MAX_LENGTH_LEEWAY`).
+* Allow tracking with Google Analytics (optional).
+* Allow relations in child notes to be specified as HTML links, i.e., in the
+  `href` attribute of `<a>` elements.
 * Allow inclusion or exclusion of items based on multiple tags (previously, only
   a single pattern could be checked).
 

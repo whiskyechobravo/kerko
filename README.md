@@ -421,6 +421,9 @@ override their default value:
     dictates the locale of Zotero item types, field names, creator types and
     citations. Defaults to `'en-US'`. Supported locales are listed at
     https://api.zotero.org/schema, under "locales".
+* `GOOGLE_ANALYTICS_ID`: A Google Analytics property ID, e.g., 'UA-99999-9'.
+  This variable is optional and there is no default value. If set, the Google
+  Analytics tag is inserted into the pages.
 * Development/test-related variables:
   * `KERKO_ZOTERO_START`: Skip items, start at the specified position. Defaults
     to `0`. Useful only for development/tests.
