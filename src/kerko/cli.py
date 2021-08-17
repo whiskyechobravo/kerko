@@ -26,19 +26,6 @@ def cli():
     """Run a Kerko subcommand."""
 
 
-@cli.command(deprecated=True)
-@with_appcontext
-def index():  # Deprecated after version 0.4.
-    """
-    Synchronize the cache, the search index, and the attachments.
-
-    This command is deprecated. Use the 'sync' command.
-    """
-    sync_cache()
-    sync_index()
-    sync_attachments()
-
-
 @cli.command()
 @click.argument(
     'target',

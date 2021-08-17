@@ -75,6 +75,10 @@ Other changes:
 * Inject blocks in item Jinja2 template to facilitate theming.
 * Slightly increase some top/bottom margins.
 
+Backwards incompatible changes:
+
+* Remove deprecated `kerko index` CLI command (use `kerko sync` instead).
+
 Possibly backwards incompatible changes (more or less internal API changes):
 
 * Require newer major versions of Flask (2.0.1), Jinja2 (3.0.1), Werkzeug
