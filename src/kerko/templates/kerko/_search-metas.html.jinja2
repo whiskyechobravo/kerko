@@ -3,9 +3,9 @@
 {%- endif %}
 {%- if pager %}
     {%- if pager.previous %}
-        <link rel="prev" href="{{ pager.previous.url }}">
+        <link rel="prev" href="{{ pager.previous[0].url }}">
     {%- endif %}
     {%- if pager.next %}
-        <link rel="next" href="{{ pager.next.url }}">
+        <link rel="next" href="{{ pager.next[0].url }}">
     {%- endif %}
 {%- endif %}
