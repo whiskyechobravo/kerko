@@ -49,6 +49,7 @@ Features:
 Bug fixes:
 
 * Fix irrelevant sync warnings, from extractors running on attachment items.
+* Fix empty prev/next links in search pages metadata.
 
 Other changes:
 
