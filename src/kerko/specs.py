@@ -472,7 +472,7 @@ class SortSpec:
 
 class CitationFormatSpec:
     """
-    Specifies a citation download format.
+    Specifies a record download format.
 
     This is a configuration element, with no effect on the search index schema.
     """
@@ -490,21 +490,20 @@ class CitationFormatSpec:
             group_item_delimiter=''
     ):
         """
-        Initialize a citation download format.
+        Initialize a format.
 
-        :param str key: Key of this citation format.
+        :param str key: Key of this format.
 
-        :param FieldSpec field: `FieldSpec` instance associated to this citation
-            format.
+        :param FieldSpec field: `FieldSpec` instance associated to this format.
 
-        :param str label: Label of this citation format.
+        :param str label: Label of this format.
 
-        :param int weight: Determine the position of this citation format
-            relative to the others in lists.
+        :param int weight: Determine the position of this format relative to the
+            others in lists.
 
-        :param str extension: File extension of this citation format.
+        :param str extension: File extension of this format.
 
-        :param str mime_type: MIME type of this citation format.
+        :param str mime_type: MIME type of this format.
 
         :param str group_format: Format string for wrapping multiple entries.
 

@@ -174,7 +174,7 @@ class Criteria:
         return url_for('kerko.search', **self.build_query(**kwargs))
 
     def build_download_url(self, citation_format_key, **kwargs):
-        """Build a citation download URL with all the search criteria."""
+        """Build a record download URL with all the search criteria."""
         return url_for(
             'kerko.search_citation_download',
             citation_format_key=citation_format_key,

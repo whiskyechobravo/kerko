@@ -72,6 +72,9 @@ Other changes:
 * Support more timezone names. Timezone names such as 'US/Eastern' or
   'Europe/London' previously did not work, and times could not be converted
   to daylight saving times.
+* Change labels:
+    * "Print this citation" → "Print this record" (on item pages)
+    * "Download this citation" → "Download this record" (on item & search pages)
 * Inject blocks in item Jinja2 template to facilitate theming.
 * Slightly increase some top/bottom margins.
 

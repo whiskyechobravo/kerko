@@ -77,7 +77,7 @@
                         {%- if config.KERKO_PRINT_ITEM_LINK %}
                             <div class="{% block print_link_wrapper_classes %}d-none d-md-inline-block d-print-none mb-2{% endblock %}">
                                 <button id="print-link" class="{% block print_btn_classes %}btn btn-light{% endblock %}" type="button">
-                                    <span class="fas fa-print" aria-hidden="true"></span> {% trans count=1, count_formatted='1' %}Print this citation{% pluralize %}Print {{ count_formatted }} citations{% endtrans %} {# TODO: Remove pluralization after solving issue where translation is not loaded when the same message is sometimes pluralized, sometimes not. #}
+                                    <span class="fas fa-print" aria-hidden="true"></span> {{ _('Print this record') }}
                                 </button>
                             </div>
                         {%- endif %}
@@ -85,7 +85,7 @@
                             <div class="{% block download_link_wrapper_classes %}d-inline-block d-print-none mb-2{% endblock %}">
                                 <div class="dropdown">
                                     <button class="{% block download_btn_classes %}btn btn-secondary btn-light dropdown-toggle{% endblock %}" type="button" id="download-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="fas fa-download" aria-hidden="true"></span> {% trans count=1, count_formatted='1' %}Download this citation{% pluralize %}Download {{ count_formatted }} citations{% endtrans -%} {# TODO: Remove pluralization after solving issue where translation is not loaded when the same message is sometimes pluralized, sometimes not. -#}
+                                        <span class="fas fa-download" aria-hidden="true"></span> {% trans count=1, count_formatted='1' %}Download this record{% pluralize %}Download {{ count_formatted }} records{% endtrans -%} {# TODO: Remove pluralization after solving issue where translation is not loaded when the same message is sometimes pluralized, sometimes not. -#}
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labelledby="download-options">
                                         {%- for citation_format in config.KERKO_COMPOSER.get_ordered_specs('citation_formats') %}

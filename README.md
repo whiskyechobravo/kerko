@@ -125,13 +125,13 @@ The following features are implemented in Kerko:
   as well as on small screens. It is based on [Bootstrap].
 * Customizable front-end: applications may partly or fully replace the default
   templates, scripts and stylesheets with their own.
-* Semantic markup: users may easily import citations into their own reference
+* Semantic markup: users may easily import records into their own reference
   manager software, either from search results pages or individual bibliographic
   record pages, both of which embed bibliographic metadata (using the [OpenURL
   COinS][COinS] model). Zotero Connector, for example, will automatically detect
   the metadata present in the page, but similar behavior applies to [many other
   reference management software][COinS_clients] as well.
-* Exporting: users may export individual citations as well as complete
+* Exporting: users may export individual records as well as complete
   bibliographies corresponding to search results. By default, download links are
   provided for the RIS and BibTeX formats, but applications may be configured to
   export [any format supported by the Zotero API][Zotero_export].
@@ -241,8 +241,8 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
      e.g., fields for display and search, facets for filtering. These are
      defined by instantiating the `Composer` class. Your application may
      manipulate the resulting object at configuration time to add, remove or
-     alter fields, facets, sort options, search scopes, citation download
-     formats, or badges. See [Kerko Recipes](#kerko-recipes) for some examples.
+     alter fields, facets, sort options, search scopes, record download formats,
+     or badges. See [Kerko Recipes](#kerko-recipes) for some examples.
 
 
 3. Also configure the Flask-Babel and Bootstrap-Flask extensions:
@@ -333,9 +333,9 @@ override their default value:
   CSL file. Defaults to `'apa'`.
 * `KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW`: Open attachments in new windows, i.e.,
   add the `target="_blank"` attribute to attachment links. Defaults to `False`.
-* `KERKO_DOWNLOAD_CITATIONS_LINK`: Provide a citation download button on search
+* `KERKO_DOWNLOAD_CITATIONS_LINK`: Provide a record download button on search
   results pages. Defaults to `True`.
-* `KERKO_DOWNLOAD_CITATIONS_MAX_COUNT`: Limit over which the citation download
+* `KERKO_DOWNLOAD_CITATIONS_MAX_COUNT`: Limit over which the record download
   button should be hidden from search results pages. Defaults to `0` (i.e. no
   limit).
 * `KERKO_FACET_COLLAPSING`: Allow collapsible facets. Defaults to `False`.
@@ -583,10 +583,10 @@ Kerko site, but also full-text search from within Zotero!
 ### Providing _Cites_ and _Cited by_ relations
 
 Zotero allows one to link items together through its _Related_ field. However,
-such relations are not typed nor directed, making it impossible (1) to tell
-whether the relation has anything to do with citations, or (2) to distinguish
-which of two related items is the citing entity, and which is the one being
-cited. Consequently, Kerko has its own method for setting up those relations.
+such relations are not typed nor directed, making it impossible (1) to indicate
+the nature of the relation, or (2) to distinguish which of two related items is
+the citing entity, and which is the one being cited. Consequently, Kerko has its
+own method for setting up those relations.
 
 To establish _Cites_ relations in your Zotero library, you must follow the
 procedure below:

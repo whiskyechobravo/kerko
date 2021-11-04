@@ -296,7 +296,7 @@ def standalone_attachment_download(item_id, attachment_filename=None):
 @blueprint.route('/<path:item_id>/export/<string:citation_format_key>')
 @except_abort(SearchIndexError, 503)
 def item_citation_download(item_id, citation_format_key):
-    """Download a citation."""
+    """Download a record."""
     if current_app.config['KERKO_USE_TRANSLATIONS']:
         babel_domain.as_default()
 
@@ -336,7 +336,7 @@ def item_citation_download(item_id, citation_format_key):
 @blueprint.route('/export/<string:citation_format_key>/')
 @except_abort(SearchIndexError, 503)
 def search_citation_download(citation_format_key):
-    """Download all citations resulting from a search."""
+    """Download all records resulting from a search."""
     citation_format = current_app.config['KERKO_COMPOSER'].citation_formats.get(citation_format_key)
     if not citation_format:
         return abort(404)
