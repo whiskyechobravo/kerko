@@ -18,12 +18,14 @@
                     document.documentElement.className = document.documentElement.className.replace(re, '$1js$2');
                 </script>
                 {%- if config.GOOGLE_ANALYTICS_ID %}
+                    <!-- Global site tag (gtag.js) - Google Analytics -->
+                    <script async src="https://www.googletagmanager.com/gtag/js?id={{ config.GOOGLE_ANALYTICS_ID }}"></script>
                     <script>
-                        window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-                        ga('create', '{{ config.GOOGLE_ANALYTICS_ID }}', 'auto');
-                        ga('send', 'pageview');
+                        window.dataLayer = window.dataLayer || [];
+                        function gtag(){dataLayer.push(arguments);}
+                        gtag('js', new Date());
+                        gtag('config', '{{ config.GOOGLE_ANALYTICS_ID }}');
                     </script>
-                    <script async src='https://www.google-analytics.com/analytics.js'></script>
                 {%- endif %}
             {%- endblock head_scripts %}
             {%- block favicon %}
