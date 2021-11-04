@@ -23,10 +23,10 @@ def get_cache_schema():
         version=NUMERIC(stored=True),  # Copied from Zotero.
         parentItem=ID(stored=True),  # Kerko addition.
         itemType=ID(stored=True),  # Kerko addition.
-        library=STORED,  # Copied from Zotero & JSON-encoded.
-        links=STORED,  # Copied from Zotero & JSON-encoded.
-        meta=STORED,  # Copied from Zotero & JSON-encoded.
-        data=STORED,  # Copied from Zotero & JSON-encoded.
+        library=STORED,  # Copied from Zotero.
+        links=STORED,  # Copied from Zotero.
+        meta=STORED,  # Copied from Zotero.
+        data=STORED,  # Copied from Zotero.
         fulltext=STORED,  # Kerko addition.
     )
     for format_ in get_formats():
