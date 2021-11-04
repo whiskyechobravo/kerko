@@ -232,7 +232,7 @@ class ItemTypeLabelExtractor(Extractor):
 
 
 class ItemFieldsExtractor(Extractor):
-    """Extract field metadata, serialized as a JSON string."""
+    """Extract field metadata."""
 
     def extract(self, item, library_context, spec):
         item_type = item.get('data', {}).get('itemType')
@@ -247,7 +247,7 @@ class ItemFieldsExtractor(Extractor):
 
 
 class CreatorTypesExtractor(Extractor):
-    """Extract creator types metadata, serialized as a JSON string."""
+    """Extract creator types metadata."""
 
     def extract(self, item, library_context, spec):
         item_type = item.get('data', {}).get('itemType')

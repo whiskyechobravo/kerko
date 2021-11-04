@@ -1384,7 +1384,6 @@ class Composer:
                     key='data',
                     field_type=STORED,
                     extractor=extractors.RawDataExtractor(),
-                    codec=codecs.JSONFieldCodec()
                 )
             )
         # Child notes of the item.
@@ -1431,7 +1430,6 @@ class Composer:
                     key='item_fields',
                     field_type=STORED,
                     extractor=extractors.ItemFieldsExtractor(),
-                    codec=codecs.JSONFieldCodec()
                 )
             )
         # Creator types for this item type, for convenient access.
@@ -1441,7 +1439,6 @@ class Composer:
                     key='creator_types',
                     field_type=STORED,
                     extractor=extractors.CreatorTypesExtractor(),
-                    codec=codecs.JSONFieldCodec()
                 )
             )
 
