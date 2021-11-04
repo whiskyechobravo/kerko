@@ -23,11 +23,12 @@ def load_object(storage, key, default=None):
 
 
 def save_object(storage, key, obj):
+    get_storage_dir(storage).mkdir(parents=True, exist_ok=True)
     with open(get_storage_dir(storage) / f'{key}.pickle', 'wb') as f:
         pickle.dump(obj, f)
 
 
-def open_index(index_name, *, write=False, schema=None, auto_create=False):
+def open_index(storage, *, write=False, schema=None, auto_create=False):
     """
     Open a Whoosh search index.
 
@@ -41,7 +42,7 @@ def open_index(index_name, *, write=False, schema=None, auto_create=False):
 
     :param bool write: If `True`, make the index writable instead of read-only.
     """
-    index_dir = get_storage_dir(index_name)
+    index_dir = get_storage_dir(storage) / 'whoosh'
     try:
         index = None
         if not index_dir.exists() and auto_create and write:
@@ -66,7 +67,7 @@ def open_index(index_name, *, write=False, schema=None, auto_create=False):
         raise SearchIndexError from exc
 
 
-def delete_index(index_name):
-    index_dir = get_storage_dir(index_name)
+def delete_storage(storage):
+    index_dir = get_storage_dir(storage)
     if index_dir.is_dir():
         shutil.rmtree(index_dir)

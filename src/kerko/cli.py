@@ -6,7 +6,7 @@ import wrapt
 from flask import current_app
 from flask.cli import with_appcontext
 
-from .storage import delete_index
+from .storage import delete_storage
 from .sync import zotero
 from .sync.attachments import delete_attachments, sync_attachments
 from .sync.cache import sync_cache
@@ -62,9 +62,9 @@ def clean(target):
     By default, everything is cleaned.
     """
     if target in ['everything', 'cache']:
-        delete_index('cache')
+        delete_storage('cache')
     if target in ['everything', 'index']:
-        delete_index('index')
+        delete_storage('index')
     if target in ['everything', 'attachments']:
         delete_attachments()
 
