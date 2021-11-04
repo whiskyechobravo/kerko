@@ -10,25 +10,17 @@ on:
 
 jobs:
   test:
-    name: Test - ${{ matrix.config.python }} - ${{ matrix.config.os }}
-    runs-on: ${{ matrix.config.os }}
-
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        config:
-          - os: ubuntu-latest
-            python: 3.7
-          - os: ubuntu-latest
-            python: 3.8
-          - os: ubuntu-latest
-            python: 3.9
+        python-version: ["3.7", "3.8", "3.9", "3.10"]
 
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.config.python }}
+      - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.config.python }}
+          python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -38,4 +30,4 @@ jobs:
           echo "=====  PYTHON  ====="
           python --version
       - name: Run tests
-        run: tox -e py${{ matrix.config.python }}
+        run: tox -e py${{ matrix.python-version }}
