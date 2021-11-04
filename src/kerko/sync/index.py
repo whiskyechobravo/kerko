@@ -66,6 +66,13 @@ def sync_index():
         current_app.logger.error('An exception occurred. Could not finish updating the index.')
     else:
         writer.commit()
+        # Save the cache's last_modified timestamp. Later, we cannot access the
+        # cache directly to show the user when the data was last synchronized
+        # from Zotero, because there is no guarantee that what the user's sees
+        # (i.e., the current content of the index) is still in sync with the
+        # cache (the cache might have been cleaned, or it might have been just
+        # updated, with an index update still pending).
+        save_object('index', 'last_update_from_zotero', cache.last_modified())
         save_object('index', 'version', cache_version)
         current_app.logger.info(
             f"Index sync successful, now at version {cache_version} "

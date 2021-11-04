@@ -9,7 +9,7 @@ from whoosh.query import And, Every, Not, Or, Term
 from whoosh.sorting import Count, Facets, FieldFacet
 
 from .criteria import Criteria
-from .storage import open_index
+from .storage import load_object, open_index
 
 
 def get_search_return_fields(page_len, exclude=None):
@@ -345,11 +345,8 @@ def run_query(criteria, return_fields=None, query_facets=True, default_terms=Non
     facets = {}
     total = 0
     page_count = 0
-    last_sync = None
 
     index = open_index('index')
-    last_sync = index.last_modified()
-
     with index.searcher() as searcher:
         composer = current_app.config['KERKO_COMPOSER']
         q = build_keywords_query(criteria.keywords)
@@ -393,7 +390,7 @@ def run_query(criteria, return_fields=None, query_facets=True, default_terms=Non
                 default_terms,
             )
 
-    return items, facets, total, page_count, last_sync
+    return items, facets, total, page_count, load_object('index', 'last_update_from_zotero')
 
 
 def run_query_unique(field_name, value, return_fields=None, default_terms=None):

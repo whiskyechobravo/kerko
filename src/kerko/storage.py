@@ -68,6 +68,5 @@ def open_index(storage, *, write=False, schema=None, auto_create=False):
 
 
 def delete_storage(storage):
-    index_dir = get_storage_dir(storage)
-    if index_dir.is_dir():
-        shutil.rmtree(index_dir)
+    if (get_storage_dir(storage)).is_dir():
+        shutil.rmtree(get_storage_dir(storage))
