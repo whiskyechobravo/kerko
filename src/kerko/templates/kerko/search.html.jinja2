@@ -125,7 +125,7 @@
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labelledby="download-options">
                                             {%- for citation_format in config.KERKO_COMPOSER.get_ordered_specs('citation_formats') %}
-                                                <a class="dropdown-item" href="{{ download_urls[citation_format.key] }}" rel="nofollow" {{ title_aria_label(_('Download in {download_option} format').format(download_option=citation_format.label|escape)) }}>
+                                                <a class="dropdown-item" href="{{ download_urls[citation_format.key] }}" rel="nofollow" type="{{ citation_format.mime_type|escape }}" {{ title_aria_label(_('Download in {download_option} format').format(download_option=citation_format.label|escape)) }}>
                                                     {{- citation_format.label -}}
                                                 </a>
                                                 <p class="px-4 text-muted">{{ citation_format.help_text }}</p>

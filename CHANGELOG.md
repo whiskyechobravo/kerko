@@ -77,6 +77,9 @@ Other changes:
     * "Download this citation" → "Download this record" (on item & search pages)
 * Inject blocks in item Jinja2 template to facilitate theming.
 * Slightly increase some top/bottom margins.
+* Add the `type` HTML attribute to record download links.
+* Add the `rel="alternate"` HTML attribute to record download links on item
+  pages. Also add a corresponding `link` element to the page `head`.
 
 Backwards incompatible changes:
 
