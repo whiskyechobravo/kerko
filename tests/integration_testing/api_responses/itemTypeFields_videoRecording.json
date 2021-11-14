@@ -1,0 +1,86 @@
+[
+    {
+        "field": "title",
+        "localized": "Title"
+    },
+    {
+        "field": "abstractNote",
+        "localized": "Abstract"
+    },
+    {
+        "field": "videoRecordingFormat",
+        "localized": "Format"
+    },
+    {
+        "field": "seriesTitle",
+        "localized": "Series Title"
+    },
+    {
+        "field": "volume",
+        "localized": "Volume"
+    },
+    {
+        "field": "numberOfVolumes",
+        "localized": "# of Volumes"
+    },
+    {
+        "field": "place",
+        "localized": "Place"
+    },
+    {
+        "field": "studio",
+        "localized": "Studio"
+    },
+    {
+        "field": "date",
+        "localized": "Date"
+    },
+    {
+        "field": "runningTime",
+        "localized": "Running Time"
+    },
+    {
+        "field": "language",
+        "localized": "Language"
+    },
+    {
+        "field": "ISBN",
+        "localized": "ISBN"
+    },
+    {
+        "field": "shortTitle",
+        "localized": "Short Title"
+    },
+    {
+        "field": "url",
+        "localized": "URL"
+    },
+    {
+        "field": "accessDate",
+        "localized": "Accessed"
+    },
+    {
+        "field": "archive",
+        "localized": "Archive"
+    },
+    {
+        "field": "archiveLocation",
+        "localized": "Loc. in Archive"
+    },
+    {
+        "field": "libraryCatalog",
+        "localized": "Library Catalog"
+    },
+    {
+        "field": "callNumber",
+        "localized": "Call Number"
+    },
+    {
+        "field": "rights",
+        "localized": "Rights"
+    },
+    {
+        "field": "extra",
+        "localized": "Extra"
+    }
+]

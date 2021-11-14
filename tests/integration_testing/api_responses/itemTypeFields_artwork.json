@@ -1,0 +1,62 @@
+[
+    {
+        "field": "title",
+        "localized": "Title"
+    },
+    {
+        "field": "abstractNote",
+        "localized": "Abstract"
+    },
+    {
+        "field": "artworkMedium",
+        "localized": "Medium"
+    },
+    {
+        "field": "artworkSize",
+        "localized": "Artwork Size"
+    },
+    {
+        "field": "date",
+        "localized": "Date"
+    },
+    {
+        "field": "language",
+        "localized": "Language"
+    },
+    {
+        "field": "shortTitle",
+        "localized": "Short Title"
+    },
+    {
+        "field": "archive",
+        "localized": "Archive"
+    },
+    {
+        "field": "archiveLocation",
+        "localized": "Loc. in Archive"
+    },
+    {
+        "field": "libraryCatalog",
+        "localized": "Library Catalog"
+    },
+    {
+        "field": "callNumber",
+        "localized": "Call Number"
+    },
+    {
+        "field": "url",
+        "localized": "URL"
+    },
+    {
+        "field": "accessDate",
+        "localized": "Accessed"
+    },
+    {
+        "field": "rights",
+        "localized": "Rights"
+    },
+    {
+        "field": "extra",
+        "localized": "Extra"
+    }
+]

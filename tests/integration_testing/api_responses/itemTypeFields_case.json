@@ -1,0 +1,62 @@
+[
+    {
+        "field": "caseName",
+        "localized": "Case Name"
+    },
+    {
+        "field": "abstractNote",
+        "localized": "Abstract"
+    },
+    {
+        "field": "court",
+        "localized": "Court"
+    },
+    {
+        "field": "dateDecided",
+        "localized": "Date Decided"
+    },
+    {
+        "field": "docketNumber",
+        "localized": "Docket Number"
+    },
+    {
+        "field": "reporter",
+        "localized": "Reporter"
+    },
+    {
+        "field": "reporterVolume",
+        "localized": "Reporter Volume"
+    },
+    {
+        "field": "firstPage",
+        "localized": "First Page"
+    },
+    {
+        "field": "history",
+        "localized": "History"
+    },
+    {
+        "field": "language",
+        "localized": "Language"
+    },
+    {
+        "field": "shortTitle",
+        "localized": "Short Title"
+    },
+    {
+        "field": "url",
+        "localized": "URL"
+    },
+    {
+        "field": "accessDate",
+        "localized": "Accessed"
+    },
+    {
+        "field": "rights",
+        "localized": "Rights"
+    },
+    {
+        "field": "extra",
+        "localized": "Extra"
+    }
+]

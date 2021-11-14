@@ -1,0 +1,857 @@
+[
+    {
+        "key": "UXA97IQG",
+        "version": 2,
+        "library": {
+            "type": "group",
+            "id": 4507457,
+            "name": "Kerko integration testing",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/kerko_integration_testing",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/4507457/items/UXA97IQG",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/kerko_integration_testing/items/UXA97IQG",
+                "type": "text/html"
+            },
+            "up": {
+                "href": "https://api.zotero.org/groups/4507457/items/MZPGBKMQ",
+                "type": "application/json"
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 2080646,
+                "username": "dlesieur",
+                "name": "David Lesieur",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/dlesieur",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "numChildren": 0
+        },
+        "bib": "<div class=\"csl-bib-body\" style=\"line-height: 2; padding-left: 1em; text-indent:-1em;\">\n  <div class=\"csl-entry\"><i>This item has an imported PDF attachment (linkMode = imported_url).</i> (n.d.).</div>\n</div>",
+        "bibtex": "\n\n",
+        "coins": "<span class='Z3988' title='url_ver=Z39.88-2004&amp;ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fzotero.org%3A2&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Adc&amp;rft.type=note'></span>\n",
+        "data": {
+            "key": "UXA97IQG",
+            "version": 2,
+            "parentItem": "MZPGBKMQ",
+            "itemType": "note",
+            "note": "<p>This item has an imported PDF attachment (linkMode = imported_url).</p>",
+            "tags": [],
+            "relations": {
+                "owl:sameAs": "http://zotero.org/groups/2351708/items/LP3RZXMG"
+            },
+            "dateAdded": "2021-11-10T19:44:36Z",
+            "dateModified": "2021-11-10T19:44:36Z"
+        },
+        "ris": ""
+    },
+    {
+        "key": "8UCNG48V",
+        "version": 3,
+        "library": {
+            "type": "group",
+            "id": 4507457,
+            "name": "Kerko integration testing",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/kerko_integration_testing",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/4507457/items/8UCNG48V",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/kerko_integration_testing/items/8UCNG48V",
+                "type": "text/html"
+            },
+            "up": {
+                "href": "https://api.zotero.org/groups/4507457/items/MZPGBKMQ",
+                "type": "application/json"
+            },
+            "enclosure": {
+                "type": "application/pdf",
+                "href": "https://api.zotero.org/groups/4507457/items/8UCNG48V/file/view",
+                "title": "Fernandez - 2011 - Zotero information management software 2.0.pdf",
+                "length": 259865
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 2080646,
+                "username": "dlesieur",
+                "name": "David Lesieur",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/dlesieur",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "numChildren": 0
+        },
+        "bib": "<div class=\"csl-bib-body\" style=\"line-height: 2; padding-left: 1em; text-indent:-1em;\">\n  <div class=\"csl-entry\"><i>Fernandez - 2011 - Zotero information management software 2.0.pdf</i>. (n.d.). Retrieved April 7, 2021, from https://trace.tennessee.edu/cgi/viewcontent.cgi?article=1011&amp;context=utk_libpub</div>\n</div>",
+        "bibtex": "\n\n",
+        "coins": "<span class='Z3988' title='url_ver=Z39.88-2004&amp;ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fzotero.org%3A2&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Adc&amp;rft.type=attachment&amp;rft.title=Fernandez%20-%202011%20-%20Zotero%20information%20management%20software%202.0.pdf&amp;rft.identifier=https%3A%2F%2Ftrace.tennessee.edu%2Fcgi%2Fviewcontent.cgi%3Farticle%3D1011%26context%3Dutk_libpub'></span>\n",
+        "data": {
+            "key": "8UCNG48V",
+            "version": 3,
+            "parentItem": "MZPGBKMQ",
+            "itemType": "attachment",
+            "linkMode": "imported_url",
+            "title": "Fernandez - 2011 - Zotero information management software 2.0.pdf",
+            "accessDate": "2021-04-07T21:38:52Z",
+            "url": "https://trace.tennessee.edu/cgi/viewcontent.cgi?article=1011&context=utk_libpub",
+            "note": "",
+            "contentType": "application/pdf",
+            "charset": "",
+            "filename": "Fernandez - 2011 - Zotero information management software 2.0.pdf",
+            "md5": "01356f10ecc8724ac493b64619ef4285",
+            "mtime": 1636573476000,
+            "tags": [],
+            "relations": {
+                "owl:sameAs": "http://zotero.org/groups/2351708/items/PHULFR8N"
+            },
+            "dateAdded": "2021-11-10T19:44:36Z",
+            "dateModified": "2021-11-10T19:44:36Z"
+        },
+        "ris": ""
+    },
+    {
+        "key": "EPZFDKUE",
+        "version": 10,
+        "library": {
+            "type": "group",
+            "id": 4507457,
+            "name": "Kerko integration testing",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/kerko_integration_testing",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/4507457/items/EPZFDKUE",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/kerko_integration_testing/items/EPZFDKUE",
+                "type": "text/html"
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 2080646,
+                "username": "dlesieur",
+                "name": "David Lesieur",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/dlesieur",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "creatorSummary": "Mustermann et al.",
+            "parsedDate": "2019",
+            "numChildren": 0
+        },
+        "bib": "<div class=\"csl-bib-body\" style=\"line-height: 2; padding-left: 1em; text-indent:-1em;\">\n  <div class=\"csl-entry\">Mustermann, E., Jacques, P.-J., P&#xE9;rez, J., Doe, J., Roe, R., Smith, J., &amp; Kumar, A. (2019). <i>A book with multiple authors</i> (J. Jansen, Ed.). Example Publishing.</div>\n</div>",
+        "bibtex": "\n@book{mustermann_book_2019,\n\taddress = {Example Place},\n\ttitle = {A book with multiple authors},\n\tisbn = {979-8292-9-6571-8},\n\tabstract = {This book has 1 editor and 7 authors.},\n\tlanguage = {en},\n\tpublisher = {Example Publishing},\n\tauthor = {Mustermann, Erika and Jacques, Pierre-Jean and Pérez, Juan and Doe, John and Roe, Richard and Smith, Jane and Kumar, Ashok},\n\teditor = {Jansen, Jan},\n\tyear = {2019},\n\tnote = {KerkoTestID: 2351708-TAQ6HCSL},\n\tkeywords = {Authors, Highwire Press},\n}\n",
+        "coins": "<span class='Z3988' title='url_ver=Z39.88-2004&amp;ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fzotero.org%3A2&amp;rft_id=urn%3Aisbn%3A979-8292-9-6571-8&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=A%20book%20with%20multiple%20authors&amp;rft.place=Example%20Place&amp;rft.publisher=Example%20Publishing&amp;rft.aufirst=Erika&amp;rft.aulast=Mustermann&amp;rft.au=Erika%20Mustermann&amp;rft.au=Pierre-Jean%20Jacques&amp;rft.au=Juan%20P%C3%A9rez&amp;rft.au=John%20Doe&amp;rft.au=Richard%20Roe&amp;rft.au=Jane%20Smith&amp;rft.au=Ashok%20Kumar&amp;rft.au=Jan%20Jansen&amp;rft.date=2019&amp;rft.tpages=123&amp;rft.isbn=979-8292-9-6571-8&amp;rft.language=en'></span>\n",
+        "data": {
+            "key": "EPZFDKUE",
+            "version": 10,
+            "itemType": "book",
+            "title": "A book with multiple authors",
+            "creators": [
+                {
+                    "creatorType": "author",
+                    "firstName": "Erika",
+                    "lastName": "Mustermann"
+                },
+                {
+                    "creatorType": "author",
+                    "firstName": "Pierre-Jean",
+                    "lastName": "Jacques"
+                },
+                {
+                    "creatorType": "author",
+                    "firstName": "Juan",
+                    "lastName": "Pérez"
+                },
+                {
+                    "creatorType": "author",
+                    "firstName": "John",
+                    "lastName": "Doe"
+                },
+                {
+                    "creatorType": "author",
+                    "firstName": "Richard",
+                    "lastName": "Roe"
+                },
+                {
+                    "creatorType": "author",
+                    "firstName": "Jane",
+                    "lastName": "Smith"
+                },
+                {
+                    "creatorType": "author",
+                    "firstName": "Ashok",
+                    "lastName": "Kumar"
+                },
+                {
+                    "creatorType": "editor",
+                    "firstName": "Jan",
+                    "lastName": "Jansen"
+                }
+            ],
+            "abstractNote": "This book has 1 editor and 7 authors.",
+            "series": "",
+            "seriesNumber": "",
+            "volume": "",
+            "numberOfVolumes": "",
+            "edition": "",
+            "place": "Example Place",
+            "publisher": "Example Publishing",
+            "date": "2019",
+            "numPages": "123",
+            "language": "en",
+            "ISBN": "979-8292-9-6571-8",
+            "shortTitle": "",
+            "url": "",
+            "accessDate": "",
+            "archive": "",
+            "archiveLocation": "",
+            "libraryCatalog": "",
+            "callNumber": "",
+            "rights": "",
+            "extra": "KerkoTestID: 2351708-TAQ6HCSL",
+            "tags": [
+                {
+                    "tag": "Authors"
+                },
+                {
+                    "tag": "Highwire Press"
+                }
+            ],
+            "collections": [
+                "S7BFFL65"
+            ],
+            "relations": {
+                "owl:sameAs": "http://zotero.org/groups/2351708/items/TAQ6HCSL"
+            },
+            "dateAdded": "2021-11-10T19:44:36Z",
+            "dateModified": "2021-11-10T19:49:09Z"
+        },
+        "ris": "TY  - BOOK\r\nTI  - A book with multiple authors\r\nAU  - Mustermann, Erika\r\nAU  - Jacques, Pierre-Jean\r\nAU  - Pérez, Juan\r\nAU  - Doe, John\r\nAU  - Roe, Richard\r\nAU  - Smith, Jane\r\nAU  - Kumar, Ashok\r\nA3  - Jansen, Jan\r\nAB  - This book has 1 editor and 7 authors.\r\nCY  - Example Place\r\nDA  - 2019///\r\nPY  - 2019\r\nSP  - 123\r\nLA  - en\r\nPB  - Example Publishing\r\nSN  - 979-8292-9-6571-8\r\nKW  - Authors\r\nKW  - Highwire Press\r\nER  - \r\n\r\n"
+    },
+    {
+        "key": "IR7VFLX4",
+        "version": 10,
+        "library": {
+            "type": "group",
+            "id": 4507457,
+            "name": "Kerko integration testing",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/kerko_integration_testing",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/4507457/items/IR7VFLX4",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/kerko_integration_testing/items/IR7VFLX4",
+                "type": "text/html"
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 2080646,
+                "username": "dlesieur",
+                "name": "David Lesieur",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/dlesieur",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "creatorSummary": "Doe",
+            "parsedDate": "2019",
+            "numChildren": 0
+        },
+        "bib": "<div class=\"csl-bib-body\" style=\"line-height: 2; padding-left: 1em; text-indent:-1em;\">\n  <div class=\"csl-entry\">Doe, J. (2019). <i>A report with a DOI in the Extra field</i> (Technical Report No. 10). Example Institution. https://doi.org/10.5555/2351708-DNFRSHFB</div>\n</div>",
+        "bibtex": "\n@techreport{doe_report_2019,\n\ttype = {Technical report},\n\ttitle = {A report with a {DOI} in the {Extra} field},\n\turl = {http://example.com},\n\tlanguage = {en},\n\tnumber = {10},\n\tinstitution = {Example Institution},\n\tauthor = {Doe, John},\n\tyear = {2019},\n\tdoi = {10.5555/2351708-DNFRSHFB},\n\tnote = {KerkoTestID: 2351708-DNFRSHFB},\n\tkeywords = {Extra, Highwire Press},\n}\n",
+        "coins": "<span class='Z3988' title='url_ver=Z39.88-2004&amp;ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fzotero.org%3A2&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=report&amp;rft.btitle=A%20report%20with%20a%20DOI%20in%20the%20Extra%20field&amp;rft.publisher=Example%20Institution&amp;rft.aufirst=John&amp;rft.aulast=Doe&amp;rft.au=John%20Doe&amp;rft.date=2019&amp;rft.language=en'></span>\n",
+        "data": {
+            "key": "IR7VFLX4",
+            "version": 10,
+            "itemType": "report",
+            "title": "A report with a DOI in the Extra field",
+            "creators": [
+                {
+                    "creatorType": "author",
+                    "firstName": "John",
+                    "lastName": "Doe"
+                }
+            ],
+            "abstractNote": "",
+            "reportNumber": "10",
+            "reportType": "Technical report",
+            "seriesTitle": "",
+            "place": "",
+            "institution": "Example Institution",
+            "date": "2019",
+            "pages": "",
+            "language": "en",
+            "shortTitle": "",
+            "url": "http://example.com",
+            "accessDate": "",
+            "archive": "",
+            "archiveLocation": "",
+            "libraryCatalog": "",
+            "callNumber": "",
+            "rights": "",
+            "extra": "DOI: 10.5555/2351708-DNFRSHFB\nKerkoTestID: 2351708-DNFRSHFB",
+            "tags": [
+                {
+                    "tag": "Extra"
+                },
+                {
+                    "tag": "Highwire Press"
+                }
+            ],
+            "collections": [
+                "S7BFFL65"
+            ],
+            "relations": {
+                "owl:sameAs": "http://zotero.org/groups/2351708/items/DNFRSHFB"
+            },
+            "dateAdded": "2021-11-10T19:44:36Z",
+            "dateModified": "2021-11-10T19:47:44Z"
+        },
+        "ris": "TY  - RPRT\r\nTI  - A report with a DOI in the Extra field\r\nAU  - Doe, John\r\nDA  - 2019///\r\nPY  - 2019\r\nLA  - en\r\nM3  - Technical report\r\nPB  - Example Institution\r\nSN  - 10\r\nUR  - http://example.com\r\nKW  - Extra\r\nKW  - Highwire Press\r\nER  - \r\n\r\n"
+    },
+    {
+        "key": "F3WYV4X2",
+        "version": 10,
+        "library": {
+            "type": "group",
+            "id": 4507457,
+            "name": "Kerko integration testing",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/kerko_integration_testing",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/4507457/items/F3WYV4X2",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/kerko_integration_testing/items/F3WYV4X2",
+                "type": "text/html"
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 2080646,
+                "username": "dlesieur",
+                "name": "David Lesieur",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/dlesieur",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "creatorSummary": "Hoe",
+            "parsedDate": "2021-11-10",
+            "numChildren": 0
+        },
+        "bib": "<div class=\"csl-bib-body\" style=\"line-height: 2; padding-left: 1em; text-indent:-1em;\">\n  <div class=\"csl-entry\">Hoe, H. (2021). A conference paper. <i>Proceedings of the First Example Conference, 2021</i>, 11&#x2013;55. https://doi.org/10.5555/2351708-99VVIN8V</div>\n</div>",
+        "bibtex": "\n@inproceedings{hoe_conference_2021,\n\taddress = {Example Place},\n\ttitle = {A conference paper},\n\turl = {http://example.com/2351708-99VVIN8V},\n\tdoi = {10.5555/2351708-99VVIN8V},\n\tabstract = {This is the abstract of a conference paper. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque pharetra, orci eu ullamcorper iaculis, mauris justo ullamcorper purus, vel bibendum leo felis et arcu. Phasellus pellentesque neque eros. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Integer mattis purus sem, posuere placerat enim elementum at. Suspendisse potenti. End of the abstract.},\n\tlanguage = {en},\n\turldate = {2021-11-10},\n\tbooktitle = {Proceedings of the {First} {Example} {Conference}, 2021},\n\tpublisher = {Example Publishing},\n\tauthor = {Hoe, Harry},\n\tmonth = nov,\n\tyear = {2021},\n\tnote = {KerkoTestID: 2351708-99VVIN8V},\n\tkeywords = {Highwire Press},\n\tpages = {11--55},\n}\n",
+        "coins": "<span class='Z3988' title='url_ver=Z39.88-2004&amp;ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fzotero.org%3A2&amp;rft_id=info%3Adoi%2F10.5555%2F2351708-99VVIN8V&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=proceeding&amp;rft.atitle=A%20conference%20paper&amp;rft.btitle=Proceedings%20of%20the%20First%20Example%20Conference%2C%202021&amp;rft.place=Example%20Place&amp;rft.publisher=Example%20Publishing&amp;rft.aufirst=Harry&amp;rft.aulast=Hoe&amp;rft.au=Harry%20Hoe&amp;rft.date=2021-11-10&amp;rft.pages=11-55&amp;rft.spage=11&amp;rft.epage=55&amp;rft.language=en'></span>\n",
+        "data": {
+            "key": "F3WYV4X2",
+            "version": 10,
+            "itemType": "conferencePaper",
+            "title": "A conference paper",
+            "creators": [
+                {
+                    "creatorType": "author",
+                    "firstName": "Harry",
+                    "lastName": "Hoe"
+                }
+            ],
+            "abstractNote": "This is the abstract of a conference paper. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque pharetra, orci eu ullamcorper iaculis, mauris justo ullamcorper purus, vel bibendum leo felis et arcu. Phasellus pellentesque neque eros. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Integer mattis purus sem, posuere placerat enim elementum at. Suspendisse potenti. End of the abstract.",
+            "date": "2021-11-10",
+            "proceedingsTitle": "Proceedings of the First Example Conference, 2021",
+            "conferenceName": "First Example Conference, 2021",
+            "place": "Example Place",
+            "publisher": "Example Publishing",
+            "volume": "",
+            "pages": "11-55",
+            "series": "",
+            "language": "en",
+            "DOI": "10.5555/2351708-99VVIN8V",
+            "ISBN": "",
+            "shortTitle": "",
+            "url": "http://example.com/2351708-99VVIN8V",
+            "accessDate": "2021-11-10T16:55:10Z",
+            "archive": "",
+            "archiveLocation": "",
+            "libraryCatalog": "",
+            "callNumber": "",
+            "rights": "",
+            "extra": "KerkoTestID: 2351708-99VVIN8V",
+            "tags": [
+                {
+                    "tag": "Highwire Press"
+                }
+            ],
+            "collections": [
+                "S7BFFL65"
+            ],
+            "relations": {
+                "owl:sameAs": "http://zotero.org/groups/2351708/items/99VVIN8V"
+            },
+            "dateAdded": "2021-11-10T19:44:36Z",
+            "dateModified": "2021-11-12T20:00:33Z"
+        },
+        "ris": "TY  - CONF\r\nTI  - A conference paper\r\nAU  - Hoe, Harry\r\nT2  - First Example Conference, 2021\r\nAB  - This is the abstract of a conference paper. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque pharetra, orci eu ullamcorper iaculis, mauris justo ullamcorper purus, vel bibendum leo felis et arcu. Phasellus pellentesque neque eros. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Integer mattis purus sem, posuere placerat enim elementum at. Suspendisse potenti. End of the abstract.\r\nC1  - Example Place\r\nC3  - Proceedings of the First Example Conference, 2021\r\nDA  - 2021/11/10/\r\nPY  - 2021\r\nDO  - 10.5555/2351708-99VVIN8V\r\nSP  - 11\r\nEP  - 55\r\nLA  - en\r\nPB  - Example Publishing\r\nUR  - http://example.com/2351708-99VVIN8V\r\nY2  - 2021/11/10/16:55:10\r\nKW  - Highwire Press\r\nER  - \r\n\r\n"
+    },
+    {
+        "key": "MZPGBKMQ",
+        "version": 10,
+        "library": {
+            "type": "group",
+            "id": 4507457,
+            "name": "Kerko integration testing",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/kerko_integration_testing",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/4507457/items/MZPGBKMQ",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/kerko_integration_testing/items/MZPGBKMQ",
+                "type": "text/html"
+            },
+            "attachment": {
+                "href": "https://api.zotero.org/groups/4507457/items/8UCNG48V",
+                "type": "application/json",
+                "attachmentType": "application/pdf",
+                "attachmentSize": 259865
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 2080646,
+                "username": "dlesieur",
+                "name": "David Lesieur",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/dlesieur",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "creatorSummary": "Fernandez",
+            "parsedDate": "2011-06-07",
+            "numChildren": 2
+        },
+        "bib": "<div class=\"csl-bib-body\" style=\"line-height: 2; padding-left: 1em; text-indent:-1em;\">\n  <div class=\"csl-entry\">Fernandez, P. (2011). Zotero: information management software 2.0. <i>Library Hi Tech News</i>, <i>28</i>(4), 5&#x2013;7. https://doi.org/10.1108/07419051111154758</div>\n</div>",
+        "bibtex": "\n@article{fernandez_zotero_2011,\n\ttitle = {Zotero: information management software 2.0},\n\tvolume = {28},\n\tissn = {0741-9058},\n\tshorttitle = {Zotero},\n\turl = {https://www.emerald.com/insight/content/doi/10.1108/07419051111154758/full/html},\n\tdoi = {10.1108/07419051111154758},\n\tlanguage = {en},\n\tnumber = {4},\n\turldate = {2021-04-07},\n\tjournal = {Library Hi Tech News},\n\tauthor = {Fernandez, Peter},\n\tmonth = jun,\n\tyear = {2011},\n\tnote = {KerkoTestID: 2351708-NW89E453},\n\tkeywords = {Attachments, Highwire Press},\n\tpages = {5--7},\n}\n",
+        "coins": "<span class='Z3988' title='url_ver=Z39.88-2004&amp;ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fzotero.org%3A2&amp;rft_id=info%3Adoi%2F10.1108%2F07419051111154758&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.atitle=Zotero%3A%20information%20management%20software%202.0&amp;rft.jtitle=Library%20Hi%20Tech%20News&amp;rft.stitle=Library%20Hi%20Tech%20News&amp;rft.volume=28&amp;rft.issue=4&amp;rft.aufirst=Peter&amp;rft.aulast=Fernandez&amp;rft.au=Peter%20Fernandez&amp;rft.date=2011-06-07&amp;rft.pages=5-7&amp;rft.spage=5&amp;rft.epage=7&amp;rft.issn=0741-9058&amp;rft.language=en'></span>\n",
+        "data": {
+            "key": "MZPGBKMQ",
+            "version": 10,
+            "itemType": "journalArticle",
+            "title": "Zotero: information management software 2.0",
+            "creators": [
+                {
+                    "creatorType": "author",
+                    "firstName": "Peter",
+                    "lastName": "Fernandez"
+                }
+            ],
+            "abstractNote": "",
+            "publicationTitle": "Library Hi Tech News",
+            "volume": "28",
+            "issue": "4",
+            "pages": "5-7",
+            "date": "2011-06-07",
+            "series": "",
+            "seriesTitle": "",
+            "seriesText": "",
+            "journalAbbreviation": "Library Hi Tech News",
+            "language": "en",
+            "DOI": "10.1108/07419051111154758",
+            "ISSN": "0741-9058",
+            "shortTitle": "Zotero",
+            "url": "https://www.emerald.com/insight/content/doi/10.1108/07419051111154758/full/html",
+            "accessDate": "2021-04-07T21:38:53Z",
+            "archive": "",
+            "archiveLocation": "",
+            "libraryCatalog": "DOI.org (Crossref)",
+            "callNumber": "",
+            "rights": "",
+            "extra": "KerkoTestID: 2351708-NW89E453",
+            "tags": [
+                {
+                    "tag": "Attachments"
+                },
+                {
+                    "tag": "Highwire Press"
+                }
+            ],
+            "collections": [
+                "S7BFFL65"
+            ],
+            "relations": {
+                "owl:sameAs": "http://zotero.org/groups/2351708/items/NW89E453"
+            },
+            "dateAdded": "2021-11-10T19:44:36Z",
+            "dateModified": "2021-11-10T19:44:36Z"
+        },
+        "ris": "TY  - JOUR\r\nTI  - Zotero: information management software 2.0\r\nAU  - Fernandez, Peter\r\nT2  - Library Hi Tech News\r\nDA  - 2011/06/07/\r\nPY  - 2011\r\nDO  - 10.1108/07419051111154758\r\nDP  - DOI.org (Crossref)\r\nVL  - 28\r\nIS  - 4\r\nSP  - 5\r\nEP  - 7\r\nJ2  - Library Hi Tech News\r\nLA  - en\r\nSN  - 0741-9058\r\nST  - Zotero\r\nUR  - https://www.emerald.com/insight/content/doi/10.1108/07419051111154758/full/html\r\nY2  - 2021/04/07/21:38:53\r\nKW  - Attachments\r\nKW  - Highwire Press\r\nER  - \r\n\r\n"
+    },
+    {
+        "key": "BWQDC77S",
+        "version": 10,
+        "library": {
+            "type": "group",
+            "id": 4507457,
+            "name": "Kerko integration testing",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/kerko_integration_testing",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/4507457/items/BWQDC77S",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/kerko_integration_testing/items/BWQDC77S",
+                "type": "text/html"
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 2080646,
+                "username": "dlesieur",
+                "name": "David Lesieur",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/dlesieur",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "creatorSummary": "Hoe",
+            "parsedDate": "2015-05-15",
+            "numChildren": 0
+        },
+        "bib": "<div class=\"csl-bib-body\" style=\"line-height: 2; padding-left: 1em; text-indent:-1em;\">\n  <div class=\"csl-entry\">Hoe, H. (2015). <i>A thesis example</i> [Ph.D.]. Small University.</div>\n</div>",
+        "bibtex": "\n@phdthesis{hoe_thesis_2015,\n\taddress = {Tilt Cove, NL},\n\ttype = {Ph.{D}.},\n\ttitle = {A thesis example},\n\tabstract = {This is the abstract of a thesis. Duis sed ultricies sapien. Sed vel magna at orci lacinia sollicitudin at nec orci. Vestibulum nisi mauris, semper ut fringilla a, porta vitae sapien. Morbi at mauris facilisis orci dignissim pellentesque. Duis feugiat pulvinar ex sed aliquet. Curabitur ornare efficitur nulla ut mattis. Phasellus ac lectus nec nisl consectetur vestibulum vel vel dui. Vestibulum consectetur tortor eget velit fringilla scelerisque. Mauris nec iaculis leo. End of the abstract.},\n\tlanguage = {en},\n\tschool = {Small University},\n\tauthor = {Hoe, Harry},\n\tmonth = may,\n\tyear = {2015},\n\tnote = {KerkoTestID: 2351708-9TCEM5BE},\n\tkeywords = {Highwire Press},\n}\n",
+        "coins": "<span class='Z3988' title='url_ver=Z39.88-2004&amp;ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fzotero.org%3A2&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Adissertation&amp;rft.title=A%20thesis%20example&amp;rft.inst=Small%20University&amp;rft.degree=Ph.D.&amp;rft.aufirst=Harry&amp;rft.aulast=Hoe&amp;rft.au=Harry%20Hoe&amp;rft.date=2015-05-15&amp;rft.tpages=555&amp;rft.language=en'></span>\n",
+        "data": {
+            "key": "BWQDC77S",
+            "version": 10,
+            "itemType": "thesis",
+            "title": "A thesis example",
+            "creators": [
+                {
+                    "creatorType": "author",
+                    "firstName": "Harry",
+                    "lastName": "Hoe"
+                }
+            ],
+            "abstractNote": "This is the abstract of a thesis. Duis sed ultricies sapien. Sed vel magna at orci lacinia sollicitudin at nec orci. Vestibulum nisi mauris, semper ut fringilla a, porta vitae sapien. Morbi at mauris facilisis orci dignissim pellentesque. Duis feugiat pulvinar ex sed aliquet. Curabitur ornare efficitur nulla ut mattis. Phasellus ac lectus nec nisl consectetur vestibulum vel vel dui. Vestibulum consectetur tortor eget velit fringilla scelerisque. Mauris nec iaculis leo. End of the abstract.",
+            "thesisType": "Ph.D.",
+            "university": "Small University",
+            "place": "Tilt Cove, NL",
+            "date": "2015-05-15",
+            "numPages": "555",
+            "language": "en",
+            "shortTitle": "",
+            "url": "",
+            "accessDate": "",
+            "archive": "",
+            "archiveLocation": "",
+            "libraryCatalog": "",
+            "callNumber": "",
+            "rights": "",
+            "extra": "KerkoTestID: 2351708-9TCEM5BE",
+            "tags": [
+                {
+                    "tag": "Highwire Press"
+                }
+            ],
+            "collections": [
+                "S7BFFL65"
+            ],
+            "relations": {
+                "owl:sameAs": "http://zotero.org/groups/2351708/items/9TCEM5BE"
+            },
+            "dateAdded": "2021-11-10T19:44:36Z",
+            "dateModified": "2021-11-10T19:44:36Z"
+        },
+        "ris": "TY  - THES\r\nTI  - A thesis example\r\nAU  - Hoe, Harry\r\nAB  - This is the abstract of a thesis. Duis sed ultricies sapien. Sed vel magna at orci lacinia sollicitudin at nec orci. Vestibulum nisi mauris, semper ut fringilla a, porta vitae sapien. Morbi at mauris facilisis orci dignissim pellentesque. Duis feugiat pulvinar ex sed aliquet. Curabitur ornare efficitur nulla ut mattis. Phasellus ac lectus nec nisl consectetur vestibulum vel vel dui. Vestibulum consectetur tortor eget velit fringilla scelerisque. Mauris nec iaculis leo. End of the abstract.\r\nCY  - Tilt Cove, NL\r\nDA  - 2015/05/15/\r\nPY  - 2015\r\nSP  - 555\r\nLA  - en\r\nM3  - Ph.D.\r\nPB  - Small University\r\nKW  - Highwire Press\r\nER  - \r\n\r\n"
+    },
+    {
+        "key": "X2IEN6S2",
+        "version": 12,
+        "library": {
+            "type": "group",
+            "id": 4507457,
+            "name": "Kerko integration testing",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/kerko_integration_testing",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/4507457/items/X2IEN6S2",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/kerko_integration_testing/items/X2IEN6S2",
+                "type": "text/html"
+            },
+            "up": {
+                "href": "https://api.zotero.org/groups/4507457/items/YE4WVE35",
+                "type": "application/json"
+            },
+            "enclosure": {
+                "type": "text/html",
+                "href": "https://api.zotero.org/groups/4507457/items/X2IEN6S2/file/view"
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 2080646,
+                "username": "dlesieur",
+                "name": "David Lesieur",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/dlesieur",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "numChildren": 0
+        },
+        "bib": "<div class=\"csl-bib-body\" style=\"line-height: 2; padding-left: 1em; text-indent:-1em;\">\n  <div class=\"csl-entry\"><i>How to Make a Faceted Classification and Put It On the Web | William Denton</i>. (n.d.). Retrieved April 7, 2021, from https://www.miskatonic.org/library/facet-web-howto.html</div>\n</div>",
+        "bibtex": "\n\n",
+        "coins": "<span class='Z3988' title='url_ver=Z39.88-2004&amp;ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fzotero.org%3A2&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Adc&amp;rft.type=attachment&amp;rft.title=How%20to%20Make%20a%20Faceted%20Classification%20and%20Put%20It%20On%20the%20Web%20%7C%20William%20Denton&amp;rft.identifier=https%3A%2F%2Fwww.miskatonic.org%2Flibrary%2Ffacet-web-howto.html'></span>\n",
+        "data": {
+            "key": "X2IEN6S2",
+            "version": 12,
+            "parentItem": "YE4WVE35",
+            "itemType": "attachment",
+            "linkMode": "imported_url",
+            "title": "How to Make a Faceted Classification and Put It On the Web | William Denton",
+            "accessDate": "2021-04-07T21:30:21Z",
+            "url": "https://www.miskatonic.org/library/facet-web-howto.html",
+            "note": "",
+            "contentType": "text/html",
+            "charset": "utf-8",
+            "filename": "facet-web-howto.html",
+            "md5": "5cb4cf17be691083e08aee92de43d950",
+            "mtime": 1636845011000,
+            "tags": [],
+            "relations": {
+                "owl:sameAs": "http://zotero.org/groups/2351708/items/FMYHENNV"
+            },
+            "dateAdded": "2021-11-13T23:10:11Z",
+            "dateModified": "2021-11-13T23:10:11Z"
+        },
+        "ris": ""
+    },
+    {
+        "key": "YE4WVE35",
+        "version": 23,
+        "library": {
+            "type": "group",
+            "id": 4507457,
+            "name": "Kerko integration testing",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/kerko_integration_testing",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/4507457/items/YE4WVE35",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/kerko_integration_testing/items/YE4WVE35",
+                "type": "text/html"
+            },
+            "attachment": {
+                "href": "https://api.zotero.org/groups/4507457/items/X2IEN6S2",
+                "type": "application/json",
+                "attachmentType": "text/html"
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 2080646,
+                "username": "dlesieur",
+                "name": "David Lesieur",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/dlesieur",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "creatorSummary": "Denton",
+            "parsedDate": "2003",
+            "numChildren": 2
+        },
+        "bib": "<div class=\"csl-bib-body\" style=\"line-height: 2; padding-left: 1em; text-indent:-1em;\">\n  <div class=\"csl-entry\">Denton, W. (2003). <i>How to Make a Faceted Classification and Put It On the Web</i>. https://www.miskatonic.org/library/facet-web-howto.html</div>\n</div>",
+        "bibtex": "\n@misc{denton_how_2003,\n\ttitle = {How to {Make} a {Faceted} {Classification} and {Put} {It} {On} the {Web}},\n\turl = {https://www.miskatonic.org/library/facet-web-howto.html},\n\turldate = {2021-04-07},\n\tauthor = {Denton, William},\n\tyear = {2003},\n\tnote = {KerkoTestID: 4507457-YE4WVE35},\n\tkeywords = {Attachments},\n}\n",
+        "coins": "<span class='Z3988' title='url_ver=Z39.88-2004&amp;ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fzotero.org%3A2&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Adc&amp;rft.type=webpage&amp;rft.title=How%20to%20Make%20a%20Faceted%20Classification%20and%20Put%20It%20On%20the%20Web&amp;rft.identifier=https%3A%2F%2Fwww.miskatonic.org%2Flibrary%2Ffacet-web-howto.html&amp;rft.aufirst=William&amp;rft.aulast=Denton&amp;rft.au=William%20Denton&amp;rft.date=2003'></span>\n",
+        "data": {
+            "key": "YE4WVE35",
+            "version": 23,
+            "itemType": "webpage",
+            "title": "How to Make a Faceted Classification and Put It On the Web",
+            "creators": [
+                {
+                    "creatorType": "author",
+                    "firstName": "William",
+                    "lastName": "Denton"
+                }
+            ],
+            "abstractNote": "",
+            "websiteTitle": "",
+            "websiteType": "",
+            "date": "2003",
+            "shortTitle": "",
+            "url": "https://www.miskatonic.org/library/facet-web-howto.html",
+            "accessDate": "2021-04-07T21:30:17Z",
+            "language": "",
+            "rights": "",
+            "extra": "KerkoTestID: 4507457-YE4WVE35",
+            "tags": [
+                {
+                    "tag": "Attachments"
+                }
+            ],
+            "collections": [
+                "S7BFFL65"
+            ],
+            "relations": {
+                "owl:sameAs": "http://zotero.org/groups/2351708/items/ZQKSVQ7V"
+            },
+            "dateAdded": "2021-11-13T23:10:11Z",
+            "dateModified": "2021-11-13T23:30:20Z"
+        },
+        "ris": "TY  - ELEC\r\nTI  - How to Make a Faceted Classification and Put It On the Web\r\nAU  - Denton, William\r\nDA  - 2003///\r\nPY  - 2003\r\nUR  - https://www.miskatonic.org/library/facet-web-howto.html\r\nY2  - 2021/04/07/21:30:17\r\nKW  - Attachments\r\nER  - \r\n\r\n"
+    },
+    {
+        "key": "5N9Z9JY6",
+        "version": 15,
+        "library": {
+            "type": "group",
+            "id": 4507457,
+            "name": "Kerko integration testing",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/kerko_integration_testing",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/4507457/items/5N9Z9JY6",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/kerko_integration_testing/items/5N9Z9JY6",
+                "type": "text/html"
+            },
+            "up": {
+                "href": "https://api.zotero.org/groups/4507457/items/YE4WVE35",
+                "type": "application/json"
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 2080646,
+                "username": "dlesieur",
+                "name": "David Lesieur",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/dlesieur",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "numChildren": 0
+        },
+        "bib": "<div class=\"csl-bib-body\" style=\"line-height: 2; padding-left: 1em; text-indent:-1em;\">\n  <div class=\"csl-entry\"><i>This item has a webpage snapshot attachment.</i> (n.d.).</div>\n</div>",
+        "bibtex": "\n\n",
+        "coins": "<span class='Z3988' title='url_ver=Z39.88-2004&amp;ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fzotero.org%3A2&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Adc&amp;rft.type=note'></span>\n",
+        "data": {
+            "key": "5N9Z9JY6",
+            "version": 15,
+            "parentItem": "YE4WVE35",
+            "itemType": "note",
+            "note": "<p>This item has a webpage snapshot attachment.</p>",
+            "tags": [],
+            "relations": {},
+            "dateAdded": "2021-11-13T23:11:34Z",
+            "dateModified": "2021-11-13T23:11:37Z"
+        },
+        "ris": ""
+    }
+]

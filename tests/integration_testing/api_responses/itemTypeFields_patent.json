@@ -1,0 +1,82 @@
+[
+    {
+        "field": "title",
+        "localized": "Title"
+    },
+    {
+        "field": "abstractNote",
+        "localized": "Abstract"
+    },
+    {
+        "field": "place",
+        "localized": "Place"
+    },
+    {
+        "field": "country",
+        "localized": "Country"
+    },
+    {
+        "field": "assignee",
+        "localized": "Assignee"
+    },
+    {
+        "field": "issuingAuthority",
+        "localized": "Issuing Authority"
+    },
+    {
+        "field": "patentNumber",
+        "localized": "Patent Number"
+    },
+    {
+        "field": "filingDate",
+        "localized": "Filing Date"
+    },
+    {
+        "field": "pages",
+        "localized": "Pages"
+    },
+    {
+        "field": "applicationNumber",
+        "localized": "Application Number"
+    },
+    {
+        "field": "priorityNumbers",
+        "localized": "Priority Numbers"
+    },
+    {
+        "field": "issueDate",
+        "localized": "Issue Date"
+    },
+    {
+        "field": "references",
+        "localized": "References"
+    },
+    {
+        "field": "legalStatus",
+        "localized": "Legal Status"
+    },
+    {
+        "field": "language",
+        "localized": "Language"
+    },
+    {
+        "field": "shortTitle",
+        "localized": "Short Title"
+    },
+    {
+        "field": "url",
+        "localized": "URL"
+    },
+    {
+        "field": "accessDate",
+        "localized": "Accessed"
+    },
+    {
+        "field": "rights",
+        "localized": "Rights"
+    },
+    {
+        "field": "extra",
+        "localized": "Extra"
+    }
+]

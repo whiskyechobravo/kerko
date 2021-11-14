@@ -1,0 +1,70 @@
+[
+    {
+        "field": "title",
+        "localized": "Title"
+    },
+    {
+        "field": "abstractNote",
+        "localized": "Abstract"
+    },
+    {
+        "field": "billNumber",
+        "localized": "Bill Number"
+    },
+    {
+        "field": "code",
+        "localized": "Code"
+    },
+    {
+        "field": "codeVolume",
+        "localized": "Code Volume"
+    },
+    {
+        "field": "section",
+        "localized": "Section"
+    },
+    {
+        "field": "codePages",
+        "localized": "Code Pages"
+    },
+    {
+        "field": "legislativeBody",
+        "localized": "Legislative Body"
+    },
+    {
+        "field": "session",
+        "localized": "Session"
+    },
+    {
+        "field": "history",
+        "localized": "History"
+    },
+    {
+        "field": "date",
+        "localized": "Date"
+    },
+    {
+        "field": "language",
+        "localized": "Language"
+    },
+    {
+        "field": "url",
+        "localized": "URL"
+    },
+    {
+        "field": "accessDate",
+        "localized": "Accessed"
+    },
+    {
+        "field": "shortTitle",
+        "localized": "Short Title"
+    },
+    {
+        "field": "rights",
+        "localized": "Rights"
+    },
+    {
+        "field": "extra",
+        "localized": "Extra"
+    }
+]

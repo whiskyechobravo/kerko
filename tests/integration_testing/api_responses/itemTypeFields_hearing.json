@@ -1,0 +1,74 @@
+[
+    {
+        "field": "title",
+        "localized": "Title"
+    },
+    {
+        "field": "abstractNote",
+        "localized": "Abstract"
+    },
+    {
+        "field": "committee",
+        "localized": "Committee"
+    },
+    {
+        "field": "place",
+        "localized": "Place"
+    },
+    {
+        "field": "publisher",
+        "localized": "Publisher"
+    },
+    {
+        "field": "numberOfVolumes",
+        "localized": "# of Volumes"
+    },
+    {
+        "field": "documentNumber",
+        "localized": "Document Number"
+    },
+    {
+        "field": "pages",
+        "localized": "Pages"
+    },
+    {
+        "field": "legislativeBody",
+        "localized": "Legislative Body"
+    },
+    {
+        "field": "session",
+        "localized": "Session"
+    },
+    {
+        "field": "history",
+        "localized": "History"
+    },
+    {
+        "field": "date",
+        "localized": "Date"
+    },
+    {
+        "field": "language",
+        "localized": "Language"
+    },
+    {
+        "field": "shortTitle",
+        "localized": "Short Title"
+    },
+    {
+        "field": "url",
+        "localized": "URL"
+    },
+    {
+        "field": "accessDate",
+        "localized": "Accessed"
+    },
+    {
+        "field": "rights",
+        "localized": "Rights"
+    },
+    {
+        "field": "extra",
+        "localized": "Extra"
+    }
+]

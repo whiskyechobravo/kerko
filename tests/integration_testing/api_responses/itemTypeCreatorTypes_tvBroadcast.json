@@ -1,0 +1,26 @@
+[
+    {
+        "creatorType": "director",
+        "localized": "Director"
+    },
+    {
+        "creatorType": "castMember",
+        "localized": "Cast Member"
+    },
+    {
+        "creatorType": "contributor",
+        "localized": "Contributor"
+    },
+    {
+        "creatorType": "guest",
+        "localized": "Guest"
+    },
+    {
+        "creatorType": "producer",
+        "localized": "Producer"
+    },
+    {
+        "creatorType": "scriptwriter",
+        "localized": "Scriptwriter"
+    }
+]

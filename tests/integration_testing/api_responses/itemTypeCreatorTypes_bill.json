@@ -1,0 +1,14 @@
+[
+    {
+        "creatorType": "sponsor",
+        "localized": "Sponsor"
+    },
+    {
+        "creatorType": "contributor",
+        "localized": "Contributor"
+    },
+    {
+        "creatorType": "cosponsor",
+        "localized": "Cosponsor"
+    }
+]

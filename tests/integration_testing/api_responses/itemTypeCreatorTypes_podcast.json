@@ -1,0 +1,14 @@
+[
+    {
+        "creatorType": "podcaster",
+        "localized": "Podcaster"
+    },
+    {
+        "creatorType": "contributor",
+        "localized": "Contributor"
+    },
+    {
+        "creatorType": "guest",
+        "localized": "Guest"
+    }
+]

@@ -1,0 +1,38 @@
+[
+    {
+        "key": "S7BFFL65",
+        "version": 13,
+        "library": {
+            "type": "group",
+            "id": 4507457,
+            "name": "Kerko integration testing",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/kerko_integration_testing",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/4507457/collections/S7BFFL65",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/kerko_integration_testing/collections/S7BFFL65",
+                "type": "text/html"
+            }
+        },
+        "meta": {
+            "numCollections": 0,
+            "numItems": 6
+        },
+        "data": {
+            "key": "S7BFFL65",
+            "version": 13,
+            "name": "test_item_meta",
+            "parentCollection": false,
+            "relations": {}
+        }
+    }
+]

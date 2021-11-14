@@ -1,0 +1,66 @@
+[
+    {
+        "field": "nameOfAct",
+        "localized": "Name of Act"
+    },
+    {
+        "field": "abstractNote",
+        "localized": "Abstract"
+    },
+    {
+        "field": "code",
+        "localized": "Code"
+    },
+    {
+        "field": "codeNumber",
+        "localized": "Code Number"
+    },
+    {
+        "field": "publicLawNumber",
+        "localized": "Public Law Number"
+    },
+    {
+        "field": "dateEnacted",
+        "localized": "Date Enacted"
+    },
+    {
+        "field": "pages",
+        "localized": "Pages"
+    },
+    {
+        "field": "section",
+        "localized": "Section"
+    },
+    {
+        "field": "session",
+        "localized": "Session"
+    },
+    {
+        "field": "history",
+        "localized": "History"
+    },
+    {
+        "field": "language",
+        "localized": "Language"
+    },
+    {
+        "field": "shortTitle",
+        "localized": "Short Title"
+    },
+    {
+        "field": "url",
+        "localized": "URL"
+    },
+    {
+        "field": "accessDate",
+        "localized": "Accessed"
+    },
+    {
+        "field": "rights",
+        "localized": "Rights"
+    },
+    {
+        "field": "extra",
+        "localized": "Extra"
+    }
+]

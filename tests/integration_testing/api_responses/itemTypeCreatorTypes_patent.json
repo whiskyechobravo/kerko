@@ -1,0 +1,14 @@
+[
+    {
+        "creatorType": "inventor",
+        "localized": "Inventor"
+    },
+    {
+        "creatorType": "attorneyAgent",
+        "localized": "Attorney/Agent"
+    },
+    {
+        "creatorType": "contributor",
+        "localized": "Contributor"
+    }
+]

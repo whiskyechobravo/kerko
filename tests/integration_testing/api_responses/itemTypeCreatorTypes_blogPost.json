@@ -1,0 +1,14 @@
+[
+    {
+        "creatorType": "author",
+        "localized": "Author"
+    },
+    {
+        "creatorType": "commenter",
+        "localized": "Commenter"
+    },
+    {
+        "creatorType": "contributor",
+        "localized": "Contributor"
+    }
+]

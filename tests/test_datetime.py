@@ -1,5 +1,5 @@
 """
-Tests for the date and time utilities.
+Unit tests for the date and time utilities.
 """
 
 import unittest

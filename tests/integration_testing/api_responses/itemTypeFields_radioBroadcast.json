@@ -1,0 +1,78 @@
+[
+    {
+        "field": "title",
+        "localized": "Title"
+    },
+    {
+        "field": "abstractNote",
+        "localized": "Abstract"
+    },
+    {
+        "field": "programTitle",
+        "localized": "Program Title"
+    },
+    {
+        "field": "episodeNumber",
+        "localized": "Episode Number"
+    },
+    {
+        "field": "audioRecordingFormat",
+        "localized": "Format"
+    },
+    {
+        "field": "place",
+        "localized": "Place"
+    },
+    {
+        "field": "network",
+        "localized": "Network"
+    },
+    {
+        "field": "date",
+        "localized": "Date"
+    },
+    {
+        "field": "runningTime",
+        "localized": "Running Time"
+    },
+    {
+        "field": "language",
+        "localized": "Language"
+    },
+    {
+        "field": "shortTitle",
+        "localized": "Short Title"
+    },
+    {
+        "field": "url",
+        "localized": "URL"
+    },
+    {
+        "field": "accessDate",
+        "localized": "Accessed"
+    },
+    {
+        "field": "archive",
+        "localized": "Archive"
+    },
+    {
+        "field": "archiveLocation",
+        "localized": "Loc. in Archive"
+    },
+    {
+        "field": "libraryCatalog",
+        "localized": "Library Catalog"
+    },
+    {
+        "field": "callNumber",
+        "localized": "Call Number"
+    },
+    {
+        "field": "rights",
+        "localized": "Rights"
+    },
+    {
+        "field": "extra",
+        "localized": "Extra"
+    }
+]

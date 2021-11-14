@@ -1,0 +1,14 @@
+[
+    {
+        "creatorType": "cartographer",
+        "localized": "Cartographer"
+    },
+    {
+        "creatorType": "contributor",
+        "localized": "Contributor"
+    },
+    {
+        "creatorType": "seriesEditor",
+        "localized": "Series Editor"
+    }
+]

@@ -1,0 +1,94 @@
+[
+    {
+        "field": "title",
+        "localized": "Title"
+    },
+    {
+        "field": "abstractNote",
+        "localized": "Abstract"
+    },
+    {
+        "field": "bookTitle",
+        "localized": "Book Title"
+    },
+    {
+        "field": "series",
+        "localized": "Series"
+    },
+    {
+        "field": "seriesNumber",
+        "localized": "Series Number"
+    },
+    {
+        "field": "volume",
+        "localized": "Volume"
+    },
+    {
+        "field": "numberOfVolumes",
+        "localized": "# of Volumes"
+    },
+    {
+        "field": "edition",
+        "localized": "Edition"
+    },
+    {
+        "field": "place",
+        "localized": "Place"
+    },
+    {
+        "field": "publisher",
+        "localized": "Publisher"
+    },
+    {
+        "field": "date",
+        "localized": "Date"
+    },
+    {
+        "field": "pages",
+        "localized": "Pages"
+    },
+    {
+        "field": "language",
+        "localized": "Language"
+    },
+    {
+        "field": "ISBN",
+        "localized": "ISBN"
+    },
+    {
+        "field": "shortTitle",
+        "localized": "Short Title"
+    },
+    {
+        "field": "url",
+        "localized": "URL"
+    },
+    {
+        "field": "accessDate",
+        "localized": "Accessed"
+    },
+    {
+        "field": "archive",
+        "localized": "Archive"
+    },
+    {
+        "field": "archiveLocation",
+        "localized": "Loc. in Archive"
+    },
+    {
+        "field": "libraryCatalog",
+        "localized": "Library Catalog"
+    },
+    {
+        "field": "callNumber",
+        "localized": "Call Number"
+    },
+    {
+        "field": "rights",
+        "localized": "Rights"
+    },
+    {
+        "field": "extra",
+        "localized": "Extra"
+    }
+]

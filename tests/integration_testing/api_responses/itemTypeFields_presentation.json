@@ -1,0 +1,50 @@
+[
+    {
+        "field": "title",
+        "localized": "Title"
+    },
+    {
+        "field": "abstractNote",
+        "localized": "Abstract"
+    },
+    {
+        "field": "presentationType",
+        "localized": "Type"
+    },
+    {
+        "field": "date",
+        "localized": "Date"
+    },
+    {
+        "field": "place",
+        "localized": "Place"
+    },
+    {
+        "field": "meetingName",
+        "localized": "Meeting Name"
+    },
+    {
+        "field": "url",
+        "localized": "URL"
+    },
+    {
+        "field": "accessDate",
+        "localized": "Accessed"
+    },
+    {
+        "field": "language",
+        "localized": "Language"
+    },
+    {
+        "field": "shortTitle",
+        "localized": "Short Title"
+    },
+    {
+        "field": "rights",
+        "localized": "Rights"
+    },
+    {
+        "field": "extra",
+        "localized": "Extra"
+    }
+]

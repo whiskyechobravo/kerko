@@ -1,0 +1,18 @@
+[
+    {
+        "creatorType": "performer",
+        "localized": "Performer"
+    },
+    {
+        "creatorType": "composer",
+        "localized": "Composer"
+    },
+    {
+        "creatorType": "contributor",
+        "localized": "Contributor"
+    },
+    {
+        "creatorType": "wordsBy",
+        "localized": "Words By"
+    }
+]

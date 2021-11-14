@@ -1,0 +1,10 @@
+[
+    {
+        "creatorType": "artist",
+        "localized": "Artist"
+    },
+    {
+        "creatorType": "contributor",
+        "localized": "Contributor"
+    }
+]

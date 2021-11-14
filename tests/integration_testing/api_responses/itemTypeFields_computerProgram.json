@@ -1,0 +1,78 @@
+[
+    {
+        "field": "title",
+        "localized": "Title"
+    },
+    {
+        "field": "abstractNote",
+        "localized": "Abstract"
+    },
+    {
+        "field": "seriesTitle",
+        "localized": "Series Title"
+    },
+    {
+        "field": "versionNumber",
+        "localized": "Version"
+    },
+    {
+        "field": "date",
+        "localized": "Date"
+    },
+    {
+        "field": "system",
+        "localized": "System"
+    },
+    {
+        "field": "place",
+        "localized": "Place"
+    },
+    {
+        "field": "company",
+        "localized": "Company"
+    },
+    {
+        "field": "programmingLanguage",
+        "localized": "Language"
+    },
+    {
+        "field": "ISBN",
+        "localized": "ISBN"
+    },
+    {
+        "field": "shortTitle",
+        "localized": "Short Title"
+    },
+    {
+        "field": "url",
+        "localized": "URL"
+    },
+    {
+        "field": "rights",
+        "localized": "Rights"
+    },
+    {
+        "field": "archive",
+        "localized": "Archive"
+    },
+    {
+        "field": "archiveLocation",
+        "localized": "Loc. in Archive"
+    },
+    {
+        "field": "libraryCatalog",
+        "localized": "Library Catalog"
+    },
+    {
+        "field": "callNumber",
+        "localized": "Call Number"
+    },
+    {
+        "field": "accessDate",
+        "localized": "Accessed"
+    },
+    {
+        "field": "extra",
+        "localized": "Extra"
+    }
+]

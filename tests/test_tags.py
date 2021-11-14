@@ -1,5 +1,5 @@
 """
-Tests for the tags module.
+Unit tests for the tags module.
 """
 
 import unittest

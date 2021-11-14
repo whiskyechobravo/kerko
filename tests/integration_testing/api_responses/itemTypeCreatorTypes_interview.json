@@ -1,0 +1,18 @@
+[
+    {
+        "creatorType": "interviewee",
+        "localized": "Interview With"
+    },
+    {
+        "creatorType": "contributor",
+        "localized": "Contributor"
+    },
+    {
+        "creatorType": "interviewer",
+        "localized": "Interviewer"
+    },
+    {
+        "creatorType": "translator",
+        "localized": "Translator"
+    }
+]

@@ -1,0 +1,78 @@
+[
+    {
+        "field": "title",
+        "localized": "Title"
+    },
+    {
+        "field": "abstractNote",
+        "localized": "Abstract"
+    },
+    {
+        "field": "publicationTitle",
+        "localized": "Publication"
+    },
+    {
+        "field": "place",
+        "localized": "Place"
+    },
+    {
+        "field": "edition",
+        "localized": "Edition"
+    },
+    {
+        "field": "date",
+        "localized": "Date"
+    },
+    {
+        "field": "section",
+        "localized": "Section"
+    },
+    {
+        "field": "pages",
+        "localized": "Pages"
+    },
+    {
+        "field": "language",
+        "localized": "Language"
+    },
+    {
+        "field": "shortTitle",
+        "localized": "Short Title"
+    },
+    {
+        "field": "ISSN",
+        "localized": "ISSN"
+    },
+    {
+        "field": "url",
+        "localized": "URL"
+    },
+    {
+        "field": "accessDate",
+        "localized": "Accessed"
+    },
+    {
+        "field": "archive",
+        "localized": "Archive"
+    },
+    {
+        "field": "archiveLocation",
+        "localized": "Loc. in Archive"
+    },
+    {
+        "field": "libraryCatalog",
+        "localized": "Library Catalog"
+    },
+    {
+        "field": "callNumber",
+        "localized": "Call Number"
+    },
+    {
+        "field": "rights",
+        "localized": "Rights"
+    },
+    {
+        "field": "extra",
+        "localized": "Extra"
+    }
+]

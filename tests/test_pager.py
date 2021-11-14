@@ -1,5 +1,5 @@
 """
-Tests for the pager module.
+Unit tests for the pager module.
 """
 
 import unittest

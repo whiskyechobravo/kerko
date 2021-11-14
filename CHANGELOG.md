@@ -80,6 +80,8 @@ Other changes:
 * Add the `type` HTML attribute to record download links.
 * Add the `rel="alternate"` HTML attribute to record download links on item
   pages. Also add a corresponding `link` element to the page `head`.
+* Added utilities for running automated integration tests. This will allow
+  testing many areas of Kerko that previously could hardly be tested.
 
 Backwards incompatible changes:
 
