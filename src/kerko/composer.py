@@ -1340,6 +1340,15 @@ class Composer:
                     extractor=extractors.ItemDataExtractor(key='url'),
                 )
             )
+        # Year, based on a parsing of Zotero's Date field.
+        if 'year' not in exclude:
+            self.add_field(
+                FieldSpec(
+                    key='year',
+                    field_type=STORED,
+                    extractor=extractors.YearExtractor(),
+                )
+            )
         # Formatted citation.
         if 'bib' not in exclude:
             self.add_field(

@@ -8,7 +8,7 @@ from flask import (abort, current_app, flash, make_response, redirect,
                    render_template, request, send_from_directory, url_for)
 from flask_babel import get_locale, gettext, ngettext
 
-from . import babel_domain, blueprint, query
+from . import babel_domain, blueprint, meta, query
 from .breadbox import build_breadbox
 from .criteria import Criteria
 from .exceptions import except_abort
@@ -120,6 +120,7 @@ def search():
             item_url=url_for(
                 '.item_view', item_id=search_results[0]['id'], _external=True
             ) if search_results[0] else '',
+            highwirepress_tags=meta.build_highwirepress_tags(search_results[0]),
             back_url=criteria.build_url(page_num=list_page_num),
             time=time.process_time() - start_time,
             **context
@@ -187,9 +188,10 @@ def item_view(item_id):
     )
     return render_template(
         current_app.config['KERKO_TEMPLATE_ITEM'],
-        item=item,
         title=item.get('data', {}).get('title', ''),
+        item=item,
         item_url=item_url,
+        highwirepress_tags=meta.build_highwirepress_tags(item),
         time=time.process_time() - start_time,
         locale=get_locale(),
     )

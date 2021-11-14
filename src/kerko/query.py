@@ -9,6 +9,7 @@ from whoosh.query import And, Every, Not, Or, Term
 from whoosh.sorting import Count, Facets, FieldFacet
 
 from .criteria import Criteria
+from .meta import format_creator_name
 from .storage import load_object, open_index
 
 
@@ -162,14 +163,7 @@ def build_creators_display(item):
         if spec == 'data' and 'creators' in item['data']:
             for creator in item['data']['creators']:
                 # Add creator display name.
-                creator['display'] = creator.get('name', '') or ', '.join(
-                    [
-                        n for n in (
-                            creator.get('lastName', ''),
-                            creator.get('firstName', '')
-                        ) if n
-                    ]
-                )
+                creator['display'] = format_creator_name(creator)
                 # Add creator type labels.
                 if 'creator_types' in item:
                     for t in item['creator_types']:

@@ -40,6 +40,8 @@ Features:
 * Add configuration options for truncating long abstracts in search results
   (`KERKO_RESULTS_ABSTRACTS_MAX_LENGTH` and
   `KERKO_RESULTS_ABSTRACTS_MAX_LENGTH_LEEWAY`).
+* Embed Highwire Press tags in item pages. This is enabled by default but can be
+  disabled by setting `KERKO_HIGHWIREPRESS_TAGS` to `False`.
 * Allow tracking with Google Analytics (optional).
 * Allow relations in child notes to be specified as HTML links, i.e., in the
   `href` attribute of `<a>` elements.

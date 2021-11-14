@@ -47,6 +47,9 @@
     {%- for citation_format in config.KERKO_COMPOSER.get_ordered_specs('citation_formats') %}
         <link rel="alternate" title="{{ citation_format.label|escape }}" type="{{ citation_format.mime_type|escape }}" href="{{ url_for('kerko.item_citation_download', item_id=item.id, citation_format_key=citation_format.key) }}">
     {%- endfor %}
+    {%- for tag in highwirepress_tags %}
+        <meta name="{{ tag[0] }}" content="{{ tag[1]|striptags|escape }}">
+    {%- endfor %}
 {%- endblock metas %}
 
 {%- block content_inner %}

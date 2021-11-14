@@ -588,6 +588,17 @@ class ItemTypeFacetExtractor(Extractor):
         return None
 
 
+class YearExtractor(Extractor):
+    """Parse the Zotero item's publication date to get just the year."""
+
+    def extract(self, item, library_context, spec):
+        parsed_date = item.get('meta', {}).get('parsedDate', '')
+        if parsed_date:
+            year, _month, _day = _parse_zotero_date(parsed_date)
+            return str(year)
+        return None
+
+
 class YearFacetExtractor(Extractor):
     """Index the Zotero item's publication date for faceting by year."""
 

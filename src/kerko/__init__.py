@@ -1,6 +1,5 @@
 """
-Kerko: A Flask blueprint that provides faceted search for bibliographies based
-on Zotero.
+Kerko: A Flask blueprint that provides faceted search for bibliographies based on Zotero.
 """
 # pylint: disable=invalid-name
 
@@ -65,6 +64,7 @@ def init_default_config(state):
     state.app.config.setdefault('KERKO_DOWNLOAD_CITATIONS_LINK', True)
     state.app.config.setdefault('KERKO_DOWNLOAD_CITATIONS_MAX_COUNT', 0)
     state.app.config.setdefault('KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW', False)
+    state.app.config.setdefault('KERKO_HIGHWIREPRESS_TAGS', True)
     state.app.config.setdefault('KERKO_RELATIONS_INITIAL_LIMIT', 5)
     state.app.config.setdefault('KERKO_RELATIONS_SORT', 'author_asc')
     state.app.config.setdefault('KERKO_RELATIONS_LINKS', False)
