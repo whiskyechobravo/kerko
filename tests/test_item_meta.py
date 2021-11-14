@@ -9,7 +9,7 @@ import elementpath  # For XPath 2.0 selectors.
 from kerko.meta import format_creator_name
 from lxml import etree
 
-from integration_testing import IntegrationTestCase
+from tests.integration_testing import IntegrationTestCase
 
 
 class CreatorNameTestCase(unittest.TestCase):

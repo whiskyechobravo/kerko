@@ -9,7 +9,7 @@ from kerko.sync import zotero
 from kerko.sync.cache import sync_cache
 from kerko.sync.index import sync_index
 
-from integration_testing import MockZoteroTestCase
+from tests.integration_testing import MockZoteroTestCase
 
 
 class SyncTestCase(MockZoteroTestCase):
