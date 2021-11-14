@@ -310,7 +310,7 @@ class Items:
         """
         self.zotero_credentials = zotero_credentials
         self.since = since
-        self.include = ','.join(formats or ['data'])
+        self.include = ','.join(sorted(formats or ['data']))
         if trash:
             self.method = 'trash'
             self.method_info = 'trashed'
@@ -345,7 +345,7 @@ class Items:
             'since': self.since,
             'start': self.start,
             'limit': limit,
-            'sort': 'dateModified',
+            'sort': 'dateAdded',
             'direction': 'asc',
             'include': self.include,
             'style': current_app.config['KERKO_CSL_STYLE'],
