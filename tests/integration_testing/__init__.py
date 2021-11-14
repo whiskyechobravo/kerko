@@ -124,7 +124,7 @@ class MockZoteroTestCase(unittest.TestCase):
         slow Kerko sync process for every test method.
         """
         cls.app = Flask(__name__)
-        cls.temp_dir = tempfile.TemporaryDirectory()
+        cls.temp_dir = tempfile.TemporaryDirectory(prefix='kerko-tests-')
         cls.init_config()
         cls.init_blueprints()
         cls.init_extensions()
