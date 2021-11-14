@@ -6,6 +6,7 @@ This allows testing the full sync process, with mock Zotero API responses.
 
 import pathlib
 import re
+import sys
 import tempfile
 import unittest
 
@@ -217,9 +218,9 @@ class MockZoteroTestCase(unittest.TestCase):
             headers=cls.ZOTERO_RESPONSE_HEADERS,
         )
 
-        # Callables
-        cls.addClassCleanup(cls.responses.stop)
-        cls.addClassCleanup(cls.responses.reset)
+        if sys.version_info[:2] > (3, 7):
+            cls.addClassCleanup(cls.responses.stop)
+            cls.addClassCleanup(cls.responses.reset)
 
         # Make sure the data directory is empty before synchronizing.
         delete_storage('cache')
@@ -228,6 +229,10 @@ class MockZoteroTestCase(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.temp_dir.cleanup()
+
+        if sys.version_info[:2] <= (3, 7):
+            cls.responses.stop()
+            cls.responses.reset()
 
 
 class IntegrationTestCase(MockZoteroTestCase):
