@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
 
-from babel.numbers import format_number
+from babel.numbers import format_decimal
 from flask_babel import get_locale
 from whoosh.fields import ID
 from whoosh.query import Prefix, Term
@@ -263,7 +263,7 @@ class FlatFacetSpec(FacetSpec):
                     items.append({
                         'label': label,
                         'count': count,
-                        'count_formatted': format_number(count, locale=get_locale()),
+                        'count_formatted': format_decimal(count, locale=get_locale()),
                         'remove_url': remove_url,
                         'add_url': add_url,
                     })
@@ -379,7 +379,7 @@ class TreeFacetSpec(FacetSpec):
                     node['node'] = {
                         'label': label,
                         'count': count,
-                        'count_formatted': format_number(count, locale=get_locale()),
+                        'count_formatted': format_decimal(count, locale=get_locale()),
                         'remove_url': remove_url,
                         'add_url': add_url,
                     }

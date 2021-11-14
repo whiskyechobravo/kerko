@@ -3,7 +3,7 @@ import sys
 import time
 from datetime import datetime
 
-from babel.numbers import format_number
+from babel.numbers import format_decimal
 from flask import (abort, current_app, flash, make_response, redirect,
                    render_template, request, send_from_directory, url_for)
 from flask_babel import get_locale, gettext, ngettext
@@ -64,9 +64,9 @@ def search():
         'active_facets': breadbox['filters'].keys() if 'filters' in breadbox else [],
         'sorter': build_sorter(criteria),
         'total_count': total_count,
-        'total_count_formatted': format_number(total_count, locale=get_locale()),
+        'total_count_formatted': format_decimal(total_count, locale=get_locale()),
         'page_count': page_count,
-        'page_count_formatted': format_number(page_count, locale=get_locale()),
+        'page_count_formatted': format_decimal(page_count, locale=get_locale()),
         'page_len': criteria.page_len,
         'show_abstracts': criteria.show_abstracts,
         'abstracts_toggler_url': criteria.build_url(

@@ -1,6 +1,6 @@
 from itertools import chain
 
-from babel.numbers import format_number
+from babel.numbers import format_decimal
 from flask import current_app
 from flask_babel import get_locale
 
@@ -51,7 +51,7 @@ def build_pager(sections, criteria, page_kwargs=None):
             pager[section] = [
                 {
                     'page_num': p,
-                    'page_num_formatted': format_number(p, locale=get_locale()),
+                    'page_num_formatted': format_decimal(p, locale=get_locale()),
                     'url': criteria.build_url(
                         page_num=p,
                         page_len=criteria.page_len,
