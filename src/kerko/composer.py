@@ -299,10 +299,10 @@ class Composer:
                 )
             )
         # Alternate IDs to search when the primary ID is not found.
-        if 'alternateId' not in exclude:  # TODO: Replace with snake_case, for consistency.
+        if 'alternate_id' not in exclude:
             self.add_field(
                 FieldSpec(
-                    key='alternateId',
+                    key='alternate_id',
                     field_type=ID(stored=True),
                     extractor=extractors.MultiExtractor(
                         extractors=[
@@ -1735,7 +1735,7 @@ class Composer:
                     field=self.fields['rel_cites'],
                     label=_("Cites"),
                     weight=10,
-                    id_fields=[self.fields['id'], self.fields['alternateId']],
+                    id_fields=[self.fields['id'], self.fields['alternate_id']],
                     reverse=True,
                     reverse_key='isCitedBy',
                     reverse_field_key='rev_cites',

@@ -168,7 +168,7 @@ def item_view(item_id):
 
     base_filter_terms = query.build_filter_terms('item_type', exclude=['note', 'attachment'])
     item, fellback = query.run_query_unique_with_fallback(
-        ['id', 'alternateId'],
+        ['id', 'alternate_id'],
         item_id,
         default_terms=base_filter_terms,
     )
@@ -212,7 +212,7 @@ def child_attachment_download(item_id, attachment_id, attachment_filename=None):
         babel_domain.as_default()
 
     item, fellback = query.run_query_unique_with_fallback(
-        ['id', 'alternateId'],
+        ['id', 'alternate_id'],
         item_id,
         default_terms=query.build_filter_terms('item_type', exclude=['note', 'attachment']),
     )
@@ -268,7 +268,7 @@ def standalone_attachment_download(item_id, attachment_filename=None):
         babel_domain.as_default()
 
     item, fellback = query.run_query_unique_with_fallback(
-        ['id', 'alternateId'],
+        ['id', 'alternate_id'],
         item_id,
         default_terms=query.build_filter_terms('item_type', include=['attachment']),
     )
@@ -303,7 +303,7 @@ def item_citation_download(item_id, citation_format_key):
         babel_domain.as_default()
 
     item, fellback = query.run_query_unique_with_fallback(
-        ['id', 'alternateId'],
+        ['id', 'alternate_id'],
         item_id,
         default_terms=query.build_filter_terms('item_type', exclude=['note', 'attachment']),
     )

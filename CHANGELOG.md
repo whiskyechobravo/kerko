@@ -115,6 +115,8 @@ Possibly backwards incompatible changes (more or less internal API changes):
     * `StoredFileAttachmentsExtractor` → `ChildFileAttachmentsExtractor`
 * A view has been renamed:
     * `item_attachment_download` → `child_attachment_download`
+* A default field has been renamed:
+    * `alternateId` → `alternate_id`
 
 ## 0.7.1 (2021-02-04)
 

@@ -101,8 +101,8 @@ class MockZoteroTestCase(unittest.TestCase):
         cls.app.config['KERKO_DATA_DIR'] = pathlib.Path(cls.temp_dir.name)
         cls.app.config['KERKO_COMPOSER'] = Composer()
 
-        # Add alternateId to help retrieving and testing specific items.
-        cls.app.config['KERKO_COMPOSER'].fields['alternateId'].extractor.extractors.append(
+        # Add alternate_id to help retrieving and testing specific items.
+        cls.app.config['KERKO_COMPOSER'].fields['alternate_id'].extractor.extractors.append(
             extractors.TransformerExtractor(
                 extractor=extractors.ItemDataExtractor(key='extra'),
                 transformers=[

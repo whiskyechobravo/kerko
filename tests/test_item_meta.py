@@ -426,3 +426,5 @@ class ItemMetaTestCase(IntegrationTestCase):
                 [],
                 "Only book, conferencePaper, journalArticle, report, or thesis items are allowed to have Highwire Press tags"
             )
+
+    # TODO: Test item with empty title/author/date.
