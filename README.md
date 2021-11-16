@@ -14,6 +14,38 @@ well-established and powerful bibliographic reference management tool for
 individuals or teams working on the bibliography's content.
 
 
+## Contents
+
+- [Kerko](#kerko)
+  - [Contents](#contents)
+  - [How it works](#how-it-works)
+  - [Demo site](#demo-site)
+  - [Features](#features)
+  - [Requirements](#requirements)
+    - [Dependencies](#dependencies)
+  - [Getting started](#getting-started)
+  - [Configuration variables](#configuration-variables)
+  - [Synchronization process](#synchronization-process)
+  - [Command line interface (CLI)](#command-line-interface-cli)
+  - [Known limitations](#known-limitations)
+  - [Design choices](#design-choices)
+  - [Kerko Recipes](#kerko-recipes)
+    - [Ensuring full-text indexing of your attachments in Zotero](#ensuring-full-text-indexing-of-your-attachments-in-zotero)
+    - [Providing _Cites_ and _Cited by_ relations](#providing-cites-and-cited-by-relations)
+  - [Translating Kerko](#translating-kerko)
+  - [Contributing](#contributing)
+    - [Reporting issues](#reporting-issues)
+    - [Making code changes](#making-code-changes)
+    - [Running the tests](#running-the-tests)
+    - [Submitting code changes](#submitting-code-changes)
+    - [Submitting a translation](#submitting-a-translation)
+    - [Supporting the project](#supporting-the-project)
+  - [Changelog](#changelog)
+  - [Project background](#project-background)
+    - [Etymology](#etymology)
+  - [Powered by Kerko](#powered-by-kerko)
+
+
 ## How it works
 
 A Kerko-powered bibliography is managed using Zotero, and stored in the cloud on
@@ -698,6 +730,49 @@ consider the following guidelines:
   exception.
 
 
+### Making code changes
+
+Clone the [Kerko repository][Kerko] into a local directory. Set up a [virtual
+environment][venv], then install this local version of Kerko in the virtual
+environment, including development and testing dependencies by running the
+following command from Kerko's root directory, i.e., where `setup.cfg` resides:
+
+```bash
+pip install -e .[dev,tests]
+```
+
+
+### Running the tests
+
+To run basic tests in your current environment:
+
+```bash
+python -m unittest
+```
+
+To check code coverage as well, use this command instead:
+
+```bash
+coverage run -m unittest
+```
+
+Then generate the coverage report:
+
+```bash
+coverage report
+```
+
+Note: Test coverage is still very low at the moment. You are welcome to
+contribute new tests!
+
+To run the full test suite under different environments (using the various
+Python interpreters available on your machine):
+
+```bash
+tox
+```
+
+
 ### Submitting code changes
 
 Pull requests may be submitted against [Kerko's repository][Kerko]. Please
@@ -713,33 +788,6 @@ consider the following guidelines:
   keywords](https://help.github.com/en/articles/closing-issues-using-keywords).
 * If a Jinja2 template represents a page fragment or a collection of macros,
   prefix its file name with the underscore character.
-
-
-#### Running the tests
-
-Before running the tests, make sure you have an actual installation of Kerko
-that includes your changes as well as the dependencies required for testing,
-e.g., from Kerko's root directory, where `setup.cfg` resides:
-
-```bash
-pip install -e .[tests]
-```
-
-To run basic tests in your current environment:
-
-```bash
-python -m unittest
-```
-
-To run the full test suite under different environments (using the various
-Python interpreters available on your machine):
-
-```bash
-tox
-```
-
-Note: Test coverage is very low at the moment. You are welcome to contribute new
-tests!
 
 
 ### Submitting a translation
