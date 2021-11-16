@@ -76,7 +76,7 @@ def init_default_config(state):
     state.app.config.setdefault('KERKO_TEMPLATE_SEARCH_ITEM', 'kerko/search-item.html.jinja2')
     state.app.config.setdefault('KERKO_TEMPLATE_ITEM', 'kerko/item.html.jinja2')
 
-    state.app.config.setdefault('KERKO_BOOTSTRAP_VERSION', '4.5.3')
+    state.app.config.setdefault('KERKO_BOOTSTRAP_VERSION', '4.6.1')
     state.app.config.setdefault('KERKO_JQUERY_VERSION', '3.5.1')
     state.app.config.setdefault('KERKO_POPPER_VERSION', '1.16.1')
     state.app.config.setdefault('KERKO_WITH_JQUERY', True)
