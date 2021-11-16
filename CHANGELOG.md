@@ -1,6 +1,6 @@
 # Changelog
 
-## Latest (unreleased)
+## 0.8 (2021-11-16)
 
 *Warning:* Upgrading from version 0.7.x or earlier will require that you clean
 and re-sync your existing search index. Use the following commands, then restart
@@ -91,8 +91,8 @@ Backwards incompatible changes:
 
 Possibly backwards incompatible changes (more or less internal API changes):
 
-* Require newer major versions of Flask (2.0.1), Jinja2 (3.0.1), Werkzeug
-  (2.0.1), and Click (8.0.1).
+* Upgrade many dependencies, including new major versions of Flask (2.x), Jinja2
+  (3.x), Werkzeug (2.x), Click (8.x).
 * The default list for the `KERKO_RESULTS_FIELDS` setting now includes the
   `'url'` field. If you have overridden that setting in your application and
   `KERKO_RESULTS_URL_LINKS` is enabled, you'll probably have to add `'url'` too.
