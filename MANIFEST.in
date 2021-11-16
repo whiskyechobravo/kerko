@@ -1,7 +1,10 @@
 include LICENSE.txt
 include MANIFEST.in
+include babel.cfg
+include *.ini
 include *.md
 graft src
 graft tests
+global-exclude .env
 global-exclude *.pot
 global-exclude *.pyc
