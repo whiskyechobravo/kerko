@@ -18,3 +18,23 @@ build-backend = "setuptools.build_meta"
 
     [tool.pylint.basic]
     good-names = "a,b,c,d,dt,e,f,fq,g,h,i,id,j,k,m,n,p,q,r,s,t,tz,u,v,w,x,y,_"
+
+[tool.pydocstyle]
+ignore = [
+    "D100",
+    "D101",
+    "D102",
+    "D103",
+    "D105",
+    "D106",
+    "D107",
+    "D200",
+    "D202",
+    "D203",
+    "D205",
+    "D211",
+    "D212",
+    "D213",
+    "D301",
+    "D400",
+]
