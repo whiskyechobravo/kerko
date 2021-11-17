@@ -750,15 +750,10 @@ To run basic tests in your current environment:
 python -m unittest
 ```
 
-To check code coverage as well, use this command instead:
+To check code coverage as well, use these commands instead:
 
 ```bash
 coverage run -m unittest
-```
-
-Then generate the coverage report:
-
-```bash
 coverage report
 ```
 
