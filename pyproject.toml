@@ -1,6 +1,5 @@
 [build-system]
 requires = [
-    "Babel >= 2.6.0",  # For compiling catalog.
     "setuptools >= 44.0.0",
     "wheel",
 ]
