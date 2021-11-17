@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.8.1 (2021-11-16)
+
+Bug fixes:
+
+* Fix missing dependency for package building.
+
+
 ## 0.8 (2021-11-16)
 
 *Warning:* Upgrading from version 0.7.x or earlier will require that you clean
