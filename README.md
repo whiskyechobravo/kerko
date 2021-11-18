@@ -20,7 +20,6 @@ Contents:
   - [Demo site](#demo-site)
   - [Features](#features)
   - [Requirements](#requirements)
-    - [Dependencies](#dependencies)
   - [Getting started](#getting-started)
   - [Configuration variables](#configuration-variables)
   - [Synchronization process](#synchronization-process)
@@ -198,13 +197,12 @@ The following features are implemented in Kerko:
 
 Kerko requires Python 3.7 or later.
 
-
-### Dependencies
-
-The following packages will be automatically installed when installing Kerko:
+The following Python packages will be automatically installed when installing
+Kerko:
 
 * [Babel]: utilities for internationalization and localization.
 * [Bootstrap-Flask]: helper for integrating [Bootstrap].
+* [Click]: command line interface creation kit.
 * [Flask]: web application framework.
 * [Flask-Babel]: helps Kerko provide its own translations, at the blueprint level.
 * [Flask-WTF]: simple integration of Flask and WTForms.
@@ -875,6 +873,7 @@ If you wish to add your Kerko-powered online bibliography to this list, please
 [Bootstrap]: https://getbootstrap.com/
 [Bootstrap-Flask]: https://pypi.org/project/Bootstrap-Flask/
 [Bootstrap-Flask_documentation]: https://bootstrap-flask.readthedocs.io/en/latest/basic.html
+[Click]: https://pypi.org/project/click/
 [COinS]: https://en.wikipedia.org/wiki/COinS
 [COinS_clients]: https://en.wikipedia.org/wiki/COinS#Client_tools
 [CSL]: https://citationstyles.org/
