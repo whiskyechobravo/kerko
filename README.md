@@ -13,11 +13,9 @@ but easy to use web interface for end-users of the bibliography, and a
 well-established and powerful bibliographic reference management tool for
 individuals or teams working on the bibliography's content.
 
-
-## Contents
+Contents:
 
 - [Kerko](#kerko)
-  - [Contents](#contents)
   - [How it works](#how-it-works)
   - [Demo site](#demo-site)
   - [Features](#features)
