@@ -1,4 +1,4 @@
-{% macro badges(item, mode) %}
+{% macro badges(item, mode, wrapper_classes='float-right ml-2 py-2') %}
     {%- set badge_ns = namespace(has_active_badges=False) %}
     {%- for badge in config.KERKO_COMPOSER.get_ordered_specs('badges') %}
         {%- if badge.is_active(item) %}
@@ -6,7 +6,7 @@
         {%- endif %}
     {%- endfor %}
     {%- if badge_ns.has_active_badges %}
-        <span class="float-right ml-2 py-2">
+        <span class="{{ wrapper_classes }}">
             {%- for badge in config.KERKO_COMPOSER.get_ordered_specs('badges') %}
                 {{ badge.render(item, mode) }}
             {%- endfor %}
