@@ -289,21 +289,28 @@ class Composer:
         if '*' in exclude:
             return
 
-        # Primary item ID for the search index, matching the Zotero item key.
+        #
+        # Identifier fields, for keyword search. Highly boosted for matches to
+        # rank at the top of results.
+        #
+
+        # Primary ID used for resolving items. Same as the Zotero item key.
         if 'id' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='id',
-                    field_type=ID(unique=True, stored=True),
+                    field_type=ID(**self.primary_id_kwargs, unique=True, stored=True),
+                    scopes=['all', 'metadata'],
                     extractor=extractors.ItemExtractor(key='key')
                 )
             )
-        # Alternate IDs to search when the primary ID is not found.
+        # Alternate IDs used when the primary ID cannot be resolved.
         if 'alternate_id' not in exclude:
             self.add_field(
                 FieldSpec(
                     key='alternate_id',
-                    field_type=ID(stored=True),
+                    field_type=ID(**self.primary_id_kwargs),
+                    scopes=['all', 'metadata'],
                     extractor=extractors.MultiExtractor(
                         extractors=[
                             extractors.ItemDataExtractor(key='DOI'),
@@ -332,7 +339,8 @@ class Composer:
                     )
                 )
             )
-        # Item type key.
+
+        # Item type key. Non-searchable.
         if 'item_type' not in exclude:
             self.add_field(
                 FieldSpec(
@@ -341,6 +349,7 @@ class Composer:
                     extractor=extractors.ItemDataExtractor(key='itemType'),
                 )
             )
+
         # Item type label.
         if 'item_type_label' not in exclude:
             self.add_field(
@@ -354,41 +363,11 @@ class Composer:
 
         # All Zotero item fields that we want to make available to keyword
         # search are specified below, each with an appropriate analyzer chain.
-        # The same keys as Zotero are used (hence the camelCases), but with
-        # 'z_' prefixes to prevent name clashes with other fields.
-
+        # The same keys as Zotero are used (hence the camelCases), but with 'z_'
+        # prefixes to prevent name clashes with other schema fields.
         #
-        # Identifier fields, for keyword search. Highly boosted for matches to
-        # rank at the top of results.
-        #
-
-        if 'z_DOI' not in exclude:
-            self.add_field(
-                FieldSpec(
-                    key='z_DOI',
-                    field_type=ID(**self.primary_id_kwargs),
-                    scopes=['all', 'metadata'],
-                    extractor=extractors.ItemDataExtractor(key='DOI')
-                )
-            )
-        if 'z_ISBN' not in exclude:
-            self.add_field(
-                FieldSpec(
-                    key='z_ISBN',
-                    field_type=ID(**self.primary_id_kwargs),
-                    scopes=['all', 'metadata'],
-                    extractor=extractors.ItemDataExtractor(key='ISBN')
-                )
-            )
-        if 'z_ISSN' not in exclude:
-            self.add_field(
-                FieldSpec(
-                    key='z_ISSN',
-                    field_type=ID(**self.primary_id_kwargs),
-                    scopes=['all', 'metadata'],
-                    extractor=extractors.ItemDataExtractor(key='ISSN')
-                )
-            )
+        # Note that DOI, ISBN and ISSN are omitted because their values are
+        # already indexed in the 'alternate_id' field.
 
         #
         # Secondary identifiers, for keyword search. Moderately boosted.
