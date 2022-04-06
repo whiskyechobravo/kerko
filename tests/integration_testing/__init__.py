@@ -160,14 +160,22 @@ class MockZoteroTestCase(unittest.TestCase):
         for item_type in cls.ZOTERO_ITEM_TYPES:
             cls.responses.add(
                 responses.GET,
-                f'https://api.zotero.org/itemTypeFields?itemType={item_type}&locale=en-US',
+                re.compile(
+                    re.escape(
+                        f'https://api.zotero.org/itemTypeFields?itemType={item_type}&locale=en-US'
+                    ) + r'(\&timeout=[0-9]+)?'
+                ),
                 content_type='application/json',
                 body=cls.get_response(f'itemTypeFields_{item_type}'),
                 headers=cls.ZOTERO_RESPONSE_HEADERS,
             )
             cls.responses.add(
                 responses.GET,
-                f'https://api.zotero.org/itemTypeCreatorTypes?itemType={item_type}&locale=en-US',
+                re.compile(
+                    re.escape(
+                        f'https://api.zotero.org/itemTypeCreatorTypes?itemType={item_type}&locale=en-US'
+                    ) + r'(\&timeout=[0-9]+)?'
+                ),
                 content_type='application/json',
                 body=cls.get_response(f'itemTypeCreatorTypes_{item_type}'),
                 headers=cls.ZOTERO_RESPONSE_HEADERS,
