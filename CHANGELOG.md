@@ -14,6 +14,12 @@ Features:
 
 - Allow searching items by their Zotero key.
 
+Bug fixes:
+
+- Fix last sync time not displayed at the bottom of search results when
+  `KERKO_PRINT_CITATIONS_LINK` and `KERKO_DOWNLOAD_CITATIONS_LINK` are both set
+  to `False`.
+
 Other changes:
 
 - Apply a boost factor to DOI, ISBN and ISSN fields extracted from the Extra
