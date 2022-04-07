@@ -24,6 +24,7 @@ Other changes:
 
 - Apply a boost factor to DOI, ISBN and ISSN fields extracted from the Extra
   field (previously, only the dedicated Zotero fields had a boost factor).
+- Add blocks in templates to facilitate theming.
 - Improve documentation.
 - Move pydocstyle config to `pyproject.toml`.
 
