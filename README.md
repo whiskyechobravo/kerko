@@ -860,6 +860,8 @@ tool.
 The following online bibliographies are powered by Kerko:
 
 * [Bibliographie francophone sur l'archivistique](https://bibliopiaf.ebsi.umontreal.ca/)
+* [Community Knowledge Open Library on English-Speaking Quebec](https://ckol.quescren.ca/)
+* [Lipedema Foundation LEGATO Lipedema Library](https://library.lipedema.org/)
 * [Open Development & Education Evidence Library](https://docs.opendeved.net/)
 * [The EdTech Hub Evidence Library](http://docs.edtechhub.org/)
 * [University of Saint Joseph Research Output](https://research.usj.edu.mo/)
