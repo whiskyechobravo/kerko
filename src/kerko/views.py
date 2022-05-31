@@ -18,12 +18,6 @@ from .pager import get_sections as get_pager_sections
 from .sorter import build_sorter
 from .storage import SearchIndexError, get_storage_dir
 
-if sys.version_info < (3, 7):
-    # Workaround for 'TypeError: cannot deepcopy this pattern object' when
-    # encountering a compiled regular expression.
-    import re
-    copy._deepcopy_dispatch[type(re.compile(''))] = lambda r, _: r  # pylint: disable=protected-access
-
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @except_abort(SearchIndexError, 503)
