@@ -616,6 +616,13 @@ search conditions:
       select *RegExp* in the small dropdown list, as that will make the period
       match any character)
 
+This search might return a long list of unindexed attachments. To reindex them
+all at once, you may select them, then right-click to get the contextual menu,
+and select "Reindex items". It may require some time to update your library on
+zotero.org. Note that documents that have no text content, as well as missing
+documents, will still be considered as unindexed and appear in the results of
+the saved search.
+
 Controlling the indexing status will not only improve full-text search on your
 Kerko site, but also full-text search from within Zotero!
 
