@@ -6,7 +6,7 @@ import wrapt
 from flask import current_app
 from flask.cli import with_appcontext
 
-from .storage import delete_storage
+from .storage import delete_storage, get_doc_count
 from .sync import zotero
 from .sync.attachments import delete_attachments, sync_attachments
 from .sync.cache import sync_cache
@@ -67,6 +67,30 @@ def clean(target):
         delete_storage('index')
     if target in ['everything', 'attachments']:
         delete_attachments()
+
+
+@cli.command()
+@click.argument(
+    'target',
+    type=click.Choice(['cache', 'index'], case_sensitive=False),
+)
+@with_appcontext
+def count(target):
+    """
+    Output the number of documents available in the cache or in search index.
+
+    The cache is a flat database where items of any type or hierarchical level
+    are counted as separate items.
+
+    The search index is a denormalized database where items are grouped in
+    single documents with their child notes and attachments. The count may
+    include items that are not usually displayed in search results, e.g.,
+    standalone notes or attachments.
+
+    WARNING: This command is provided for development purposes only and may be
+    modified or removed from the module at any time.
+    """
+    pprint.pprint(get_doc_count(target))
 
 
 @cli.command()

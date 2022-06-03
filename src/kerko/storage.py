@@ -70,3 +70,9 @@ def open_index(storage, *, write=False, schema=None, auto_create=False):
 def delete_storage(storage):
     if (get_storage_dir(storage)).is_dir():
         shutil.rmtree(get_storage_dir(storage))
+
+
+def get_doc_count(storage):
+    """Return the number of documents in the specified Whoosh search index."""
+    with open_index(storage).searcher() as searcher:
+        return searcher.doc_count()
