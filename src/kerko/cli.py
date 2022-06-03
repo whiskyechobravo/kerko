@@ -74,9 +74,9 @@ def clean(target):
 @with_appcontext
 def zotero_item(item_key):
     """
-    Retrieve an item from the Zotero library.
+    Retrieve an item from the library, using the Zotero API.
 
-    WARNING: This command is provided for debugging purposes only and may be
+    WARNING: This command is provided for development purposes only and may be
     modified or removed from the module at any time.
     """
     credentials = zotero.init_zotero()
@@ -87,9 +87,9 @@ def zotero_item(item_key):
 @with_appcontext
 def zotero_item_types():
     """
-    List all item types supported by Zotero.
+    List all item types, using the Zotero API.
 
-    WARNING: This command is provided for debugging purposes only and may be
+    WARNING: This command is provided for development purposes only and may be
     modified or removed from the module at any time.
     """
     credentials = zotero.init_zotero()
@@ -100,9 +100,9 @@ def zotero_item_types():
 @with_appcontext
 def zotero_item_fields():
     """
-    List all fields supported by Zotero.
+    List all fields, using the Zotero API.
 
-    WARNING: This command is provided for debugging purposes only and may be
+    WARNING: This command is provided for development purposes only and may be
     modified or removed from the module at any time.
     """
     credentials = zotero.init_zotero()
@@ -114,9 +114,9 @@ def zotero_item_fields():
 @with_appcontext
 def zotero_item_type_fields(item_type):
     """
-    List all fields supported by Zotero for a given item type.
+    List the available fields for a given item type, using the Zotero API.
 
-    WARNING: This command is provided for debugging purposes only and may be
+    WARNING: This command is provided for development purposes only and may be
     modified or removed from the module at any time.
     """
     credentials = zotero.init_zotero()
@@ -128,9 +128,9 @@ def zotero_item_type_fields(item_type):
 @with_appcontext
 def zotero_item_type_creator_types(item_type):
     """
-    List all creator types supported by Zotero for a given item type.
+    List the available creator types for a given item type, using the Zotero API.
 
-    WARNING: This command is provided for debugging purposes only and may be
+    WARNING: This command is provided for development purposes only and may be
     modified or removed from the module at any time.
     """
     credentials = zotero.init_zotero()
@@ -141,9 +141,9 @@ def zotero_item_type_creator_types(item_type):
 @with_appcontext
 def zotero_top_level_collections():
     """
-    List keys and names of top-level collections from the Zotero library.
+    List top-level collections of the library, using the Zotero API.
 
-    WARNING: This command is provided for debugging purposes only and may be
+    WARNING: This command is provided for development purposes only and may be
     modified or removed from the module at any time.
     """
     credentials = zotero.init_zotero()
