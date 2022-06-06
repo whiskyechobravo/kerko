@@ -2,12 +2,11 @@
 Tests for item meta tags.
 """
 
-import pathlib
 import unittest
 
 import elementpath  # For XPath 2.0 selectors.
-from kerko.meta import format_creator_name
 from lxml import etree
+from kerko.meta import format_creator_name
 
 from tests.integration_testing import IntegrationTestCase
 
@@ -186,7 +185,8 @@ class ItemMetaTestCase(IntegrationTestCase):
                 'citation_dissertation_institution',
                 'citation_technical_report_institution',
                 'citation_technical_report_number',
-                "Tag is unexpected for this particular item, or for 'conferencePaper' items in general"
+                "Tag is unexpected for this particular item, "
+                "or for 'conferencePaper' items in general"
             ]
             self.assertEqual(
                 elementpath.select(
@@ -421,10 +421,11 @@ class ItemMetaTestCase(IntegrationTestCase):
             self.assertEqual(
                 elementpath.select(
                     tree,
-                    f'/html/head/meta[matches(@name, "citation_.+")]/@name'
+                    '/html/head/meta[matches(@name, "citation_.+")]/@name'
                 ),
                 [],
-                "Only book, conferencePaper, journalArticle, report, or thesis items are allowed to have Highwire Press tags"
+                "Only book, conferencePaper, journalArticle, report, or thesis "
+                "items are allowed to have Highwire Press tags"
             )
 
     # TODO: Test item with empty title/author/date.
