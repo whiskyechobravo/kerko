@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <sitemap>
+        {%- for page_num in range(1, sitemap_count + 1) %}
+                <loc>{{ url_for('kerko.sitemap', page_num=page_num, _external=True) }}</loc>
+        {%- endfor %}
+    </sitemap>
+</sitemapindex>

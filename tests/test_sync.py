@@ -2,19 +2,18 @@
 Integration tests for data synchronization.
 """
 
-import pathlib
-
 from flask import current_app
 from kerko.sync import zotero
 from kerko.sync.cache import sync_cache
 from kerko.sync.index import sync_index
 
-from tests.integration_testing import MockZoteroTestCase
+from tests.integration_testing import (EmptyLibraryTestCase,
+                                       PopulatedLibraryTestCase)
 
 
-class SyncTestCase(MockZoteroTestCase):
+class SyncPopulatedLibraryTestCase(PopulatedLibraryTestCase):
     """
-    Test data synchronization with mock Zotero API responses.
+    Test data synchronization with a populated Zotero library.
 
     If this fails, all other integration tests are likely to fail as well.
     """
@@ -33,3 +32,15 @@ class SyncTestCase(MockZoteroTestCase):
         self.assertGreater(sync_cache(), 0, "Cache is empty!")
         self.assertGreater(sync_index(), 0, "Index is empty!")
         # TODO: Assert more things.
+
+
+class SyncEmptyLibraryTestCase(EmptyLibraryTestCase):
+    """
+    Test data synchronization with an empty Zotero library.
+
+    If this fails, other integration tests are likely to fail as well.
+    """
+
+    def test_sync_index(self):
+        self.assertEqual(sync_cache(), 0, "Cache should be empty!")
+        self.assertEqual(sync_index(), None, "Index should be empty!")

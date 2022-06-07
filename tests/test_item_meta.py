@@ -8,7 +8,7 @@ import elementpath  # For XPath 2.0 selectors.
 from lxml import etree
 from kerko.meta import format_creator_name
 
-from tests.integration_testing import IntegrationTestCase
+from tests.integration_testing import PopulatedSynchronizedLibraryTestCase
 
 
 class CreatorNameTestCase(unittest.TestCase):
@@ -45,7 +45,7 @@ class CreatorNameTestCase(unittest.TestCase):
         )
 
 
-class ItemMetaTestCase(IntegrationTestCase):
+class ItemMetaTestCase(PopulatedSynchronizedLibraryTestCase):
     """Integration tests for item meta tags."""
 
     def test_highwire_press_book(self):

@@ -438,6 +438,23 @@ def run_query_all(return_fields=None, default_terms=None):
     return []
 
 
+def run_query_filter_paged(page_num, page_len, return_fields=None, default_terms=None):
+    """
+    Perform a paged search query for items, optionally filtered (no faceting).
+    """
+    with open_index('index').searcher() as searcher:
+        results = searcher.search_page(
+            Every(),
+            pagenum=page_num,
+            pagelen=page_len,
+            filter=And(default_terms) if default_terms else None,
+        )
+        if results:
+            for hit in results:
+                yield _get_fields(hit, return_fields)
+    return []
+
+
 def check_fields(fields):
     """
     Check if the specified fields exist in the schema.

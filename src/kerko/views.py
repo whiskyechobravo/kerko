@@ -1,4 +1,5 @@
 import copy
+import math
 import time
 from datetime import datetime
 
@@ -15,7 +16,9 @@ from .forms import SearchForm
 from .pager import build_pager, get_page_numbers
 from .pager import get_sections as get_pager_sections
 from .sorter import build_sorter
-from .storage import SearchIndexError, get_storage_dir
+from .storage import SearchIndexError, get_doc_count, get_storage_dir
+
+SITEMAP_URL_MAX_COUNT = 50000
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
@@ -359,3 +362,57 @@ def search_citation_download(citation_format_key):
     response.headers['Content-Type'] = \
         f'{citation_format.mime_type}; charset=utf-8'
     return response
+
+
+def get_sitemap_page_count():
+    count = get_doc_count('index')
+    if count:
+        count = math.ceil(count / SITEMAP_URL_MAX_COUNT)
+        # Note: count may include items that will be excluded from the
+        # sitemap, but this is the efficient way to get a good enough count.
+    return count
+
+
+@blueprint.route('/sitemap_index.xml')
+@except_abort(SearchIndexError, 503)
+def sitemap_index():
+    """Generate a sitemap index."""
+    response = make_response(
+        render_template(
+            'kerko/sitemap_index.xml.jinja2',
+            sitemap_count=get_sitemap_page_count(),
+        )
+    )
+    response.headers['Content-Type'] = 'application/xml; charset=utf-8'
+    return response
+
+
+@blueprint.route(f'/sitemap_<int(min=1, max={SITEMAP_URL_MAX_COUNT}):page_num>.xml')
+@except_abort(SearchIndexError, 503)
+def sitemap(page_num):
+    """Generate a sitemap."""
+    if page_num > get_sitemap_page_count():
+        # Return an empty sitemap rather than a 404. Someday it might contain something.
+        items = []
+    else:
+        base_filter_terms = query.build_filter_terms('item_type', exclude=['note', 'attachment'])
+        items = query.run_query_filter_paged(
+            page_num=page_num,
+            page_len=SITEMAP_URL_MAX_COUNT,
+            return_fields=['id', 'data'],  # FIXME: Add dateModified field to schema to avoid loading all data!
+            default_terms=base_filter_terms,
+        )
+    response = make_response(
+        render_template(
+            'kerko/sitemap.xml.jinja2',
+            page_num=page_num,
+            items=items,
+        )
+    )
+    response.headers['Content-Type'] = 'application/xml; charset=utf-8'
+    return response
+
+
+# TODO: Document the new feature, as well as other recent changes.
+    # Suggest users to add sitemap_index.xml to their robots.txt
+    # (multiple sitemaps are allowed), and to upload to Google

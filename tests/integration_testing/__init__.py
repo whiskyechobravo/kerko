@@ -22,11 +22,8 @@ from kerko.sync.cache import sync_cache
 from kerko.sync.index import sync_index
 
 
-class MockZoteroTestCase(unittest.TestCase):
-    """Test case providing mock responses to Zotero API calls."""
-
-    ZOTERO_ITEMS_TOTAL_RESULTS = '10'
-    ZOTERO_ITEMS_LAST_MODIFIED_VERSION = '26'
+class MockLibraryTestCase(unittest.TestCase):
+    """Base test case providing mock Zotero API responses."""
 
     ZOTERO_RESPONSE_HEADERS = {
         'Content-Type': 'application/json',
@@ -116,39 +113,15 @@ class MockZoteroTestCase(unittest.TestCase):
         )
 
     @classmethod
-    def setUpClass(cls):
+    def add_responses(cls):
         """
-        Prepare the test fixtures.
+        Add mock API responses.
 
-        These are set up at the class level helps avoid repeating the relatively
-        slow Kerko sync process for every test method.
+        This class only implements those responses that are always the same
+        regardless of the Zotero library.
+
+        Subclasses should override this method to add more responses.
         """
-        cls.app = Flask(__name__)
-        cls.temp_dir = tempfile.TemporaryDirectory(prefix='kerko-tests-')
-        cls.init_config()
-        cls.init_blueprints()
-        cls.init_extensions()
-        ctx = cls.app.app_context()
-        ctx.push()
-
-        # Setup mock responses, per https://github.com/getsentry/responses#responses-inside-a-unittest-setup.
-        cls.responses = responses.RequestsMock()
-        cls.responses.start()
-        cls.responses.add(
-            responses.GET,
-            'https://api.zotero.org/groups/9999999/collections?start=0&limit=100&format=json',
-            content_type='application/json',
-            body=cls.get_response('collections'),
-            headers=cls.ZOTERO_RESPONSE_HEADERS,
-        )
-        cls.responses.add(
-            responses.GET,
-            'https://api.zotero.org/groups/9999999/collections',
-            match_querystring=False,  # Fallback for other 'collections' requests.
-            content_type='application/json',
-            body='[]',
-            headers=cls.ZOTERO_RESPONSE_HEADERS,
-        )
         cls.responses.add(
             responses.GET,
             'https://api.zotero.org/itemTypes',
@@ -180,6 +153,70 @@ class MockZoteroTestCase(unittest.TestCase):
                 body=cls.get_response(f'itemTypeCreatorTypes_{item_type}'),
                 headers=cls.ZOTERO_RESPONSE_HEADERS,
             )
+
+    @classmethod
+    def setUpClass(cls):
+        """
+        Prepare the test fixtures.
+
+        These are set up at the class level helps avoid repeating the relatively
+        slow Kerko sync process for every test method.
+        """
+        cls.app = Flask(__name__)
+        cls.temp_dir = tempfile.TemporaryDirectory(prefix='kerko-tests-')
+        cls.init_config()
+        cls.init_blueprints()
+        cls.init_extensions()
+        ctx = cls.app.app_context()
+        ctx.push()
+
+        # Setup mock responses, per https://github.com/getsentry/responses#responses-inside-a-unittest-setup.
+        cls.responses = responses.RequestsMock()
+        cls.responses.start()
+
+        cls.add_responses()
+
+        if sys.version_info[:2] > (3, 7):
+            cls.addClassCleanup(cls.responses.stop)
+            cls.addClassCleanup(cls.responses.reset)
+
+        # Make sure the data directory is empty before synchronizing.
+        delete_storage('cache')
+        delete_storage('index')
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.temp_dir.cleanup()
+
+        if sys.version_info[:2] <= (3, 7):
+            cls.responses.stop()
+            cls.responses.reset()
+
+
+class PopulatedLibraryTestCase(MockLibraryTestCase):
+    """Test case providing mock Zotero API responses for a populated library."""
+
+    ZOTERO_ITEMS_TOTAL_RESULTS = '10'
+    ZOTERO_ITEMS_LAST_MODIFIED_VERSION = '26'
+
+    @classmethod
+    def add_responses(cls):
+        super().add_responses()
+        cls.responses.add(
+            responses.GET,
+            'https://api.zotero.org/groups/9999999/collections?start=0&limit=100&format=json',
+            content_type='application/json',
+            body=cls.get_response('collections'),
+            headers=cls.ZOTERO_RESPONSE_HEADERS,
+        )
+        cls.responses.add(
+            responses.GET,
+            'https://api.zotero.org/groups/9999999/collections',
+            match_querystring=False,  # Fallback for other 'collections' requests.
+            content_type='application/json',
+            body='[]',
+            headers=cls.ZOTERO_RESPONSE_HEADERS,
+        )
         cls.responses.add(
             responses.GET,
             'https://api.zotero.org/groups/9999999/items?since=0&start=0&limit=100&sort=dateAdded&direction=asc&include=bib%2Cbibtex%2Ccoins%2Cdata%2Cris&style=apa&format=json',
@@ -226,33 +263,67 @@ class MockZoteroTestCase(unittest.TestCase):
             headers=cls.ZOTERO_RESPONSE_HEADERS,
         )
 
-        if sys.version_info[:2] > (3, 7):
-            cls.addClassCleanup(cls.responses.stop)
-            cls.addClassCleanup(cls.responses.reset)
 
-        # Make sure the data directory is empty before synchronizing.
-        delete_storage('cache')
-        delete_storage('index')
+class EmptyLibraryTestCase(MockLibraryTestCase):
+    """Test case providing mock Zotero API responses for an empty library."""
 
     @classmethod
-    def tearDownClass(cls):
-        cls.temp_dir.cleanup()
+    def add_responses(cls):
+        super().add_responses()
+        cls.responses.add(
+            responses.GET,
+            'https://api.zotero.org/groups/9999999/collections',
+            match_querystring=False,  # Response for all 'collections' requests.
+            content_type='application/json',
+            body='[]',  # No collections.
+            headers=cls.ZOTERO_RESPONSE_HEADERS,
+        )
+        cls.responses.add(
+            responses.GET,
+            'https://api.zotero.org/groups/9999999/items',
+            match_querystring=False,  # Response for all 'items' requests.
+            content_type='application/json',
+            body='[]',  # No items.
+            headers={
+                **cls.ZOTERO_RESPONSE_HEADERS,
+                **{
+                    'Total-Results': '0',
+                    'Last-Modified-Version': '1',
+                }
+            },
+        )
+        cls.responses.add(
+            responses.GET,
+            'https://api.zotero.org/groups/9999999/fulltext',
+            match_querystring=False,  # Response for all 'fulltext' requests.
+            content_type='application/json',
+            body='{}',
+            headers=cls.ZOTERO_RESPONSE_HEADERS,
+        )
 
-        if sys.version_info[:2] <= (3, 7):
-            cls.responses.stop()
-            cls.responses.reset()
 
-
-class IntegrationTestCase(MockZoteroTestCase):
-    """
-    Test case providing synchronized data from the integration testing library.
-
-    If tests based on this class fail, check tests from `test_sync`, and fix
-    those first if they are also failing.
-    """
+class SyncMixin():
 
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls):  # pylint:disable=invalid-name
         super().setUpClass()
         sync_cache()
         sync_index()
+
+
+class PopulatedSynchronizedLibraryTestCase(SyncMixin, PopulatedLibraryTestCase):
+    """
+    Test case providing synchronized data from the integration testing library.
+
+    If tests based on this test case fail, check tests from `test_sync`, and fix
+    those first if they are also failing.
+    """
+
+
+class EmptySynchronizedLibraryTestCase(SyncMixin, EmptyLibraryTestCase):
+    """
+    Test case providing synchronized data from an empty Zotero library.
+
+    If tests based on this test case fail, check tests from `test_sync`, and fix
+    those first if they are also failing.
+    """

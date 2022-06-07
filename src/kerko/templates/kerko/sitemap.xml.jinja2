@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    {%- for item in items %}
+        <url>
+            <loc>{{ url_for('kerko.item_view', item_id=item.id, _external=True) }}</loc>
+            <lastmod>{{ item.data.dateModified|striptags|escape }}</lastmod>
+        </url>
+    {%- endfor %}
+</urlset>

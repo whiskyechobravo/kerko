@@ -57,8 +57,8 @@ declare -a item_types=(
     "webpage"
 )
 
-# Show headers.
-echo -e "\nGetting Zotero API response headers..."
+# Show headers (for informational purpose only).
+echo -e "\nShowing Zotero API response headers..."
 curl --include "https://api.zotero.org/${prefix}/${KERKO_ZOTERO_LIBRARY_ID}/items?v=3&key=${KERKO_ZOTERO_API_KEY}&limit=1&format=versions"
 
 # Update response files.

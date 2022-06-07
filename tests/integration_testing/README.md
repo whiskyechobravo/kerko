@@ -15,13 +15,19 @@ Always keep in mind that changing the library might break existing tests.
 
 Place items in collections having the same name as the test module(s) that use them.
 
-Once changes are done in the Zotero library, the following steps should be taken
-to update the saved responses:
+Once changes are done in the Zotero library, the steps below should be taken to
+update the saved responses.
 
+
+## Updating the saved responses
+
+- Before making any changes, make sure all the tests pass. If they don't pass
+  after the changes, you will know that breaking changes happened either in the
+  Zotero library's test data or in the way the Zotero API responded.
 - Go to the `api_responses` directory.
-- Set the `KERKO_ZOTERO_API_KEY` environment variable, or set it in a `.env` in
-  the `api_responses` directory.
-- Run `update.bash` to update the JSON files.
+- Set the `KERKO_ZOTERO_API_KEY` environment variable, or set it in a `.env`
+  file in the `api_responses` directory.
+- Run the `update.bash` script from that directory to update the JSON files.
 - Note the values for the headers indicated below (which are output by
   `update.bash`), and update the corresponding variables in the
   `integration_testing` module, i.e.:
