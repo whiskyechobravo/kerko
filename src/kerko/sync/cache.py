@@ -35,7 +35,11 @@ def get_cache_schema():
 
 
 def sync_cache():
-    """Build a cache of items retrieved from Zotero."""
+    """
+    Build a cache of items retrieved from Zotero.
+
+    Return the number of synchronized items, or `None` in case of an error.
+    """
     current_app.logger.info("Starting cache sync...")
     count = 0
     zotero_credentials = zotero.init_zotero()
@@ -110,6 +114,7 @@ def sync_cache():
         writer.cancel()
         current_app.logger.exception(e)
         current_app.logger.error('An exception occurred. Could not finish updating the cache.')
+        return None
     else:
         writer.commit()
         save_object('cache', 'version', version)

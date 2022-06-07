@@ -6,7 +6,7 @@ from flask import current_app
 
 from ..extractors import is_file_attachment
 from ..query import check_fields, run_query_all
-from ..storage import get_storage_dir
+from ..storage import SearchIndexError, get_storage_dir
 from . import zotero
 
 
@@ -28,6 +28,8 @@ def sync_attachments():
 
     Files are requested based on item data available in the search index. Thus,
     it always makes sense to synchronize the search index beforehand.
+
+    Return the number of synchronized items, or `None` in case of an error.
     """
     def _sync_attachment(attachment, parent=None):
         context = f"(parent item: {parent['id']})" if parent else '(standalone)'
@@ -54,45 +56,53 @@ def sync_attachments():
             current_app.logger.debug(f"Keeping attachment {attachment['id']} {context}.")
 
     current_app.logger.info("Starting attachment files sync...")
-    composer = current_app.config['KERKO_COMPOSER']
-    attachments_dir = get_storage_dir('attachments')
-    attachments_dir.mkdir(parents=True, exist_ok=True)
-    local_files = {p.name for p in attachments_dir.iterdir()}
-
-    missing_fields = check_fields(['id', 'attachments'])
-    if missing_fields:
-        current_app.logger.error(
-            "The following fields are missing from the search index: {}."
-            " You might need to check your Kerko settings and/or"
-            " clean and sync your search index.".format(
-                ', '.join(missing_fields)
-            )
-        )
-        return
-
-    # List all items from the search index and request their attachments, if
-    # any, from Zotero
-    zotero_credentials = zotero.init_zotero()
     count = 0
-    items = run_query_all(['id', 'item_type', 'attachments', 'data'])
-    for item in items:
-        if item['item_type'] == 'attachment' and is_file_attachment(item, composer.mime_types):
-            _sync_attachment(item)
-            count += 1
-        else:
-            # Child attachments, unlike standalone attachments (above), do not
-            # need their linkMode or MIME type to be validated, because that has
-            # already been done by an extractor when writing the search index.
-            for attachment in item.get('attachments', []):
-                _sync_attachment(attachment, parent=item)
+    composer = current_app.config['KERKO_COMPOSER']
+    try:
+        attachments_dir = get_storage_dir('attachments')
+        attachments_dir.mkdir(parents=True, exist_ok=True)
+        local_files = {p.name for p in attachments_dir.iterdir()}
+
+        missing_fields = check_fields(['id', 'attachments'])
+        if missing_fields:
+            current_app.logger.error(
+                "The following fields are missing from the search index: {}."
+                " You might need to check your Kerko settings and/or"
+                " clean and sync your search index.".format(
+                    ', '.join(missing_fields)
+                )
+            )
+            return None
+
+        # List all items from the search index and request their attachments, if
+        # any, from Zotero
+        zotero_credentials = zotero.init_zotero()
+        items = run_query_all(['id', 'item_type', 'attachments', 'data'])
+        for item in items:
+            if item['item_type'] == 'attachment' and is_file_attachment(item, composer.mime_types):
+                _sync_attachment(item)
                 count += 1
+            else:
+                # Child attachments, unlike standalone attachments (above), do not
+                # need their linkMode or MIME type to be validated, because that has
+                # already been done by an extractor when writing the search index.
+                for attachment in item.get('attachments', []):
+                    _sync_attachment(attachment, parent=item)
+                    count += 1
 
-    # Delete remaining local files that were not referenced by any item.
-    for name in local_files:
-        current_app.logger.debug(f"Deleting attachment {name}, unused.")
-        (attachments_dir / name).unlink()
+        # Delete remaining local files that were not referenced by any item.
+        for name in local_files:
+            current_app.logger.debug(f"Deleting attachment {name}, unused.")
+            (attachments_dir / name).unlink()
 
-    current_app.logger.info(f"Attachment files sync successful ({count} file(s) processed).")
+        current_app.logger.info(f"Attachment files sync successful ({count} file(s) processed).")
+    except SearchIndexError:
+        current_app.logger.error("The index is empty or has errors, and needs to be synchronized first.")
+        return None
+    except Exception as e:  # pylint: disable=broad-except
+        current_app.logger.exception(e)
+        current_app.logger.error('An exception occurred. Could not finish updating the index.')
+        return None
     return count
 
 

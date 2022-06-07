@@ -36,16 +36,19 @@ def cli():
 @execution_time_logger
 def sync(target):
     """
-    Synchronize the cache, the search index, or the file attachments.
+    Synchronize the cache, the search index, and/or the file attachments.
 
     By default, everything is synchronized.
     """
     if target in ['everything', 'cache']:
-        sync_cache()
+        if sync_cache() is None:
+            raise click.Abort
     if target in ['everything', 'index']:
-        sync_index()
+        if sync_index() is None:
+            raise click.Abort
     if target in ['everything', 'attachments']:
-        sync_attachments()
+        if sync_attachments() is None:
+            raise click.Abort
 
 
 @cli.command()
@@ -57,7 +60,7 @@ def sync(target):
 @with_appcontext
 def clean(target):
     """
-    Delete the cache, the search index, or the attachments immediately.
+    Delete the cache, the search index, and/or the attachments immediately.
 
     By default, everything is cleaned.
     """
@@ -90,6 +93,7 @@ def count(target):
     WARNING: This command is provided for development purposes only and may be
     modified or removed from the module at any time.
     """
+    # TODO: Nicer output in case of exception.
     pprint.pprint(get_doc_count(target))
 
 
