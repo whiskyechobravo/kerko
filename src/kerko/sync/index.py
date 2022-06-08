@@ -12,21 +12,16 @@ def sync_index():
     """
     Build the search index from the local cache.
 
-    Return the number of synchronized items, or `None` in case of an error.
+    Return the number of synchronized items.
     """
     current_app.logger.info("Starting index sync...")
     composer = current_app.config['KERKO_COMPOSER']
     library_context = load_object('cache', 'library')
 
-    try:
-        cache = open_index('cache')
-    except SearchIndexError:
-        return None
-
+    cache = open_index('cache')
     cache_version = load_object('cache', 'version', default=0)
     if not cache_version:
-        current_app.logger.error("The cache is empty and needs to be synchronized first.")
-        return None
+        raise SearchIndexError("The cache is empty and needs to be synchronized first.")
     # FIXME: The following does not detect when just the collections have changed in the cache (with no item changes). Should check the collections_version! https://pyzotero.readthedocs.io/en/latest/#zotero.Zotero.collection_versions
     # if load_object('index', 'version', default=0) == cache_version:
     #     current_app.logger.warning(f"The index is already up-to-date with cache version {cache_version}, nothing to do.")
@@ -63,11 +58,9 @@ def sync_index():
                 )
             else:
                 current_app.logger.debug(f"Item {count} excluded ({item['key']})")
-    except Exception as e:  # pylint: disable=broad-except
+    except Exception:  # pylint: disable=broad-except
         writer.cancel()
-        current_app.logger.exception(e)
-        current_app.logger.error('An exception occurred. Could not finish updating the index.')
-        return None
+        raise
     else:
         writer.commit()
         # Save the cache's last_modified timestamp. Later, we cannot access the

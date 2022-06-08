@@ -3,6 +3,7 @@ Integration tests for data synchronization.
 """
 
 from flask import current_app
+from kerko.storage import SearchIndexError
 from kerko.sync import zotero
 from kerko.sync.cache import sync_cache
 from kerko.sync.index import sync_index
@@ -21,8 +22,14 @@ class SyncPopulatedLibraryTestCase(PopulatedLibraryTestCase):
     def test_sync_library_context(self):
         zotero_credentials = zotero.init_zotero()
         library_context = zotero.request_library_context(zotero_credentials)
-        self.assertEqual(library_context.library_id, current_app.config['KERKO_ZOTERO_LIBRARY_ID'])
-        self.assertEqual(library_context.library_type, current_app.config['KERKO_ZOTERO_LIBRARY_TYPE'])
+        self.assertEqual(
+            library_context.library_id,
+            current_app.config['KERKO_ZOTERO_LIBRARY_ID'],
+        )
+        self.assertEqual(
+            library_context.library_type,
+            current_app.config['KERKO_ZOTERO_LIBRARY_TYPE'],
+        )
         self.assertEqual(set(library_context.item_types.keys()), set(self.ZOTERO_ITEM_TYPES))
         self.assertEqual(set(library_context.item_fields.keys()), set(self.ZOTERO_ITEM_TYPES))
         self.assertEqual(set(library_context.creator_types.keys()), set(self.ZOTERO_ITEM_TYPES))
@@ -42,5 +49,5 @@ class SyncEmptyLibraryTestCase(EmptyLibraryTestCase):
     """
 
     def test_sync_index(self):
-        self.assertEqual(sync_cache(), 0, "Cache should be empty!")
-        self.assertEqual(sync_index(), None, "Index should be empty!")
+        self.assertEqual(sync_cache(), 0)
+        self.assertRaises(SearchIndexError, sync_index)

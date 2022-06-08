@@ -4,7 +4,7 @@ from flask import current_app
 from whoosh.fields import ID, NUMERIC, STORED, Schema
 from whoosh.qparser import QueryParser
 
-from ..storage import load_object, open_index, save_object
+from ..storage import SearchIndexError, load_object, open_index, save_object
 from . import zotero
 
 
@@ -38,7 +38,7 @@ def sync_cache():
     """
     Build a cache of items retrieved from Zotero.
 
-    Return the number of synchronized items, or `None` in case of an error.
+    Return the number of synchronized items.
     """
     current_app.logger.info("Starting cache sync...")
     count = 0
@@ -110,11 +110,9 @@ def sync_cache():
                 count += 1
                 writer.delete_by_term('key', deleted)
                 current_app.logger.debug(f"Item {count} removed ({deleted})")
-    except Exception as e:  # pylint: disable=broad-except
+    except Exception:  # pylint: disable=broad-except
         writer.cancel()
-        current_app.logger.exception(e)
-        current_app.logger.error('An exception occurred. Could not finish updating the cache.')
-        return None
+        raise
     else:
         writer.commit()
         save_object('cache', 'version', version)

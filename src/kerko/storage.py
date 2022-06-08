@@ -32,7 +32,7 @@ def open_index(storage, *, write=False, schema=None, auto_create=False):
     """
     Open a Whoosh search index.
 
-    :param str index_name: Name of the subdirectory containing the index.
+    :param str storage: Name of the subdirectory containing the index.
 
     :param dict/callable schema: Schema of the index, required if parameter
         `write` is `True`.
@@ -58,13 +58,13 @@ def open_index(storage, *, write=False, schema=None, auto_create=False):
                 return index
             if index.doc_count() > 0:  # In read mode, we expect some docs to be available.
                 return index
-            current_app.logger.error(f"Empty index in directory '{index_dir}'.")
-            raise SearchIndexError
-        current_app.logger.error(f"Could not open the index from directory '{index_dir}'.")
-        raise SearchIndexError
-    except whoosh.index.IndexError as exc:
-        current_app.logger.error(f"Index error in directory '{index_dir}': '{exc}'.")
-        raise SearchIndexError from exc
+            raise SearchIndexError(f"Empty {storage} in directory '{index_dir}'.")
+        raise SearchIndexError(
+            f"Could not open {storage} from directory '{index_dir}'. " +
+            (f"Make sure to sync {storage} first." if not write else '')
+        )
+    except whoosh.index.IndexError as e:
+        raise SearchIndexError(f"Error with {storage} in directory '{index_dir}': '{e}'.") from e
 
 
 def delete_storage(storage):

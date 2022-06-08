@@ -6,7 +6,7 @@ import wrapt
 from flask import current_app
 from flask.cli import with_appcontext
 
-from .storage import delete_storage, get_doc_count
+from .storage import SearchIndexError, delete_storage, get_doc_count
 from .sync import zotero
 from .sync.attachments import delete_attachments, sync_attachments
 from .sync.cache import sync_cache
@@ -40,15 +40,16 @@ def sync(target):
 
     By default, everything is synchronized.
     """
-    if target in ['everything', 'cache']:
-        if sync_cache() is None:
-            raise click.Abort
-    if target in ['everything', 'index']:
-        if sync_index() is None:
-            raise click.Abort
-    if target in ['everything', 'attachments']:
-        if sync_attachments() is None:
-            raise click.Abort
+    try:
+        if target in ['everything', 'cache']:
+            sync_cache()
+        if target in ['everything', 'index']:
+            sync_index()
+        if target in ['everything', 'attachments']:
+            sync_attachments()
+    except SearchIndexError as e:
+        current_app.logger.error(e)
+        raise click.Abort()
 
 
 @cli.command()
@@ -85,16 +86,19 @@ def count(target):
     The cache is a flat database where items of any type or hierarchical level
     are counted as separate items.
 
-    The search index is a denormalized database where items are grouped in
-    single documents with their child notes and attachments. The count may
-    include items that are not usually displayed in search results, e.g.,
-    standalone notes or attachments.
+    The search index is a flat, denormalized database where each item is grouped
+    with its children in a single document. The count may include items that are
+    not usually displayed in search results, e.g., standalone notes or
+    attachments.
 
     WARNING: This command is provided for development purposes only and may be
     modified or removed from the module at any time.
     """
-    # TODO: Nicer output in case of exception.
-    pprint.pprint(get_doc_count(target))
+    try:
+        pprint.pprint(get_doc_count(target))
+    except SearchIndexError as e:
+        current_app.logger.error(e)
+        raise click.Abort()
 
 
 @cli.command()

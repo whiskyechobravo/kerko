@@ -303,16 +303,7 @@ class EmptyLibraryTestCase(MockLibraryTestCase):
         )
 
 
-class SyncMixin():
-
-    @classmethod
-    def setUpClass(cls):  # pylint:disable=invalid-name
-        super().setUpClass()
-        sync_cache()
-        sync_index()
-
-
-class PopulatedSynchronizedLibraryTestCase(SyncMixin, PopulatedLibraryTestCase):
+class SynchronizedTestCase(PopulatedLibraryTestCase):
     """
     Test case providing synchronized data from the integration testing library.
 
@@ -320,11 +311,8 @@ class PopulatedSynchronizedLibraryTestCase(SyncMixin, PopulatedLibraryTestCase):
     those first if they are also failing.
     """
 
-
-class EmptySynchronizedLibraryTestCase(SyncMixin, EmptyLibraryTestCase):
-    """
-    Test case providing synchronized data from an empty Zotero library.
-
-    If tests based on this test case fail, check tests from `test_sync`, and fix
-    those first if they are also failing.
-    """
+    @classmethod
+    def setUpClass(cls):  # pylint:disable=invalid-name
+        super().setUpClass()
+        sync_cache()
+        sync_index()
