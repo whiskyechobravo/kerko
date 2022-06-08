@@ -81,15 +81,19 @@ def clean(target):
 @with_appcontext
 def count(target):
     """
-    Output the number of documents available in the cache or in search index.
+    Output the number of records available in the cache or in the search index.
+
+    The cache and the index are structured very differently and their respective
+    numbers should not be expected to match. The number of records in the index
+    may not even match the number of results obtained in Kerko's search
+    interface, because the search can do some internal filtering.
 
     The cache is a flat database where items of any type or hierarchical level
-    are counted as separate items.
+    are counted as separate records.
 
-    The search index is a flat, denormalized database where each item is grouped
-    with its children in a single document. The count may include items that are
-    not usually displayed in search results, e.g., standalone notes or
-    attachments.
+    The index is a flat, denormalized database where each item is grouped with
+    its children in a single record. The count may include items that are not
+    usually displayed in search results, e.g., standalone notes or attachments.
 
     WARNING: This command is provided for development purposes only and may be
     modified or removed from the module at any time.
