@@ -47,6 +47,7 @@ declare -a item_types=(
     "note"
     "patent"
     "podcast"
+    "preprint"
     "presentation"
     "radioBroadcast"
     "report"

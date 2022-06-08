@@ -28,7 +28,7 @@ class MockLibraryTestCase(unittest.TestCase):
     ZOTERO_RESPONSE_HEADERS = {
         'Content-Type': 'application/json',
         'Zotero-API-Version': '3',
-        'Zotero-Schema-Version': '3',
+        'Zotero-Schema-Version': '15',
     }
 
     ZOTERO_ITEM_TYPES = [
@@ -59,6 +59,7 @@ class MockLibraryTestCase(unittest.TestCase):
         'note',
         'patent',
         'podcast',
+        'preprint',
         'presentation',
         'radioBroadcast',
         'report',

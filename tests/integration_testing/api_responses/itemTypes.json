@@ -28,10 +28,6 @@
         "localized": "Case"
     },
     {
-        "itemType": "computerProgram",
-        "localized": "Computer Program"
-    },
-    {
         "itemType": "conferencePaper",
         "localized": "Conference Paper"
     },
@@ -108,6 +104,10 @@
         "localized": "Podcast"
     },
     {
+        "itemType": "preprint",
+        "localized": "Preprint"
+    },
+    {
         "itemType": "presentation",
         "localized": "Presentation"
     },
@@ -118,6 +118,10 @@
     {
         "itemType": "report",
         "localized": "Report"
+    },
+    {
+        "itemType": "computerProgram",
+        "localized": "Software"
     },
     {
         "itemType": "statute",

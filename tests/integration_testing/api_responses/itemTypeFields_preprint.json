@@ -8,48 +8,48 @@
         "localized": "Abstract"
     },
     {
-        "field": "seriesTitle",
-        "localized": "Series Title"
+        "field": "genre",
+        "localized": "Genre"
     },
     {
-        "field": "versionNumber",
-        "localized": "Version"
+        "field": "repository",
+        "localized": "Repository"
     },
     {
-        "field": "date",
-        "localized": "Date"
-    },
-    {
-        "field": "system",
-        "localized": "System"
+        "field": "archiveID",
+        "localized": "Archive ID"
     },
     {
         "field": "place",
         "localized": "Place"
     },
     {
-        "field": "company",
-        "localized": "Company"
+        "field": "date",
+        "localized": "Date"
     },
     {
-        "field": "programmingLanguage",
-        "localized": "Prog. Language"
+        "field": "series",
+        "localized": "Series"
     },
     {
-        "field": "ISBN",
-        "localized": "ISBN"
+        "field": "seriesNumber",
+        "localized": "Series Number"
     },
     {
-        "field": "shortTitle",
-        "localized": "Short Title"
+        "field": "DOI",
+        "localized": "DOI"
+    },
+    {
+        "field": "citationKey",
+        "localized": "Citation Key"
     },
     {
         "field": "url",
         "localized": "URL"
     },
     {
-        "field": "rights",
-        "localized": "Rights"
+        "field": "accessDate",
+        "localized": "Accessed"
     },
     {
         "field": "archive",
@@ -60,6 +60,14 @@
         "localized": "Loc. in Archive"
     },
     {
+        "field": "shortTitle",
+        "localized": "Short Title"
+    },
+    {
+        "field": "language",
+        "localized": "Language"
+    },
+    {
         "field": "libraryCatalog",
         "localized": "Library Catalog"
     },
@@ -68,8 +76,8 @@
         "localized": "Call Number"
     },
     {
-        "field": "accessDate",
-        "localized": "Accessed"
+        "field": "rights",
+        "localized": "Rights"
     },
     {
         "field": "extra",
