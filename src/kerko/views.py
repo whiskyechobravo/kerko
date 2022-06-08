@@ -373,7 +373,7 @@ def get_sitemap_page_count():
     return count
 
 
-@blueprint.route('/sitemap_index.xml')
+@blueprint.route('/sitemap.xml')
 @except_abort(SearchIndexError, 503)
 def sitemap_index():
     """Generate a sitemap index."""
@@ -387,12 +387,12 @@ def sitemap_index():
     return response
 
 
-@blueprint.route(f'/sitemap_<int(min=1, max={SITEMAP_URL_MAX_COUNT}):page_num>.xml')
+@blueprint.route(f'/sitemap<int(min=1, max={SITEMAP_URL_MAX_COUNT}):page_num>.xml')
 @except_abort(SearchIndexError, 503)
 def sitemap(page_num):
     """Generate a sitemap."""
     if page_num > get_sitemap_page_count():
-        # Return an empty sitemap rather than a 404. Someday it might contain something.
+        # Return an empty sitemap rather than a 404. In the future, it might contain something.
         items = []
     else:
         base_filter_terms = query.build_filter_terms('item_type', exclude=['note', 'attachment'])
@@ -411,8 +411,3 @@ def sitemap(page_num):
     )
     response.headers['Content-Type'] = 'application/xml; charset=utf-8'
     return response
-
-
-# TODO: Document the new feature, as well as other recent changes.
-    # Suggest users to add sitemap_index.xml to their robots.txt
-    # (multiple sitemaps are allowed), and to upload to Google
