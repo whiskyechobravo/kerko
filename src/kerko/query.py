@@ -10,7 +10,7 @@ from whoosh.sorting import Count, Facets, FieldFacet
 
 from .criteria import Criteria
 from .meta import format_creator_name
-from .storage import load_object, open_index
+from .storage import SchemaError, load_object, open_index
 
 
 def get_search_return_fields(page_len, exclude=None):
@@ -142,11 +142,14 @@ def _get_fields(hit, return_fields=None):
     :param list return_fields: A list of fields to load. If None, all fields
         will be loaded.
     """
-    if return_fields is None:
-        item = hit.fields()
-    else:
-        item = {f: hit[f] for f in return_fields if f in hit}
-    return _decode_fields(item)
+    try:
+        if return_fields is None:
+            item = hit.fields()
+        else:
+            item = {f: hit[f] for f in return_fields if f in hit}
+        return _decode_fields(item)
+    except KeyError as e:
+        raise SchemaError("Schema changes are required. Please clean and sync index.") from e
 
 
 def _decode_fields(item):

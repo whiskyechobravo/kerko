@@ -6,7 +6,8 @@ import wrapt
 from flask import current_app
 from flask.cli import with_appcontext
 
-from .storage import SearchIndexError, delete_storage, get_doc_count
+from .storage import (SchemaError, SearchIndexError, delete_storage,
+                      get_doc_count)
 from .sync import zotero
 from .sync.attachments import delete_attachments, sync_attachments
 from .sync.cache import sync_cache
@@ -49,7 +50,11 @@ def sync(target):
             sync_attachments()
     except SearchIndexError as e:
         current_app.logger.error(e)
-        raise click.Abort()
+        raise click.Abort
+    except SchemaError as e:
+        current_app.logger.error(e.__cause__)
+        current_app.logger.error(e)
+        raise click.Abort
 
 
 @cli.command()
@@ -102,7 +107,7 @@ def count(target):
         pprint.pprint(get_doc_count(target))
     except SearchIndexError as e:
         current_app.logger.error(e)
-        raise click.Abort()
+        raise click.Abort
 
 
 @cli.command()

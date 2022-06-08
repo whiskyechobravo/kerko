@@ -4,7 +4,8 @@ import whoosh
 from flask import current_app
 from whoosh.query import Term
 
-from ..storage import SearchIndexError, load_object, open_index, save_object
+from ..storage import (SchemaError, SearchIndexError, load_object, open_index,
+                       save_object)
 from ..tags import TagGate
 
 
@@ -58,6 +59,9 @@ def sync_index():
                 )
             else:
                 current_app.logger.debug(f"Item {count} excluded ({item['key']})")
+    except (whoosh.fields.FieldConfigurationError, whoosh.fields.UnknownFieldError) as e:
+        writer.cancel()
+        raise SchemaError("Schema changes are required. Please clean index.") from e
     except Exception:  # pylint: disable=broad-except
         writer.cancel()
         raise

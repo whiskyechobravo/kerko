@@ -1,10 +1,11 @@
 """Synchronize the Zotero library into a local cache."""
 
 from flask import current_app
-from whoosh.fields import ID, NUMERIC, STORED, Schema
+from whoosh.fields import (ID, NUMERIC, STORED, FieldConfigurationError,
+                           Schema, UnknownFieldError)
 from whoosh.qparser import QueryParser
 
-from ..storage import SearchIndexError, load_object, open_index, save_object
+from ..storage import SchemaError, load_object, open_index, save_object
 from . import zotero
 
 
@@ -18,6 +19,8 @@ def get_formats():
 
 
 def get_cache_schema():
+    # CAUTION: When changing this schema, consider adapting any code that depend
+    # on the changes to raise `SchemaError` if the the schema is incorrect.
     schema = Schema(
         key=ID(unique=True, stored=True),  # Copied from Zotero.
         version=NUMERIC(stored=True),  # Copied from Zotero.
@@ -110,6 +113,9 @@ def sync_cache():
                 count += 1
                 writer.delete_by_term('key', deleted)
                 current_app.logger.debug(f"Item {count} removed ({deleted})")
+    except (FieldConfigurationError, UnknownFieldError) as e:
+        writer.cancel()
+        raise SchemaError("Schema changes are required. Please clean cache.") from e
     except Exception:  # pylint: disable=broad-except
         writer.cancel()
         raise

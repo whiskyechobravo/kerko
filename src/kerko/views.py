@@ -16,12 +16,14 @@ from .forms import SearchForm
 from .pager import build_pager, get_page_numbers
 from .pager import get_sections as get_pager_sections
 from .sorter import build_sorter
-from .storage import SearchIndexError, get_doc_count, get_storage_dir
+from .storage import (SchemaError, SearchIndexError, get_doc_count,
+                      get_storage_dir)
 
 SITEMAP_URL_MAX_COUNT = 50000
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
+@except_abort(SchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def search():
     """View the results of a search."""
@@ -154,6 +156,7 @@ def search():
 
 
 @blueprint.route('/<path:item_id>')
+@except_abort(SchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def item_view(item_id):
     """View a full bibliographic record."""
@@ -195,6 +198,7 @@ def item_view(item_id):
 
 @blueprint.route('/<path:item_id>/download/<string:attachment_id>/')
 @blueprint.route('/<path:item_id>/download/<string:attachment_id>/<string:attachment_filename>')
+@except_abort(SchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def child_attachment_download(item_id, attachment_id, attachment_filename=None):
     """
@@ -251,6 +255,7 @@ def child_attachment_download(item_id, attachment_id, attachment_filename=None):
 
 @blueprint.route('/download/<string:item_id>/')
 @blueprint.route('/download/<string:item_id>/<string:attachment_filename>')
+@except_abort(SchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def standalone_attachment_download(item_id, attachment_filename=None):
     """
@@ -292,6 +297,7 @@ def standalone_attachment_download(item_id, attachment_filename=None):
 
 
 @blueprint.route('/<path:item_id>/export/<string:citation_format_key>')
+@except_abort(SchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def item_citation_download(item_id, citation_format_key):
     """Download a record."""
@@ -332,6 +338,7 @@ def item_citation_download(item_id, citation_format_key):
 
 
 @blueprint.route('/export/<string:citation_format_key>/')
+@except_abort(SchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def search_citation_download(citation_format_key):
     """Download all records resulting from a search."""
@@ -388,6 +395,7 @@ def sitemap_index():
 
 
 @blueprint.route(f'/sitemap<int(min=1, max={SITEMAP_URL_MAX_COUNT}):page_num>.xml')
+@except_abort(SchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def sitemap(page_num):
     """Generate a sitemap."""

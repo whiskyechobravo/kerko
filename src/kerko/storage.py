@@ -10,6 +10,10 @@ class SearchIndexError(Exception):
     pass
 
 
+class SchemaError(Exception):
+    pass
+
+
 def get_storage_dir(storage):
     return pathlib.Path(current_app.config['KERKO_DATA_DIR']) / storage
 
@@ -61,7 +65,7 @@ def open_index(storage, *, write=False, schema=None, auto_create=False):
             raise SearchIndexError(f"Empty {storage} in directory '{index_dir}'.")
         raise SearchIndexError(
             f"Could not open {storage} from directory '{index_dir}'. " +
-            (f"Make sure to sync {storage} first." if not write else '')
+            (f"Please sync {storage}." if not write else '')
         )
     except whoosh.index.IndexError as e:
         raise SearchIndexError(f"Error with {storage} in directory '{index_dir}': '{e}'.") from e
