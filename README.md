@@ -29,6 +29,7 @@ Contents:
   - [Kerko Recipes](#kerko-recipes)
     - [Ensuring full-text indexing of your attachments in Zotero](#ensuring-full-text-indexing-of-your-attachments-in-zotero)
     - [Providing _Cites_ and _Cited by_ relations](#providing-cites-and-cited-by-relations)
+    - [Submitting your sitemap to search engines](#submitting-your-sitemap-to-search-engines)
   - [Translating Kerko](#translating-kerko)
   - [Contributing](#contributing)
     - [Reporting issues](#reporting-issues)
@@ -167,6 +168,8 @@ The following features are implemented in Kerko:
       recommended for indexing by [Google Scholar][HighwirePress_Google], and
       are recognized by many other databases and reference management tools,
       including the [Zotero Connector][Zotero_Connector] browser extension.
+* Sitemap: an [XML Sitemap][XML_Sitemap] is automatically generated, and you may
+  use it to help search engines discover your bibliographic records.
 * Exporting: users may export individual records as well as complete
   bibliographies corresponding to search results. By default, download links are
   provided for the RIS and BibTeX formats, but applications may be configured to
@@ -336,8 +339,9 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
    bibliography.
 
 You have just built a really minimal application for Kerko. This code example is
-available at [KerkoStart]. See also [KerkoApp] for a slightly more complete
-example.
+available at [KerkoStart]. See also [KerkoApp] for a more complete and
+production-ready example (also recommended if you are developing a custom
+application or integrating into another application).
 
 
 ## Configuration variables
@@ -674,6 +678,34 @@ Remarks:
   addition to _Cites_ and _Cited by_.
 
 
+### Submitting your sitemap to search engines
+
+Kerko generates an [XML Sitemap][XML_Sitemap] that can help search engines
+discover your bibliographic records.
+
+The path of the sitemap depends on the configuration of your application. For
+[KerkoApp] or the [Getting started](#getting-started) example above, its path is
+`/bibliography/sitemap.xml`. The full URL of the sitemap then looks like
+`https://example.com/bibliography/sitemap.xml`.
+
+Different search engines may have different procedures for submitting sitemaps
+([Google](https://developers.google.com/search/docs/advanced/sitemaps/build-sitemap#addsitemap),
+[Bing](https://www.bing.com/webmasters/help/Sitemaps-3b5cf6ed),
+[Yandex](https://yandex.com/support/webmaster/indexing-options/sitemap.html)).
+
+However, a standard method consists in adding a `Sitemap` directive to a
+`robots.txt` file served at the root of your site, to tell web crawlers where to
+find your sitemap. For example, you would add the following line to
+`robots.txt`:
+
+```
+Sitemap: https://example.com/bibliography/sitemap.xml
+```
+
+A `robots.txt` file can have multiple `Sitemap` directives, thus the Kerko
+sitemap can be specified alongside any other you might already have.
+
+
 ## Translating Kerko
 
 Kerko can be translated using Babel's [setuptools
@@ -911,6 +943,7 @@ If you wish to add your Kerko-powered online bibliography to this list, please
 [Whisky_Echo_Bravo]: https://whiskyechobravo.com
 [Whoosh]: https://pypi.org/project/Whoosh/
 [WTForms]: https://pypi.org/project/WTForms/
+[XML_Sitemap]: https://www.sitemaps.org/
 [Zotero]: https://www.zotero.org/
 [Zotero_Connector]: https://www.zotero.org/download/connectors
 [Zotero_demo]: https://www.zotero.org/groups/2348869/kerko_demo/items

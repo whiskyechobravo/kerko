@@ -13,12 +13,16 @@ flask kerko sync index
 Features:
 
 - Allow searching items by their Zotero key.
+- Add XML sitemap.
+- Add the `kerko count` CLI command (mostly meant for development purposes).
 
 Bug fixes:
 
 - Fix last sync time not displayed at the bottom of search results when
   `KERKO_PRINT_CITATIONS_LINK` and `KERKO_DOWNLOAD_CITATIONS_LINK` are both set
   to `False`.
+- Fix the `kerko sync` CLI command not returning an error code with some types
+  of failures.
 
 Other changes:
 
@@ -26,7 +30,11 @@ Other changes:
   field (previously, only the dedicated Zotero fields had a boost factor).
 - Add blocks in templates to facilitate theming.
 - Improve documentation.
+- Make some log and CLI error messages more user-friendly.
 - Move pydocstyle config to `pyproject.toml`.
+- Remove remnants of code aimed at Python versions older than 3.7.
+- Remove support for configuration variables `KERKO_ZOTERO_START` and
+  `KERKO_ZOTERO_END` (were only used for development and no longer practical).
 
 
 ## 0.8.1 (2021-11-16)
