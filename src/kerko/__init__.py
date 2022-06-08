@@ -39,8 +39,6 @@ def init_default_config(state):
     state.app.config.setdefault('KERKO_TITLE', 'Kerko')
     state.app.config.setdefault('KERKO_WHOOSH_LANGUAGE', 'en')
     state.app.config.setdefault('KERKO_ZOTERO_LOCALE', 'en-US')
-    state.app.config.setdefault('KERKO_ZOTERO_START', 0)
-    state.app.config.setdefault('KERKO_ZOTERO_END', 0)
     state.app.config.setdefault('KERKO_ZOTERO_MAX_ATTEMPTS', 10)
     state.app.config.setdefault('KERKO_ZOTERO_WAIT', 120)  # In seconds.
     state.app.config.setdefault('KERKO_ZOTERO_BATCH_SIZE', 100)

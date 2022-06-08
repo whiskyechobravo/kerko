@@ -317,7 +317,7 @@ class Items:
         else:
             self.method = 'items'
             self.method_info = 'updated'
-        self.start = current_app.config['KERKO_ZOTERO_START']
+        self.start = 0
         self.zotero_batch = []
         self.iterator = iter(self.zotero_batch)
 
@@ -325,9 +325,6 @@ class Items:
         return self
 
     def __next__(self):
-        if current_app.config['KERKO_ZOTERO_END'] > 0 and \
-                self.start >= current_app.config['KERKO_ZOTERO_END']:
-            raise StopIteration
         while True:
             try:
                 return self._next_item()
