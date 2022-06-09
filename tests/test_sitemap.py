@@ -2,10 +2,10 @@
 Tests for the XML sitemap views.
 """
 
-import re
-
 from flask import url_for
 from lxml import etree
+
+from kerko.query import run_query_all
 
 from tests.integration_testing import SynchronizedTestCase
 
@@ -40,10 +40,18 @@ class PopulatedSitemapTestCase(SynchronizedTestCase):
 
             root = etree.fromstring(response.get_data(as_text=True).encode('utf-8'))
             urls = root.xpath('/ns:urlset/ns:url/ns:loc/text()', namespaces=self.namespaces)
-            url_pattern = re.compile(r'^http.?://.+/bibliography/[a-zA-Z0-9]{8}$')
-            self.assertFalse([url for url in urls if not url_pattern.match(url)])
-
-            # TODO: Check validity of item URLs.
+            self.assertEqual(
+                len(set(urls)),
+                len(urls),
+                "One or more sitemap URLs are not unique",
+            )
+            self.assertEqual(
+                len(urls),
+                len(list(run_query_all())),
+                "The number of URLs in the sitemap does not match the number of items.",
+            )
+            for url in urls:
+                self.assertEqual(client.get(url).status_code, 200)
 
     def test_sitemap_out_of_range(self):
         """Test out of range sitemaps."""
