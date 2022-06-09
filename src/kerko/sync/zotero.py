@@ -41,14 +41,11 @@ def retry_zotero(wrapped, _instance, args, kwargs):
                 zotero_errors.HTTPError,
                 zotero_errors.UnsupportedParams
         ) as e:
-            current_app.logger.exception(e)
+            current_app.logger.warning(e)
             if attempts < current_app.config['KERKO_ZOTERO_MAX_ATTEMPTS']:
                 current_app.logger.warning(
-                    "The Zotero API call has failed in {func}. "
-                    "New attempt in {wait} seconds...".format(
-                        func=wrapped.__name__,
-                        wait=current_app.config['KERKO_ZOTERO_WAIT']
-                    )
+                    f"The Zotero API request has failed in {wrapped.__name__}. "
+                    f"New attempt in {current_app.config['KERKO_ZOTERO_WAIT']} seconds..."
                 )
                 attempts += 1
                 sleep(current_app.config['KERKO_ZOTERO_WAIT'])
