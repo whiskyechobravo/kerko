@@ -26,6 +26,7 @@ Bug fixes:
 
 Other changes:
 
+- Handle new Zotero fields introduced with the new 'preprint' item type.
 - Apply a boost factor to DOI, ISBN and ISSN fields extracted from the Extra
   field (previously, only the dedicated Zotero fields had a boost factor).
 - Add blocks in templates to facilitate theming.

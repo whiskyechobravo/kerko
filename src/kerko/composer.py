@@ -667,6 +667,15 @@ class Composer:
                     extractor=extractors.ItemDataExtractor(key='archive')
                 )
             )
+        if 'z_archiveID' not in exclude:
+            self.add_field(
+                FieldSpec(
+                    key='z_archiveID',
+                    field_type=TEXT(**self.name_text_kwargs),
+                    scopes=['all', 'metadata'],
+                    extractor=extractors.ItemDataExtractor(key='archiveID')
+                )
+            )
         if 'z_archiveLocation' not in exclude:
             self.add_field(
                 FieldSpec(
@@ -1136,6 +1145,15 @@ class Composer:
                     extractor=extractors.ItemDataExtractor(key='reportType')
                 )
             )
+        if 'z_repository' not in exclude:
+            self.add_field(
+                FieldSpec(
+                    key='z_repository',
+                    field_type=TEXT(**self.primary_text_kwargs),
+                    scopes=['all', 'metadata'],
+                    extractor=extractors.ItemDataExtractor(key='repository')
+                )
+            )
         if 'z_rights' not in exclude:
             self.add_field(
                 FieldSpec(
@@ -1203,6 +1221,7 @@ class Composer:
         # Known Zotero item fields that we are deliberately ignoring for search:
         # - accessDate
         # - codePages
+        # - citationKey
         # - extra
         # - firstPage
         # - numberOfVolumes
@@ -1211,6 +1230,7 @@ class Composer:
         # - runningTime
         # - scale
         # - url
+        # - version
 
         #
         # Other metadata associated to Zotero items, for keyword search.
