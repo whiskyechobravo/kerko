@@ -25,6 +25,8 @@ from kerko.sync.index import sync_index
 class MockLibraryTestCase(unittest.TestCase):
     """Base test case providing mock Zotero API responses."""
 
+    URL_PREFIX = '/bibliography'
+
     ZOTERO_RESPONSE_HEADERS = {
         'Content-Type': 'application/json',
         'Zotero-API-Version': '3',
@@ -78,7 +80,7 @@ class MockLibraryTestCase(unittest.TestCase):
 
     @classmethod
     def init_blueprints(cls):
-        cls.app.register_blueprint(kerko_blueprint, url_prefix='/bibliography')
+        cls.app.register_blueprint(kerko_blueprint, url_prefix=cls.URL_PREFIX)
 
     @classmethod
     def init_extensions(cls):

@@ -22,7 +22,7 @@ class PopulatedSitemapTestCase(SynchronizedTestCase):
         """Test the XML sitemap index."""
 
         with self.app.test_client() as client:
-            response = client.get('/bibliography/sitemap.xml')
+            response = client.get(f'{self.URL_PREFIX}/sitemap.xml')
             self.assertEqual(response.status_code, 200)
 
             root = etree.fromstring(response.get_data(as_text=True).encode('utf-8'))
@@ -35,7 +35,7 @@ class PopulatedSitemapTestCase(SynchronizedTestCase):
         """Test the XML sitemap."""
 
         with self.app.test_client() as client:
-            response = client.get('/bibliography/sitemap1.xml')
+            response = client.get(f'{self.URL_PREFIX}/sitemap1.xml')
             self.assertEqual(response.status_code, 200)
 
             root = etree.fromstring(response.get_data(as_text=True).encode('utf-8'))
@@ -57,22 +57,22 @@ class PopulatedSitemapTestCase(SynchronizedTestCase):
         """Test out of range sitemaps."""
 
         with self.app.test_client() as client:
-            response = client.get('/bibliography/sitemap0.xml')
+            response = client.get(f'{self.URL_PREFIX}/sitemap0.xml')
             self.assertEqual(response.status_code, 404)
 
         with self.app.test_client() as client:
-            response = client.get('/bibliography/sitemap50001.xml')
+            response = client.get(f'{self.URL_PREFIX}/sitemap50001.xml')
             self.assertEqual(response.status_code, 404)
 
         with self.app.test_client() as client:
-            response = client.get('/bibliography/sitemapbomb.xml')
+            response = client.get(f'{self.URL_PREFIX}/sitemapbomb.xml')
             self.assertEqual(response.status_code, 404)
 
     def test_sitemap_empty(self):
         """Test empty sitemaps."""
 
         with self.app.test_client() as client:
-            response = client.get('/bibliography/sitemap2.xml')
+            response = client.get(f'{self.URL_PREFIX}/sitemap2.xml')
             self.assertEqual(response.status_code, 200)
 
             root = etree.fromstring(response.get_data(as_text=True).encode('utf-8'))
