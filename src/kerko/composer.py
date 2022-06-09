@@ -1233,6 +1233,27 @@ class Composer:
         # - version
 
         #
+        # Other Zotero fields, stored only, not to be searched.
+        #
+
+        if 'z_dateAdded' not in exclude:
+            self.add_field(
+                FieldSpec(
+                    key='z_dateAdded',
+                    field_type=STORED,
+                    extractor=extractors.ItemDataExtractor(key='dateAdded')
+                )
+            )
+        if 'z_dateModified' not in exclude:
+            self.add_field(
+                FieldSpec(
+                    key='z_dateModified',
+                    field_type=STORED,
+                    extractor=extractors.ItemDataExtractor(key='dateModified')
+                )
+            )
+
+        #
         # Other metadata associated to Zotero items, for keyword search.
         #
 

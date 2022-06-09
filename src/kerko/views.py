@@ -407,7 +407,7 @@ def sitemap(page_num):
         items = query.run_query_filter_paged(
             page_num=page_num,
             page_len=SITEMAP_URL_MAX_COUNT,
-            return_fields=['id', 'data'],  # FIXME: Add dateModified field to schema to avoid loading all data!
+            return_fields=['id', 'z_dateModified'],
             default_terms=base_filter_terms,
         )
     response = make_response(
