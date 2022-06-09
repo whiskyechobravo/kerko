@@ -150,7 +150,10 @@ def _get_fields(hit, return_fields=None):
         return _decode_fields(item)
     except KeyError as e:
         current_app.logger.error(e)
-        raise SchemaError("Schema changes are required. Please clean and sync index.") from e
+        raise SchemaError(
+            "A field is missing from the schema. Either this is a programming "
+            "error, or you may need to clean and sync the index."
+        ) from e
 
 
 def _decode_fields(item):
