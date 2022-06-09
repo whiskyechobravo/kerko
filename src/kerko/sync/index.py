@@ -61,6 +61,7 @@ def sync_index():
                 current_app.logger.debug(f"Item {count} excluded ({item['key']})")
     except (whoosh.fields.FieldConfigurationError, whoosh.fields.UnknownFieldError) as e:
         writer.cancel()
+        current_app.logger.error(e)
         raise SchemaError("Schema changes are required. Please clean index.") from e
     except Exception:  # pylint: disable=broad-except
         writer.cancel()

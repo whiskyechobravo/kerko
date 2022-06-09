@@ -31,7 +31,7 @@ Other changes:
   field (previously, only the dedicated Zotero fields had a boost factor).
 - Add blocks in templates to facilitate theming.
 - Improve documentation.
-- Make some log and CLI error messages more user-friendly.
+- Make sync and schema-related error messages more helpful and user-friendly.
 - Move pydocstyle config to `pyproject.toml`.
 - Remove remnants of code aimed at Python versions older than 3.7.
 - Remove support for configuration variables `KERKO_ZOTERO_START` and

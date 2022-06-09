@@ -149,6 +149,7 @@ def _get_fields(hit, return_fields=None):
             item = {f: hit[f] for f in return_fields if f in hit}
         return _decode_fields(item)
     except KeyError as e:
+        current_app.logger.error(e)
         raise SchemaError("Schema changes are required. Please clean and sync index.") from e
 
 

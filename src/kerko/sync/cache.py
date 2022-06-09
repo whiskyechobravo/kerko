@@ -115,6 +115,7 @@ def sync_cache():
                 current_app.logger.debug(f"Item {count} removed ({deleted})")
     except (FieldConfigurationError, UnknownFieldError) as e:
         writer.cancel()
+        current_app.logger.error(e)
         raise SchemaError("Schema changes are required. Please clean cache.") from e
     except Exception:  # pylint: disable=broad-except
         writer.cancel()

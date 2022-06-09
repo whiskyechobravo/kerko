@@ -52,7 +52,6 @@ def sync(target):
         current_app.logger.error(e)
         raise click.Abort
     except SchemaError as e:
-        current_app.logger.error(e.__cause__)
         current_app.logger.error(e)
         raise click.Abort
 

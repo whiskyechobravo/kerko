@@ -19,8 +19,6 @@ def except_abort(exc, status):
         try:
             return wrapped(*args, **kwargs)
         except exc as e:
-            if e.__cause__:
-                current_app.logger.error(e.__cause__)
             current_app.logger.error(e)
             abort(status)
     return wrapper
