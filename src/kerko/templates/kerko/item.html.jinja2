@@ -12,7 +12,7 @@
     {%- endif %}
 {%- endmacro %}
 
-{% macro facet_field(label_text, value_text, key, add_link_title=None) %}
+{% macro facet_field(label_text, value_text, key, add_title=None) %}
     {#- Display a field using its facet, if available, otherwise fallback to a regular field display. #}
     {%- if key in config.KERKO_COMPOSER.facets and key in item.facet_results %}
         {%- set f = config.KERKO_COMPOSER.facets[key] %}
@@ -22,17 +22,16 @@
                 facet_items(
                     f.missing_label,
                     item.facet_results[f.key],
-                    expand=True,
-                    add_link_icon='',
-                    remove_link_icon='',
                     list_tag='div',
                     item_tag='div',
-                    add_link_title=add_link_title
+                    add_icon='',
+                    add_title=add_title,
+                    remove_icon=''
                 )
             )
         }}
     {%- else %}
-        {#- There is matching facet, just display its value. #}
+        {#- No matching facet, display as a regular field. #}
         {{- field(label_text, value_text) }}
     {%- endif %}
 {%- endmacro %}
@@ -109,7 +108,7 @@
             {%- endif %}
         {%- endblock item_actions %}
         {%- block item_field_resource_type %}
-            {{- facet_field(_("Resource type"), item.item_type_label, 'facet_item_type', add_link_title=_("Search the '{}' resource type").format(item.item_type_label)) }}
+            {{- facet_field(_("Resource type"), item.item_type_label, 'facet_item_type', add_title=_("Search the '{}' resource type").format(item.item_type_label)) }}
         {%- endblock item_field_resource_type %}
         {%- block item_field_creators %}
             {%- if item.data.creators %}

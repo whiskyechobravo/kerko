@@ -1,5 +1,5 @@
-{%- macro relations_list(relations) %}
-    <ul class="list-unstyled">
+{%- macro relations_list(relations, collapse_id='') %}
+    <ul {% if collapse_id %}id="{{ collapse_id }}"{% endif %} class="list-unstyled {% if collapse_id %}collapse{% endif %}">
         {%- for result in relations %}
             {%- with result_url=url_for('.item_view', item_id=result.id, _external=True), show_abstracts=False, hide_result_links=not config.KERKO_RELATIONS_LINKS %}
                 {%- include "kerko/_search-result.html.jinja2" %}
@@ -13,13 +13,15 @@
     {%- if apply_relations_initial_limit %}
         {{ relations_list(item[field][:config.KERKO_RELATIONS_INITIAL_LIMIT]) }}
         {%- if item[field]|length > config.KERKO_RELATIONS_INITIAL_LIMIT %}
-            <div class="collapse d-print-block" id="collapse-rel-{{ key }}">
-                {{ relations_list(item[field][config.KERKO_RELATIONS_INITIAL_LIMIT:]) }}
+            {{ relations_list(item[field][config.KERKO_RELATIONS_INITIAL_LIMIT:], collapse_id='rel-' + key|string + '-more') }}
+            <div class="mb-3 d-print-none">
+                <button class="btn btn-light btn-expand" data-toggle="collapse" data-target="#rel-{{ key }}-more" aria-expanded="false" aria-controls="rel-{{ key }}-more">
+                    <span class="fas fa-chevron-down" aria-hidden="true"></span> {{ _("View all") }}
+                </button>
+                <button class="btn btn-light btn-collapse" data-toggle="collapse" data-target="#rel-{{ key }}-more" aria-expanded="true" aria-controls="rel-{{ key }}-more">
+                    <span class="fas fa-chevron-up" aria-hidden="true"></span> {{ _("View fewer") }}
+                </button>
             </div>
-            <button class="btn btn-light d-print-none more-or-less" data-toggle="collapse" data-target="#collapse-rel-{{ key }}" aria-expanded="false" aria-controls="collapse-rel-{{ key }}">
-                <span class="more">{{ _("View all") }}</span>
-                <span class="less">{{ _("View fewer") }}</span>
-            </button>
         {%- endif %}
     {%- else %}
         {{ relations_list(item[field]) }}

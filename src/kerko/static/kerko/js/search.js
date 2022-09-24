@@ -11,4 +11,14 @@ jQuery(function($) {
     injectModalBody('.facets', target);
     $(target).modal();
   });
+
+  $('.collapse').on('show.bs.collapse', function(e) {
+    e.stopPropagation();
+    $(e.currentTarget).prev('.continued').removeClass('continued-hint');
+  });
+  $('.collapse').on('hidden.bs.collapse', function(e) {
+    e.stopPropagation();
+    $(e.currentTarget).prev('.continued').addClass('continued-hint');
+  });
+  // TODO: Autoscroll page to keep facet in view when collapsing on "view less".
 });

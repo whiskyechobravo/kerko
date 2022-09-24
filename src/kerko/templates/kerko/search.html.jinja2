@@ -194,7 +194,7 @@
 {%- block body_scripts %}
     {{- super() }}
     {%- block kerko_search_js %}
-        <script src="{{ url_for('kerko.static', filename='kerko/js/search.js') }}"></script>
+        <script src="{{ url_for('kerko.static', filename='kerko/js/search.js') }}?20220925"></script>
     {%- endblock kerko_search_js %}
     {%- block kerko_print_js %}
         {%- if show_print_link %}

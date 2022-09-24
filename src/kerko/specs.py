@@ -95,6 +95,8 @@ class FacetSpec(BaseFieldSpec):
             title,
             filter_key,
             weight=0,
+            soft_limit=0,
+            soft_limit_leeway=0,
             codec=None,
             missing_label=None,
             sort_key=None,
@@ -110,10 +112,22 @@ class FacetSpec(BaseFieldSpec):
 
         :param str title: Title of the facet.
 
-        :param str filter_key: Key to use in URLs when filtering with this facet.
+        :param str filter_key: Key to use in URLs when filtering with this
+            facet.
 
         :param int weight: Determine the position of this facet relative to the
             others.
+
+        :param int soft_limit: Maximum number of filters to show by default
+            under this facet. Excess filters will be shown if the user clicks a
+            "view more" button. Defaults to 0 (no limit).
+
+        :param int soft_limit_leeway: If the number of filters under this facet
+            exceeds `soft_limit` by this tolerance margin or less, all filters
+            will be shown. Defaults to 0 (no tolerance margin).
+
+        :param str missing_label: Label to use for items that do not have any
+            value for this facet. Defaults to `None` (show no label at all).
 
         :param BaseFacetCodec codec: Value encoder/decoder for this facet.
 
@@ -121,14 +135,15 @@ class FacetSpec(BaseFieldSpec):
 
         :param `renderers.Renderer` renderer: A renderer for this facet. The
             rendering context provides the following variables:
+
             - `spec`: The `FacetSpec` instance.
             - `items`: The facet values retrieved by the search query.
             - `mode`: A string whose value is one of the following:
                 - `'search'`: Displaying the facet on a search results page.
-                - `'field'`: Displaying the facet on a full bibliographic
-                  record page.
-                - `'breadbox'`: Displaying the facet as a search criteria in
-                  the breadbox.
+                - `'field'`: Displaying the facet on a full bibliographic record
+                  page.
+                - `'breadbox'`: Displaying the facet as a search criteria in the
+                  breadbox.
 
         .. seealso: Additional :meth:`BaseFieldSpec.__init__` arguments.
         """
@@ -136,6 +151,8 @@ class FacetSpec(BaseFieldSpec):
         self.title = title
         self.filter_key = filter_key
         self.weight = weight
+        self.soft_limit = soft_limit
+        self.soft_limit_leeway = soft_limit_leeway
         self.codec = codec or BaseFacetCodec()
         self.missing_label = missing_label
         self.sort_key = sort_key
@@ -197,21 +214,20 @@ class FacetSpec(BaseFieldSpec):
     def sort_items(self, items):
         if self.sort_key is None:
             return
-        # Sort items with multiple-keys, using tuples. The first tuple element
-        # (the primary sort key), gets inserted before the other sort keys. It
-        # is a boolean value that ensures that empty labels (those of missing
-        # values) appear last regardless of the sort direction.
-        #
-        # Note: Count values are multiplied by -1 to reverse their order.
-        # Because there is only one 'reverse' flag for all sort keys, the
-        # reverse order for counts is, counterintuitively, ascending. When
-        # ordering facet values by count, we usually want descending order, so
-        # if the reverse flag False in that case, it is possible to get the
-        # second sort key, usually 'label' sorted in alphabetical order.
+
+        # Sort items based on multiple-keys.
         return sorted(
             items,
             key=lambda x: (
-                bool(x['label']) if self.sort_reverse else not x['label'], *[
+                # First sort key: show active items first.
+                not x['remove_url'],
+                # Second sort key: show items with missing labels last.
+                bool(x['label']) if self.sort_reverse else not x['label'],
+                # Third sort key: sort items according to the facet's specified
+                # sort keys. If 'count' is used as key, multiply the count value
+                # by -1 to reverse order (because the desired default when
+                # ordering by count is the descending order).
+                *[
                     x[k] * -1 if k == 'count' else
                     (sort_normalize(x[k]) if isinstance(x[k], str) else x[k])
                     for k in self.sort_key
@@ -363,10 +379,7 @@ class TreeFacetSpec(FacetSpec):
                 else:
                     add_url = criteria.build_add_filter_url(self, value)
                 if remove_url or add_url:  # Only items with an URL get displayed.
-                    if value:
-                        path = value.split(sep=self.path_separator)
-                    else:
-                        path = [value]
+                    path = value.split(sep=self.path_separator)
 
                     # Build the tree path. Part of the path may or may not already
                     # exist as the facet values are not ordered.
@@ -375,6 +388,7 @@ class TreeFacetSpec(FacetSpec):
                         node = node['children'][component]
                     # Add data at the leaf.
                     node['node'] = {
+                        'id': '-'.join(path),
                         'label': label,
                         'count': count,
                         'count_formatted': format_decimal(count, locale=get_locale()),
