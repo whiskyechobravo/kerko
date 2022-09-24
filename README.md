@@ -411,9 +411,9 @@ override their default value:
   ellipsis sign ("..."). Defaults to `0` (abstracts get displayed in their full
   length, without any truncation).
 * `KERKO_RESULTS_ABSTRACTS_MAX_LENGTH_LEEWAY`: If the length of an abstract only
-  exceeds `KERKO_RESULTS_ABSTRACTS_MAX_LENGTH` by this tolerance margin (in
-  number of characters), it will not be truncated. Defaults to `0` (no tolerance
-  margin).
+  exceeds `KERKO_RESULTS_ABSTRACTS_MAX_LENGTH` by this tolerance margin or less
+  (in number of characters), it will not be truncated. Defaults to `0` (no
+  tolerance margin).
 * `KERKO_RESULTS_ATTACHMENT_LINKS`: Provide links to attachments in search
   results. Defaults to `True`.
 * `KERKO_RESULTS_URL_LINKS`: Provide links to online resources in search
