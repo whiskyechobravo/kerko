@@ -37,6 +37,10 @@ Other changes:
 - Remove support for configuration variables `KERKO_ZOTERO_START` and
   `KERKO_ZOTERO_END` (were only used for development and no longer practical).
 
+Backwards incompatible changes:
+
+- Remove the `KERKO_FACET_COLLAPSING` option.
+
 
 ## 0.8.1 (2021-11-16)
 

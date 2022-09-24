@@ -377,7 +377,6 @@ override their default value:
 * `KERKO_DOWNLOAD_CITATIONS_MAX_COUNT`: Limit over which the record download
   button should be hidden from search results pages. Defaults to `0` (i.e. no
   limit).
-* `KERKO_FACET_COLLAPSING`: Allow collapsible facets. Defaults to `False`.
 * `KERKO_FULLTEXT_SEARCH`: Allow full-text search of PDF attachments. Defaults
   to `True`. To get consistent results, see [Ensuring full-text indexing of your
   attachments in

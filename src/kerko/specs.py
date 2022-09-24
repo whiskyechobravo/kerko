@@ -102,7 +102,6 @@ class FacetSpec(BaseFieldSpec):
             item_view=True,
             allow_overlap=True,
             query_class=None,
-            collapsible=True,
             renderer=None,
             **kwargs
     ):
@@ -144,7 +143,6 @@ class FacetSpec(BaseFieldSpec):
         self.item_view = item_view
         self.allow_overlap = allow_overlap
         self.query_class = query_class or Term
-        self.collapsible = collapsible
         self.renderer = renderer or renderers.TemplateResolverRenderer(
             'kerko/_facet_{mode}.html.jinja2'
         )
