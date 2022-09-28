@@ -1,4 +1,5 @@
 {%- from "kerko/_attributes.html.jinja2" import title_aria_label %}
+{%- from "kerko/_collapse.html.jinja2" import expand_collapse_buttons %}
 
 {%- macro facet_item(
             missing_label,
@@ -39,13 +40,19 @@
             {%- if not item.remove_url and item.count > 0 %}<span class="facet-item-count"> ({{ item.count_formatted|safe }})</span>{%- endif %}
             {%- if subtree %}
                 {%- if list_id and item.id %}
-                    {%- set target = list_id + '-' + item.id|string -%}
-                    <button class="btn btn-link px-1 py-0 border-0 align-baseline btn-expand" data-toggle="collapse" data-target="#{{ target }}" aria-controls="{{ target }}" aria-expanded="{% if item.remove_url %}true{% else %}false{% endif %}" {{ title_aria_label(expand_title) }}>
-                        {%- if expand_icon %}<span class="{{ expand_icon }}" aria-hidden="true" style="width: 1rem;"></span>{% endif -%}
-                    </button>{#- No whitespace -#}
-                    <button class="btn btn-link px-1 py-0 border-0 align-baseline btn-collapse" data-toggle="collapse" data-target="#{{ target }}" aria-controls="{{ target }}" aria-expanded="{% if item.remove_url %}false{% else %}true{% endif %}" {{ title_aria_label(collapse_title) }}>
-                        {%- if collapse_icon %}<span class="{{ collapse_icon }}" aria-hidden="true" style="width: 1rem;"></span>{% endif -%}
-                    </button>
+                    {{- expand_collapse_buttons(
+                            collapse_id=list_id + '-' + item.id|string,
+                            btn_class='btn btn-link px-1 py-0 border-0 align-baseline',
+                            expand_label='',
+                            expand_description=expand_title,
+                            expand_icon=expand_icon,
+                            collapse_label='',
+                            collapse_description=collapse_title,
+                            collapse_icon=collapse_icon,
+                            icons_width='1rem',
+                            expand_default=item.remove_url
+                        )
+                    -}}
                 {%- endif %}
                 {{ subtree|safe }}
             {%- endif %}
@@ -105,12 +112,7 @@
                     {{- facet_items(missing_label, items[:soft_limit], list_id=list_id, list_class_top=[list_class_top, 'mb-0', 'continued', 'continued-hint']|join(' '), top_level=True, **kwargs) }}
                     {{- facet_items(missing_label, items[soft_limit:], list_id=list_id, list_class_top=[list_class_top, 'mb-0', 'collapse']|join(' '), top_level=True, collapse=True, more=True, **kwargs) }}
                     <div class="mb-3 d-print-none">
-                        <button class="btn btn-light btn-sm btn-expand" data-toggle="collapse" data-target="#{{ list_id }}-more" aria-expanded="false" aria-controls="{{ list_id }}-more">
-                            <span class="fas fa-chevron-down" aria-hidden="true"></span> {{ _("View more") }}
-                        </button>
-                        <button class="btn btn-light btn-sm btn-collapse" data-toggle="collapse" data-target="#{{ list_id }}-more" aria-expanded="true" aria-controls="{{ list_id }}-more">
-                            <span class="fas fa-chevron-up" aria-hidden="true"></span> {{ _("View less") }}
-                        </button>
+                        {{- expand_collapse_buttons(collapse_id=list_id + '-more') -}}
                     </div>
                 {%- else %}
                     {{- facet_items(missing_label, items, list_id=list_id, list_class_top=list_class_top, top_level=True, **kwargs) }}

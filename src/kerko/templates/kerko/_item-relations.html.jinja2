@@ -1,3 +1,5 @@
+{%- from "kerko/_collapse.html.jinja2" import expand_collapse_buttons %}
+
 {%- macro relations_list(relations, collapse_id='') %}
     <ul {% if collapse_id %}id="{{ collapse_id }}"{% endif %} class="list-unstyled {% if collapse_id %}collapse{% endif %}">
         {%- for result in relations %}
@@ -13,14 +15,10 @@
     {%- if apply_relations_initial_limit %}
         {{ relations_list(item[field][:config.KERKO_RELATIONS_INITIAL_LIMIT]) }}
         {%- if item[field]|length > config.KERKO_RELATIONS_INITIAL_LIMIT %}
-            {{ relations_list(item[field][config.KERKO_RELATIONS_INITIAL_LIMIT:], collapse_id='rel-' + key|string + '-more') }}
+            {%- set collapse_id = 'rel-' + key|string + '-more' %}
+            {{ relations_list(item[field][config.KERKO_RELATIONS_INITIAL_LIMIT:], collapse_id=collapse_id) }}
             <div class="mb-3 d-print-none">
-                <button class="btn btn-light btn-expand" data-toggle="collapse" data-target="#rel-{{ key }}-more" aria-expanded="false" aria-controls="rel-{{ key }}-more">
-                    <span class="fas fa-chevron-down" aria-hidden="true"></span> {{ _("View all") }}
-                </button>
-                <button class="btn btn-light btn-collapse" data-toggle="collapse" data-target="#rel-{{ key }}-more" aria-expanded="true" aria-controls="rel-{{ key }}-more">
-                    <span class="fas fa-chevron-up" aria-hidden="true"></span> {{ _("View fewer") }}
-                </button>
+                {{- expand_collapse_buttons(collapse_id=collapse_id) -}}
             </div>
         {%- endif %}
     {%- else %}
