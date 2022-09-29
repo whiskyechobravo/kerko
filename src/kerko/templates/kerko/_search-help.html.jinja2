@@ -49,9 +49,10 @@
                     <h3>{{ _("Explore") }}</h3>
                     <p>{{ _("This section allows you to explore categories associated with the references.") }}</p>
                     <ul>
-                        <li>{{ _("Check a category to add it to your search criteria and narrow your search. The results will only show entries that are associated with the category, and more specific terms may appear under the newly selected category.") }}</li>
+                        <li>{{ _("Categories can be used to filter your search. Check a category to add it to your search criteria and narrow your search. Your search results will then only show entries that are associated with that category.") }}</li>
                         <li>{{ _("Uncheck a category to remove it from your search criteria and broaden your search results.") }}</li>
                         <li>{{ _("The numbers shown next to the categories indicate how many entries are associated with each category in the current set of results. Those numbers will vary based on your search criteria to always describe the current set of results. Likewise, categories and whole facets will disappear when the result set has no entry associated to them.") }}</li>
+                        <li>{{ _("An arrow icon ({}) appearing next to a category indicates that subcategories are available. You may press it to expand a list of more specific categories. You may press it again later to collapse the list. Expanding or collapsing subcategories will not change your current search; this allows you to quickly explore a hierarchy of categories if desired.").format('<span class="fas fa-chevron-right" aria-hidden="true"></span>') }}</li>
                     </ul>
                     <h3>{{ _("Results") }}</h3>
                     <p>{{ _("This section shows the search results. When no search criteria has been given, it shows the full content of the bibliography (up to {page_len} entries per page).").format(page_len=config.KERKO_PAGE_LEN) }}</p>
