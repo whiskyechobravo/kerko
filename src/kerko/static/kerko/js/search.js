@@ -1,7 +1,7 @@
 jQuery(function($) {
   // Handlers for facets modal.
   $('#facets-modal-toggle').click(function(e) {
-    // Move facets to modal body.
+    // Move facets into the modal body.
     $('#facets').prependTo($('#facets-modal-body'));
     $('#facets-modal').modal();
   });
@@ -28,15 +28,32 @@ jQuery(function($) {
     e.stopPropagation();
   });
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    function scroll(el, currentTop, wantedTop) {
+      if (currentTop > wantedTop) {
+        // Bootstrap's standard collapse duration is 350ms. A different duration
+        // for the scrolling would create an unpleasant effect.
+        el.animate({scrollTop: Math.max(0, wantedTop)}, 350);
+      }
+    }
     $('.continued + .collapse').on('hide.bs.collapse', function(e) {
-      // On collapsing, scroll up if the continued element's bottom is not visible.
+      // On collapsing, scroll up if the bottom 100px of the continued element
+      // are not visible.
       e.stopPropagation();
       var $el = $(e.currentTarget).prev('.continued');
-      var wantedVisiblePosition = $el.offset().top + $el.outerHeight() - 100;
-      if ($(document).scrollTop() > wantedVisiblePosition) {
-        // Bootstrap's standard collapse duration is 350ms. Any different duration
-        // for the scrolling would feel unpleasant to the user.
-        $('html, body').animate({scrollTop: Math.max(0, wantedVisiblePosition)}, 350);
+      var $modalBody = $el.closest('.modal-body');
+      if ($modalBody.length) {
+        scroll(
+          $modalBody,
+          $modalBody.scrollTop(),
+          $el.get(0).offsetTop + $el.outerHeight() - 100
+        );
+      }
+      else {
+        scroll(
+          $('html, body'),
+          $(document).scrollTop(),
+          $el.offset().top + $el.outerHeight() - 100
+        );
       }
     });
   }
