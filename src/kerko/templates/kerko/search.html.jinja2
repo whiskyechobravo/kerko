@@ -30,7 +30,7 @@
                 </div>
                 {%- if facet_results and search_results %}
                     <div class="{% block facets_link_wrapper_classes %}d-inline-block d-lg-none d-print-none mt-1 mb-2{% endblock %}">
-                        <button id="facets-modal-toggle" class="{% block facets_btn_classes %}btn btn-primary{% endblock %}" data-target="#facets-modal">
+                        <button id="facets-modal-toggle" class="{% block facets_btn_classes %}btn btn-primary{% endblock %}">
                             <span class="fas fa-compass" aria-hidden="true"></span> {{ _("Explore") }}
                         </button>
                     </div>
@@ -162,9 +162,9 @@
 {%- block sidebar_inner %}
     {%- block facet_results %}
         {%- if facet_results and search_results %}
-            <div class="d-none d-lg-block d-print-none">
+            <div id="facets-container" class="d-none d-lg-block d-print-none">
                 <h2 class="{% block facets_heading_classes %}mt-2 mb-4{% endblock %}">{{ _("Explore") }}</h2>
-                <div class="facets">
+                <div id="facets" class="facets">
                     {%- for f in config.KERKO_COMPOSER.get_ordered_specs('facets') %}
                         {{ f.render(facet_results[f.key], 'search') }}
                     {%- endfor %}
@@ -179,7 +179,7 @@
                                 <span class="fas fa-times" aria-hidden="true"></span>
                             </button>
                         </div>
-                        <div class="modal-body">
+                        <div id="facets-modal-body" class="modal-body">
                             <div class="my-3 text-right">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="{{ _('Close Explore panel') }}">{{ _("Close") }}</button>
                             </div>
