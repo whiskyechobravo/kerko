@@ -46,6 +46,8 @@ class Composer:
             default_child_include_re='',
             default_child_exclude_re=r'^_',
             mime_types=None,
+            facet_initial_limit=0,
+            facet_initial_limit_leeway=0,
     ):  # pylint: disable=too-many-arguments
         """
         Initialize the object.
@@ -153,6 +155,15 @@ class Composer:
         :param list mime_types: List of allowed MIME types for attachments. If
             this parameter is None, the list will default to
             `["application/pdf"]`. Pass an empty list to allow any MIME type.
+
+        :param int facet_initial_limit: Limits the number of facet values
+            initially shown under facets on search results pages. If more values
+            are available, a "show more" button will let the user expand the
+            list. Defaults to `0` (i.e. no limit).
+
+        :param facet_initial_limit_leeway: If the number of facet values exceeds
+            `facet_initial_limit` by this tolerance margin or less, all values
+            will be initially shown. Defaults to `0` (i.e. no tolerance margin).
         """
         if not whoosh.lang.has_stemmer(whoosh_language):
             whoosh_language = 'en'
@@ -211,6 +222,8 @@ class Composer:
             self.mime_types = ['application/pdf']
         else:
             self.mime_types = mime_types
+        self.facet_initial_limit = facet_initial_limit
+        self.facet_initial_limit_leeway = facet_initial_limit_leeway
         self.init_default_scopes(exclude_default_scopes)
         self.init_default_fields(exclude_default_fields)
         self.init_default_facets(exclude_default_facets)
@@ -1513,6 +1526,8 @@ class Composer:
                     title=_('Topic'),
                     filter_key='topic',
                     weight=100,
+                    initial_limit=self.facet_initial_limit,
+                    initial_limit_leeway=self.facet_initial_limit_leeway,
                     field_type=ID(stored=True),
                     extractor=extractors.TagsFacetExtractor(
                         include_re=self.default_tag_include_re,
@@ -1534,6 +1549,8 @@ class Composer:
                     title=_('Resource type'),
                     filter_key='type',
                     weight=200,
+                    initial_limit=self.facet_initial_limit,
+                    initial_limit_leeway=self.facet_initial_limit_leeway,
                     field_type=ID(stored=True),
                     extractor=extractors.ItemTypeFacetExtractor(),
                     codec=codecs.ItemTypeFacetCodec(),
@@ -1552,6 +1569,8 @@ class Composer:
                     title=_('Publication year'),
                     filter_key='year',
                     weight=300,
+                    initial_limit=self.facet_initial_limit,
+                    initial_limit_leeway=self.facet_initial_limit_leeway,
                     field_type=ID(stored=True),
                     extractor=extractors.YearFacetExtractor(),
                     codec=codecs.YearTreeFacetCodec(),

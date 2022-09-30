@@ -12,6 +12,11 @@ flask kerko sync index
 
 Features:
 
+- Add expand/collapse actions on facet values, allowing full exploration of
+  hierarchical facets without changing the current search.
+- Add an optional initial limit on the number of values to show under each
+  facet. When the initial limit is reached, a "show more" button allow to user
+  to expand the full list.
 - Allow searching items by their Zotero key.
 - Add XML sitemap.
 - Add the `kerko count` CLI command (mostly meant for development purposes).
@@ -23,12 +28,16 @@ Bug fixes:
   to `False`.
 - Fix the `kerko sync` CLI command not returning an error code with some types
   of failures.
+- Fix invalid HTML in help modal.
 
 Other changes:
 
 - Handle new Zotero fields introduced with the new 'preprint' item type.
 - Apply a boost factor to DOI, ISBN and ISSN fields extracted from the Extra
   field (previously, only the dedicated Zotero fields had a boost factor).
+- Under each facet, always show the facet's active filters first.
+- Make facet values with long labels easier to read (by indenting wrapped lines
+  to the right of the checkbox).
 - Add blocks in templates to facilitate theming.
 - Improve documentation.
 - Make sync and schema-related error messages more helpful and user-friendly.
@@ -39,7 +48,17 @@ Other changes:
 
 Backwards incompatible changes:
 
-- Remove the `KERKO_FACET_COLLAPSING` option.
+- Remove the `KERKO_FACET_COLLAPSING` option. The new initial limit on facets
+  values made this feature largely redundant.
+- Remove the `collapsible` param from the `FacetSpec` class.
+
+Changes that might break custom themes:
+
+- The HTML markup and CSS styles of expand/collapse buttons have changed.
+- The parameters of the `facet`, `facet_item`, `facet_items`, `facet_fields`
+  template macros have changed.
+- The `facets-container`, `facets`, and `facets-modal-body` element ids are now
+  required in `search.html.jinja2`.
 
 
 ## 0.8.1 (2021-11-16)

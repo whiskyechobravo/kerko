@@ -95,8 +95,8 @@ class FacetSpec(BaseFieldSpec):
             title,
             filter_key,
             weight=0,
-            soft_limit=0,
-            soft_limit_leeway=0,
+            initial_limit=0,
+            initial_limit_leeway=0,
             codec=None,
             missing_label=None,
             sort_key=None,
@@ -118,13 +118,13 @@ class FacetSpec(BaseFieldSpec):
         :param int weight: Determine the position of this facet relative to the
             others.
 
-        :param int soft_limit: Maximum number of filters to show by default
+        :param int initial_limit: Maximum number of filters to show by default
             under this facet. Excess filters will be shown if the user clicks a
             "view more" button. Defaults to 0 (no limit).
 
-        :param int soft_limit_leeway: If the number of filters under this facet
-            exceeds `soft_limit` by this tolerance margin or less, all filters
-            will be shown. Defaults to 0 (no tolerance margin).
+        :param int initial_limit_leeway: If the number of filters under this
+            facet exceeds `initial_limit` by this tolerance margin or less, all
+            filters will be shown. Defaults to 0 (no tolerance margin).
 
         :param str missing_label: Label to use for items that do not have any
             value for this facet. Defaults to `None` (show no label at all).
@@ -151,8 +151,8 @@ class FacetSpec(BaseFieldSpec):
         self.title = title
         self.filter_key = filter_key
         self.weight = weight
-        self.soft_limit = soft_limit
-        self.soft_limit_leeway = soft_limit_leeway
+        self.initial_limit = initial_limit
+        self.initial_limit_leeway = initial_limit_leeway
         self.codec = codec or BaseFacetCodec()
         self.missing_label = missing_label
         self.sort_key = sort_key

@@ -1,7 +1,7 @@
 # French translations for Kerko.
 # Copyright (C) 2022 Kerko Contributors
 # This file is distributed under the same license as the Kerko project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# David Lesieur <kerko@whiskyechobravo.com>, 2022.
 #
 msgid ""
 msgstr ""

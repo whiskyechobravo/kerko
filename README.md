@@ -396,7 +396,7 @@ override their default value:
 * `KERKO_PRINT_CITATIONS_MAX_COUNT`: Limit over which the print button should
   be hidden from search results pages. Defaults to `0` (i.e. no limit).
 * `KERKO_RELATIONS_INITIAL_LIMIT`: Number of related items to show above the
-  "view all" link. Defaults to `5`.
+  "show more" link. Defaults to `5`.
 * `KERKO_RELATIONS_LINKS`: Show item links in lists of related items. Defaults
   to `False`. Enabling this only has an effect if at least one of the following
   variables is also set to `True`: `KERKO_RESULTS_ATTACHMENT_LINKS`,
