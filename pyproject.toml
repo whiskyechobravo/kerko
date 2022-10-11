@@ -10,7 +10,7 @@ build-backend = "setuptools.build_meta"
     disable = [
         "fixme",
         "missing-docstring",
-        "too-many-line",
+        "too-many-lines",
     ]
     enable = [
         "unused-import",
