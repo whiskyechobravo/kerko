@@ -227,12 +227,14 @@ templates (but could be completely removed or replaced by your application):
 
 ## Getting started
 
-This section only applies if you intend to integrate Kerko into your own
-application. If you are more interested into the standalone KerkoApp
-application, please refer to its [installation instructions][KerkoApp].
+This section should help you understand the minimal steps required for getting
+Kerko to work within a Flask application. For a ready-to-use standalone
+application, please refer to [KerkoApp's installation instructions][KerkoApp]
+instead.
 
-We'll assume that you have some familiarity with Flask and suggest steps for
-building a minimal app, let's call it `hello_kerko.py`, to get you started.
+Some familiarity with [Flask] should help you make more sense of the
+instructions, but should not be absolutely necessary for getting them to work.
+Let's now build a minimal app, which we'll call `hello_kerko.py`:
 
 1. The first step is to install Kerko. As with any Python library, it is highly
    recommended to install Kerko within a [virtual environment][venv].
@@ -242,7 +244,6 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
    ```bash
    pip install kerko
    ```
-
 
 2. In `hello_kerko.py`, configure variables required by Kerko and create your
    `app` object, as in the example below:
@@ -282,7 +283,6 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
      alter fields, facets, sort options, search scopes, record download formats,
      or badges. See [Kerko Recipes](#kerko-recipes) for some examples.
 
-
 3. Also configure the Flask-Babel and Bootstrap-Flask extensions:
 
    ```python
@@ -296,7 +296,6 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
    See the respective docs of [Flask-Babel][Flask-Babel_documentation] and
    [Bootstrap-Flask][Bootstrap-Flask_documentation] for more details.
 
-
 4. Instantiate the Kerko blueprint and register it in your app:
 
    ```python
@@ -307,7 +306,6 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
 
    The `url_prefix` argument defines the base path for every URL provided by
    Kerko.
-
 
 5. In the same directory as `hello_kerko.py` with your virtual environment
    active, run the following shell commands:
@@ -339,9 +337,10 @@ building a minimal app, let's call it `hello_kerko.py`, to get you started.
    bibliography.
 
 You have just built a really minimal application for Kerko. This code example is
-available at [KerkoStart]. See also [KerkoApp] for a more complete and
-production-ready example (also recommended if you are developing a custom
-application or integrating into another application).
+available at [KerkoStart]. However, if you are looking at developing a custom
+Kerko application, we recommend that you consider [KerkoApp] as a starting
+point. While KerkoApp is still quite small, it adds some features and is more
+production-ready than the above example.
 
 
 ## Configuration variables
