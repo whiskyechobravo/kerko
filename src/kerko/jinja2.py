@@ -49,13 +49,13 @@ def parse_and_urlize_doi(eval_ctx, text, target=None, rel=None):
     return result
 
 
-def register_filters(state: BlueprintSetupState):
+def register_filters(blueprint):
     """Add custom template filters."""
-    state.blueprint.add_app_template_filter(format_datetime, name='kerko_format_datetime')
-    state.blueprint.add_app_template_filter(reformat_date, name='kerko_reformat_date')
-    state.blueprint.add_app_template_filter(
+    blueprint.add_app_template_filter(format_datetime, name='kerko_format_datetime')
+    blueprint.add_app_template_filter(reformat_date, name='kerko_reformat_date')
+    blueprint.add_app_template_filter(
         lambda text: urlparse(text).hostname, name='kerko_url_hostname'
     )
-    state.blueprint.add_app_template_filter(safe_url_string, name='kerko_url_sanitize')
-    state.blueprint.add_app_template_filter(urlize_doi, name='kerko_urlize_doi')
-    state.blueprint.add_app_template_filter(parse_and_urlize_doi, name='kerko_parse_and_urlize_doi')
+    blueprint.add_app_template_filter(safe_url_string, name='kerko_url_sanitize')
+    blueprint.add_app_template_filter(urlize_doi, name='kerko_urlize_doi')
+    blueprint.add_app_template_filter(parse_and_urlize_doi, name='kerko_parse_and_urlize_doi')

@@ -86,11 +86,16 @@ def init_default_config(state):
     )
 
 
-blueprint = Blueprint(
-    'kerko', __name__, static_folder='static', template_folder='templates'
-)
-blueprint.record_once(init_default_config)
-blueprint.record_once(register_filters)
+def make_blueprint():
+    b = Blueprint(
+        'kerko', __name__, static_folder='static', template_folder='templates'
+    )
+    b.record_once(init_default_config)
+    register_filters(b)
+    return b
+
+
+blueprint = make_blueprint()
 
 
 from . import views  # pylint: disable=wrong-import-position
