@@ -45,6 +45,8 @@ Other changes:
 - Remove remnants of code aimed at Python versions older than 3.7.
 - Remove support for configuration variables `KERKO_ZOTERO_START` and
   `KERKO_ZOTERO_END` (were only used for development and no longer practical).
+- Tag package as compatible with Python 3.10 and 3.11.
+- Remove leftover code related to Python versions older than 3.7
 
 Backwards incompatible changes:
 
