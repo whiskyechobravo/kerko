@@ -38,7 +38,7 @@ def get_page_numbers(sections):
     return []
 
 
-def build_pager(sections, criteria, page_kwargs=None):
+def build_pager(sections, criteria, page_kwargs=None, endpoint='kerko.search'):
     """
     Build pager links for use in a search view.
 
@@ -53,6 +53,7 @@ def build_pager(sections, criteria, page_kwargs=None):
                     'page_num': p,
                     'page_num_formatted': format_decimal(p, locale=get_locale()),
                     'url': criteria.build_url(
+                        endpoint=endpoint,
                         page_num=p,
                         page_len=criteria.page_len,
                         **page_kwargs.get(p) if page_kwargs else {}

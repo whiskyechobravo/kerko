@@ -155,6 +155,50 @@ def search():
     )
 
 
+@blueprint.route('/atom.xml', methods=['GET'])
+@except_abort(SchemaError, 500)
+@except_abort(SearchIndexError, 503)
+def atom_feed():
+    """Build a feed based on the search criteria."""
+    if current_app.config['KERKO_USE_TRANSLATIONS']:
+        babel_domain.as_default()
+
+    criteria = Criteria(request)
+    link_url = criteria.build_url(_external=True)
+    criteria.page_len = current_app.config['KERKO_PAGE_LEN']
+    is_searching = criteria.has_keyword_search() or criteria.has_filter_search()
+
+    base_filter_terms = query.build_filter_terms('item_type', exclude=['note', 'attachment'])
+    items, _, total_count, page_count, last_sync = query.run_query(
+        criteria,
+        return_fields=['id', 'data'],
+        query_facets=False,
+        default_terms=base_filter_terms,
+    )
+    for item in items:
+        query.build_creators_display(item)
+    criteria.fit_pager(page_count)
+    pager_sections = get_pager_sections(criteria.page_num, page_count)
+    # TODO: What if zero results?
+    response = make_response(
+        render_template(
+            current_app.config['KERKO_TEMPLATE_ATOM_FEED'],
+            link_url=link_url,
+            items=items,
+            total_count=total_count,
+            page_len=criteria.page_len,
+            pager=build_pager(pager_sections, criteria, endpoint='kerko.atom_feed'),
+            is_searching=is_searching,
+            locale=get_locale(),
+            last_sync=datetime.fromtimestamp(
+                last_sync, tz=datetime.now().astimezone().tzinfo
+            ).isoformat() if last_sync else datetime.now().isoformat(),
+        )
+    )
+    response.headers['Content-Type'] = 'application/atom+xml; charset=utf-8'
+    return response
+
+
 @blueprint.route('/<path:item_id>')
 @except_abort(SchemaError, 500)
 @except_abort(SearchIndexError, 503)

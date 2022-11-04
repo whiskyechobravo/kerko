@@ -169,9 +169,9 @@ class Criteria:
             query['id'] = id_
         return query.to_dict(flat=False)
 
-    def build_url(self, **kwargs):
+    def build_url(self, endpoint='kerko.search', _external=None, **kwargs):
         """Build an URL with all the search criteria."""
-        return url_for('kerko.search', **self.build_query(**kwargs))
+        return url_for(endpoint, _external=_external, **self.build_query(**kwargs))
 
     def build_download_url(self, citation_format_key, **kwargs):
         """Build a record download URL with all the search criteria."""

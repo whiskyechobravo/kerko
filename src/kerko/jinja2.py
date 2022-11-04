@@ -19,15 +19,18 @@ if typing.TYPE_CHECKING:
 
 
 @evalcontextfilter
-def urlize_doi(eval_ctx, doi, target=None, rel=None):
+def urlize_doi(eval_ctx, doi, target=None, rel=None, link=True):
     """Convert the specified DOI to an URL."""
     if not re.match(r'^https?://', doi, flags=re.IGNORECASE):
         url = 'https://doi.org/' + str(doi)
     else:
         url = str(doi)
-    target = f' target="{target}"' if target else ''
-    rel = f' rel="{rel}"' if rel else ''
-    result = f'<a href="{url}"{target}{rel}>{doi}</a>'
+    if link:
+        target = f' target="{target}"' if target else ''
+        rel = f' rel="{rel}"' if rel else ''
+        result = f'<a href="{url}"{target}{rel}>{doi}</a>'
+    else:
+        result = url
     if eval_ctx.autoescape:
         result = Markup(result)
     return result
