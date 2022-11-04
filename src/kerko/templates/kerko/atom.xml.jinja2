@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed {% block feed_attributes %}xmlns="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/"{% endblock %}>
+    {%- block feed_elements %}
+        <title>{{ config.KERKO_TITLE|escape }}{% if is_searching %} - {{ _('Search results') }}{% endif %}</title>
+        <link href="{{ link_url }}"/>
+        <link rel="self" href="{{ request.url }}"/>
+        {%- if pager.first %}
+            <link rel="first" href="{{ pager.first[0].url }}"/>
+        {%- endif %}
+        {%- if pager.previous %}
+            <link rel="previous" href="{{ pager.previous[0].url }}"/>
+        {%- endif %}
+        {%- if pager.next %}
+            <link rel="next" href="{{ pager.next[0].url }}"/>
+        {%- endif %}
+        {%- if pager.last %}
+            <link rel="last" href="{{ pager.last[0].url }}"/>
+        {%- endif %}
+        <updated>{{ last_sync }}</updated>
+        <id>{{ link_url }}</id>
+    {%- endblock %}
+    {%- block feed_entries %}
+        {%- for item in items %}
+            <entry>
+                <title>{{ item.data.title|escape }}</title>
+                <link href="{{ url_for('kerko.item_view', item_id=item.id, _external=True) }}"/>
+                <id>{{ url_for('kerko.item_view', item_id=item.id, _external=True) }}</id>
+                <updated>{{ item.data.dateModified|escape }}</updated>
+                {%- if item.data.abstractNote %}
+                    <summary>{{ item.data.abstractNote|escape }}</summary>
+                {%- endif %}
+                {%- for creator in item.data.creators %}
+                    {%- if creator.display %}
+                        <dc:creator>{{ creator.display|escape }}</dc:creator>
+                    {%- endif %}
+                {%- endfor %}
+                {%- with item_date = [item.data.date, item.data.dateDecided, item.data.dateEnacted, item.data.filingDate, item.data.issueDate]|select|first %}
+                    {%- if item_date %}
+                        <dc:date>{{ item_date|escape }}</dc:date>
+                    {%- endif %}
+                {%- endwith %}
+                {%- if item.data.DOI %}
+                    <dc:identifier>DOI: {{ item.data.DOI|escape|kerko_urlize_doi(link=False) }}</dc:identifier>
+                    {#- TODO: If item.data.DOI empty, check if it can be parsed from the Extra field. #}
+                {%- endif %}
+                {%- if item.data.ISBN %}
+                    <dc:identifier>ISBN: {{ item.data.ISBN|escape }}</dc:identifier>
+                {%- endif %}
+                {%- if item.data.ISSN %}
+                    <dc:identifier>ISSN: {{ item.data.ISSN|escape }}</dc:identifier>
+                {%- endif %}
+                {%- if item.data.language %}
+                    <dc:language>{{ item.data.language|escape }}</dc:language>
+                {%- endif %}
+                {%- if item.data.publisher %}
+                    <dc:publisher>{{ item.data.publisher|escape }}</dc:publisher>
+                {%- endif %}
+                {%- if item.data.rights %}
+                    <dc:rights>{{ item.data.rights|escape }}</dc:rights>
+                {%- endif %}
+                <dc:title>{{ item.data.title|escape }}</dc:title>
+            </entry>
+        {%- endfor %}
+    {%- endblock %}
+</feed>
