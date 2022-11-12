@@ -8,7 +8,7 @@ user interface pattern: the "breadcrumbs".
 from collections import defaultdict
 from copy import copy
 
-from flask import current_app
+from flask import current_app, url_for
 
 
 def build_breadbox_keywords(criteria):
@@ -17,10 +17,24 @@ def build_breadbox_keywords(criteria):
     for scope in current_app.config['KERKO_COMPOSER'].scopes.values():
         if scope.key in criteria.keywords:
             for value in criteria.keywords.getlist(scope.key):
-                keywords[scope.key].append({
-                    'label': value,
-                    'remove_url': criteria.build_remove_keywords_url(scope.key, value),
-                })
+                keywords[scope.key].append(
+                    {
+                        'label':
+                            value,
+                        'remove_url':
+                            url_for(
+                                '.search',
+                                **criteria.params(
+                                    keywords=scope.remove_keywords(value, criteria.keywords),
+                                    options={
+                                        'page': None,
+                                        'page-len': None,
+                                        'id': None,
+                                    },
+                                )
+                            ),
+                    }
+                )
     return keywords
 
 

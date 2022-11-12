@@ -1,226 +1,192 @@
+from abc import ABC
+
+from flask import current_app
 from werkzeug.datastructures import MultiDict
 
-from flask import current_app, url_for
 
+class Criteria(ABC):
+    """
+    Represent a complete set of user-submitted search criteria.
 
-class Criteria:
-    """Represent a complete set of user-submitted search criteria."""
+    In practice, a criteria object is similar to `request.args`, but its
+    internal structure uses multiple `MultiDict` objects instead of a single
+    flat one like `request.args`:
 
-    # This class is close to the views because it knows about all sorts
-    # of view-related elements, such as the request and the form fields.
+    - `keywords` is a `MultiDict` of all keyword search-related parameters.
+    - `filters` is a `MultiDict` of all filtering-related parameters.
+    - `options` is a `MultiDict` of the remaining search parameters.
 
-    def __init__(self, request=None):
-        """Extract criteria from the request, ensuring that all are valid."""
-        self.composer = current_app.config['KERKO_COMPOSER']
-        self._extract_keywords(request)
-        self._extract_filters(request)
-        self._extract_pager(request)
-        self._extract_sort(request)  # Must run after _extract_keywords().
-        self._extract_show_abstracts(request)
-        self._extract_print_preview(request)
-        self._extract_id(request)  # Must run after _extract_pager().
+    This class aims at providing a convenient place for storing and accessing
+    validated search parameters that describe a search request.
+    """
 
-    def _extract_keywords(self, request=None):
+    def __init__(self, initial=None, options_initializers=None):
+        """
+        Initialize the criteria.
+
+        :param MultiDict initial: Values to initialize from (usually originating
+            from `request.args`).
+
+        :param list options_initializers: Mandatory list of callables for
+            validating and initializing the options. The first argument to each
+            callable is the `Criteria` object to update with clean values, and
+            the second one is the 'initial' `MultiDict`. An initializer *must
+            not* assign a default value when there is no initial value, unless
+            the parameter is mandatory. The initializers effectively
+            determine which options are available.
+        """
         self.keywords = MultiDict()
-        if request:
-            for scope in self.composer.scopes.values():
-                if scope.key in request.args:
-                    self.keywords.setlist(scope.key, request.args.getlist(scope.key))
-
-    def _extract_filters(self, request=None):
         self.filters = MultiDict()
-        if request:
-            for spec in self.composer.facets.values():
-                values = request.args.getlist(spec.filter_key)
-                if values:
-                    self.filters.setlist(spec.filter_key, values)
+        self.options = MultiDict()
+        if initial:
+            initialize_keywords(self, initial)
+            initialize_filters(self, initial)
+            for initializer in options_initializers:
+                initializer(self, initial)
 
-    def _extract_pager(self, request=None):
-        if request:
-            try:
-                self.page_num = int(request.args.get('page', 1))
-            except ValueError:
-                self.page_num = 1
-        else:
-            self.page_num = 1
-        if request and request.args.get('page-len') == 'all':
-            # Note: print_preview pages show all results.
-            self.page_len = None
-        else:
-            default_page_len = current_app.config['KERKO_PAGE_LEN']
-            if request:
-                try:
-                    self.page_len = int(request.args.get('page-len', default_page_len))
-                except ValueError:
-                    self.page_len = default_page_len
-            if not request or self.page_len < 1:
-                self.page_len = default_page_len
+    def has_keywords(self):
+        """Return `True` if criteria includes active keywords."""
+        return any(self.keywords.values())
 
-    def _extract_sort(self, request=None):
-        composer = current_app.config['KERKO_COMPOSER']
-        # Use the first enabled sort as default.
-        default_sort = None
-        for sort_spec in composer.get_ordered_specs('sorts'):
-            if sort_spec.is_allowed(criteria=self):
-                default_sort = sort_spec.key
-                break
-        assert default_sort
+    def has_filters(self):
+        """Return `True` if criteria includes active filters."""
+        return any(self.filters.values())
 
-        if request:
-            self.sort = request.args.get('sort', None)
-        if not request \
-                or self.sort not in composer.sorts \
-                or not composer.sorts[self.sort].is_allowed(criteria=self):
-            self.sort = default_sort
-
-    def _extract_show_abstracts(self, request=None):
-        if current_app.config['KERKO_RESULTS_ABSTRACTS_TOGGLER']:
-            self.show_abstracts = self.get_boolean_param(
-                request, param='abstracts', default=current_app.config['KERKO_RESULTS_ABSTRACTS']
-            )
-        else:
-            self.show_abstracts = current_app.config['KERKO_RESULTS_ABSTRACTS']
-
-    def _extract_print_preview(self, request=None):
-        self.print_preview = self.get_boolean_param(request, param='print-preview', default=False)
-
-    def _extract_id(self, request=None):
-        if request and self.page_len == 1:
-            self.id = request.args.get('id', None)
-        else:
-            self.id = None
-
-    @staticmethod
-    def get_boolean_param(request, param, default):
-        if request:
-            value = request.args.get(param)
-            if value not in ['t', 'f', '0', '1']:
-                return default
-            return value in ['t', '1']
-        return default
-
-    def fit_pager(self, page_count):
-        """Ensure that pager values fit within the given page count."""
-        self.page_num = min(self.page_num, page_count)
-
-    def has_keyword_search(self):
-        """Return True if criteria contains a keyword search."""
-        return self.keywords is not None and any(self.keywords.values())
-
-    def has_filter_search(self):
-        """Return True if criteria contains active filters."""
-        return self.filters is not None and any(self.filters.values())
-
-    def build_query(
-            self,
-            *,
-            keywords=None,
-            filters=None,
-            page_num=None,
-            page_len=None,
-            sort=None,
-            show_abstracts=None,
-            print_preview=None,
-            id_=None
-    ):
+    def params(self, *, keywords=None, filters=None, options=None):
         """
-        Prepare a query string ready for use when generating an URL.
+        Return parameters for a search request.
 
-        :param MultiDict keywords: New keywords dict. Use None to preserve the
-            active keywords, or False to reset.
+        The returned parameters are based on the active criteria, but some may
+        be overridden with the given values.
 
-        :param MultiDict filters: New filters dict. Use None to preserve the
-            active filters, or False to reset.
+        :param MultiDict keywords: If not `None`, the argument overrides the
+            active keywords in the returned values.
 
-        :param str sort: Key of the sort specification. Use None to preserve the
-            active sort, or False to reset.
+        :param MultiDict filters: If not `None`, the argument overrides the
+            active filters in the returned values.
+
+        :param dict options: A mapping whose values, if any, are to override the
+            corresponding active options in the returned values.
+
+        :return dict: A dict representing query string arguments in a search
+            request (may be passed as the `values` argument to
+            `flask.url_for()`).
         """
-        query = MultiDict()
-        if keywords:
-            query.update(keywords)
-        elif keywords is None:
-            query.update(self.keywords)
-        if filters:
-            query.update(filters)
-        elif filters is None:
-            query.update(self.filters)
-        if page_num:
-            # Never defaults to self.page_num, because new queries should
-            # always reset the pager.
-            query['page'] = page_num
-        if page_len and page_len != current_app.config['KERKO_PAGE_LEN']:
-            # Never defaults to self.page_len, because new queries should
-            # always reset the pager.
-            query['page-len'] = page_len
-        if sort:
-            query['sort'] = sort
-        elif sort is None:
-            query['sort'] = self.sort
-        if show_abstracts is None:
-            show_abstracts = self.show_abstracts
-        if show_abstracts != current_app.config['KERKO_RESULTS_ABSTRACTS']:
-            query['abstracts'] = int(show_abstracts)
-        if print_preview or self.print_preview:
-            # Only set print-preview if it is enabled.
-            query['print-preview'] = 1
-        if id_ and page_len == 1:
-            # Never defaults to self.id, because new queries should never lead
-            # to the same item.
-            query['id'] = id_
-        return query.to_dict(flat=False)
+        query_params = MultiDict()
+        query_params.update(self.keywords if keywords is None else keywords)
+        query_params.update(self.filters if filters is None else filters)
+        if options:
+            # Update from those self.options that are not being overridden.
+            for key in self.options.keys():
+                if key not in options:
+                    query_params.setlist(key, self.options.getlist(key))
+            # Update with the overrides and additions.
+            query_params.update(options)
+        else:
+            query_params.update(self.options)
+        return query_params.to_dict(flat=False)
 
-    def build_url(self, endpoint='kerko.search', _external=None, **kwargs):
-        """Build an URL with all the search criteria."""
-        return url_for(endpoint, _external=_external, **self.build_query(**kwargs))
+    def fit_page(self, page_count):
+        """Ensure that the page number is less than or equal to the given page count."""
+        self.options['page'] = min(self.options.get('page', 1), page_count)
 
-    def build_download_url(self, citation_format_key, **kwargs):
-        """Build a record download URL with all the search criteria."""
-        return url_for(
-            'kerko.search_citation_download',
-            citation_format_key=citation_format_key,
-            **self.build_query(**kwargs)
-        )
-
-    def build_add_keywords_url(self, scope, value):
-        """
-        Build an URL with all the search criteria, adding the given keywords.
-
-        :param str scope: Key of the keyword search scope.
-
-        :param str value: Keywords to search the scope with.
-        """
-        value = value.strip()
-        new_keywords = self.keywords.deepcopy()
-        new_filters = None
-        new_sort = None
-        if scope in self.composer.scopes and value:
-            if not new_keywords:  # If adding keywords for the first time.
-                new_sort = False  # Reset the sort.
-            new_keywords.add(scope, value)
-        return url_for(
-            'kerko.search',
-            **self.build_query(keywords=new_keywords, filters=new_filters, sort=new_sort)
-        )
-
-    def build_remove_keywords_url(self, scope, value):
-        """Build an URL with all the search criteria, except the given keywords."""
-        new_keywords = self.keywords.deepcopy()
-        if new_keywords:
-            new_values = [v for v in new_keywords.poplist(scope) if v != value]
-            if new_values:
-                new_keywords.setlist(scope, new_values)
-        return url_for('kerko.search', **self.build_query(keywords=new_keywords))
-
-    def build_add_filter_url(self, facet_spec, value):
-        """Build an URL with all the search criteria, adding the given facet value."""
-        new_filters = facet_spec.add_filter(value, self.filters)
-        if new_filters:
-            return url_for('kerko.search', **self.build_query(filters=new_filters))
+    def get_active_sort_spec(self):
+        """Return the spec of the active sort or, if none is active, the default sort to use."""
+        if (sort_key := self.options.get('sort')):
+            return current_app.config['KERKO_COMPOSER'].sorts[sort_key]
+        for sort_spec in current_app.config['KERKO_COMPOSER'].get_ordered_specs('sorts'):
+            if sort_spec.is_allowed(self):
+                return sort_spec
         return None
 
-    def build_remove_filter_url(self, facet_spec, value):
-        """Build an URL with all the search criteria, removing the given facet value."""
-        new_filters = facet_spec.remove_filter(value, self.filters)
-        if new_filters:
-            return url_for('kerko.search', **self.build_query(filters=new_filters))
-        return None
+    def get_active_facet_specs(self):
+        """Return the specs of the active facets."""
+        return [
+            current_app.config['KERKO_COMPOSER'].get_facet_by_filter_key(filter_key)
+            for filter_key in self.filters.keys()
+        ]
+
+
+class SearchCriteria(Criteria):
+
+    def __init__(self, initial=None):
+        super().__init__(
+            initial=initial,
+            options_initializers=[
+                initialize_page,
+                initialize_page_len,
+                initialize_sort,  # Must run after initialize_keywords().
+                initialize_abstracts,
+                initialize_print_preview,
+                initialize_id,  # Must run after initialize_page_len().
+            ]
+        )
+
+
+class FeedCriteria(Criteria):
+
+    def __init__(self, initial=None):
+        super().__init__(
+            initial=initial,
+            options_initializers=[
+                initialize_page,
+            ],
+        )
+
+
+def initialize_keywords(criteria, initial):
+    for scope in current_app.config['KERKO_COMPOSER'].scopes.values():
+        if (values := initial.getlist(scope.key)):
+            criteria.keywords.setlist(scope.key, values)
+
+
+def initialize_filters(criteria, initial):
+    for spec in current_app.config['KERKO_COMPOSER'].facets.values():
+        if (values := initial.getlist(spec.filter_key)):
+            criteria.filters.setlist(spec.filter_key, values)
+
+
+def initialize_page(criteria, initial):
+    try:
+        if (page := int(initial.get('page', 0))) and page >= 1:
+            criteria.options['page'] = page
+    except ValueError:
+        pass
+
+
+def initialize_page_len(criteria, initial):
+    page_len = initial.get('page-len', 0)
+    try:
+        if page_len == 'all' or ((page_len := int(page_len)) and page_len >= 1):
+            criteria.options['page-len'] = page_len
+    except ValueError:
+        pass
+
+
+def initialize_sort(criteria, initial):
+    if (sort_spec := current_app.config['KERKO_COMPOSER'].sorts.get(
+        initial.get('sort', '')
+    )) and sort_spec.is_allowed(criteria):
+        criteria.options['sort'] = sort_spec.key
+
+
+def initialize_abstracts(criteria, initial):
+    if current_app.config['KERKO_RESULTS_ABSTRACTS_TOGGLER']:
+        enabled_by_default = current_app.config['KERKO_RESULTS_ABSTRACTS']
+        if (abstracts := initial.get('abstracts')):
+            if abstracts in ['t', '1'] and not enabled_by_default:
+                criteria.options['abstracts'] = 1
+            elif abstracts in ['f', '0'] and enabled_by_default:
+                criteria.options['abstracts'] = 0
+
+
+def initialize_print_preview(criteria, initial):
+    if current_app.config['KERKO_PRINT_CITATIONS_LINK'] and initial.get('print-preview') in [
+        't', '1'
+    ]:
+        criteria.options['print-preview'] = 1
+
+
+def initialize_id(criteria, initial):
+    if criteria.options.get('page-len') == 1 and (initial_id := initial.get('id')):
+        criteria.options['id'] = initial_id

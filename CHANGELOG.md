@@ -62,6 +62,11 @@ Changes that might break custom themes:
 - The `facets-container`, `facets`, and `facets-modal-body` element ids are now
   required in `search.html.jinja2`.
 
+Possibly backwards incompatible changes (more or less internal API changes):
+
+- Rewrote the `criteria` module. `Criteria.keywords` and `Criteria.filters` work
+  pretty much as before, but everything else has changed.
+
 
 ## 0.8.1 (2021-11-16)
 

@@ -2,21 +2,21 @@ import copy
 import re
 from collections.abc import Iterable
 
-from flask import current_app
+from flask import current_app, url_for
 from flask_babel import gettext
 from whoosh.qparser import MultifieldParser, QueryParser, plugins
 from whoosh.query import And, Every, Not, Or, Term
 from whoosh.sorting import Count, Facets, FieldFacet
 
-from .criteria import Criteria
+from .criteria import SearchCriteria
 from .meta import format_creator_name
 from .storage import SchemaError, load_object, open_index
 
 
-def get_search_return_fields(page_len, exclude=None):
+def get_search_return_fields(return_all=False, exclude=None):
     if exclude is None:
         exclude = []
-    if page_len != 1:  # Note: page_len can be None (for all results).
+    if not return_all:
         return_fields = [f for f in current_app.config['KERKO_RESULTS_FIELDS'] if f not in exclude]
         for badge in current_app.config['KERKO_COMPOSER'].badges.values():
             if badge.field.key not in return_fields:
@@ -49,7 +49,10 @@ def build_keywords_query(keywords):
             plugins.BoostPlugin(),
         ]
         for key, value in keywords.items(multi=True):
-            fields = [spec.key for spec in composer.fields.values() if key in spec.scopes]
+            fields = [
+                field_spec.key
+                for field_spec in composer.fields.values() if key in field_spec.scopes
+            ]
             if not fields:
                 raise KeyError  # No known field for that scope key.
             parser = MultifieldParser(
@@ -59,22 +62,6 @@ def build_keywords_query(keywords):
     else:
         queries.append(Every())
     return And(queries)
-
-
-def get_query_facets(filters, criteria):
-    """Return the specs of facets specified by the search criteria."""
-    composer = current_app.config['KERKO_COMPOSER']
-    if criteria.page_len == 1:
-        # On single-item pages, facets are displayed in the breadbox only, thus
-        # only the active facets need to be retrieved.
-        facets = []
-        if filters:
-            for filter_key, _ in filters:
-                spec = composer.get_facet_by_filter_key(filter_key)
-                if spec:
-                    facets.append(spec)
-        return facets
-    return composer.facets.values()
 
 
 def build_groupedby_query(facets):
@@ -178,10 +165,9 @@ def build_creators_display(item):
                             creator['label'] = t['localized']
                             break
                 # Add creator link.
-                if 'creator' in current_app.config['KERKO_COMPOSER'].scopes:
-                    creator['url'] = Criteria().build_add_keywords_url(
-                        scope='creator',
-                        value='"{}"'.format(creator['display'])
+                if (creator_scope := current_app.config['KERKO_COMPOSER'].scopes.get('creator')):
+                    creator['url'] = url_for(
+                        '.search', **creator_scope.add_keywords(value=f"\"{creator['display']}\"")
                     )
 
 
@@ -200,8 +186,8 @@ def build_item_facet_results(item):
                 fake_results = [(value, 0) for value in item[spec.key]]
             else:
                 fake_results = [(item[spec.key], 0)]
-            # Pass an empty Criteria; the facets will provide starting points for new searches.
-            item['facet_results'][spec.key] = spec.build(fake_results, criteria=Criteria())
+            # Use empty SearchCriteria: the facets will provide starting points for new searches.
+            item['facet_results'][spec.key] = spec.build(fake_results, criteria=SearchCriteria())
 
 
 def build_search_facet_results(searcher, groups, criteria, facet_specs, default_terms=None):
@@ -213,29 +199,27 @@ def build_search_facet_results(searcher, groups, criteria, facet_specs, default_
         # Build facet results from groupings obtained with the search.
         for spec in facet_specs:
             facets[spec.key] = spec.build(groups(spec.key).items(), criteria)
-    elif criteria.has_filter_search():
+    elif criteria.has_filters():
         # No groupings available even though facets are used. This usually means
         # that the search itself had zero results, thus no facet results either.
         # But building facet results is still desirable in order to display the
         # active filters in the search interface. To get those, we perform a
         # separate query for each active filter, but this time ignoring any
         # other search criteria.
-        for filter_key in criteria.filters.keys():
-            for spec in facet_specs:
-                if filter_key == spec.filter_key:
-                    results = searcher.search(
-                        Every(),
-                        filter=build_filter_query(
-                            [tuple([spec.key, criteria.filters.getlist(spec.key)])],
-                            default_terms,
-                        ),
-                        groupedby=build_groupedby_query([spec]),
-                        maptype=Count,  # Not to be used, as other criteria are ignored.
-                        limit=1,  # Don't care about the documents.
-                    )
-                    facets[spec.key] = spec.build(
-                        results.groups(spec.key).items(), criteria, active_only=True
-                    )
+        for spec in criteria.get_active_facet_specs():
+            results = searcher.search(
+                Every(),
+                filter=build_filter_query(
+                    [tuple([spec.key, criteria.filters.getlist(spec.key)])],
+                    default_terms,
+                ),
+                groupedby=build_groupedby_query([spec]),
+                maptype=Count,  # Not to be used, as other criteria are ignored.
+                limit=1,  # Don't care about the documents.
+            )
+            facets[spec.key] = spec.build(
+                results.groups(spec.key).items(), criteria, active_only=True
+            )
     return facets
 
 
@@ -357,13 +341,18 @@ def run_query(criteria, return_fields=None, query_facets=True, default_terms=Non
                 default_terms,
             ),
         }
-        search_args.update(build_sort_args(composer.sorts[criteria.sort]))
+        search_args.update(build_sort_args(criteria.get_active_sort_spec()))
         if query_facets:
-            facet_specs = get_query_facets(criteria.filters.lists(), criteria)
+            if criteria.options.get('page-len') == 1:
+                # On single-item pages, facets are displayed in the breadbox
+                # only, thus only the active facets need to be retrieved.
+                facet_specs = criteria.get_active_facet_specs()
+            else:
+                facet_specs = composer.facets.values()
             search_args['groupedby'] = build_groupedby_query(facet_specs)
             search_args['maptype'] = Count
         groups = None
-        if criteria.page_len is None:  # Retrieve all results.
+        if criteria.options.get('page-len') == 'all':  # Retrieve all results.
             search_args['limit'] = None
 
             results = searcher.search(q, **search_args)
@@ -373,8 +362,10 @@ def run_query(criteria, return_fields=None, query_facets=True, default_terms=Non
                 total = results.estimated_length()
                 page_count = 1
         else:  # Retrieve a range of results.
-            search_args['pagenum'] = criteria.page_num
-            search_args['pagelen'] = criteria.page_len
+            search_args['pagenum'] = criteria.options.get('page', 1)
+            search_args['pagelen'] = criteria.options.get(
+                'page-len', current_app.config['KERKO_PAGE_LEN']
+            )
 
             results = searcher.search_page(q, **search_args)
             if results:

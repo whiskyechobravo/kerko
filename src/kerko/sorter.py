@@ -1,16 +1,23 @@
-from flask import current_app
+from flask import current_app, url_for
 
 
 def build_sorter(criteria):
-    composer = current_app.config['KERKO_COMPOSER']
-    sorter = {
-        'active': composer.sorts[criteria.sort].label,
-        'items': [],
-    }
-    for sort_spec in composer.get_ordered_specs('sorts'):
-        if sort_spec.is_allowed(criteria):
-            sorter['items'].append({
-                'label': sort_spec.label,
-                'url': criteria.build_url(sort=sort_spec.key)
-            })
+    sorter = {}
+    if (active_sort_spec := criteria.get_active_sort_spec()):
+        sorter['active'] = active_sort_spec.label
+    sorter['items'] = [
+        {
+            'label':
+                sort_spec.label,
+            'url':
+                url_for(
+                    '.search', **criteria.params(options={
+                        'sort': sort_spec.key,
+                        'page': None,
+                    })
+                ),
+        } for sort_spec in current_app.config['KERKO_COMPOSER'].get_ordered_specs('sorts')
+        if sort_spec.is_allowed(criteria)
+    ]
+
     return sorter

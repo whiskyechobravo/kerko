@@ -2,7 +2,9 @@ from abc import ABC, abstractmethod
 from collections.abc import Iterable
 
 from babel.numbers import format_decimal
+from flask import url_for
 from flask_babel import get_locale
+from werkzeug.datastructures import MultiDict
 from whoosh.fields import ID
 from whoosh.query import Prefix, Term
 
@@ -25,6 +27,35 @@ class ScopeSpec:
         self.breadbox_label = breadbox_label
         self.weight = weight
         self.help_text = help_text
+
+    def add_keywords(self, value, active_keywords=None):
+        """
+        Add a value for this scope to active keywords.
+
+        :param string value: The value to add.
+
+        :param MultiDict active_keywords: The active keywords to derive from.
+
+        :return MultiDict: A copy of the keywords with the added value.
+        """
+        new_keywords = active_keywords.deepcopy() if active_keywords else MultiDict()
+        new_keywords.add(self.key, value.strip())
+        return new_keywords
+
+    def remove_keywords(self, value, active_keywords):
+        """
+        Remove a value for this facet from active keywords.
+
+        :param string value: The value to remove.
+
+        :param MultiDict active_keywords: The active keywords to derive from.
+
+        :return MultiDict: A copy of the keywords with the value removed.
+        """
+        if (new_keywords := active_keywords.deepcopy()) and (
+                new_values := [v for v in new_keywords.poplist(self.key) if v != value]):
+            new_keywords.setlist(self.key, new_values)
+        return new_keywords
 
 
 class BaseFieldSpec(ABC):
@@ -175,25 +206,25 @@ class FacetSpec(BaseFieldSpec):
     @abstractmethod
     def add_filter(self, value, active_filters):
         """
-        Build a query string that adds a value for this facet to the active filters.
+        Add a value for this facet to active filters.
 
-        :param string value: The value to add to the active filters.
+        :param string value: The value to add.
 
         :param MultiDict active_filters: The active filters to derive from.
 
-        :return MultiDict: The resulting filters.
+        :return MultiDict: A copy of the filters with the added value.
         """
 
     @abstractmethod
     def remove_filter(self, value, active_filters):
         """
-        Build a query string that removes a value for this facet from the active filters.
+        Remove a value for this facet from active filters.
 
-        :param string value: The value to remove from the active filters.
+        :param string value: The value to remove.
 
         :param MultiDict active_filters: The active filters to derive from.
 
-        :return MultiDict: The resulting filters.
+        :return MultiDict: A copy of the filters with the value removed.
         """
 
     @abstractmethod
@@ -268,11 +299,36 @@ class FlatFacetSpec(FacetSpec):
         for value, count in results:
             if value or self.missing_label:
                 value, label = self.decode(value, default_value=value, default_label=value)
-                remove_url = criteria.build_remove_filter_url(self, value)
+                if (new_filters := self.remove_filter(value, criteria.filters)):
+                    remove_url = url_for(
+                        '.search',
+                        **criteria.params(
+                            filters=new_filters,
+                            options={
+                                'page': None,
+                                'page-len': None,
+                                'id': None,
+                            },
+                        )
+                    )
+                else:
+                    remove_url = None
                 if remove_url or active_only:
                     add_url = None
+                elif (new_filters := self.add_filter(value, criteria.filters)):
+                    add_url = url_for(
+                        '.search',
+                        **criteria.params(
+                            filters=new_filters,
+                            options={
+                                'page': None,
+                                'page-len': None,
+                                'id': None,
+                            },
+                        )
+                    )
                 else:
-                    add_url = criteria.build_add_filter_url(self, value)
+                    add_url = None
                 if remove_url or add_url:  # Only items with an URL get displayed.
                     items.append({
                         'label': label,
@@ -373,11 +429,36 @@ class TreeFacetSpec(FacetSpec):
         for value, count in results:
             if value or self.missing_label:
                 value, label = self.decode(value, default_value=value, default_label=value)
-                remove_url = criteria.build_remove_filter_url(self, value)
+                if (new_filters := self.remove_filter(value, criteria.filters)):
+                    remove_url = url_for(
+                        '.search',
+                        **criteria.params(
+                            filters=new_filters,
+                            options={
+                                'page': None,
+                                'page-len': None,
+                                'id': None,
+                            },
+                        )
+                    )
+                else:
+                    remove_url = None
                 if remove_url or active_only:
                     add_url = None
+                elif (new_filters := self.add_filter(value, criteria.filters)):
+                    add_url = url_for(
+                        '.search',
+                        **criteria.params(
+                            filters=new_filters,
+                            options={
+                                'page': None,
+                                'page-len': None,
+                                'id': None,
+                            },
+                        )
+                    )
                 else:
-                    add_url = criteria.build_add_filter_url(self, value)
+                    add_url = None
                 if remove_url or add_url:  # Only items with an URL get displayed.
                     path = value.split(sep=self.path_separator)
 
