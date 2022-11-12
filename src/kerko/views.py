@@ -10,7 +10,7 @@ from flask_babel import get_locale, gettext, ngettext
 
 from . import babel_domain, blueprint, meta, query
 from .breadbox import build_breadbox
-from .criteria import Criteria
+from .criteria import FeedCriteria, SearchCriteria
 from .exceptions import except_abort
 from .forms import SearchForm
 from .pager import build_pager, get_page_numbers
@@ -32,62 +32,89 @@ def search():
     if current_app.config['KERKO_USE_TRANSLATIONS']:
         babel_domain.as_default()
 
-    criteria = Criteria(request)
+    criteria = SearchCriteria(request.args)
     form = SearchForm(csrf_enabled=False)
-    if form.validate_on_submit():
-        url = criteria.build_add_keywords_url(
-            scope=form.scope.data,
-            value=form.keywords.data)
+    if form.validate_on_submit() and (
+            scope := current_app.config['KERKO_COMPOSER'].scopes.get(form.scope.data)):
+        url = url_for(
+            '.search',
+            **criteria.params(
+                keywords=scope.add_keywords(form.keywords.data, criteria.keywords),
+                options={'page': None},
+            )
+        )
         return redirect(url, 302)
 
     base_filter_terms = query.build_filter_terms('item_type', exclude=['note', 'attachment'])
     search_results, facet_results, total_count, page_count, last_sync = query.run_query(
         criteria,
-        query.get_search_return_fields(criteria.page_len),
+        query.get_search_return_fields(return_all=(criteria.options.get('page-len') == 1)),
         default_terms=base_filter_terms,
     )
 
-    if criteria.page_len == 1 and criteria.id and (
-            total_count == 0 or criteria.id != search_results[0]['id']
+    if criteria.options.get('page-len') == 1 and (criteria_id := criteria.options.get('id')) and (
+        total_count == 0 or criteria_id != search_results[0]['id']
     ):
         # The search result page no longer points to the desired item.
-        return redirect(url_for('.item_view', item_id=criteria.id, _external=True), 301)
+        return redirect(url_for('.item_view', item_id=criteria_id, _external=True), 301)
 
-    criteria.fit_pager(page_count)
+    criteria.fit_page(page_count)
     breadbox = build_breadbox(criteria, facet_results)
-    pager_sections = get_pager_sections(criteria.page_num, page_count)
+    pager_sections = get_pager_sections(criteria.options['page'], page_count)
     context = {
-        'facet_results': facet_results,
-        'breadbox': breadbox,
-        'active_facets': breadbox['filters'].keys() if 'filters' in breadbox else [],
-        'sorter': build_sorter(criteria),
-        'total_count': total_count,
-        'total_count_formatted': format_decimal(total_count, locale=get_locale()),
-        'page_count': page_count,
-        'page_count_formatted': format_decimal(page_count, locale=get_locale()),
-        'page_len': criteria.page_len,
-        'show_abstracts': criteria.show_abstracts,
-        'abstracts_toggler_url': criteria.build_url(
-            show_abstracts=not criteria.show_abstracts, page_num=criteria.page_num
-        ),
-        'is_searching': criteria.has_keyword_search() or criteria.has_filter_search(),
-        'locale': get_locale(),
-        'last_sync': datetime.fromtimestamp(
-            last_sync, tz=datetime.now().astimezone().tzinfo
-        ) if last_sync else None,
+        'facet_results':
+            facet_results,
+        'breadbox':
+            breadbox,
+        'active_facets':
+            breadbox['filters'].keys() if 'filters' in breadbox else [],
+        'sorter':
+            build_sorter(criteria),
+        'total_count':
+            total_count,
+        'total_count_formatted':
+            format_decimal(total_count, locale=get_locale()),
+        'page_count':
+            page_count,
+        'page_count_formatted':
+            format_decimal(page_count, locale=get_locale()),
+        'page_len':
+            criteria.options.get('page-len', current_app.config['KERKO_PAGE_LEN']),
+        'show_abstracts':
+            criteria.options.get('abstracts', current_app.config['KERKO_RESULTS_ABSTRACTS']),
+        'abstracts_toggler_url':
+            url_for(
+                '.search',
+                **criteria.params(
+                    options={
+                        'abstracts':
+                            int(
+                                not criteria.options.
+                                get('abstracts', current_app.config['KERKO_RESULTS_ABSTRACTS'])
+                            ),
+                    }
+                )
+            ),
+        'is_searching':
+            criteria.has_keywords() or criteria.has_filters(),
+        'locale':
+            get_locale(),
+        'last_sync':
+            datetime.fromtimestamp(last_sync, tz=datetime.now().astimezone().tzinfo)
+            if last_sync else None,
     }
 
-    if criteria.page_len == 1 and total_count != 0:
+    if criteria.options.get('page-len') == 1 and total_count != 0:
         # Retrieve item ids corresponding to individual result page numbers.
-        page_kwargs = {}
+        page_options = {}
         page_criteria = copy.deepcopy(criteria)
         for page_num in get_page_numbers(pager_sections):
-            if page_num == criteria.page_num:
+            if page_num == criteria.options['page']:
                 # We already know the current page's item id. No further query necessary.
-                page_kwargs[page_num] = {'id_': search_results[0]['id']}
+                page_options[page_num] = {'id': search_results[0]['id']}
             else:
                 # Run a search query to get the item id corresponding to the page number.
-                page_criteria.page_num = page_num
+                page_criteria.options['page'] = page_num
                 page_search_results, _, _, _, _ = query.run_query(
                     page_criteria,
                     return_fields=['id'],
@@ -95,15 +122,15 @@ def search():
                     default_terms=base_filter_terms,
                 )
                 if page_search_results:
-                    page_kwargs[page_num] = {'id_': page_search_results[0]['id']}
-        context['pager'] = build_pager(pager_sections, criteria, page_kwargs)
+                    page_options[page_num] = {'id': page_search_results[0]['id']}
+        context['pager'] = build_pager(pager_sections, criteria, page_options)
 
-        list_page_num = int((criteria.page_num - 1) / current_app.config['KERKO_PAGE_LEN'] + 1)
+        list_page_num = int((criteria.options['page'] - 1) / current_app.config['KERKO_PAGE_LEN'] + 1)
         query.build_creators_display(search_results[0])
         query.build_item_facet_results(search_results[0])
         query.build_relations(
             search_results[0],
-            query.get_search_return_fields(page_len=None, exclude=['coins']),
+            query.get_search_return_fields(exclude=['coins']),
             sort=current_app.config['KERKO_RELATIONS_SORT'],
             default_terms=base_filter_terms,
         )
@@ -115,22 +142,33 @@ def search():
             current_app.config['KERKO_TEMPLATE_SEARCH_ITEM'],
             title=search_results[0].get('data', {}).get('title', ''),
             item=search_results[0],
-            item_url=url_for(
-                '.item_view', item_id=search_results[0]['id'], _external=True
-            ) if search_results[0] else '',
+            item_url=url_for('.item_view', item_id=search_results[0]['id'], _external=True)
+            if search_results[0] else '',
             highwirepress_tags=meta.build_highwirepress_tags(search_results[0]),
-            back_url=criteria.build_url(page_num=list_page_num),
+            back_url=url_for(
+                '.search', **criteria.params(options={
+                    'page': list_page_num,
+                    'page-len': None,
+                    'id': None,
+                })
+            ),
             time=time.process_time() - start_time,
             **context
         )
 
     if total_count > 0:
         context['pager'] = build_pager(pager_sections, criteria)
+        page_len = criteria.options.get('page-len', current_app.config['KERKO_PAGE_LEN'])
+        if page_len == 'all':
+            page_len = 0
         search_results_urls = [
-            criteria.build_url(
-                page_num=(criteria.page_num - 1) * (criteria.page_len or 0) + i + 1,
-                page_len=1,
-                id_=result['id'],
+            url_for(
+                '.search',
+                **criteria.params(options={
+                    'page': (criteria.options['page'] - 1) * page_len + i + 1,
+                    'page-len': 1,
+                    'id': result['id'],
+                })
             ) for i, result in enumerate(search_results)
         ]
         search_results = zip(search_results, search_results_urls)
@@ -144,10 +182,23 @@ def search():
         current_app.config['KERKO_TEMPLATE_SEARCH'],
         form=form,
         search_results=search_results,
-        print_url=criteria.build_url(page_len='all', print_preview=True),
-        print_preview=criteria.print_preview,
+        print_url=url_for(
+            '.search',
+            **criteria.params(options={
+                'page': None,
+                'page-len': 'all',
+                'print-preview': 1,
+            })
+        ),
+        print_preview=criteria.options.get('print-preview', 0),
         download_urls={
-            key: criteria.build_download_url(key)
+            key: url_for(
+                '.search_citation_download',
+                citation_format_key=key,
+                **criteria.params(options={
+                    'page': None,
+                })
+            )
             for key in current_app.config['KERKO_COMPOSER'].citation_formats.keys()
         },
         time=time.process_time() - start_time,
@@ -163,10 +214,9 @@ def atom_feed():
     if current_app.config['KERKO_USE_TRANSLATIONS']:
         babel_domain.as_default()
 
-    criteria = Criteria(request)
-    link_url = criteria.build_url(_external=True)
-    criteria.page_len = current_app.config['KERKO_PAGE_LEN']
-    is_searching = criteria.has_keyword_search() or criteria.has_filter_search()
+    criteria = FeedCriteria(request.args)
+    link_url = url_for('.search', _external=True, **criteria.params())
+    is_searching = criteria.has_keywords() or criteria.has_filters()
 
     base_filter_terms = query.build_filter_terms('item_type', exclude=['note', 'attachment'])
     items, _, total_count, page_count, last_sync = query.run_query(
@@ -177,8 +227,8 @@ def atom_feed():
     )
     for item in items:
         query.build_creators_display(item)
-    criteria.fit_pager(page_count)
-    pager_sections = get_pager_sections(criteria.page_num, page_count)
+    criteria.fit_page(page_count)
+    pager_sections = get_pager_sections(criteria.options['page'], page_count)
     # TODO: What if zero results?
     response = make_response(
         render_template(
@@ -186,7 +236,7 @@ def atom_feed():
             link_url=link_url,
             items=items,
             total_count=total_count,
-            page_len=criteria.page_len,
+            page_len=current_app.config['KERKO_PAGE_LEN'],
             pager=build_pager(pager_sections, criteria, endpoint='kerko.atom_feed'),
             is_searching=is_searching,
             locale=get_locale(),
@@ -225,7 +275,7 @@ def item_view(item_id):
     query.build_item_facet_results(item)
     query.build_relations(
         item,
-        query.get_search_return_fields(page_len=None, exclude=['coins']),
+        query.get_search_return_fields(exclude=['coins']),
         sort=current_app.config['KERKO_RELATIONS_SORT'],
         default_terms=base_filter_terms,
     )
@@ -390,8 +440,8 @@ def search_citation_download(citation_format_key):
     if not citation_format:
         return abort(404)
 
-    criteria = Criteria(request)
-    criteria.page_len = None
+    criteria = SearchCriteria(request.args)
+    criteria.options['page-len'] = 'all'
 
     search_results, _, total_count, _, _ = query.run_query(  # TODO: Avoid building facet results.
         criteria,

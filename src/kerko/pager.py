@@ -1,7 +1,7 @@
 from itertools import chain
 
 from babel.numbers import format_decimal
-from flask import current_app
+from flask import current_app, url_for
 from flask_babel import get_locale
 
 
@@ -38,12 +38,12 @@ def get_page_numbers(sections):
     return []
 
 
-def build_pager(sections, criteria, page_kwargs=None, endpoint='kerko.search'):
+def build_pager(sections, criteria, page_options=None, endpoint='kerko.search'):
     """
     Build pager links for use in a search view.
 
-    :param dict page_kwargs: A dict keyed by page number, where each value is a
-        dict of extra params to pass along when building that page's URL.
+    :param dict page_options: A dict keyed by page number, where each value is a
+        dict of search options to pass along when building that page's URL.
     """
     pager = {}
     if sections:
@@ -52,12 +52,15 @@ def build_pager(sections, criteria, page_kwargs=None, endpoint='kerko.search'):
                 {
                     'page_num': p,
                     'page_num_formatted': format_decimal(p, locale=get_locale()),
-                    'url': criteria.build_url(
-                        endpoint=endpoint,
-                        page_num=p,
-                        page_len=criteria.page_len,
-                        **page_kwargs.get(p) if page_kwargs else {}
-                    )
+                    'url': url_for(
+                        endpoint,
+                        **criteria.params(
+                            options={
+                                'page': p,
+                                **(page_options.get(p, {}) if page_options else {})
+                            }
+                        ),
+                    ),
                 } for p in pages
             ]
     return pager

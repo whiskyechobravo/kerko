@@ -1621,7 +1621,7 @@ class Composer:
                     weight=0,
                     fields=None,
                     # Sort by score is only possible on keyword search.
-                    is_allowed=lambda criteria: criteria.has_keyword_search()
+                    is_allowed=lambda criteria: criteria.has_keywords()
                 )
             )
         if 'date_desc' not in exclude:
