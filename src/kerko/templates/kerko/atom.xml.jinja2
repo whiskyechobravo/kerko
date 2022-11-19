@@ -2,8 +2,9 @@
 <feed {% block feed_attributes %}xmlns="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/"{% endblock %}>
     {%- block feed_elements %}
         <title>{{ config.KERKO_TITLE|escape }}{% if is_searching %} - {{ _('Search results') }}{% endif %}</title>
-        <link href="{{ link_url }}"/>
-        <link rel="self" href="{{ request.url }}"/>
+        <link href="{{ html_url }}"/>
+        <link rel="self" href="{{ feed_url }}"/>
+        {#- RFC 5005 paged feed links #}
         {%- if pager.first %}
             <link rel="first" href="{{ pager.first[0].url }}"/>
         {%- endif %}
@@ -17,7 +18,7 @@
             <link rel="last" href="{{ pager.last[0].url }}"/>
         {%- endif %}
         <updated>{{ last_sync }}</updated>
-        <id>{{ link_url }}</id>
+        <id>{{ html_url }}</id>
     {%- endblock %}
     {%- block feed_entries %}
         {%- for item in items %}
