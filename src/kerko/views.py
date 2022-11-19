@@ -226,7 +226,6 @@ def atom_feed():
         query.build_creators_display(item)
     criteria.fit_page(page_count)
     pager_sections = get_pager_sections(criteria.options['page'], page_count)
-    # TODO: What if zero results?
     response = make_response(
         render_template(
             current_app.config['KERKO_TEMPLATE_ATOM_FEED'],
