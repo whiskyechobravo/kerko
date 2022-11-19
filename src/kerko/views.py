@@ -215,9 +215,6 @@ def atom_feed():
         babel_domain.as_default()
 
     criteria = FeedCriteria(request.args)
-    link_url = url_for('.search', _external=True, **criteria.params())
-    is_searching = criteria.has_keywords() or criteria.has_filters()
-
     base_filter_terms = query.build_filter_terms('item_type', exclude=['note', 'attachment'])
     items, _, total_count, page_count, last_sync = query.run_query(
         criteria,
@@ -233,16 +230,17 @@ def atom_feed():
     response = make_response(
         render_template(
             current_app.config['KERKO_TEMPLATE_ATOM_FEED'],
-            link_url=link_url,
+            feed_url=url_for('.atom_feed', _external=True, **criteria.params(options={'page': None})),
+            html_url=url_for('.search', _external=True, **criteria.params(options={'page': None})),
             items=items,
             total_count=total_count,
             page_len=current_app.config['KERKO_PAGE_LEN'],
             pager=build_pager(pager_sections, criteria, endpoint='kerko.atom_feed'),
-            is_searching=is_searching,
+            is_searching=criteria.has_keywords() or criteria.has_filters(),
             locale=get_locale(),
-            last_sync=datetime.fromtimestamp(
-                last_sync, tz=datetime.now().astimezone().tzinfo
-            ).isoformat() if last_sync else datetime.now().isoformat(),
+            last_sync=datetime.fromtimestamp(last_sync,
+                                             tz=datetime.now().astimezone().tzinfo).isoformat()
+            if last_sync else datetime.now().isoformat(),
         )
     )
     response.headers['Content-Type'] = 'application/atom+xml; charset=utf-8'
