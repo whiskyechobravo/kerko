@@ -8,7 +8,7 @@ from whoosh.qparser import MultifieldParser, QueryParser, plugins
 from whoosh.query import And, Every, Not, Or, Term
 from whoosh.sorting import Count, Facets, FieldFacet
 
-from .criteria import SearchCriteria
+from .criteria import create_search_criteria
 from .meta import format_creator_name
 from .storage import SchemaError, load_object, open_index
 
@@ -186,8 +186,10 @@ def build_item_facet_results(item):
                 fake_results = [(value, 0) for value in item[spec.key]]
             else:
                 fake_results = [(item[spec.key], 0)]
-            # Use empty SearchCriteria: the facets will provide starting points for new searches.
-            item['facet_results'][spec.key] = spec.build(fake_results, criteria=SearchCriteria())
+            # Use empty criteria -- the facets will provide starting points for new searches.
+            item['facet_results'][spec.key] = spec.build(
+                fake_results, criteria=create_search_criteria()
+            )
 
 
 def build_search_facet_results(searcher, groups, criteria, facet_specs, default_terms=None):
