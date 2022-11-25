@@ -1,10 +1,8 @@
-from abc import ABC
-
 from flask import current_app
 from werkzeug.datastructures import MultiDict
 
 
-class Criteria(ABC):
+class Criteria:
     """
     Represent a complete set of user-submitted search criteria.
 
@@ -16,8 +14,8 @@ class Criteria(ABC):
     - `filters` is a `MultiDict` of all filtering-related parameters.
     - `options` is a `MultiDict` of the remaining search parameters.
 
-    This class aims at providing a convenient place for storing and accessing
-    validated search parameters that describe a search request.
+    The goal of this class is to provide a convenient place for storing and
+    accessing validated parameters that describe a search request.
     """
 
     def __init__(self, initial=None, options_initializers=None):
@@ -28,19 +26,21 @@ class Criteria(ABC):
             from `request.args`).
 
         :param list options_initializers: Mandatory list of callables for
-            validating and initializing the options. The first argument to each
-            callable is the `Criteria` object to update with clean values, and
-            the second one is the 'initial' `MultiDict`. An initializer *must
-            not* assign a default value when there is no initial value, unless
-            the parameter is mandatory. The initializers effectively
-            determine which options are available.
+            validating and initializing the options from the `initial` values.
+            The first argument to each callable is the `Criteria` instance to
+            update with clean values, and the second one is the 'initial'
+            `MultiDict` from which values can be extracted. An initializer *must
+            not* assign a default value when an option has no 'initial' value,
+            unless having a value is mandatory, otherwise all search URLs
+            derived from the `Criteria` instance will end up with that value
+            explicitly set.
         """
         self.keywords = MultiDict()
         self.filters = MultiDict()
         self.options = MultiDict()
         if initial:
-            initialize_keywords(self, initial)
-            initialize_filters(self, initial)
+            _initialize_keywords(self, initial)
+            _initialize_filters(self, initial)
             for initializer in options_initializers:
                 initializer(self, initial)
 
@@ -107,46 +107,42 @@ class Criteria(ABC):
         ]
 
 
-class SearchCriteria(Criteria):
-
-    def __init__(self, initial=None):
-        super().__init__(
-            initial=initial,
-            options_initializers=[
-                initialize_page,
-                initialize_page_len,
-                initialize_sort,  # Must run after initialize_keywords().
-                initialize_abstracts,
-                initialize_print_preview,
-                initialize_id,  # Must run after initialize_page_len().
-            ]
-        )
+def create_search_criteria(initial=None):
+    return Criteria(
+        initial=initial,
+        options_initializers=[
+            _initialize_page,
+            _initialize_page_len,
+            _initialize_sort,  # Must run after initialize_keywords().
+            _initialize_abstracts,
+            _initialize_print_preview,
+            _initialize_id,  # Must run after initialize_page_len().
+        ],
+    )
 
 
-class FeedCriteria(Criteria):
-
-    def __init__(self, initial=None):
-        super().__init__(
-            initial=initial,
-            options_initializers=[
-                initialize_page,
-            ],
-        )
+def create_feed_criteria(initial=None):
+    return Criteria(
+        initial=initial,
+        options_initializers=[
+            _initialize_page,
+        ],
+    )
 
 
-def initialize_keywords(criteria, initial):
+def _initialize_keywords(criteria, initial):
     for scope in current_app.config['KERKO_COMPOSER'].scopes.values():
         if (values := initial.getlist(scope.key)):
             criteria.keywords.setlist(scope.key, values)
 
 
-def initialize_filters(criteria, initial):
+def _initialize_filters(criteria, initial):
     for spec in current_app.config['KERKO_COMPOSER'].facets.values():
         if (values := initial.getlist(spec.filter_key)):
             criteria.filters.setlist(spec.filter_key, values)
 
 
-def initialize_page(criteria, initial):
+def _initialize_page(criteria, initial):
     try:
         if (page := int(initial.get('page', 0))) and page >= 1:
             criteria.options['page'] = page
@@ -154,7 +150,7 @@ def initialize_page(criteria, initial):
         pass
 
 
-def initialize_page_len(criteria, initial):
+def _initialize_page_len(criteria, initial):
     page_len = initial.get('page-len', 0)
     try:
         if page_len == 'all' or ((page_len := int(page_len)) and page_len >= 1):
@@ -163,14 +159,14 @@ def initialize_page_len(criteria, initial):
         pass
 
 
-def initialize_sort(criteria, initial):
+def _initialize_sort(criteria, initial):
     if (sort_spec := current_app.config['KERKO_COMPOSER'].sorts.get(
         initial.get('sort', '')
     )) and sort_spec.is_allowed(criteria):
         criteria.options['sort'] = sort_spec.key
 
 
-def initialize_abstracts(criteria, initial):
+def _initialize_abstracts(criteria, initial):
     if current_app.config['KERKO_RESULTS_ABSTRACTS_TOGGLER']:
         enabled_by_default = current_app.config['KERKO_RESULTS_ABSTRACTS']
         if (abstracts := initial.get('abstracts')):
@@ -180,13 +176,13 @@ def initialize_abstracts(criteria, initial):
                 criteria.options['abstracts'] = 0
 
 
-def initialize_print_preview(criteria, initial):
+def _initialize_print_preview(criteria, initial):
     if current_app.config['KERKO_PRINT_CITATIONS_LINK'] and initial.get('print-preview') in [
         't', '1'
     ]:
         criteria.options['print-preview'] = 1
 
 
-def initialize_id(criteria, initial):
+def _initialize_id(criteria, initial):
     if criteria.options.get('page-len') == 1 and (initial_id := initial.get('id')):
         criteria.options['id'] = initial_id

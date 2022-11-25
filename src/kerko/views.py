@@ -10,7 +10,7 @@ from flask_babel import get_locale, gettext, ngettext
 
 from . import babel_domain, blueprint, meta, query
 from .breadbox import build_breadbox
-from .criteria import FeedCriteria, SearchCriteria
+from .criteria import create_feed_criteria, create_search_criteria
 from .exceptions import except_abort
 from .forms import SearchForm
 from .pager import build_pager, get_page_numbers
@@ -32,7 +32,7 @@ def search():
     if current_app.config['KERKO_USE_TRANSLATIONS']:
         babel_domain.as_default()
 
-    criteria = SearchCriteria(request.args)
+    criteria = create_search_criteria(request.args)
     form = SearchForm(csrf_enabled=False)
     if form.validate_on_submit() and (
             scope := current_app.config['KERKO_COMPOSER'].scopes.get(form.scope.data)):
@@ -214,7 +214,7 @@ def atom_feed():
     if current_app.config['KERKO_USE_TRANSLATIONS']:
         babel_domain.as_default()
 
-    criteria = FeedCriteria(request.args)
+    criteria = create_feed_criteria(request.args)
     base_filter_terms = query.build_filter_terms('item_type', exclude=['note', 'attachment'])
     items, _, total_count, page_count, last_sync = query.run_query(
         criteria,
@@ -437,7 +437,7 @@ def search_citation_download(citation_format_key):
     if not citation_format:
         return abort(404)
 
-    criteria = SearchCriteria(request.args)
+    criteria = create_search_criteria(request.args)
     criteria.options['page-len'] = 'all'
 
     search_results, _, total_count, _, _ = query.run_query(  # TODO: Avoid building facet results.
