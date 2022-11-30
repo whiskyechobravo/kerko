@@ -5,6 +5,9 @@ from flask import current_app, url_for
 from flask_babel import get_locale
 
 
+# TODO: move to search_results submodule.
+
+
 def get_sections(page_num, page_count):
     """Return dict of pager sections, where each section is a list of page numbers."""
     if page_count <= 1:

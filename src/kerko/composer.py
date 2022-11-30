@@ -1816,6 +1816,17 @@ class Composer:
         self.schema.remove(key)
         del self.fields[key]
 
+    def select_fields(self, keys):
+        """
+        Return a subset of specifications.
+
+        :param list keys: Keys of the desired specs. Key that don't exist in the
+            specifications dict are silently ignored.
+
+        :return dict: The desired specs.
+        """
+        return {key: self.fields[key] for key in self.fields.keys() & keys}
+
     def add_facet(self, facet):
         self.facets[facet.key] = facet
         self.schema.add(facet.key, facet.field_type)
@@ -1858,7 +1869,7 @@ class Composer:
         """
         Return a list of specifications, sorted by weight.
 
-        :param str attr: Attribute name of the specification dict. The
+        :param str attr: Attribute name of the specifications dict. The
             specifications must themselves have a `weight` attribute.
         """
         return sorted(getattr(self, attr).values(), key=lambda spec: spec.weight)

@@ -52,6 +52,9 @@ class Criteria:
         """Return `True` if criteria includes active filters."""
         return any(self.filters.values())
 
+    def is_searching(self):
+        return self.has_keywords() or self.has_filters()
+
     def params(self, *, keywords=None, filters=None, options=None):
         """
         Return parameters for a search request.
