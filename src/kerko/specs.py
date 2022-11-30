@@ -296,7 +296,7 @@ class FlatFacetSpec(FacetSpec):
 
     def build(self, results, criteria, active_only=False):
         items = []
-        for value, count in results:
+        for value, count in results.items():
             if value or self.missing_label:
                 value, label = self.decode(value, default_value=value, default_label=value)
                 if (new_filters := self.remove_filter(value, criteria.filters)):
@@ -426,7 +426,7 @@ class TreeFacetSpec(FacetSpec):
 
     def build(self, results, criteria, active_only=False):
         tree = Tree()
-        for value, count in results:
+        for value, count in results.items():
             if value or self.missing_label:
                 value, label = self.decode(value, default_value=value, default_label=value)
                 if (new_filters := self.remove_filter(value, criteria.filters)):

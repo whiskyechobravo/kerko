@@ -11,6 +11,9 @@ from copy import copy
 from flask import current_app, url_for
 
 
+# TODO: move to search_results submodule.
+
+
 def build_breadbox_keywords(criteria):
     """Build the active keywords in the same format as a facet."""
     keywords = defaultdict(list)
