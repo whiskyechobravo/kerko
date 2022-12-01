@@ -1,5 +1,6 @@
-from flask import current_app
 from werkzeug.datastructures import MultiDict
+
+from kerko.shortcuts import composer, config
 
 
 class Criteria:
@@ -96,18 +97,11 @@ class Criteria:
     def get_active_sort_spec(self):
         """Return the spec of the active sort or, if none is active, the default sort to use."""
         if (sort_key := self.options.get('sort')):
-            return current_app.config['KERKO_COMPOSER'].sorts[sort_key]
-        for sort_spec in current_app.config['KERKO_COMPOSER'].get_ordered_specs('sorts'):
+            return composer().sorts[sort_key]
+        for sort_spec in composer().get_ordered_specs('sorts'):
             if sort_spec.is_allowed(self):
                 return sort_spec
         return None
-
-    def get_active_facet_specs(self):
-        """Return the specs of the active facets."""
-        return [
-            current_app.config['KERKO_COMPOSER'].get_facet_by_filter_key(filter_key)
-            for filter_key in self.filters.keys()
-        ]
 
 
 def create_search_criteria(initial=None):
@@ -134,13 +128,13 @@ def create_feed_criteria(initial=None):
 
 
 def _initialize_keywords(criteria, initial):
-    for scope in current_app.config['KERKO_COMPOSER'].scopes.values():
+    for scope in composer().scopes.values():
         if (values := initial.getlist(scope.key)):
             criteria.keywords.setlist(scope.key, values)
 
 
 def _initialize_filters(criteria, initial):
-    for spec in current_app.config['KERKO_COMPOSER'].facets.values():
+    for spec in composer().facets.values():
         if (values := initial.getlist(spec.filter_key)):
             criteria.filters.setlist(spec.filter_key, values)
 
@@ -163,15 +157,15 @@ def _initialize_page_len(criteria, initial):
 
 
 def _initialize_sort(criteria, initial):
-    if (sort_spec := current_app.config['KERKO_COMPOSER'].sorts.get(
+    if (sort_spec := composer().sorts.get(
         initial.get('sort', '')
     )) and sort_spec.is_allowed(criteria):
         criteria.options['sort'] = sort_spec.key
 
 
 def _initialize_abstracts(criteria, initial):
-    if current_app.config['KERKO_RESULTS_ABSTRACTS_TOGGLER']:
-        enabled_by_default = current_app.config['KERKO_RESULTS_ABSTRACTS']
+    if config('KERKO_RESULTS_ABSTRACTS_TOGGLER'):
+        enabled_by_default = config('KERKO_RESULTS_ABSTRACTS')
         if (abstracts := initial.get('abstracts')):
             if abstracts in ['t', '1'] and not enabled_by_default:
                 criteria.options['abstracts'] = 1
@@ -180,7 +174,7 @@ def _initialize_abstracts(criteria, initial):
 
 
 def _initialize_print_preview(criteria, initial):
-    if current_app.config['KERKO_PRINT_CITATIONS_LINK'] and initial.get('print-preview') in [
+    if config('KERKO_PRINT_CITATIONS_LINK') and initial.get('print-preview') in [
         't', '1'
     ]:
         criteria.options['print-preview'] = 1

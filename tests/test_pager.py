@@ -7,7 +7,7 @@ import unittest
 from flask import current_app, Flask
 
 from kerko import blueprint as kerko_blueprint
-from kerko import pager
+from kerko.views import pager
 
 
 class SectionsTestCase(unittest.TestCase):

@@ -1,6 +1,7 @@
 import re
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
+from itertools import chain
 
 from flask_babel import gettext
 from whoosh.qparser import MultifieldParser, plugins
@@ -50,13 +51,13 @@ class Searcher:
         *,
         keywords=None,
         filters=None,
-        include=None,
-        exclude=None,
+        allow=None,
+        reject=None,
         sort_spec=None,
         faceting=True,
     ):
         self._prepare_keywords(keywords)
-        self._prepare_filters(filters, include, exclude)
+        self._prepare_filters(filters, allow, reject)
         self._prepare_sorting(sort_spec)
         if faceting:
             self._prepare_faceting()
@@ -98,32 +99,36 @@ class Searcher:
         else:
             self.search_args['query'] = Every()
 
-    def _prepare_filters(self, filters=None, include=None, exclude=None):
+    def _prepare_filters(self, filters=None, allow=None, reject=None):
         """
         Prepare query filtering terms.
 
         :param MultiDict filters: The filters to apply keyed by filter key. If
             falsy, no filters will be applied.
 
-        :param dict include: A dict of inclusion filters, where the items' key
-            and value are, respectively, the schema field name and the list of
-            field values to include (which will be combined with the `Or`
-            boolean search operator). Note that no validation of the field name
-            is made against the schema.
+        :param dict allow: A dict of inclusion filters, where the key and value
+            are, respectively, the schema field name and the list of field
+            values to allow in the search results. Any match will allow an item
+            in the results, i.e., the values are flattened and combined with the
+            `Or` boolean search operator). Note that no validation of the field
+            name is made against the schema.
 
-        :param dict exclude: A dict of exclusion filters, where the items' key
-            and value are, respectively, the schema field name and the list of
-            field values to include (which will be combined with the `And` and
-            `Not` boolean search operators). Note that no validation of the
+        :param dict reject: A dict of exclusion filters, where the key and value
+            are, respectively, the schema field name and the list of field
+            values to reject from the search results. Any match will reject an
+            item from the results, i.e., the values are combined with the `And`
+            and `Not` boolean search operators). Note that no validation of the
             field name is made against the schema.
         """
         terms = []
-        if include:
-            for field_name, include_values in include.items():
-                terms.extend([Or([Term(field_name, value) for value in include_values])])
-        if exclude:
-            for field_name, include_values in exclude.items():
-                terms.extend([Not(Term(field_name, value)) for value in include_values])
+        if allow:
+            terms.append(Or(list(chain(
+                *[[Term(field, value) for value in allow_values]
+                    for field, allow_values in allow.items()]
+            ))))
+        if reject:
+            for field, reject_values in reject.items():
+                terms.extend([Not(Term(field, value)) for value in reject_values])
         if filters:
             for filter_key, filter_values in filters.lists():
                 if spec := self.facet_specs.get(filter_key):
@@ -158,9 +163,9 @@ class Searcher:
             )
         self.search_args['maptype'] = Count
 
-    def search_all(self, *, limit=None, **kwargs):
+    def search(self, *, limit=None, **kwargs):
         self._prepare_search_args(**kwargs)
-        return AllResults(self.searcher.search(
+        return UnpagedResults(self.searcher.search(
             q=self.search_args.pop('query'),
             limit=limit,
             **self.search_args,
@@ -168,7 +173,7 @@ class Searcher:
 
     def search_page(self, *, page, page_len, **kwargs):
         self._prepare_search_args(**kwargs)
-        return PageResults(
+        return PagedResults(
             self.searcher.search_page(
                 pagenum=page,
                 pagelen=page_len,
@@ -222,25 +227,31 @@ class Results(ABC):
     def item_count(self):
         pass
 
-    def items(self, field_specs):
+    def items(self, field_specs, facet_specs=None):
         """
         Load search result items, with just the specified fields.
 
         This may be called only while the searcher object is still alive.
 
-        :param dict field_specs: The specifications of the fields to load. Any
-            requested field that doesn't exist in a result is silently ignored.
+        :param dict field_specs: The specifications of the fields to load into
+            each item. Any requested field that is not present in a result is
+            silently ignored for that result.
+
+        :param dict facet_specs: The specifications of the facets to load into
+            each item. Any requested facet that is not present in a result is
+            silently ignored for that result.
         """
-        return [self._item(hit, field_specs) for hit in self._results]
+        return [self._item(hit, field_specs, facet_specs) for hit in self._results]
 
     def facets(self, facet_specs, criteria, active_only=False):
         """
-        Load facet results, with just the specified facets.
+        Load facets from search results.
 
         This may be called only while the searcher object is still alive.
 
         :param dict facet_specs: The specifications of the facets to load. Any
-            requested facet that doesn't exist in a result is silently ignored.
+            requested facet that doesn't have a corresponding grouping in the
+            search results is silently ignored.
         """
         return {
             key: facet_specs[key].build(self._groups(key), criteria, active_only)
@@ -248,12 +259,16 @@ class Results(ABC):
         }
 
     @staticmethod
-    def _item(hit, field_specs):
+    def _item(hit, field_specs, facet_specs=None):
         """
         Copy specified fields from a `whoosh.searching.Hit` object into a `dict`.
         """
+        facet_specs = facet_specs or {}
         return {
-            key: field_specs[key].decode(hit[key]) for key in field_specs.keys() & hit.keys()
+            **{key: field_specs[key].decode(hit[key])
+               for key in field_specs.keys() & hit.keys()},
+            **{key: hit[key]
+               for key in facet_specs.keys() & hit.keys()}
         }
 
     @abstractmethod
@@ -267,7 +282,7 @@ class Results(ABC):
         pass
 
 
-class AllResults(Results):
+class UnpagedResults(Results):
     """Interface results from a `whoosh.searching.Results` object."""
 
     @property
@@ -285,7 +300,7 @@ class AllResults(Results):
         return self._results.facet_names()
 
 
-class PageResults(Results):
+class PagedResults(Results):
     """Interface results from a `whoosh.searching.PageResults` object."""
 
     @property

@@ -6,14 +6,14 @@ from flask import (abort, flash, make_response, redirect, render_template,
                    request, send_from_directory, url_for)
 from flask_babel import get_locale, gettext
 
-from kerko import babel_domain, blueprint, meta, query
+from kerko import babel_domain, blueprint, query
 from kerko.criteria import create_feed_criteria, create_search_criteria
 from kerko.exceptions import except_abort
 from kerko.forms import SearchForm
-from kerko.shortcuts import composer, setting
+from kerko.shortcuts import composer, config
 from kerko.storage import (SchemaError, SearchIndexError, get_doc_count,
                            get_storage_dir)
-from kerko.views import pager
+from kerko.views import creators, meta, pager
 from kerko.views.searching import search_item, search_list
 
 SITEMAP_URL_MAX_COUNT = 50000
@@ -26,7 +26,7 @@ def search():
     """View the results of a search."""
     start_time = time.process_time()
 
-    if setting('KERKO_USE_TRANSLATIONS'):
+    if config('KERKO_USE_TRANSLATIONS'):
         babel_domain.as_default()
 
     criteria = create_search_criteria(request.args)
@@ -44,7 +44,7 @@ def search():
         )
         return redirect(url, 302)
 
-    if criteria.options.get('page-len', setting('KERKO_PAGE_LEN')) == 1:
+    if criteria.options.get('page-len', config('KERKO_PAGE_LEN')) == 1:
         template, context = search_item(criteria)
     else:
         template, context = search_list(criteria)
@@ -63,7 +63,7 @@ def search():
 @except_abort(SearchIndexError, 503)
 def atom_feed():
     """Build a feed based on the search criteria."""
-    if setting('KERKO_USE_TRANSLATIONS'):
+    if config('KERKO_USE_TRANSLATIONS'):
         babel_domain.as_default()
 
     criteria = create_feed_criteria(request.args)
@@ -75,18 +75,18 @@ def atom_feed():
         default_terms=base_filter_terms,
     )
     for item in items:
-        query.build_creators_display(item)
+        creators.inject_creator_display_names(item)
     criteria.fit_page(page_count)
     pager_sections = pager.get_sections(criteria.options['page'], page_count)
     response = make_response(
         render_template(
-            setting('KERKO_TEMPLATE_ATOM_FEED'),
+            config('KERKO_TEMPLATE_ATOM_FEED'),
             feed_url=url_for('.atom_feed', _external=True, **criteria.params(options={'page': None})),
             html_url=url_for('.search', _external=True, **criteria.params(options={'page': None})),
             items=items,
             total_count=total_count,
-            page_len=setting('KERKO_PAGE_LEN'),
-            pager=pager.build(pager_sections, criteria, endpoint='kerko.atom_feed'),
+            page_len=config('KERKO_PAGE_LEN'),
+            pager=pager.build_pager(pager_sections, criteria, endpoint='kerko.atom_feed'),
             is_searching=criteria.has_keywords() or criteria.has_filters(),
             locale=get_locale(),
             last_sync=datetime.fromtimestamp(last_sync,
@@ -105,7 +105,7 @@ def item_view(item_id):
     """View a full bibliographic record."""
     start_time = time.process_time()
 
-    if setting('KERKO_USE_TRANSLATIONS'):
+    if config('KERKO_USE_TRANSLATIONS'):
         babel_domain.as_default()
 
     base_filter_terms = query.build_filter_terms('item_type', exclude=['note', 'attachment'])
@@ -120,16 +120,16 @@ def item_view(item_id):
     if fellback:
         return redirect(item_url, 301)
 
-    query.build_creators_display(item)
+    creators.inject_creator_display_names(item)
     query.build_item_facet_results(item)
     query.build_relations(
         item,
         query.get_search_return_fields(exclude=['coins']),
-        sort=setting('KERKO_RELATIONS_SORT'),
+        sort=config('KERKO_RELATIONS_SORT'),
         default_terms=base_filter_terms,
     )
     return render_template(
-        setting('KERKO_TEMPLATE_ITEM'),
+        config('KERKO_TEMPLATE_ITEM'),
         title=item.get('data', {}).get('title', ''),
         item=item,
         item_url=item_url,
@@ -151,7 +151,7 @@ def child_attachment_download(item_id, attachment_id, attachment_filename=None):
     filename, a redirect is performed to a corrected URL so that the client gets
     a proper filename.
     """
-    if setting('KERKO_USE_TRANSLATIONS'):
+    if config('KERKO_USE_TRANSLATIONS'):
         babel_domain.as_default()
 
     item, fellback = query.run_query_unique_with_fallback(
@@ -208,7 +208,7 @@ def standalone_attachment_download(item_id, attachment_filename=None):
     filename, a redirect is performed to a corrected URL so that the client gets
     a proper filename.
     """
-    if setting('KERKO_USE_TRANSLATIONS'):
+    if config('KERKO_USE_TRANSLATIONS'):
         babel_domain.as_default()
 
     item, fellback = query.run_query_unique_with_fallback(
@@ -244,7 +244,7 @@ def standalone_attachment_download(item_id, attachment_filename=None):
 @except_abort(SearchIndexError, 503)
 def item_citation_download(item_id, citation_format_key):
     """Download a record."""
-    if setting('KERKO_USE_TRANSLATIONS'):
+    if config('KERKO_USE_TRANSLATIONS'):
         babel_domain.as_default()
 
     item, fellback = query.run_query_unique_with_fallback(

@@ -66,6 +66,12 @@ Possibly backwards incompatible changes (more or less internal API changes):
 
 - Rewrote the `criteria` module. `Criteria.keywords` and `Criteria.filters` work
   pretty much as before, but everything else has changed.
+- Rewrote the `query` module, which had organically grown into an tangled mess,
+  now replaced with the `search` module. This new API is completely different.
+- Adapted view code to the above-mentioned `search` API, and split the `views`
+  module into multiple ones (`views.creators`, `views.relations`,
+  `views.routes`, `views.searching`).
+- Moved the `breadbox`, `meta`, `pager`, and `sorter` modules under `views`.
 
 
 ## 0.8.1 (2021-11-16)

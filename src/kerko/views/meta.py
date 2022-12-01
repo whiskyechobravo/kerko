@@ -4,20 +4,7 @@ import re
 
 from flask import current_app, url_for
 
-
-def format_creator_name(creator):
-    """Format a name from a dict having either a 'name' key, or 'firstName' and 'lastName' keys."""
-    return creator.get(
-        'name',
-        ', '.join(
-            [
-                name_part for name_part in [
-                    creator.get('lastName', '').strip(),
-                    creator.get('firstName', '').strip()
-                ] if name_part
-            ]
-        ),
-    )
+from kerko.views.creators import format_creator_name
 
 
 def build_highwirepress_tags(item):  # pylint: disable=too-many-branches
