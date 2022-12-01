@@ -1,10 +1,7 @@
 from flask import current_app, url_for
 
 
-# TODO: move to search_results submodule.
-
-
-def build_sorter(criteria):
+def build(criteria):
     sorter = {}
     if (active_sort_spec := criteria.get_active_sort_spec()):
         sorter['active'] = active_sort_spec.label

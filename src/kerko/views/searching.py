@@ -8,9 +8,8 @@ from flask_babel import get_locale, gettext, ngettext
 from kerko import meta, query
 from kerko.search import Searcher
 from kerko.shortcuts import composer, setting
-from kerko.sorter import build_sorter
 from kerko.storage import load_object, open_index
-from kerko.views import breadbox, pager
+from kerko.views import breadbox, pager, sorter
 
 
 def _base_search_args(criteria):
@@ -221,7 +220,7 @@ def search_list(criteria):
             pager.get_sections(criteria.options['page'], results.page_count),
             criteria,
         )
-        context['sorter'] = build_sorter(criteria)
+        context['sorter'] = sorter.build(criteria)
         context['show_abstracts'] = criteria.options.get(
             'abstracts', setting('KERKO_RESULTS_ABSTRACTS')
         )
