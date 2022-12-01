@@ -5,5 +5,5 @@ def composer():
     return current_app.config['KERKO_COMPOSER']
 
 
-def setting(key):
+def config(key):
     return current_app.config[key]

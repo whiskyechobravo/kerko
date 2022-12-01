@@ -1,3 +1,3 @@
 """Routed views."""
 
-from . import routes
+from kerko.views import routes

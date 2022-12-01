@@ -2,15 +2,14 @@ import copy
 import re
 from collections.abc import Iterable
 
-from flask import current_app, url_for
+from flask import current_app
 from flask_babel import gettext
 from whoosh.qparser import MultifieldParser, QueryParser, plugins
 from whoosh.query import And, Every, Not, Or, Term
 from whoosh.sorting import Count, Facets, FieldFacet
 
-from .criteria import create_search_criteria
-from .meta import format_creator_name
-from .storage import SchemaError, load_object, open_index
+from kerko.criteria import create_search_criteria
+from kerko.storage import SchemaError, load_object, open_index
 
 
 def get_search_return_fields(return_all=False, exclude=None):
@@ -149,26 +148,6 @@ def _decode_fields(item):
         if k in field_specs:
             item[k] = field_specs[k].decode(v)
     return item
-
-
-def build_creators_display(item):
-    """Prepare creator data for easier display."""
-    for spec in item.keys():
-        if spec == 'data' and 'creators' in item['data']:
-            for creator in item['data']['creators']:
-                # Add creator display name.
-                creator['display'] = format_creator_name(creator)
-                # Add creator type labels.
-                if 'creator_types' in item:
-                    for t in item['creator_types']:
-                        if t['creatorType'] == creator['creatorType']:
-                            creator['label'] = t['localized']
-                            break
-                # Add creator link.
-                if (creator_scope := current_app.config['KERKO_COMPOSER'].scopes.get('creator')):
-                    creator['url'] = url_for(
-                        '.search', **creator_scope.add_keywords(value=f"\"{creator['display']}\"")
-                    )
 
 
 def build_item_facet_results(item):

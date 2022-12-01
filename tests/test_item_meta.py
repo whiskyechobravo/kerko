@@ -6,7 +6,7 @@ import unittest
 
 import elementpath  # For XPath 2.0 selectors.
 from lxml import etree
-from kerko.meta import format_creator_name
+from kerko.views.creators import format_creator_name
 
 from tests.integration_testing import SynchronizedTestCase
 

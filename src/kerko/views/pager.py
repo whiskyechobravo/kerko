@@ -5,9 +5,6 @@ from flask import current_app, url_for
 from flask_babel import get_locale
 
 
-# TODO: Turn this into a class. It would simplify calling code. With careful implementation (possibly __getitem__()), it could probably remain compatible with existing templates.
-
-
 def get_sections(page_num, page_count):
     """Return dict of pager sections, where each section is a list of page numbers."""
     if page_count <= 1:
@@ -41,7 +38,7 @@ def get_page_numbers(sections):
     return []
 
 
-def build(sections, criteria, page_options=None, endpoint='kerko.search'):
+def build_pager(sections, criteria, page_options=None, endpoint='kerko.search'):
     """
     Build pager links for use in a search view.
 

@@ -1835,12 +1835,6 @@ class Composer:
         self.schema.remove(key)
         del self.facets[key]
 
-    def get_facet_by_filter_key(self, filter_key, default=None):
-        for spec in self.facets.values():
-            if spec.filter_key == filter_key:
-                return spec
-        return default
-
     def add_sort(self, sort):
         self.sorts[sort.key] = sort
 
