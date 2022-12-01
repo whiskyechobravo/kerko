@@ -10,12 +10,11 @@ from kerko import babel_domain, blueprint, meta, query
 from kerko.criteria import create_feed_criteria, create_search_criteria
 from kerko.exceptions import except_abort
 from kerko.forms import SearchForm
-from kerko.pager import build_pager
-from kerko.pager import get_sections as get_pager_sections
 from kerko.shortcuts import composer, setting
 from kerko.storage import (SchemaError, SearchIndexError, get_doc_count,
                            get_storage_dir)
-from kerko.views import helpers
+from kerko.views import pager
+from kerko.views.searching import search_item, search_list
 
 SITEMAP_URL_MAX_COUNT = 50000
 
@@ -46,9 +45,9 @@ def search():
         return redirect(url, 302)
 
     if criteria.options.get('page-len', setting('KERKO_PAGE_LEN')) == 1:
-        template, context = helpers.search_item(criteria)
+        template, context = search_item(criteria)
     else:
-        template, context = helpers.search_list(criteria)
+        template, context = search_list(criteria)
     return render_template(
         template,
         form=form,
@@ -78,7 +77,7 @@ def atom_feed():
     for item in items:
         query.build_creators_display(item)
     criteria.fit_page(page_count)
-    pager_sections = get_pager_sections(criteria.options['page'], page_count)
+    pager_sections = pager.get_sections(criteria.options['page'], page_count)
     response = make_response(
         render_template(
             setting('KERKO_TEMPLATE_ATOM_FEED'),
@@ -87,7 +86,7 @@ def atom_feed():
             items=items,
             total_count=total_count,
             page_len=setting('KERKO_PAGE_LEN'),
-            pager=build_pager(pager_sections, criteria, endpoint='kerko.atom_feed'),
+            pager=pager.build(pager_sections, criteria, endpoint='kerko.atom_feed'),
             is_searching=criteria.has_keywords() or criteria.has_filters(),
             locale=get_locale(),
             last_sync=datetime.fromtimestamp(last_sync,
