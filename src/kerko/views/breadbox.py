@@ -11,10 +11,7 @@ from copy import copy
 from flask import current_app, url_for
 
 
-# TODO: move to search_results submodule.
-
-
-def build_breadbox_keywords(criteria):
+def build_keywords(criteria):
     """Build the active keywords in the same format as a facet."""
     keywords = defaultdict(list)
     for scope in current_app.config['KERKO_COMPOSER'].scopes.values():
@@ -52,7 +49,7 @@ def get_active_filters(results):
     return filters
 
 
-def build_breadbox_filters(facet_results):
+def build_filters(facet_results):
     """Collect just the active facets from the given facet results."""
     filters = {}
     for key, results in facet_results.items():
@@ -62,14 +59,14 @@ def build_breadbox_filters(facet_results):
     return filters
 
 
-def build_breadbox(criteria, facet_results):
+def build(criteria, facet_results):
     breadbox = {}
 
-    breadbox_keywords = build_breadbox_keywords(criteria)
+    breadbox_keywords = build_keywords(criteria)
     if breadbox_keywords:
         breadbox['keywords'] = breadbox_keywords
 
-    breadbox_filters = build_breadbox_filters(facet_results)
+    breadbox_filters = build_filters(facet_results)
     if breadbox_filters:
         breadbox['filters'] = breadbox_filters
 

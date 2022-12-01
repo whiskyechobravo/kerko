@@ -1,5 +1,3 @@
-"""Helper functions for views."""
-
 import copy
 from datetime import datetime
 
@@ -8,13 +6,11 @@ from flask import redirect, url_for
 from flask_babel import get_locale, gettext, ngettext
 
 from kerko import meta, query
-from kerko.breadbox import build_breadbox
-from kerko.pager import build_pager, get_page_numbers
-from kerko.pager import get_sections as get_pager_sections
 from kerko.search import Searcher
 from kerko.shortcuts import composer, setting
 from kerko.sorter import build_sorter
 from kerko.storage import load_object, open_index
+from kerko.views import breadbox, pager
 
 
 def _base_search_args(criteria):
@@ -128,21 +124,21 @@ def search_item(criteria):
         context['total_count_formatted'] = format_decimal(results.item_count, locale=get_locale())
         context['page_count'] = results.page_count
         context['page_count_formatted'] = format_decimal(results.page_count, locale=get_locale())
-        pager_sections = get_pager_sections(criteria.options['page'], results.page_count)
+        pager_sections = pager.get_sections(criteria.options['page'], results.page_count)
         pager_options = {
             p: {'id': item_id}
-            for p, item_id in _get_page_items(criteria, get_page_numbers(pager_sections), current_item_id)
+            for p, item_id in _get_page_items(criteria, pager.get_page_numbers(pager_sections), current_item_id)
         }
         field_specs = composer().fields  # All fields.
         # TODO: continue!!!!
-        # context['breadbox'] = build_breadbox(criteria, facet_results)
+        # context['breadbox'] = breadbox.build_breadbox(criteria, facet_results)
 
         # TODO: À adapter!!!
         if criteria.options.get('page-len') == 1 and total_count != 0:
             # Retrieve item ids corresponding to individual result page numbers.
             page_options = {}
             page_criteria = copy.deepcopy(criteria)
-            for page_num in get_page_numbers(pager_sections):
+            for page_num in pager.get_page_numbers(pager_sections):
                 if page_num == criteria.options['page']:
                     # We already know the current page's item id. No further query necessary.
                     page_options[page_num] = {'id': search_results[0]['id']}
@@ -157,7 +153,7 @@ def search_item(criteria):
                     )
                     if page_search_results:
                         page_options[page_num] = {'id': page_search_results[0]['id']}
-            context['pager'] = build_pager(pager_sections, criteria, page_options)
+            context['pager'] = pager.build(pager_sections, criteria, page_options)
 
             list_page_num = int((criteria.options['page'] - 1) / setting('KERKO_PAGE_LEN') + 1)
             query.build_creators_display(search_results[0])
@@ -221,8 +217,8 @@ def search_list(criteria):
         context['total_count_formatted'] = format_decimal(results.item_count, locale=get_locale())
         context['page_count'] = results.page_count
         context['page_count_formatted'] = format_decimal(results.page_count, locale=get_locale())
-        context['pager'] = build_pager(
-            get_pager_sections(criteria.options['page'], results.page_count),
+        context['pager'] = pager.build(
+            pager.get_sections(criteria.options['page'], results.page_count),
             criteria,
         )
         context['sorter'] = build_sorter(criteria)
@@ -267,7 +263,7 @@ def search_list(criteria):
         facets = results.facets(composer().facets, criteria)
         context['search_results'] = zip(items, _build_item_search_urls(items, criteria))
         context['facet_results'] = facets
-        context['breadbox'] = build_breadbox(criteria, facets)
+        context['breadbox'] = breadbox.build(criteria, facets)
 
         if (last_sync := load_object('index', 'last_update_from_zotero')):
             context['last_sync'] = datetime.fromtimestamp(
