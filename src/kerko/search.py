@@ -51,13 +51,14 @@ class Searcher:
         *,
         keywords=None,
         filters=None,
+        require=None,
         allow=None,
         reject=None,
         sort_spec=None,
-        faceting=True,
+        faceting=True
     ):
         self._prepare_keywords(keywords)
-        self._prepare_filters(filters, allow, reject)
+        self._prepare_filters(filters, require, allow, reject)
         self._prepare_sorting(sort_spec)
         if faceting:
             self._prepare_faceting()
@@ -99,19 +100,26 @@ class Searcher:
         else:
             self.search_args['query'] = Every()
 
-    def _prepare_filters(self, filters=None, allow=None, reject=None):
+    def _prepare_filters(self, filters=None, require=None, allow=None, reject=None):
         """
         Prepare query filtering terms.
 
-        :param MultiDict filters: The filters to apply keyed by filter key. If
-            falsy, no filters will be applied.
+        :param MultiDict filters: The facet filters to apply keyed by filter
+            key. If falsy, no filters will be applied.
+
+        :param dict require: Values that are all required to match, that will be
+            combined to the search with the `And` boolean search operator. Each
+            key must correspond to a schema field name. The value must be a list
+            of accepted values that will be combined together with a nested `Or`
+            boolean search operator.
 
         :param dict allow: A dict of inclusion filters, where the key and value
             are, respectively, the schema field name and the list of field
             values to allow in the search results. Any match will allow an item
             in the results, i.e., the values are flattened and combined with the
-            `Or` boolean search operator). Note that no validation of the field
-            name is made against the schema.
+            `Or` boolean search operator), but at least one match will be
+            required. Note that no validation of the field name is made against
+            the schema.
 
         :param dict reject: A dict of exclusion filters, where the key and value
             are, respectively, the schema field name and the list of field
@@ -121,12 +129,17 @@ class Searcher:
             field name is made against the schema.
         """
         terms = []
+        if require:
+            for field_key in require.keys() & self.field_specs.keys():
+                terms.append(Or([Term(field_key, value) for value in require[field_key]]))
         if allow:
+            # TODO: Validate field keys against field_specs, as done above for 'require'?
             terms.append(Or(list(chain(
                 *[[Term(field, value) for value in allow_values]
                     for field, allow_values in allow.items()]
             ))))
         if reject:
+            # TODO: Validate field keys against field_specs, as done above for 'require'?
             for field, reject_values in reject.items():
                 terms.extend([Not(Term(field, value)) for value in reject_values])
         if filters:
