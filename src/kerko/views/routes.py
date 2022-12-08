@@ -328,18 +328,22 @@ def search_citation_download(citation_format_key):
         return abort(404)
 
     criteria = create_search_criteria(request.args)
-    criteria.options['page-len'] = 'all'
-
-    search_results, _, total_count, _, _ = query.run_query(  # TODO: Avoid building facet results.
-        criteria,
-        return_fields=[citation_format.field.key],
-        default_terms=query.build_filter_terms('item_type', exclude=['note', 'attachment']),
-    )
-
-    if total_count == 0:
-        return abort(404)
-
-    citations = [result.get(citation_format.field.key, '') for result in search_results]
+    index = open_index('index')
+    with Searcher(index) as searcher:
+        results = searcher.search(
+            limit=None,
+            keywords=criteria.keywords,
+            filters=criteria.filters,
+            reject={'item_type': ['note', 'attachment']},
+            sort_spec=criteria.get_active_sort_spec(),
+            faceting=False,
+        )
+        if results.is_empty():
+            return abort(404)
+        citations = [
+            item.get(citation_format.field.key, '') for item in
+            results.items(field_specs={citation_format.field.key: citation_format.field})
+        ]
     response = make_response(
         citation_format.group_format.format(
             citation_format.group_item_delimiter.join(citations)
