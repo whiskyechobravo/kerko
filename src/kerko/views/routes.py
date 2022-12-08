@@ -118,7 +118,7 @@ def item_view(item_id):
         fellback = False
         while try_id_fields:
             results = searcher.search(
-                allow={try_id_fields.popleft(): [item_id]},
+                require={try_id_fields.popleft(): [item_id]},
                 reject={'item_type': ['note', 'attachment']},
                 limit=1,
                 faceting=False,
@@ -169,7 +169,7 @@ def child_attachment_download(item_id, attachment_id, attachment_filename=None):
         fellback = False
         while try_id_fields:
             results = searcher.search(
-                allow={try_id_fields.popleft(): [item_id]},
+                require={try_id_fields.popleft(): [item_id]},
                 reject={'item_type': ['note', 'attachment']},
                 limit=1,
                 faceting=False,
@@ -229,15 +229,29 @@ def standalone_attachment_download(item_id, attachment_filename=None):
     if config('KERKO_USE_TRANSLATIONS'):
         babel_domain.as_default()
 
-    item, fellback = query.run_query_unique_with_fallback(
-        ['id', 'alternate_id'],
-        item_id,
-        default_terms=query.build_filter_terms('item_type', include=['attachment']),
-    )
-    if not item:
-        return abort(404)
+    index = open_index('index')
+    with Searcher(index) as searcher:
+        # Try matching the item by id, with fallback to alternate id.
+        try_id_fields = deque(['id', 'alternate_id'])
+        fellback = False
+        while try_id_fields:
+            results = searcher.search(
+                require={
+                    try_id_fields.popleft(): [item_id],
+                    'item_type': ['attachment'],
+                },
+                limit=1,
+                faceting=False,
+            )
+            if results.is_empty():
+                fellback = True  # Not found on first attempt.
+                continue
+            break  # Found item.
+        if results.is_empty():
+            return abort(404)
+        item = results.items(composer().select_fields(['id', 'data']))[0]
 
-    filepath = get_storage_dir('attachments') / item_id
+    filepath = get_storage_dir('attachments') / item['id']
     if not filepath.exists():
         return abort(404)
 
@@ -251,7 +265,7 @@ def standalone_attachment_download(item_id, attachment_filename=None):
 
     return send_from_directory(
         get_storage_dir('attachments'),
-        item_id,
+        item['id'],
         download_name=filename,
         mimetype=item['data'].get('contentType', 'octet-stream'),
     )
