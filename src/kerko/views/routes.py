@@ -1,5 +1,6 @@
 import math
 import time
+from collections import deque
 from datetime import datetime
 
 from flask import (abort, flash, make_response, redirect, render_template,
@@ -10,11 +11,13 @@ from kerko import babel_domain, blueprint, query
 from kerko.criteria import create_feed_criteria, create_search_criteria
 from kerko.exceptions import except_abort
 from kerko.forms import SearchForm
+from kerko.search import Searcher
 from kerko.shortcuts import composer, config
 from kerko.storage import (SchemaError, SearchIndexError, get_doc_count,
-                           get_storage_dir)
-from kerko.views import creators, meta, pager
-from kerko.views.searching import search_item, search_list
+                           get_storage_dir, open_index)
+from kerko.views import (item_creators, item_facets, item_meta, item_relations,
+                         pager)
+from kerko.views.searching import search_list, search_single
 
 SITEMAP_URL_MAX_COUNT = 50000
 
@@ -45,7 +48,7 @@ def search():
         return redirect(url, 302)
 
     if criteria.options.get('page-len', config('KERKO_PAGE_LEN')) == 1:
-        template, context = search_item(criteria)
+        template, context = search_single(criteria)
     else:
         template, context = search_list(criteria)
     return render_template(
@@ -75,7 +78,7 @@ def atom_feed():
         default_terms=base_filter_terms,
     )
     for item in items:
-        creators.inject_creator_display_names(item)
+        item_creators.inject_creator_display_names(item)
     criteria.fit_page(page_count)
     pager_sections = pager.get_sections(criteria.options['page'], page_count)
     response = make_response(
@@ -108,32 +111,37 @@ def item_view(item_id):
     if config('KERKO_USE_TRANSLATIONS'):
         babel_domain.as_default()
 
-    base_filter_terms = query.build_filter_terms('item_type', exclude=['note', 'attachment'])
-    item, fellback = query.run_query_unique_with_fallback(
-        ['id', 'alternate_id'],
-        item_id,
-        default_terms=base_filter_terms,
-    )
-    if not item:
-        return abort(404)
-    item_url = url_for('.item_view', item_id=item['id'], _external=True)
-    if fellback:
-        return redirect(item_url, 301)
-
-    creators.inject_creator_display_names(item)
-    query.build_item_facet_results(item)
-    query.build_relations(
-        item,
-        query.get_search_return_fields(exclude=['coins']),
-        sort=config('KERKO_RELATIONS_SORT'),
-        default_terms=base_filter_terms,
-    )
+    index = open_index('index')
+    with Searcher(index) as searcher:
+        # Try matching the item by id, with fallback to alternate id.
+        try_id_fields = deque(['id', 'alternate_id'])
+        fellback = False
+        while try_id_fields:
+            results = searcher.search(
+                allow={try_id_fields.popleft(): [item_id]},
+                reject={'item_type': ['note', 'attachment']},
+                limit=1,
+                faceting=False,
+            )
+            if results.is_empty():
+                fellback = True  # Not found on first attempt.
+                continue
+            break
+        if results.is_empty():
+            return abort(404)
+        item = results.items(composer().fields, composer().facets)[0]
+        item_url = url_for('.item_view', item_id=item['id'], _external=True)
+        if fellback:
+            return redirect(item_url, 301)
+    item_creators.inject_creator_display_names(item)
+    item_relations.inject_relations(item)
+    item_facets.inject_facet_results(item)
     return render_template(
         config('KERKO_TEMPLATE_ITEM'),
-        title=item.get('data', {}).get('title', ''),
         item=item,
         item_url=item_url,
-        highwirepress_tags=meta.build_highwirepress_tags(item),
+        title=item.get('data', {}).get('title', ''),
+        highwirepress_tags=item_meta.build_highwirepress_tags(item),
         time=time.process_time() - start_time,
         locale=get_locale(),
     )

@@ -5,11 +5,11 @@ from flask import redirect, url_for
 from flask_babel import get_locale, gettext, ngettext
 from werkzeug.datastructures import MultiDict
 
-from kerko.criteria import create_search_criteria
 from kerko.search import Searcher
 from kerko.shortcuts import composer, config
 from kerko.storage import load_object, open_index
-from kerko.views import breadbox, creators, meta, pager, relations, sorter
+from kerko.views import (breadbox, item_creators, item_facets, item_meta,
+                         item_relations, pager, sorter)
 
 
 def _build_item_search_urls(items, criteria):
@@ -30,26 +30,6 @@ def _build_item_search_urls(items, criteria):
     if page_len == 'all':
         page_len = 0
     return [build_url(item, position) for position, item in enumerate(items)]
-
-
-def _inject_facet_results(item):
-    """
-    Prepare facet "results" corresponding to the given item's faceting fields.
-
-    The only distinction from real facet results obtained from a search is that
-    counts are zero. Using the same data structure as real facet results allows
-    the reuse of facet display logic.
-    """
-    item['facet_results'] = {}
-    for spec_key in composer().facets.keys() & item.keys():
-        if isinstance(item[spec_key], list):
-            fake_results = {value: 0 for value in item[spec_key]}
-        else:
-            fake_results = {item[spec_key]: 0}
-        # Use empty criteria -- the facets will provide starting points for new searches.
-        item['facet_results'][spec_key] = composer().facets[spec_key].build(
-            fake_results, criteria=create_search_criteria()
-        )
 
 
 def _get_page_item_ids(criteria, page_numbers, current_item_id):
@@ -77,7 +57,7 @@ def _get_page_item_ids(criteria, page_numbers, current_item_id):
     return item_ids
 
 
-def search_empty(criteria):
+def empty_results(criteria):
     context = {}
     facets = {}
     context['title'] = gettext('Your search did not match any resources')
@@ -102,7 +82,7 @@ def search_empty(criteria):
     return config('KERKO_TEMPLATE_SEARCH'), context
 
 
-def search_item(criteria):
+def search_single(criteria):
     context = {}
     index = open_index('index')
     with Searcher(index) as searcher:
@@ -123,7 +103,7 @@ def search_item(criteria):
             return redirect(url_for('.item_view', item_id=criteria_id, _external=True), 301)
 
         if results.is_empty():
-            return search_empty(criteria)
+            return empty_results(criteria)
 
         criteria.fit_page(results.page_count)
         if criteria.is_searching():
@@ -134,14 +114,14 @@ def search_item(criteria):
         # Load item with all available fields.
         item = results.items(composer().fields, composer().facets)[0]
         facets = results.facets(composer().facets, criteria, active_only=True)
-        creators.inject_creator_display_names(item)
-        relations.inject_relations(item)
-        _inject_facet_results(item)
+        item_creators.inject_creator_display_names(item)
+        item_relations.inject_relations(item)
+        item_facets.inject_facet_results(item)
 
         context['item'] = item
         context['item_url'] = url_for('.item_view', item_id=item['id'], _external=True)
         context['title'] = item.get('data', {}).get('title', '')
-        context['highwirepress_tags'] = meta.build_highwirepress_tags(item)
+        context['highwirepress_tags'] = item_meta.build_highwirepress_tags(item)
 
         context['total_count'] = results.item_count
         context['total_count_formatted'] = format_decimal(results.item_count, locale=get_locale())
@@ -197,7 +177,7 @@ def search_list(criteria):
             )
 
         if results.is_empty():
-            return search_empty(criteria)
+            return empty_results(criteria)
 
         criteria.fit_page(results.page_count)
 
