@@ -4,10 +4,11 @@ import hashlib
 
 from flask import current_app
 
-from ..extractors import is_file_attachment
-from ..query import check_fields, run_query_all
-from ..storage import SearchIndexError, get_storage_dir
-from . import zotero
+from kerko.extractors import is_file_attachment
+from kerko.search import Searcher
+from kerko.shortcuts import composer
+from kerko.storage import get_storage_dir, open_index
+from kerko.sync import zotero
 
 
 def md5_checksum(path):
@@ -55,35 +56,30 @@ def sync_attachments():
             current_app.logger.debug(f"Keeping attachment {attachment['id']} {context}.")
 
     current_app.logger.info("Starting attachment files sync...")
-    composer = current_app.config['KERKO_COMPOSER']
     attachments_dir = get_storage_dir('attachments')
     attachments_dir.mkdir(parents=True, exist_ok=True)
     local_files = {p.name for p in attachments_dir.iterdir()}
 
-    missing_fields = check_fields(['id', 'attachments'])
-    if missing_fields:
-        raise SearchIndexError(
-            f"The following fields are missing from the search index: "
-            f"{', '.join(missing_fields)}. You might need to check your "
-            f"Kerko settings and/or clean and sync your search index."
-        )
-
     # List all items from the search index and request their attachments, if
     # any, from Zotero
     zotero_credentials = zotero.init_zotero()
-    items = run_query_all(['id', 'item_type', 'attachments', 'data'])
-    count = 0
-    for item in items:
-        if item['item_type'] == 'attachment' and is_file_attachment(item, composer.mime_types):
-            _sync_attachment(item)
-            count += 1
-        else:
-            # Child attachments, unlike standalone attachments (above), do not
-            # need their linkMode or MIME type to be validated, because that has
-            # already been done by an extractor when writing the search index.
-            for attachment in item.get('attachments', []):
-                _sync_attachment(attachment, parent=item)
+    index = open_index('index')
+    with Searcher(index) as searcher:
+        count = 0
+        results = searcher.search(limit=None)  # Retrieve all items.
+        for item in results.items(
+            composer().select_fields(['id', 'item_type', 'attachments', 'data'])
+        ):
+            if item['item_type'] == 'attachment' and is_file_attachment(item, composer().mime_types):
+                _sync_attachment(item)
                 count += 1
+            else:
+                # Child attachments, unlike standalone attachments (above), do not
+                # need their linkMode or MIME type to be validated, because that has
+                # already been done by an extractor when writing the search index.
+                for attachment in item.get('attachments', []):
+                    _sync_attachment(attachment, parent=item)
+                    count += 1
 
     # Delete remaining local files that were not referenced by any item.
     for name in local_files:
