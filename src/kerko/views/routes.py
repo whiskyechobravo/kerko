@@ -126,7 +126,7 @@ def item_view(item_id):
             if results.is_empty():
                 fellback = True  # Not found on first attempt.
                 continue
-            break
+            break  # Found item.
         if results.is_empty():
             return abort(404)
         item = results.items(composer().fields, composer().facets)[0]
@@ -162,23 +162,33 @@ def child_attachment_download(item_id, attachment_id, attachment_filename=None):
     if config('KERKO_USE_TRANSLATIONS'):
         babel_domain.as_default()
 
-    item, fellback = query.run_query_unique_with_fallback(
-        ['id', 'alternate_id'],
-        item_id,
-        default_terms=query.build_filter_terms('item_type', exclude=['note', 'attachment']),
-    )
-    if not item:
-        return abort(404)
-
-    matching_attachments = list(
-        filter(lambda a: a.get('id') == attachment_id, item.get('attachments', []))
-    )
+    index = open_index('index')
+    with Searcher(index) as searcher:
+        # Try matching the item by id, with fallback to alternate id.
+        try_id_fields = deque(['id', 'alternate_id'])
+        fellback = False
+        while try_id_fields:
+            results = searcher.search(
+                allow={try_id_fields.popleft(): [item_id]},
+                reject={'item_type': ['note', 'attachment']},
+                limit=1,
+                faceting=False,
+            )
+            if results.is_empty():
+                fellback = True  # Not found on first attempt.
+                continue
+            break  # Found item.
+        if results.is_empty():
+            return abort(404)
+        item = results.items(composer().select_fields(['id', 'attachments']))[0]
+    matching_attachments = [a for a in item.get('attachments', []) if a.get('id') == attachment_id]
     if not matching_attachments or len(matching_attachments) > 1:
         flash(
             gettext(
                 "The document you have requested has been removed. "
                 "Please check below for the latest documents available."
-            ), 'warning'
+            ),
+            'warning',
         )
         return redirect(url_for('.item_view', item_id=item['id']), 301)
     attachment = matching_attachments[0]
