@@ -61,19 +61,9 @@ class PopulatedSitemapTestCase(SynchronizedTestCase):
             self.assertEqual(response.status_code, 404)
 
         with self.app.test_client() as client:
-            response = client.get(f'{self.URL_PREFIX}/sitemap50001.xml')
+            response = client.get(f'{self.URL_PREFIX}/sitemap500.xml')
             self.assertEqual(response.status_code, 404)
 
         with self.app.test_client() as client:
             response = client.get(f'{self.URL_PREFIX}/sitemapbomb.xml')
             self.assertEqual(response.status_code, 404)
-
-    def test_sitemap_empty(self):
-        """Test empty sitemaps."""
-
-        with self.app.test_client() as client:
-            response = client.get(f'{self.URL_PREFIX}/sitemap2.xml')
-            self.assertEqual(response.status_code, 200)
-
-            root = etree.fromstring(response.get_data(as_text=True).encode('utf-8'))
-            self.assertTrue(root.xpath('not(/ns:urlset/*)', namespaces=self.namespaces))

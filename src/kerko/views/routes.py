@@ -379,28 +379,32 @@ def sitemap_index():
     return response
 
 
-@blueprint.route(f'/sitemap<int(min=1, max={SITEMAP_URL_MAX_COUNT}):page_num>.xml')
+@blueprint.route('/sitemap<int(min=1):page_num>.xml')
 @except_abort(SchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def sitemap(page_num):
     """Generate a sitemap."""
     if page_num > get_sitemap_page_count():
-        # Return an empty sitemap rather than a 404. In the future, it might contain something.
-        items = []
-    else:
-        base_filter_terms = query.build_filter_terms('item_type', exclude=['note', 'attachment'])
-        items = query.run_query_filter_paged(
-            page_num=page_num,
+        return abort(404)
+
+    index = open_index('index')
+    with Searcher(index) as searcher:
+        results = searcher.search_page(
+            page=page_num,
             page_len=SITEMAP_URL_MAX_COUNT,
-            return_fields=['id', 'z_dateModified'],
-            default_terms=base_filter_terms,
+            reject={'item_type': ['note', 'attachment']},
+            # sort_spec=SortSpec(
+            #     key='date_added_asc',
+            #     label='',
+            #     fields=[
+            #         # TODO: Add sort_date_added field.
+            #     ]
+            # ),
+            faceting=False,
         )
-    response = make_response(
-        render_template(
-            'kerko/sitemap.xml.jinja2',
-            page_num=page_num,
-            items=items,
-        )
-    )
+        if results.is_empty():
+            return abort(404)
+        items = results.items(composer().select_fields(['id', 'z_dateModified']))
+    response = make_response(render_template('kerko/sitemap.xml.jinja2', items=items))
     response.headers['Content-Type'] = 'application/xml; charset=utf-8'
     return response
