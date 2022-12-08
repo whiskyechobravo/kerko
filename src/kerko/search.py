@@ -55,8 +55,14 @@ class Searcher:
         allow=None,
         reject=None,
         sort_spec=None,
-        faceting=True
+        faceting=False,
     ):
+        """
+        Prepare search arguments.
+
+        :param bool faceting: Whether to compute groupings along with the search
+            results.
+        """
         self._prepare_keywords(keywords)
         self._prepare_filters(filters, require, allow, reject)
         self._prepare_sorting(sort_spec)
