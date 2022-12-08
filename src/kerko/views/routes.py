@@ -126,7 +126,7 @@ def item_view(item_id):
             if results.is_empty():
                 fellback = True  # Not found on first attempt.
                 continue
-            break  # Found item.
+            break  # Found item, or no more id fields to try.
         if results.is_empty():
             return abort(404)
         item = results.items(composer().fields, composer().facets)[0]
@@ -177,7 +177,7 @@ def child_attachment_download(item_id, attachment_id, attachment_filename=None):
             if results.is_empty():
                 fellback = True  # Not found on first attempt.
                 continue
-            break  # Found item.
+            break  # Found item, or no more id fields to try.
         if results.is_empty():
             return abort(404)
         item = results.items(composer().select_fields(['id', 'attachments']))[0]
@@ -246,7 +246,7 @@ def standalone_attachment_download(item_id, attachment_filename=None):
             if results.is_empty():
                 fellback = True  # Not found on first attempt.
                 continue
-            break  # Found item.
+            break  # Found item, or no more id fields to try.
         if results.is_empty():
             return abort(404)
         item = results.items(composer().select_fields(['id', 'data']))[0]
@@ -279,17 +279,29 @@ def item_citation_download(item_id, citation_format_key):
     if config('KERKO_USE_TRANSLATIONS'):
         babel_domain.as_default()
 
-    item, fellback = query.run_query_unique_with_fallback(
-        ['id', 'alternate_id'],
-        item_id,
-        default_terms=query.build_filter_terms('item_type', exclude=['note', 'attachment']),
-    )
-    if not item:
-        return abort(404)
-
     citation_format = composer().citation_formats.get(citation_format_key)
     if not citation_format:
         return abort(404)
+
+    index = open_index('index')
+    with Searcher(index) as searcher:
+        # Try matching the item by id, with fallback to alternate id.
+        try_id_fields = deque(['id', 'alternate_id'])
+        fellback = False
+        while try_id_fields:
+            results = searcher.search(
+                require={try_id_fields.popleft(): [item_id]},
+                reject={'item_type': ['note', 'attachment']},
+                limit=1,
+                faceting=False,
+            )
+            if results.is_empty():
+                fellback = True  # Not found on first attempt.
+                continue
+            break  # Found item, or no more id fields to try.
+        if results.is_empty():
+            return abort(404)
+        item = results.items(composer().select_fields(['id', citation_format.field.key]))[0]
 
     content = item.get(citation_format.field.key)
     if not content:
