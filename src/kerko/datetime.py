@@ -71,3 +71,17 @@ def format_datetime(dt, *, convert_tz=False, show_tz=False):
         else:
             parts.append(f"({dt.tzname()})")
     return ' '.join(parts)
+
+
+def iso_to_timestamp(date_str):
+    """
+    Convert an ISO 8601 date string to a timestamp.
+
+    Note: This does not accept all ISO 8601 strings, but just the following
+    format: %Y-%m-%dT%H:%M:%SZ
+
+    :return int: Timestamp rounded to an integer.
+    """
+    return round(datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%SZ').timestamp())
+    # Note: Using strptime() instead of fromisoformat(), because the latter only
+    # accepts the specific string format since Python 3.11+.

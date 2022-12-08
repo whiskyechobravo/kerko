@@ -9,9 +9,10 @@ from whoosh.query import Prefix, Term
 from whoosh.support.charset import accent_map
 from whoosh.util.text import rcompile
 
-from . import codecs, extractors, transformers
-from .specs import (CitationFormatSpec, FieldSpec, FlatFacetSpec, RelationSpec, ScopeSpec, SortSpec,
-                    TreeFacetSpec)
+from kerko import codecs, extractors, transformers
+from kerko.datetime import iso_to_timestamp
+from kerko.specs import (CitationFormatSpec, FieldSpec, FlatFacetSpec,
+                         RelationSpec, ScopeSpec, SortSpec, TreeFacetSpec)
 
 
 class Composer:
@@ -1509,6 +1510,28 @@ class Composer:
                     key='sort_date',
                     field_type=NUMERIC(sortable=True),
                     extractor=extractors.SortDateExtractor(),
+                )
+            )
+        if 'sort_date_added' not in exclude:
+            self.add_field(
+                FieldSpec(
+                    key='sort_date_added',
+                    field_type=NUMERIC(sortable=True),
+                    extractor=extractors.TransformerExtractor(
+                        extractor=extractors.ItemDataExtractor(key='dateAdded'),
+                        transformers=[iso_to_timestamp],
+                    )
+                )
+            )
+        if 'sort_date_modified' not in exclude:
+            self.add_field(
+                FieldSpec(
+                    key='sort_date_modified',
+                    field_type=NUMERIC(sortable=True),
+                    extractor=extractors.TransformerExtractor(
+                        extractor=extractors.ItemDataExtractor(key='dateModified'),
+                        transformers=[iso_to_timestamp],
+                    )
                 )
             )
 

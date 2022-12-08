@@ -13,6 +13,7 @@ from kerko.exceptions import except_abort
 from kerko.forms import SearchForm
 from kerko.search import Searcher
 from kerko.shortcuts import composer, config
+from kerko.specs import SortSpec
 from kerko.storage import (SchemaError, SearchIndexError, get_doc_count,
                            get_storage_dir, load_object, open_index)
 from kerko.views import (item_creators, item_facets, item_meta, item_relations,
@@ -73,13 +74,22 @@ def atom_feed():
     criteria = create_feed_criteria(request.args)
     index = open_index('index')
     with Searcher(index) as searcher:
+        if (sort_field := composer().fields.get('sort_date_added')):
+            sort_spec = SortSpec(
+                key='date_added_desc',
+                label='',
+                fields=[sort_field],
+                reverse=True,
+            )
+        else:
+            sort_spec = None
         results = searcher.search_page(
             page=criteria.options.get('page', 1),
             page_len=criteria.options.get('page-len', config('KERKO_PAGE_LEN')),
             keywords=criteria.keywords,
             filters=criteria.filters,
             reject={'item_type': ['note', 'attachment']},
-            # TODO: sort_spec=
+            sort_spec=sort_spec,
             faceting=False,
         )
         if results.is_empty():
@@ -413,17 +423,20 @@ def sitemap(page_num):
 
     index = open_index('index')
     with Searcher(index) as searcher:
+        if (sort_field := composer().fields.get('sort_date_modified')):
+            sort_spec = SortSpec(
+                key='date_added_desc',
+                label='',
+                fields=[sort_field],
+                reverse=True,
+            )
+        else:
+            sort_spec = None
         results = searcher.search_page(
             page=page_num,
             page_len=SITEMAP_URL_MAX_COUNT,
             reject={'item_type': ['note', 'attachment']},
-            # sort_spec=SortSpec(
-            #     key='date_added_asc',
-            #     label='',
-            #     fields=[
-            #         # TODO: Add sort_date_added field.
-            #     ]
-            # ),
+            sort_spec=sort_spec,
             faceting=False,
         )
         if results.is_empty():
