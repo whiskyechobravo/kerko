@@ -7,14 +7,14 @@ from flask import (abort, flash, make_response, redirect, render_template,
                    request, send_from_directory, url_for)
 from flask_babel import get_locale, gettext
 
-from kerko import babel_domain, blueprint, query
+from kerko import babel_domain, blueprint
 from kerko.criteria import create_feed_criteria, create_search_criteria
 from kerko.exceptions import except_abort
 from kerko.forms import SearchForm
 from kerko.search import Searcher
 from kerko.shortcuts import composer, config
 from kerko.storage import (SchemaError, SearchIndexError, get_doc_count,
-                           get_storage_dir, open_index)
+                           get_storage_dir, load_object, open_index)
 from kerko.views import (item_creators, item_facets, item_meta, item_relations,
                          pager)
 from kerko.views.searching import search_list, search_single
@@ -69,32 +69,56 @@ def atom_feed():
     if config('KERKO_USE_TRANSLATIONS'):
         babel_domain.as_default()
 
+    context = {}
     criteria = create_feed_criteria(request.args)
-    base_filter_terms = query.build_filter_terms('item_type', exclude=['note', 'attachment'])
-    items, _, total_count, page_count, last_sync = query.run_query(
-        criteria,
-        return_fields=['id', 'data'],
-        query_facets=False,
-        default_terms=base_filter_terms,
-    )
-    for item in items:
-        item_creators.inject_creator_display_names(item)
-    criteria.fit_page(page_count)
-    pager_sections = pager.get_sections(criteria.options['page'], page_count)
+    index = open_index('index')
+    with Searcher(index) as searcher:
+        results = searcher.search_page(
+            page=criteria.options.get('page', 1),
+            page_len=criteria.options.get('page-len', config('KERKO_PAGE_LEN')),
+            keywords=criteria.keywords,
+            filters=criteria.filters,
+            reject={'item_type': ['note', 'attachment']},
+            # TODO: sort_spec=
+            faceting=False,
+        )
+        if results.is_empty():
+            items = []
+        else:
+            items = results.items(composer().select_fields(['id', 'data']))
+            for item in items:
+                item_creators.inject_creator_display_names(item)
+        context['items'] = items
+        context['total_count'] = results.item_count
+        criteria.fit_page(results.page_count or 1)
+        pager_sections = pager.get_sections(criteria.options['page'], results.page_count)
+
+    last_sync = load_object('index', 'last_update_from_zotero')
+    if last_sync:
+        context['last_sync'] = datetime.fromtimestamp(
+            last_sync, tz=datetime.now().astimezone().tzinfo
+        )
+    else:
+        context['last_sync'] = datetime.now().isoformat()
+
     response = make_response(
         render_template(
             config('KERKO_TEMPLATE_ATOM_FEED'),
-            feed_url=url_for('.atom_feed', _external=True, **criteria.params(options={'page': None})),
-            html_url=url_for('.search', _external=True, **criteria.params(options={'page': None})),
-            items=items,
-            total_count=total_count,
-            page_len=config('KERKO_PAGE_LEN'),
             pager=pager.build_pager(pager_sections, criteria, endpoint='kerko.atom_feed'),
+            page_len=config('KERKO_PAGE_LEN'),
+            feed_url=url_for(
+                '.atom_feed',
+                _external=True,
+                **criteria.params(options={'page': None}),
+            ),
+            html_url=url_for(
+                '.search',
+                _external=True,
+                **criteria.params(options={'page': None}),
+            ),
             is_searching=criteria.has_keywords() or criteria.has_filters(),
             locale=get_locale(),
-            last_sync=datetime.fromtimestamp(last_sync,
-                                             tz=datetime.now().astimezone().tzinfo).isoformat()
-            if last_sync else datetime.now().isoformat(),
+            **context,
         )
     )
     response.headers['Content-Type'] = 'application/atom+xml; charset=utf-8'
