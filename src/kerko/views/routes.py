@@ -226,9 +226,6 @@ def standalone_attachment_download(item_id, attachment_filename=None):
     filename, a redirect is performed to a corrected URL so that the client gets
     a proper filename.
     """
-    if config('KERKO_USE_TRANSLATIONS'):
-        babel_domain.as_default()
-
     index = open_index('index')
     with Searcher(index) as searcher:
         # Try matching the item by id, with fallback to alternate id.
@@ -276,9 +273,6 @@ def standalone_attachment_download(item_id, attachment_filename=None):
 @except_abort(SearchIndexError, 503)
 def item_citation_download(item_id, citation_format_key):
     """Download a record."""
-    if config('KERKO_USE_TRANSLATIONS'):
-        babel_domain.as_default()
-
     citation_format = composer().citation_formats.get(citation_format_key)
     if not citation_format:
         return abort(404)
