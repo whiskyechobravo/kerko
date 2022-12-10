@@ -8,10 +8,11 @@ from werkzeug.datastructures import MultiDict
 from whoosh.fields import ID
 from whoosh.query import Prefix, Term
 
-from . import extractors, renderers
-from .codecs import BaseFacetCodec, CollectionFacetCodec, IdentityFieldCodec
-from .text import slugify, sort_normalize
-from .tree import Tree
+from kerko import extractors, renderers
+from kerko.codecs import (BaseFacetCodec, CollectionFacetCodec,
+                          IdentityFieldCodec)
+from kerko.text import slugify, sort_normalize
+from kerko.tree import Tree
 
 
 class ScopeSpec:

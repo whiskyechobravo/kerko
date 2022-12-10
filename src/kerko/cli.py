@@ -6,12 +6,12 @@ import wrapt
 from flask import current_app
 from flask.cli import with_appcontext
 
-from .storage import (SchemaError, SearchIndexError, delete_storage,
-                      get_doc_count)
-from .sync import zotero
-from .sync.attachments import delete_attachments, sync_attachments
-from .sync.cache import sync_cache
-from .sync.index import sync_index
+from kerko.storage import (SchemaError, SearchIndexError, delete_storage,
+                           get_doc_count)
+from kerko.sync import zotero
+from kerko.sync.attachments import delete_attachments, sync_attachments
+from kerko.sync.cache import sync_cache
+from kerko.sync.index import sync_index
 
 
 @wrapt.decorator

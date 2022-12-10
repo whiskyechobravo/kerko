@@ -4,9 +4,9 @@ import whoosh
 from flask import current_app
 from whoosh.query import Term
 
-from ..storage import (SchemaError, SearchIndexError, load_object, open_index,
-                       save_object)
-from ..tags import TagGate
+from kerko.storage import (SchemaError, SearchIndexError, load_object,
+                           open_index, save_object)
+from kerko.tags import TagGate
 
 
 def sync_index():
