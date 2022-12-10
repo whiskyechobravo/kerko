@@ -107,7 +107,7 @@ def atom_feed():
     if last_sync:
         context['last_sync'] = datetime.fromtimestamp(
             last_sync, tz=datetime.now().astimezone().tzinfo
-        )
+        ).isoformat()
     else:
         context['last_sync'] = datetime.now().isoformat()
 
