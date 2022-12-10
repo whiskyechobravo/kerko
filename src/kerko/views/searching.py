@@ -49,7 +49,7 @@ def _get_page_item_ids(criteria, page_numbers, current_item_id):
                     page_len=1,
                     keywords=criteria.keywords,
                     filters=criteria.filters,
-                    reject={'item_type': ['note', 'attachment']},
+                    reject_any={'item_type': ['note', 'attachment']},
                     sort_spec=criteria.get_active_sort_spec(),
                     faceting=False,
                 )
@@ -58,6 +58,7 @@ def _get_page_item_ids(criteria, page_numbers, current_item_id):
 
 
 def empty_results(criteria):
+    """Prepare the template context variables for an empty search results page."""
     context = {}
     facets = {}
     context['title'] = gettext('Your search did not match any resources')
@@ -73,7 +74,7 @@ def empty_results(criteria):
             for key, value in criteria.filters.lists():
                 results = searcher.search(
                     filters=MultiDict({key: value}),
-                    reject={'item_type': ['note', 'attachment']},
+                    reject_any={'item_type': ['note', 'attachment']},
                     limit=1,  # We don't care about the actual items.
                     faceting=True,
                 )
@@ -83,6 +84,7 @@ def empty_results(criteria):
 
 
 def search_single(criteria):
+    """Perform search, and prepare template context for a results page containing a single item."""
     context = {}
     index = open_index('index')
     with Searcher(index) as searcher:
@@ -91,7 +93,7 @@ def search_single(criteria):
             page_len=1,
             keywords=criteria.keywords,
             filters=criteria.filters,
-            reject={'item_type': ['note', 'attachment']},
+            reject_any={'item_type': ['note', 'attachment']},
             sort_spec=criteria.get_active_sort_spec(),
             faceting=True,
         )
@@ -153,6 +155,7 @@ def search_single(criteria):
 
 
 def search_list(criteria):
+    """Perform search, and prepare the template context variables for a list of search results."""
     context = {}
     index = open_index('index')
     with Searcher(index) as searcher:
@@ -160,7 +163,7 @@ def search_list(criteria):
         common_search_args = {
             'keywords': criteria.keywords,
             'filters': criteria.filters,
-            'reject': {'item_type': ['note', 'attachment']},
+            'reject_any': {'item_type': ['note', 'attachment']},
             'sort_spec': criteria.get_active_sort_spec(),
             'faceting': True,
         }

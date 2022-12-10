@@ -88,7 +88,7 @@ def atom_feed():
             page_len=criteria.options.get('page-len', config('KERKO_PAGE_LEN')),
             keywords=criteria.keywords,
             filters=criteria.filters,
-            reject={'item_type': ['note', 'attachment']},
+            reject_any={'item_type': ['note', 'attachment']},
             sort_spec=sort_spec,
             faceting=False,
         )
@@ -152,8 +152,8 @@ def item_view(item_id):
         fellback = False
         while try_id_fields:
             results = searcher.search(
-                require={try_id_fields.popleft(): [item_id]},
-                reject={'item_type': ['note', 'attachment']},
+                require_all={try_id_fields.popleft(): [item_id]},
+                reject_any={'item_type': ['note', 'attachment']},
                 limit=1,
                 faceting=False,
             )
@@ -203,8 +203,8 @@ def child_attachment_download(item_id, attachment_id, attachment_filename=None):
         fellback = False
         while try_id_fields:
             results = searcher.search(
-                require={try_id_fields.popleft(): [item_id]},
-                reject={'item_type': ['note', 'attachment']},
+                require_all={try_id_fields.popleft(): [item_id]},
+                reject_any={'item_type': ['note', 'attachment']},
                 limit=1,
                 faceting=False,
             )
@@ -267,7 +267,7 @@ def standalone_attachment_download(item_id, attachment_filename=None):
         fellback = False
         while try_id_fields:
             results = searcher.search(
-                require={
+                require_all={
                     try_id_fields.popleft(): [item_id],
                     'item_type': ['attachment'],
                 },
@@ -318,8 +318,8 @@ def item_citation_download(item_id, citation_format_key):
         fellback = False
         while try_id_fields:
             results = searcher.search(
-                require={try_id_fields.popleft(): [item_id]},
-                reject={'item_type': ['note', 'attachment']},
+                require_all={try_id_fields.popleft(): [item_id]},
+                reject_any={'item_type': ['note', 'attachment']},
                 limit=1,
                 faceting=False,
             )
@@ -368,7 +368,7 @@ def search_citation_download(citation_format_key):
             limit=None,
             keywords=criteria.keywords,
             filters=criteria.filters,
-            reject={'item_type': ['note', 'attachment']},
+            reject_any={'item_type': ['note', 'attachment']},
             sort_spec=criteria.get_active_sort_spec(),
             faceting=False,
         )
@@ -435,7 +435,7 @@ def sitemap(page_num):
         results = searcher.search_page(
             page=page_num,
             page_len=SITEMAP_URL_MAX_COUNT,
-            reject={'item_type': ['note', 'attachment']},
+            reject_any={'item_type': ['note', 'attachment']},
             sort_spec=sort_spec,
             faceting=False,
         )
