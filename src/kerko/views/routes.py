@@ -101,7 +101,7 @@ def atom_feed():
         context['items'] = items
         context['total_count'] = results.item_count
         criteria.fit_page(results.page_count or 1)
-        pager_sections = pager.get_sections(criteria.options['page'], results.page_count)
+        pager_sections = pager.get_sections(criteria.options['page'], results.page_count or 1)
 
     last_sync = load_object('index', 'last_update_from_zotero')
     if last_sync:
