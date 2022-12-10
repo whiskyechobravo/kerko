@@ -5,8 +5,8 @@ Tests for the XML sitemap views.
 from flask import url_for
 from lxml import etree
 
-from kerko.query import run_query_all
-
+from kerko.search import Searcher
+from kerko.storage import open_index
 from tests.integration_testing import SynchronizedTestCase
 
 
@@ -47,7 +47,7 @@ class PopulatedSitemapTestCase(SynchronizedTestCase):
             )
             self.assertEqual(
                 len(urls),
-                len(list(run_query_all())),
+                len(Searcher(open_index('index')).search()),
                 "The number of URLs in the sitemap does not match the number of items.",
             )
             for url in urls:
