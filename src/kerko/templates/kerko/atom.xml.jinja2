@@ -26,6 +26,7 @@
                 <title type="html">{{ item.data.title|escape }}</title>
                 <link href="{{ url_for('kerko.item_view', item_id=item.id, _external=True) }}"/>
                 <id>{{ url_for('kerko.item_view', item_id=item.id, _external=True) }}</id>
+                <published>{{ item.data.dateAdded|escape }}</published>
                 <updated>{{ item.data.dateModified|escape }}</updated>
                 {%- if item.data.abstractNote %}
                     <summary type="html">{{ item.data.abstractNote|escape }}</summary>
@@ -38,7 +39,6 @@
                 {%- with item_date = [item.data.date, item.data.dateDecided, item.data.dateEnacted, item.data.filingDate, item.data.issueDate]|select|first %}
                     {%- if item_date %}
                         <dc:date>{{ item_date|escape }}</dc:date>
-                        {#- Not using <published> because Atom requires the date to comply with RFC 3339, but item dates are often fuzzy. #}
                     {%- endif %}
                 {%- endwith %}
                 {%- if item.data.DOI %}
