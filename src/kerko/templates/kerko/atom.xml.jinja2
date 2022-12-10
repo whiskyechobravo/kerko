@@ -18,7 +18,7 @@
             <link rel="last" href="{{ pager.last[0].url }}"/>
         {%- endif %}
         <updated>{{ last_sync }}</updated>
-        <id>{{ html_url }}</id>
+        <id>{{ feed_url }}</id>
     {%- endblock %}
     {%- block feed_entries %}
         {%- for item in items %}
