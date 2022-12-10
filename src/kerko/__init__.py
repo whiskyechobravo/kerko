@@ -8,7 +8,7 @@ import pathlib
 from flask import Blueprint
 from flask_babel import Domain
 
-from .jinja2 import register_filters
+from kerko.jinja2 import register_filters
 
 
 babel_domain = Domain(domain='kerko')
@@ -99,4 +99,4 @@ def make_blueprint():
 blueprint = make_blueprint()
 
 
-from . import views  # pylint: disable=wrong-import-position
+from kerko import views  # pylint: disable=wrong-import-position

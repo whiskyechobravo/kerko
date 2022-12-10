@@ -5,8 +5,8 @@ from whoosh.fields import (ID, NUMERIC, STORED, FieldConfigurationError,
                            Schema, UnknownFieldError)
 from whoosh.qparser import QueryParser
 
-from ..storage import SchemaError, load_object, open_index, save_object
-from . import zotero
+from kerko.storage import SchemaError, load_object, open_index, save_object
+from kerko.sync import zotero
 
 
 def get_formats():

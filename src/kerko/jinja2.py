@@ -8,11 +8,10 @@ import re
 import typing
 from urllib.parse import urlparse
 
+from jinja2 import Markup, evalcontextfilter
 from w3lib.url import safe_url_string
 
-from jinja2 import Markup, evalcontextfilter
-
-from .datetime import format_datetime, reformat_date
+from kerko.datetime import format_datetime, reformat_date
 
 if typing.TYPE_CHECKING:
     from flask.blueprints import BlueprintSetupState

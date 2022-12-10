@@ -9,9 +9,10 @@ from collections.abc import Iterable
 
 from flask import Markup, current_app
 
-from .tags import TagGate
-from .text import id_normalize, sort_normalize
-from .transformers import find_item_id_in_zotero_uris_str, find_item_id_in_zotero_uri_links
+from kerko.tags import TagGate
+from kerko.text import id_normalize, sort_normalize
+from kerko.transformers import (find_item_id_in_zotero_uri_links,
+                                find_item_id_in_zotero_uris_str)
 
 RECORD_SEPARATOR = '\x1e'
 
