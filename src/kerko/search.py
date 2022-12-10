@@ -51,9 +51,9 @@ class Searcher:
         *,
         keywords=None,
         filters=None,
-        require=None,
-        allow=None,
-        reject=None,
+        require_all=None,
+        require_any=None,
+        reject_any=None,
         sort_spec=None,
         faceting=False,
     ):
@@ -64,7 +64,7 @@ class Searcher:
             results.
         """
         self._prepare_keywords(keywords)
-        self._prepare_filters(filters, require, allow, reject)
+        self._prepare_filters(filters, require_all, require_any, reject_any)
         self._prepare_sorting(sort_spec)
         if faceting:
             self._prepare_faceting()
@@ -106,48 +106,47 @@ class Searcher:
         else:
             self.search_args['query'] = Every()
 
-    def _prepare_filters(self, filters=None, require=None, allow=None, reject=None):
+    def _prepare_filters(self, filters=None, require_all=None, require_any=None, reject_any=None):
         """
         Prepare query filtering terms.
 
         :param MultiDict filters: The facet filters to apply keyed by filter
             key. If falsy, no filters will be applied.
 
-        :param dict require: Values that are all required to match, that will be
-            combined to the search with the `And` boolean search operator. Each
-            key must correspond to a schema field name. The value must be a list
-            of accepted values that will be combined together with a nested `Or`
-            boolean search operator.
+        :param dict require_all: Values that are all required to match, that
+            will be combined to the search with the `And` boolean search
+            operator. Each key must correspond to a schema field name. The value
+            must be a list of one or more accepted values (which will be
+            combined together with a nested `Or` boolean search operator).
 
-        :param dict allow: A dict of inclusion filters, where the key and value
-            are, respectively, the schema field name and the list of field
+        :param dict require_any: A dict of inclusion filters, where the key and
+            value are, respectively, the schema field name and the list of field
             values to allow in the search results. Any match will allow an item
-            in the results, i.e., the values are flattened and combined with the
-            `Or` boolean search operator), but at least one match will be
-            required. Note that no validation of the field name is made against
-            the schema.
+            in the results, but at least one match is required (values are
+            expanded to a flat list of field, value pairs, which are combined
+            with the `Or` boolean search operator).
 
-        :param dict reject: A dict of exclusion filters, where the key and value
-            are, respectively, the schema field name and the list of field
-            values to reject from the search results. Any match will reject an
-            item from the results, i.e., the values are combined with the `And`
-            and `Not` boolean search operators). Note that no validation of the
-            field name is made against the schema.
+        :param dict reject_any: A dict of exclusion filters, where the key and
+            value are, respectively, the schema field name and a list of one or
+            more field values to reject. Any match will cause an item to be
+            rejected from the results (values are expanded to a flat list of
+            field, value pairs, which are combined with the `And` and `Not`
+            boolean search operators).
         """
         terms = []
-        if require:
-            for field_key in require.keys() & self.field_specs.keys():
-                terms.append(Or([Term(field_key, value) for value in require[field_key]]))
-        if allow:
-            # TODO: Validate field keys against field_specs, as done above for 'require'?
+        if require_all:
+            for field_key in require_all.keys() & self.field_specs.keys():
+                terms.append(Or([Term(field_key, value) for value in require_all[field_key]]))
+        if require_any:
             terms.append(Or(list(chain(
-                *[[Term(field, value) for value in allow_values]
-                    for field, allow_values in allow.items()]
+                *[[Term(field_name, value) for value in allow_values]
+                    for field_name, allow_values in require_any.items()
+                    if field_name in self.field_specs.keys()]
             ))))
-        if reject:
-            # TODO: Validate field keys against field_specs, as done above for 'require'?
-            for field, reject_values in reject.items():
-                terms.extend([Not(Term(field, value)) for value in reject_values])
+        if reject_any:
+            for field_name, reject_values in reject_any.items():
+                if field_name in self.field_specs.keys():
+                    terms.extend([Not(Term(field_name, value)) for value in reject_values])
         if filters:
             for filter_key, filter_values in filters.lists():
                 if spec := self.facet_specs.get(filter_key):

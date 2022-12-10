@@ -3,6 +3,29 @@ from werkzeug.datastructures import MultiDict
 from kerko.shortcuts import composer, config
 
 
+def create_search_criteria(initial=None):
+    return Criteria(
+        initial=initial,
+        options_initializers=[
+            Criteria.initialize_page,
+            Criteria.initialize_page_len,
+            Criteria.initialize_sort,  # Must run after initialize_keywords().
+            Criteria.initialize_abstracts,
+            Criteria.initialize_print_preview,
+            Criteria.initialize_id,  # Must run after initialize_page_len().
+        ],
+    )
+
+
+def create_feed_criteria(initial=None):
+    return Criteria(
+        initial=initial,
+        options_initializers=[
+            Criteria.initialize_page,
+        ],
+    )
+
+
 class Criteria:
     """
     Represent a complete set of user-submitted search criteria.
@@ -40,8 +63,8 @@ class Criteria:
         self.filters = MultiDict()
         self.options = MultiDict()
         if initial:
-            _initialize_keywords(self, initial)
-            _initialize_filters(self, initial)
+            self.initialize_keywords(initial)
+            self.initialize_filters(initial)
             for initializer in options_initializers:
                 initializer(self, initial)
 
@@ -103,83 +126,52 @@ class Criteria:
                 return sort_spec
         return None
 
+    def initialize_keywords(self, initial):
+        for scope in composer().scopes.values():
+            if (values := initial.getlist(scope.key)):
+                self.keywords.setlist(scope.key, values)
 
-def create_search_criteria(initial=None):
-    return Criteria(
-        initial=initial,
-        options_initializers=[
-            _initialize_page,
-            _initialize_page_len,
-            _initialize_sort,  # Must run after initialize_keywords().
-            _initialize_abstracts,
-            _initialize_print_preview,
-            _initialize_id,  # Must run after initialize_page_len().
-        ],
-    )
+    def initialize_filters(self, initial):
+        for spec in composer().facets.values():
+            if (values := initial.getlist(spec.filter_key)):
+                self.filters.setlist(spec.filter_key, values)
 
+    def initialize_page(self, initial):
+        try:
+            if (page := int(initial.get('page', 0))) and page >= 1:
+                self.options['page'] = page
+        except ValueError:
+            pass
 
-def create_feed_criteria(initial=None):
-    return Criteria(
-        initial=initial,
-        options_initializers=[
-            _initialize_page,
-        ],
-    )
+    def initialize_page_len(self, initial):
+        page_len = initial.get('page-len', 0)
+        try:
+            if page_len == 'all' or ((page_len := int(page_len)) and page_len >= 1):
+                self.options['page-len'] = page_len
+        except ValueError:
+            pass
 
+    def initialize_sort(self, initial):
+        if (sort_spec := composer().sorts.get(
+            initial.get('sort', '')
+        )) and sort_spec.is_allowed(self):
+            self.options['sort'] = sort_spec.key
 
-def _initialize_keywords(criteria, initial):
-    for scope in composer().scopes.values():
-        if (values := initial.getlist(scope.key)):
-            criteria.keywords.setlist(scope.key, values)
+    def initialize_abstracts(self, initial):
+        if config('KERKO_RESULTS_ABSTRACTS_TOGGLER'):
+            enabled_by_default = config('KERKO_RESULTS_ABSTRACTS')
+            if (abstracts := initial.get('abstracts')):
+                if abstracts in ['t', '1'] and not enabled_by_default:
+                    self.options['abstracts'] = 1
+                elif abstracts in ['f', '0'] and enabled_by_default:
+                    self.options['abstracts'] = 0
 
+    def initialize_print_preview(self, initial):
+        if config('KERKO_PRINT_CITATIONS_LINK') and initial.get('print-preview') in [
+            't', '1'
+        ]:
+            self.options['print-preview'] = 1
 
-def _initialize_filters(criteria, initial):
-    for spec in composer().facets.values():
-        if (values := initial.getlist(spec.filter_key)):
-            criteria.filters.setlist(spec.filter_key, values)
-
-
-def _initialize_page(criteria, initial):
-    try:
-        if (page := int(initial.get('page', 0))) and page >= 1:
-            criteria.options['page'] = page
-    except ValueError:
-        pass
-
-
-def _initialize_page_len(criteria, initial):
-    page_len = initial.get('page-len', 0)
-    try:
-        if page_len == 'all' or ((page_len := int(page_len)) and page_len >= 1):
-            criteria.options['page-len'] = page_len
-    except ValueError:
-        pass
-
-
-def _initialize_sort(criteria, initial):
-    if (sort_spec := composer().sorts.get(
-        initial.get('sort', '')
-    )) and sort_spec.is_allowed(criteria):
-        criteria.options['sort'] = sort_spec.key
-
-
-def _initialize_abstracts(criteria, initial):
-    if config('KERKO_RESULTS_ABSTRACTS_TOGGLER'):
-        enabled_by_default = config('KERKO_RESULTS_ABSTRACTS')
-        if (abstracts := initial.get('abstracts')):
-            if abstracts in ['t', '1'] and not enabled_by_default:
-                criteria.options['abstracts'] = 1
-            elif abstracts in ['f', '0'] and enabled_by_default:
-                criteria.options['abstracts'] = 0
-
-
-def _initialize_print_preview(criteria, initial):
-    if config('KERKO_PRINT_CITATIONS_LINK') and initial.get('print-preview') in [
-        't', '1'
-    ]:
-        criteria.options['print-preview'] = 1
-
-
-def _initialize_id(criteria, initial):
-    if criteria.options.get('page-len') == 1 and (initial_id := initial.get('id')):
-        criteria.options['id'] = initial_id
+    def initialize_id(self, initial):
+        if self.options.get('page-len') == 1 and (initial_id := initial.get('id')):
+            self.options['id'] = initial_id

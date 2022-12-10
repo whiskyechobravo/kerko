@@ -48,7 +48,7 @@ def inject_relations(item):
     """
     common_search_args = {
         'limit': None,
-        'reject': {'item_type': ['note', 'attachment']},
+        'reject_any': {'item_type': ['note', 'attachment']},
         'sort_spec': composer().sorts.get(config('KERKO_RELATIONS_SORT')),
         'faceting': False,
     }
@@ -63,16 +63,16 @@ def inject_relations(item):
         for relation_spec in composer().relations.values():
             if relation_spec.directed:
                 item[relation_spec.field.key] = searcher.search(
-                    allow=_get_forward_rel_filters(item, relation_spec),
+                    require_any=_get_forward_rel_filters(item, relation_spec),
                     **common_search_args,
                 ).items(related_item_fields)
                 if relation_spec.reverse:
                     item[relation_spec.reverse_field_key] = searcher.search(
-                        allow=_get_reverse_rel_filters(item, relation_spec),
+                        require_any=_get_reverse_rel_filters(item, relation_spec),
                         **common_search_args,
                     ).items(related_item_fields)
             else:
                 item[relation_spec.field.key] = searcher.search(
-                    allow=_get_bidirectional_rel_filters(item, relation_spec),
+                    require_any=_get_bidirectional_rel_filters(item, relation_spec),
                     **common_search_args,
                 ).items(related_item_fields)
