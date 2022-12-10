@@ -8,7 +8,9 @@ from whoosh.qparser import MultifieldParser, plugins
 from whoosh.query import And, Every, Not, Or, Term
 from whoosh.sorting import Count, Facets, FieldFacet
 
-from .shortcuts import composer
+from kerko.exceptions import except_raise
+from kerko.shortcuts import composer
+from kerko.storage import SchemaError
 
 
 class Searcher:
@@ -181,6 +183,7 @@ class Searcher:
             )
         self.search_args['maptype'] = Count
 
+    @except_raise(KeyError, SchemaError, "Schema changes are required. Please clean index.")
     def search(self, *, limit=None, **kwargs):
         self._prepare_search_args(**kwargs)
         return UnpagedResults(self.searcher.search(
@@ -189,6 +192,7 @@ class Searcher:
             **self.search_args,
         ))
 
+    @except_raise(KeyError, SchemaError, "Schema changes are required. Please clean index.")
     def search_page(self, *, page, page_len, **kwargs):
         self._prepare_search_args(**kwargs)
         return PagedResults(
