@@ -168,12 +168,15 @@ The following features are implemented in Kerko:
       recommended for indexing by [Google Scholar][HighwirePress_Google], and
       are recognized by many other databases and reference management tools,
       including the [Zotero Connector][Zotero_Connector] browser extension.
-* Syndication feeds: [Atom][Atom] syndication feeds are automatically generated.
-    * The main feed lists to the most recently added bibliographic records.
-    * Any search results page has a related feed that lists the most recently
+* Web feeds: users of news aggregators or feed readers may get updates when new
+  bibliographic records are added. They may subscribe to the main feed, or to
+  one or more custom feeds.
+    * The main feed lists the most recently added bibliographic records.
+    * Any search page has a related custom feed that lists the most recently
       added bibliographic records that match the search criteria. Thus, a user
-      having a specific area of interest can obtain a custom feed simply by
-      performing a keyword search and/or selecting one or more filters.
+      can obtain a custom feed for a particular area of interest by entering
+      keywords to search and/or selecting filters.
+    * Feeds are provided in the [Atom syndication format][Atom].
     * Basic metadata is provided directly in the feeds, using unqualified
       [Dublin Core][Dublin_Core] tags.
 * Sitemap: an [XML Sitemap][XML_Sitemap] is automatically generated, and you may
@@ -385,8 +388,8 @@ override their default value:
   button should be hidden from search results pages. Defaults to `0` (i.e. no
   limit).
 * `KERKO_FEEDS`: A list of syndication feed formats to publish. Defaults to
-  `['atom']`. If set to an empty list, no syndication feed will be provided. At
-  this point, the only supported format is `'atom'`.
+  `['atom']`. If set to an empty list, no web feed will be provided. The only
+  supported format is `'atom'`.
 * `KERKO_FULLTEXT_SEARCH`: Allow full-text search of PDF attachments. Defaults
   to `True`. To get consistent results, see [Ensuring full-text indexing of your
   attachments in
