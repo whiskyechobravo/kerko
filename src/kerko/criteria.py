@@ -128,7 +128,8 @@ class Criteria:
 
     def get_active_sort_spec(self):
         """Return the spec of the active sort or, if none is active, the default sort to use."""
-        if (sort_key := self.options.get('sort')):
+        sort_key = self.options.get('sort')
+        if sort_key:
             return composer().sorts[sort_key]
         for sort_spec in composer().get_ordered_specs('sorts'):
             if sort_spec.is_allowed(self):
@@ -137,17 +138,20 @@ class Criteria:
 
     def initialize_keywords(self, initial):
         for scope in composer().scopes.values():
-            if (values := initial.getlist(scope.key)):
+            values = initial.getlist(scope.key)
+            if values:
                 self.keywords.setlist(scope.key, values)
 
     def initialize_filters(self, initial):
         for spec in composer().facets.values():
-            if (values := initial.getlist(spec.filter_key)):
+            values = initial.getlist(spec.filter_key)
+            if values:
                 self.filters.setlist(spec.filter_key, values)
 
     def initialize_page(self, initial):
         try:
-            if (page := int(initial.get('page', 0))) and page >= 1:
+            page = int(initial.get('page', 0))
+            if page >= 1:
                 self.options['page'] = page
         except ValueError:
             pass
@@ -155,21 +159,23 @@ class Criteria:
     def initialize_page_len(self, initial):
         page_len = initial.get('page-len', 0)
         try:
-            if page_len == 'all' or ((page_len := int(page_len)) and page_len >= 1):
+            if page_len == 'all':
                 self.options['page-len'] = page_len
+            elif int(page_len) >= 1:
+                self.options['page-len'] = int(page_len)
         except ValueError:
             pass
 
     def initialize_sort(self, initial):
-        if (sort_spec := composer().sorts.get(
-            initial.get('sort', '')
-        )) and sort_spec.is_allowed(self):
+        sort_spec = composer().sorts.get(initial.get('sort', ''))
+        if sort_spec and sort_spec.is_allowed(self):
             self.options['sort'] = sort_spec.key
 
     def initialize_abstracts(self, initial):
         if config('KERKO_RESULTS_ABSTRACTS_TOGGLER'):
             enabled_by_default = config('KERKO_RESULTS_ABSTRACTS')
-            if (abstracts := initial.get('abstracts')):
+            abstracts = initial.get('abstracts')
+            if abstracts:
                 if abstracts in ['t', '1'] and not enabled_by_default:
                     self.options['abstracts'] = 1
                 elif abstracts in ['f', '0'] and enabled_by_default:
@@ -182,5 +188,5 @@ class Criteria:
             self.options['print-preview'] = 1
 
     def initialize_id(self, initial):
-        if self.options.get('page-len') == 1 and (initial_id := initial.get('id')):
-            self.options['id'] = initial_id
+        if self.options.get('page-len') == 1 and initial.get('id'):
+            self.options['id'] = initial.get('id')

@@ -53,9 +53,11 @@ class ScopeSpec:
 
         :return MultiDict: A copy of the keywords with the value removed.
         """
-        if (new_keywords := active_keywords.deepcopy()) and (
-                new_values := [v for v in new_keywords.poplist(self.key) if v != value]):
-            new_keywords.setlist(self.key, new_values)
+        new_keywords = active_keywords.deepcopy()
+        if new_keywords:
+            new_values = [v for v in new_keywords.poplist(self.key) if v != value]
+            if new_values:
+                new_keywords.setlist(self.key, new_values)
         return new_keywords
 
 
@@ -300,7 +302,8 @@ class FlatFacetSpec(FacetSpec):
         for value, count in results.items():
             if value or self.missing_label:
                 value, label = self.decode(value, default_value=value, default_label=value)
-                if (new_filters := self.remove_filter(value, criteria.filters)):
+                new_filters = self.remove_filter(value, criteria.filters)
+                if new_filters:
                     remove_url = url_for(
                         '.search',
                         **criteria.params(
@@ -316,20 +319,22 @@ class FlatFacetSpec(FacetSpec):
                     remove_url = None
                 if remove_url or active_only:
                     add_url = None
-                elif (new_filters := self.add_filter(value, criteria.filters)):
-                    add_url = url_for(
-                        '.search',
-                        **criteria.params(
-                            filters=new_filters,
-                            options={
-                                'page': None,
-                                'page-len': None,
-                                'id': None,
-                            },
-                        )
-                    )
                 else:
-                    add_url = None
+                    new_filters = self.add_filter(value, criteria.filters)
+                    if new_filters:
+                        add_url = url_for(
+                            '.search',
+                            **criteria.params(
+                                filters=new_filters,
+                                options={
+                                    'page': None,
+                                    'page-len': None,
+                                    'id': None,
+                                },
+                            )
+                        )
+                    else:
+                        add_url = None
                 if remove_url or add_url:  # Only items with an URL get displayed.
                     items.append({
                         'label': label,
@@ -430,7 +435,8 @@ class TreeFacetSpec(FacetSpec):
         for value, count in results.items():
             if value or self.missing_label:
                 value, label = self.decode(value, default_value=value, default_label=value)
-                if (new_filters := self.remove_filter(value, criteria.filters)):
+                new_filters = self.remove_filter(value, criteria.filters)
+                if new_filters:
                     remove_url = url_for(
                         '.search',
                         **criteria.params(
@@ -446,20 +452,22 @@ class TreeFacetSpec(FacetSpec):
                     remove_url = None
                 if remove_url or active_only:
                     add_url = None
-                elif (new_filters := self.add_filter(value, criteria.filters)):
-                    add_url = url_for(
-                        '.search',
-                        **criteria.params(
-                            filters=new_filters,
-                            options={
-                                'page': None,
-                                'page-len': None,
-                                'id': None,
-                            },
-                        )
-                    )
                 else:
-                    add_url = None
+                    new_filters = self.add_filter(value, criteria.filters)
+                    if new_filters:
+                        add_url = url_for(
+                            '.search',
+                            **criteria.params(
+                                filters=new_filters,
+                                options={
+                                    'page': None,
+                                    'page-len': None,
+                                    'id': None,
+                                },
+                            )
+                        )
+                    else:
+                        add_url = None
                 if remove_url or add_url:  # Only items with an URL get displayed.
                     path = value.split(sep=self.path_separator)
 
