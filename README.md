@@ -174,11 +174,11 @@ The following features are implemented in Kerko:
     * The main feed lists the most recently added bibliographic records.
     * Any search page has a related custom feed that lists the most recently
       added bibliographic records that match the search criteria. Thus, a user
-      can obtain a custom feed for a particular area of interest by entering
-      keywords to search and/or selecting filters.
+      can obtain a custom feed for a particular area of interest simply by
+      entering keywords to search and/or selecting filters.
     * Feeds are provided in the [Atom syndication format][Atom].
-    * Basic metadata is provided directly in the feeds, using unqualified
-      [Dublin Core][Dublin_Core] tags.
+    * Basic metadata is provided directly in the feeds, using both Atom and
+      unqualified [Dublin Core][Dublin_Core] elements.
 * Sitemap: an [XML Sitemap][XML_Sitemap] is automatically generated, and you may
   use it to help search engines discover your bibliographic records.
 * Exporting: users may export individual records as well as complete
