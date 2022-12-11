@@ -48,6 +48,26 @@ class Searcher:
     def __exit__(self, *exc_info):
         self.close()
 
+    @except_raise(KeyError, SchemaError, "Schema changes are required. Please clean index.")
+    def search(self, *, limit=None, **kwargs):
+        self._prepare_search_args(**kwargs)
+        return UnpagedResults(self.searcher.search(
+            q=self.search_args.pop('query'),
+            limit=limit,
+            **self.search_args,
+        ))
+
+    @except_raise(KeyError, SchemaError, "Schema changes are required. Please clean index.")
+    def search_page(self, *, page, page_len, **kwargs):
+        self._prepare_search_args(**kwargs)
+        return PagedResults(
+            self.searcher.search_page(
+                pagenum=page,
+                pagelen=page_len,
+                **self.search_args,
+            )
+        )
+
     def _prepare_search_args(
         self,
         *,
@@ -182,26 +202,6 @@ class Searcher:
                 facet_spec.key, allow_overlap=facet_spec.allow_overlap
             )
         self.search_args['maptype'] = Count
-
-    @except_raise(KeyError, SchemaError, "Schema changes are required. Please clean index.")
-    def search(self, *, limit=None, **kwargs):
-        self._prepare_search_args(**kwargs)
-        return UnpagedResults(self.searcher.search(
-            q=self.search_args.pop('query'),
-            limit=limit,
-            **self.search_args,
-        ))
-
-    @except_raise(KeyError, SchemaError, "Schema changes are required. Please clean index.")
-    def search_page(self, *, page, page_len, **kwargs):
-        self._prepare_search_args(**kwargs)
-        return PagedResults(
-            self.searcher.search_page(
-                pagenum=page,
-                pagelen=page_len,
-                **self.search_args,
-            )
-        )
 
 
 class Results(ABC):
