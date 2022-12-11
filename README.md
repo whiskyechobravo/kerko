@@ -168,6 +168,14 @@ The following features are implemented in Kerko:
       recommended for indexing by [Google Scholar][HighwirePress_Google], and
       are recognized by many other databases and reference management tools,
       including the [Zotero Connector][Zotero_Connector] browser extension.
+* Syndication feeds: [Atom][Atom] syndication feeds are automatically generated.
+    * The main feed lists to the most recently added bibliographic records.
+    * Any search results page has a related feed that lists the most recently
+      added bibliographic records that match the search criteria. Thus, a user
+      having a specific area of interest can obtain a custom feed simply by
+      performing a keyword search and/or selecting one or more filters.
+    * Basic metadata is provided directly in the feeds, using unqualified
+      [Dublin Core][Dublin_Core] tags.
 * Sitemap: an [XML Sitemap][XML_Sitemap] is automatically generated, and you may
   use it to help search engines discover your bibliographic records.
 * Exporting: users may export individual records as well as complete
@@ -376,6 +384,9 @@ override their default value:
 * `KERKO_DOWNLOAD_CITATIONS_MAX_COUNT`: Limit over which the record download
   button should be hidden from search results pages. Defaults to `0` (i.e. no
   limit).
+* `KERKO_FEEDS`: A list of syndication feed formats to publish. Defaults to
+  `['atom']`. If set to an empty list, no syndication feed will be provided. At
+  this point, the only supported format is `'atom'`.
 * `KERKO_FULLTEXT_SEARCH`: Allow full-text search of PDF attachments. Defaults
   to `True`. To get consistent results, see [Ensuring full-text indexing of your
   attachments in
@@ -902,6 +913,7 @@ If you wish to add your Kerko-powered online bibliography to this list, please
 [e-mail us][Kerko_email] or submit a pull request.
 
 
+[Atom]: https://en.wikipedia.org/wiki/Atom_(web_standard)
 [Babel]: https://pypi.org/project/Babel/
 [BM25F]: https://en.wikipedia.org/wiki/Okapi_BM25
 [Bootstrap]: https://getbootstrap.com/
@@ -911,6 +923,7 @@ If you wish to add your Kerko-powered online bibliography to this list, please
 [COinS]: https://en.wikipedia.org/wiki/COinS
 [COinS_clients]: https://en.wikipedia.org/wiki/COinS#Client_tools
 [CSL]: https://citationstyles.org/
+[Dublin_Core]: https://en.wikipedia.org/wiki/Dublin_Core
 [Flask]: https://pypi.org/project/Flask/
 [Flask_blueprint]: https://flask.palletsprojects.com/en/latest/blueprints/
 [Flask-Babel]: https://pypi.org/project/Flask-Babel/

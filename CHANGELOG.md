@@ -17,6 +17,7 @@ Features:
 - Add an optional initial limit on the number of values to show under each
   facet. When the initial limit is reached, a "show more" button allow to user
   to expand the full list.
+- Add Atom syndication feeds.
 - Allow searching items by their Zotero key.
 - Add XML sitemap.
 - Add the `kerko count` CLI command (mostly meant for development purposes).

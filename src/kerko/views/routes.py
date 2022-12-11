@@ -70,6 +70,9 @@ def atom_feed():
     if config('KERKO_USE_TRANSLATIONS'):
         babel_domain.as_default()
 
+    if 'atom' not in config('KERKO_FEEDS'):
+        return abort(404)
+
     context = {}
     criteria = create_feed_criteria(request.args)
     index = open_index('index')

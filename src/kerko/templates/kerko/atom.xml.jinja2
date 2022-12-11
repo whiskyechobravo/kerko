@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed {% block feed_attributes %}xmlns="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/"{% endblock %}>
     {%- block feed_elements %}
-        <title type="html">{{ config.KERKO_TITLE|escape }}{% if is_searching %} - {{ _('Search results') }}{% endif %}</title>
+        <title type="html">{{ config.KERKO_TITLE|escape }} - {% if is_searching %}{{ _('Custom feed based on your search') }}{% else %}{{ _('Main feed') }}{% endif %}</title>
         <link rel="alternate" href="{{ html_url }}"/>
         <link rel="self" href="{{ feed_url }}"/>
         {#- RFC 5005 paged feed links #}

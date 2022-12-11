@@ -46,8 +46,10 @@ class Criteria:
         """
         Initialize the criteria.
 
-        :param MultiDict initial: Values to initialize from (usually originating
-            from `request.args`).
+        :param MultiDict|Criteria initial: Values to initialize from, either a
+            `MultiDict` from `request.args`, or an instance of `Criteria`). If
+            initial values are provided, they get deep-copied into the new
+            `Criteria` instance.
 
         :param list options_initializers: Mandatory list of callables for
             validating and initializing the options from the `initial` values.
@@ -63,10 +65,17 @@ class Criteria:
         self.filters = MultiDict()
         self.options = MultiDict()
         if initial:
-            self.initialize_keywords(initial)
-            self.initialize_filters(initial)
-            for initializer in options_initializers:
-                initializer(self, initial)
+            if isinstance(initial, Criteria):
+                self.keywords = initial.keywords.deepcopy()
+                self.filters = initial.filters.deepcopy()
+                for initializer in options_initializers:
+                    initializer(self, initial.options)
+            else:
+                assert isinstance(initial, MultiDict)
+                self.initialize_keywords(initial)
+                self.initialize_filters(initial)
+                for initializer in options_initializers:
+                    initializer(self, initial)
 
     def has_keywords(self):
         """Return `True` if criteria includes active keywords."""
