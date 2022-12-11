@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Kerko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-10 19:24-0500\n"
-"PO-Revision-Date: 2022-12-10 19:24-0500\n"
+"POT-Creation-Date: 2022-12-10 20:25-0500\n"
+"PO-Revision-Date: 2022-12-10 20:25-0500\n"
 "Last-Translator: David Lesieur <kerko@whiskyechobravo.com>\n"
 "Language: fr\n"
 "Language-Team: fr <kerko@whiskyechobravo.com>\n"
@@ -156,17 +156,20 @@ msgstr "Cité par"
 msgid "Related"
 msgstr "Connexe"
 
-#: src/kerko/search.py:87 src/kerko/templates/kerko/_search-help.html.jinja2:37
+#: src/kerko/search.py:107
+#: src/kerko/templates/kerko/_search-help.html.jinja2:37
 #: src/kerko/templates/kerko/_search-help.html.jinja2:43
 msgid "AND"
 msgstr "ET"
 
-#: src/kerko/search.py:88 src/kerko/templates/kerko/_search-help.html.jinja2:38
+#: src/kerko/search.py:108
+#: src/kerko/templates/kerko/_search-help.html.jinja2:38
 #: src/kerko/templates/kerko/_search-help.html.jinja2:43
 msgid "OR"
 msgstr "OU"
 
-#: src/kerko/search.py:89 src/kerko/templates/kerko/_search-help.html.jinja2:39
+#: src/kerko/search.py:109
+#: src/kerko/templates/kerko/_search-help.html.jinja2:39
 msgid "NOT"
 msgstr "SAUF"
 
@@ -292,8 +295,8 @@ msgstr ""
 #: src/kerko/templates/kerko/_search-help.html.jinja2:49
 #: src/kerko/templates/kerko/_search-help.html.jinja2:68
 #: src/kerko/templates/kerko/search.html.jinja2:34
-#: src/kerko/templates/kerko/search.html.jinja2:166
-#: src/kerko/templates/kerko/search.html.jinja2:177
+#: src/kerko/templates/kerko/search.html.jinja2:173
+#: src/kerko/templates/kerko/search.html.jinja2:184
 msgid "Explore"
 msgstr "Explorer"
 
@@ -622,19 +625,9 @@ msgstr ""
 " liste des résultats."
 
 #: src/kerko/templates/kerko/_search-help.html.jinja2:72
-#: src/kerko/templates/kerko/search.html.jinja2:184
+#: src/kerko/templates/kerko/search.html.jinja2:191
 msgid "Close"
 msgstr "Fermer"
-
-#: src/kerko/templates/kerko/_search-metas.html.jinja2:13
-#: src/kerko/templates/kerko/atom.xml.jinja2:4
-msgid "Custom feed based on your search"
-msgstr "Fil de syndication personnalisé d’après vos critères de recherche"
-
-#: src/kerko/templates/kerko/_search-metas.html.jinja2:13
-#: src/kerko/templates/kerko/atom.xml.jinja2:4
-msgid "Main feed"
-msgstr "Fil de syndication principal"
 
 #: src/kerko/templates/kerko/_search-result.html.jinja2:14
 msgid "View details"
@@ -739,7 +732,7 @@ msgid "Relations"
 msgstr "Relations"
 
 #: src/kerko/templates/kerko/item.html.jinja2:252
-#: src/kerko/templates/kerko/search.html.jinja2:142
+#: src/kerko/templates/kerko/search.html.jinja2:149
 #, python-format
 msgid "Processing time: %(time)s seconds"
 msgstr "Temps de traitement: %(time)s seconds"
@@ -791,12 +784,12 @@ msgid_plural "Print %(count_formatted)s citations"
 msgstr[0] "Imprimer cette référence"
 msgstr[1] "Imprimer %(count_formatted)s références"
 
-#: src/kerko/templates/kerko/search.html.jinja2:145
+#: src/kerko/templates/kerko/search.html.jinja2:152
 #, python-format
 msgid "Last update from database: %(when)s"
 msgstr "Dernière mise à jour depuis la base de données&nbsp;: %(when)s"
 
-#: src/kerko/templates/kerko/search.html.jinja2:150
+#: src/kerko/templates/kerko/search.html.jinja2:157
 msgid ""
 "\n"
 "                <p>Suggestions:</p>\n"
@@ -816,12 +809,20 @@ msgstr ""
 "                    <li>Essayez des termes plus généraux.</li>\n"
 "                </ul>"
 
-#: src/kerko/templates/kerko/search.html.jinja2:178
-#: src/kerko/templates/kerko/search.html.jinja2:184
+#: src/kerko/templates/kerko/search.html.jinja2:185
+#: src/kerko/templates/kerko/search.html.jinja2:191
 msgid "Close Explore panel"
 msgstr "Fermer le panneau d’exploration"
 
-#: src/kerko/views/routes.py:224
+#: src/kerko/views/routes.py:118 src/kerko/views/searching.py:241
+msgid "Custom feed"
+msgstr "Fil de syndication personnalisé"
+
+#: src/kerko/views/routes.py:120 src/kerko/views/searching.py:243
+msgid "Main feed"
+msgstr "Fil de syndication principal"
+
+#: src/kerko/views/routes.py:229
 msgid ""
 "The document you have requested has been removed. Please check below for "
 "the latest documents available."
@@ -842,3 +843,7 @@ msgid "Result"
 msgid_plural "Results"
 msgstr[0] "Résultat"
 msgstr[1] "Résultats"
+
+#: src/kerko/views/searching.py:240
+msgid "Custom feed based on your search"
+msgstr "Fil de syndication personnalisé d’après vos critères de recherche"

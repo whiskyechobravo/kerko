@@ -2,7 +2,7 @@
 <feed {% block feed_attributes %}xmlns="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/"{% endblock %}>
     {%- block feed_elements %}
         {%- block feed_title %}
-            <title type="html">{{ config.KERKO_TITLE|escape }} - {% if is_searching %}{{ _('Custom feed based on your search') }}{% else %}{{ _('Main feed') }}{% endif %}</title>
+            <title type="html">{{ config.KERKO_TITLE|escape }} - {{ feed_title|escape }}</title>
         {%- endblock %}
         <link rel="alternate" href="{{ html_url }}"/>
         <link rel="self" href="{{ feed_url }}"/>

@@ -236,6 +236,11 @@ def search_list(criteria):
                     'page': None,
                 })
             )
+            if criteria.is_searching():
+                context['atom_feed_help'] = gettext('Custom feed based on your search')
+                context['atom_feed_title'] = gettext('Custom feed')
+            else:
+                context['atom_feed_title'] = gettext('Main feed')
 
         # Prepare search result items.
         field_specs = composer().select_fields(

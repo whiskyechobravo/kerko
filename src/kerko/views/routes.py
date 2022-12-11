@@ -114,6 +114,11 @@ def atom_feed():
     else:
         context['last_sync'] = datetime.now().isoformat()
 
+    if criteria.is_searching():
+        context['feed_title'] = gettext('Custom feed')
+    else:
+        context['feed_title'] = gettext('Main feed')
+
     response = make_response(
         render_template(
             config('KERKO_TEMPLATE_ATOM_FEED'),
@@ -129,7 +134,7 @@ def atom_feed():
                 _external=True,
                 **criteria.params(options={'page': None}),
             ),
-            is_searching=criteria.has_keywords() or criteria.has_filters(),
+            is_searching=criteria.is_searching(),
             locale=get_locale(),
             **context,
         )
