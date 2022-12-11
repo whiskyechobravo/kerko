@@ -2,8 +2,9 @@
 
 import re
 
-from flask import current_app, url_for
+from flask import url_for
 
+from kerko.shortcuts import config
 from kerko.views.item_creators import format_creator_name
 
 
@@ -13,7 +14,7 @@ def build_highwirepress_tags(item):  # pylint: disable=too-many-branches
     # - https://www.monperrus.net/martin/accurate+bibliographic+metadata+and+google+scholar
     tags = []
     data = item.get('data', {})
-    if current_app.config['KERKO_HIGHWIREPRESS_TAGS'] and data.get('itemType') in [
+    if config('KERKO_HIGHWIREPRESS_TAGS') and data.get('itemType') in [
         'book',
         'conferencePaper',
         'journalArticle',

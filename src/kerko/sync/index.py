@@ -4,6 +4,7 @@ import whoosh
 from flask import current_app
 from whoosh.query import Term
 
+from kerko.shortcuts import composer
 from kerko.storage import (SchemaError, SearchIndexError, load_object,
                            open_index, save_object)
 from kerko.tags import TagGate
@@ -16,7 +17,6 @@ def sync_index():
     Return the number of synchronized items.
     """
     current_app.logger.info("Starting index sync...")
-    composer = current_app.config['KERKO_COMPOSER']
     library_context = load_object('cache', 'library')
 
     cache = open_index('cache')
@@ -41,17 +41,17 @@ def sync_index():
         return yield_items(parent['key'])
 
     count = 0
-    index = open_index('index', schema=composer.schema, auto_create=True, write=True)
+    index = open_index('index', schema=composer().schema, auto_create=True, write=True)
     writer = index.writer(limitmb=256)
     try:
         writer.mergetype = whoosh.writing.CLEAR
-        gate = TagGate(composer.default_item_include_re, composer.default_item_exclude_re)
+        gate = TagGate(composer().default_item_include_re, composer().default_item_exclude_re)
         for item in yield_top_level_items():
             count += 1
             if gate.check(item['data']):
                 item['children'] = list(yield_children(item))  # Extend the base Zotero item dict.
                 document = {}
-                for spec in list(composer.fields.values()) + list(composer.facets.values()):
+                for spec in list(composer().fields.values()) + list(composer().facets.values()):
                     spec.extract_to_document(document, item, library_context)
                 writer.update_document(**document)
                 current_app.logger.debug(

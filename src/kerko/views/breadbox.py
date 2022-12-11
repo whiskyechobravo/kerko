@@ -8,13 +8,15 @@ user interface pattern: the "breadcrumbs".
 from collections import defaultdict
 from copy import copy
 
-from flask import current_app, url_for
+from flask import url_for
+
+from kerko.shortcuts import composer
 
 
 def _build_keywords(criteria):
     """Build the active keywords in the same format as a facet."""
     keywords = defaultdict(list)
-    for scope in current_app.config['KERKO_COMPOSER'].scopes.values():
+    for scope in composer().scopes.values():
         if scope.key in criteria.keywords:
             for value in criteria.keywords.getlist(scope.key):
                 keywords[scope.key].append(
