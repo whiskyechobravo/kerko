@@ -816,11 +816,11 @@ msgstr "Fermer le panneau d’exploration"
 
 #: src/kerko/views/routes.py:118 src/kerko/views/searching.py:241
 msgid "Custom feed"
-msgstr "Fil de syndication personnalisé"
+msgstr "Flux web personnalisé"
 
 #: src/kerko/views/routes.py:120 src/kerko/views/searching.py:243
 msgid "Main feed"
-msgstr "Fil de syndication principal"
+msgstr "Flux web principal"
 
 #: src/kerko/views/routes.py:229
 msgid ""
@@ -846,4 +846,4 @@ msgstr[1] "Résultats"
 
 #: src/kerko/views/searching.py:240
 msgid "Custom feed based on your search"
-msgstr "Fil de syndication personnalisé d’après vos critères de recherche"
+msgstr "Flux web personnalisé d’après vos critères de recherche"
