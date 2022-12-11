@@ -5,15 +5,15 @@ from whoosh.fields import (ID, NUMERIC, STORED, FieldConfigurationError,
                            Schema, UnknownFieldError)
 from whoosh.qparser import QueryParser
 
+from kerko.shortcuts import composer, config
 from kerko.storage import SchemaError, load_object, open_index, save_object
 from kerko.sync import zotero
 
 
 def get_formats():
-    composer = current_app.config['KERKO_COMPOSER']
     return {
         spec.extractor.format
-        for spec in list(composer.fields.values()) + list(composer.facets.values())
+        for spec in list(composer().fields.values()) + list(composer().facets.values())
         if spec.extractor.format != 'data'
     }
 
@@ -53,7 +53,7 @@ def sync_cache():
     cache = open_index('cache', schema=get_cache_schema, auto_create=True, write=True)
     writer = cache.writer(limitmb=256)
     try:
-        if current_app.config['KERKO_FULLTEXT_SEARCH']:
+        if config('KERKO_FULLTEXT_SEARCH'):
             fulltext_items = zotero.load_new_fulltext(zotero_credentials, since)
         else:
             fulltext_items = {}

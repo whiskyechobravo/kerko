@@ -1,4 +1,6 @@
-from flask import current_app, url_for
+from flask import url_for
+
+from kerko.shortcuts import composer
 
 
 def build_sorter(criteria):
@@ -16,7 +18,7 @@ def build_sorter(criteria):
                         'page': None,
                     })
                 ),
-        } for sort_spec in current_app.config['KERKO_COMPOSER'].get_ordered_specs('sorts')
+        } for sort_spec in composer().get_ordered_specs('sorts')
         if sort_spec.is_allowed(criteria)
     ]
 

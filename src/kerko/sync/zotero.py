@@ -6,6 +6,8 @@ import wrapt
 from flask import current_app
 from pyzotero import zotero, zotero_errors
 
+from kerko.shortcuts import config
+
 
 class LibraryContext:
     """Contains data related to a Zotero library."""
@@ -42,13 +44,13 @@ def retry_zotero(wrapped, _instance, args, kwargs):
                 zotero_errors.UnsupportedParams
         ) as e:
             current_app.logger.warning(e)
-            if attempts < current_app.config['KERKO_ZOTERO_MAX_ATTEMPTS']:
+            if attempts < config('KERKO_ZOTERO_MAX_ATTEMPTS'):
                 current_app.logger.warning(
                     f"The Zotero API request has failed in {wrapped.__name__}. "
-                    f"New attempt in {current_app.config['KERKO_ZOTERO_WAIT']} seconds..."
+                    f"New attempt in {config('KERKO_ZOTERO_WAIT')} seconds..."
                 )
                 attempts += 1
-                sleep(current_app.config['KERKO_ZOTERO_WAIT'])
+                sleep(config('KERKO_ZOTERO_WAIT'))
             else:
                 current_app.logger.error(
                     "The maximum number of API call attempts to Zotero has "
@@ -59,10 +61,10 @@ def retry_zotero(wrapped, _instance, args, kwargs):
 
 def init_zotero():
     return zotero.Zotero(
-        library_id=current_app.config['KERKO_ZOTERO_LIBRARY_ID'],
-        library_type=current_app.config['KERKO_ZOTERO_LIBRARY_TYPE'],
-        api_key=current_app.config['KERKO_ZOTERO_API_KEY'],
-        locale=current_app.config['KERKO_ZOTERO_LOCALE']
+        library_id=config('KERKO_ZOTERO_LIBRARY_ID'),
+        library_type=config('KERKO_ZOTERO_LIBRARY_TYPE'),
+        api_key=config('KERKO_ZOTERO_API_KEY'),
+        locale=config('KERKO_ZOTERO_LOCALE')
     )
 
 
@@ -232,7 +234,7 @@ class Collections:
         else:
             method = zotero_credentials.collections
         while True:
-            more = method(start=start, limit=current_app.config['KERKO_ZOTERO_BATCH_SIZE'])
+            more = method(start=start, limit=config('KERKO_ZOTERO_BATCH_SIZE'))
             if not more:
                 break
             start += len(more)
@@ -330,7 +332,7 @@ class Items:
 
     @retry_zotero
     def _next_batch(self):
-        limit = current_app.config['KERKO_ZOTERO_BATCH_SIZE']
+        limit = config('KERKO_ZOTERO_BATCH_SIZE')
         current_app.logger.info(
             f"Requesting up to {limit} {self.method_info} items since version {self.since}, "
             f"starting at position {self.start}..."
@@ -342,7 +344,7 @@ class Items:
             'sort': 'dateAdded',
             'direction': 'asc',
             'include': self.include,
-            'style': current_app.config['KERKO_CSL_STYLE'],
+            'style': config('KERKO_CSL_STYLE'),
         }
         self.zotero_batch = getattr(self.zotero_credentials, self.method)(**params)
         if not self.zotero_batch:

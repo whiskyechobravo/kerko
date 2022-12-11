@@ -1,8 +1,8 @@
+from flask_wtf import FlaskForm
 from wtforms import SelectField, validators
 from wtforms.fields.html5 import SearchField
 
-from flask import current_app
-from flask_wtf import FlaskForm
+from kerko.shortcuts import composer
 
 
 class SearchForm(FlaskForm):
@@ -13,5 +13,5 @@ class SearchForm(FlaskForm):
         super().__init__(**kwargs)
         self.scope.choices = [
             (s.key, s.selector_label)
-            for s in current_app.config['KERKO_COMPOSER'].get_ordered_specs('scopes')
+            for s in composer().get_ordered_specs('scopes')
         ]
