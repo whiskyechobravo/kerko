@@ -5,6 +5,7 @@ from flask import redirect, url_for
 from flask_babel import get_locale, gettext, ngettext
 from werkzeug.datastructures import MultiDict
 
+from kerko.criteria import create_feed_criteria
 from kerko.search import Searcher
 from kerko.shortcuts import composer, config
 from kerko.storage import load_object, open_index
@@ -228,6 +229,13 @@ def search_list(criteria):
             )
             for key in composer().citation_formats.keys()
         }
+        if 'atom' in config('KERKO_FEEDS'):
+            context['atom_feed_url'] = url_for(
+                '.atom_feed',
+                **create_feed_criteria(initial=criteria).params(options={
+                    'page': None,
+                })
+            )
 
         # Prepare search result items.
         field_specs = composer().select_fields(
