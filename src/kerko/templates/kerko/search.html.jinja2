@@ -136,7 +136,7 @@
                             {%- endif %}
                             {%- if atom_feed_url %}
                                 <div class="{% block atom_feed_link_wrapper_classes %}d-inline-block d-print-none mb-1{% endblock %}">
-                                    <a class="{% block atom_feed_btn_classes %}btn btn-light{% endblock %}" href="{{ atom_feed_url }}" type="application/atom+xml" {% if atom_feed_help %}title="{{ atom_feed_help|escape }}"{% endif %}>
+                                    <a class="{% block atom_feed_btn_classes %}btn btn-light{% endblock %}" href="{{ atom_feed_url }}" type="application/atom+xml" {% if atom_feed_help %}title="{{ atom_feed_help|escape }}"{% endif %} target="_blank">
                                         <span class="fas fa-rss" aria-hidden="true"></span> {{ atom_feed_title }}
                                     </a>
                                 </div>
