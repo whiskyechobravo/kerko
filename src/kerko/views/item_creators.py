@@ -37,7 +37,10 @@ def inject_creator_display_names(item, link=True):
                         if t['creatorType'] == creator['creatorType']:
                             creator['label'] = t['localized']
                             break
-                if link and (creator_scope := composer().scopes.get('creator')):
-                    creator['url'] = url_for(
-                        '.search', **creator_scope.add_keywords(value=f"\"{creator['display']}\"")
-                    )
+                if link:
+                    creator_scope = composer().scopes.get('creator')
+                    if creator_scope:
+                        creator['url'] = url_for(
+                            '.search',
+                            **creator_scope.add_keywords(value=f"\"{creator['display']}\""),
+                        )

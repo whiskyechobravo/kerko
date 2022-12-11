@@ -35,18 +35,18 @@ def search():
 
     criteria = create_search_criteria(request.args)
     form = SearchForm(csrf_enabled=False)
-    if form.validate_on_submit() and (
-            scope := composer().scopes.get(form.scope.data)
-    ):
-        # Add the newly submitted keywords, and redirect to search with them.
-        url = url_for(
-            '.search',
-            **criteria.params(
-                keywords=scope.add_keywords(form.keywords.data, criteria.keywords),
-                options={'page': None},
+    if form.validate_on_submit():
+        scope = composer().scopes.get(form.scope.data)
+        if scope:
+            # Add the newly submitted keywords, and redirect to search with them.
+            url = url_for(
+                '.search',
+                **criteria.params(
+                    keywords=scope.add_keywords(form.keywords.data, criteria.keywords),
+                    options={'page': None},
+                )
             )
-        )
-        return redirect(url, 302)
+            return redirect(url, 302)
 
     if criteria.options.get('page-len', config('KERKO_PAGE_LEN')) == 1:
         template, context = search_single(criteria)
@@ -77,7 +77,8 @@ def atom_feed():
     criteria = create_feed_criteria(request.args)
     index = open_index('index')
     with Searcher(index) as searcher:
-        if (sort_field := composer().fields.get('sort_date_added')):
+        sort_field = composer().fields.get('sort_date_added')
+        if sort_field:
             sort_spec = SortSpec(
                 key='date_added_desc',
                 label='',
@@ -431,7 +432,8 @@ def sitemap(page_num):
 
     index = open_index('index')
     with Searcher(index) as searcher:
-        if (sort_field := composer().fields.get('sort_date_modified')):
+        sort_field = composer().fields.get('sort_date_modified')
+        if sort_field:
             sort_spec = SortSpec(
                 key='date_added_desc',
                 label='',

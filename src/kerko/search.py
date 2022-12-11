@@ -171,7 +171,8 @@ class Searcher:
                     terms.extend([Not(Term(field_name, value)) for value in reject_values])
         if filters:
             for filter_key, filter_values in filters.lists():
-                if spec := self.facet_specs.get(filter_key):
+                spec = self.facet_specs.get(filter_key)
+                if spec:
                     for v in filter_values:
                         if v == '':  # If trying to filter with a missing value.
                             # Exclude all results with a value in facet field.

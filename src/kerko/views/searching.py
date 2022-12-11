@@ -99,9 +99,8 @@ def search_single(criteria):
             faceting=True,
         )
 
-        if (criteria_id := criteria.options.get('id')) and (
-            results.is_empty() or criteria_id != results[0]['id']
-        ):
+        criteria_id = criteria.options.get('id')
+        if criteria_id and (results.is_empty() or criteria_id != results[0]['id']):
             # The search URL is obsolete, the result no longer matches the expected item.
             return redirect(url_for('.item_view', item_id=criteria_id, _external=True), 301)
 
@@ -253,7 +252,8 @@ def search_list(criteria):
         context['facet_results'] = facets
         context['breadbox'] = breadbox.build_breadbox(criteria, facets)
 
-        if (last_sync := load_object('index', 'last_update_from_zotero')):
+        last_sync = load_object('index', 'last_update_from_zotero')
+        if last_sync:
             context['last_sync'] = datetime.fromtimestamp(
                 last_sync,
                 tz=datetime.now().astimezone().tzinfo,
