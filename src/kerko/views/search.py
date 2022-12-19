@@ -6,7 +6,7 @@ from flask_babel import get_locale, gettext, ngettext
 from werkzeug.datastructures import MultiDict
 
 from kerko.criteria import create_feed_criteria
-from kerko.search import Searcher
+from kerko.searcher import Searcher
 from kerko.shortcuts import composer, config
 from kerko.storage import load_object, open_index
 from kerko.views import (breadbox, item_creators, item_facets, item_meta,

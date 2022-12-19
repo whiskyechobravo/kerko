@@ -10,7 +10,7 @@ from lxml import etree
 from werkzeug.datastructures import MultiDict
 
 from kerko.criteria import create_feed_criteria
-from kerko.search import Searcher
+from kerko.searcher import Searcher
 from kerko.shortcuts import config
 from kerko.storage import open_index
 from tests.integration_testing import SynchronizedTestCase

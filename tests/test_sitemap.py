@@ -5,7 +5,7 @@ Tests for the XML sitemap views.
 from flask import url_for
 from lxml import etree
 
-from kerko.search import Searcher
+from kerko.searcher import Searcher
 from kerko.storage import open_index
 from tests.integration_testing import SynchronizedTestCase
 

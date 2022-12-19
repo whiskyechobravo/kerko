@@ -1,4 +1,4 @@
-from kerko.search import Searcher
+from kerko.searcher import Searcher
 from kerko.shortcuts import composer, config
 from kerko.storage import open_index
 
