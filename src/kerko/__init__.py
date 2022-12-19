@@ -66,6 +66,8 @@ def init_default_config(state):
     state.app.config.setdefault('KERKO_RELATIONS_SORT', 'author_asc')
     state.app.config.setdefault('KERKO_RELATIONS_LINKS', False)
     state.app.config.setdefault('KERKO_FEEDS', ['atom'])
+    state.app.config.setdefault('KERKO_FEEDS_REQUIRE_ANY', {})
+    state.app.config.setdefault('KERKO_FEEDS_REJECT_ANY', {})
     state.app.config.setdefault('KERKO_USE_TRANSLATIONS', True)
 
     state.app.config.setdefault('KERKO_TEMPLATE_BASE', 'kerko/base.html.jinja2')
