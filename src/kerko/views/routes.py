@@ -11,14 +11,14 @@ from kerko import babel_domain, blueprint
 from kerko.criteria import create_feed_criteria, create_search_criteria
 from kerko.exceptions import except_abort
 from kerko.forms import SearchForm
-from kerko.search import Searcher
+from kerko.searcher import Searcher
 from kerko.shortcuts import composer, config
 from kerko.specs import SortSpec
 from kerko.storage import (SchemaError, SearchIndexError, get_doc_count,
                            get_storage_dir, load_object, open_index)
 from kerko.views import (item_creators, item_facets, item_meta, item_relations,
                          pager)
-from kerko.views.searching import search_list, search_single
+from kerko.views.search import search_list, search_single
 
 SITEMAP_URL_MAX_COUNT = 50000
 

@@ -5,7 +5,7 @@ import hashlib
 from flask import current_app
 
 from kerko.extractors import is_file_attachment
-from kerko.search import Searcher
+from kerko.searcher import Searcher
 from kerko.shortcuts import composer
 from kerko.storage import get_storage_dir, open_index
 from kerko.sync import zotero

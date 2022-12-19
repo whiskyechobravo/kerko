@@ -68,10 +68,10 @@ Possibly backwards incompatible changes (more or less internal API changes):
 - Rewrote the `criteria` module. `Criteria.keywords` and `Criteria.filters` work
   pretty much as before, but everything else has changed.
 - Rewrote the `query` module, which had organically grown into an tangled mess,
-  now replaced with the `search` module. This new API is completely different.
-- Adapted view code to the above-mentioned `search` API.
+  now replaced with the `searcher` module. This new API is completely different.
+- Adapted view code to the above-mentioned `searcher` API.
 - Split the monolithic `views` module into multiple modules under `views`
-  (`item_creators`, `item_facets`, `item_relations`, `routes`, `searching`), and
+  (`item_creators`, `item_facets`, `item_relations`, `routes`, `search`), and
   moved `breadbox`, `meta` (as `item_meta`), `pager`, and `sorter` under
   `views`.
 
