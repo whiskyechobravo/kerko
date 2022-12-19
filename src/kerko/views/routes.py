@@ -92,7 +92,8 @@ def atom_feed():
             page_len=criteria.options.get('page-len', config('KERKO_PAGE_LEN')),
             keywords=criteria.keywords,
             filters=criteria.filters,
-            reject_any={'item_type': ['note', 'attachment']},
+            require_any=config('KERKO_FEEDS_REQUIRE_ANY'),
+            reject_any={'item_type': ['note', 'attachment'], **config('KERKO_FEEDS_REJECT_ANY')},
             sort_spec=sort_spec,
             faceting=False,
         )
