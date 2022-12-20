@@ -1,10 +1,10 @@
 import math
 import time
 from collections import deque
-from datetime import datetime
+from datetime import datetime, timedelta
 
-from flask import (abort, flash, make_response, redirect, render_template,
-                   request, send_from_directory, url_for)
+from flask import (abort, current_app, flash, make_response, redirect,
+                   render_template, request, send_from_directory, url_for)
 from flask_babel import get_locale, gettext
 
 from kerko import babel_domain, blueprint
@@ -77,16 +77,26 @@ def atom_feed():
     criteria = create_feed_criteria(request.args)
     index = open_index('index')
     with Searcher(index) as searcher:
+        extra_args = {}
+
         sort_field = composer().fields.get('sort_date_added')
         if sort_field:
-            sort_spec = SortSpec(
+            extra_args['sort_spec'] = SortSpec(
                 key='date_added_desc',
                 label='',
                 fields=[sort_field],
                 reverse=True,
             )
-        else:
-            sort_spec = None
+
+        if config('KERKO_FEEDS_MAX_DAYS'):
+            today = datetime.today()
+            start = datetime(today.year, today.month,
+                             today.day) - timedelta(config('KERKO_FEEDS_MAX_DAYS'))
+            current_app.logger.debug(
+                f"Feed max days: {config('KERKO_FEEDS_MAX_DAYS')} ⇒ items dated {start} and newer."
+            )
+            extra_args['require_date_ranges'] = {'filter_date': (start, None)}
+
         results = searcher.search_page(
             page=criteria.options.get('page', 1),
             page_len=criteria.options.get('page-len', config('KERKO_PAGE_LEN')),
@@ -94,8 +104,8 @@ def atom_feed():
             filters=criteria.filters,
             require_any=config('KERKO_FEEDS_REQUIRE_ANY'),
             reject_any={'item_type': ['note', 'attachment'], **config('KERKO_FEEDS_REJECT_ANY')},
-            sort_spec=sort_spec,
             faceting=False,
+            **extra_args,
         )
         if results.is_empty():
             items = []

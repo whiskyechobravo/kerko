@@ -6,6 +6,7 @@ from itertools import chain
 from flask_babel import gettext
 from whoosh.qparser import MultifieldParser, plugins
 from whoosh.query import And, Every, Not, Or, Term
+from whoosh.query.ranges import DateRange
 from whoosh.sorting import Count, Facets, FieldFacet
 
 from kerko.exceptions import except_raise
@@ -75,6 +76,7 @@ class Searcher:
         filters=None,
         require_all=None,
         require_any=None,
+        require_date_ranges=None,
         reject_any=None,
         sort_spec=None,
         faceting=False,
@@ -86,7 +88,7 @@ class Searcher:
             results.
         """
         self._prepare_keywords(keywords)
-        self._prepare_filters(filters, require_all, require_any, reject_any)
+        self._prepare_filters(filters, require_all, require_any, require_date_ranges, reject_any)
         self._prepare_sorting(sort_spec)
         if faceting:
             self._prepare_faceting()
@@ -128,7 +130,14 @@ class Searcher:
         else:
             self.search_args['query'] = Every()
 
-    def _prepare_filters(self, filters=None, require_all=None, require_any=None, reject_any=None):
+    def _prepare_filters(
+        self,
+        filters=None,
+        require_all=None,
+        require_any=None,
+        require_date_ranges=None,
+        reject_any=None,
+    ):
         """
         Prepare query filtering terms.
 
@@ -154,6 +163,13 @@ class Searcher:
             rejected from the results (values are expanded to a flat list of
             field, value pairs, which are combined with the `And` and `Not`
             boolean search operators).
+
+        :param dict require_date_ranges: A dict of date ranges that are all
+            required to match. Each key and value are, respectively, the schema
+            field name and a tuple with start and end `datetime` objects (the
+            range may be open at either end, using `None` instead of a
+            `datetime` instance). Items falling outside the date range will be
+            rejected from the results.
         """
         terms = []
         if require_all:
@@ -165,6 +181,9 @@ class Searcher:
                     for field_name, allow_values in require_any.items()
                     if field_name in self.field_specs.keys()]
             ))))
+        if require_date_ranges:
+            for field_key in require_date_ranges.keys() & self.field_specs.keys():
+                terms.append(DateRange(field_key, *require_date_ranges[field_key]))
         if reject_any:
             for field_name, reject_values in reject_any.items():
                 if field_name in self.field_specs.keys():

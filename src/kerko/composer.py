@@ -4,13 +4,13 @@ import whoosh
 from flask_babel import lazy_gettext as _
 from whoosh.analysis import CharsetFilter, LowercaseFilter, StemFilter
 from whoosh.analysis.tokenizers import RegexTokenizer
-from whoosh.fields import BOOLEAN, ID, NUMERIC, STORED, TEXT, Schema
+from whoosh.fields import BOOLEAN, DATETIME, ID, NUMERIC, STORED, TEXT, Schema
 from whoosh.query import Prefix, Term
 from whoosh.support.charset import accent_map
 from whoosh.util.text import rcompile
 
 from kerko import codecs, extractors, transformers
-from kerko.datetime import iso_to_timestamp
+from kerko.datetime import iso_to_datetime, iso_to_timestamp
 from kerko.specs import (CitationFormatSpec, FieldSpec, FlatFacetSpec,
                          RelationSpec, ScopeSpec, SortSpec, TreeFacetSpec)
 
@@ -1531,6 +1531,26 @@ class Composer:
                     extractor=extractors.TransformerExtractor(
                         extractor=extractors.ItemDataExtractor(key='dateModified'),
                         transformers=[iso_to_timestamp],
+                    )
+                )
+            )
+
+        #
+        # Fields for internal filtering.
+        #
+        if 'filter_date' not in exclude:
+            self.add_field(
+                FieldSpec(
+                    key='filter_date',
+                    field_type=DATETIME,
+                    extractor=extractors.ChainExtractor(
+                        extractors=[
+                            extractors.ParsedDatetimeExtractor(),
+                            extractors.TransformerExtractor(
+                                extractor=extractors.ItemDataExtractor(key='dateAdded'),
+                                transformers=[iso_to_datetime],
+                            ),
+                        ]
                     )
                 )
             )
