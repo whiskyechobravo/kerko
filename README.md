@@ -179,6 +179,10 @@ The following features are implemented in Kerko:
     * Feeds are provided in the [Atom syndication format][Atom].
     * Basic metadata is provided directly in the feeds, using both Atom and
       unqualified [Dublin Core][Dublin_Core] elements.
+    * An age limit may be configured to exclude older items from the feeds. This
+      may be useful to bibliographies that are frequently updated and mostly
+      meant to promote recent literature (all resources still remain visible to
+      the search interface regardless of their age).
 * Sitemap: an [XML Sitemap][XML_Sitemap] is automatically generated, and you may
   use it to help search engines discover your bibliographic records.
 * Exporting: users may export individual records as well as complete
@@ -390,6 +394,12 @@ override their default value:
 * `KERKO_FEEDS`: A list of syndication feed formats to publish. Defaults to
   `['atom']`. If set to an empty list, no web feed will be provided. The only
   supported format is `'atom'`.
+* `KERKO_FEEDS_MAX_DAYS`: The age (in number of days) of the oldest items
+  allowed into web feeds. The date field of the items are used for that purpose,
+  and when no date is available, the date the item was added to Zotero is used
+  instead. Defaults to `0` (no age limit). Note: When an item's date lacks the
+  month and/or day, the 12th month of the year and/or last day of the month are
+  used to determine its age.
 * `KERKO_FULLTEXT_SEARCH`: Allow full-text search of PDF attachments. Defaults
   to `True`. To get consistent results, see [Ensuring full-text indexing of your
   attachments in

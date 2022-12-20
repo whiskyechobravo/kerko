@@ -5,30 +5,19 @@ Functions for extracting data from Zotero items.
 import itertools
 import re
 from abc import ABC, abstractmethod
+from calendar import monthrange
 from collections.abc import Iterable
+from datetime import datetime
 
 from flask import Markup, current_app
 
+from kerko.datetime import parse_fuzzy_date
 from kerko.tags import TagGate
 from kerko.text import id_normalize, sort_normalize
 from kerko.transformers import (find_item_id_in_zotero_uri_links,
                                 find_item_id_in_zotero_uris_str)
 
 RECORD_SEPARATOR = '\x1e'
-
-
-def _parse_zotero_date(text):
-    """Parse a fuzzy date into a (year, month, day) tuple of numerical values."""
-    year = month = day = 0
-    matches = re.match(r'^([0-9]{4})(-([0-9]{2})(-([0-9]{2}))?)?', text)
-    if matches:
-        if matches.group(1):
-            year = int(matches.group(1))
-        if matches.group(3):
-            month = int(matches.group(3))
-        if matches.group(5):
-            day = int(matches.group(5))
-    return year, month, day
 
 
 def encode_single(value, spec):
@@ -171,6 +160,29 @@ class MultiExtractor(Extractor):
             elif value:
                 values.append(value)
         return values or None
+
+
+class ChainExtractor(Extractor):
+    """
+    Extract data using a chain of extractors.
+
+    When the an extractor returns `None`, the following one in the chain is
+    tried, until a value is found or no more extractors are left to try in the
+    chain.
+    """
+
+    def __init__(self, *, extractors, **kwargs):
+        super().__init__(**kwargs)
+        self.extractors = extractors
+
+    def extract(self, item, library_context, spec):
+        value = None
+        for extractor in self.extractors:
+            assert self.format == extractor.format  # Extractors can only use same format as parent.
+            value = extractor.extract(item, library_context, spec)
+            if value is not None:
+                break
+        return value
 
 
 class KeyExtractor(Extractor):  # pylint: disable=abstract-method
@@ -595,7 +607,7 @@ class YearExtractor(Extractor):
     def extract(self, item, library_context, spec):
         parsed_date = item.get('meta', {}).get('parsedDate', '')
         if parsed_date:
-            year, _month, _day = _parse_zotero_date(parsed_date)
+            year, _month, _day = parse_fuzzy_date(parsed_date)
             return str(year)
         return None
 
@@ -609,7 +621,7 @@ class YearFacetExtractor(Extractor):
     def extract(self, item, library_context, spec):
         parsed_date = item.get('meta', {}).get('parsedDate', '')
         if parsed_date:
-            year, _month, _day = _parse_zotero_date(parsed_date)
+            year, _month, _day = parse_fuzzy_date(parsed_date)
             decade = int(int(year) / 10) * 10
             century = int(int(year) / 100) * 100
             return _expand_paths([str(century), str(decade), str(year)])
@@ -620,6 +632,24 @@ class ItemDataLinkFacetExtractor(ItemDataExtractor):
 
     def extract(self, item, library_context, spec):
         return item.get('data', {}).get(self.key, '').strip() != ''
+
+
+class ParsedDatetimeExtractor(Extractor):
+
+    def extract(self, item, library_context, spec):
+        parsed_date = item.get('meta', {}).get('parsedDate', None)
+        if parsed_date:
+            year, month, day = parse_fuzzy_date(parsed_date, default_year=1, default_month=12)
+            if day == 0:
+                day = monthrange(year, month)[1]
+            try:
+                return datetime(year, month, day)
+            except ValueError:
+                try:
+                    return datetime(year)
+                except ValueError:
+                    return None
+        return None
 
 
 def _prepare_sort_text(text):
@@ -670,5 +700,5 @@ class SortDateExtractor(Extractor):
 
     def extract(self, item, library_context, spec):
         parsed_date = item.get('meta', {}).get('parsedDate', '')
-        year, month, day = _parse_zotero_date(parsed_date)
+        year, month, day = parse_fuzzy_date(parsed_date)
         return int('{:04d}{:02d}{:02d}'.format(year, month, day))

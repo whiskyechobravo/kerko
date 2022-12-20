@@ -2,10 +2,25 @@
 Date and time utilities.
 """
 
+import re
 from datetime import datetime
 
 from babel import dates
 from flask_babel import get_locale, get_timezone
+
+
+def parse_fuzzy_date(text, default_year=0, default_month=0, default_day=0):
+    """Parse a fuzzy date into a (year, month, day) tuple of numerical values."""
+    year, month, day = default_year, default_month, default_day
+    matches = re.match(r'^([0-9]{4})(-([0-9]{2})(-([0-9]{2}))?)?', text)
+    if matches:
+        if matches.group(1):
+            year = int(matches.group(1))
+        if matches.group(3):
+            month = int(matches.group(3))
+        if matches.group(5):
+            day = int(matches.group(5))
+    return year, month, day
 
 
 def reformat_date(value, **kwargs):
@@ -82,6 +97,18 @@ def iso_to_timestamp(date_str):
 
     :return int: Timestamp rounded to an integer.
     """
-    return round(datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%SZ').timestamp())
+    return round(iso_to_datetime(date_str).timestamp())
+
+
+def iso_to_datetime(date_str):
+    """
+    Convert an ISO 8601 date string to a `datetime` object.
+
+    Note: This does not accept all ISO 8601 strings, but just the following
+    format: %Y-%m-%dT%H:%M:%SZ
+
+    :return datetime: `datetime` object.
+    """
+    return datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%SZ')
     # Note: Using strptime() instead of fromisoformat(), because the latter only
     # accepts the specific string format since Python 3.11+.
