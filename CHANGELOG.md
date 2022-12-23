@@ -40,6 +40,7 @@ Other changes:
 - Make facet values with long labels easier to read (by indenting wrapped lines
   to the right of the checkbox).
 - Add blocks in templates to facilitate theming.
+- Remove `page` parameter from pagination links when `page=1`.
 - Improve documentation.
 - Make sync and schema-related error messages more helpful and user-friendly.
 - Move pydocstyle config to `pyproject.toml`.

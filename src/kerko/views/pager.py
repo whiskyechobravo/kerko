@@ -58,7 +58,7 @@ def build_pager(sections, criteria, page_options=None, endpoint='kerko.search'):
                         endpoint,
                         **criteria.params(
                             options={
-                                'page': p,
+                                'page': p if p > 1 else None,
                                 **(page_options.get(p, {}) if page_options else {})
                             }
                         ),
