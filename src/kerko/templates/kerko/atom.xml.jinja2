@@ -4,6 +4,12 @@
         {%- block feed_title %}
             <title type="html">{{ config.KERKO_TITLE|escape }} - {{ feed_title|escape }}</title>
         {%- endblock %}
+        {%- block feed_author %}
+            <author>
+                <name>{{ config.KERKO_TITLE|escape }}</name>
+                <uri>{{ url_for('kerko.search', _external=True) }}</uri>
+            </author>
+        {%- endblock %}
         <link rel="alternate" href="{{ html_url }}"/>
         <link rel="self" href="{{ feed_url }}"/>
         {#- RFC 5005 paged feed links #}
