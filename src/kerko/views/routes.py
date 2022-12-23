@@ -87,15 +87,27 @@ def atom_feed():
                 fields=[sort_field],
                 reverse=True,
             )
+        else:
+            current_app.logger.warning(
+                "Feed cannot be sorted because the 'sort_date_added' was "
+                "removed from the configuration."
+            )
 
         if config('KERKO_FEEDS_MAX_DAYS'):
-            today = datetime.today()
-            start = datetime(today.year, today.month,
-                             today.day) - timedelta(config('KERKO_FEEDS_MAX_DAYS'))
-            current_app.logger.debug(
-                f"Feed max days: {config('KERKO_FEEDS_MAX_DAYS')} ⇒ items dated {start} and newer."
-            )
-            extra_args['require_date_ranges'] = {'filter_date': (start, None)}
+            if 'filter_date' in composer().fields:
+                today = datetime.today()
+                start = datetime(today.year, today.month,
+                                 today.day) - timedelta(config('KERKO_FEEDS_MAX_DAYS'))
+                current_app.logger.debug(
+                    f"Show items dated {start} and newer"
+                    f" (KERKO_FEEDS_MAX_DAYS == {config('KERKO_FEEDS_MAX_DAYS')})."
+                )
+                extra_args['require_date_ranges'] = {'filter_date': (start, None)}
+            else:
+                current_app.logger.warning(
+                    "'KERKO_FEEDS_MAX_DAYS' is set but has no effect because the "
+                    "'filter_date' field was removed from the configuration."
+                )
 
         results = searcher.search_page(
             page=criteria.options.get('page', 1),
