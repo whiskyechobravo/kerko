@@ -1545,7 +1545,7 @@ class Composer:
                     field_type=DATETIME,
                     extractor=extractors.ChainExtractor(
                         extractors=[
-                            extractors.ParsedDatetimeExtractor(),
+                            extractors.MaximizeParsedDateExtractor(),
                             extractors.TransformerExtractor(
                                 extractor=extractors.ItemDataExtractor(key='dateAdded'),
                                 transformers=[iso_to_datetime],

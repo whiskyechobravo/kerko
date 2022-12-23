@@ -3,14 +3,20 @@ Date and time utilities.
 """
 
 import re
+from calendar import monthrange
 from datetime import datetime
 
 from babel import dates
 from flask_babel import get_locale, get_timezone
 
 
-def parse_fuzzy_date(text, default_year=0, default_month=0, default_day=0):
-    """Parse a fuzzy date into a (year, month, day) tuple of numerical values."""
+def parse_partial_date(text, default_year=0, default_month=0, default_day=0):
+    """
+    Parse a partial date into a (year, month, day) tuple of numerical values.
+
+    If year, month, and/or day is missing, replace it with the specified default
+    value.
+    """
     year, month, day = default_year, default_month, default_day
     matches = re.match(r'^([0-9]{4})(-([0-9]{2})(-([0-9]{2}))?)?', text)
     if matches:
@@ -20,6 +26,31 @@ def parse_fuzzy_date(text, default_year=0, default_month=0, default_day=0):
             month = int(matches.group(3))
         if matches.group(5):
             day = int(matches.group(5))
+    return year, month, day
+
+
+def maximize_partial_date(year, month, day):
+    """
+    Maximize the values of a (potentially) partial date.
+
+    If `year`, `month`, and/or `day` is `0`, replace with the maximum calendar
+    value. If all are `0`, return today's date. If the known date parts match
+    today's corresponding date parts, complete the date with today's parts
+    instead of the maximum calendar value.
+    """
+    today = datetime.today()
+    if year == 0:
+        year, month, day = today.year, today.month, today.day
+    if month == 0:
+        if year == today.year:
+            month, day = today.month, today.day
+        else:
+            month = 12
+    if day == 0:
+        if year == today.year and month == today.month:
+            day = today.day
+        else:
+            day = monthrange(year, month)[1]  # Use last day of the month.
     return year, month, day
 
 

@@ -5,13 +5,12 @@ Functions for extracting data from Zotero items.
 import itertools
 import re
 from abc import ABC, abstractmethod
-from calendar import monthrange
 from collections.abc import Iterable
 from datetime import datetime
 
 from flask import Markup, current_app
 
-from kerko.datetime import parse_fuzzy_date
+from kerko.datetime import maximize_partial_date, parse_partial_date
 from kerko.tags import TagGate
 from kerko.text import id_normalize, sort_normalize
 from kerko.transformers import (find_item_id_in_zotero_uri_links,
@@ -607,7 +606,7 @@ class YearExtractor(Extractor):
     def extract(self, item, library_context, spec):
         parsed_date = item.get('meta', {}).get('parsedDate', '')
         if parsed_date:
-            year, _month, _day = parse_fuzzy_date(parsed_date)
+            year, _month, _day = parse_partial_date(parsed_date)
             return str(year)
         return None
 
@@ -621,7 +620,7 @@ class YearFacetExtractor(Extractor):
     def extract(self, item, library_context, spec):
         parsed_date = item.get('meta', {}).get('parsedDate', '')
         if parsed_date:
-            year, _month, _day = parse_fuzzy_date(parsed_date)
+            year, _month, _day = parse_partial_date(parsed_date)
             decade = int(int(year) / 10) * 10
             century = int(int(year) / 100) * 100
             return _expand_paths([str(century), str(decade), str(year)])
@@ -634,21 +633,16 @@ class ItemDataLinkFacetExtractor(ItemDataExtractor):
         return item.get('data', {}).get(self.key, '').strip() != ''
 
 
-class ParsedDatetimeExtractor(Extractor):
+class MaximizeParsedDateExtractor(Extractor):
+    """Extract and "maximize" a `datetime` object from the item's `parsedDate` meta field."""
 
     def extract(self, item, library_context, spec):
         parsed_date = item.get('meta', {}).get('parsedDate', None)
         if parsed_date:
-            year, month, day = parse_fuzzy_date(parsed_date, default_year=1, default_month=12)
-            if day == 0:
-                day = monthrange(year, month)[1]
             try:
-                return datetime(year, month, day)
+                return datetime(*maximize_partial_date(*parse_partial_date(parsed_date)))
             except ValueError:
-                try:
-                    return datetime(year)
-                except ValueError:
-                    return None
+                pass
         return None
 
 
@@ -700,5 +694,5 @@ class SortDateExtractor(Extractor):
 
     def extract(self, item, library_context, spec):
         parsed_date = item.get('meta', {}).get('parsedDate', '')
-        year, month, day = parse_fuzzy_date(parsed_date)
+        year, month, day = parse_partial_date(parsed_date)
         return int('{:04d}{:02d}{:02d}'.format(year, month, day))
