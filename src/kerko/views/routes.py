@@ -151,7 +151,11 @@ def atom_feed():
             feed_url=url_for(
                 '.atom_feed',
                 _external=True,
-                **criteria.params(options={'page': None}),
+                **criteria.params(
+                    options={
+                        'page': criteria.options['page'] if criteria.options['page'] > 1 else None
+                    }
+                ),
             ),
             html_url=url_for(
                 '.search',
