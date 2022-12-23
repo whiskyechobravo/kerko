@@ -394,12 +394,21 @@ override their default value:
 * `KERKO_FEEDS`: A list of syndication feed formats to publish. Defaults to
   `['atom']`. If set to an empty list, no web feed will be provided. The only
   supported format is `'atom'`.
+* `KERKO_FEEDS_FIELDS`: List of fields to retrieve for each feed item (these may
+  be used by the `KERKO_TEMPLATE_ATOM_FEED` template). Values in this list are
+  keys identifying fields defined in the `kerko.composer.Composer` instance. One
+  probably only needs to change the default list when overriding the template to
+  display additional fields. Note that some fields from the default list may be
+  required by other Kerko functions.
 * `KERKO_FEEDS_MAX_DAYS`: The age (in number of days) of the oldest items
-  allowed into web feeds. The date field of the items are used for that purpose,
+  allowed into web feeds. The Date field of the items are used for that purpose,
   and when no date is available, the date the item was added to Zotero is used
-  instead. Defaults to `0` (no age limit). Note: When an item's date lacks the
-  month and/or day, the 12th month of the year and/or last day of the month are
-  used to determine its age.
+  instead. Defaults to `0` (no age limit). Unless your goal is to promote recent
+  literature only, you should probably ignore this setting. Note: Items with
+  missing dates will be considered as very recent, to prevent them from being
+  excluded from feeds. For the same reason, items whose date lack the month
+  and/or the day will be considered as from the 12th month of the year and/or
+  the last day of the month.
 * `KERKO_FULLTEXT_SEARCH`: Allow full-text search of PDF attachments. Defaults
   to `True`. To get consistent results, see [Ensuring full-text indexing of your
   attachments in
@@ -454,6 +463,8 @@ override their default value:
   `kerko/search-item.html.jinja2`.
 * `KERKO_TEMPLATE_ITEM`: Name of the Jinja2 template to render for the
   bibliographic record view. Defaults to `kerko/item.html.jinja2`.
+* `KERKO_TEMPLATE_ATOM_FEED`: Name of the Jinja2 template used to render an Atom
+  feed. Defaults to `kerko/atom.xml.jinja2`.
 * `KERKO_TEMPLATE_LAYOUT`: Name of the Jinja2 template that is extended by the
   search, search-item, and item templates. Defaults to `kerko/layout.html.jinja2`.
 * `KERKO_TEMPLATE_BASE`: Name of the Jinja2 template that is extended by the

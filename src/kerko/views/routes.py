@@ -114,7 +114,7 @@ def atom_feed():
             page_len=criteria.options.get('page-len', config('KERKO_PAGE_LEN')),
             keywords=criteria.keywords,
             filters=criteria.filters,
-            require_any=config('KERKO_FEEDS_REQUIRE_ANY'),
+            require_any=config('KERKO_FEEDS_REQUIRE_ANY'),  # Apply custom filtering, if not None.
             reject_any={'item_type': ['note', 'attachment'], **config('KERKO_FEEDS_REJECT_ANY')},
             faceting=False,
             **extra_args,
@@ -122,7 +122,7 @@ def atom_feed():
         if results.is_empty():
             items = []
         else:
-            items = results.items(composer().select_fields(['id', 'data']))
+            items = results.items(composer().select_fields(config('KERKO_FEEDS_FIELDS')))
             for item in items:
                 item_creators.inject_creator_display_names(item)
         context['items'] = items
