@@ -1,7 +1,8 @@
+import time
 from datetime import datetime
 
 from babel.numbers import format_decimal
-from flask import redirect, url_for
+from flask import redirect, render_template, url_for
 from flask_babel import get_locale, gettext, ngettext
 from werkzeug.datastructures import MultiDict
 
@@ -58,7 +59,7 @@ def _get_page_item_ids(criteria, page_numbers, current_item_id):
     return item_ids
 
 
-def empty_results(criteria):
+def empty_results(criteria, form):
     """Prepare the template context variables for an empty search results page."""
     context = {}
     facets = {}
@@ -81,11 +82,18 @@ def empty_results(criteria):
                 )
                 facets.update(results.facets(composer().facets, criteria, active_only=True))
     context['breadbox'] = breadbox.build_breadbox(criteria, facets)
-    return config('KERKO_TEMPLATE_SEARCH'), context
+    return render_template(
+        config('KERKO_TEMPLATE_SEARCH'),
+        form=form,
+        locale=get_locale(),
+        is_searching=criteria.is_searching(),
+        **context,
+    )
 
 
-def search_single(criteria):
+def search_single(criteria, form):
     """Perform search, and prepare template context for a results page containing a single item."""
+    start_time = time.process_time()
     context = {}
     index = open_index('index')
     with Searcher(index) as searcher:
@@ -105,7 +113,7 @@ def search_single(criteria):
             return redirect(url_for('.item_view', item_id=criteria_id, _external=True), 301)
 
         if results.is_empty():
-            return empty_results(criteria)
+            return empty_results(criteria, form)
 
         criteria.fit_page(results.page_count)
         if criteria.is_searching():
@@ -151,11 +159,19 @@ def search_single(criteria):
                 }
             )
         )
-    return config('KERKO_TEMPLATE_SEARCH_ITEM'), context
+    return render_template(
+        config('KERKO_TEMPLATE_SEARCH_ITEM'),
+        form=form,
+        time=time.process_time() - start_time,
+        locale=get_locale(),
+        is_searching=criteria.is_searching(),
+        **context,
+    )
 
 
-def search_list(criteria):
+def search_list(criteria, form):
     """Perform search, and prepare the template context variables for a list of search results."""
+    start_time = time.process_time()
     context = {}
     index = open_index('index')
     with Searcher(index) as searcher:
@@ -180,7 +196,7 @@ def search_list(criteria):
             )
 
         if results.is_empty():
-            return empty_results(criteria)
+            return empty_results(criteria, form)
 
         criteria.fit_page(results.page_count)
 
@@ -258,5 +274,11 @@ def search_list(criteria):
                 last_sync,
                 tz=datetime.now().astimezone().tzinfo,
             )
-
-    return config('KERKO_TEMPLATE_SEARCH'), context
+    return render_template(
+        config('KERKO_TEMPLATE_SEARCH'),
+        form=form,
+        time=time.process_time() - start_time,
+        locale=get_locale(),
+        is_searching=criteria.is_searching(),
+        **context,
+    )

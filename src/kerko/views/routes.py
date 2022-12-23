@@ -28,8 +28,6 @@ SITEMAP_URL_MAX_COUNT = 50000
 @except_abort(SearchIndexError, 503)
 def search():
     """View the results of a search."""
-    start_time = time.process_time()
-
     if config('KERKO_USE_TRANSLATIONS'):
         babel_domain.as_default()
 
@@ -49,17 +47,8 @@ def search():
             return redirect(url, 302)
 
     if criteria.options.get('page-len', config('KERKO_PAGE_LEN')) == 1:
-        template, context = search_single(criteria)
-    else:
-        template, context = search_list(criteria)
-    return render_template(
-        template,
-        form=form,
-        time=time.process_time() - start_time,
-        locale=get_locale(),
-        is_searching=criteria.is_searching(),
-        **context,
-    )
+        return search_single(criteria, form)
+    return search_list(criteria, form)
 
 
 @blueprint.route('/atom.xml', methods=['GET'])
