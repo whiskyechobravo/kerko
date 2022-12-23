@@ -7,33 +7,33 @@
         {%- block feed_author %}
             <author>
                 <name>{{ config.KERKO_TITLE|escape }}</name>
-                <uri>{{ url_for('kerko.search', _external=True) }}</uri>
+                <uri>{{ url_for('kerko.search', _external=True)|escape }}</uri>
             </author>
         {%- endblock %}
-        <link rel="alternate" href="{{ html_url }}"/>
-        <link rel="self" href="{{ feed_url }}"/>
+        <link rel="alternate" href="{{ html_url|escape }}"/>
+        <link rel="self" href="{{ feed_url|escape }}"/>
         {#- RFC 5005 paged feed links #}
         {%- if pager.first %}
-            <link rel="first" href="{{ pager.first[0].url }}"/>
+            <link rel="first" href="{{ pager.first[0].url|escape }}"/>
         {%- endif %}
         {%- if pager.previous %}
-            <link rel="previous" href="{{ pager.previous[0].url }}"/>
+            <link rel="previous" href="{{ pager.previous[0].url|escape }}"/>
         {%- endif %}
         {%- if pager.next %}
-            <link rel="next" href="{{ pager.next[0].url }}"/>
+            <link rel="next" href="{{ pager.next[0].url|escape }}"/>
         {%- endif %}
         {%- if pager.last %}
-            <link rel="last" href="{{ pager.last[0].url }}"/>
+            <link rel="last" href="{{ pager.last[0].url|escape }}"/>
         {%- endif %}
         <updated>{{ last_sync }}</updated>
-        <id>{{ feed_url }}</id>
+        <id>{{ feed_url|escape }}</id>
     {%- endblock %}
     {%- block feed_entries %}
         {%- for item in items %}
             <entry>
                 <title type="html">{{ item.data.title|escape }}</title>
-                <link href="{{ url_for('kerko.item_view', item_id=item.id, _external=True) }}"/>
-                <id>{{ url_for('kerko.item_view', item_id=item.id, _external=True) }}</id>
+                <link href="{{ url_for('kerko.item_view', item_id=item.id, _external=True)|escape }}"/>
+                <id>{{ url_for('kerko.item_view', item_id=item.id, _external=True)|escape }}</id>
                 <published>{{ item.data.dateAdded|escape }}</published>
                 <updated>{{ item.data.dateModified|escape }}</updated>
                 {%- if item.data.abstractNote %}
@@ -50,7 +50,7 @@
                     {%- endif %}
                 {%- endwith %}
                 {%- if item.data.DOI %}
-                    <dc:identifier>{{ item.data.DOI|escape|kerko_urlize_doi(link=False) }}</dc:identifier>
+                    <dc:identifier>{{ item.data.DOI|escape|kerko_urlize_doi(link=False)|escape }}</dc:identifier>
                     {#- TODO: If item.data.DOI empty, check if it can be parsed from the Extra field. #}
                 {%- endif %}
                 {%- if item.data.ISBN %}
