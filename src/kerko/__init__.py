@@ -66,6 +66,7 @@ def init_default_config(state):
     state.app.config.setdefault('KERKO_RELATIONS_SORT', 'author_asc')
     state.app.config.setdefault('KERKO_RELATIONS_LINKS', False)
     state.app.config.setdefault('KERKO_FEEDS', ['atom'])
+    state.app.config.setdefault('KERKO_FEEDS_FIELDS', ['id', 'data'])
     state.app.config.setdefault('KERKO_FEEDS_REQUIRE_ANY', {})
     state.app.config.setdefault('KERKO_FEEDS_REJECT_ANY', {})
     state.app.config.setdefault('KERKO_FEEDS_MAX_DAYS', 0)
