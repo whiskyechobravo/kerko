@@ -135,7 +135,9 @@ def atom_feed():
     response = make_response(
         render_template(
             config('KERKO_TEMPLATE_ATOM_FEED'),
-            pager=pager.build_pager(pager_sections, criteria, endpoint='kerko.atom_feed'),
+            pager=pager.build_pager(
+                pager_sections, criteria, endpoint='kerko.atom_feed', _external=True
+            ),
             page_len=config('KERKO_PAGE_LEN'),
             feed_url=url_for(
                 '.atom_feed',
