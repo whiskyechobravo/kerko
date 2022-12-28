@@ -56,7 +56,10 @@ def inject_relations(item):
     # lists, except for the COinS field because we don't want it to get rendered
     # when displaying relations.
     related_item_fields = composer().select_fields(
-        [key for key in config('KERKO_RESULTS_FIELDS') if key != 'coins'],
+        [
+            key for key in config('KERKO_RESULTS_FIELDS') +
+            [badge.field.key for badge in composer().badges.values()] if key != 'coins'
+        ],
     )
     index = open_index('index')
     with Searcher(index) as searcher:
