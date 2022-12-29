@@ -555,26 +555,27 @@ Some frequently used commands are:
 # List all commands provided by Kerko:
 flask kerko --help
 
-# Delete all of Kerko's data.
+# Delete all of Kerko's data: cache, search index, attachments.
 flask kerko clean
 
 # Get help about the clean command:
 flask kerko clean --help
 
-# Synchronize everything from Zotero.
+# Synchronize everything: the cache (from Zotero), the search index (from the
+# cache), the attachments (from files in Zotero, based on list in search index).
 flask kerko sync
 
 # Get help about the sync command:
 flask kerko sync --help
 
-# Delete the cache (the next sync will perform a full update from Zotero, but
-# it will not re-download all file attachments).
+# Delete the cache. A subsequent 'flask kerko sync' will perform a full update
+# from Zotero, but it will not re-download all file attachments.
 flask kerko clean cache
 
 # Delete just the search index.
 flask kerko clean index
 
-# Synchronize just the search index.
+# Synchronize just the search index (from the cache).
 flask kerko sync index
 ```
 
