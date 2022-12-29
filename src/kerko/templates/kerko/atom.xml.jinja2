@@ -27,6 +27,7 @@
         {%- endif %}
         <updated>{{ last_sync }}</updated>
         <id>{{ feed_url|escape }}</id>
+        <generator uri="https://github.com/whiskyechobravo/kerko">Kerko</generator>
     {%- endblock %}
     {%- block feed_entries %}
         {%- for item in items %}
