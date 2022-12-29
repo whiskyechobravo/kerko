@@ -1,5 +1,4 @@
 include LICENSE.txt
-include MANIFEST.in
 include babel.cfg
 include *.ini
 include *.md
