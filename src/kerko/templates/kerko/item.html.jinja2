@@ -52,10 +52,10 @@
 {%- endblock metas %}
 
 {%- block content_inner %}
-    <div class="mb-4 item-content">
+    <div class="mt-2 mb-4 item-content">
         {%- block item_actions %}
             {%- if item.attachments or config.KERKO_PRINT_ITEM_LINK or config.KERKO_COMPOSER.citation_formats %}
-                <div class="row my-3">
+                <div class="row my-2">
                     <div class="col-auto ml-auto text-right">
                         {%- if item.attachments|length > 1 %}
                             <div class="{% block attachment_links_wrapper_classes %}d-inline-block d-print-none mb-2{% endblock %}">
@@ -254,10 +254,21 @@
 {%- endblock content_footer %}
 
 {%- block content_header %}
-    <h1 class="{% block item_heading_classes %}h2 my-2 clearfix{% endblock %}">
-        {{- badges(item, mode='item') -}}
-        {{- title|escape -}}
-    </h1>
+    <div class="row">
+        <div class="{% block top_link_wrapper_classes %}col-auto ml-auto my-2 d-print-none{% endblock %}">
+            <a class="{% block top_btn_classes %}btn btn-primary{% endblock %}" href="{{ url_for('kerko.search') }}">
+                <span class="fas fa-arrow-up" aria-hidden="true"></span> {{ _("Full bibliography") }}
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="{% block item_heading_wrapper_classes %}col-auto my-3{% endblock %}">
+            <h1 class="{% block item_heading_classes %}h2 mb-0{% endblock %}">
+                {{- badges(item, mode='item') -}}
+                {{- title|escape -}}
+            </h1>
+        </div>
+    </div>
 {%- endblock content_header %}
 
 {%- block body_scripts %}
