@@ -32,6 +32,7 @@
     {%- block feed_entries %}
         {%- for item in items %}
             <entry>
+                {%- block feed_entry scoped %}
                 <title type="html">{{ item.data.title|escape }}</title>
                 <link href="{{ url_for('kerko.item_view', item_id=item.id, _external=True)|escape }}"/>
                 <id>{{ url_for('kerko.item_view', item_id=item.id, _external=True)|escape }}</id>
@@ -70,7 +71,8 @@
                     <dc:rights>{{ item.data.rights|escape }}</dc:rights>
                 {%- endif %}
                 <dc:title>{{ item.data.title|escape }}</dc:title>
+                {%- endblock %}{# /feed_entry #}
             </entry>
         {%- endfor %}
-    {%- endblock %}
+    {%- endblock %}{# /feed_entries #}
 </feed>
