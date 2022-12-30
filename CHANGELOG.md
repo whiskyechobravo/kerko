@@ -2,6 +2,11 @@
 
 ## Latest (unreleased)
 
+TBD.
+
+
+## 0.9 (2022-12-29)
+
 *Warning:* Upgrading from version 0.8.x or earlier will require that you rebuild
 your search index. Use the following commands, then restart the application:
 
@@ -39,6 +44,7 @@ Other changes:
 - Under each facet, always show the facet's active filters first.
 - Make facet values with long labels easier to read (by indenting wrapped lines
   to the right of the checkbox).
+- Add link to full bibliography from item pages.
 - Add blocks in templates to facilitate theming.
 - Remove `page` parameter from pagination links when `page=1`.
 - Improve documentation.
@@ -159,8 +165,8 @@ Other changes:
   'Europe/London' previously did not work, and times could not be converted
   to daylight saving times.
 - Change labels:
-    * "Print this citation" → "Print this record" (on item pages)
-    * "Download this citation" → "Download this record" (on item & search pages)
+    - "Print this citation" → "Print this record" (on item pages)
+    - "Download this citation" → "Download this record" (on item & search pages)
 - Inject blocks in item Jinja2 template to facilitate theming.
 - Slightly increase some top/bottom margins.
 - Add the `type` HTML attribute to record download links.
@@ -190,17 +196,17 @@ Possibly backwards incompatible changes (more or less internal API changes):
   `children` key). If you have created custom extractor classes, their
   `extract()` method will need to be adapted accordingly.
 - Some extractor classes have been renamed:
-    * `BaseAttachmentsExtractor` → `BaseChildAttachmentsExtractor`
-    * `BaseNotesExtractor` → `BaseChildNotesExtractor`
-    * `LinkedURIAttachmentsExtractor` → `ChildLinkedURIAttachmentsExtractor`
-    * `NotesTextExtractor` → `ChildNotesTextExtractor`
-    * `RawNotesExtractor` → `RawChildNotesExtractor`
-    * `RelationsInNotesExtractor` → `RelationsInChildNotesExtractor`
-    * `StoredFileAttachmentsExtractor` → `ChildFileAttachmentsExtractor`
+    - `BaseAttachmentsExtractor` → `BaseChildAttachmentsExtractor`
+    - `BaseNotesExtractor` → `BaseChildNotesExtractor`
+    - `LinkedURIAttachmentsExtractor` → `ChildLinkedURIAttachmentsExtractor`
+    - `NotesTextExtractor` → `ChildNotesTextExtractor`
+    - `RawNotesExtractor` → `RawChildNotesExtractor`
+    - `RelationsInNotesExtractor` → `RelationsInChildNotesExtractor`
+    - `StoredFileAttachmentsExtractor` → `ChildFileAttachmentsExtractor`
 - A view has been renamed:
-    * `item_attachment_download` → `child_attachment_download`
+    - `item_attachment_download` → `child_attachment_download`
 - A default field has been renamed:
-    * `alternateId` → `alternate_id`
+    - `alternateId` → `alternate_id`
 
 ## 0.7.1 (2021-02-04)
 
@@ -240,10 +246,10 @@ Features:
   ([#4](https://github.com/whiskyechobravo/kerko/issues/4)).
 - Show attached links to URIs on item pages.
 - Show relations on item pages. The relation types provided by default are:
-  * _Related_, based on Zotero's _Related_ field.
-  * _Cites_, managed through child notes containing Zotero URIs and tagged with
+  - _Related_, based on Zotero's _Related_ field.
+  - _Cites_, managed through child notes containing Zotero URIs and tagged with
     the `_cites` tag.
-  * _Cited by_, automatically inferred from _Cites_ relations.
+  - _Cited by_, automatically inferred from _Cites_ relations.
 - The Extra field is now searched when searching "in any fields".
 - Items that have a DOI, ISBN or ISSN identifier can be referenced by appending
   their identifier to your Kerko site's base URL.
