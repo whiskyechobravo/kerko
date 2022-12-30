@@ -71,8 +71,8 @@
                         <dc:rights>{{ item.data.rights|escape }}</dc:rights>
                     {%- endif %}
                     <dc:title>{{ item.data.title|escape }}</dc:title>
-                {%- endblock %}{# /feed_entry #}
+                {%- endblock feed_entry %}
             </entry>
         {%- endfor %}
-    {%- endblock %}{# /feed_entries #}
+    {%- endblock feed_entries %}
 </feed>
