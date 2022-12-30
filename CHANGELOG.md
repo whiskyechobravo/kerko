@@ -20,7 +20,7 @@ Features:
 - Add expand/collapse actions on facet values, allowing full exploration of
   hierarchical facets without changing the current search.
 - Add an optional initial limit on the number of values to show under each
-  facet. When the initial limit is reached, a "show more" button allow to user
+  facet. When the initial limit is reached, a "show more" button allows the user
   to expand the full list.
 - Add Atom syndication feeds.
 - Allow searching items by their Zotero key.
@@ -51,8 +51,6 @@ Other changes:
 - Make sync and schema-related error messages more helpful and user-friendly.
 - Move pydocstyle config to `pyproject.toml`.
 - Remove remnants of code aimed at Python versions older than 3.7.
-- Remove support for configuration variables `KERKO_ZOTERO_START` and
-  `KERKO_ZOTERO_END` (were only used for development and no longer practical).
 - Tag package as compatible with Python 3.10 and 3.11.
 - Remove leftover code related to Python versions older than 3.7
 
@@ -61,6 +59,8 @@ Backwards incompatible changes:
 - Remove the `KERKO_FACET_COLLAPSING` option. The new initial limit on facets
   values made this feature largely redundant.
 - Remove the `collapsible` param from the `FacetSpec` class.
+- Remove support for configuration variables `KERKO_ZOTERO_START` and
+  `KERKO_ZOTERO_END` (were only used for development and no longer practical).
 
 Changes that might break custom themes:
 
