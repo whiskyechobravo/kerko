@@ -10,8 +10,8 @@ from kerko.criteria import create_feed_criteria
 from kerko.searcher import Searcher
 from kerko.shortcuts import composer, config
 from kerko.storage import load_object, open_index
-from kerko.views import (breadbox, item_creators, item_facets, item_meta,
-                         item_relations, pager, sorter)
+from kerko.views import breadbox, pager, sorter
+from kerko.views.item import build_item_context, inject_item_data
 
 
 def _build_item_search_urls(items, criteria):
@@ -124,15 +124,9 @@ def search_single(criteria, form):
         # Load item with all available fields.
         item = results.items(composer().fields, composer().facets)[0]
         facets = results.facets(composer().facets, criteria, active_only=True)
-        item_creators.inject_creator_display_names(item)
-        item_relations.inject_relations(item)
-        item_facets.inject_facet_results(item)
 
-        context['item'] = item
-        context['item_url'] = url_for('.item_view', item_id=item['id'], _external=True)
-        context['title'] = item.get('data', {}).get('title', '')
-        context['highwirepress_tags'] = item_meta.build_highwirepress_tags(item)
-
+        inject_item_data(item)
+        context.update(build_item_context(item))
         context['total_count'] = results.item_count
         context['total_count_formatted'] = format_decimal(results.item_count, locale=get_locale())
         context['page_count'] = results.page_count
@@ -263,10 +257,10 @@ def search_list(criteria, form):
             [badge.field.key for badge in composer().badges.values()],
         )
         items = results.items(field_specs)
-        facets = results.facets(composer().facets, criteria)
+        results_facets = results.facets(composer().facets, criteria)
         context['search_results'] = zip(items, _build_item_search_urls(items, criteria))
-        context['facet_results'] = facets
-        context['breadbox'] = breadbox.build_breadbox(criteria, facets)
+        context['facet_results'] = results_facets
+        context['breadbox'] = breadbox.build_breadbox(criteria, results_facets)
 
         last_sync = load_object('index', 'last_update_from_zotero')
         if last_sync:

@@ -5,7 +5,7 @@ import re
 from flask import url_for
 
 from kerko.shortcuts import config
-from kerko.views.item_creators import format_creator_name
+from kerko.views.item.creators import format_creator_name
 
 
 def build_highwirepress_tags(item):  # pylint: disable=too-many-branches

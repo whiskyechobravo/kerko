@@ -16,8 +16,8 @@ from kerko.shortcuts import composer, config
 from kerko.specs import SortSpec
 from kerko.storage import (SchemaError, SearchIndexError, get_doc_count,
                            get_storage_dir, load_object, open_index)
-from kerko.views import (item_creators, item_facets, item_meta, item_relations,
-                         pager)
+from kerko.views import pager
+from kerko.views.item import build_item_context, creators, inject_item_data
 from kerko.views.search import search_list, search_single
 
 SITEMAP_URL_MAX_COUNT = 50000
@@ -113,7 +113,7 @@ def atom_feed():
         else:
             items = results.items(composer().select_fields(config('KERKO_FEEDS_FIELDS')))
             for item in items:
-                item_creators.inject_creator_display_names(item)
+                creators.inject_creator_display_names(item)
         context['items'] = items
         context['total_count'] = results.item_count
         criteria.fit_page(results.page_count or 1)
@@ -191,18 +191,12 @@ def item_view(item_id):
         if results.is_empty():
             return abort(404)
         item = results.items(composer().fields, composer().facets)[0]
-        item_url = url_for('.item_view', item_id=item['id'], _external=True)
         if fellback:
-            return redirect(item_url, 301)
-    item_creators.inject_creator_display_names(item)
-    item_relations.inject_relations(item)
-    item_facets.inject_facet_results(item)
+            return redirect(url_for('.item_view', item_id=item['id']), 301)
+    inject_item_data(item)
     return render_template(
         config('KERKO_TEMPLATE_ITEM'),
-        item=item,
-        item_url=item_url,
-        title=item.get('data', {}).get('title', ''),
-        highwirepress_tags=item_meta.build_highwirepress_tags(item),
+        **build_item_context(item),
         time=time.process_time() - start_time,
         locale=get_locale(),
     )
