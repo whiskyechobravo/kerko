@@ -21,7 +21,7 @@
                                     <span class="btn-toggle-icon-on fas fa-toggle-on" aria-hidden="true"></span>
                                     {{ _('"{}" button').format(_("Open in Zotero")) }}
                                 </button>
-                                <small id="open-in-zotero-app-toggle-help" class="form-text text-muted">{{ _('Enable or disable the display of the "{}" button on full bibliographic record pages. This button allows you to open the record in the Zotero application. It might be useful only if you have the Zotero application installed on your device, and if you were granted access to the Zotero library that holds the record.').format(_("Open in Zotero")) }}</small>
+                                <small id="open-in-zotero-app-toggle-help" class="form-text text-muted">{{ _('Show or hide the "{}" button on full bibliographic record pages. This button allows you to open the record in the Zotero application. It might be useful only if you have the Zotero application installed on your device, and if you were granted access to the Zotero library that holds the record.').format(_("Open in Zotero")) }}</small>
                             </div>
                         {%- endif %}
                         {%- if config.KERKO_OPEN_IN_ZOTERO_WEB %}
@@ -31,7 +31,7 @@
                                     <span class="btn-toggle-icon-on fas fa-toggle-on" aria-hidden="true"></span>
                                     {{ _('"{}" button').format(_("View on zotero.org")) }}
                                 </button>
-                                <small id="open-in-zotero-web-toggle-help" class="form-text text-muted">{{ _('Enable or disable the display of the "{}" button on full bibliographic record pages. This button allows you to view the record on zotero.org. It might be useful only if you were granted access to the Zotero library that holds the record.').format(_("View on zotero.org")) }}</small>
+                                <small id="open-in-zotero-web-toggle-help" class="form-text text-muted">{{ _('Show or hide the "{}" button on full bibliographic record pages. This button allows you to view the record on zotero.org. It might be useful only if you were granted access to the Zotero library that holds the record.').format(_("View on zotero.org")) }}</small>
                             </div>
                         {%- endif %}
                     {%- endblock preferences_open_in_zotero %}
