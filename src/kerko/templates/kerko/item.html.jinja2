@@ -103,12 +103,12 @@
                                 </div>
                             </div>
                         {%- endif %}
-                        {%- if config.KERKO_OPEN_IN_ZOTERO_APP %}
+                        {%- if config.KERKO_OPEN_IN_ZOTERO_APP and open_in_zotero_app_url %}
                             <div id="open-in-zotero-app" class="text-right d-inline-block d-print-none mb-2 {% if not open_in_zotero_app %}d-none-important{% endif %}">
                                 <a class="btn btn-light" href="{{ open_in_zotero_app_url }}"><span class="fas fa-external-link-alt" aria-hidden="true"></span> {{ _("Open in Zotero") }}</a>
                             </div>
                         {%- endif %}
-                        {%- if config.KERKO_OPEN_IN_ZOTERO_WEB %}
+                        {%- if config.KERKO_OPEN_IN_ZOTERO_WEB and open_in_zotero_web_url %}
                             <div id="open-in-zotero-web" class="text-right d-inline-block d-print-none mb-2 {% if not open_in_zotero_web %}d-none-important{% endif %}">
                                 <a class="btn btn-light" href="{{ open_in_zotero_web_url }}" target="_blank"><span class="fas fa-external-link-alt" aria-hidden="true"></span> {{ _("View on zotero.org") }}</a>
                             </div>
