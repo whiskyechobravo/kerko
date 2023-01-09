@@ -84,3 +84,12 @@ main {
   padding-top: 1rem;
   padding-bottom: 3rem;
 }
+.btn-toggle[active] > .btn-toggle-icon-off {
+  display: none;
+}
+.btn-toggle:not([active]) > .btn-toggle-icon-on {
+  display: none;
+}
+.d-none-important {
+  display: none !important;
+}

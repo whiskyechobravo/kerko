@@ -2,7 +2,21 @@
 
 ## Latest (unreleased)
 
-TBD.
+*Warning:* Upgrading from version 0.9 or earlier will require that you rebuild
+your search index. Use the following commands, then restart the application:
+
+```bash
+flask kerko clean index
+flask kerko sync index
+```
+
+Features:
+
+- Add optional "Open in Zotero" and "View on zotero.org" buttons to item pages.
+  These are disabled by default (see the new settings `KERKO_OPEN_IN_ZOTERO_APP`
+  and `KERKO_OPEN_IN_ZOTERO_WEB`). Even when these settings are enabled, a user
+  who wishes to use such button must first enable it from the (also
+  new) Preferences dialog.
 
 
 ## 0.9 (2022-12-29)

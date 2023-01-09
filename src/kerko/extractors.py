@@ -258,6 +258,37 @@ class ItemFieldsExtractor(Extractor):
         return None
 
 
+class ItemLinkExtractor(Extractor):
+    """Extract an item link from the 'links' element."""
+
+    def __init__(self, *, link_key, link_type, **kwargs):
+        super().__init__(**kwargs)
+        self.link_key = link_key
+        self.link_type = link_type
+
+    def extract(self, item, library_context, spec):
+        link = item.get('links', {}).get(self.link_key, {})
+        if link and link.get('type') == self.link_type:
+            return link.get('href')
+        return None
+
+
+class ZoteroWebItemURLExtractor(ItemLinkExtractor):
+    """Extract an item's zotero.org link."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(link_key='alternate', link_type='text/html', *args, **kwargs)
+
+
+class ZoteroAppItemURLExtractor(Extractor):
+    """Extract a link for opening the item in the Zotero app."""
+
+    def extract(self, item, library_context, spec):
+        if library_context.library_type == 'group':
+            return f"zotero://select/groups/{library_context.library_id}/items/{item.get('key')}"
+        return f"zotero://select/library/items/{item.get('key')}"
+
+
 class CreatorTypesExtractor(Extractor):
     """Extract creator types metadata."""
 

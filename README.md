@@ -471,6 +471,25 @@ override their default value:
 - `KERKO_TEMPLATE_BASE`: Name of the Jinja2 template that is extended by the
   layout template. Defaults to `kerko/base.html.jinja2`.
 - `KERKO_TITLE`: The title to display in web pages. Defaults to `'Kerko'`.
+- `KERKO_OPEN_IN_ZOTERO_APP`: On item pages, show a button for opening the
+  corresponding item in the Zotero application (through a link using the
+  `zotero://` protocol). If this option is set to `True`, a user will still need
+  to first enable the button from the Preferences menu (which can be accessed
+  from the footer of item pages and saves the user's choices in browser
+  cookies). For the link to work, the user must also have the Zotero application
+  installed, and have access to the Zotero library. This feature is generally
+  only useful to library editors and might confuse other users, especially if
+  your Zotero library is private. Thus you should probably enable this option
+  only if there is a strong need from the editors. Defaults to `False`.
+- `KERKO_OPEN_IN_ZOTERO_WEB`: On item pages, show a button for viewing the
+  corresponding item on zotero.org (through a regular hyperlink). If this option
+  is set to `True`, a user will still need to first enable the button from the
+  Preferences menu (which can be accessed from the footer of item pages and
+  saves the user's choices in browser cookies). For the link to work, the user
+  must also have access to the Zotero library. This feature is generally only
+  useful to library editors and might confuse other users, especially if your
+  Zotero library is private. Thus you should probably enable this option only if
+  there is a strong need from the editors. Defaults to `False`.
 - `KERKO_ZOTERO_BATCH_SIZE`: Number of items to request on each call to the
   Zotero API. Defaults to `100` (which is the maximum currently allowed by the
   API).

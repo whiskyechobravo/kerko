@@ -1483,6 +1483,24 @@ class Composer:
                     extractor=extractors.CreatorTypesExtractor(),
                 )
             )
+        # URL for opening item in Zotero app.
+        if 'zotero_app_url' not in exclude:
+            self.add_field(
+                FieldSpec(
+                    key='zotero_app_url',
+                    field_type=STORED,
+                    extractor=extractors.ZoteroAppItemURLExtractor(),
+                )
+            )
+        # URL of the item on zotero.org.
+        if 'zotero_web_url' not in exclude:
+            self.add_field(
+                FieldSpec(
+                    key='zotero_web_url',
+                    field_type=STORED,
+                    extractor=extractors.ZoteroWebItemURLExtractor(),
+                )
+            )
 
         #
         # Fields for sorting.
