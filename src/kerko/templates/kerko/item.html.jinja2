@@ -301,12 +301,10 @@
     {{- super() }}
     {%- block kerko_item_js %}
         <script src="{{ url_for('kerko.static', filename='kerko/js/item.js') }}?202008101934"></script>
-    {%- endblock kerko_item_js %}
-    {%- block open_in_zotero_js %}
         {%- if config.KERKO_OPEN_IN_ZOTERO_APP or config.KERKO_OPEN_IN_ZOTERO_WEB %}
             <script src="{{ url_for('kerko.static', filename='kerko/js/open_in_zotero.js') }}?20221016"></script>
         {%- endif %}
-    {%- endblock open_in_zotero_js %}
+    {%- endblock kerko_item_js %}
     {%- block kerko_print_js %}
         {%- if config.KERKO_PRINT_ITEM_LINK %}
             <script src="{{ url_for('kerko.static', filename='kerko/js/print.js') }}"></script>
