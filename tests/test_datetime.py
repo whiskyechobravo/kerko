@@ -183,105 +183,105 @@ class DateStringReformattingTestCase(unittest.TestCase):
     def test_iso8601_utc_en(self):
         current_app.config['BABEL_DEFAULT_LOCALE'] = 'en_US'
         current_app.config['BABEL_DEFAULT_TIMEZONE'] = 'UTC'
-        self.assertEqual(
+        self.assertRegex(
             reformat_date('2020-09-17T07:11:41+00:00', convert_tz=True),
-            '9/17/20, 7:11 AM'
+            r'9/17/20, 7:11\sAM'
         )
-        self.assertEqual(
+        self.assertRegex(
             reformat_date('2020-09-17T07:11:41+00:00', convert_tz=False),
-            '9/17/20, 7:11 AM'
+            r'9/17/20, 7:11\sAM'
         )
-        self.assertEqual(
+        self.assertRegex(
             reformat_date('2020-09-17T07:11:41+00:00', convert_tz=True, show_tz=True),
-            '9/17/20, 7:11 AM (UTC)'
+            r'9/17/20, 7:11\sAM\s\(UTC\)'
         )
-        self.assertEqual(
+        self.assertRegex(
             reformat_date('2020-11-07T12:30:19Z', convert_tz=True),
-            '11/7/20, 12:30 PM'
+            r'11/7/20, 12:30\sPM'
         )
-        self.assertEqual(
+        self.assertRegex(
             reformat_date('2020-11-07T12:30:19Z', convert_tz=False),
-            '11/7/20, 12:30 PM'
+            r'11/7/20, 12:30\sPM'
         )
-        self.assertEqual(
+        self.assertRegex(
             reformat_date('2020-11-07T12:30:19Z', convert_tz=True, show_tz=True),
-            '11/7/20, 12:30 PM (UTC)'
+            r'11/7/20, 12:30\sPM\s\(UTC\)'
         )
-        self.assertEqual(
+        self.assertRegex(
             reformat_date('2019-07-22T20:42+00:00', convert_tz=True),
-            '7/22/19, 8:42 PM'
+            r'7/22/19, 8:42\sPM'
         )
-        self.assertEqual(
+        self.assertRegex(
             reformat_date('2019-07-22T20:42+00:00', convert_tz=False),
-            '7/22/19, 8:42 PM'
+            r'7/22/19, 8:42\sPM'
         )
-        self.assertEqual(
+        self.assertRegex(
             reformat_date('2019-07-22T20:42+00:00', convert_tz=True, show_tz=True),
-            '7/22/19, 8:42 PM (UTC)'
+            r'7/22/19, 8:42\sPM\s\(UTC\)'
         )
-        self.assertEqual(
+        self.assertRegex(
             reformat_date('2020-11-07T12:30:19-0500', convert_tz=True),
-            '11/7/20, 5:30 PM'
+            r'11/7/20, 5:30\sPM'
         )
-        self.assertEqual(
+        self.assertRegex(
             reformat_date('2020-11-07T12:30:19-0500', convert_tz=False),
-            '11/7/20, 12:30 PM'
+            r'11/7/20, 12:30\sPM'
         )
-        self.assertEqual(
+        self.assertRegex(
             reformat_date('2020-11-07T12:30:19-0500', convert_tz=True, show_tz=True),
-            '11/7/20, 5:30 PM (UTC)'
+            r'11/7/20, 5:30\sPM\s\(UTC\)'
         )
 
     def test_iso8601_est_en(self):
         current_app.config['BABEL_DEFAULT_LOCALE'] = 'en_US'
         current_app.config['BABEL_DEFAULT_TIMEZONE'] = 'EST'
-        self.assertEqual(
+        self.assertRegex(
             reformat_date('2020-09-17T07:11:41+00:00', convert_tz=True),
-            '9/17/20, 2:11 AM'
+            r'9/17/20, 2:11\sAM'
         )
-        self.assertEqual(
+        self.assertRegex(
             reformat_date('2020-09-17T07:11:41+00:00', convert_tz=False),
-            '9/17/20, 7:11 AM'
+            r'9/17/20, 7:11\sAM'
         )
-        self.assertEqual(
+        self.assertRegex(
             reformat_date('2020-09-17T07:11:41+00:00', convert_tz=True, show_tz=True),
-            '9/17/20, 2:11 AM (EST)'
+            r'9/17/20, 2:11\sAM\s\(EST\)'
         )
-        self.assertEqual(
+        self.assertRegex(
             reformat_date('2020-11-07T12:30:19Z', convert_tz=True),
-            '11/7/20, 7:30 AM'
+            r'11/7/20, 7:30\sAM'
         )
-        self.assertEqual(
+        self.assertRegex(
             reformat_date('2020-11-07T12:30:19Z', convert_tz=False),
-            '11/7/20, 12:30 PM'
+            r'11/7/20, 12:30\sPM'
         )
-        self.assertEqual(
+        self.assertRegex(
             reformat_date('2020-11-07T12:30:19Z', convert_tz=True, show_tz=True),
-            '11/7/20, 7:30 AM (EST)'
+            r'11/7/20, 7:30\sAM\s\(EST\)'
         )
-        self.assertEqual(
+        self.assertRegex(
             reformat_date('2019-07-22T20:42+00:00', convert_tz=True),
-            '7/22/19, 3:42 PM'
+            r'7/22/19, 3:42\sPM'
         )
-        self.assertEqual(
+        self.assertRegex(
             reformat_date('2019-07-22T20:42+00:00', convert_tz=False),
-            '7/22/19, 8:42 PM'
+            r'7/22/19, 8:42\sPM'
         )
-        self.assertEqual(
+        self.assertRegex(
             reformat_date('2019-07-22T20:42+00:00', convert_tz=True, show_tz=True),
-            '7/22/19, 3:42 PM (EST)'
+            r'7/22/19, 3:42\sPM\s\(EST\)'
         )
-        self.assertEqual(
+        self.assertRegex(
             reformat_date('2020-11-07T12:30:19-0500', convert_tz=True),
-            '11/7/20, 12:30 PM'
+            r'11/7/20, 12:30\sPM'
         )
-        self.assertEqual(
+        self.assertRegex(
             reformat_date('2020-11-07T12:30:19-0500', convert_tz=False),
-            '11/7/20, 12:30 PM'
+            r'11/7/20, 12:30\sPM'
         )
-        self.assertEqual(
+        self.assertRegex(
             reformat_date('2020-11-07T12:30:19-0500', convert_tz=True, show_tz=True),
-            '11/7/20, 12:30 PM (EST)'
+            r'11/7/20, 12:30\sPM\s\(EST\)'
         )
 
     def test_non_iso8601_utc_fr(self):
