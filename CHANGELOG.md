@@ -18,6 +18,10 @@ Features:
   who wishes to use such button must first enable it from the (also
   new) Preferences dialog.
 
+Other changes:
+
+- Add Portuguese translation. Thanks to Gonçalo Cordeiro.
+
 
 ## 0.9 (2022-12-29)
 
@@ -305,7 +309,7 @@ Other changes:
 - Display ISO 8601 calendar dates in a more readable format, using the
   formatting style of the locale.
 - Show a timezone abbreviation along with time of last update from Zotero.
-- Add German translation. Thanks [@mmoole](https://github.com/mmoole).
+- Add German translation. Thanks to [@mmoole](https://github.com/mmoole).
 - Fix broken "Getting started" example in README.
 - Migrate most package distribution options and metadata from `setup.py` to
   `setup.cfg`.
