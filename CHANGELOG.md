@@ -68,7 +68,6 @@ Other changes:
 - Improve documentation.
 - Make sync and schema-related error messages more helpful and user-friendly.
 - Move pydocstyle config to `pyproject.toml`.
-- Remove remnants of code aimed at Python versions older than 3.7.
 - Tag package as compatible with Python 3.10 and 3.11.
 - Remove leftover code related to Python versions older than 3.7
 
