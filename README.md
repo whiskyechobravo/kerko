@@ -24,6 +24,7 @@ Contents:
   - [Configuration variables](#configuration-variables)
   - [Synchronization process](#synchronization-process)
   - [Command line interface (CLI)](#command-line-interface-cli)
+  - [API](#api)
   - [Known limitations](#known-limitations)
   - [Design choices](#design-choices)
   - [Kerko Recipes](#kerko-recipes)
@@ -598,6 +599,22 @@ flask kerko clean index
 # Synchronize just the search index (from the cache).
 flask kerko sync index
 ```
+
+
+## API
+
+At this time, Kerko only provides a single API endpoint.
+
+In the description below, `BASE_URL` should be replaced with the protocol,
+domain, and URL path prefix (as specified when registering the Kerko blueprint)
+that are relevant to your installation.
+
+- `BASE_URL/api/last-sync`: Returns a JSON object with information about the
+  last synchronization from Zotero. This may be used to monitor
+  synchronizations. If no sync has been performed, it returns an empty object,
+  otherwise the returned object contains the following key-value pairs:
+    - `'hours_ago'`: Number of hours since the last sync.
+    - `'when'`: ISO 8601 date string with the date and time of the last sync.
 
 
 ## Known limitations

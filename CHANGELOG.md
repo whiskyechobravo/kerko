@@ -17,6 +17,7 @@ Features:
   and `KERKO_OPEN_IN_ZOTERO_WEB`). Even when these settings are enabled, a user
   who wishes to use such button must first enable it from the (also
   new) Preferences dialog.
+- Add API for retrieving information about the last synchronization from Zotero.
 
 Other changes:
 

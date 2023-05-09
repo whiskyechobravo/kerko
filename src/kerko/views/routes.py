@@ -467,3 +467,16 @@ def sitemap(page_num):
     response = make_response(render_template('kerko/sitemap.xml.jinja2', items=items))
     response.headers['Content-Type'] = 'application/xml; charset=utf-8'
     return response
+
+
+@blueprint.route('/api/last-sync')
+def last_updated_on():
+    last_sync = load_object('index', 'last_update_from_zotero')
+    if last_sync:
+        return {
+            'when': datetime.fromtimestamp(
+                last_sync, tz=datetime.now().astimezone().tzinfo
+            ).isoformat(),
+            'hours_ago': round((time.time() - last_sync) / 3600, 3),
+        }
+    return {}
