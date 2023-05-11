@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import SelectField, validators
-from wtforms.fields.html5 import SearchField
+from wtforms.fields import SearchField
 
 from kerko.shortcuts import composer
 

@@ -8,7 +8,8 @@ import re
 import typing
 from urllib.parse import urlparse
 
-from jinja2 import Markup, evalcontextfilter
+from jinja2 import pass_eval_context
+from markupsafe import Markup
 from w3lib.url import safe_url_string
 
 from kerko.datetime import format_datetime, reformat_date
@@ -17,7 +18,7 @@ if typing.TYPE_CHECKING:
     from flask.blueprints import BlueprintSetupState
 
 
-@evalcontextfilter
+@pass_eval_context
 def urlize_doi(eval_ctx, doi, target=None, rel=None, link=True):
     """Convert the specified DOI to an URL."""
     if not re.match(r'^https?://', doi, flags=re.IGNORECASE):
@@ -35,7 +36,7 @@ def urlize_doi(eval_ctx, doi, target=None, rel=None, link=True):
     return result
 
 
-@evalcontextfilter
+@pass_eval_context
 def parse_and_urlize_doi(eval_ctx, text, target=None, rel=None):
     """Convert a DOI to an URL, on all lines having the 'DOI:' prefix."""
     target = f' target="{target}"' if target else ''
