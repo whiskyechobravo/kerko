@@ -251,7 +251,7 @@ instead.**
 
 Some familiarity with [Flask] should help you make more sense of the
 instructions, but should not be absolutely necessary for getting them to work.
-Let's now build a minimal app, which we'll call `hello_kerko.py`:
+Let's now build a minimal app:
 
 1. The first step is to install Kerko. As with any Python library, it is highly
    recommended to install Kerko within a [virtual environment][venv].
@@ -267,7 +267,6 @@ Let's now build a minimal app, which we'll call `hello_kerko.py`:
    content such as the example below:
 
    ```sh
-   FLASK_APP=hello_kerko
    SECRET_KEY="your-random-secret-key"  # Replace this value.
    KERKO_ZOTERO_API_KEY="xxxxxxxxxxxxxxxxxxxxxxxx"  # Replace this value.
    KERKO_ZOTERO_LIBRARY_ID="9999999"  # Replace this value.
@@ -276,8 +275,6 @@ Let's now build a minimal app, which we'll call `hello_kerko.py`:
 
    Here's the meaning of each variable:
 
-   - `FLASK_APP`: This variable contains the name of the application you will be
-     creating at the next step.
    - `SECRET_KEY`: This variable is required for generating secure tokens in web
      forms. It should have a hard to guess, random value, and should really
      remain secret.
@@ -291,7 +288,7 @@ Let's now build a minimal app, which we'll call `hello_kerko.py`:
    practice to keep this file only on the machine where the application is
    hosted, and to never push it to a code repository.
 
-3. Create a file named `hello_kerko.py` with the following content:
+3. Create a file named `wsgi.py` with the following content:
 
    ```python
    import pathlib
@@ -349,8 +346,8 @@ Let's now build a minimal app, which we'll call `hello_kerko.py`:
    The `url_prefix` argument defines the base path for every URL provided by
    Kerko.
 
-6. In the same directory as `hello_kerko.py` with your virtual environment
-   active, run the following shell commands:
+6. In the same directory as `wsgi.py` with your virtual environment active, run
+   the following shell commands:
 
    ```bash
    flask kerko sync
@@ -591,8 +588,7 @@ re-synchronizing from Zotero.
 ## Command line interface (CLI)
 
 Kerko provides an integration with the [Flask command line interface][Flask_CLI].
-The `flask` command will work with your virtual environment active, and with the
-`FLASK_APP` environment variable set to tell it where to find your application.
+The `flask` command will work with your virtual environment active.
 
 Some frequently used commands are:
 
