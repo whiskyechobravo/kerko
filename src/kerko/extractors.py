@@ -8,7 +8,8 @@ from abc import ABC, abstractmethod
 from collections.abc import Iterable
 from datetime import datetime
 
-from flask import Markup, current_app
+from flask import current_app
+from markupsafe import Markup
 
 from kerko.datetime import maximize_partial_date, parse_partial_date
 from kerko.tags import TagGate

@@ -326,10 +326,10 @@ Let's now build a minimal app:
 
    ```python
    from flask_babel import Babel
-   from flask_bootstrap import Bootstrap
+   from flask_bootstrap import Bootstrap4
 
    babel = Babel(app)
-   bootstrap = Bootstrap(app)
+   bootstrap = Bootstrap4(app)
    ```
 
    See the respective docs of [Flask-Babel][Flask-Babel_documentation] and

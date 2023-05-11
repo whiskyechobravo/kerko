@@ -13,7 +13,7 @@ import unittest
 import responses
 from flask import Flask, current_app
 from flask_babel import Babel, Domain
-from flask_bootstrap import Bootstrap
+from flask_bootstrap import Bootstrap4
 from kerko import blueprint as kerko_blueprint
 from kerko import extractors, transformers
 from kerko.composer import Composer
@@ -87,7 +87,7 @@ class MockLibraryTestCase(unittest.TestCase):
         cls._babel_domain = Domain()
         cls._babel = Babel(default_domain=cls._babel_domain)
         cls._babel.init_app(cls.app)
-        cls._bootstrap = Bootstrap()
+        cls._bootstrap = Bootstrap4()
         cls._bootstrap.init_app(cls.app)
 
     @classmethod
