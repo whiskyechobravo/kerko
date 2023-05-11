@@ -245,9 +245,9 @@ templates (but could be completely removed or replaced by your application):
 ## Getting started
 
 This section should help you understand the minimal steps required for getting
-Kerko to work within a Flask application. For a ready-to-use standalone
+Kerko to work within a Flask application. **For a ready-to-use standalone
 application, please refer to [KerkoApp's installation instructions][KerkoApp]
-instead.
+instead.**
 
 Some familiarity with [Flask] should help you make more sense of the
 instructions, but should not be absolutely necessary for getting them to work.
@@ -259,37 +259,62 @@ Let's now build a minimal app, which we'll call `hello_kerko.py`:
    Once the virtual environment is set and active, use the following command:
 
    ```bash
-   pip install kerko
+   pip install kerko environs
    ```
 
-2. In `hello_kerko.py`, configure variables required by Kerko and create your
-   `app` object, as in the example below:
+2. In the directory where you want to install your application, create a file
+   named `.env`, where variables required by Kerko will be configured, with
+   content such as the example below:
 
-   ```python
-   import pathlib
-
-   from flask import Flask
-   from kerko.composer import Composer
-
-   app = Flask(__name__)
-   app.config['SECRET_KEY'] = '_5#y2L"F4Q8z\n\xec]/'  # Replace this value.
-   app.config['KERKO_ZOTERO_API_KEY'] = 'xxxxxxxxxxxxxxxxxxxxxxxx'  # Replace this value.
-   app.config['KERKO_ZOTERO_LIBRARY_ID'] = '9999999'  # Replace this value.
-   app.config['KERKO_ZOTERO_LIBRARY_TYPE'] = 'group'  # Replace this value if necessary.
-   app.config['KERKO_DATA_DIR'] = str(pathlib.Path(__file__).parent / 'data' / 'kerko')
-   app.config['KERKO_COMPOSER'] = Composer()
+   ```sh
+   FLASK_APP=hello_kerko
+   SECRET_KEY="your-random-secret-key"  # Replace this value.
+   KERKO_ZOTERO_API_KEY="xxxxxxxxxxxxxxxxxxxxxxxx"  # Replace this value.
+   KERKO_ZOTERO_LIBRARY_ID="9999999"  # Replace this value.
+   KERKO_ZOTERO_LIBRARY_TYPE="group"  # Replace this value if necessary.
    ```
 
+   Here's the meaning of each variable:
+
+   - `FLASK_APP`: This variable contains the name of the application you will be
+     creating at the next step.
    - `SECRET_KEY`: This variable is required for generating secure tokens in web
-     forms. It should have a secure, random value and it really has to be
-     secret. It is usually set in an environment variable rather than in Python
-     code, to make sure it never ends up in a code repository. But here we're
-     taking the minimal route and thus are cutting some corners!
+     forms. It should have a hard to guess, random value, and should really
+     remain secret.
    - `KERKO_ZOTERO_API_KEY`, `KERKO_ZOTERO_LIBRARY_ID` and
      `KERKO_ZOTERO_LIBRARY_TYPE`: These variables are required for Kerko to be
      able to access your Zotero library. See [Configuration
      variables](#configuration-variables) for details on how to properly set
      these variables.
+
+   A `.env` file is a good place to store an application's secrets. It is good
+   practice to keep this file only on the machine where the application is
+   hosted, and to never push it to a code repository.
+
+3. Create a file named `hello_kerko.py` with the following content:
+
+   ```python
+   import pathlib
+
+   from environs import Env
+   from flask import Flask
+   from kerko.composer import Composer
+
+   env = Env()
+   env.read_env()
+
+   app = Flask(__name__)
+   app.config['SECRET_KEY'] = env.str('SECRET_KEY')
+   app.config['KERKO_ZOTERO_API_KEY'] = env.str('KERKO_ZOTERO_API_KEY')
+   app.config['KERKO_ZOTERO_LIBRARY_ID'] = env.str('KERKO_ZOTERO_LIBRARY_ID')
+   app.config['KERKO_ZOTERO_LIBRARY_TYPE'] = env.str('KERKO_ZOTERO_LIBRARY_TYPE')
+   app.config['KERKO_DATA_DIR'] = str(pathlib.Path(__file__).parent / 'data' / 'kerko')
+   app.config['KERKO_COMPOSER'] = Composer()
+   ```
+
+   This code creates the Flask application object (`app`), loads configuration
+   settings from the `.env` file, and sets two more configuration variables:
+
    - `KERKO_DATA_DIR`: This variable specifies the directory where to store the
      search index and the file attachments. If the specified directory does not
      already exists, Kerko will try to create it.
@@ -300,7 +325,7 @@ Let's now build a minimal app, which we'll call `hello_kerko.py`:
      alter fields, facets, sort options, search scopes, record download formats,
      or badges. See [Kerko Recipes](#kerko-recipes) for some examples.
 
-3. Also configure the Flask-Babel and Bootstrap-Flask extensions:
+4. Also configure the Flask-Babel and Bootstrap-Flask extensions:
 
    ```python
    from flask_babel import Babel
@@ -313,7 +338,7 @@ Let's now build a minimal app, which we'll call `hello_kerko.py`:
    See the respective docs of [Flask-Babel][Flask-Babel_documentation] and
    [Bootstrap-Flask][Bootstrap-Flask_documentation] for more details.
 
-4. Instantiate the Kerko blueprint and register it in your app:
+5. Instantiate the Kerko blueprint and register it in your app:
 
    ```python
    from kerko import blueprint as kerko_blueprint
@@ -324,11 +349,10 @@ Let's now build a minimal app, which we'll call `hello_kerko.py`:
    The `url_prefix` argument defines the base path for every URL provided by
    Kerko.
 
-5. In the same directory as `hello_kerko.py` with your virtual environment
+6. In the same directory as `hello_kerko.py` with your virtual environment
    active, run the following shell commands:
 
    ```bash
-   export FLASK_APP=hello_kerko.py
    flask kerko sync
    ```
 
@@ -344,19 +368,19 @@ Let's now build a minimal app, which we'll call `hello_kerko.py`:
    flask kerko --help
    ```
 
-6. Run your application:
+7. Run your application:
 
    ```bash
    flask run
    ```
 
-7. Open http://127.0.0.1:5000/bibliography/ in your browser and explore the
+8. Open http://127.0.0.1:5000/bibliography/ in your browser and explore the
    bibliography.
 
-You have just built a really minimal application for Kerko. This code example is
-available at [KerkoStart]. However, if you are looking at developing a custom
-Kerko application, we recommend that you consider [KerkoApp] as a starting
-point. While KerkoApp is still quite small, it adds some features and is more
+You have just built a really minimal application for Kerko. The full code
+example is available at [KerkoStart]. However, if you are looking at developing
+a custom Kerko application, we recommend that you use [KerkoApp] as a starting
+point. While KerkoApp is still small, it adds some features and is more
 production-ready than the above example.
 
 
