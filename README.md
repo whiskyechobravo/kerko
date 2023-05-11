@@ -350,7 +350,7 @@ Let's now build a minimal app:
    the following shell commands:
 
    ```bash
-   flask kerko sync
+   flask --debug kerko sync
    ```
 
    Kerko will retrieve your bibliographic data from zotero.org. If you have a
@@ -358,6 +358,10 @@ Let's now build a minimal app:
    no progress indicator). In production use, that command is usually added to
    the crontab file for regular execution (with enough time between executions
    for each to complete before the next one starts).
+
+   The `--debug` switch is optional. If you use it, some messages will give you
+   an idea of the sync process' progress. If you omit it, the command will run
+   silently unless there are warnings or errors.
 
    To list all commands provided by Kerko:
 
@@ -368,7 +372,7 @@ Let's now build a minimal app:
 7. Run your application:
 
    ```bash
-   flask run
+   flask --debug run
    ```
 
 8. Open http://127.0.0.1:5000/bibliography/ in your browser and explore the
@@ -540,9 +544,10 @@ override their default value:
     dictates the locale of Zotero item types, field names, creator types and
     citations. Defaults to `'en-US'`. Supported locales are listed at
     https://api.zotero.org/schema, under "locales".
-- `GOOGLE_ANALYTICS_ID`: A Google Analytics property ID, e.g., 'UA-99999-9'.
-  This variable is optional and there is no default value. If set, the Google
-  Analytics tag is inserted into the pages.
+- `GOOGLE_ANALYTICS_ID`: A Google Analytics stream ID, e.g., 'G-??????????'.
+  This variable is optional and there is no default value. If set and Flask is
+  not running in debug mode, then the Google Analytics tag is inserted into the
+  pages.
 
 **Caution:** Many of the configuration variables cause changes to the structure
 of Kerko's cache or search index. Changing those variables may require that you
@@ -632,9 +637,9 @@ that are relevant to your installation.
 - `BASE_URL/api/last-sync`: Returns a JSON object with information about the
   last synchronization from Zotero. This may be used to monitor
   synchronizations. If no sync has been performed, it returns an empty object,
-  otherwise the returned object contains the following key-value pairs:
-    - `'hours_ago'`: Number of hours since the last sync.
-    - `'when'`: ISO 8601 date string with the date and time of the last sync.
+  otherwise the returned object contains the following values:
+    - `hours_ago`: Number of hours since the last sync.
+    - `when`: ISO 8601 date string with the date and time of the last sync.
 
 
 ## Known limitations
