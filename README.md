@@ -1035,7 +1035,7 @@ If you wish to add your Kerko-powered online bibliography to this list, please
 [pytz]: https://pypi.org/project/pytz/
 [Pyzotero]: https://pypi.org/project/Pyzotero/
 [Snowball]: https://snowballstem.org/
-[venv]: https://docs.python.org/3.8/tutorial/venv.html
+[venv]: https://docs.python.org/3.11/tutorial/venv.html
 [w3lib]: https://pypi.org/project/w3lib/
 [Werkzeug]: https://pypi.org/project/Werkzeug/
 [Whisky_Echo_Bravo]: https://whiskyechobravo.com
