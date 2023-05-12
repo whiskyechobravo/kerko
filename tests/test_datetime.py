@@ -157,15 +157,14 @@ class DateStringReformattingTestCase(unittest.TestCase):
     def setUp(self):
         self.app = Flask(__name__)
         self.app.register_blueprint(kerko_blueprint, url_prefix='/bibliography')
-        babel_domain = Domain()
-        babel = Babel(default_domain=babel_domain)
-        babel.init_app(self.app)
+        self.babel = Babel(default_domain=Domain())
         ctx = self.app.app_context()
         ctx.push()
 
     def test_non_iso8601_utc_en(self):
         current_app.config['BABEL_DEFAULT_LOCALE'] = 'en_US'
         current_app.config['BABEL_DEFAULT_TIMEZONE'] = 'UTC'
+        self.babel.init_app(current_app)
         self.assertEqual(reformat_date('2020'), '2020')
         self.assertEqual(reformat_date('2020-10'), '2020-10')
         self.assertEqual(reformat_date('2020-05-05'), '2020-05-05')
@@ -183,6 +182,7 @@ class DateStringReformattingTestCase(unittest.TestCase):
     def test_iso8601_utc_en(self):
         current_app.config['BABEL_DEFAULT_LOCALE'] = 'en_US'
         current_app.config['BABEL_DEFAULT_TIMEZONE'] = 'UTC'
+        self.babel.init_app(current_app)
         self.assertRegex(
             reformat_date('2020-09-17T07:11:41+00:00', convert_tz=True),
             r'9/17/20, 7:11\sAM'
@@ -235,6 +235,7 @@ class DateStringReformattingTestCase(unittest.TestCase):
     def test_iso8601_est_en(self):
         current_app.config['BABEL_DEFAULT_LOCALE'] = 'en_US'
         current_app.config['BABEL_DEFAULT_TIMEZONE'] = 'EST'
+        self.babel.init_app(current_app)
         self.assertRegex(
             reformat_date('2020-09-17T07:11:41+00:00', convert_tz=True),
             r'9/17/20, 2:11\sAM'
@@ -287,12 +288,14 @@ class DateStringReformattingTestCase(unittest.TestCase):
     def test_non_iso8601_utc_fr(self):
         current_app.config['BABEL_DEFAULT_LOCALE'] = 'fr_FR'
         current_app.config['BABEL_DEFAULT_TIMEZONE'] = 'UTC'
+        self.babel.init_app(current_app)
         self.assertEqual(reformat_date('September 2020'), 'September 2020')
         self.assertEqual(reformat_date('September 20, 2020'), 'September 20, 2020')
 
     def test_iso8601_utc_fr(self):
         current_app.config['BABEL_DEFAULT_LOCALE'] = 'fr_FR'
         current_app.config['BABEL_DEFAULT_TIMEZONE'] = 'UTC'
+        self.babel.init_app(current_app)
         self.assertEqual(
             reformat_date('2020-09-17T07:11:41+00:00', convert_tz=True),
             '17/09/2020 07:11'
