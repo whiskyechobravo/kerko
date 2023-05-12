@@ -28,7 +28,6 @@ class MockLibraryTestCase(unittest.TestCase):
     URL_PREFIX = '/bibliography'
 
     ZOTERO_RESPONSE_HEADERS = {
-        'Content-Type': 'application/json',
         'Zotero-API-Version': '3',
         'Zotero-Schema-Version': '15',
     }
@@ -128,8 +127,8 @@ class MockLibraryTestCase(unittest.TestCase):
         cls.responses.add(
             responses.GET,
             'https://api.zotero.org/itemTypes',
-            content_type='application/json',
             body=cls.get_response('itemTypes'),
+            content_type='application/json',
             headers=cls.ZOTERO_RESPONSE_HEADERS,
         )
         for item_type in cls.ZOTERO_ITEM_TYPES:
@@ -140,8 +139,8 @@ class MockLibraryTestCase(unittest.TestCase):
                         f'https://api.zotero.org/itemTypeFields?itemType={item_type}&locale=en-US'
                     ) + r'(\&timeout=[0-9]+)?'
                 ),
-                content_type='application/json',
                 body=cls.get_response(f'itemTypeFields_{item_type}'),
+                content_type='application/json',
                 headers=cls.ZOTERO_RESPONSE_HEADERS,
             )
             cls.responses.add(
@@ -151,8 +150,8 @@ class MockLibraryTestCase(unittest.TestCase):
                         f'https://api.zotero.org/itemTypeCreatorTypes?itemType={item_type}&locale=en-US'
                     ) + r'(\&timeout=[0-9]+)?'
                 ),
-                content_type='application/json',
                 body=cls.get_response(f'itemTypeCreatorTypes_{item_type}'),
+                content_type='application/json',
                 headers=cls.ZOTERO_RESPONSE_HEADERS,
             )
 
@@ -207,23 +206,23 @@ class PopulatedLibraryTestCase(MockLibraryTestCase):
         cls.responses.add(
             responses.GET,
             'https://api.zotero.org/groups/9999999/collections?start=0&limit=100&format=json',
-            content_type='application/json',
             body=cls.get_response('collections'),
+            content_type='application/json',
             headers=cls.ZOTERO_RESPONSE_HEADERS,
         )
         # Fallback for other 'collections' requests.
         cls.responses.add(
             responses.GET,
             'https://api.zotero.org/groups/9999999/collections',
-            content_type='application/json',
             body='[]',
+            content_type='application/json',
             headers=cls.ZOTERO_RESPONSE_HEADERS,
         )
         cls.responses.add(
             responses.GET,
             'https://api.zotero.org/groups/9999999/items?since=0&start=0&limit=100&sort=dateAdded&direction=asc&include=bib%2Cbibtex%2Ccoins%2Cdata%2Cris&style=apa&format=json',
-            content_type='application/json',
             body=cls.get_response('items'),
+            content_type='application/json',
             headers={
                 **cls.ZOTERO_RESPONSE_HEADERS,
                 **{
@@ -235,8 +234,8 @@ class PopulatedLibraryTestCase(MockLibraryTestCase):
         cls.responses.add(
             responses.GET,
             f'https://api.zotero.org/groups/9999999/items?since=0&start={cls.ZOTERO_ITEMS_TOTAL_RESULTS}&limit=100&sort=dateAdded&direction=asc&include=bib%2Cbibtex%2Ccoins%2Cdata%2Cris&style=apa&format=json',
-            content_type='application/json',
             body='[]',
+            content_type='application/json',
             headers={
                 **cls.ZOTERO_RESPONSE_HEADERS,
                 **{
@@ -247,8 +246,8 @@ class PopulatedLibraryTestCase(MockLibraryTestCase):
         cls.responses.add(
             responses.GET,
             'https://api.zotero.org/groups/9999999/items?limit=1&format=json',
-            content_type='application/json',
             body=cls.get_response('items_versions'),
+            content_type='application/json',
             headers={
                 **cls.ZOTERO_RESPONSE_HEADERS,
                 **{
@@ -260,8 +259,8 @@ class PopulatedLibraryTestCase(MockLibraryTestCase):
         cls.responses.add(
             responses.GET,
             'https://api.zotero.org/groups/9999999/fulltext?since=0',
-            content_type='application/json',
             body=cls.get_response('fulltext'),
+            content_type='application/json',
             headers=cls.ZOTERO_RESPONSE_HEADERS,
         )
 
@@ -276,16 +275,16 @@ class EmptyLibraryTestCase(MockLibraryTestCase):
         cls.responses.add(
             responses.GET,
             'https://api.zotero.org/groups/9999999/collections',
-            content_type='application/json',
             body='[]',  # No collections.
+            content_type='application/json',
             headers=cls.ZOTERO_RESPONSE_HEADERS,
         )
         # Response for all 'items' requests.
         cls.responses.add(
             responses.GET,
             'https://api.zotero.org/groups/9999999/items',
-            content_type='application/json',
             body='[]',  # No items.
+            content_type='application/json',
             headers={
                 **cls.ZOTERO_RESPONSE_HEADERS,
                 **{
@@ -298,8 +297,8 @@ class EmptyLibraryTestCase(MockLibraryTestCase):
         cls.responses.add(
             responses.GET,
             'https://api.zotero.org/groups/9999999/fulltext',
-            content_type='application/json',
             body='{}',
+            content_type='application/json',
             headers=cls.ZOTERO_RESPONSE_HEADERS,
         )
 
