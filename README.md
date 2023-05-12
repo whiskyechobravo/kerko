@@ -1014,7 +1014,7 @@ If you wish to add your Kerko-powered online bibliography to this list, please
 [Flask]: https://pypi.org/project/Flask/
 [Flask_blueprint]: https://flask.palletsprojects.com/en/latest/blueprints/
 [Flask-Babel]: https://pypi.org/project/Flask-Babel/
-[Flask-Babel_documentation]: https://flask-babel.tkte.ch/
+[Flask-Babel_documentation]: https://python-babel.github.io/flask-babel/
 [Flask_CLI]: https://flask.palletsprojects.com/en/latest/cli/
 [Flask-WTF]: https://pypi.org/project/Flask-WTF/
 [FontAwesome]: https://fontawesome.com/icons
