@@ -128,7 +128,6 @@ class MockLibraryTestCase(unittest.TestCase):
         cls.responses.add(
             responses.GET,
             'https://api.zotero.org/itemTypes',
-            match_querystring=False,
             content_type='application/json',
             body=cls.get_response('itemTypes'),
             headers=cls.ZOTERO_RESPONSE_HEADERS,
@@ -212,10 +211,10 @@ class PopulatedLibraryTestCase(MockLibraryTestCase):
             body=cls.get_response('collections'),
             headers=cls.ZOTERO_RESPONSE_HEADERS,
         )
+        # Fallback for other 'collections' requests.
         cls.responses.add(
             responses.GET,
             'https://api.zotero.org/groups/9999999/collections',
-            match_querystring=False,  # Fallback for other 'collections' requests.
             content_type='application/json',
             body='[]',
             headers=cls.ZOTERO_RESPONSE_HEADERS,
@@ -273,18 +272,18 @@ class EmptyLibraryTestCase(MockLibraryTestCase):
     @classmethod
     def add_responses(cls):
         super().add_responses()
+        # Response for all 'collections' requests.
         cls.responses.add(
             responses.GET,
             'https://api.zotero.org/groups/9999999/collections',
-            match_querystring=False,  # Response for all 'collections' requests.
             content_type='application/json',
             body='[]',  # No collections.
             headers=cls.ZOTERO_RESPONSE_HEADERS,
         )
+        # Response for all 'items' requests.
         cls.responses.add(
             responses.GET,
             'https://api.zotero.org/groups/9999999/items',
-            match_querystring=False,  # Response for all 'items' requests.
             content_type='application/json',
             body='[]',  # No items.
             headers={
@@ -295,10 +294,10 @@ class EmptyLibraryTestCase(MockLibraryTestCase):
                 }
             },
         )
+        # Response for all 'fulltext' requests.
         cls.responses.add(
             responses.GET,
             'https://api.zotero.org/groups/9999999/fulltext',
-            match_querystring=False,  # Response for all 'fulltext' requests.
             content_type='application/json',
             body='{}',
             headers=cls.ZOTERO_RESPONSE_HEADERS,
