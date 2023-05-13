@@ -198,7 +198,7 @@ The following features are implemented in Kerko:
 - Relations: bibliographic record pages show links to related items, if any. You
   may define such relations using Zotero's _Related_ field. Moreover, Kerko adds
   the _Cites_ and _Cited by_ relation types, which can be managed in Zotero
-  through notes (see [Kerko Recipes](#kerko-recipes). Custom applications
+  through notes (see [Kerko Recipes](#kerko-recipes)). Custom applications
   can add more types of relations if desired.
 - Badges: icons can be displayed next to items, based on custom conditions.
 - Responsive design: the simple default implementation works on large monitors
@@ -338,9 +338,9 @@ Let's now build a minimal app:
 5. Instantiate the Kerko blueprint and register it in your app:
 
    ```python
-   from kerko import blueprint as kerko_blueprint
+   import kerko
 
-   app.register_blueprint(kerko_blueprint, url_prefix='/bibliography')
+   app.register_blueprint(kerko.blueprint, url_prefix='/bibliography')
    ```
 
    The `url_prefix` argument defines the base path for every URL provided by
@@ -380,9 +380,10 @@ Let's now build a minimal app:
 
 You have just built a really minimal application for Kerko. The full code
 example is available at [KerkoStart]. However, if you are looking at developing
-a custom Kerko application, we recommend that you use [KerkoApp] as a starting
-point. While KerkoApp is still small, it adds some features and is more
-production-ready than the above example.
+a custom Kerko application, we recommend that you still look at [KerkoApp] for a
+slightly more advanced starting point. While still small, KerkoApp adds some
+structure as well as features such as configuration options, translations
+loading, and error pages.
 
 
 ## Configuration variables
@@ -533,9 +534,6 @@ override their default value:
     a timezone selector function to override it (see the [Flask-Babel
     documentation][Flask-Babel_documentation]). Any timezone name supported by
     the [pytz] package should work.
-  - `KERKO_USE_TRANSLATIONS`: Use translations provided by the Kerko package.
-    Defaults to `True`. When this is set to `False`, translations may be
-    provided by the application's own translation catalog.
   - `KERKO_WHOOSH_LANGUAGE`: The language of search requests. Defaults to
     `'en'`. You may refer to Whoosh's source to get the list of supported
     languages (`whoosh.lang.languages`) and the list of languages that support
@@ -837,7 +835,8 @@ python setup.py compile_catalog
 ```
 
 You are welcome to contribute your translation. See [Submitting a
-translation](#submitting-a-translation).
+translation](#submitting-a-translation). It is only thanks to user contributions
+that Kerko is available in multiple languages.
 
 
 ## Contributing

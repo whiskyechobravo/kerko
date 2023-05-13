@@ -7,7 +7,7 @@ from flask import (abort, current_app, flash, make_response, redirect,
                    render_template, request, send_from_directory, url_for)
 from flask_babel import get_locale, gettext
 
-from kerko import babel_domain, blueprint
+from kerko import blueprint
 from kerko.criteria import create_feed_criteria, create_search_criteria
 from kerko.exceptions import except_abort
 from kerko.forms import SearchForm
@@ -28,9 +28,6 @@ SITEMAP_URL_MAX_COUNT = 50000
 @except_abort(SearchIndexError, 503)
 def search():
     """View the results of a search."""
-    if config('KERKO_USE_TRANSLATIONS'):
-        babel_domain.as_default()
-
     criteria = create_search_criteria(request.args)
     form = SearchForm(csrf_enabled=False)
     if form.validate_on_submit():
@@ -56,8 +53,6 @@ def search():
 @except_abort(SearchIndexError, 503)
 def atom_feed():
     """Build a feed based on the search criteria."""
-    if config('KERKO_USE_TRANSLATIONS'):
-        babel_domain.as_default()
 
     if 'atom' not in config('KERKO_FEEDS'):
         return abort(404)
@@ -169,9 +164,6 @@ def item_view(item_id):
     """View a full bibliographic record."""
     start_time = time.process_time()
 
-    if config('KERKO_USE_TRANSLATIONS'):
-        babel_domain.as_default()
-
     index = open_index('index')
     with Searcher(index) as searcher:
         # Try matching the item by id, with fallback to alternate id.
@@ -214,9 +206,6 @@ def child_attachment_download(item_id, attachment_id, attachment_filename=None):
     filename, a redirect is performed to a corrected URL so that the client gets
     a proper filename.
     """
-    if config('KERKO_USE_TRANSLATIONS'):
-        babel_domain.as_default()
-
     index = open_index('index')
     with Searcher(index) as searcher:
         # Try matching the item by id, with fallback to alternate id.
