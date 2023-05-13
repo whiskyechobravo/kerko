@@ -6,7 +6,7 @@ import unittest
 from datetime import datetime
 
 from flask import Flask, current_app
-from flask_babel import Babel, Domain
+from flask_babel import Babel
 
 from kerko import blueprint as kerko_blueprint
 from kerko.datetime import (iso_to_datetime, maximize_partial_date,
@@ -157,7 +157,7 @@ class DateStringReformattingTestCase(unittest.TestCase):
     def setUp(self):
         self.app = Flask(__name__)
         self.app.register_blueprint(kerko_blueprint, url_prefix='/bibliography')
-        self.babel = Babel(default_domain=Domain())
+        self.babel = Babel()
         ctx = self.app.app_context()
         ctx.push()
 
