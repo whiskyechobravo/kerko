@@ -6,12 +6,13 @@ Kerko: A Flask blueprint that provides faceted search for bibliographies based o
 import pathlib
 
 from flask import Blueprint
-from flask_babel import Domain
 
 from kerko.jinja2 import register_filters
 
-
-babel_domain = Domain(domain='kerko')
+# Kerko won't load translations on its own. To load them, an application may add
+# the following domain and translation directories to its Babel configuration.
+TRANSLATION_DOMAIN = 'kerko'
+TRANSLATION_DIRECTORIES = [str(pathlib.Path(__file__).parent / 'translations')]
 
 
 def init_default_config(state):
@@ -72,7 +73,6 @@ def init_default_config(state):
     state.app.config.setdefault('KERKO_FEEDS_REQUIRE_ANY', {})
     state.app.config.setdefault('KERKO_FEEDS_REJECT_ANY', {})
     state.app.config.setdefault('KERKO_FEEDS_MAX_DAYS', 0)
-    state.app.config.setdefault('KERKO_USE_TRANSLATIONS', True)
 
     state.app.config.setdefault('KERKO_TEMPLATE_BASE', 'kerko/base.html.jinja2')
     state.app.config.setdefault('KERKO_TEMPLATE_LAYOUT', 'kerko/layout.html.jinja2')
@@ -86,12 +86,6 @@ def init_default_config(state):
     state.app.config.setdefault('KERKO_POPPER_VERSION', '1.16.1')
     state.app.config.setdefault('KERKO_WITH_JQUERY', True)
     state.app.config.setdefault('KERKO_WITH_POPPER', True)
-
-    # Look for translations both in Kerko's and the app's translations directories.
-    state.app.config.setdefault(
-        'BABEL_TRANSLATION_DIRECTORIES',
-        ';'.join([str(pathlib.Path(__file__).parent / 'translations'), 'translations'])
-    )
 
 
 def make_blueprint():
