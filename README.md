@@ -623,6 +623,11 @@ flask kerko clean index
 flask kerko sync index
 ```
 
+The above commands should work as-is when you are in the application's directory
+(where the `wsgi.py` file is found). To run them from other directories, you
+might need to use Flask's `--app` option, or to set the `FLASK_APP` environment
+variable.
+
 
 ## API
 

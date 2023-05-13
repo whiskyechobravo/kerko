@@ -22,6 +22,18 @@ Features:
 Other changes:
 
 - Add Portuguese translation. Thanks to Gonçalo Cordeiro.
+- Improve the Getting started instructions.
+
+Backwards incompatible changes:
+
+- Raise the minimum required versions of Flask, Flask-Babel, Bootstrap-Flask,
+  and WTForms. If you have a custom application, some of those may introduce
+  breaking changes.
+- Remove the `KERKO_USE_TRANSLATIONS` configuration variable. Kerko now relies
+  on the application's default Babel domain and translation directories. Custom
+  applications that wish to load Kerko's translations should now add
+  `kerko.TRANSLATION_DOMAIN` and `kerko.TRANSLATION_DIRECTORIES` to their Babel
+  configuration.
 
 
 ## 0.9 (2022-12-29)
