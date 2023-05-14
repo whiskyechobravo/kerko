@@ -34,6 +34,11 @@ Backwards incompatible changes:
   applications that wish to load Kerko's translations should now add
   `kerko.TRANSLATION_DOMAIN` and `kerko.TRANSLATION_DIRECTORIES` to their Babel
   configuration.
+- Arguments of the `__init__()` method of `FacetSpec` and its subclasses must be
+  given as keyword arguments. Positional arguments are no longer accepted.
+- The `sort_key` argument to `FacetSpec.__init__()` is now `sort_by`.
+- `Composer` built-in fields `z_dateAdded` and `z_dateModified` are now
+  `date_added` and `date_modified` respectively.
 
 
 ## 0.9 (2022-12-29)

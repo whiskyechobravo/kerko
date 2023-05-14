@@ -85,7 +85,7 @@ def clean(target):
 @with_appcontext
 def count(target):
     """
-    Output the number of records available in the cache or in the search index.
+    Show the number of records available in the cache or in the search index.
 
     The cache and the index are structured very differently and their respective
     numbers should not be expected to match. The number of records in the index
@@ -107,6 +107,15 @@ def count(target):
     except SearchIndexError as e:
         current_app.logger.error(e)
         raise click.Abort
+
+
+@cli.command()
+@with_appcontext
+def config():
+    """
+    Show the app's full configuration.
+    """
+    pprint.pprint(dict(current_app.config))
 
 
 @cli.command()

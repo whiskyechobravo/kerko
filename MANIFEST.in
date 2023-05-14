@@ -2,6 +2,7 @@ include LICENSE.txt
 include babel.cfg
 include *.ini
 include *.md
+include *.toml
 graft src
 graft tests
 global-exclude .env

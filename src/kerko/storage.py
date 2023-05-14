@@ -4,7 +4,7 @@ import shutil
 
 import whoosh
 
-from kerko.shortcuts import config
+from kerko.shortcuts import data_dir
 
 
 class SearchIndexError(Exception):
@@ -16,7 +16,7 @@ class SchemaError(Exception):
 
 
 def get_storage_dir(storage):
-    return pathlib.Path(config('KERKO_DATA_DIR')) / storage
+    return pathlib.Path(data_dir()) / storage
 
 
 def load_object(storage, key, default=None):

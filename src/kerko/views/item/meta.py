@@ -14,7 +14,7 @@ def build_highwirepress_tags(item):  # pylint: disable=too-many-branches
     # - https://www.monperrus.net/martin/accurate+bibliographic+metadata+and+google+scholar
     tags = []
     data = item.get('data', {})
-    if config('KERKO_HIGHWIREPRESS_TAGS') and data.get('itemType') in [
+    if config('kerko.meta.highwirepress_tags') and data.get('itemType') in [
         'book',
         'conferencePaper',
         'journalArticle',

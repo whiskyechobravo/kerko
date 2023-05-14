@@ -1,4 +1,4 @@
-{% extends config.KERKO_TEMPLATE_BASE %}
+{% extends config.kerko.templates.base %}
 {% from "kerko/_attributes.html.jinja2" import title_aria_label %}
 
 {%- block meta_title_inner -%}
@@ -15,7 +15,7 @@
     {{- super() }}
     {%- block bootstrap_css %}
         {%- if bootstrap %}
-            {{ bootstrap.load_css(version=config.KERKO_BOOTSTRAP_VERSION) }}
+            {{ bootstrap.load_css(version=config.kerko.assets.bootstrap_version) }}
         {%- endif %}
     {%- endblock bootstrap_css %}
     {%- block fontawesome_css %}
@@ -113,11 +113,11 @@
     {%- block bootstrap_js %}
         {%- if bootstrap %}
             {{ bootstrap.load_js(
-                version=config.KERKO_BOOTSTRAP_VERSION,
-                jquery_version=config.KERKO_JQUERY_VERSION,
-                popper_version=config.KERKO_POPPER_VERSION,
-                with_jquery=config.KERKO_WITH_JQUERY,
-                with_popper=config.KERKO_WITH_POPPER) }}
+                version=config.kerko.assets.bootstrap_version,
+                jquery_version=config.kerko.assets.jquery_version,
+                popper_version=config.kerko.assets.popper_version,
+                with_jquery=config.kerko.assets.with_jquery,
+                with_popper=config.kerko.assets.with_popper) }}
         {%- endif %}
     {%- endblock bootstrap_js %}
 {%- endblock body_scripts %}

@@ -53,7 +53,7 @@ def sync_cache():
     cache = open_index('cache', schema=get_cache_schema, auto_create=True, write=True)
     writer = cache.writer(limitmb=256)
     try:
-        if config('KERKO_FULLTEXT_SEARCH'):
+        if config('kerko.search.fulltext'):
             fulltext_items = zotero.load_new_fulltext(zotero_credentials, since)
         else:
             fulltext_items = {}

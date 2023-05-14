@@ -30,12 +30,12 @@ def build_item_context(item):
         'highwirepress_tags':
             meta.build_highwirepress_tags(item),
     }
-    if config('KERKO_OPEN_IN_ZOTERO_APP'):
+    if config('kerko.features.open_in_zotero_app'):
         context['open_in_zotero_app'] = bool(request.cookies.get('open-in-zotero-app'))
         url = item.get('zotero_app_url', '')
         if url and is_valid_url(url):
             context['open_in_zotero_app_url'] = url
-    if config('KERKO_OPEN_IN_ZOTERO_WEB'):
+    if config('kerko.features.open_in_zotero_web'):
         context['open_in_zotero_web'] = bool(request.cookies.get('open-in-zotero-web'))
         url = item.get('zotero_web_url', '')
         if url and is_valid_url(url):

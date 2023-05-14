@@ -1,10 +1,10 @@
-{% extends config.KERKO_TEMPLATE_LAYOUT %}
+{% extends config.kerko.templates.layout %}
 {% from "kerko/_attributes.html.jinja2" import title_aria_label %}
 
-{%- set show_print_link = config.KERKO_PRINT_CITATIONS_MAX_COUNT == 0 or total_count <= config.KERKO_PRINT_CITATIONS_MAX_COUNT %}
-{%- set show_print_link = show_print_link and config.KERKO_PRINT_CITATIONS_LINK %}
-{%- set show_download_link = config.KERKO_DOWNLOAD_CITATIONS_MAX_COUNT == 0 or total_count <= config.KERKO_DOWNLOAD_CITATIONS_MAX_COUNT %}
-{%- set show_download_link = show_download_link and config.KERKO_DOWNLOAD_CITATIONS_LINK and config.KERKO_COMPOSER.citation_formats %}
+{%- set show_print_link = config.kerko.features.print_citations_max_count == 0 or total_count <= config.kerko.features.print_citations_max_count %}
+{%- set show_print_link = show_print_link and config.kerko.features.print_citations_link %}
+{%- set show_download_link = config.kerko.features.download_citations_max_count == 0 or total_count <= config.kerko.features.download_citations_max_count %}
+{%- set show_download_link = show_download_link and config.kerko.features.download_citations_link and config.kerko_composer.citation_formats %}
 {%- set abstracts_toggler_title = _('Hide abstracts') if show_abstracts else _('Show abstracts') %}
 
 {%- block metas %}
@@ -78,7 +78,7 @@
             {%- endif %}
         </div>
         {%- if search_results %}
-            {%- if pager or config.KERKO_RESULTS_ABSTRACTS_TOGGLER %}
+            {%- if pager or config.kerko.features.results_abstracts_toggler %}
                 <div class="row mb-2">
                     {%- if pager %}
                         <div class="col-auto mr-auto">
@@ -87,7 +87,7 @@
                             {%- endblock pager_top %}
                         </div>
                     {%- endif %}
-                    {%- if config.KERKO_RESULTS_ABSTRACTS_TOGGLER %}
+                    {%- if config.kerko.features.results_abstracts_toggler %}
                         <div class="col-auto ml-auto pl-0">
                             {%- block abstracts_toggler %}
                                 <a class="btn btn-light d-print-none" href="{{ abstracts_toggler_url }}" title="{{ abstracts_toggler_title }}" aria-label="{{ abstracts_toggler_title }}">{% if show_abstracts %}<span class="fas fa-toggle-on" aria-hidden="true"></span>{% else %}<span class="fas fa-toggle-off" aria-hidden="true"></span>{% endif %} {{ _("Abstracts") }}</a>
@@ -124,7 +124,7 @@
                                             <span class="fas fa-download" aria-hidden="true"></span> {% trans count=total_count, count_formatted=total_count_formatted|safe %}Download this record{% pluralize %}Download {{ count_formatted }} records{% endtrans -%}
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labelledby="download-options">
-                                            {%- for citation_format in config.KERKO_COMPOSER.get_ordered_specs('citation_formats') %}
+                                            {%- for citation_format in config.kerko_composer.get_ordered_specs('citation_formats') %}
                                                 <a class="dropdown-item" href="{{ download_urls[citation_format.key] }}" rel="nofollow" type="{{ citation_format.mime_type|escape }}" {{ title_aria_label(_('Download in {download_option} format').format(download_option=citation_format.label|escape)) }}>
                                                     {{- citation_format.label -}}
                                                 </a>
@@ -172,7 +172,7 @@
             <div id="facets-container" class="d-none d-lg-block d-print-none">
                 <h2 class="{% block facets_heading_classes %}mt-2 mb-4{% endblock %}">{{ _("Explore") }}</h2>
                 <div id="facets" class="facets">
-                    {%- for f in config.KERKO_COMPOSER.get_ordered_specs('facets') %}
+                    {%- for f in config.kerko_composer.get_ordered_specs('facets') %}
                         {{ f.render(facet_results[f.key], 'search') }}
                     {%- endfor %}
                 </div>

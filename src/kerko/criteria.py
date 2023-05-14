@@ -172,8 +172,8 @@ class Criteria:
             self.options['sort'] = sort_spec.key
 
     def initialize_abstracts(self, initial):
-        if config('KERKO_RESULTS_ABSTRACTS_TOGGLER'):
-            enabled_by_default = config('KERKO_RESULTS_ABSTRACTS')
+        if config('kerko.features.results_abstracts_toggler'):
+            enabled_by_default = config('kerko.features.results_abstracts')
             abstracts = initial.get('abstracts')
             if abstracts:
                 if abstracts in ['t', '1'] and not enabled_by_default:
@@ -182,7 +182,7 @@ class Criteria:
                     self.options['abstracts'] = 0
 
     def initialize_print_preview(self, initial):
-        if config('KERKO_PRINT_CITATIONS_LINK') and initial.get('print-preview') in [
+        if config('kerko.features.print_citations_link') and initial.get('print-preview') in [
             't', '1'
         ]:
             self.options['print-preview'] = 1

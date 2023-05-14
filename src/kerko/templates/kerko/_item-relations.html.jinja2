@@ -3,7 +3,7 @@
 {%- macro relations_list(relations, collapse_id='') %}
     <ul {% if collapse_id %}id="{{ collapse_id }}"{% endif %} class="list-unstyled {% if collapse_id %}collapse{% endif %}">
         {%- for result in relations %}
-            {%- with result_url=url_for('kerko.item_view', item_id=result.id, _external=True), show_abstracts=False, hide_result_links=not config.KERKO_RELATIONS_LINKS %}
+            {%- with result_url=url_for('kerko.item_view', item_id=result.id, _external=True), show_abstracts=False, hide_result_links=not config.kerko.features.relations_links %}
                 {%- include "kerko/_search-result.html.jinja2" %}
             {%- endwith %}
         {%- endfor %}
@@ -13,10 +13,10 @@
 <div class="tab-pane fade {% if is_active %}show active{% endif %}" id="{{ key }}" role="tabpanel" aria-labelledby="tab-{{ key }}">
     <div class="d-none d-print-block font-weight-bold">{{ label }}</div>
     {%- if apply_relations_initial_limit %}
-        {{ relations_list(item[field][:config.KERKO_RELATIONS_INITIAL_LIMIT]) }}
-        {%- if item[field]|length > config.KERKO_RELATIONS_INITIAL_LIMIT %}
+        {{ relations_list(item[field][:config.kerko.features.relations_initial_limit]) }}
+        {%- if item[field]|length > config.kerko.features.relations_initial_limit %}
             {%- set collapse_id = 'rel-' + key|string + '-more' %}
-            {{ relations_list(item[field][config.KERKO_RELATIONS_INITIAL_LIMIT:], collapse_id=collapse_id) }}
+            {{ relations_list(item[field][config.kerko.features.relations_initial_limit:], collapse_id=collapse_id) }}
             <div class="mb-3 d-print-none">
                 {{- expand_collapse_buttons(collapse_id=collapse_id) -}}
             </div>

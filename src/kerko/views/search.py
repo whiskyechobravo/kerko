@@ -28,7 +28,7 @@ def _build_item_search_urls(items, criteria):
             )
         )
 
-    page_len = criteria.options.get('page-len', config('KERKO_PAGE_LEN'))
+    page_len = criteria.options.get('page-len', config('kerko.pagination.page_len'))
     if page_len == 'all':
         page_len = 0
     return [build_url(item, position) for position, item in enumerate(items)]
@@ -83,7 +83,7 @@ def empty_results(criteria, form):
                 facets.update(results.facets(composer().facets, criteria, active_only=True))
     context['breadbox'] = breadbox.build_breadbox(criteria, facets)
     return render_template(
-        config('KERKO_TEMPLATE_SEARCH'),
+        config('kerko.templates.search'),
         form=form,
         locale=get_locale(),
         is_searching=criteria.is_searching(),
@@ -146,7 +146,7 @@ def search_single(criteria, form):
             **criteria.params(
                 options={
                     'page': int(
-                        (criteria.options.get('page', 1) - 1) / config('KERKO_PAGE_LEN') + 1
+                        (criteria.options.get('page', 1) - 1) / config('kerko.pagination.page_len') + 1
                     ),
                     'page-len': None,
                     'id': None,
@@ -154,7 +154,7 @@ def search_single(criteria, form):
             )
         )
     return render_template(
-        config('KERKO_TEMPLATE_SEARCH_ITEM'),
+        config('kerko.templates.search_item'),
         form=form,
         time=time.process_time() - start_time,
         locale=get_locale(),
@@ -169,7 +169,7 @@ def search_list(criteria, form):
     context = {}
     index = open_index('index')
     with Searcher(index) as searcher:
-        page_len = criteria.options.get('page-len', config('KERKO_PAGE_LEN'))
+        page_len = criteria.options.get('page-len', config('kerko.pagination.page_len'))
         common_search_args = {
             'keywords': criteria.keywords,
             'filters': criteria.filters,
@@ -208,14 +208,14 @@ def search_list(criteria, form):
         )
         context['sorter'] = sorter.build_sorter(criteria)
         context['show_abstracts'] = criteria.options.get(
-            'abstracts', config('KERKO_RESULTS_ABSTRACTS')
+            'abstracts', config('kerko.features.results_abstracts')
         )
         context['abstracts_toggler_url'] = url_for(
             '.search',
             **criteria.params(options={
                 'abstracts': int(
                     not criteria.options.
-                    get('abstracts', config('KERKO_RESULTS_ABSTRACTS'))
+                    get('abstracts', config('kerko.features.results_abstracts'))
                 ),
             })
         )
@@ -238,7 +238,7 @@ def search_list(criteria, form):
             )
             for key in composer().citation_formats.keys()
         }
-        if 'atom' in config('KERKO_FEEDS'):
+        if 'atom' in config('kerko.feeds.formats'):
             context['atom_feed_url'] = url_for(
                 '.atom_feed',
                 **create_feed_criteria(initial=criteria).params(options={
@@ -253,7 +253,7 @@ def search_list(criteria, form):
 
         # Prepare search result items.
         field_specs = composer().select_fields(
-            config('KERKO_RESULTS_FIELDS') +
+            config('kerko.search.result_fields') +
             [badge.field.key for badge in composer().badges.values()],
         )
         items = results.items(field_specs)
@@ -269,7 +269,7 @@ def search_list(criteria, form):
                 tz=datetime.now().astimezone().tzinfo,
             )
     return render_template(
-        config('KERKO_TEMPLATE_SEARCH'),
+        config('kerko.templates.search'),
         form=form,
         time=time.process_time() - start_time,
         locale=get_locale(),

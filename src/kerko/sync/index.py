@@ -4,7 +4,7 @@ import whoosh
 from flask import current_app
 from whoosh.query import Term
 
-from kerko.shortcuts import composer
+from kerko.shortcuts import composer, config
 from kerko.storage import (SchemaError, SearchIndexError, load_object,
                            open_index, save_object)
 from kerko.tags import TagGate
@@ -45,7 +45,10 @@ def sync_index():
     writer = index.writer(limitmb=256)
     try:
         writer.mergetype = whoosh.writing.CLEAR
-        gate = TagGate(composer().default_item_include_re, composer().default_item_exclude_re)
+        gate = TagGate(
+            config('kerko.zotero.item_include_re'),
+            config('kerko.zotero.item_exclude_re'),
+        )
         for item in yield_top_level_items():
             count += 1
             if gate.check(item['data']):
@@ -55,7 +58,8 @@ def sync_index():
                     spec.extract_to_document(document, item, library_context)
                 writer.update_document(**document)
                 current_app.logger.debug(
-                    f"Item {count} updated ({item['key']}, {item.get('itemType')}): {document.get('z_title')}"
+                    f"Item {count} updated ({item['key']}, {item.get('itemType')}): "
+                    f"{document.get('data', {}).get('title')}"
                 )
             else:
                 current_app.logger.debug(f"Item {count} excluded ({item['key']})")

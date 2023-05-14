@@ -14,9 +14,11 @@ import responses
 from flask import Flask, current_app
 from flask_babel import Babel, Domain
 from flask_bootstrap import Bootstrap4
-from kerko import blueprint as kerko_blueprint
+
+import kerko
 from kerko import extractors, transformers
 from kerko.composer import Composer
+from kerko.config_helpers import config_update
 from kerko.storage import delete_storage
 from kerko.sync.cache import sync_cache
 from kerko.sync.index import sync_index
@@ -79,7 +81,7 @@ class MockLibraryTestCase(unittest.TestCase):
 
     @classmethod
     def init_blueprints(cls):
-        cls.app.register_blueprint(kerko_blueprint, url_prefix=cls.URL_PREFIX)
+        cls.app.register_blueprint(kerko.blueprint, url_prefix=cls.URL_PREFIX)
 
     @classmethod
     def init_extensions(cls):
@@ -92,16 +94,15 @@ class MockLibraryTestCase(unittest.TestCase):
     @classmethod
     def init_config(cls):
         cls.app.config['SECRET_KEY'] = 'not-so-secret-secret'
-        cls.app.config['KERKO_ZOTERO_API_KEY'] = 'xxxxxxxxxxxxxxxxxxxxxxxx'
-        cls.app.config['KERKO_ZOTERO_LIBRARY_ID'] = '9999999'
-        cls.app.config['KERKO_ZOTERO_LIBRARY_TYPE'] = 'group'
-        cls.app.config['KERKO_ZOTERO_MAX_ATTEMPTS'] = 1
-        cls.app.config['KERKO_ZOTERO_WAIT'] = 0
-        cls.app.config['KERKO_DATA_DIR'] = pathlib.Path(cls.temp_dir.name)
-        cls.app.config['KERKO_COMPOSER'] = Composer()
+        cls.app.config['ZOTERO_API_KEY'] = 'xxxxxxxxxxxxxxxxxxxxxxxx'
+        cls.app.config['ZOTERO_LIBRARY_ID'] = '9999999'
+        cls.app.config['ZOTERO_LIBRARY_TYPE'] = 'group'
+        cls.app.config['DATA_DIR'] = cls.temp_dir.name
+        config_update(cls.app.config, kerko.DEFAULTS)
+        cls.app.config['kerko_composer'] = Composer(cls.app.config)
 
         # Add alternate_id to help retrieving and testing specific items.
-        cls.app.config['KERKO_COMPOSER'].fields['alternate_id'].extractor.extractors.append(
+        cls.app.config['kerko_composer'].fields['alternate_id'].extractor.extractors.append(
             extractors.TransformerExtractor(
                 extractor=extractors.ItemDataExtractor(key='extra'),
                 transformers=[

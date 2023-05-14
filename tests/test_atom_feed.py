@@ -49,7 +49,7 @@ class AtomFeedTestCase(SynchronizedTestCase):
             )
             self.assertRegex(
                 root.xpath('/ns:feed/ns:title/text()', namespaces=self.namespaces)[0],
-                rf'^{re.escape(config("KERKO_TITLE"))}',
+                rf'^{re.escape(config("kerko.meta.title"))}',
                 "feed.title is incorrect",
             )
             # Check date, with a compromise: not trying full ISO 8601 variants.
@@ -194,7 +194,7 @@ class AtomFeedTestCase(SynchronizedTestCase):
             )
             self.assertRegex(
                 root.xpath('/ns:feed/ns:title/text()', namespaces=self.namespaces)[0],
-                rf'^{re.escape(config("KERKO_TITLE"))}',
+                rf'^{re.escape(config("kerko.meta.title"))}',
                 "feed.title is missing or incorrect",
             )
             self.assertIsInstance(

@@ -4,9 +4,11 @@ Unit tests for the pager module.
 
 import unittest
 
-from flask import current_app, Flask
+from flask import Flask
 
-from kerko import blueprint as kerko_blueprint
+import kerko
+from kerko.config_helpers import config_update
+from kerko.shortcuts import config
 from kerko.views import pager
 
 
@@ -15,13 +17,14 @@ class SectionsTestCase(unittest.TestCase):
 
     def setUp(self):
         self.app = Flask(__name__)
-        self.app.register_blueprint(kerko_blueprint, url_prefix='/bibliography')
+        config_update(self.app.config, kerko.DEFAULTS)
+        self.app.register_blueprint(kerko.blueprint, url_prefix='/bibliography')
         ctx = self.app.app_context()
         ctx.push()
 
     def test_default_config(self):
         # This setting impacts the results of pager functions.
-        self.assertEqual(current_app.config['KERKO_PAGER_LINKS'], 4)
+        self.assertEqual(config('kerko.pagination.pager_links'), 4)
 
     def test_on_page_1_of_1(self):
         sections = pager.get_sections(page_num=1, page_count=1)

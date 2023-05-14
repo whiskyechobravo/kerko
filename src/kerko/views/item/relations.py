@@ -49,7 +49,7 @@ def inject_relations(item):
     common_search_args = {
         'limit': None,
         'reject_any': {'item_type': ['note', 'attachment']},
-        'sort_spec': composer().sorts.get(config('KERKO_RELATIONS_SORT')),
+        'sort_spec': composer().sorts.get(config('kerko.features.relations_sort')),
         'faceting': False,
     }
     # For each related item, load the same fields as in normal search result
@@ -57,7 +57,7 @@ def inject_relations(item):
     # when displaying relations.
     related_item_fields = composer().select_fields(
         [
-            key for key in config('KERKO_RESULTS_FIELDS') +
+            key for key in config('kerko.search.result_fields') +
             [badge.field.key for badge in composer().badges.values()] if key != 'coins'
         ],
     )

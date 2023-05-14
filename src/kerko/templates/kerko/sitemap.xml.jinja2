@@ -3,7 +3,7 @@
     {%- for item in items %}
         <url>
             <loc>{{ url_for('kerko.item_view', item_id=item.id, _external=True) }}</loc>
-            <lastmod>{{ item.z_dateModified|striptags|escape }}</lastmod>
+            <lastmod>{{ item.date_modified|striptags|escape }}</lastmod>
         </url>
     {%- endfor %}
 </urlset>

@@ -2,7 +2,7 @@
 
 {%- if breadbox %}
     {%- if breadbox.keywords %}
-        {%- for scope in config.KERKO_COMPOSER.get_ordered_specs('scopes') %}
+        {%- for scope in config.kerko_composer.get_ordered_specs('scopes') %}
             {{- facet(
                     scope.breadbox_label,
                     '',
@@ -18,7 +18,7 @@
         {%- endfor %}
     {%- endif %}
     {%- if breadbox.filters %}
-        {%- for f in config.KERKO_COMPOSER.get_ordered_specs('facets') %}
+        {%- for f in config.kerko_composer.get_ordered_specs('facets') %}
             {{ f.render(breadbox.filters[f.key], 'breadbox') }}
         {%- endfor %}
     {%- endif %}

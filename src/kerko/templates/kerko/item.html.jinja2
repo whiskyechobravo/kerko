@@ -1,4 +1,4 @@
-{% extends config.KERKO_TEMPLATE_LAYOUT %}
+{% extends config.kerko.templates.layout %}
 {% from "kerko/_attributes.html.jinja2" import title_aria_label %}
 {% from "kerko/_badges.html.jinja2" import badges %}
 {% from "kerko/_facets.html.jinja2" import facet_items %}
@@ -14,8 +14,8 @@
 
 {% macro facet_field(label_text, value_text, key, add_title=None) %}
     {#- Display a field using its facet, if available, otherwise fallback to a regular field display. #}
-    {%- if key in config.KERKO_COMPOSER.facets and key in item.facet_results %}
-        {%- set f = config.KERKO_COMPOSER.facets[key] %}
+    {%- if key in config.kerko_composer.facets and key in item.facet_results %}
+        {%- set f = config.kerko_composer.facets[key] %}
         {#- We have a matching facet, display its link. #}
         {{- field(
                 f.title,
@@ -43,7 +43,7 @@
 {%- block metas %}
     {{- super() }}
     <link rel="canonical" title="{{ title|escape }}" href="{{ item_url }}">
-    {%- for citation_format in config.KERKO_COMPOSER.get_ordered_specs('citation_formats') %}
+    {%- for citation_format in config.kerko_composer.get_ordered_specs('citation_formats') %}
         <link rel="alternate" title="{{ citation_format.label|escape }}" type="{{ citation_format.mime_type|escape }}" href="{{ url_for('kerko.item_citation_download', item_id=item.id, citation_format_key=citation_format.key) }}">
     {%- endfor %}
     {%- for tag in highwirepress_tags %}
@@ -54,7 +54,7 @@
 {%- block content_inner %}
     <div class="mt-2 mb-4 item-content">
         {%- block item_actions %}
-            {%- if item.attachments or config.KERKO_PRINT_ITEM_LINK or config.KERKO_COMPOSER.citation_formats or config.KERKO_OPEN_IN_ZOTERO_APP or config.KERKO_OPEN_IN_ZOTERO_WEB %}
+            {%- if item.attachments or config.kerko.features.print_item_link or config.kerko_composer.citation_formats or config.kerko.features.open_in_zotero_app or config.kerko.features.open_in_zotero_web %}
                 <div class="row my-2">
                     <div class="col-auto ml-auto text-right">
                         {%- if item.attachments|length > 1 %}
@@ -65,7 +65,7 @@
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labelledby="attachment-options">
                                         {%- for attachment in item.attachments %}
-                                            <a class="dropdown-item" href="{{ url_for('kerko.child_attachment_download', item_id=item.id, attachment_id=attachment['id'], attachment_filename=attachment['data']['filename']) }}"{% if config.KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW %} target="_blank"{% endif %}>
+                                            <a class="dropdown-item" href="{{ url_for('kerko.child_attachment_download', item_id=item.id, attachment_id=attachment['id'], attachment_filename=attachment['data']['filename']) }}"{% if config.kerko.features.download_attachment_new_window %} target="_blank"{% endif %}>
                                                 {{- attachment['data']['filename']|escape }}
                                             </a>
                                         {%- endfor %}
@@ -74,26 +74,26 @@
                             </div>
                         {%- elif item.attachments|length == 1 %}
                             <div class="{% block attachment_link_wrapper_classes %}d-inline-block d-print-none mb-2{% endblock %}">
-                                <a class="{% block attachment_link_btn_classes %}btn btn-primary{% endblock %}" href="{{ url_for('kerko.child_attachment_download', item_id=item.id, attachment_id=item.attachments[0]['id'], attachment_filename=item.attachments[0]['data']['filename']) }}"{% if config.KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW %} target="_blank"{% endif %} {{ title_aria_label(_('Read \'{}\'').format(item.attachments[0]['data']['filename']|escape)) }}>
+                                <a class="{% block attachment_link_btn_classes %}btn btn-primary{% endblock %}" href="{{ url_for('kerko.child_attachment_download', item_id=item.id, attachment_id=item.attachments[0]['id'], attachment_filename=item.attachments[0]['data']['filename']) }}"{% if config.kerko.features.download_attachment_new_window %} target="_blank"{% endif %} {{ title_aria_label(_('Read \'{}\'').format(item.attachments[0]['data']['filename']|escape)) }}>
                                     <span class="fas fa-file" aria-hidden="true"></span> {{ _('Read document') -}}
                                 </a>
                             </div>
                         {%- endif %}
-                        {%- if config.KERKO_PRINT_ITEM_LINK %}
+                        {%- if config.kerko.features.print_item_link %}
                             <div class="{% block print_link_wrapper_classes %}d-none d-md-inline-block d-print-none mb-2{% endblock %}">
                                 <button id="print-link" class="{% block print_btn_classes %}btn btn-light{% endblock %}" type="button">
                                     <span class="fas fa-print" aria-hidden="true"></span> {{ _('Print this record') }}
                                 </button>
                             </div>
                         {%- endif %}
-                        {%- if config.KERKO_COMPOSER.citation_formats %}
+                        {%- if config.kerko_composer.citation_formats %}
                             <div class="{% block download_link_wrapper_classes %}d-inline-block d-print-none mb-2{% endblock %}">
                                 <div class="dropdown">
                                     <button class="{% block download_btn_classes %}btn btn-light dropdown-toggle{% endblock %}" type="button" id="download-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <span class="fas fa-download" aria-hidden="true"></span> {% trans count=1, count_formatted='1' %}Download this record{% pluralize %}Download {{ count_formatted }} records{% endtrans -%} {# TODO: Remove pluralization after solving issue where translation is not loaded when the same message is sometimes pluralized, sometimes not. -#}
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labelledby="download-options">
-                                        {%- for citation_format in config.KERKO_COMPOSER.get_ordered_specs('citation_formats') %}
+                                        {%- for citation_format in config.kerko_composer.get_ordered_specs('citation_formats') %}
                                             <a class="dropdown-item" href="{{ url_for('kerko.item_citation_download', item_id=item.id, citation_format_key=citation_format.key) }}" rel="alternate" type="{{ citation_format.mime_type|escape }}" {{ title_aria_label(_('Download in {download_option} format').format(download_option=citation_format.label|escape)) }}>
                                                 {{- citation_format.label -}}
                                             </a>
@@ -103,12 +103,12 @@
                                 </div>
                             </div>
                         {%- endif %}
-                        {%- if config.KERKO_OPEN_IN_ZOTERO_APP and open_in_zotero_app_url %}
+                        {%- if config.kerko.features.open_in_zotero_app and open_in_zotero_app_url %}
                             <div id="open-in-zotero-app" class="text-right d-inline-block d-print-none mb-2 {% if not open_in_zotero_app %}d-none-important{% endif %}">
                                 <a class="btn btn-light" href="{{ open_in_zotero_app_url }}"><span class="fas fa-external-link-alt" aria-hidden="true"></span> {{ _("Open in Zotero") }}</a>
                             </div>
                         {%- endif %}
-                        {%- if config.KERKO_OPEN_IN_ZOTERO_WEB and open_in_zotero_web_url %}
+                        {%- if config.kerko.features.open_in_zotero_web and open_in_zotero_web_url %}
                             <div id="open-in-zotero-web" class="text-right d-inline-block d-print-none mb-2 {% if not open_in_zotero_web %}d-none-important{% endif %}">
                                 <a class="btn btn-light" href="{{ open_in_zotero_web_url }}" target="_blank"><span class="fas fa-external-link-alt" aria-hidden="true"></span> {{ _("View on zotero.org") }}</a>
                             </div>
@@ -181,7 +181,7 @@
         {%- endblock item_field_citation %}
         {%- block item_facets %}
             {%- if item.facet_results %}
-                {%- for f in config.KERKO_COMPOSER.get_ordered_specs('facets') if f.item_view and f.key in item.facet_results %}
+                {%- for f in config.kerko_composer.get_ordered_specs('facets') if f.item_view and f.key in item.facet_results %}
                     {{ f.render(item.facet_results[f.key], 'field') }}
                 {%- endfor %}
             {%- endif %}
@@ -193,7 +193,7 @@
                     <div class="col-md-8 col-lg-9 break-word">
                         <ul class="list-unstyled">
                             {%- for attachment in item.attachments %}
-                                <li><a href="{{ url_for('kerko.child_attachment_download', item_id=item.id, attachment_id=attachment['id'], attachment_filename=attachment['data']['filename']) }}"{% if config.KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW %} target="_blank"{% endif %}><span class="fas fa-file d-print-none no-decorate mr-1" aria-hidden="true"></span>{{ attachment['data']['filename']|escape }}</a></li>
+                                <li><a href="{{ url_for('kerko.child_attachment_download', item_id=item.id, attachment_id=attachment['id'], attachment_filename=attachment['data']['filename']) }}"{% if config.kerko.features.download_attachment_new_window %} target="_blank"{% endif %}><span class="fas fa-file d-print-none no-decorate mr-1" aria-hidden="true"></span>{{ attachment['data']['filename']|escape }}</a></li>
                             {%- endfor %}
                         </ul>
                     </div>
@@ -206,7 +206,7 @@
         {%- block item_field_relations %}
             {#- Determine which relation tab is to be initially active, if any. #}
             {%- set relations_ns = namespace(active_tab=None) %}
-            {%- for rel in config.KERKO_COMPOSER.get_ordered_specs('relations') %}
+            {%- for rel in config.kerko_composer.get_ordered_specs('relations') %}
                 {%- if not relations_ns.active_tab %}
                     {%- if item[rel.field.key] %}
                         {%- set relations_ns.active_tab = rel.key %}
@@ -220,7 +220,7 @@
                     <div class="col-md-4 col-lg-3 font-weight-bold break-word text-md-right mb-2 mt-md-2 d-print-none">{{ _('Relations') }}</div>
                     <div class="col-md-8 col-lg-9 break-word">
                         <ul class="nav nav-tabs d-print-none" role="tablist">
-                            {%- for rel in config.KERKO_COMPOSER.get_ordered_specs('relations') %}
+                            {%- for rel in config.kerko_composer.get_ordered_specs('relations') %}
                                 {%- if item[rel.field.key] %}
                                     <li class="nav-item" role="tab">
                                         <a id="tab-{{ rel.key }}" href="#{{ rel.key }}" class="nav-link {% if rel.key == relations_ns.active_tab %}active{% endif %}" data-toggle="tab" aria-controls="{{ rel.key }}" {% if rel.key == relations_ns.active_tab %}aria-selected="true"{% endif %}>{{ rel.label }}</a>
@@ -234,7 +234,7 @@
                             {%- endfor %}
                         </ul>
                         <div class="tab-content">
-                            {%- for rel in config.KERKO_COMPOSER.get_ordered_specs('relations') %}
+                            {%- for rel in config.kerko_composer.get_ordered_specs('relations') %}
                                 {%- if item[rel.field.key] %}
                                     {%- with key=rel.key, field=rel.field.key, label=rel.label, is_active=rel.key == relations_ns.active_tab %}
                                         {%- include "kerko/_item-relations.html.jinja2" %}
@@ -266,7 +266,7 @@
 {%- block footer_inner %}
     {{ super() }}
     {%- block preferences %}
-        {%- if config.KERKO_OPEN_IN_ZOTERO_APP or config.KERKO_OPEN_IN_ZOTERO_WEB %}
+        {%- if config.kerko.features.open_in_zotero_app or config.kerko.features.open_in_zotero_web %}
             <div class="text-right d-print-none pr-3 pb-3">
                 <button class="btn btn-secondary" data-toggle="modal" data-target="#preferences-modal">
                     <span class="fas fa-cog" aria-hidden="true"></span> {{ _("Preferences") }}
@@ -301,12 +301,12 @@
     {{- super() }}
     {%- block kerko_item_js %}
         <script src="{{ url_for('kerko.static', filename='kerko/js/item.js') }}?202008101934"></script>
-        {%- if config.KERKO_OPEN_IN_ZOTERO_APP or config.KERKO_OPEN_IN_ZOTERO_WEB %}
+        {%- if config.kerko.features.open_in_zotero_app or config.kerko.features.open_in_zotero_web %}
             <script src="{{ url_for('kerko.static', filename='kerko/js/open_in_zotero.js') }}?20221016"></script>
         {%- endif %}
     {%- endblock kerko_item_js %}
     {%- block kerko_print_js %}
-        {%- if config.KERKO_PRINT_ITEM_LINK %}
+        {%- if config.kerko.features.print_item_link %}
             <script src="{{ url_for('kerko.static', filename='kerko/js/print.js') }}"></script>
         {%- endif %}
     {%- endblock kerko_print_js %}

@@ -21,10 +21,10 @@
                         <li>{{ _("Each new submission adds the entered keywords to the list of search criteria.") }}</li>
                         <li>{{ _("To start a new search instead of adding keywords to the current search, use the <strong>{}</strong> button, then enter your new keywords.").format(_("Reset search")) }}</li>
                         <li>{{ _("To replace an already submitted keyword, first remove it by unchecking its checkbox, then submit a new keyword.") }}</li>
-                        {%- if config.KERKO_COMPOSER.scopes|length %}
+                        {%- if config.kerko_composer.scopes|length %}
                             <li>{{ _("You may control the extent of your search by selecting where to search. The options are:") }}
                                 <ul>
-                                    {%- for scope in config.KERKO_COMPOSER.scopes.values() %}
+                                    {%- for scope in config.kerko_composer.scopes.values() %}
                                         {%- if scope.help_text %}
                                             <li><strong>{{ scope.selector_label }}</strong>{{ _(": ") }}{{ scope.help_text }}</li>
                                         {%- endif %}
@@ -55,14 +55,14 @@
                         <li>{{ _("An arrow icon ({}) appearing next to a category indicates that subcategories are available. You may press it to expand a list of more specific categories. You may press it again later to collapse the list. Expanding or collapsing subcategories will not change your current search; this allows you to quickly explore a hierarchy of categories if desired.").format('<span class="fas fa-chevron-right" aria-hidden="true"></span>') }}</li>
                     </ul>
                     <h3>{{ _("Results") }}</h3>
-                    <p>{{ _("This section shows the search results. When no search criteria has been given, it shows the full content of the bibliography (up to {page_len} entries per page).").format(page_len=config.KERKO_PAGE_LEN) }}</p>
+                    <p>{{ _("This section shows the search results. When no search criteria has been given, it shows the full content of the bibliography (up to {page_len} entries per page).").format(page_len=config.kerko.pagination.page_len) }}</p>
                     <ul>
                         <li>{{ _("Each entry of the results list is a link to its full bibliographic record. From the bibliographic record view, you may continue exploring the search results by going to previous or following records in your search results, or you may return to the list of results.") }}</li>
                         <li>{{ _("Additional links, such as <strong>Read document</strong> or <strong>View on <em>[website name]</em></strong>, may appear under a result. These give you quick access to the resource. Those links will also be available in the full bibliographic record.") }}</li>
-                        {%- if config.KERKO_RESULTS_ABSTRACTS_TOGGLER %}
+                        {%- if config.kerko.features.results_abstracts_toggler %}
                             <li>{{- _("The <strong>Abstracts</strong> button lets you toggle the display of abstracts within the list of search results. Enabling abstracts, however, will have no effect on results for which no abstract is available.") }}
                         {%- endif %}
-                        {%- if config.KERKO_COMPOSER.sorts|length %}
+                        {%- if config.kerko_composer.sorts|length %}
                             <li>{{ _("Various options are provided to let you sort the search results. One of them is the <strong>Relevance</strong> option, which ranks the results from most relevant to least relevant. The score used for ranking takes into account word frequencies as well as the fields where they appear. For instance, if a search term occurs frequently in an entry or is one of very few terms used in that entry, that entry will probably rank higher than another where the search term occurs less frequently or where lots of other words also occur. Likewise, a search term will have more effect on the scores if it is rare in the whole bibliography than if it is very common. Also, if a search term appears in, e.g., the title of an entry, it will have more effect on the score of that entry than if it appeared in a less important field such as the abstract.") }}</li>
                             <li>{{ _("The <strong>Relevance</strong> sort is only available after keywords have been submitted using the <strong>{search}</strong> section.").format(search=_("Search")) }}</li>
                             <li>{{ _("Categories selected in the <strong>{explore}</strong> section have no effect on the relevance score. Their only effect is to filter the list of results.").format(explore=_("Explore")) }}</li>
