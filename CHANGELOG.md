@@ -39,6 +39,8 @@ Backwards incompatible changes:
 - The `sort_key` argument to `FacetSpec.__init__()` is now `sort_by`.
 - `Composer` built-in fields `z_dateAdded` and `z_dateModified` are now
   `date_added` and `date_modified` respectively.
+- The data directory now has a default location relative to the instance path,
+  which is determined by Flask.
 
 
 ## 0.9 (2022-12-29)

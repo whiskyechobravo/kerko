@@ -388,6 +388,9 @@ pages.
 
 The variables below are required and have no default values:
 
+- `SECRET_KEY`: This variable is required for generating secure tokens
+  in web forms. It should have a hard to guess, random value, and should
+  really remain secret.
 - `ZOTERO_API_KEY`: Your API key, as [created on
   zotero.org](https://www.zotero.org/settings/keys/new).
 - `ZOTERO_LIBRARY_ID`: The identifier of the library to get data from. For
@@ -404,14 +407,13 @@ override their default value:
 
 **TODO:config: Clarify that the following may be set as environment variables or .env variables but with a prefix defined by the app; or no prefix if set directly in app.config in Python code**
 
-- `SECRET_KEY`: This variable is required for generating secure tokens
-  in web forms. It should have a hard to guess, random value, and should
-  really remain secret.
-- `DATA_DIR`: The directory where to store the search index and the file
-  attachments. This may be an absolute path or a relative path; a relative path
-  will be resolved from the application's root directory. Under the data
-  directory, subdirectories `cache`, `index` and `attachments` will be created
-  if they do not already exist.
+- `DATA_DIR`: The directory where Kerko will store its data (such as the search
+  index and the file attachments). This may be specified as an absolute path or
+  as a relative path. For the latter case, the path will be relative to the
+  application's instance directory that is [determined by
+  Flask](https://flask.palletsprojects.com/en/2.3.x/config/#instance-folders).
+  Under the data directory, subdirectories `cache`, `index` and `attachments`
+  will be created if they do not already exist.
 
 **TODO:config: Clarify what those dots mean in the following structured/dict config**
 
