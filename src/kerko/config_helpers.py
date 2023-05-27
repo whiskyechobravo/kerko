@@ -290,6 +290,9 @@ FacetModelUnion = Annotated[
 class SortsModel(BaseModel):
     """Model for the kerko.sorts config table."""
 
+    class Config:
+        extra = Extra.forbid
+
     enabled: bool = True
     weight: int = 0
     label: Optional[str]
@@ -297,6 +300,9 @@ class SortsModel(BaseModel):
 
 class CitationFormatsModel(BaseModel):
     """Model for the kerko.citation_formats config table."""
+
+    class Config:
+        extra = Extra.forbid
 
     enabled: bool = True
     weight: int = 0
@@ -309,6 +315,9 @@ class CitationFormatsModel(BaseModel):
 class RelationsModel(BaseModel):
     """Model for the kerko.relations config table."""
 
+    class Config:
+        extra = Extra.forbid
+
     enabled: bool = True
     weight: int = 0
     label: Optional[str]
@@ -316,6 +325,9 @@ class RelationsModel(BaseModel):
 
 class KerkoModel(BaseModel):
     """Model for the kerko config table."""
+
+    class Config:
+        extra = Extra.forbid
 
     assets: AssetsModel
     features: FeaturesModel
