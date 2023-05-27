@@ -333,25 +333,15 @@ class KerkoModel(BaseModel):
     relations: Dict[ElementIdStr, RelationsModel]
 
 
-def load_toml(filename: Union[str, pathlib.Path], silent=False) -> Dict[str, Any]:
-    """
-    Load the content of a TOML file.
-
-    CAUTION: This function is meant to be called during initialization, outside
-    of the application context. On errors, it may print to stderr and exit the
-    process abruptly.
-    """
+def load_toml(filename: Union[str, pathlib.Path]) -> Dict[str, Any]:
+    """Load the content of a TOML file."""
     try:
         with open(filename, 'rb') as file:
             return tomllib.load(file)
     except OSError as e:
-        if not silent:
-            print(f"Unable to open TOML file.\n{e}", file=sys.stderr)
-        sys.exit(1)
+        raise RuntimeError(f"Unable to open TOML file.\n{e}") from e
     except tomllib.TOMLDecodeError as e:
-        if not silent:
-            print(f"Invalid TOML format in file '{filename}'.\n{e}", file=sys.stderr)
-        sys.exit(1)
+        raise RuntimeError(f"Invalid TOML format in file '{filename}'.\n{e}") from e
 
 
 def config_update(config: Config, new_data: Dict[str, Any]) -> None:
@@ -389,7 +379,7 @@ def config_set(config: Config, path: str, value: Any) -> None:
     dpath.new(config, path, value, separator='.')
 
 
-def validate_config(config: Config, silent=False) -> None:
+def validate_config(config: Config) -> None:
     """
     Parse and validate Kerko's config to ensure the data is valid.
 
@@ -397,15 +387,9 @@ def validate_config(config: Config, silent=False) -> None:
 
     If some types are incorrect, they may be silently coerced into the expected
     types (strict typing is not enforced by the models).
-
-    CAUTION: This function is meant to be called during initialization, outside
-    of the application context. On errors, it may print to stderr and exit the
-    process abruptly.
     """
     if config.get('kerko'):
         try:
             config_set(config, 'kerko', KerkoModel.parse_obj(config['kerko']).dict())
         except ValidationError as e:
-            if not silent:
-                print(f"Invalid configuration. {e}", file=sys.stderr)
-            sys.exit(1)
+            raise RuntimeError(f"Invalid configuration. {e}") from e

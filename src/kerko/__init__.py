@@ -4,6 +4,7 @@ Kerko: A Flask blueprint that provides faceted search for bibliographies based o
 # pylint: disable=invalid-name
 
 import pathlib
+import sys
 
 from flask import Blueprint
 
@@ -15,7 +16,11 @@ from kerko.jinja2 import register_filters
 TRANSLATION_DOMAIN = 'kerko'
 TRANSLATION_DIRECTORIES = [str(pathlib.Path(__file__).parent / 'translations')]
 
-DEFAULTS = load_toml(pathlib.Path(__file__).parent / 'default_config.toml')
+try:
+    DEFAULTS = load_toml(pathlib.Path(__file__).parent / 'default_config.toml')
+except RuntimeError as e:
+    print(e, file=sys.stderr)
+    sys.exit(1)
 
 
 def make_blueprint():
