@@ -406,6 +406,9 @@ def validate_config(
     """
     if config.get(key):
         try:
+            # The parsed models are stored in the config as dicts. This way, the
+            # whole configuration structure is made of dicts only, allowing
+            # consistent access regardless of the element or its depth.
             config_set(config, key, model.parse_obj(config[key]).dict())
         except ValidationError as e:
             raise RuntimeError(f"Invalid configuration. {e}") from e
