@@ -1,7 +1,6 @@
 import abc
 import pathlib
-import sys
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Type, Union
 
 from typing_extensions import Annotated, Literal
 
@@ -13,7 +12,7 @@ except ModuleNotFoundError:
 import dpath
 import whoosh
 from flask import Config
-from pydantic import (  # type: ignore  # pylint: disable=no-name-in-module
+from pydantic import (  # pylint: disable=no-name-in-module
     BaseModel, ConstrainedStr, Extra, Field, NonNegativeInt, ValidationError,
     validator)
 
@@ -391,17 +390,21 @@ def config_set(config: Config, path: str, value: Any) -> None:
     dpath.new(config, path, value, separator='.')
 
 
-def validate_config(config: Config) -> None:
+def validate_config(
+    config: Config,
+    key: str = 'kerko',
+    model: Type[BaseModel] = KerkoModel,
+) -> None:
     """
-    Parse and validate Kerko's config to ensure the data is valid.
+    Parse and validate a configuration to ensure the data is valid.
 
-    This only validates the structure that's under the 'kerko' key.
+    This only validates the structure that's under the specified key.
 
     If some types are incorrect, they may be silently coerced into the expected
     types (strict typing is not enforced by the models).
     """
-    if config.get('kerko'):
+    if config.get(key):
         try:
-            config_set(config, 'kerko', KerkoModel.parse_obj(config['kerko']).dict())
+            config_set(config, key, model.parse_obj(config[key]).dict())
         except ValidationError as e:
             raise RuntimeError(f"Invalid configuration. {e}") from e
