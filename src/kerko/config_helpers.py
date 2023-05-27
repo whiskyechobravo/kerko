@@ -158,6 +158,7 @@ class SearchModel(BaseModel):
     def validate_whoosh_has_language(cls, v):  # pylint: disable=no-self-argument
         if not whoosh.lang.has_stemmer(v):
             raise ValueError(f"language '{v}' not supported by Whoosh")
+        return v
 
 
 class ScopesModel(BaseModel):
