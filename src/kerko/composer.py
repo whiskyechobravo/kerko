@@ -1,4 +1,4 @@
-import re  # pylint: disable=too-many-lines
+import re
 from typing import Dict
 
 from flask import Config
