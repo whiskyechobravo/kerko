@@ -81,6 +81,5 @@ class ValidateConfigTestCase(unittest.TestCase):
 
     def test_invalid_config(self):
         config = Config(root_path='', defaults={'kerko': 'bad_config'})
-        with self.assertRaises(SystemExit) as e:
-            validate_config(config, silent=True)
-        self.assertEqual(e.exception.code, 1)
+        with self.assertRaises(RuntimeError):
+            validate_config(config)
