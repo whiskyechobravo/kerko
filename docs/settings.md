@@ -23,7 +23,7 @@ The variables below are required and have no default values:
 
 ## Optional settings
 
-**TODO:docs: make each setting stand out more; maybe convert to headings**
+**TODO:docs: make each setting stand out more; maybe convert to definition list (https://squidfunk.github.io/mkdocs-material/reference/lists/#using-definition-lists)**
 
 Any of the following variables may be added to your configuration if you wish to
 override their default value:

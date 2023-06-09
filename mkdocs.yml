@@ -82,5 +82,7 @@ extra:
     - icon: fontawesome/brands/github
       link: https://github.com/whiskyechobravo/kerko
       name: Kerko on GitHub
+  version:
+    provider: mike
 
-copyright: Copyright &copy; Whisky Echo Bravo Services inc. and Kerko contributors
+copyright: Copyright &copy; <a href="https://whiskyechobravo.com" target="_blank" rel="noopener">Whisky Echo Bravo Services inc.­</a> and Kerko contributors

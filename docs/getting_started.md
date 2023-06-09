@@ -285,4 +285,5 @@ pages.
 [Flask-Babel_documentation]: https://python-babel.github.io/flask-babel/
 [Kerko]: https://github.com/whiskyechobravo/kerko
 [KerkoApp]: https://github.com/whiskyechobravo/kerkoapp
+[KerkoStart]: https://github.com/whiskyechobravo/kerkostart
 [venv]: https://docs.python.org/3.11/tutorial/venv.html
