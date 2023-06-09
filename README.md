@@ -36,6 +36,7 @@ Contents:
     - [Reporting issues](#reporting-issues)
     - [Making code changes](#making-code-changes)
     - [Running the tests](#running-the-tests)
+    - [Working on the documentation](#working-on-the-documentation)
     - [Submitting code changes](#submitting-code-changes)
     - [Submitting a translation](#submitting-a-translation)
     - [Supporting the project](#supporting-the-project)
@@ -877,7 +878,7 @@ environment, including development and testing dependencies by running the
 following command from Kerko's root directory, i.e., where `setup.cfg` resides:
 
 ```bash
-pip install -e .[dev,tests]
+pip install -e .[dev,docs,tests]
 ```
 
 
@@ -905,6 +906,15 @@ Python interpreters available on your machine):
 ```bash
 tox
 ```
+
+
+### Working on the documentation
+
+Useful commands:
+
+`mkdocs serve`: Start the live-reloading docs server.
+`mkdocs build`: Build the documentation site.
+`mkdocs -h`: Print help message and exit.
 
 
 ### Submitting code changes
