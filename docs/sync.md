@@ -1,6 +1,6 @@
 # Synchronizing from Zotero
 
-## The synchronization process
+## Understanding the synchronization process
 
 Kerko does one-way data synchronization from zotero.org through a 3-step
 process:
@@ -10,7 +10,7 @@ process:
 3. Download the file attachments from Zotero.
 
 The first step performs incremental updates of the local cache. After an initial
-full update, the subsequent synchronization runs will request only new and
+full synchronization, subsequent synchronization runs will only request new and
 updated items from Zotero. This greatly reduces the number of Zotero API calls,
 and thus the time required to complete the synchronization process.
 
@@ -22,18 +22,18 @@ using the application sees the data that was available prior to the
 synchronization run.
 
 The third and last step reads the list of file attachments from the search
-index, with their MD5 hashes. It compares those with the available local copies
-of the files, and downloads new or changed files from Zotero. It also deletes
-any local files that may no longer be used.
+index, with their MD5 hashes. It compares the hashes with those of the available
+local copies of the files, and downloads new or changed files from Zotero. It
+also deletes any local files that may no longer be used.
 
-Normally, all synchronization steps are executed. But under certain
-circumstances it can be useful to execute a given step individually. For
+Usually, all synchronization steps should be executed. But under certain
+circumstances it can be useful to execute a specific step individually. For
 example, after changing some configuration settings, one may clean just the
-search index and rebuild it from the cache (see [the command line
-interface](#command-line-interface-cli) below), which will be much faster than
+search index and rebuild it from the cache, which will be much faster than
 re-synchronizing from Zotero.
 
-**TODO: note that this is unidirectional; Kerko never writes to the Zotero library**
+As previously mentioned, the synchronization process is unidirectional, from
+Zotero to Kerko. Kerko will never try to write anything to your Zotero library.
 
 
 ## Useful commands
@@ -43,57 +43,93 @@ The `flask` command will work with your virtual environment active.
 
 Some frequently used commands are:
 
-```bash
-# List all commands provided by Kerko:
-flask kerko --help
+`flask kerko --help`
 
-# Delete all of Kerko's data: cache, search index, attachments.
-flask kerko clean
+: Lists all commands provided by Kerko.
 
-# Get help about the clean command:
-flask kerko clean --help
+`flask kerko clean`
 
-# Synchronize everything: the cache (from Zotero), the search index (from the
-# cache), the attachments (from files in Zotero, based on list in search index).
-flask kerko sync
+: Deletes all of Kerko's data: cache, search index, attachments.
 
-# Get help about the sync command:
-flask kerko sync --help
+`flask kerko clean --help`
 
-# Delete the cache. A subsequent 'flask kerko sync' will perform a full update
-# from Zotero, but it will not re-download all file attachments.
-flask kerko clean cache
+: Shows help about the clean command.
 
-# Delete just the search index.
-flask kerko clean index
+`flask kerko sync`
 
-# Synchronize just the search index (from the cache).
-flask kerko sync index
-```
+: Synchronizes everything: the cache (from Zotero), the search index (from the
+  cache), the attachments (from files in Zotero, based on list in search index).
 
-The above commands should work as-is when you are in the application's directory
-(where the `wsgi.py` file is found). To run them from other directories, you
-might need to use Flask's `--app` option, or to set the `FLASK_APP` environment
-variable.
+    !!! tip "Tip: Making commands more verbose"
+
+        The `--debug` option may be used with any Flask command and will cause
+        Kerko to output more information. It will tell quite a bit more about
+        what is happening during the synchronization process. For example:
+
+        ```bash
+        flask --debug kerko sync
+        ```
+
+`flask kerko sync --help`
+
+: Shows help about the sync command:
+
+`flask kerko clean cache`
+
+: Deletes the cache. A subsequent execution of `flask kerko sync` will perform a
+  full update from Zotero, but it will not re-download all file attachments.
+
+`flask kerko clean index`
+
+: Deletes just the search index.
+
+`flask kerko sync index`
+
+: Synchronizes just the search index (from the cache).
+
+!!! tip "Tip: Running commands from outside the application's directory"
+
+    The above commands should work as-is when you are in the application's
+    directory (where the `wsgi.py` file is found). To run them from another
+    directory, you could use Flask's `--app` option, or to set the `FLASK_APP`
+    environment variable. For example:
+
+    ```bash
+    flask --app=/path/to/kerkoapp/wsgi:app kerko sync
+    ```
 
 
 ## Monitoring data synchronization
 
-Kerko provides a web API endpoint that you might want to use to monitor data
+Kerko provides a web API endpoint that you could use to monitor data
 synchronization.
 
 In the description below, `BASE_URL` should be replaced with the protocol,
-domain, and URL path prefix (as specified when registering the Kerko blueprint)
-that are relevant to your installation.
+domain, port, and Kerko URL path prefix that are relevant to your installation,
+e.g., `https://example.com/bibliography`.
 
-- `BASE_URL/api/last-sync`: Returns a JSON object with information about the
-  last synchronization from Zotero. This may be used to monitor
-  synchronizations. If no sync has been performed, it returns an empty object,
+The web API endpoint is:
+
+`BASE_URL/api/last-sync`
+
+: Returns a JSON object with information about the last synchronization from
+  Zotero. If no sync has been performed yet, it returns an empty JSON object,
   otherwise the returned object contains the following values:
-    - `hours_ago`: Number of hours since the last sync.
-    - `when`: ISO 8601 date string with the date and time of the last sync.
 
-**TODO: provide sample JSON**
+    `hours_ago`
+
+    : Number of hours since the last sync.
+
+    `when`
+
+    : ISO 8601 date string with the date and time of the last sync.
+
+    ```json title="Sample JSON output"
+    {
+      "hours_ago": 17.029,
+      "when": "2023-05-24T11:10:29.093335-04:00"
+    }
+    ```
 
 
 [Flask_CLI]: https://flask.palletsprojects.com/en/latest/cli/

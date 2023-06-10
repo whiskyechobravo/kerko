@@ -21,7 +21,7 @@ installation will suit you best.
 This procedure requires that you have [Python], [pip], and [Git] installed on
 your computer.
 
-1. The first step is to install the software.
+1. The first step is to install the software. Use the following commands:
 
     === "POSIX"
         ```bash
@@ -98,28 +98,31 @@ your computer.
 
 6. Open http://localhost:5000/ in your browser and explore the bibliography!
 
-!!! warning
+!!! warning "Not suitable for production"
 
-    This procedure relies on Flask's built-in server, which is **not suitable for
-    production**. For production, you should consider better options, such as
-    the [WSGI servers suggested in Flask's documentation][Flask_production].
+    The above procedure relies on Flask's built-in server, which is not
+    suitable for production. For production use, you should consider better
+    options, such as the [WSGI servers suggested in Flask's
+    documentation][Flask_production].
 
-If you wish to launch the application again in a future session, make sure to
-reactivate the virtual environment first. The operations would look like:
+!!! info "Running your installed application"
 
-=== "POSIX"
-    ```bash
-    cd kerkoapp
-    source venv/bin/activate
-    flask --debug run
-    ```
+    To launch the application again in a future session, make sure to reactivate the
+    virtual environment first. The command sequence should look like:
 
-=== "Windows"
-    ```
-    cd kerkoapp
-    venv\Scripts\activate.bat
-    flask --debug run
-    ```
+    === "POSIX"
+        ```bash
+        cd kerkoapp
+        source venv/bin/activate
+        flask --debug run
+        ```
+
+    === "Windows"
+        ```
+        cd kerkoapp
+        venv\Scripts\activate.bat
+        flask --debug run
+        ```
 
 
 ### Docker installation
@@ -200,7 +203,7 @@ and volume binding, see the [Docker documentation][Docker_docs].
 This section should help you understand the minimal steps required for getting
 Kerko to work within a custom Flask application.
 
-!!! note ""
+!!! tip
 
     For a ready-to-use standalone application, you will be better off using
     [KerkoApp](#getting-started-with-kerkoapp) instead.
@@ -211,7 +214,7 @@ Let's now build a minimal app:
 
 1. Create an empty directory `myapp` where your application reside.
 
-2. Install Kerko in a new [virtual environment][venv].
+2. Install Kerko in a new [virtual environment][venv]:
 
     === "POSIX"
         ```bash
