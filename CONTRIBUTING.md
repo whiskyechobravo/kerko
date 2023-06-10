@@ -17,7 +17,7 @@ consider the following guidelines:
 ## Making code changes
 
 Clone the [Kerko repository][Kerko] into a local directory. Set up a [virtual
-environment][venv], then install this local version of Kerko in the virtual
+environment][venv], then install that local version of Kerko in the virtual
 environment, including development and testing dependencies by running the
 following command from Kerko's root directory, i.e., where `setup.cfg` resides:
 

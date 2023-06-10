@@ -30,9 +30,6 @@ nosetests.xml
 coverage.xml
 *.cover
 
-# Documentation build.
-/site/
-
 # Translations.
 *.mo
 *.pot
@@ -40,8 +37,8 @@ coverage.xml
 # Logs.
 *.log
 
-# Sphinx documentation.
-docs/_build/
+# Documentation build.
+/site/
 
 # DotEnv configuration.
 .env

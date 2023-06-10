@@ -33,7 +33,7 @@ search index and rebuild it from the cache (see [the command line
 interface](#command-line-interface-cli) below), which will be much faster than
 re-synchronizing from Zotero.
 
-**TODO: note that Kerko never writes to the Zotero library**
+**TODO: note that this is unidirectional; Kerko never writes to the Zotero library**
 
 
 ## Useful commands

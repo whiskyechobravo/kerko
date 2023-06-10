@@ -5,7 +5,7 @@ nav:
   - getting_started.md
   - sync.md
   - guides.md
-  - settings.md
+  - config.md
   - cli.md
   - troubleshooting.md
   - contributing.md

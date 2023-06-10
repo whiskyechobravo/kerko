@@ -1,6 +1,6 @@
-# Settings reference
+# Configuration reference
 
-**TODO: some intro**
+**TODO: some intro; decide on how to structure this (environment vars/TOML settings OR deployment-specific settings/app settings); mark required settings with a flag rather than structure the document based on that**
 
 ## Required settings
 

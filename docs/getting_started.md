@@ -1,282 +1,371 @@
 # Getting started
 
-**TODO: update this** This section presents ~~two~~ approaches to getting started with ~~KerkoApp~~: running
-from a standard installation of KerkoApp, or running from a Docker container
-pre-built with KerkoApp. You may choose the one you are most comfortable with.
+For getting started with Kerko, we recommend that you use KerkoApp, either with
+a "standard" installation, or with a Docker installation. However, if KerkoApp
+does not work for your use case, we also have instructions for [creating a
+minimalist application](#creating-a-custom-application) that could serve as a
+starting point for a custom Kerko application.
 
-KerkoApp is just a thin container around Kerko. As such, almost all of its
-features are inherited from Kerko. See [Kerko's documentation][Kerko] for the
-list of features.
-
-The main features added by KerkoApp over Kerko's are:
-
-**TODO:config: Update this description!**
-
-- Read most configuration from environment variables or a `.env` file, adhering
-  to the [Twelve-factor App](https://12factor.net/config) methodology.
-- Provide extra environment variables for:
-    - defining facets based on Zotero collections;
-    - excluding or including tags or child items (notes and attachments) with
-      regular expressions;
-    - excluding fields, facets, sort options, search scopes, record download
-      formats, or badges from Kerko's defaults.
-- Provide templates for common HTTP errors.
-- Load user interface translations based on the configured locale.
 
 ## Getting started with KerkoApp
 
+To install KerkoApp, you may choose between a "standard" installation and a
+Docker installation. Just go with the option you feel most comfortable with. If
+you don't know Docker, you should be fine with the standard installation. But if
+you prefer not to touch any Python-related thing, perhaps the Docker
+installation will suit you best.
+
+
 ### Standard installation
 
-This procedure requires Python 3.7 or later.
+This procedure requires that you have [Python], [pip], and [Git] installed on
+your computer.
 
-1. The first step is to install the software. As with any Python package, it is
-   highly recommended to install it within a [virtual environment][venv].
+1. The first step is to install the software.
 
-   ```bash
-   git clone https://github.com/whiskyechobravo/kerkoapp.git
-   cd kerkoapp
-   pip install -r requirements/run.txt
-   ```
+    === "POSIX"
+        ```bash
+        git clone https://github.com/whiskyechobravo/kerkoapp.git
+        cd kerkoapp
+        python -m venv venv
+        source venv/bin/activate
+        pip install -r requirements/run.txt
+        ```
 
-   This will install many packages required by Kerko or KerkoApp.
+    === "Windows"
+        ```
+        git clone https://github.com/whiskyechobravo/kerkoapp.git
+        cd kerkoapp
+        python -m venv venv
+        venv\Scripts\activate.bat
+        pip install -r requirements\run.txt
+        ```
 
-2. Copy the `sample.env` file to `.env`. Open `.env` in a text editor to assign
-   proper values to the variables outlined below.
+    This will install all packages required by Kerko and KerkoApp within a
+    [virtual environment][venv].
 
-   - `KERKOAPP_SECRET_KEY`: This variable is required for generating secure tokens in web
-     forms. It should have a secure, random value and it really has to be
-     secret. For this reason, never add your `.env` file to a code repository.
-   - `KERKOAPP_ZOTERO_API_KEY`, `KERKOAPP_ZOTERO_LIBRARY_ID` and
-     `KERKOAPP_ZOTERO_LIBRARY_TYPE`: These variables are required for Kerko to be
-     able to access your Zotero library. See [Environment
-     variables](#environment-variables) for details.
+2. Copy the `sample.env` file to `.env` in the same directory. Open `.env` in a
+   text editor to assign proper values to the variables outlined below.
 
-3. Have KerkoApp retrieve your data from zotero.org:
+    - `KERKOAPP_SECRET_KEY`: This variable is required for generating secure
+      tokens in web forms. It should have a secure, random value and it really
+      has to be secret. For this reason, never add your `.env` file to a code
+      repository.
+    - `KERKOAPP_ZOTERO_API_KEY`: Your Zotero API key, as [created on
+      zotero.org](https://www.zotero.org/settings/keys/new). We recommend that
+      you create a read-only API key, as Kerko does not need to write to your
+      library.
+    - `KERKOAPP_ZOTERO_LIBRARY_ID`: The identifier of the Zotero library to get
+      data from. For a personal library this value is your _userID_, as found on
+      https://www.zotero.org/settings/keys (you must be logged-in). For a group
+      library this value is the _groupID_ of the library, as found in the URL of
+      the library (e.g., the _groupID_ of the library at
+      https://www.zotero.org/groups/2348869/kerko_demo is `2348869`).
+    - `KERKOAPP_ZOTERO_LIBRARY_TYPE`: The type of library to get data from,
+      either `'user'` for your personal library, or `'group'` for a group
+      library.
 
-   ```bash
-   flask --debug kerko sync
-   ```
+3. Copy the `sample.config.toml` file to `config.toml` in the same directory.
+   You do not need to edit the latter at this point, but later on this is where
+   you will change configuration options.
 
-   If you have a large bibliography and/or large file attachments, that command
-   may take a while to complete (and there is no progress indicator). In
-   production use, that command is usually added to the crontab file for regular
-   execution.
+4. Have KerkoApp synchronize your data from zotero.org:
 
-   The `--debug` switch is optional. If you use it, some messages will give you
-   an idea of the sync process' progress. If you omit it, the command will run
-   silently unless there are warnings or errors.
+    ```bash
+    flask --debug kerko sync
+    ```
 
-4. Run KerkoApp:
+    If you have a large Zotero library and/or large file attachments, that
+    command may take a while to complete. Wait until the command finishes. In
+    production use, this command is usually added to the crontab file for regular
+    execution.
 
-   ```bash
-   flask --debug run
-   ```
+    The `--debug` switch is optional. If you use it, some messages will give you
+    an idea of the sync process' progress. If you omit it, the command will run
+    silently unless there are warnings or errors.
 
-5. Open http://localhost:5000/ in your browser and explore the bibliography.
+    To list all commands provided by Kerko:
 
-Note that Flask's built-in server is **not suitable for production** as it
-doesn’t scale well. You'll want to consider better options, such as the [WSGI
-servers suggested in Flask's documentation][Flask_production].
+    ```bash
+    flask kerko --help
+    ```
+
+5. Run KerkoApp:
+
+    ```bash
+    flask --debug run
+    ```
+
+6. Open http://localhost:5000/ in your browser and explore the bibliography!
+
+!!! warning
+
+    This procedure relies on Flask's built-in server, which is **not suitable for
+    production**. For production, you should consider better options, such as
+    the [WSGI servers suggested in Flask's documentation][Flask_production].
+
+If you wish to launch the application again in a future session, make sure to
+reactivate the virtual environment first. The operations would look like:
+
+=== "POSIX"
+    ```bash
+    cd kerkoapp
+    source venv/bin/activate
+    flask --debug run
+    ```
+
+=== "Windows"
+    ```
+    cd kerkoapp
+    venv\Scripts\activate.bat
+    flask --debug run
+    ```
 
 
 ### Docker installation
 
 This procedure requires that [Docker] is installed on your computer.
 
-1. Copy the `Makefile` and `sample.env` files from [KerkoApp's
-   repository][KerkoApp] to an empty directory on your computer.
+1. Copy the `Makefile`, `sample.env`, `sample.config.toml` files from
+   [KerkoApp's repository][KerkoApp] to an empty directory on your computer.
 
-2. Rename `sample.env` to `.env`. Open `.env` in a text editor to assign proper
-   values to the variables outlined below.
+2. Rename your `sample.env` copy to `.env`. Open `.env` in a text editor to
+   assign proper values to the variables outlined below.
 
-   - `KERKOAPP_SECRET_KEY`: This variable is required for generating secure tokens in web
-     forms. It should have a secure, random value and it really has to be
-     secret. For this reason, never add your `.env` file to a code repository.
-   - `KERKOAPP_ZOTERO_API_KEY`, `KERKOAPP_ZOTERO_LIBRARY_ID` and
-     `KERKOAPP_ZOTERO_LIBRARY_TYPE`: These variables are required for Kerko to be
-     able to access your Zotero library. See [Environment
-     variables](#environment-variables) for details.
-   - `MODULE_NAME`: This variable is required for running the application with
-     the provided Docker image. See `sample.env` for the proper value.
+    - `KERKOAPP_SECRET_KEY`: This variable is required for generating secure tokens in web
+      forms. It should have a secure, random value and it really has to be
+      secret. For this reason, never add your `.env` file to a code repository.
+    - `KERKOAPP_ZOTERO_API_KEY`: Your Zotero API key, as [created on
+      zotero.org](https://www.zotero.org/settings/keys/new). We recommend that
+      you create a read-only API key, as Kerko does not need to write to your
+      library.
+    - `KERKOAPP_ZOTERO_LIBRARY_ID`: The identifier of the Zotero library to get
+      data from. For a personal library this value is your _userID_, as found on
+      https://www.zotero.org/settings/keys (you must be logged-in). For a group
+      library this value is the _groupID_ of the library, as found in the URL of
+      the library (e.g., the _groupID_ of the library at
+      https://www.zotero.org/groups/2348869/kerko_demo is `2348869`).
+    - `KERKOAPP_ZOTERO_LIBRARY_TYPE`: The type of library to get data from,
+      either `'user'` for your personal library, or `'group'` for a group
+      library.
+    - `MODULE_NAME`: This variable is required for running the application with
+      the provided Docker image. Normally, you should not need to change the
+      value that was provided in `sample.env`.
 
-   **Do not** assign a value to the `KERKOAPP_DATA_DIR` variable. If you do, the
-   volume bindings defined within the `Makefile` will not be of any use to the
-   application running within the container.
+    !!! warning
 
-3. Pull the latest KerkoApp Docker image. In the same directory as the
+        Do not assign a value to the `KERKOAPP_DATA_DIR` variable. If you do, the
+        volume bindings defined within the `Makefile` will not be of any use to the
+        application running within the container.
+
+3. Rename your `sample.config.toml` copy to `config.toml`. You do not need to
+   edit the latter at this point, but later on this is where you will change
+   configuration options.
+
+4. Pull the latest KerkoApp Docker image. In the same directory as the
    `Makefile`, run the following command:
 
-   ```bash
-   docker pull whiskyechobravo/kerkoapp
-   ```
+    ```bash
+    docker pull whiskyechobravo/kerkoapp
+    ```
 
-4. Have KerkoApp retrieve your bibliographic data from zotero.org:
+5. Have KerkoApp retrieve your bibliographic data from zotero.org:
 
-   ```bash
-   make kerkosync
-   ```
+    ```bash
+    make kerkosync
+    ```
 
-   If you have a large bibliography, this may take a while (and there is no
-   progress indicator).
+    If you have a large Zotero library and/or large file attachments, that
+    command may take a while to complete. Wait until the command finishes.
 
-   Kerko's index will be stored in the `data` subdirectory.
+    Kerko's index will be stored in the `data` subdirectory.
 
-5. Run KerkoApp:
+6. Run KerkoApp:
 
-   ```
-   make run
-   ```
+    ```
+    make run
+    ```
 
-6. Open http://localhost:8080/ in your browser and explore the bibliography.
+7. Open http://localhost:8080/ in your browser and explore the bibliography!
 
-Keep in mind that the `sample.env` and `Makefile` provide only examples on how
-to run the dockerized KerkoApp. Also, **we have not made any special effort to
-harden the KerkoApp image for production use**; for such use, you will have to
-build an image that is up to your standards. For full documentation on how to
-run Docker containers, including the port mapping and volume binding required to
-run containers, see the [Docker documentation][Docker_docs].
+The provided `Makefile` is only an example on how to run a dockerized KerkoApp.
+For production use, you might want to build your own image.
+
+For full documentation on how to run Docker containers, including port mapping
+and volume binding, see the [Docker documentation][Docker_docs].
 
 
 ## Creating a custom application
 
 This section should help you understand the minimal steps required for getting
-Kerko to work within a Flask application. **For a ready-to-use standalone
-application, please refer to [KerkoApp's installation instructions][KerkoApp]
-instead.**
+Kerko to work within a custom Flask application.
+
+!!! note ""
+
+    For a ready-to-use standalone application, you will be better off using
+    [KerkoApp](#getting-started-with-kerkoapp) instead.
 
 Some familiarity with [Flask] should help you make more sense of the
 instructions, but should not be absolutely necessary for getting them to work.
 Let's now build a minimal app:
 
-1. The first step is to install Kerko. As with any Python library, it is highly
-   recommended to install Kerko within a [virtual environment][venv].
+1. Create an empty directory `myapp` where your application reside.
 
-   Once the virtual environment is set and active, use the following command:
+2. Install Kerko in a new [virtual environment][venv].
 
-   ```bash
-   pip install kerko
-   ```
+    === "POSIX"
+        ```bash
+        cd myapp
+        python -m venv venv
+        source venv/bin/activate
+        pip install kerko
+        ```
 
-2. In the directory where you want to install your application, create a file
-   named `.env`, where variables required by Kerko will be configured, with
-   content such as the example below:
+    === "Windows"
+        ```
+        cd myapp
+        python -m venv venv
+        venv\Scripts\activate.bat
+        pip install kerko
+        ```
 
-   ```sh
-   MYAPP_SECRET_KEY="your-random-secret-key"  # Replace this value.
-   MYAPP_ZOTERO_API_KEY="xxxxxxxxxxxxxxxxxxxxxxxx"  # Replace this value.
-   MYAPP_ZOTERO_LIBRARY_ID="9999999"  # Replace this value.
-   MYAPP_ZOTERO_LIBRARY_TYPE="group"  # Replace this value if necessary.
-   ```
+3. In the `myapp` directory, create a file named `.env`, where variables
+   required by Kerko will be configured, with content such as the example below:
 
-   Here's the meaning of each variable:
+    ```sh
+    MYAPP_SECRET_KEY="your-random-secret-key"
+    MYAPP_ZOTERO_API_KEY="xxxxxxxxxxxxxxxxxxxxxxxx"
+    MYAPP_ZOTERO_LIBRARY_ID="9999999"
+    MYAPP_ZOTERO_LIBRARY_TYPE="group"
+    ```
 
-   - `MYAPP_SECRET_KEY`: This variable is required for generating secure tokens
-     in web forms. It should have a hard to guess, random value, and should
-     really remain secret.
-   - `MYAPP_ZOTERO_API_KEY`, `MYAPP_ZOTERO_LIBRARY_ID`, and
-     `MYAPP_ZOTERO_LIBRARY_TYPE`: These variables are required for Kerko to be
-     able to access your Zotero library. See [Configuration
-     variables](#configuration-variables) for details on how to properly set
-     these variables.
+    Replace each value with a proper one. The meaning of each variable is
+    outlined below:
 
-   A `.env` file is a good place to store an application's secrets. It is good
-   practice to keep this file only on the machine where the application is
-   hosted, and to never push it to a code repository.
+    - `MYAPP_SECRET_KEY`: This variable is required for generating secure
+      tokens in web forms. It should have a secure, random value and it really
+      has to be secret. For this reason, never add your `.env` file to a code
+      repository.
+    - `MYAPP_ZOTERO_API_KEY`: Your Zotero API key, as [created on
+      zotero.org](https://www.zotero.org/settings/keys/new). We recommend that
+      you create a read-only API key, as Kerko does not need to write to your
+      library.
+    - `MYAPP_ZOTERO_LIBRARY_ID`: The identifier of the Zotero library to get
+      data from. For a personal library this value is your _userID_, as found on
+      https://www.zotero.org/settings/keys (you must be logged-in). For a group
+      library this value is the _groupID_ of the library, as found in the URL of
+      the library (e.g., the _groupID_ of the library at
+      https://www.zotero.org/groups/2348869/kerko_demo is `2348869`).
+    - `MYAPP_ZOTERO_LIBRARY_TYPE`: The type of library to get data from,
+      either `'user'` for your personal library, or `'group'` for a group
+      library.
 
-3. Create a file named `wsgi.py` with the following content:
+    A `.env` file is a good place to store an application's secrets. It is good
+    practice to keep this file only on the machine where the application is
+    hosted, and to never push it to a code repository.
 
-   ```python
-   import kerko
-   from flask import Flask
-   from kerko.config_helpers import config_set, config_update
-   from kerko.composer import Composer
+4. Create a file named `wsgi.py` with the following content:
 
-   app = Flask(__name__)
-   app.config.from_prefixed_env(prefix='MYAPP')
-   config_update(app.config, kerko.DEFAULTS)
+    ```python title="wsgi.py" linenums="1"
+    import kerko
+    from flask import Flask
+    from flask_babel import Babel
+    from flask_bootstrap import Bootstrap4
+    from kerko.composer import Composer
+    from kerko.config_helpers import config_set, config_update, validate_config
 
-   # Make changes to the Kerko configuration here, if desired.
-   config_set(app.config, 'kerko.meta.title', 'My App')
+    app = Flask(__name__)
+    ```
 
-   validate_config(app.config)
-   app.config['kerko_composer'] = Composer(app.config)
-   ```
+    This imports required modules and creates the Flask application object
+    (`app`).
 
-   This code creates the Flask application object (`app`), loads configuration
-   settings from the `.env` file, and sets two more configuration variables:
+    ```python title="wsgi.py" linenums="9"
+    app.config.from_prefixed_env(prefix='MYAPP')
+    config_update(app.config, kerko.DEFAULTS)
+    ```
 
-   - `kerko`: This variable contains Kerko's configuration settings, which are
-     represented in a Python `dict`. Here we simply assign the default values
-     from `DEFAULTS`.
-   - `kerko_composer`: This variable specifies key elements needed by Kerko,
-     e.g., fields for display and search, facets for filtering. These are
-     defined by instantiating the `Composer` class. Your application may
-     manipulate the resulting object at configuration time to add, remove or
-     alter fields, facets, sort options, search scopes, record download formats,
-     or badges. See [Kerko Recipes](#kerko-recipes) for some examples.
+    This loads configuration settings from the `.env` file, and loads Kerko's
+    default configuration.
 
-4. Also configure the Flask-Babel and Bootstrap-Flask extensions:
+    ```python title="wsgi.py" linenums="11"
+    # Make changes to the Kerko configuration here, if desired.
+    config_set(app.config, 'kerko.meta.title', 'My App')
+    ```
 
-   ```python
-   from flask_babel import Babel
-   from flask_bootstrap import Bootstrap4
+    This uses Kerko's `config_set` function to assign the title that users of
+    the web application will see. The same function could be used again right
+    there to set any of Kerko's [configuration options](config.md).
 
-   babel = Babel(app)
-   bootstrap = Bootstrap4(app)
-   ```
+    ```python title="wsgi.py" linenums="13"
+    validate_config(app.config)
+    app.config['kerko_composer'] = Composer(app.config)
+    ```
 
-   See the respective docs of [Flask-Babel][Flask-Babel_documentation] and
-   [Bootstrap-Flask][Bootstrap-Flask_documentation] for more details.
+    The ensures that the configuration has been set in a valid format, and then
+    creates the `kerko_composer` object. This object provides key elements
+    needed by Kerko, e.g., fields for display and search, facets for filtering.
+    Using methods of the `Composer` class, your application may alter this
+    object if needed (but only at configuration time, thus right here after its
+    creation), to add, remove or alter fields, facets, sort options, search
+    scopes, record download formats, or badges.
 
-5. Instantiate the Kerko blueprint and register it in your app:
+    ```python title="wsgi.py" linenums="15"
+    babel = Babel(app)
+    bootstrap = Bootstrap4(app)
+    ```
 
-   ```python
-   import kerko
+    This initializes the Flask-Babel and Bootstrap-Flask extensions (see the
+    respective docs of [Flask-Babel][Flask-Babel_documentation] and
+    [Bootstrap-Flask][Bootstrap-Flask_documentation] for more details).
 
-   app.register_blueprint(kerko.blueprint, url_prefix='/bibliography')
-   ```
+    ```python title="wsgi.py" linenums="17"
+    app.register_blueprint(kerko.blueprint, url_prefix='/bibliography')
+    ```
 
-   The `url_prefix` argument defines the base path for every URL provided by
-   Kerko.
+    Finally, the Kerko blueprint is registered with the application object. The
+    `url_prefix` argument defines the base path for every URL provided by Kerko.
 
-6. In the same directory as `wsgi.py` with your virtual environment active, run
+    !!! note
+
+        The full code example is available [on GitHub][KerkoStart].
+
+5. In the same directory as `wsgi.py` with your virtual environment active, run
    the following shell commands:
 
-   ```bash
-   flask --debug kerko sync
-   ```
+    ```bash
+    flask --debug kerko sync
+    ```
 
-   Kerko will retrieve your bibliographic data from zotero.org. If you have a
-   large bibliography or large attachments, this may take a while (and there is
-   no progress indicator). In production use, that command is usually added to
-   the crontab file for regular execution (with enough time between executions
-   for each to complete before the next one starts).
+    If you have a large Zotero library and/or large file attachments, that
+    command may take a while to complete. Wait until the command finishes. In
+    production use, this command is usually added to the crontab file for regular
+    execution.
 
-   The `--debug` switch is optional. If you use it, some messages will give you
-   an idea of the sync process' progress. If you omit it, the command will run
-   silently unless there are warnings or errors.
+    The `--debug` switch is optional. If you use it, some messages will give you
+    an idea of the sync process' progress. If you omit it, the command will run
+    silently unless there are warnings or errors.
 
-   To list all commands provided by Kerko:
+    To list all commands provided by Kerko:
 
-   ```bash
-   flask kerko --help
-   ```
+    ```bash
+    flask kerko --help
+    ```
 
-7. Run your application:
+6.  Run your application:
 
-   ```bash
-   flask --debug run
-   ```
+    ```bash
+    flask --debug run
+    ```
 
-8. Open http://127.0.0.1:5000/bibliography/ in your browser and explore the
-   bibliography.
+7. Open http://127.0.0.1:5000/bibliography/ in your browser and explore the
+   bibliography!
 
-You have just built a really minimal application for Kerko. The full code
-example is available at [KerkoStart]. However, if you are looking at developing
-a custom Kerko application, we recommend that you still look at [KerkoApp] for a
-more advanced starting point. While still small, KerkoApp adds some structure as
-well as features such as a configuration file, translations loading, and error
-pages.
+You have just built a really minimal application for Kerko. However, if you are
+looking at developing a custom Kerko application, we recommend that you still
+look at [KerkoApp] for a more advanced starting point. While still small,
+KerkoApp adds some structure as well as features such as TOML configuration
+files, translations loading, a syslog logging handler, and error pages.
 
 
 [Bootstrap-Flask_documentation]: https://bootstrap-flask.readthedocs.io/en/latest/basic.html
@@ -284,7 +373,11 @@ pages.
 [Docker]: https://www.docker.com/
 [Flask_production]: https://flask.palletsprojects.com/en/latest/deploying/
 [Flask-Babel_documentation]: https://python-babel.github.io/flask-babel/
+[Flask]: https://pypi.org/project/Flask/
+[Git]: https://git-scm.com/
 [Kerko]: https://github.com/whiskyechobravo/kerko
 [KerkoApp]: https://github.com/whiskyechobravo/kerkoapp
 [KerkoStart]: https://github.com/whiskyechobravo/kerkostart
+[pip]: https://pip.pypa.io/
+[Python]: https://www.python.org/
 [venv]: https://docs.python.org/3.11/tutorial/venv.html
