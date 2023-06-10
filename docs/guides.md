@@ -101,9 +101,9 @@ Remarks:
 Kerko generates an [XML Sitemap][XML_Sitemap] that can help search engines
 discover your bibliographic records.
 
-The path of the sitemap depends on the configuration of your application. For
-[KerkoApp] or the [Getting started](#getting-started) example above, its path is
-`/bibliography/sitemap.xml`. The full URL of the sitemap then looks like
+The path of the sitemap is `BASE_URL/sitemap.xml`, where `BASE_URL` should be
+replaced with the protocol, domain, port, and Kerko URL path prefix that are
+relevant to your installation, e.g.,
 `https://example.com/bibliography/sitemap.xml`.
 
 Different search engines may have different procedures for submitting sitemaps
@@ -113,7 +113,7 @@ Different search engines may have different procedures for submitting sitemaps
 
 However, a standard method consists in adding a `Sitemap` directive to a
 `robots.txt` file served at the root of your site, to tell web crawlers where to
-find your sitemap. For example, you would add the following line to
+find your sitemap. For example, one might add the following line to
 `robots.txt`:
 
 ```
@@ -121,17 +121,17 @@ Sitemap: https://example.com/bibliography/sitemap.xml
 ```
 
 A `robots.txt` file can have multiple `Sitemap` directives, thus the Kerko
-sitemap can be specified alongside any other you might already have.
+sitemap can be specified alongside any other sitemaps you might already have.
 
 
 ## Translating Kerko
 
-Kerko can be translated using Babel's [setuptools
+Kerko's translations are managed through Babel's [setuptools
 integration](http://babel.pocoo.org/en/latest/setup.html).
 
 The following commands should be executed from the directory that contains
-`setup.py`, and the appropriate [virtual environment][venv] must have been
-activated beforehand.
+`setup.py`, and the [virtual environment][venv] must have been activated
+beforehand.
 
 Create or update the PO template (POT) file:
 
@@ -158,22 +158,23 @@ Compile MO files:
 python setup.py compile_catalog
 ```
 
-You are welcome to contribute your translation. See [Submitting a
-translation](#submitting-a-translation). It is only thanks to user contributions
-that Kerko is available in multiple languages.
+!!! tip "Contributing your translation"
+
+    You are welcome to contribute your translation. See [Submitting a
+    translation](contributing.md#submitting-a-translation). It is only thanks to
+    user contributions that Kerko is available in multiple languages.
 
 
 ## Translating KerkoApp
 
-Note that Kerko and KerkoApp have separate translation files and that most
-messages actually come from Kerko. For translating Kerko's messages, please
-refer to [Kerko's documentation][Kerko].
+Although most user interface messages come from Kerko, KerkoApp also has its own
+separate translation file.
 
-KerkoApp can be translated with [Babel](http://babel.pocoo.org).
+KerkoApp translations are managed with [Babel](http://babel.pocoo.org).
 
 The following commands should be executed from the directory that contains
-`babel.cfg`, and the appropriate [virtual environment][venv] must have been
-activated beforehand.
+`babel.cfg`, and the [virtual environment][venv] must have been activated
+beforehand.
 
 Create or update the PO file template (POT). Replace `CURRENT_VERSION` with your
 current KerkoApp version:
@@ -204,15 +205,16 @@ pybabel compile -l YOUR_LOCALE -d kerkoapp/translations
 
 ## Deploying KerkoApp in production
 
-As there are many different systems and environments, setting up KerkoApp for
-use in production is out of scope for this guide. The procedures will be the
-same as for any Flask application, but you will have consider features that are
-more specific to KerkoApp, e.g., the `.env` file, the data directory, the
-regular synchronization of data from zotero.org.
+As there are many different operating systems and hosting environments, setting
+up KerkoApp for use in production is out of scope for this manual. The procedure
+will similar to that of any Flask application, but you will have consider
+features that are more specific to KerkoApp, e.g., the `.env` and configuration
+files, the data directory, the scheduled synchronization of data
+from zotero.org.
 
-You might find the following guide useful:
-
-- [Deploying KerkoApp on Ubuntu 20.04 or 22.04 with nginx and gunicorn](https://gist.github.com/davidlesieur/e1dafd09636a4bb333ad360e4b2c5d6d)
+You might find the following guide useful: [Deploying KerkoApp on Ubuntu 20.04
+or 22.04 with nginx and
+gunicorn](https://gist.github.com/davidlesieur/e1dafd09636a4bb333ad360e4b2c5d6d).
 
 
 
