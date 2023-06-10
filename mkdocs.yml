@@ -4,8 +4,9 @@ nav:
   - index.md
   - getting_started.md
   - sync.md
-  - settings.md
   - guides.md
+  - settings.md
+  - cli.md
   - troubleshooting.md
   - contributing.md
   - changelog.md

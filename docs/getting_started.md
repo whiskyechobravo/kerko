@@ -23,8 +23,9 @@ The main features added by KerkoApp over Kerko's are:
 - Provide templates for common HTTP errors.
 - Load user interface translations based on the configured locale.
 
+## Getting started with KerkoApp
 
-## Running KerkoApp with a standard installation
+### Standard installation
 
 This procedure requires Python 3.7 or later.
 
@@ -78,7 +79,7 @@ doesn’t scale well. You'll want to consider better options, such as the [WSGI
 servers suggested in Flask's documentation][Flask_production].
 
 
-## Running KerkoApp with Docker
+### Docker installation
 
 This procedure requires that [Docker] is installed on your computer.
 

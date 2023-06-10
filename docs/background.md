@@ -26,7 +26,6 @@ the following project:
   [École de bibliothéconomie et des sciences de l’information (EBSI)](https://ebsi.umontreal.ca/)
   (Université de Montréal, Canada).
 
-
 ## Design choices
 
 - Do not build a back-end. Let Zotero act as the "content management" system.
@@ -41,7 +40,6 @@ the following project:
 - Use a classic fullstack architecture. Keep it simple and avoid asset
   management. Some will want to replace the templates and stylesheets anyway.
 
-
 ## Etymology
 
 The name _Zotero_ reportedly derives from the Albanian word _zotëroj_, which
@@ -53,21 +51,3 @@ The name _Kerko_ is a nod to Zotero as it takes a similar etymological route: it
 derives from the Albanian word _kërkoj_, which means "to ask, to request, to
 seek, to look for, to demand, to search" and seems fit to describe a search
 tool.
-
-
-## Powered by Kerko
-
-The following online bibliographies are powered by Kerko:
-
-- [Bibliographie francophone sur l'archivistique](https://bibliopiaf.ebsi.umontreal.ca/)
-- [Community Knowledge Open Library on English-Speaking Quebec](https://ckol.quescren.ca/)
-- [Lipedema Foundation LEGATO Lipedema Library](https://library.lipedema.org/)
-- [Open Development & Education Evidence Library](https://docs.opendeved.net/)
-- [The EdTech Hub Evidence Library](http://docs.edtechhub.org/)
-- [University of Saint Joseph Research Output](https://research.usj.edu.mo/)
-
-If you wish to add your Kerko-powered online bibliography to this list, please
-[e-mail us][Kerko_email] or submit a pull request.
-
-
-[Kerko_email]: mailto:kerko@whiskyechobravo.com

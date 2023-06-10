@@ -36,7 +36,7 @@ re-synchronizing from Zotero.
 **TODO: note that Kerko never writes to the Zotero library**
 
 
-## Command line interface (CLI)
+## Useful commands
 
 Kerko provides an integration with the [Flask command line interface][Flask_CLI].
 The `flask` command will work with your virtual environment active.

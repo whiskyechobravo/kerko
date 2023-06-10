@@ -41,6 +41,21 @@ may also view the [Zotero library][Zotero_demo] that contains the source data
 for the demo site.
 
 
+## Sites using Kerko
+
+The following online bibliographies are powered by Kerko:
+
+- [Bibliographie francophone sur l'archivistique](https://bibliopiaf.ebsi.umontreal.ca/)
+- [Community Knowledge Open Library on English-Speaking Quebec](https://ckol.quescren.ca/)
+- [Lipedema Foundation LEGATO Lipedema Library](https://library.lipedema.org/)
+- [Open Development & Education Evidence Library](https://docs.opendeved.net/)
+- [The EdTech Hub Evidence Library](http://docs.edtechhub.org/)
+- [University of Saint Joseph Research Output](https://research.usj.edu.mo/)
+
+If you wish to add your Kerko-powered online bibliography to this list, please
+[e-mail us][Kerko_email] or submit a pull request.
+
+
 ## Features
 
 The following features are implemented in Kerko:
@@ -205,7 +220,6 @@ templates (but could be completely removed or replaced by your application):
 - [jQuery]: JavaScript library (required by Bootstrap).
 - [Popper.js]: JavaScript library for handling tooltips, popovers, etc. (used by Bootstrap).
 
-
 ## Known limitations
 
 - The system can probably handle relatively large bibliographies (it has been
@@ -220,9 +234,6 @@ templates (but could be completely removed or replaced by your application):
 - Whoosh does not provide much out-of-the-box support for non-Western languages.
   Therefore, search might not work very well with such languages.
 - Zotero is the sole reference management tool supported as a back-end to Kerko.
-
-
-
 
 
 [Atom]: https://en.wikipedia.org/wiki/Atom_(web_standard)
@@ -243,6 +254,7 @@ templates (but could be completely removed or replaced by your application):
 [HighwirePress_Google]: https://scholar.google.ca/intl/en/scholar/inclusion.html#indexing
 [Jinja2]: https://pypi.org/project/Jinja2/
 [jQuery]: https://jquery.com/
+[Kerko_email]: mailto:kerko@whiskyechobravo.com
 [Kerko_translations]: https://github.com/whiskyechobravo/kerko/tree/master/kerko/translations
 [Kerko]: https://github.com/whiskyechobravo/kerko
 [KerkoApp_demo]: https://demo.kerko.whiskyechobravo.com
