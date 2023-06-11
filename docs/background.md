@@ -16,8 +16,8 @@ Kerko was inspired by two prior projects:
 Later on, it became clear that other organizations needed a similar solution.
 However, software from the prior projects had to be rewritten so it could more
 easily be configured for different bibliographies from organizations with
-different needs. That led to Kerko, whose development was made possible through
-the following project:
+different needs. That led to Kerko, whose initial development was made possible
+through the following project:
 
 - [Bibliographie francophone sur l'archivistique](https://bibliopiaf.ebsi.umontreal.ca/),
   funded by the
@@ -28,15 +28,18 @@ the following project:
 
 ## Design choices
 
+Here are some of the design choices that have guided the development of Kerko so
+far:
+
 - Do not build a back-end. Let Zotero act as the "content management" system.
 - Allow Kerko to integrate into richer web applications.
-- Only implement in Kerko features that are related to the exploration of a
-  bibliography. Let other parts of the web application handle all other
-  features that might be needed.
-- Use a lightweight framework (Flask) to avoid carrying many features that are
-  not needed.
-- Use pure Python dependencies to keep installation and deployment simple. Hence
-  the use of Whoosh for search, for example, instead of Elasticsearch or Solr.
+- Only provide features that pertain to the exploration of a bibliography.
+  Other features, even when they are common to many web sites, do not belong to
+  Kerko and should be left to the applications to implement.
+- Use a lightweight framework to avoid carrying many features that are not
+  needed by Kerko (Flask was selected for this reason).
+- Use pure Python dependencies to keep installation and deployment simple (Hence
+  the use of Whoosh for search, for example, instead of Elasticsearch or Solr).
 - Use a classic fullstack architecture. Keep it simple and avoid asset
   management. Some will want to replace the templates and stylesheets anyway.
 

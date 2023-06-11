@@ -1,6 +1,6 @@
 # Troubleshooting
 
-**TODO: clarify that most of these pertain to KerkoApp**
+**TODO:docs: update & clarify that most of these pertain to KerkoApp**
 
 
 ## Conflicting package versions with standard installation

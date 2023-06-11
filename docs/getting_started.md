@@ -48,8 +48,8 @@ your computer.
    text editor to assign proper values to the variables outlined below.
 
     - `KERKOAPP_SECRET_KEY`: This variable is required for generating secure
-      tokens in web forms. It should have a secure, random value and it really
-      has to be secret. For this reason, never add your `.env` file to a code
+      tokens in web forms. It should have a hard to guess, and should really
+      remain secret. For this reason, never add your `.env` file to a code
       repository.
     - `KERKOAPP_ZOTERO_API_KEY`: Your Zotero API key, as [created on
       zotero.org](https://www.zotero.org/settings/keys/new). We recommend that
@@ -62,8 +62,7 @@ your computer.
       the library (e.g., the _groupID_ of the library at
       https://www.zotero.org/groups/2348869/kerko_demo is `2348869`).
     - `KERKOAPP_ZOTERO_LIBRARY_TYPE`: The type of library to get data from,
-      either `'user'` for your personal library, or `'group'` for a group
-      library.
+      either `'user'` for a personal library, or `'group'` for a group library.
 
 3. Copy the `sample.config.toml` file to `config.toml` in the same directory.
    You do not need to edit the latter at this point, but later on this is where
@@ -135,9 +134,10 @@ This procedure requires that [Docker] is installed on your computer.
 2. Rename your `sample.env` copy to `.env`. Open `.env` in a text editor to
    assign proper values to the variables outlined below.
 
-    - `KERKOAPP_SECRET_KEY`: This variable is required for generating secure tokens in web
-      forms. It should have a secure, random value and it really has to be
-      secret. For this reason, never add your `.env` file to a code repository.
+    - `KERKOAPP_SECRET_KEY`: This variable is required for generating secure
+      tokens in web forms. It should have a hard to guess, and should really
+      remain secret. For this reason, never add your `.env` file to a code
+      repository.
     - `KERKOAPP_ZOTERO_API_KEY`: Your Zotero API key, as [created on
       zotero.org](https://www.zotero.org/settings/keys/new). We recommend that
       you create a read-only API key, as Kerko does not need to write to your
@@ -149,11 +149,11 @@ This procedure requires that [Docker] is installed on your computer.
       the library (e.g., the _groupID_ of the library at
       https://www.zotero.org/groups/2348869/kerko_demo is `2348869`).
     - `KERKOAPP_ZOTERO_LIBRARY_TYPE`: The type of library to get data from,
-      either `'user'` for your personal library, or `'group'` for a group
-      library.
+      either `'user'` for a personal library, or `'group'` for a group library.
     - `MODULE_NAME`: This variable is required for running the application with
-      the provided Docker image. Normally, you should not need to change the
-      value that was provided in `sample.env`.
+      the provided Docker image. It specifies the Python module to be imported
+      by Gunicorn. You should not need to change the value that is provided in
+      `sample.env`.
 
     !!! warning
 
@@ -245,10 +245,9 @@ Let's now build a minimal app:
     Replace each value with a proper one. The meaning of each variable is
     outlined below:
 
-    - `MYAPP_SECRET_KEY`: This variable is required for generating secure
-      tokens in web forms. It should have a secure, random value and it really
-      has to be secret. For this reason, never add your `.env` file to a code
-      repository.
+    - `MYAPP_SECRET_KEY`: This variable is required for generating secure tokens
+      in web forms. It should have a hard to guess, and should really remain
+      secret. For this reason, never add your `.env` file to a code repository.
     - `MYAPP_ZOTERO_API_KEY`: Your Zotero API key, as [created on
       zotero.org](https://www.zotero.org/settings/keys/new). We recommend that
       you create a read-only API key, as Kerko does not need to write to your
@@ -259,9 +258,8 @@ Let's now build a minimal app:
       library this value is the _groupID_ of the library, as found in the URL of
       the library (e.g., the _groupID_ of the library at
       https://www.zotero.org/groups/2348869/kerko_demo is `2348869`).
-    - `MYAPP_ZOTERO_LIBRARY_TYPE`: The type of library to get data from,
-      either `'user'` for your personal library, or `'group'` for a group
-      library.
+    - `MYAPP_ZOTERO_LIBRARY_TYPE`: The type of library to get data from, either
+      `'user'` for a personal library, or `'group'` for a group library.
 
     A `.env` file is a good place to store an application's secrets. It is good
     practice to keep this file only on the machine where the application is

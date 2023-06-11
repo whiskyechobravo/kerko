@@ -1,5 +1,30 @@
 # How-to guides
 
+## Defining custom facets based on Zotero collections
+
+**TODO:docs: old KerkoApp documentation to update:**
+
+`KERKOAPP_COLLECTION_FACETS`: Defines facets modeled on Zotero collections.
+This variable should be a list of semicolon-delimited triples (collection key,
+facet weight and facet title, separated by colons). Each specified collection
+will appear in Kerko as a facet where subcollections will be represented as
+values within the facet. The weight determines a facet's position relative to
+the other facets. The facet title will be displayed by Kerko and, if desired,
+may be different from the collection's name in Zotero (you could use this to
+differentiate the names of collections made publicly available in Kerko
+through facets from those used internally in your Zotero library). Note that
+for a collection-based facet to appear in the search interface, all of the
+following conditions must be met:
+    - The specified collection key corresponds to a top-level collection in the
+    Zotero library.
+    - The specified collection has at least one subcollection that contains at
+    least one item that is not excluded by Kerko (meaning the item is not
+    excluded by other settings such as `KERKOAPP_ITEM_EXCLUDE_RE` or
+    `KERKOAPP_ITEM_INCLUDE_RE`).
+    - The value of `KERKOAPP_COLLECTION_FACETS` should be defined within a single
+    string, on a single line.
+
+
 ## Ensuring full-text indexing of your attachments in Zotero
 
 Kerko's full-text indexing relies on text content extracted from attachments by
