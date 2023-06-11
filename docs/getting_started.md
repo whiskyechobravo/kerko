@@ -3,8 +3,7 @@
 For getting started with Kerko, we recommend that you use KerkoApp, either with
 a "standard" installation, or with a Docker installation. However, if KerkoApp
 does not work for your use case, we also have instructions for [creating a
-minimalist application](#creating-a-custom-application) that could serve as a
-starting point for a custom Kerko application.
+custom application](#creating-a-custom-application).
 
 
 ## Getting started with KerkoApp

@@ -15,14 +15,15 @@ differentiate the names of collections made publicly available in Kerko
 through facets from those used internally in your Zotero library). Note that
 for a collection-based facet to appear in the search interface, all of the
 following conditions must be met:
-    - The specified collection key corresponds to a top-level collection in the
-    Zotero library.
-    - The specified collection has at least one subcollection that contains at
-    least one item that is not excluded by Kerko (meaning the item is not
-    excluded by other settings such as `KERKOAPP_ITEM_EXCLUDE_RE` or
-    `KERKOAPP_ITEM_INCLUDE_RE`).
-    - The value of `KERKOAPP_COLLECTION_FACETS` should be defined within a single
-    string, on a single line.
+
+- The specified collection key corresponds to a top-level collection in the
+  Zotero library.
+- The specified collection has at least one subcollection that contains at least
+  one item that is not excluded by Kerko (meaning the item is not excluded by
+  other settings such as `KERKOAPP_ITEM_EXCLUDE_RE` or
+  `KERKOAPP_ITEM_INCLUDE_RE`).
+- The value of `KERKOAPP_COLLECTION_FACETS` should be defined within a single
+  string, on a single line.
 
 
 ## Ensuring full-text indexing of your attachments in Zotero
@@ -192,8 +193,8 @@ python setup.py compile_catalog
 
 ## Translating KerkoApp
 
-Although most user interface messages come from Kerko, KerkoApp also has its own
-separate translation file.
+Although most user interface messages come from Kerko, KerkoApp also has
+messages of its own, and thus its own separate translation file.
 
 KerkoApp translations are managed with [Babel](http://babel.pocoo.org).
 
