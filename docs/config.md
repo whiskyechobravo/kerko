@@ -1,4 +1,4 @@
-# Configuration overview
+# Configuration basics
 
 ## Types of settings
 
@@ -47,7 +47,7 @@ have a lowercase name, are organized into a hierarchy, and are referenced using
 dot-separated paths. Examples are: `kerko.features.results_abstracts`,
 `kerko.meta.title`, `kerko.facets.item_type.enabled`.
 
-With KerkoApp, those variables may be set in a [TOML] configuration file. The
+With KerkoApp, those settings may be set in a [TOML] configuration file. The
 TOML syntax allows organizing settings under headers to avoid repetitions and
 to make the file more readable. Therefore, the `kerko.meta.title` setting, for
 example, may appear in the configuration file as:
