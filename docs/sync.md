@@ -1,25 +1,23 @@
-# Synchronizing from Zotero
+# Synchronization
 
-## Understanding the synchronization process
+Kerko synchronizes its data from Zotero through a 3-step process:
 
-Kerko does one-way data synchronization from zotero.org through a 3-step
-process:
+1. Update a cache of the Zotero library.
+2. Update the search index from the cache.
+3. Download file attachments from Zotero.
 
-1. Synchronize the Zotero library into a local cache.
-2. Update of the search index from the cache.
-3. Download the file attachments from Zotero.
-
-The first step performs incremental updates of the local cache. After an initial
-full synchronization, subsequent synchronization runs will only request new and
-updated items from Zotero. This greatly reduces the number of Zotero API calls,
-and thus the time required to complete the synchronization process.
+The first step is an incremental update of the cache, which is a local copy of
+the library. To this end, Kerko uses the Zotero API to request items and
+collections from the library on zotero.org. Unless the library is getting
+synchronized for the first time by Kerko, this will only request new and changed
+items from Zotero in order to reduce the number of API requests.
 
 The second step reads data from the cache to update the search index. If the
-cache has changed since the last update, it performs a full update of the search
-index, otherwise it skips to the next step. Any changes to the search index are
-"committed" as a whole at the end of this step, thus up to that point any user
-using the application sees the data that was available prior to the
-synchronization run.
+cache has changed since the last update, a full update of the search index is
+performed. No Zotero API calls are made during this step. Any changes to the
+search index are only committed at the end of this step, thus while the update
+is taking place users still see the data as it was prior to the synchronization
+run.
 
 The third and last step reads the list of file attachments from the search
 index, with their MD5 hashes. It compares the hashes with those of the available
@@ -27,13 +25,15 @@ local copies of the files, and downloads new or changed files from Zotero. It
 also deletes any local files that may no longer be used.
 
 Usually, all synchronization steps should be executed. But under certain
-circumstances it can be useful to execute a specific step individually. For
-example, after changing some configuration settings, one may clean just the
-search index and rebuild it from the cache, which will be much faster than
-re-synchronizing from Zotero.
+circumstances it can be useful to run a specific step alone. For example, after
+changing certain configuration settings, instead of cleaning all data and
+performing a lengthy full synchronization from Zotero, one may clean just the
+search index and rebuild it from the cache.
 
-As previously mentioned, the synchronization process is unidirectional, from
-Zotero to Kerko. Kerko will never try to write anything to your Zotero library.
+!!! note
+
+    The synchronization process is unidirectional, where Kerko pulls data from
+    Zotero. Kerko will never try to write anything to your Zotero library.
 
 
 ## Useful commands
