@@ -345,11 +345,14 @@ class KerkoModel(BaseModel):
     relations: Dict[ElementIdStr, RelationsModel]
 
 
-def load_toml(filename: Union[str, pathlib.Path]) -> Dict[str, Any]:
+def load_toml(filename: Union[str, pathlib.Path], silent=True) -> Dict[str, Any]:
     """Load the content of a TOML file."""
     try:
         with open(filename, 'rb') as file:
-            return tomllib.load(file)
+            config = tomllib.load(file)
+            if not silent:
+                print(f"Found configuration file: {filename}")
+            return config
     except OSError as e:
         raise RuntimeError(f"Unable to open TOML file.\n{e}") from e
     except tomllib.TOMLDecodeError as e:
