@@ -394,18 +394,17 @@ def config_set(config: Config, path: str, value: Any) -> None:
     dpath.new(config, path, value, separator='.')
 
 
-def validate_config(
+def parse_config(
     config: Config,
     key: str = 'kerko',
     model: Type[BaseModel] = KerkoModel,
 ) -> None:
     """
-    Parse and validate a configuration to ensure the data is valid.
+    Parse and validate configuration.
 
-    This only validates the structure that's under the specified key.
-
-    If some types are incorrect, they may be silently coerced into the expected
-    types (strict typing is not enforced by the models).
+    This only processes the structure that's under the specified key, and
+    replaces the values at key with the parsed version. This may silently
+    coerce data into the expected types (strict typing is not enforced).
     """
     if config.get(key):
         try:

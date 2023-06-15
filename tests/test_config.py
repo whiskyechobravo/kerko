@@ -8,7 +8,7 @@ from flask import Config
 
 from kerko import DEFAULTS as KERKO_DEFAULTS
 from kerko.config_helpers import (config_get, config_set, config_update,
-                                  validate_config)
+                                  parse_config)
 
 
 class ConfigUpdateTestCase(unittest.TestCase):
@@ -77,9 +77,9 @@ class ValidateConfigTestCase(unittest.TestCase):
 
     def test_default_config(self):
         config = Config(root_path='', defaults=KERKO_DEFAULTS)
-        validate_config(config)
+        parse_config(config)
 
     def test_invalid_config(self):
         config = Config(root_path='', defaults={'kerko': 'bad_config'})
         with self.assertRaises(RuntimeError):
-            validate_config(config)
+            parse_config(config)
