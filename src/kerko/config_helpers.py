@@ -345,8 +345,8 @@ class KerkoModel(BaseModel):
     relations: Dict[ElementIdStr, RelationsModel]
 
 
-class RootModel(BaseModel):
-    """Model for validating mandatory at the root table."""
+class ConfigModel(BaseModel):
+    """Model for validating mandatory at the root config table."""
 
     # Note: This model allows extra fields since we cannot cover all variables
     # that Flask, Flask extensions, and applications might support.
@@ -355,6 +355,7 @@ class RootModel(BaseModel):
     ZOTERO_API_KEY: str = Field(min_length=16)
     ZOTERO_LIBRARY_ID: str = Field(regex=r'^[0-9]+$')
     ZOTERO_LIBRARY_TYPE: Union[Literal["user"], Literal["group"]]
+    kerko: Optional[KerkoModel]
 
 
 def load_toml(filename: Union[str, pathlib.Path], verbose=False) -> Dict[str, Any]:
@@ -408,27 +409,28 @@ def config_set(config: Config, path: str, value: Any) -> None:
 
 def parse_config(
     config: Config,
-    key: Union[str, None],
-    model: Type[BaseModel],
+    key: Optional[str] = None,
+    model: Type[BaseModel] = ConfigModel
 ) -> None:
     """
-    Parse and validate configuration, or part of it, using `model`.
+    Parse and validate configuration using `model`.
 
-    This only processes the structure that's under the specified `key`, and
-    replaces the values at key with the parsed version. This may silently coerce
-    data into the expected types (strict typing is not enforced).
+    Values get replaced by parsed ones. Values may thus get silently coerced
+    into the types specified by the model (unless strict typing is enforced by
+    the model, in which case an error will be raised).
 
-    If `key` is `None`, then the whole configuration is parsed with the given
-    `model`.
+    If `key` is `None`, then the whole configuration gets parsed with the given
+    `model`. Otherwise only the structure at the specified `key` gets parsed.
+
+    If `key` does not exists in the config, it is silently skipped.
     """
     try:
-        if key:
-            if config.get(key):
-                # The parsed models are stored in the config as dicts. This way, the
-                # whole configuration structure is made of dicts only, allowing
-                # consistent access regardless of the element or its depth.
-                config_set(config, key, model.parse_obj(config[key]).dict())
-        else:
-            config.from_mapping(model.parse_obj(config).dict())
+        if key is None:
+            config.update(model.parse_obj(config).dict())
+        elif config.get(key):
+            # The parsed models are stored in the config as dicts. This way, the
+            # whole configuration structure is made of dicts only, allowing
+            # consistent access regardless of the element or its depth.
+            config_set(config, key, model.parse_obj(config[key]).dict())
     except ValidationError as e:
         raise RuntimeError(f"Invalid configuration. {e}") from e

@@ -7,7 +7,7 @@ import unittest
 from flask import Config
 
 from kerko import DEFAULTS as KERKO_DEFAULTS
-from kerko.config_helpers import (KerkoModel, RootModel, config_get,
+from kerko.config_helpers import (KerkoModel, ConfigModel, config_get,
                                   config_set, config_update, parse_config)
 
 
@@ -101,10 +101,23 @@ class ParseRootConfigTestCase(unittest.TestCase):
                 'ignored3': [1, 2, 'three'],
             }
         )
-        parse_config(config, None, RootModel)
+        parse_config(config, None, ConfigModel)
         self.assertEqual(config['ignored1'], '1')
         self.assertEqual(config['ignored2'], 2)
         self.assertEqual(config['ignored3'], [1, 2, 'three'])
+
+    def test_coerced_variable_type(self):
+        config = Config(
+            root_path='',
+            defaults={
+                'SECRET_KEY': '1234567890AB',
+                'ZOTERO_API_KEY': '1234567890ABCDEFGHIJKLMN',
+                'ZOTERO_LIBRARY_ID': 123456,  # Integer.
+                'ZOTERO_LIBRARY_TYPE': 'group',
+            }
+        )
+        parse_config(config, None, ConfigModel)
+        self.assertEqual(config['ZOTERO_LIBRARY_ID'], '123456')
 
     def test_missing_variable(self):
         config = Config(
@@ -117,7 +130,7 @@ class ParseRootConfigTestCase(unittest.TestCase):
             }
         )
         with self.assertRaises(RuntimeError):
-            parse_config(config, None, RootModel)
+            parse_config(config, None, ConfigModel)
 
     def test_empty_variable(self):
         config = Config(
@@ -130,7 +143,7 @@ class ParseRootConfigTestCase(unittest.TestCase):
             }
         )
         with self.assertRaises(RuntimeError):
-            parse_config(config, None, RootModel)
+            parse_config(config, None, ConfigModel)
 
     def test_invalid_variable(self):
         config = Config(
@@ -143,4 +156,4 @@ class ParseRootConfigTestCase(unittest.TestCase):
             }
         )
         with self.assertRaises(RuntimeError):
-            parse_config(config, None, RootModel)
+            parse_config(config, None, ConfigModel)
