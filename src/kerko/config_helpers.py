@@ -12,9 +12,9 @@ except ModuleNotFoundError:
 import dpath
 import whoosh
 from flask import Config
-from pydantic import (  # pylint: disable=no-name-in-module
-    BaseModel, ConstrainedStr, Extra, Field, NonNegativeInt, ValidationError,
-    validator)
+from pydantic import (BaseModel,  # pylint: disable=no-name-in-module
+                      ConstrainedStr, Extra, Field, NonNegativeInt,
+                      ValidationError, validator)
 
 # pylint: disable=too-few-public-methods
 
@@ -345,6 +345,18 @@ class KerkoModel(BaseModel):
     relations: Dict[ElementIdStr, RelationsModel]
 
 
+class RootModel(BaseModel):
+    """Model for validating mandatory at the root table."""
+
+    # Note: This model allows extra fields since we cannot cover all variables
+    # that Flask, Flask extensions, and applications might support.
+
+    SECRET_KEY: str = Field(min_length=12)
+    ZOTERO_API_KEY: str = Field(min_length=16)
+    ZOTERO_LIBRARY_ID: str = Field(regex=r'^[0-9]+$')
+    ZOTERO_LIBRARY_TYPE: Union[Literal["user"], Literal["group"]]
+
+
 def load_toml(filename: Union[str, pathlib.Path], verbose=False) -> Dict[str, Any]:
     """Load the content of a TOML file."""
     try:
@@ -396,21 +408,27 @@ def config_set(config: Config, path: str, value: Any) -> None:
 
 def parse_config(
     config: Config,
-    key: str = 'kerko',
-    model: Type[BaseModel] = KerkoModel,
+    key: Union[str, None],
+    model: Type[BaseModel],
 ) -> None:
     """
-    Parse and validate configuration.
+    Parse and validate configuration, or part of it, using `model`.
 
-    This only processes the structure that's under the specified key, and
-    replaces the values at key with the parsed version. This may silently
-    coerce data into the expected types (strict typing is not enforced).
+    This only processes the structure that's under the specified `key`, and
+    replaces the values at key with the parsed version. This may silently coerce
+    data into the expected types (strict typing is not enforced).
+
+    If `key` is `None`, then the whole configuration is parsed with the given
+    `model`.
     """
-    if config.get(key):
-        try:
-            # The parsed models are stored in the config as dicts. This way, the
-            # whole configuration structure is made of dicts only, allowing
-            # consistent access regardless of the element or its depth.
-            config_set(config, key, model.parse_obj(config[key]).dict())
-        except ValidationError as e:
-            raise RuntimeError(f"Invalid configuration. {e}") from e
+    try:
+        if key:
+            if config.get(key):
+                # The parsed models are stored in the config as dicts. This way, the
+                # whole configuration structure is made of dicts only, allowing
+                # consistent access regardless of the element or its depth.
+                config_set(config, key, model.parse_obj(config[key]).dict())
+        else:
+            config.from_mapping(model.parse_obj(config).dict())
+    except ValidationError as e:
+        raise RuntimeError(f"Invalid configuration. {e}") from e

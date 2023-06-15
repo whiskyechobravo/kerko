@@ -7,8 +7,8 @@ import unittest
 from flask import Config
 
 from kerko import DEFAULTS as KERKO_DEFAULTS
-from kerko.config_helpers import (config_get, config_set, config_update,
-                                  parse_config)
+from kerko.config_helpers import (KerkoModel, RootModel, config_get,
+                                  config_set, config_update, parse_config)
 
 
 class ConfigUpdateTestCase(unittest.TestCase):
@@ -72,14 +72,75 @@ class ConfigGetSetTestCase(unittest.TestCase):
         )
 
 
-class ValidateConfigTestCase(unittest.TestCase):
-    """Test config validation."""
+class ParseKerkoConfigTestCase(unittest.TestCase):
+    """Test parsing of the kerko config table."""
 
     def test_default_config(self):
         config = Config(root_path='', defaults=KERKO_DEFAULTS)
-        parse_config(config)
+        parse_config(config, 'kerko', KerkoModel)
 
     def test_invalid_config(self):
         config = Config(root_path='', defaults={'kerko': 'bad_config'})
         with self.assertRaises(RuntimeError):
-            parse_config(config)
+            parse_config(config, 'kerko', KerkoModel)
+
+
+class ParseRootConfigTestCase(unittest.TestCase):
+    """Test parsing of the config root."""
+
+    def test_valid_config(self):
+        config = Config(
+            root_path='',
+            defaults={
+                'SECRET_KEY': '1234567890AB',
+                'ZOTERO_API_KEY': '1234567890ABCDEFGHIJKLMN',
+                'ZOTERO_LIBRARY_ID': '123456',
+                'ZOTERO_LIBRARY_TYPE': 'group',
+                'ignored1': '1',
+                'ignored2': 2,
+                'ignored3': [1, 2, 'three'],
+            }
+        )
+        parse_config(config, None, RootModel)
+        self.assertEqual(config['ignored1'], '1')
+        self.assertEqual(config['ignored2'], 2)
+        self.assertEqual(config['ignored3'], [1, 2, 'three'])
+
+    def test_missing_variable(self):
+        config = Config(
+            root_path='',
+            defaults={
+                'SECRET_KEY': '1234567890AB',
+                'ZOTERO_LIBRARY_ID': '123456',
+                'ZOTERO_LIBRARY_TYPE': 'group',
+                # Missing 'ZOTERO_API_KEY'.
+            }
+        )
+        with self.assertRaises(RuntimeError):
+            parse_config(config, None, RootModel)
+
+    def test_empty_variable(self):
+        config = Config(
+            root_path='',
+            defaults={
+                'SECRET_KEY': '',  # Empty.
+                'ZOTERO_API_KEY': '1234567890ABCDEFGHIJKLMN',
+                'ZOTERO_LIBRARY_ID': '123456',
+                'ZOTERO_LIBRARY_TYPE': 'group',
+            }
+        )
+        with self.assertRaises(RuntimeError):
+            parse_config(config, None, RootModel)
+
+    def test_invalid_variable(self):
+        config = Config(
+            root_path='',
+            defaults={
+                'SECRET_KEY': '1234567890AB',
+                'ZOTERO_API_KEY': '1234567890ABCDEFGHIJKLMN',
+                'ZOTERO_LIBRARY_ID': 'ABCDEF',  # Invalid.
+                'ZOTERO_LIBRARY_TYPE': 'group',
+            }
+        )
+        with self.assertRaises(RuntimeError):
+            parse_config(config, None, RootModel)
