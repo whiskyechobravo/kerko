@@ -67,7 +67,7 @@ class FeaturesModel(BaseModel):
     print_item_link: bool
     relations_links: bool
     relations_initial_limit: int = Field(ge=5)
-    relations_sort: SlugStr  # TODO:config: Check that value is a valid Composer sort.
+    relations_sort: SlugStr
     results_abstracts: bool
     results_abstracts_max_length: NonNegativeInt
     results_abstracts_max_length_leeway: NonNegativeInt
@@ -83,10 +83,10 @@ class FeedsModel(BaseModel):
         extra = Extra.forbid
 
     formats: List[Optional[Literal["atom"]]]
-    fields: List[FieldNameStr]  # TODO:config: Check that values are valid Composer fields.
+    fields: List[FieldNameStr]
     max_days: NonNegativeInt
-    require_any: Dict[FieldNameStr, List[Union[str, bool, int, float]]]  # TODO:config: Check that keys match valid Composer fields.
-    reject_any: Dict[FieldNameStr, List[Union[str, bool, int, float]]]  # TODO:config: Check that keys match valid Composer fields.
+    require_any: Dict[FieldNameStr, List[Union[str, bool, int, float]]]
+    reject_any: Dict[FieldNameStr, List[Union[str, bool, int, float]]]
 
 
 class MetaModel(BaseModel):
@@ -150,7 +150,7 @@ class SearchModel(BaseModel):
     class Config:
         extra = Extra.forbid
 
-    result_fields: List[FieldNameStr]  # TODO:config: Check that values are valid Composer fields
+    result_fields: List[FieldNameStr]
     fulltext: bool
     whoosh_language: str = Field(regex=r'^[a-z]{2,3}$')
 
@@ -180,7 +180,7 @@ class CoreRequiredSearchFieldModel(BaseModel):
     class Config:
         extra = Extra.forbid
 
-    scopes: List[SlugStr]  # TODO:config: Check that values are valid Composer scopes.
+    scopes: List[SlugStr]
     boost: float
 
 
@@ -191,7 +191,7 @@ class CoreOptionalSearchFieldModel(BaseModel):
         extra = Extra.forbid
 
     enabled: bool = True
-    scopes: List[SlugStr]  # TODO:config: Check that values are valid Composer scopes.
+    scopes: List[SlugStr]
     boost: float
 
 
@@ -202,7 +202,7 @@ class ZoteroFieldModel(BaseModel):
         extra = Extra.forbid
 
     enabled: bool = True
-    scopes: List[SlugStr]  # TODO:config: Check that values are valid Composer scopes.
+    scopes: List[SlugStr]
     analyzer: Union[Literal["id"], Literal["text"], Literal["name"]]
     boost: float
 
@@ -237,7 +237,7 @@ class BaseFacetModel(BaseModel, abc.ABC):
     weight: int = 0
     initial_limit: NonNegativeInt = 0
     initial_limit_leeway: NonNegativeInt = 2
-    sort_by: List[FieldNameStr] = ["label"]  # TODO:config: Validate that values are valid Composer fields
+    sort_by: List[Union[Literal["label"], Literal["count"]]] = ["label"]
     sort_reverse: bool = False
     item_view: bool = True
 
