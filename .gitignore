@@ -40,9 +40,6 @@ coverage.xml
 # Documentation build.
 /site/
 
-# DotEnv configuration.
-.env
-
 # Development tools / IDEs.
 .idea
 .vscode/
@@ -58,3 +55,8 @@ coverage.xml
 *~
 *.bak
 *.old
+
+# Configuration files.
+.env
+.secrets.*
+instance.*

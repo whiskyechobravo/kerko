@@ -12,9 +12,9 @@ except ModuleNotFoundError:
 import dpath
 import whoosh
 from flask import Config
-from pydantic import (  # pylint: disable=no-name-in-module
-    BaseModel, ConstrainedStr, Extra, Field, NonNegativeInt, ValidationError,
-    validator)
+from pydantic import (BaseModel,  # pylint: disable=no-name-in-module
+                      ConstrainedStr, Extra, Field, NonNegativeInt,
+                      ValidationError, validator)
 
 # pylint: disable=too-few-public-methods
 
@@ -67,7 +67,7 @@ class FeaturesModel(BaseModel):
     print_item_link: bool
     relations_links: bool
     relations_initial_limit: int = Field(ge=5)
-    relations_sort: SlugStr  # TODO:config: Check that value is a valid Composer sort.
+    relations_sort: SlugStr
     results_abstracts: bool
     results_abstracts_max_length: NonNegativeInt
     results_abstracts_max_length_leeway: NonNegativeInt
@@ -83,10 +83,10 @@ class FeedsModel(BaseModel):
         extra = Extra.forbid
 
     formats: List[Optional[Literal["atom"]]]
-    fields: List[FieldNameStr]  # TODO:config: Check that values are valid Composer fields.
+    fields: List[FieldNameStr]
     max_days: NonNegativeInt
-    require_any: Dict[FieldNameStr, List[Union[str, bool, int, float]]]  # TODO:config: Check that keys match valid Composer fields.
-    reject_any: Dict[FieldNameStr, List[Union[str, bool, int, float]]]  # TODO:config: Check that keys match valid Composer fields.
+    require_any: Dict[FieldNameStr, List[Union[str, bool, int, float]]]
+    reject_any: Dict[FieldNameStr, List[Union[str, bool, int, float]]]
 
 
 class MetaModel(BaseModel):
@@ -150,7 +150,7 @@ class SearchModel(BaseModel):
     class Config:
         extra = Extra.forbid
 
-    result_fields: List[FieldNameStr]  # TODO:config: Check that values are valid Composer fields
+    result_fields: List[FieldNameStr]
     fulltext: bool
     whoosh_language: str = Field(regex=r'^[a-z]{2,3}$')
 
@@ -180,7 +180,7 @@ class CoreRequiredSearchFieldModel(BaseModel):
     class Config:
         extra = Extra.forbid
 
-    scopes: List[SlugStr]  # TODO:config: Check that values are valid Composer scopes.
+    scopes: List[SlugStr]
     boost: float
 
 
@@ -191,7 +191,7 @@ class CoreOptionalSearchFieldModel(BaseModel):
         extra = Extra.forbid
 
     enabled: bool = True
-    scopes: List[SlugStr]  # TODO:config: Check that values are valid Composer scopes.
+    scopes: List[SlugStr]
     boost: float
 
 
@@ -202,7 +202,7 @@ class ZoteroFieldModel(BaseModel):
         extra = Extra.forbid
 
     enabled: bool = True
-    scopes: List[SlugStr]  # TODO:config: Check that values are valid Composer scopes.
+    scopes: List[SlugStr]
     analyzer: Union[Literal["id"], Literal["text"], Literal["name"]]
     boost: float
 
@@ -237,7 +237,7 @@ class BaseFacetModel(BaseModel, abc.ABC):
     weight: int = 0
     initial_limit: NonNegativeInt = 0
     initial_limit_leeway: NonNegativeInt = 2
-    sort_by: List[FieldNameStr] = ["label"]  # TODO:config: Validate that values are valid Composer fields
+    sort_by: List[Union[Literal["label"], Literal["count"]]] = ["label"]
     sort_reverse: bool = False
     item_view: bool = True
 
@@ -345,11 +345,27 @@ class KerkoModel(BaseModel):
     relations: Dict[ElementIdStr, RelationsModel]
 
 
-def load_toml(filename: Union[str, pathlib.Path]) -> Dict[str, Any]:
+class ConfigModel(BaseModel):
+    """Model for validating mandatory at the root config table."""
+
+    # Note: This model allows extra fields since we cannot cover all variables
+    # that Flask, Flask extensions, and applications might support.
+
+    SECRET_KEY: str = Field(min_length=12)
+    ZOTERO_API_KEY: str = Field(min_length=16)
+    ZOTERO_LIBRARY_ID: str = Field(regex=r'^[0-9]+$')
+    ZOTERO_LIBRARY_TYPE: Union[Literal["user"], Literal["group"]]
+    kerko: Optional[KerkoModel]
+
+
+def load_toml(filename: Union[str, pathlib.Path], verbose=False) -> Dict[str, Any]:
     """Load the content of a TOML file."""
     try:
         with open(filename, 'rb') as file:
-            return tomllib.load(file)
+            config = tomllib.load(file)
+            if verbose:
+                print(f" * Loading configuration file {filename}")
+            return config
     except OSError as e:
         raise RuntimeError(f"Unable to open TOML file.\n{e}") from e
     except tomllib.TOMLDecodeError as e:
@@ -391,24 +407,30 @@ def config_set(config: Config, path: str, value: Any) -> None:
     dpath.new(config, path, value, separator='.')
 
 
-def validate_config(
+def parse_config(
     config: Config,
-    key: str = 'kerko',
-    model: Type[BaseModel] = KerkoModel,
+    key: Optional[str] = None,
+    model: Type[BaseModel] = ConfigModel
 ) -> None:
     """
-    Parse and validate a configuration to ensure the data is valid.
+    Parse and validate configuration using `model`.
 
-    This only validates the structure that's under the specified key.
+    Values get replaced by parsed ones. Values may thus get silently coerced
+    into the types specified by the model (unless strict typing is enforced by
+    the model, in which case an error will be raised).
 
-    If some types are incorrect, they may be silently coerced into the expected
-    types (strict typing is not enforced by the models).
+    If `key` is `None`, then the whole configuration gets parsed with the given
+    `model`. Otherwise only the structure at the specified `key` gets parsed.
+
+    If `key` does not exists in the config, it is silently skipped.
     """
-    if config.get(key):
-        try:
+    try:
+        if key is None:
+            config.update(model.parse_obj(config).dict())
+        elif config.get(key):
             # The parsed models are stored in the config as dicts. This way, the
             # whole configuration structure is made of dicts only, allowing
             # consistent access regardless of the element or its depth.
             config_set(config, key, model.parse_obj(config[key]).dict())
-        except ValidationError as e:
-            raise RuntimeError(f"Invalid configuration. {e}") from e
+    except ValidationError as e:
+        raise RuntimeError(f"Invalid configuration. {e}") from e

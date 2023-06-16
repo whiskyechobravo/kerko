@@ -16,8 +16,7 @@ def data_dir() -> str:
     Get the absolute path of the data directory.
 
     If it was defined as a relative path, it will be resolved as an absolute
-    path under the app's instance path, which is automatically determined by
-    Flask.
+    path under the app's instance path, which is determined by Flask.
 
     See https://flask.palletsprojects.com/en/2.3.x/config/#instance-folders.
     """
