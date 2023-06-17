@@ -29,11 +29,12 @@ value if omitted from your configuration.
     commands](sync.md#useful-commands) for cleaning and synchronization
     operations.
 
-!!! warning "Prefix your environment variables!"
+!!! warning "Prefix your environment variables"
 
     KerkoApp users must prefix parameter names with `KERKOAPP_` when configuring
     them as environment variables. However, no prefix should be used in TOML
-    files.
+    files. See [Environment variables](config_basics.md#environment-variables)
+    for details on setting such variables.
 
 ## `BABEL_DEFAULT_LOCALE`
 
@@ -56,9 +57,11 @@ When multiple paths are specified, each new file in the sequence will be
 merged into the known configuration. When a file contains a setting that was
 already set by a previous file, it overrides the previous value.
 
-!!! warning
+!!! warning "Environment variable only"
 
-    This variable is specific to KerkoApp and cannot be set in a TOML file.
+    This parameter is specific to KerkoApp and cannot be set in a TOML file. It
+    can only be set as an environment variable, therefore it should actually be
+    referenced as `KERKOAPP_CONFIG_FILES` (see [Environment variables](config_basics.md#environment-variables) for details on setting such variables).
 
 ## `DATA_DIR`
 

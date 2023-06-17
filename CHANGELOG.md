@@ -21,6 +21,8 @@ Features:
 
 Other changes:
 
+- Restructure and expand documentation into a unified documentation site for
+  both Kerko and KerkoApp.
 - Add Portuguese translation. Thanks to Gonçalo Cordeiro.
 - Improve the Getting started instructions.
 
@@ -41,6 +43,7 @@ Backwards incompatible changes:
   `date_added` and `date_modified` respectively.
 - The data directory now has a default location relative to the instance path,
   which is determined by Flask.
+- **TODO:config: describe configuration parameter changes**
 
 
 ## 0.9 (2022-12-29)
