@@ -25,7 +25,6 @@ theme:
     - navigation.footer
     - header.autohide
     - toc.follow
-    - toc.integrate
     - search.suggest
     - search.highlight
     - content.code.copy
