@@ -11,21 +11,16 @@ def composer() -> Composer:
     return current_app.config['kerko_composer']
 
 
-def data_dir() -> str:
+def data_path() -> str:
     """
     Get the absolute path of the data directory.
 
-    If it was defined as a relative path, it will be resolved as an absolute
-    path under the app's instance path, which is determined by Flask.
-
-    See https://flask.palletsprojects.com/en/2.3.x/config/#instance-folders.
+    If the configuration parameter was set as a relative path, it will be
+    resolved as an absolute path under the application's instance folder.
     """
-    return str(
-        pathlib.Path(current_app.instance_path) / current_app.config.get(
-            'DATA_DIR',
-            pathlib.Path('data') / 'kerko',
-        )
-    )
+    instance_path = pathlib.Path(current_app.instance_path)
+    config_data_path = pathlib.Path(current_app.config.get('DATA_PATH', 'kerko'))
+    return str(instance_path / config_data_path)
 
 
 def config(path: str) -> Any:

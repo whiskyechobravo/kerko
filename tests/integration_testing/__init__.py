@@ -18,7 +18,7 @@ from flask_bootstrap import Bootstrap4
 import kerko
 from kerko import extractors, transformers
 from kerko.composer import Composer
-from kerko.config_helpers import config_update
+from kerko.config_helpers import config_update, parse_config
 from kerko.storage import delete_storage
 from kerko.sync.cache import sync_cache
 from kerko.sync.index import sync_index
@@ -93,12 +93,13 @@ class MockLibraryTestCase(unittest.TestCase):
 
     @classmethod
     def init_config(cls):
+        config_update(cls.app.config, kerko.DEFAULTS)
         cls.app.config['SECRET_KEY'] = 'not-so-secret-secret'
         cls.app.config['ZOTERO_API_KEY'] = 'xxxxxxxxxxxxxxxxxxxxxxxx'
         cls.app.config['ZOTERO_LIBRARY_ID'] = '9999999'
         cls.app.config['ZOTERO_LIBRARY_TYPE'] = 'group'
-        cls.app.config['DATA_DIR'] = cls.temp_dir.name
-        config_update(cls.app.config, kerko.DEFAULTS)
+        cls.app.config['DATA_PATH'] = cls.temp_dir.name
+        parse_config(cls.app.config)
         cls.app.config['kerko_composer'] = Composer(cls.app.config)
 
         # Add alternate_id to help retrieving and testing specific items.

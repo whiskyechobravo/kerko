@@ -384,22 +384,23 @@ def config_update(config: Config, new_data: Dict[str, Any]) -> None:
 
 def config_get(config: Config, path: str) -> Any:
     """
-    Retrieve an arbitrarily nested configuration setting.
+    Retrieve an arbitrarily nested configuration parameter.
 
     `path` is a string of keys separated by dots ('.') acting as hierarchical
     level separators.
 
     Unlike `dict.get()`, this provides no way of specifying a default value as
-    all configuration settings are expected to already have a default.
-    Consequently, passing an invalid `path` is considered a programming error
-    (because a default was omitted) and will throw a `KeyError` exception.
+    all configuration parameters are expected to have be already initialized
+    with a default value. Passing an invalid `path`, i.e., trying to access a
+    parameter that does not have a value, is considered a programming error and
+    will throw a `KeyError` exception.
     """
     return dpath.get(config, path, separator='.')
 
 
 def config_set(config: Config, path: str, value: Any) -> None:
     """
-    Set an arbitrarily nested configuration setting.
+    Set an arbitrarily nested configuration parameter.
 
     `path` is a string of keys separated by dots ('.') acting as hierarchical
     level separators.
@@ -415,14 +416,14 @@ def parse_config(
     """
     Parse and validate configuration using `model`.
 
-    Values get replaced by parsed ones. Values may thus get silently coerced
-    into the types specified by the model (unless strict typing is enforced by
-    the model, in which case an error will be raised).
+    Parameter values get replaced by parsed ones. Values may thus get silently
+    coerced into the types specified by the model (unless strict typing is
+    enforced by the model, in which case an error will be raised).
 
     If `key` is `None`, then the whole configuration gets parsed with the given
     `model`. Otherwise only the structure at the specified `key` gets parsed.
 
-    If `key` does not exists in the config, it is silently skipped.
+    If `key` does not exists in the config, parsing is silently skipped.
     """
     try:
         if key is None:
@@ -430,7 +431,7 @@ def parse_config(
         elif config.get(key):
             # The parsed models are stored in the config as dicts. This way, the
             # whole configuration structure is made of dicts only, allowing
-            # consistent access regardless of the element or its depth.
+            # consistent access for any element at any depth.
             config_set(config, key, model.parse_obj(config[key]).dict())
     except ValidationError as e:
         raise RuntimeError(f"Invalid configuration. {e}") from e
