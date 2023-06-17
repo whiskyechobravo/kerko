@@ -2,19 +2,18 @@
 
 ## Reporting issues
 
-Kerko issues may be submitted on [Kerko's issue tracker][Kerko_issues].
+Before reporting an issue, please consider the following guidelines:
 
-KerkoApp issues may be submitted on [KerkoApp's issue tracker][KerkoApp_issues].
-
-Please consider the following guidelines:
-
-- Make sure that the same issue has not already been reported or fixed in the
-  repository.
+- Try to identify whether the issue belongs to [Kerko] or to [KerkoApp]. Then
+  submit the issue to the proper issue tracker, either [Kerko's][Kerko_issues],
+  or [KerkoApp's][KerkoApp_issues].
+- Search existing issues, in case the same issue has already been reported or
+  even fixed in the repository.
+- Describe what happened when you experienced the issue. Include the full
+  traceback if an exception was raised.
 - Describe what you expected to happen.
 - If possible, include a minimal reproducible example to help others identify
   the issue.
-- Describe what actually happened. Include the full traceback if there was an
-  exception.
 
 
 ## Making code changes
@@ -31,7 +30,7 @@ pip install -e .[dev,docs,tests]
 
 ## Running the tests
 
-To run basic tests in your current environment:
+To run the test suite:
 
 ```bash
 python -m unittest
@@ -44,9 +43,6 @@ coverage run -m unittest
 coverage report
 ```
 
-Note: Test coverage is still very low at the moment. You are welcome to
-contribute new tests!
-
 To run the full test suite under different environments (using the various
 Python interpreters available on your machine):
 
@@ -54,14 +50,19 @@ Python interpreters available on your machine):
 tox
 ```
 
+!!! note
+
+    Test coverage is still low at the moment. You are welcome to contribute
+    new tests!
+
 
 ## Working on the documentation
 
 Useful commands:
 
-`mkdocs serve`: Start the live-reloading docs server.
-`mkdocs build`: Build the documentation site.
-`mkdocs -h`: Print help message and exit.
+- `mkdocs serve`: Start the live-reloading docs server.
+- `mkdocs build`: Build the documentation site.
+- `mkdocs -h`: Print help message and exit.
 
 
 ## Submitting code changes
@@ -76,7 +77,7 @@ consider the following guidelines:
   editors provide Yapf integration.
 - If a Jinja2 template represents a page fragment or a collection of macros,
   prefix its file name with the underscore character.
-- Update the relevant parts of the documentation.
+- Update the relevant sections of the documentation.
 - Include a string like "Fixes #123" in your commit message (where 123 is the
   issue you fixed). See [Closing issues using
   keywords](https://help.github.com/en/articles/closing-issues-using-keywords).
@@ -90,10 +91,11 @@ Some guidelines:
 - The header of the PO file must be filled out appropriately.
 - All messages of the PO file must be translated.
 
-Please submit your translation as a pull request against [Kerko's
-repository][Kerko], or by [e-mail][Kerko_email], with the PO file included as an
-attachment (**do not** copy the PO file's content into an e-mail's body, since
-that could introduce formatting or encoding issues).
+Please submit your translation as a pull request against the proper repository,
+either [Kerko's][Kerko], or [KerkoApp's][KerkoApp], or by [e-mail][Kerko_email],
+with the PO file included as an attachment (**do not** copy the PO file's
+content into an e-mail's body, since that could introduce formatting or encoding
+issues).
 
 
 ## Supporting the project
@@ -112,5 +114,6 @@ hire us for an unrelated project, please [e-mail us][Kerko_email].
 [Kerko]: https://github.com/whiskyechobravo/kerko
 [Kerko_email]: mailto:kerko@whiskyechobravo.com
 [Kerko_issues]: https://github.com/whiskyechobravo/kerko/issues
+[KerkoApp]: https://github.com/whiskyechobravo/kerkoapp
 [KerkoApp_issues]: https://github.com/whiskyechobravo/kerkoapp/issues
 [venv]: https://docs.python.org/3.11/tutorial/venv.html
