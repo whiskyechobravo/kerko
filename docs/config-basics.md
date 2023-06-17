@@ -10,7 +10,7 @@ applications](#configuration-in-custom-applications)).
 When looking at Kerko configuration options, you will quickly notice two styles
 of parameter names, uppercase names and lowercase names.
 
-Uppercase names, such as `SECRET_KEY`, `ZOTERO_LIBRARY_ID`, `DATA_DIR`,
+Uppercase names, such as `SECRET_KEY`, `ZOTERO_LIBRARY_ID`, `DATA_PATH`,
 `BABEL_DEFAULT_LOCALE`, follow the usual convention for environment variables.
 Most Flask and Flask extensions parameter names follow this convention. Some
 Kerko parameters have uppercase names too, but only those parameters that may
@@ -79,21 +79,22 @@ title = "My Awesome Bibliography"
 ZOTERO_LIBRARY_ID = "123456"
 ```
 
-By default, KerkoApp will look for a series of TOML files, in the following
-order:
+By default, KerkoApp will look for a series of TOML files:
 
 1. `config.toml`
 1. `instance.toml`
 1. `.secrets.toml`
 
-For each of those, KerkoApp first looks for the file into the instance folder,
-which is [determined by Flask][Flask_instance_folder]. If it does not find it
-there, it searches by traversing directories upwards until it finds the file or
-reaches the root directory. Whether the file was found or not, KerkoApp then
-continues with the next filename in the list.
+For each of those, KerkoApp first looks for the file into the current working
+directory. If it does not find it there, it searches by traversing directories
+upwards until it finds the file or reaches the root directory. At this point, if
+the file is still not found, the same scanning process is reapplied, but this
+time starting from the [instance path](config-params.md#instance_path). After
+that, whether the file was found or not, KerkoApp continues with the next
+filename in the list.
 
-The files are loaded in the specified order. The configuration from each file
-gets merged into the previously known configuration. If a parameter was already
+The files are loaded in the specified order. The parameters from each file get
+merged into the previously known configuration. If a given parameter was already
 set, its value is overwritten by the one from the later file.
 
 This approach allows a layered configuration where:
@@ -111,10 +112,7 @@ You do not have to use all three files. One might, for example, use just
 `config.toml` and `.secrets.toml`, and not create `instance.toml`.
 
 You may replace the default list of TOML file paths by setting the
-`KERKOAPP_CONFIG_FILES` environment variable. Its value must be a
-semicolon-separated list of paths, where individual paths may be either absolute
-or relative. Relative paths will be resolved from the instance folder, or
-searched by traversing directories upwards if needed.
+[`KERKOAPP_CONFIG_FILES`](config-params.md#config_files) environment variable.
 
 In the example below, the default list of TOML files is replaced by a list of
 two file paths, one relative and the other absolute:

@@ -48,14 +48,19 @@ name supported by the [pytz] package should work.
 ## `CONFIG_FILES`
 
 Specifies where to look for one or more TOML configuration files. The value must
-be a semicolon-separated list of file paths, where individual paths may be
-either absolute or relative. Relative paths will be searched starting from the
-instance folder, which is [determined by Flask][Flask_instance_folder], and
-traversing directories upwards if needed.
+be a semicolon-separated list of file paths.
 
-When multiple paths are specified, each new file in the sequence will be
-merged into the known configuration. When a file contains a setting that was
-already set by a previous file, it overrides the previous value.
+The files are loaded in the specified order. The parameters from each file get
+merged into the previously known configuration. If a given parameter was already
+set, its value is overwritten by the one from the later file.
+
+The default value is `"config.toml;instance.toml;.secrets.toml"`.
+
+Paths may be absolute or relative. Relative paths are resolved from the current
+working directory. If a specified file is not found there, it is searched by
+traversing the directories upwards. If the root directory is reached and the
+file is still not found, then the same search method is reapplied, but this time
+starting from the [`INSTANCE_PATH`](#instance_path).
 
 !!! warning "Environment variable only"
 
@@ -63,25 +68,41 @@ already set by a previous file, it overrides the previous value.
     can only be set as an environment variable, therefore it should actually be
     referenced as `KERKOAPP_CONFIG_FILES` (see [Environment variables](config-basics.md#environment-variables) for details on setting such variables).
 
-## `DATA_DIR`
+## `DATA_PATH`
 
-The directory where Kerko will store its data (such as the search index and the
-file attachments). This may be specified as an absolute path or as a relative
-path. In the latter case, the path will be relative to the instance folder
-[determined by Flask][Flask_instance_folder]. Default value is `data/kerko` (or
-`data\kerko` on Windows).
+The data path specifies a directory where Kerko may store its cache, search
+index, and file attachments. This may be provided as an absolute path or as a
+relative path. If a relative path is given, it will be relative to
+[`INSTANCE_PATH`](#instance_path).
+
+The default value is `kerko`.
+
+It is typically unnecessary to set both `DATA_PATH` and `INSTANCE_PATH`.
+
+## `INSTANCE_PATH`
+
+The instance path specifies a directory where the application may store data and
+configuration files.
+
+The default value is [determined by Flask][Flask_instance_folder]. In practice,
+the default for KerkoApp users is a directory named `instance` located at the
+same level as the `wsgi.py` file. You may set `INSTANCE_PATH` to a different
+directory, which you must provide as an **absolute path**.
+
+It is unnecessary to set `INSTANCE_PATH` if you are already setting
+[`DATA_PATH`](#data_path) as an absolute path.
+
+!!! warning "Environment variable only"
+
+    This parameter is specific to KerkoApp and cannot be set in a TOML file. It
+    can only be set as an environment variable, therefore it should actually be
+    referenced as `KERKOAPP_INSTANCE_PATH` (see [Environment variables](config-basics.md#environment-variables) for details on setting such variables).
 
 ## `LOGGING_ADDRESS`
 
-**TODO:docs: To document**
-
 ## `LOGGING_FORMAT`
 
-**TODO:docs: To document**
-
 ## `LOGGING_HANDLER`
-
-**TODO:docs: To document**
 
 ## `LOGGING_LEVEL`
 
