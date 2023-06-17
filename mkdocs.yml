@@ -11,8 +11,8 @@ nav:
   - recipes.md
   - troubleshooting.md
   - contributing.md
-  - changelog.md
   - background.md
+  - changelog.md
 
 theme:
   name: material

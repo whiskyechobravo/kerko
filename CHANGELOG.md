@@ -1,5 +1,9 @@
 # Changelog
 
+For changes that might be specific to KerkoApp, please refer to the [KerkoApp
+changelog](https://github.com/whiskyechobravo/kerkoapp/blob/master/CHANGELOG.md).
+
+
 ## Latest (unreleased)
 
 *Warning:* Upgrading from version 0.9 or earlier will require that you rebuild
