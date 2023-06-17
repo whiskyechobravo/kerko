@@ -298,7 +298,7 @@ Let's now build a minimal app:
     Next, adjust general application parameters to your liking. For example, we
     can use the `config_set` function to set the main title of the web
     application to `"My App"`. This function can be called each time you wish to
-    set a [configuration option](config.md).
+    set a [configuration option](config-basics.md).
 
     ```python title="wsgi.py" linenums="14"
     # Make changes to the Kerko configuration here, if desired.

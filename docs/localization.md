@@ -5,17 +5,17 @@ purpose, the main issues to consider are:
 
 - The language of the user interface. Kerko defaults to English but translations
   for languages are available. To configure a language other than English, see
-  [`BABEL_DEFAULT_LOCALE`](config_params.md#babel_default_locale). If no
+  [`BABEL_DEFAULT_LOCALE`](config-params.md#babel_default_locale). If no
   translation is available for the desired language, or if the existing
   translation needs to be updated, see [Translating Kerko](#translating-kerko)
   and [Translating KerkoApp](#translating-kerkoapp) below.
 - The timezone to apply when displaying times. To configure the timezone, see
-  [`BABEL_DEFAULT_TIMEZONE`](config_params.md#babel_default_timezone).
+  [`BABEL_DEFAULT_TIMEZONE`](config-params.md#babel_default_timezone).
 - The language and locale used by Zotero, which determines the display names of
   fields, item types, and author types, and can impact citation formatting as
-  well. To configure this, see [`kerko.zotero.locale`](config_params.md#locale).
+  well. To configure this, see [`kerko.zotero.locale`](config-params.md#locale).
 - The language analysis applied by the Whoosh search engine. To configure this,
-  see [`kerko.search.whoosh_language`](config_params.md#whoosh_language).
+  see [`kerko.search.whoosh_language`](config-params.md#whoosh_language).
 
 
 ## Translating Kerko

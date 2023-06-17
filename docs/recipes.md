@@ -19,7 +19,7 @@ sort_reverse = false
 item_view = true
 ```
 
-Please refer to [`kerko.facets`](config_params.md#kerkofacets) for details on
+Please refer to [`kerko.facets`](config-params.md#kerkofacets) for details on
 each parameter.
 
 

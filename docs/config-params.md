@@ -26,14 +26,14 @@ value if omitted from your configuration.
     Moreover, many parameters affect the structure of the cache or the search
     index that Kerko depends on. Changing such parameters may require that you
     rebuild the cache or the search index. See [Useful
-    commands](sync.md#useful-commands) for cleaning and synchronization
-    operations.
+    commands](synchronization.md#useful-commands) for cleaning and
+    synchronization operations.
 
 !!! warning "Prefix your environment variables"
 
     KerkoApp users must prefix parameter names with `KERKOAPP_` when configuring
     them as environment variables. However, no prefix should be used in TOML
-    files. See [Environment variables](config_basics.md#environment-variables)
+    files. See [Environment variables](config-basics.md#environment-variables)
     for details on setting such variables.
 
 ## `BABEL_DEFAULT_LOCALE`
@@ -61,7 +61,7 @@ already set by a previous file, it overrides the previous value.
 
     This parameter is specific to KerkoApp and cannot be set in a TOML file. It
     can only be set as an environment variable, therefore it should actually be
-    referenced as `KERKOAPP_CONFIG_FILES` (see [Environment variables](config_basics.md#environment-variables) for details on setting such variables).
+    referenced as `KERKOAPP_CONFIG_FILES` (see [Environment variables](config-basics.md#environment-variables) for details on setting such variables).
 
 ## `DATA_DIR`
 
@@ -439,7 +439,7 @@ rise above heavier ones (large numbers).
 
 Allow full-text search of PDF attachments. Defaults to `true`. To get consistent
 results, see [Ensuring full-text indexing of your attachments in
-Zotero](guides.md#ensuring-full-text-indexing-of-your-attachments-in-zotero).
+Zotero](recipes.md#ensuring-full-text-indexing-of-your-attachments-in-zotero).
 
 ### `result_fields`
 
