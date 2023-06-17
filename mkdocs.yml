@@ -2,11 +2,13 @@ site_name: Kerko
 
 nav:
   - index.md
-  - getting_started.md
+  - start.md
   - sync.md
-  - guides.md
-  - config.md
-  - settings.md
+  - config_basics.md
+  - config_params.md
+  - l10n.md
+  - recipes.md
+  - deploy.md
   - troubleshooting.md
   - contributing.md
   - changelog.md

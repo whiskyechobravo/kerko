@@ -1,29 +1,26 @@
-# How-to guides
+# Recipes
 
 ## Defining custom facets based on Zotero collections
 
-**TODO:docs: old KerkoApp documentation to update:**
+**TODO:docs: Give instructions. Mention required clean index & sync index.**
 
-`KERKOAPP_COLLECTION_FACETS`: Defines facets modeled on Zotero collections.
-This variable should be a list of semicolon-delimited triples (collection key,
-facet weight and facet title, separated by colons). Each specified collection
-will appear in Kerko as a facet where subcollections will be represented as
-values within the facet. The weight determines a facet's position relative to
-the other facets. The facet title will be displayed by Kerko and, if desired,
-may be different from the collection's name in Zotero (you could use this to
-differentiate the names of collections made publicly available in Kerko
-through facets from those used internally in your Zotero library). Note that
-for a collection-based facet to appear in the search interface, all of the
-following conditions must be met:
+```toml title="Facet configuration example"
+[kerko.facets.my_facet]
+enabled = true
+type = "collection"
+collection_key = "AAAAAAAA"
+filter_key = "my_facet"
+title = "My facet"
+weight = 50
+initial_limit = 10
+initial_limit_leeway = 2
+sort_by = ["count", "label"]
+sort_reverse = false
+item_view = true
+```
 
-- The specified collection key corresponds to a top-level collection in the
-  Zotero library.
-- The specified collection has at least one subcollection that contains at least
-  one item that is not excluded by Kerko (meaning the item is not excluded by
-  other settings such as `KERKOAPP_ITEM_EXCLUDE_RE` or
-  `KERKOAPP_ITEM_INCLUDE_RE`).
-- The value of `KERKOAPP_COLLECTION_FACETS` should be defined within a single
-  string, on a single line.
+Please refer to [`kerko.facets`](config_params.md#kerkofacets) for details on
+each parameter.
 
 
 ## Ensuring full-text indexing of your attachments in Zotero
@@ -148,100 +145,6 @@ Sitemap: https://example.com/bibliography/sitemap.xml
 
 A `robots.txt` file can have multiple `Sitemap` directives, thus the Kerko
 sitemap can be specified alongside any other sitemaps you might already have.
-
-
-## Translating Kerko
-
-Kerko's translations are managed through Babel's [setuptools
-integration](http://babel.pocoo.org/en/latest/setup.html).
-
-The following commands should be executed from the directory that contains
-`setup.py`, and the [virtual environment][venv] must have been activated
-beforehand.
-
-Create or update the PO template (POT) file:
-
-```bash
-python setup.py extract_messages
-```
-
-Create a new PO file (for a new locale) based on the POT file. Replace
-`YOUR_LOCALE` with the appropriate language code, e.g., `de`, `es`, `fr`:
-
-```bash
-python setup.py init_catalog --locale YOUR_LOCALE
-```
-
-Update an existing PO file based on the POT file:
-
-```bash
-python setup.py update_catalog --locale YOUR_LOCALE
-```
-
-Compile MO files:
-
-```bash
-python setup.py compile_catalog
-```
-
-!!! tip "Contributing your translation"
-
-    You are welcome to contribute your translation. See [Submitting a
-    translation](contributing.md#submitting-a-translation). It is only thanks to
-    user contributions that Kerko is available in multiple languages.
-
-
-## Translating KerkoApp
-
-Although most user interface messages come from Kerko, KerkoApp also has
-messages of its own, and thus its own separate translation file.
-
-KerkoApp translations are managed with [Babel](http://babel.pocoo.org).
-
-The following commands should be executed from the directory that contains
-`babel.cfg`, and the [virtual environment][venv] must have been activated
-beforehand.
-
-Create or update the PO file template (POT). Replace `CURRENT_VERSION` with your
-current KerkoApp version:
-
-```bash
-pybabel extract -F babel.cfg -o kerkoapp/translations/messages.pot --project=KerkoApp --version=CURRENT_VERSION --copyright-holder="Kerko Contributors" kerkoapp
-```
-
-Create a new PO file (for a new locale) based on the POT file. Replace
-`YOUR_LOCALE` with the appropriate language code, e.g., `de`, `es`, `it`:
-
-```bash
-pybabel init -l YOUR_LOCALE -i kerkoapp/translations/messages.pot -d kerkoapp/translations
-```
-
-Update an existing PO file based on the POT file:
-
-```bash
-pybabel update -l YOUR_LOCALE -i kerkoapp/translations/messages.pot -d kerkoapp/translations
-```
-
-Compile MO files:
-
-```bash
-pybabel compile -l YOUR_LOCALE -d kerkoapp/translations
-```
-
-
-## Deploying KerkoApp in production
-
-As there are many different operating systems and hosting environments, setting
-up KerkoApp for use in production is out of scope for this manual. The procedure
-will similar to that of any Flask application, but you will have consider
-features that are more specific to KerkoApp, e.g., the `.env` and configuration
-files, the data directory, the scheduled synchronization of data
-from zotero.org.
-
-You might find the following guide useful: [Deploying KerkoApp on Ubuntu 20.04
-or 22.04 with nginx and
-gunicorn](https://gist.github.com/davidlesieur/e1dafd09636a4bb333ad360e4b2c5d6d).
-
 
 
 [Kerko]: https://github.com/whiskyechobravo/kerko

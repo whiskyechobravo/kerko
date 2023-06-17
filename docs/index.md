@@ -203,14 +203,14 @@ The main features provided by Kerko are:
   deleting its data. These can be invoked through the `flask` command (see
   [useful commands](sync.md#useful-commands)).
 
-[KerkoApp] is just a thin layer built around Kerko and inherits all of Kerko's
-features. Nevertheless, it provides a few additional features of its own:
+[KerkoApp] is a standalone application built around Kerko. It inherits all of
+Kerko's features and it provides a few additions of its own:
 
-- **Configuration files**: allow separation of configuration from code.
-    - Read deployment-specific settings from environment variables or from a
-      `.env` file, enabling the [Twelve-factor App](https://12factor.net/config)
-      methodology.
-    - Read application settings from one or more [TOML] configuration files.
+- **Configuration files**: allow separation of configuration from code and
+  enable the [Twelve-factor App](https://12factor.net/config) methodology.
+  Environment variables and [TOML] configuration files are supported. Secrets,
+  server-specific parameters, and general parameters can be configured in
+  separate files.
 - Page templates for common HTTP errors.
 - Syslog logging handler (for Unix environments).
 
@@ -229,7 +229,7 @@ The main ones are:
 - [Flask-Babel]: integration of Flask and Babel.
 - [Flask-WTF]: integration of Flask and WTForms.
 - [Jinja2]: template engine.
-- [Pydantic]: data and settings validation.
+- [Pydantic]: configuration validation.
 - [Pyzotero]: Python client for the Zotero API.
 - [w3lib]: URL and HTML manipulation utilities.
 - [Werkzeug]: WSGI web application library (also required by Flask).

@@ -1,9 +1,8 @@
 # Getting started
 
-For getting started with Kerko, we recommend that you use KerkoApp, either with
-a "standard" installation, or with a Docker installation. However, if KerkoApp
-does not work for your use case, we also have instructions for [creating a
-custom application](#creating-a-custom-application).
+For getting started with Kerko, we recommend that you use [KerkoApp]. However,
+if KerkoApp is not suited to your use case, we also have instructions for
+[creating a custom application](#creating-a-custom-application).
 
 
 ## Getting started with KerkoApp
@@ -11,7 +10,7 @@ custom application](#creating-a-custom-application).
 To install KerkoApp, you may choose between a "standard" installation and a
 Docker installation. Just go with the option you feel most comfortable with. If
 you don't know Docker, you should be fine with the standard installation. But if
-you prefer not to touch any Python-related thing, perhaps the Docker
+you prefer to keep your distance from Python-related stuff, perhaps the Docker
 installation will suit you best.
 
 
@@ -43,29 +42,34 @@ your computer.
     This will install all packages required by Kerko and KerkoApp within a
     [virtual environment][venv].
 
-2. Copy the `sample.env` file to `.env` in the same directory. Open `.env` in a
-   text editor to assign proper values to the variables outlined below.
+2. Copy the `sample.secrets.toml` file to `.secrets.toml` in the same directory.
+   Open `.secrets.toml` in a text editor to assign proper values to the
+   parameters outlined below:
 
-    - `KERKOAPP_SECRET_KEY`: This variable is required for generating secure
-      tokens in web forms. It should have a hard to guess, and should really
-      remain secret. For this reason, never add your `.env` file to a code
+    - `SECRET_KEY`: This parameter is required for generating secure tokens in
+      web forms. It should have a hard to guess value, and should really remain
+      secret. For this reason, never add your `.secrets.toml` file to a code
       repository.
-    - `KERKOAPP_ZOTERO_API_KEY`: Your Zotero API key, as [created on
+    - `ZOTERO_API_KEY`: Your Zotero API key, as [created on
       zotero.org](https://www.zotero.org/settings/keys/new). We recommend that
       you create a read-only API key, as Kerko does not need to write to your
       library.
-    - `KERKOAPP_ZOTERO_LIBRARY_ID`: The identifier of the Zotero library to get
-      data from. For a personal library this value is your _userID_, as found on
+
+3. Copy the `sample.config.toml` file to `config.toml` in the same directory.
+   Open `config.toml` in a text editor to assign proper values to the parameters
+   outlined below:
+
+    - `ZOTERO_LIBRARY_ID`: The identifier of the Zotero library to get
+      data from. For a personal library the value is your _userID_, as found on
       https://www.zotero.org/settings/keys (you must be logged-in). For a group
       library this value is the _groupID_ of the library, as found in the URL of
       the library (e.g., the _groupID_ of the library at
-      https://www.zotero.org/groups/2348869/kerko_demo is `2348869`).
-    - `KERKOAPP_ZOTERO_LIBRARY_TYPE`: The type of library to get data from,
-      either `'user'` for a personal library, or `'group'` for a group library.
+      https://www.zotero.org/groups/2348869/kerko_demo is `"2348869"`).
+    - `ZOTERO_LIBRARY_TYPE`: The type of library to get data from,
+      either `"user"` for a personal library, or `"group"` for a group library.
 
-3. Copy the `sample.config.toml` file to `config.toml` in the same directory.
-   You do not need to edit the latter at this point, but later on this is where
-   you will change configuration options.
+    You do not need to edit other parameters at this point, but later on
+    `config.toml` is where your configuration changes will take place.
 
 4. Have KerkoApp synchronize your data from zotero.org:
 
@@ -100,7 +104,7 @@ your computer.
 
     The above procedure relies on Flask's built-in server, which is not
     suitable for production. For production use, you should consider better
-    options, such as the [WSGI servers suggested in Flask's
+    options such as the [WSGI servers suggested in the Flask
     documentation][Flask_production].
 
 !!! info "Running your installed application"
@@ -127,42 +131,43 @@ your computer.
 
 This procedure requires that [Docker] is installed on your computer.
 
-1. Copy the `Makefile`, `sample.env`, `sample.config.toml` files from
+1. Copy the `Makefile`, `sample.env`, and `sample.config.toml` files from
    [KerkoApp's repository][KerkoApp] to an empty directory on your computer.
 
 2. Rename your `sample.env` copy to `.env`. Open `.env` in a text editor to
-   assign proper values to the variables outlined below.
+   assign proper values to the parameters outlined below:
 
-    - `KERKOAPP_SECRET_KEY`: This variable is required for generating secure
-      tokens in web forms. It should have a hard to guess, and should really
-      remain secret. For this reason, never add your `.env` file to a code
-      repository.
+    - `KERKOAPP_SECRET_KEY`: This parameter is required for generating secure
+      tokens in web forms. It should have a hard to guess value, and should
+      really remain secret. For this reason, never add your `.env` file to a
+      code repository.
     - `KERKOAPP_ZOTERO_API_KEY`: Your Zotero API key, as [created on
       zotero.org](https://www.zotero.org/settings/keys/new). We recommend that
       you create a read-only API key, as Kerko does not need to write to your
       library.
-    - `KERKOAPP_ZOTERO_LIBRARY_ID`: The identifier of the Zotero library to get
-      data from. For a personal library this value is your _userID_, as found on
+
+    You do not need to change other values in `.env`.
+
+3. Rename your `sample.config.toml` copy to `config.toml`. Open `config.toml` in
+   a text editor to assign proper values to the parameters outlined below:
+
+    - `ZOTERO_LIBRARY_ID`: The identifier of the Zotero library to get
+      data from. For a personal library the value is your _userID_, as found on
       https://www.zotero.org/settings/keys (you must be logged-in). For a group
       library this value is the _groupID_ of the library, as found in the URL of
       the library (e.g., the _groupID_ of the library at
-      https://www.zotero.org/groups/2348869/kerko_demo is `2348869`).
-    - `KERKOAPP_ZOTERO_LIBRARY_TYPE`: The type of library to get data from,
-      either `'user'` for a personal library, or `'group'` for a group library.
-    - `MODULE_NAME`: This variable is required for running the application with
-      the provided Docker image. It specifies the Python module to be imported
-      by Gunicorn. You should not need to change the value that is provided in
-      `sample.env`.
+      https://www.zotero.org/groups/2348869/kerko_demo is `"2348869"`).
+    - `ZOTERO_LIBRARY_TYPE`: The type of library to get data from,
+      either `"user"` for a personal library, or `"group"` for a group library.
+
+    You do not need to edit other parameters at this point, but later on
+    `config.toml` is where your configuration changes will take place.
 
     !!! warning
 
-        Do not assign a value to the `KERKOAPP_DATA_DIR` variable. If you do, the
-        volume bindings defined within the `Makefile` will not be of any use to the
-        application running within the container.
-
-3. Rename your `sample.config.toml` copy to `config.toml`. You do not need to
-   edit the latter at this point, but later on this is where you will change
-   configuration options.
+        Do not set the `DATA_DIR` parameter. If you do, the volume bindings
+        defined within the `Makefile` will not be of any use to the application
+        running within the container.
 
 4. Pull the latest KerkoApp Docker image. In the same directory as the
    `Makefile`, run the following command:
@@ -199,8 +204,8 @@ and volume binding, see the [Docker documentation][Docker_docs].
 
 ## Creating a custom application
 
-This section should help you understand the minimal steps required for getting
-Kerko to work within a custom Flask application.
+This section should help you understand the minimal steps required for setting
+up Kerko within a custom Flask application.
 
 !!! tip
 
@@ -231,7 +236,7 @@ Let's now build a minimal app:
         pip install kerko
         ```
 
-3. In the `myapp` directory, create a file named `.env`, where variables
+3. In the `myapp` directory, create a file named `.env`, where parameters
    required by Kerko will be configured, with content such as the example below:
 
     ```sh
@@ -241,24 +246,25 @@ Let's now build a minimal app:
     MYAPP_ZOTERO_LIBRARY_TYPE="group"
     ```
 
-    Replace each value with a proper one. The meaning of each variable is
+    Replace each value with a proper one. The meaning of each parameter is
     outlined below:
 
-    - `MYAPP_SECRET_KEY`: This variable is required for generating secure tokens
-      in web forms. It should have a hard to guess, and should really remain
-      secret. For this reason, never add your `.env` file to a code repository.
+    - `MYAPP_SECRET_KEY`: This parameter is required for generating secure
+      tokens in web forms. It should have a hard to guess value, and should
+      really remain secret. For this reason, never add your `.env` file to a
+      code repository.
     - `MYAPP_ZOTERO_API_KEY`: Your Zotero API key, as [created on
       zotero.org](https://www.zotero.org/settings/keys/new). We recommend that
       you create a read-only API key, as Kerko does not need to write to your
       library.
     - `MYAPP_ZOTERO_LIBRARY_ID`: The identifier of the Zotero library to get
-      data from. For a personal library this value is your _userID_, as found on
+      data from. For a personal library the value is your _userID_, as found on
       https://www.zotero.org/settings/keys (you must be logged-in). For a group
       library this value is the _groupID_ of the library, as found in the URL of
       the library (e.g., the _groupID_ of the library at
-      https://www.zotero.org/groups/2348869/kerko_demo is `2348869`).
-    - `MYAPP_ZOTERO_LIBRARY_TYPE`: The type of library to get data from, either
-      `'user'` for a personal library, or `'group'` for a group library.
+      https://www.zotero.org/groups/2348869/kerko_demo is `"2348869"`).
+    - `MYAPP_ZOTERO_LIBRARY_TYPE`: The type of library to get data from,
+      either `"user"` for a personal library, or `"group"` for a group library.
 
     A `.env` file is a good place to store an application's secrets. It is good
     practice to keep this file only on the machine where the application is
@@ -277,54 +283,61 @@ Let's now build a minimal app:
     app = Flask(__name__)
     ```
 
-    This imports required modules and creates the Flask application object
-    (`app`).
+    The above imports required modules and creates the Flask application object
+    (`app`). Then, load the default Kerko configuration, and update it from
+    values set in `.env`:
 
     ```python title="wsgi.py" linenums="9"
-    app.config.from_prefixed_env(prefix='MYAPP')
+    # Initialize app configuration with Kerko's defaults.
     config_update(app.config, kerko.DEFAULTS)
+
+    # Update app configuration from environment variables.
+    app.config.from_prefixed_env(prefix='MYAPP')
     ```
 
-    This loads configuration settings from the `.env` file, and loads Kerko's
-    default configuration.
+    Next, adjust general application parameters to your liking. For example, we
+    can use the `config_set` function to set the main title of the web
+    application to `"My App"`. This function can be called each time you wish to
+    set a [configuration option](config.md).
 
-    ```python title="wsgi.py" linenums="11"
+    ```python title="wsgi.py" linenums="14"
     # Make changes to the Kerko configuration here, if desired.
     config_set(app.config, 'kerko.meta.title', 'My App')
     ```
 
-    This uses Kerko's `config_set` function to assign the title that users of
-    the web application will see. The same function could be used again right
-    there to set any of Kerko's [configuration options](config.md).
+    Next, have Kerko parse and validate the configuration. Then create the
+    `kerko_composer` object, which provides key elements needed by Kerko such as
+    the fields to display and search, and the facets made available for
+    filtering:
 
-    ```python title="wsgi.py" linenums="13"
-    validate_config(app.config)
+    ```python title="wsgi.py" linenums="16"
+    # Validate configuration and save its parsed version.
+    parse_config(app.config)
+
+    # Initialize the Composer object.
     app.config['kerko_composer'] = Composer(app.config)
+
+    # Make changes to the Kerko composer object here, if desired.
     ```
 
-    The ensures that the configuration has been set in a valid format, and then
-    creates the `kerko_composer` object. This object provides key elements
-    needed by Kerko, e.g., fields for display and search, facets for filtering.
-    Using methods of the `Composer` class, your application may alter this
-    object if needed (but only at configuration time, thus right here after its
-    creation), to add, remove or alter fields, facets, sort options, search
-    scopes, record download formats, or badges.
+    Using methods of the `Composer` class, your application could alter the
+    `kerko_composer` object if needed, to add, remove or alter fields, facets,
+    sort options, search scopes, record download formats, or badges.
 
-    ```python title="wsgi.py" linenums="15"
+    Finally, initialize extensions required by Kerko (see the respective
+    documentations of [Flask-Babel][Flask-Babel_documentation] and
+    [Bootstrap-Flask][Bootstrap-Flask_documentation] for more details), and
+    register the Kerko blueprint with the application object:
+
+    ```python title="wsgi.py" linenums="23"
     babel = Babel(app)
     bootstrap = Bootstrap4(app)
-    ```
 
-    This initializes the Flask-Babel and Bootstrap-Flask extensions (see the
-    respective docs of [Flask-Babel][Flask-Babel_documentation] and
-    [Bootstrap-Flask][Bootstrap-Flask_documentation] for more details).
-
-    ```python title="wsgi.py" linenums="17"
     app.register_blueprint(kerko.blueprint, url_prefix='/bibliography')
     ```
 
-    Finally, the Kerko blueprint is registered with the application object. The
-    `url_prefix` argument defines the base path for every URL provided by Kerko.
+    The `url_prefix` argument given above defines the base path for every URL
+    provided by Kerko.
 
     !!! note
 

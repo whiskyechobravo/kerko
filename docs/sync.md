@@ -91,8 +91,8 @@ Some frequently used commands are:
 
     The above commands should work as-is when you are in the application's
     directory (where the `wsgi.py` file is found). To run them from another
-    directory, you could use Flask's `--app` option, or to set the `FLASK_APP`
-    environment variable. For example:
+    directory, you could use Flask's `--app` command line option, or to set the
+    `FLASK_APP` environment variable. For example:
 
     ```bash
     flask --app=/path/to/kerkoapp/wsgi:app kerko sync
