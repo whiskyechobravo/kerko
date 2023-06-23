@@ -196,7 +196,7 @@ Please refer to the [documentation][Kerko_documentation] for more details.
 [Flask_blueprint]: https://flask.palletsprojects.com/en/latest/blueprints/
 [Kerko]: https://github.com/whiskyechobravo/kerko
 [Kerko_actions]: https://github.com/whiskyechobravo/kerko/actions
-[Kerko_documentation]: #
+[Kerko_documentation]: https://whiskyechobravo.github.io/kerko/
 [Kerko_pypi]: https://pypi.org/project/Kerko/
 [Kerko_translations]: https://github.com/whiskyechobravo/kerko/tree/master/src/kerko/translations
 [KerkoApp]: https://github.com/whiskyechobravo/kerkoapp
