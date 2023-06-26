@@ -259,7 +259,7 @@ Let's now build a minimal app:
    Once the virtual environment is set and active, use the following command:
 
    ```bash
-   pip install kerko environs
+   pip install kerko
    ```
 
 2. In the directory where you want to install your application, create a file
@@ -267,19 +267,19 @@ Let's now build a minimal app:
    content such as the example below:
 
    ```sh
-   SECRET_KEY="your-random-secret-key"  # Replace this value.
-   KERKO_ZOTERO_API_KEY="xxxxxxxxxxxxxxxxxxxxxxxx"  # Replace this value.
-   KERKO_ZOTERO_LIBRARY_ID="9999999"  # Replace this value.
-   KERKO_ZOTERO_LIBRARY_TYPE="group"  # Replace this value if necessary.
+   MYAPP_SECRET_KEY="your-random-secret-key"  # Replace this value.
+   MYAPP_ZOTERO_API_KEY="xxxxxxxxxxxxxxxxxxxxxxxx"  # Replace this value.
+   MYAPP_ZOTERO_LIBRARY_ID="9999999"  # Replace this value.
+   MYAPP_ZOTERO_LIBRARY_TYPE="group"  # Replace this value if necessary.
    ```
 
    Here's the meaning of each variable:
 
-   - `SECRET_KEY`: This variable is required for generating secure tokens in web
-     forms. It should have a hard to guess, random value, and should really
-     remain secret.
-   - `KERKO_ZOTERO_API_KEY`, `KERKO_ZOTERO_LIBRARY_ID` and
-     `KERKO_ZOTERO_LIBRARY_TYPE`: These variables are required for Kerko to be
+   - `MYAPP_SECRET_KEY`: This variable is required for generating secure tokens
+     in web forms. It should have a hard to guess, random value, and should
+     really remain secret.
+   - `MYAPP_ZOTERO_API_KEY`, `MYAPP_ZOTERO_LIBRARY_ID`, and
+     `MYAPP_ZOTERO_LIBRARY_TYPE`: These variables are required for Kerko to be
      able to access your Zotero library. See [Configuration
      variables](#configuration-variables) for details on how to properly set
      these variables.
@@ -291,31 +291,29 @@ Let's now build a minimal app:
 3. Create a file named `wsgi.py` with the following content:
 
    ```python
-   import pathlib
-
-   from environs import Env
+   import kerko
    from flask import Flask
+   from kerko.config_helpers import config_set, config_update
    from kerko.composer import Composer
 
-   env = Env()
-   env.read_env()
-
    app = Flask(__name__)
-   app.config['SECRET_KEY'] = env.str('SECRET_KEY')
-   app.config['KERKO_ZOTERO_API_KEY'] = env.str('KERKO_ZOTERO_API_KEY')
-   app.config['KERKO_ZOTERO_LIBRARY_ID'] = env.str('KERKO_ZOTERO_LIBRARY_ID')
-   app.config['KERKO_ZOTERO_LIBRARY_TYPE'] = env.str('KERKO_ZOTERO_LIBRARY_TYPE')
-   app.config['KERKO_DATA_DIR'] = str(pathlib.Path(__file__).parent / 'data' / 'kerko')
-   app.config['KERKO_COMPOSER'] = Composer()
+   app.config.from_prefixed_env(prefix='MYAPP')
+   config_update(app.config, kerko.DEFAULTS)
+
+   # Make changes to the Kerko configuration here, if desired.
+   config_set(app.config, 'kerko.meta.title', 'My App')
+
+   validate_config(app.config)
+   app.config['kerko_composer'] = Composer(app.config)
    ```
 
    This code creates the Flask application object (`app`), loads configuration
    settings from the `.env` file, and sets two more configuration variables:
 
-   - `KERKO_DATA_DIR`: This variable specifies the directory where to store the
-     search index and the file attachments. If the specified directory does not
-     already exists, Kerko will try to create it.
-   - `KERKO_COMPOSER`: This variable specifies key elements needed by Kerko,
+   - `kerko`: This variable contains Kerko's configuration settings, which are
+     represented in a Python `dict`. Here we simply assign the default values
+     from `DEFAULTS`.
+   - `kerko_composer`: This variable specifies key elements needed by Kerko,
      e.g., fields for display and search, facets for filtering. These are
      defined by instantiating the `Composer` class. Your application may
      manipulate the resulting object at configuration time to add, remove or
@@ -381,54 +379,65 @@ Let's now build a minimal app:
 You have just built a really minimal application for Kerko. The full code
 example is available at [KerkoStart]. However, if you are looking at developing
 a custom Kerko application, we recommend that you still look at [KerkoApp] for a
-slightly more advanced starting point. While still small, KerkoApp adds some
-structure as well as features such as configuration options, translations
-loading, and error pages.
+more advanced starting point. While still small, KerkoApp adds some structure as
+well as features such as a configuration file, translations loading, and error
+pages.
 
 
 ## Configuration variables
 
 The variables below are required and have no default values:
 
-- `KERKO_COMPOSER`: An instance of the `kerko.composer.Composer` class.
-- `KERKO_DATA_DIR`: The directory where to store the search index and the file
-  attachments. Subdirectories `index` and `attachments` will be created if they
-  do not already exist.
-- `KERKO_ZOTERO_API_KEY`: Your API key, as [created on
+- `SECRET_KEY`: This variable is required for generating secure tokens
+  in web forms. It should have a hard to guess, random value, and should
+  really remain secret.
+- `ZOTERO_API_KEY`: Your API key, as [created on
   zotero.org](https://www.zotero.org/settings/keys/new).
-- `KERKO_ZOTERO_LIBRARY_ID`: The identifier of the library to get data from. For
+- `ZOTERO_LIBRARY_ID`: The identifier of the library to get data from. For
   your personal library this value should be your _userID_, as found on
   https://www.zotero.org/settings/keys (you must be logged-in). For a group
   library this value should be the _groupID_ of the library, as found in the URL
   of that library (e.g., in https://www.zotero.org/groups/2348869/kerko_demo,
   the _groupID_ is `2348869`).
-- `KERKO_ZOTERO_LIBRARY_TYPE`: The type of library to get data from, either
-  `'user'` for your personal library, or `'group'` for a group library.
+- `ZOTERO_LIBRARY_TYPE`: The type of library to get data from, either `'user'`
+  for your personal library, or `'group'` for a group library.
 
 Any of the following variables may be added to your configuration if you wish to
 override their default value:
 
-- `KERKO_CSL_STYLE`: The citation style to use for formatted references. Can be
+**TODO:config: Clarify that the following may be set as environment variables or .env variables but with a prefix defined by the app; or no prefix if set directly in app.config in Python code**
+
+- `DATA_DIR`: The directory where Kerko will store its data (such as the search
+  index and the file attachments). This may be specified as an absolute path or
+  as a relative path. For the latter case, the path will be relative to the
+  application's instance directory that is [determined by
+  Flask](https://flask.palletsprojects.com/en/2.3.x/config/#instance-folders).
+  Under the data directory, subdirectories `cache`, `index` and `attachments`
+  will be created if they do not already exist.
+
+**TODO:config: Clarify what those dots mean in the following structured/dict config**
+
+- `kerko.zotero.csl_style`: The citation style to use for formatted references. Can be
   either the file name (without the `.csl` extension) of one of the styles in the
   [Zotero Styles Repository][Zotero_styles] (e.g., `apa`) or the URL of a remote
   CSL file. Defaults to `'apa'`.
-- `KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW`: Open attachments in new windows, i.e.,
+- `kerko.features.download_attachment_new_window`: Open attachments in new windows, i.e.,
   add the `target="_blank"` attribute to attachment links. Defaults to `False`.
-- `KERKO_DOWNLOAD_CITATIONS_LINK`: Provide a record download button on search
+- `kerko.features.download_citations_link`: Provide a record download button on search
   results pages. Defaults to `True`.
-- `KERKO_DOWNLOAD_CITATIONS_MAX_COUNT`: Limit over which the record download
+- `kerko.features.download_citations_max_count`: Limit over which the record download
   button should be hidden from search results pages. Defaults to `0` (i.e. no
   limit).
-- `KERKO_FEEDS`: A list of syndication feed formats to publish. Defaults to
+- `kerko.feeds.formats`: A list of syndication feed formats to publish. Defaults to
   `['atom']`. If set to an empty list, no web feed will be provided. The only
   supported format is `'atom'`.
-- `KERKO_FEEDS_FIELDS`: List of fields to retrieve for each feed item (these may
-  be used by the `KERKO_TEMPLATE_ATOM_FEED` template). Values in this list are
+- `kerko.feeds.fields`: List of fields to retrieve for each feed item (these may
+  be used by the `kerko.templates.atom_feed` template). Values in this list are
   keys identifying fields defined in the `kerko.composer.Composer` instance. One
   probably only needs to change the default list when overriding the template to
   display additional fields. Note that some fields from the default list may be
   required by other Kerko functions.
-- `KERKO_FEEDS_MAX_DAYS`: The age (in number of days) of the oldest items
+- `kerko.feeds.max_days`: The age (in number of days) of the oldest items
   allowed into web feeds. The Date field of the items are used for that purpose,
   and when no date is available, the date the item was added to Zotero is used
   instead. Defaults to `0` (no age limit). Unless your goal is to promote recent
@@ -437,68 +446,68 @@ override their default value:
   excluded from feeds. For the same reason, items whose date lack the month
   and/or the day will be considered as from the 12th month of the year and/or
   the last day of the month.
-- `KERKO_FULLTEXT_SEARCH`: Allow full-text search of PDF attachments. Defaults
+- `kerko.fulltext`: Allow full-text search of PDF attachments. Defaults
   to `True`. To get consistent results, see [Ensuring full-text indexing of your
   attachments in
   Zotero](#ensuring-full-text-indexing-of-your-attachments-in-zotero).
-- `KERKO_HIGHWIREPRESS_TAGS`: Embed [Highwire Press
+- `kerko.meta.highwirepress_tags`: Embed [Highwire Press
   tags](https://scholar.google.ca/intl/en/scholar/inclusion.html#indexing) into
   the HTML of item pages. This should help search engines such as Google Scholar
   index your items, but works only with book, conference paper, journal article,
   report or thesis items. Defaults to `True` (i.e. enabled).
-- `KERKO_PAGE_LEN`: The number of search results per page. Defaults to `20`.
-- `KERKO_PAGER_LINKS`: Number of pages to show in the pager (not counting the
+- `kerko.pagination.page_len`: The number of search results per page. Defaults to `20`.
+- `kerko.pagination.pager_links`: Number of pages to show in the pager (not counting the
   current page). Defaults to `4`.
-- `KERKO_PRINT_ITEM_LINK`: Provide a print button on item pages. Defaults to
+- `kerko.features.print_item_link`: Provide a print button on item pages. Defaults to
   `False`.
-- `KERKO_PRINT_CITATIONS_LINK`: Provide a print button on search results
+- `kerko.features.print_citations_link`: Provide a print button on search results
   pages. Defaults to `False`.
-- `KERKO_PRINT_CITATIONS_MAX_COUNT`: Limit over which the print button should
+- `kerko.features.print_citations_max_count`: Limit over which the print button should
   be hidden from search results pages. Defaults to `0` (i.e. no limit).
-- `KERKO_RELATIONS_INITIAL_LIMIT`: Number of related items to show above the
+- `kerko.features.relations_initial_limit`: Number of related items to show above the
   "show more" link. Defaults to `5`.
-- `KERKO_RELATIONS_LINKS`: Show item links in lists of related items. Defaults
+- `kerko.features.relations_links`: Show item links in lists of related items. Defaults
   to `False`. Enabling this only has an effect if at least one of the following
-  variables is also set to `True`: `KERKO_RESULTS_ATTACHMENT_LINKS`,
-  `KERKO_RESULTS_URL_LINKS`).
-- `KERKO_RESULTS_ABSTRACTS`: Show abstracts on search result pages. Defaults to
+  variables is also set to `True`: `kerko.features.results_attachment_links`,
+  `kerko.features.results_url_links`.
+- `kerko.features.results_abstracts`: Show abstracts on search result pages. Defaults to
   `False` (abstracts are hidden).
-- `KERKO_RESULTS_ABSTRACTS_TOGGLER`: Show a button letting users show or hide
+- `kerko.features.results_abstracts_toggler`: Show a button letting users show or hide
   abstracts on search results pages. Defaults to `True` (toggle is displayed).
-- `KERKO_RESULTS_ABSTRACTS_MAX_LENGTH`: Truncate abstracts at the given length
+- `kerko.features.results_abstracts_max_length`: Truncate abstracts at the given length
   (in number of characters). If text is to be truncated in the middle of a word,
   the whole word is discarded instead. Truncated text is appended with an
   ellipsis sign ("..."). Defaults to `0` (abstracts get displayed in their full
   length, without any truncation).
-- `KERKO_RESULTS_ABSTRACTS_MAX_LENGTH_LEEWAY`: If the length of an abstract only
-  exceeds `KERKO_RESULTS_ABSTRACTS_MAX_LENGTH` by this tolerance margin or less
+- `kerko.features.results_abstracts_max_length_leeway`: If the length of an abstract only
+  exceeds `kerko.features.results_abstracts_max_length` by this tolerance margin or less
   (in number of characters), it will not be truncated. Defaults to `0` (no
   tolerance margin).
-- `KERKO_RESULTS_ATTACHMENT_LINKS`: Provide links to attachments in search
+- `kerko.features.results_attachment_links`: Provide links to attachments in search
   results. Defaults to `True`.
-- `KERKO_RESULTS_URL_LINKS`: Provide links to online resources in search
+- `kerko.features.results_url_links`: Provide links to online resources in search
   results (for items whose URL field has a value). Defaults to `True`.
-- `KERKO_RESULTS_FIELDS`: List of item fields to retrieve for search results
-  (most notably used by the `KERKO_TEMPLATE_SEARCH_ITEM` template). Values in
+- `kerko.search.result_fields`: List of item fields to retrieve for search results
+  (most notably used by the `kerko.templates.search_item` template). Values in
   this list are keys identifying fields defined in the `kerko.composer.Composer`
   instance. One probably only needs to change the default list when overriding
   the template to display additional fields. Note that some fields from the
   default list may be required by other Kerko functions.
-- `KERKO_TEMPLATE_SEARCH`: Name of the Jinja2 template to render for the search
+- `kerko.templates.search`: Name of the Jinja2 template to render for the search
   page with list of results. Defaults to `kerko/search.html.jinja2`.
-- `KERKO_TEMPLATE_SEARCH_ITEM`: Name of the Jinja2 template to render for the
+- `kerko.templates.search_item`: Name of the Jinja2 template to render for the
   search page with a single bibliographic record. Defaults to
   `kerko/search-item.html.jinja2`.
-- `KERKO_TEMPLATE_ITEM`: Name of the Jinja2 template to render for the
+- `kerko.templates.item`: Name of the Jinja2 template to render for the
   bibliographic record view. Defaults to `kerko/item.html.jinja2`.
-- `KERKO_TEMPLATE_ATOM_FEED`: Name of the Jinja2 template used to render an Atom
+- `kerko.templates.atom_feed`: Name of the Jinja2 template used to render an Atom
   feed. Defaults to `kerko/atom.xml.jinja2`.
-- `KERKO_TEMPLATE_LAYOUT`: Name of the Jinja2 template that is extended by the
+- `kerko.templates.layout`: Name of the Jinja2 template that is extended by the
   search, search-item, and item templates. Defaults to `kerko/layout.html.jinja2`.
-- `KERKO_TEMPLATE_BASE`: Name of the Jinja2 template that is extended by the
+- `kerko.templates.base`: Name of the Jinja2 template that is extended by the
   layout template. Defaults to `kerko/base.html.jinja2`.
-- `KERKO_TITLE`: The title to display in web pages. Defaults to `'Kerko'`.
-- `KERKO_OPEN_IN_ZOTERO_APP`: On item pages, show a button for opening the
+- `kerko.meta.title`: The title to display in web pages. Defaults to `'Kerko'`.
+- `kerko.features.open_in_zotero_app`: On item pages, show a button for opening the
   corresponding item in the Zotero application (through a link using the
   `zotero://` protocol). If this option is set to `True`, a user will still need
   to first enable the button from the Preferences menu (which can be accessed
@@ -508,7 +517,7 @@ override their default value:
   only useful to library editors and might confuse other users, especially if
   your Zotero library is private. Thus you should probably enable this option
   only if there is a strong need from the editors. Defaults to `False`.
-- `KERKO_OPEN_IN_ZOTERO_WEB`: On item pages, show a button for viewing the
+- `kerko.features.open_in_zotero_web`: On item pages, show a button for viewing the
   corresponding item on zotero.org (through a regular hyperlink). If this option
   is set to `True`, a user will still need to first enable the button from the
   Preferences menu (which can be accessed from the footer of item pages and
@@ -517,12 +526,12 @@ override their default value:
   useful to library editors and might confuse other users, especially if your
   Zotero library is private. Thus you should probably enable this option only if
   there is a strong need from the editors. Defaults to `False`.
-- `KERKO_ZOTERO_BATCH_SIZE`: Number of items to request on each call to the
+- `kerko.zotero.batch_size`: Number of items to request on each call to the
   Zotero API. Defaults to `100` (which is the maximum currently allowed by the
   API).
-- `KERKO_ZOTERO_MAX_ATTEMPTS`: Maximum number of tries after the Zotero API
+- `kerko.zotero.max_attempts`: Maximum number of tries after the Zotero API
   has returned an error or not responded during indexing. Defaults to `10`.
-- `KERKO_ZOTERO_WAIT`: Time to wait (in seconds) between failed attempts to
+- `kerko.zotero.wait`: Time to wait (in seconds) between failed attempts to
   call the Zotero API. Defaults to `120`.
 - Localization-related variables:
   - `BABEL_DEFAULT_LOCALE`: The default language of the user interface. Defaults
@@ -534,18 +543,18 @@ override their default value:
     a timezone selector function to override it (see the [Flask-Babel
     documentation][Flask-Babel_documentation]). Any timezone name supported by
     the [pytz] package should work.
-  - `KERKO_WHOOSH_LANGUAGE`: The language of search requests. Defaults to
+  - `kerko.search.whoosh_language`: The language of search requests. Defaults to
     `'en'`. You may refer to Whoosh's source to get the list of supported
     languages (`whoosh.lang.languages`) and the list of languages that support
     stemming (`whoosh.lang.has_stemmer()`).
-  - `KERKO_ZOTERO_LOCALE`: The locale to use with Zotero API calls. This
+  - `kerko.zotero.locale`: The locale to use with Zotero API calls. This
     dictates the locale of Zotero item types, field names, creator types and
     citations. Defaults to `'en-US'`. Supported locales are listed at
     https://api.zotero.org/schema, under "locales".
-- `GOOGLE_ANALYTICS_ID`: A Google Analytics stream ID, e.g., 'G-??????????'.
-  This variable is optional and there is no default value. If set and Flask is
-  not running in debug mode, then the Google Analytics tag is inserted into the
-  pages.
+- `kerko.meta.google_analytics_id`: A Google Analytics stream ID, e.g.,
+  'G-??????????'. This variable is optional and is empty by default. If set and
+  Flask is not running in debug mode, then the Google Analytics tag is inserted
+  into the pages.
 
 **Caution:** Many of the configuration variables cause changes to the structure
 of Kerko's cache or search index. Changing those variables may require that you

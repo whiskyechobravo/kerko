@@ -126,14 +126,15 @@ class FacetSpec(BaseFieldSpec):
 
     def __init__(
             self,
+            *,
             title,
             filter_key,
             weight=0,
             initial_limit=0,
-            initial_limit_leeway=0,
+            initial_limit_leeway=2,
             codec=None,
             missing_label=None,
-            sort_key=None,
+            sort_by=None,
             sort_reverse=False,
             item_view=True,
             allow_overlap=True,
@@ -189,7 +190,7 @@ class FacetSpec(BaseFieldSpec):
         self.initial_limit_leeway = initial_limit_leeway
         self.codec = codec or BaseFacetCodec()
         self.missing_label = missing_label
-        self.sort_key = sort_key
+        self.sort_by = sort_by
         self.sort_reverse = sort_reverse
         self.item_view = item_view
         self.allow_overlap = allow_overlap
@@ -246,7 +247,7 @@ class FacetSpec(BaseFieldSpec):
         """
 
     def sort_items(self, items):
-        if self.sort_key is None:
+        if self.sort_by is None:
             return
 
         # Sort items based on multiple-keys.
@@ -264,7 +265,7 @@ class FacetSpec(BaseFieldSpec):
                 *[
                     x[k] * -1 if k == 'count' else
                     (sort_normalize(x[k]) if isinstance(x[k], str) else x[k])
-                    for k in self.sort_key
+                    for k in self.sort_by
                 ]
             ),
             reverse=self.sort_reverse
@@ -496,13 +497,12 @@ class CollectionFacetSpec(TreeFacetSpec):
     given `collection_key`. Subcollections become values within the facet.
     """
 
-    def __init__(self, collection_key, **kwargs):
-        # Provide more convenient defaults for this type of facet.
-        kwargs.setdefault('key', 'collection_facet_' + collection_key)
+    def __init__(self, *, collection_key, **kwargs):
+        # Provide some convenient defaults for this type of facet.
+        kwargs.setdefault('key', f'facet_collection_{collection_key}')
         kwargs.setdefault('field_type', ID(stored=True))
-        kwargs.setdefault('filter_key', slugify(kwargs.get('title')))
+        kwargs.setdefault('filter_key', slugify(str(kwargs.get('title'))))
         kwargs.setdefault('codec', CollectionFacetCodec())
-        kwargs.setdefault('sort_key', ['label'])
         kwargs.setdefault('query_class', Prefix)
         kwargs.setdefault('extractor', extractors.CollectionFacetTreeExtractor())
         super().__init__(**kwargs)

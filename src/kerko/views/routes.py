@@ -43,7 +43,7 @@ def search():
             )
             return redirect(url, 302)
 
-    if criteria.options.get('page-len', config('KERKO_PAGE_LEN')) == 1:
+    if criteria.options.get('page-len', config('kerko.pagination.page_len')) == 1:
         return search_single(criteria, form)
     return search_list(criteria, form)
 
@@ -54,7 +54,7 @@ def search():
 def atom_feed():
     """Build a feed based on the search criteria."""
 
-    if 'atom' not in config('KERKO_FEEDS'):
+    if 'atom' not in config('kerko.feeds.formats'):
         return abort(404)
 
     context = {}
@@ -77,36 +77,36 @@ def atom_feed():
                 "removed from the configuration."
             )
 
-        if config('KERKO_FEEDS_MAX_DAYS'):
+        if config('kerko.feeds.max_days'):
             if 'filter_date' in composer().fields:
                 today = datetime.today()
                 start = datetime(today.year, today.month,
-                                 today.day) - timedelta(config('KERKO_FEEDS_MAX_DAYS'))
+                                 today.day) - timedelta(config('kerko.feeds.max_days'))
                 current_app.logger.debug(
                     f"Show items dated {start} and newer"
-                    f" (KERKO_FEEDS_MAX_DAYS == {config('KERKO_FEEDS_MAX_DAYS')})."
+                    f" (kerko.feeds.max_days == {config('kerko.feeds.max_days')})."
                 )
                 extra_args['require_date_ranges'] = {'filter_date': (start, None)}
             else:
                 current_app.logger.warning(
-                    "'KERKO_FEEDS_MAX_DAYS' is set but has no effect because the "
+                    "'kerko.feeds.max_days' is set but has no effect because the "
                     "'filter_date' field was removed from the configuration."
                 )
 
         results = searcher.search_page(
             page=criteria.options.get('page', 1),
-            page_len=criteria.options.get('page-len', config('KERKO_PAGE_LEN')),
+            page_len=criteria.options.get('page-len', config('kerko.pagination.page_len')),
             keywords=criteria.keywords,
             filters=criteria.filters,
-            require_any=config('KERKO_FEEDS_REQUIRE_ANY'),  # Apply custom filtering, if not None.
-            reject_any={'item_type': ['note', 'attachment'], **config('KERKO_FEEDS_REJECT_ANY')},
+            require_any=config('kerko.feeds.require_any'),  # Apply custom filtering, if not None.
+            reject_any={'item_type': ['note', 'attachment'], **config('kerko.feeds.reject_any')},
             faceting=False,
             **extra_args,
         )
         if results.is_empty():
             items = []
         else:
-            items = results.items(composer().select_fields(config('KERKO_FEEDS_FIELDS')))
+            items = results.items(composer().select_fields(config('kerko.feeds.fields')))
             for item in items:
                 creators.inject_creator_display_names(item)
         context['items'] = items
@@ -129,11 +129,11 @@ def atom_feed():
 
     response = make_response(
         render_template(
-            config('KERKO_TEMPLATE_ATOM_FEED'),
+            config('kerko.templates.atom_feed'),
             pager=pager.build_pager(
                 pager_sections, criteria, endpoint='kerko.atom_feed', _external=True
             ),
-            page_len=config('KERKO_PAGE_LEN'),
+            page_len=config('kerko.pagination.page_len'),
             feed_url=url_for(
                 '.atom_feed',
                 _external=True,
@@ -187,7 +187,7 @@ def item_view(item_id):
             return redirect(url_for('.item_view', item_id=item['id']), 301)
     inject_item_data(item)
     return render_template(
-        config('KERKO_TEMPLATE_ITEM'),
+        config('kerko.templates.item'),
         **build_item_context(item),
         time=time.process_time() - start_time,
         locale=get_locale(),
@@ -452,7 +452,7 @@ def sitemap(page_num):
         )
         if results.is_empty():
             return abort(404)
-        items = results.items(composer().select_fields(['id', 'z_dateModified']))
+        items = results.items(composer().select_fields(['id', 'date_modified']))
     response = make_response(render_template('kerko/sitemap.xml.jinja2', items=items))
     response.headers['Content-Type'] = 'application/xml; charset=utf-8'
     return response

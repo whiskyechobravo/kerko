@@ -38,9 +38,6 @@ coverage.xml
 # Sphinx documentation.
 docs/_build/
 
-# DotEnv configuration.
-.env
-
 # Development tools / IDEs.
 .idea
 .vscode/
@@ -56,3 +53,8 @@ docs/_build/
 *~
 *.bak
 *.old
+
+# Configuration files.
+.env
+.secrets.*
+instance.*

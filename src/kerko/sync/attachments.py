@@ -6,7 +6,7 @@ from flask import current_app
 
 from kerko.extractors import is_file_attachment
 from kerko.searcher import Searcher
-from kerko.shortcuts import composer
+from kerko.shortcuts import composer, config
 from kerko.storage import get_storage_dir, open_index
 from kerko.sync import zotero
 
@@ -70,7 +70,9 @@ def sync_attachments():
         for item in results.items(
             composer().select_fields(['id', 'item_type', 'attachments', 'data'])
         ):
-            if item['item_type'] == 'attachment' and is_file_attachment(item, composer().mime_types):
+            if item['item_type'] == 'attachment' and is_file_attachment(
+                item, config('kerko.zotero.attachment_mime_types')
+            ):
                 _sync_attachment(item)
                 count += 1
             else:

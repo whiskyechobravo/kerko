@@ -14,9 +14,9 @@ def get_sections(page_num, page_count):
 
     sections = {}
     page_num = min(max(page_num, 1), page_count)
-    first = max(1, int(page_num - config('KERKO_PAGER_LINKS') / 2))
-    last = min(page_count + 1, first + config('KERKO_PAGER_LINKS') + 1)
-    first = max(1, last - config('KERKO_PAGER_LINKS') - 1)
+    first = max(1, int(page_num - config('kerko.pagination.pager_links') / 2))
+    last = min(page_count + 1, first + config('kerko.pagination.pager_links') + 1)
+    first = max(1, last - config('kerko.pagination.pager_links') - 1)
 
     if page_num > 1:
         sections['first'] = [1]

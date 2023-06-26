@@ -25,7 +25,7 @@ update the saved responses.
   after the changes, you will know that breaking changes happened either in the
   Zotero library's test data or in the way the Zotero API responded.
 - Go to the `api_responses` directory.
-- Set the `KERKO_ZOTERO_API_KEY` environment variable, or set it in a `.env`
+- Set the `ZOTERO_API_KEY` environment variable, or set it in a `.env`
   file in the `api_responses` directory.
 - Run the `update.bash` script from that directory to update the JSON files.
 - Note the values for the headers indicated below (which are output by

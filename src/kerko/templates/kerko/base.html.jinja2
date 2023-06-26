@@ -8,7 +8,7 @@
                 <meta charset="utf-8"> {# CAUTION: Keep this within the first 1024 characters. #}
                 <meta http-equiv="X-UA-Compatible" content="IE=edge">
             {%- endblock metas %}
-            <title>{% block meta_title_inner %}{{ config.KERKO_TITLE|escape }}{% endblock meta_title_inner %}</title>
+            <title>{% block meta_title_inner %}{{ config.kerko.meta.title|escape }}{% endblock meta_title_inner %}</title>
             {%- block styles %}
             {%- endblock styles %}
             {%- block head_scripts %}
@@ -17,14 +17,14 @@
                     var re = new RegExp('(^|\\s)no-js(\\s|$)');
                     document.documentElement.className = document.documentElement.className.replace(re, '$1js$2');
                 </script>
-                {%- if config.GOOGLE_ANALYTICS_ID %}
+                {%- if not config.DEBUG and config.kerko.meta.google_analytics_id %}
                     <!-- Global site tag (gtag.js) - Google Analytics -->
-                    <script async src="https://www.googletagmanager.com/gtag/js?id={{ config.GOOGLE_ANALYTICS_ID }}"></script>
+                    <script async src="https://www.googletagmanager.com/gtag/js?id={{ config.kerko.meta.google_analytics_id }}"></script>
                     <script>
                         window.dataLayer = window.dataLayer || [];
                         function gtag(){dataLayer.push(arguments);}
                         gtag('js', new Date());
-                        gtag('config', '{{ config.GOOGLE_ANALYTICS_ID }}');
+                        gtag('config', '{{ config.kerko.meta.google_analytics_id }}');
                     </script>
                 {%- endif %}
             {%- endblock head_scripts %}

@@ -2,11 +2,11 @@
 <feed {% block feed_attributes %}xmlns="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/"{% endblock %}>
     {%- block feed_elements %}
         {%- block feed_title %}
-            <title type="html">{{ config.KERKO_TITLE|escape }} - {{ feed_title|escape }}</title>
+            <title type="html">{{ config.kerko.meta.title|escape }} - {{ feed_title|escape }}</title>
         {%- endblock %}
         {%- block feed_author %}
             <author>
-                <name>{{ config.KERKO_TITLE|escape }}</name>
+                <name>{{ config.kerko.meta.title|escape }}</name>
                 <uri>{{ url_for('kerko.search', _external=True)|escape }}</uri>
             </author>
         {%- endblock %}

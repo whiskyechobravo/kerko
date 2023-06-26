@@ -14,7 +14,7 @@
             <div class="modal-body">
                 {%- block preferences_modal_inner %}
                     {%- block preferences_open_in_zotero %}
-                        {%- if config.KERKO_OPEN_IN_ZOTERO_APP %}
+                        {%- if config.kerko.features.open_in_zotero_app %}
                             <div class="form-group">
                                 <button id="open-in-zotero-app-toggle" class="btn btn-toggle pl-0" data-toggle="button" {% if open_in_zotero_app %}active{% endif %} aria-pressed="{% if open_in_zotero_app %}true{% else %}false{% endif %}" aria-describedby="open-in-zotero-app-toggle-help">
                                     <span class="btn-toggle-icon-off fas fa-toggle-off" aria-hidden="true"></span>
@@ -24,7 +24,7 @@
                                 <small id="open-in-zotero-app-toggle-help" class="form-text text-muted">{{ _('Show or hide the "{}" button on full bibliographic record pages. This button allows you to open the record in the Zotero application. It might be useful only if you have the Zotero application installed on your device, and if you were granted access to the Zotero library that holds the record.').format(_("Open in Zotero")) }}</small>
                             </div>
                         {%- endif %}
-                        {%- if config.KERKO_OPEN_IN_ZOTERO_WEB %}
+                        {%- if config.kerko.features.open_in_zotero_web %}
                             <div class="form-group">
                                 <button id="open-in-zotero-web-toggle" class="btn btn-toggle pl-0" data-toggle="button" {% if open_in_zotero_web %}active{% endif %} aria-pressed="{% if open_in_zotero_web %}true{% else %}false{% endif %}" aria-describedby="open-in-zotero-web-toggle-help">
                                     <span class="btn-toggle-icon-off fas fa-toggle-off" aria-hidden="true"></span>
