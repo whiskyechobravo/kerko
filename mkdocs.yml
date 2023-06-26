@@ -1,7 +1,7 @@
 site_name: Kerko
 
 nav:
-  - index.md
+  - Introduction: index.md
   - getting-started.md
   - synchronization.md
   - config-basics.md
