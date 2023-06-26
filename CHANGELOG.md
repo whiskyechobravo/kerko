@@ -1,5 +1,9 @@
 # Changelog
 
+For changes that might be specific to KerkoApp, please refer to the [KerkoApp
+changelog](https://github.com/whiskyechobravo/kerkoapp/blob/master/CHANGELOG.md).
+
+
 ## Latest (unreleased)
 
 *Warning:* Upgrading from version 0.9 or earlier will require that you rebuild
@@ -12,35 +16,101 @@ flask kerko sync index
 
 Features:
 
+- Add many new configuration parameters. Please refer to the configuration
+  parameters documentation for the full list.
 - Add optional "Open in Zotero" and "View on zotero.org" buttons to item pages.
   These are disabled by default (see the new settings `KERKO_OPEN_IN_ZOTERO_APP`
   and `KERKO_OPEN_IN_ZOTERO_WEB`). Even when these settings are enabled, a user
   who wishes to use such button must first enable it from the (also
   new) Preferences dialog.
 - Add API for retrieving information about the last synchronization from Zotero.
+- Add the `kerko config` command to the Flask command line interface for
+  displaying all configuration parameters.
 
 Other changes:
 
+- Restructure and expand documentation into a unified documentation site for
+  both Kerko and KerkoApp.
 - Add Portuguese translation. Thanks to Gonçalo Cordeiro.
-- Improve the Getting started instructions.
 
 Backwards incompatible changes:
 
 - Raise the minimum required versions of Flask, Flask-Babel, Bootstrap-Flask,
   and WTForms. If you have a custom application, some of those may introduce
   breaking changes.
+- The data directory has a new default location relative to the instance path.
+  Please check the documentation for the `DATA_PATH` and `INSTANCE_PATH`
+  configuration parameters. You may need to set one or both of those parameters,
+  and/or move your existing data directory.
+- Almost all configuration parameters have been renamed and/or moved into a
+  hierarchical structure. Hierarchical parameters are referred to using
+  path-like, dot-separated parameter names, and may conveniently be set with the
+  `kerko.config_helpers.config_set()` function. Here is a mapping of the changed
+  parameters:
+    - `KERKO_BOOTSTRAP_VERSION` → `kerko.assets.bootstrap_version`
+    - `KERKO_CSL_STYLE` → `kerko.zotero.csl_style`
+    - `KERKO_COMPOSER` → `kerko_composer`
+    - `KERKO_DATA_DIR` → `DATA_PATH`. Now optional, relative to the instance
+      path, and defaulting to `kerko` instead of `data/kerko`.
+    - `KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW` → `kerko.features.download_attachment_new_window`
+    - `KERKO_DOWNLOAD_CITATIONS_LINK` → `kerko.features.download_citations_link`
+    - `KERKO_DOWNLOAD_CITATIONS_MAX_COUNT` → `kerko.features.download_citations_max_count`
+    - `KERKO_FEEDS` → `kerko.feeds.formats`
+    - `KERKO_FEEDS_FIELDS` → `kerko.feeds.fields`
+    - `KERKO_FEEDS_MAX_DAYS` → `kerko.feeds.max_days`
+    - `KERKO_FEEDS_REJECT_ANY` → `kerko.feeds.reject_any`
+    - `KERKO_FEEDS_REQUIRE_ANY` → `kerko.feeds.require_any`
+    - `KERKO_FULLTEXT_SEARCH` → `kerko.search.fulltext`
+    - `KERKO_HIGHWIREPRESS_TAGS` → `kerko.meta.highwirepress_tags`
+    - `KERKO_JQUERY_VERSION` → `kerko.assets.jquery_version`
+    - `KERKO_OPEN_IN_ZOTERO_APP` → `kerko.features.open_in_zotero_app`
+    - `KERKO_OPEN_IN_ZOTERO_WEB` → `kerko.features.open_in_zotero_web`
+    - `KERKO_PAGE_LEN` → `kerko.pagination.page_len`
+    - `KERKO_PAGER_LINKS` → `kerko.pagination.pager_links`
+    - `KERKO_POPPER_VERSION` → `kerko.assets.popper_version`
+    - `KERKO_PRINT_CITATIONS_LINK` → `kerko.features.print_citations_link`
+    - `KERKO_PRINT_CITATIONS_MAX_COUNT` → `kerko.features.print_citations_max_count`
+    - `KERKO_PRINT_ITEM_LINK` → `kerko.features.print_item_link`
+    - `KERKO_RELATIONS_INITIAL_LIMIT` → `kerko.features.relations_initial_limit`
+    - `KERKO_RELATIONS_LINKS` → `kerko.features.relations_links`
+    - `KERKO_RELATIONS_SORT` → `kerko.features.relations_sort`
+    - `KERKO_RESULTS_ABSTRACTS_MAX_LENGTH` → `kerko.features.results_abstracts_max_length`
+    - `KERKO_RESULTS_ABSTRACTS_MAX_LENGTH_LEEWAY` → `kerko.features.results_abstracts_max_length_leeway`
+    - `KERKO_RESULTS_ABSTRACTS` → `kerko.features.results_abstracts`
+    - `KERKO_RESULTS_ABSTRACTS_TOGGLER` → `kerko.features.results_abstracts_toggler`
+    - `KERKO_RESULTS_ATTACHMENT_LINKS` → `kerko.features.results_attachment_links`
+    - `KERKO_RESULTS_FIELDS` → `kerko.search.result_fields`
+    - `KERKO_RESULTS_URL_LINKS` → `kerko.features.results_url_links`
+    - `KERKO_TEMPLATE_ATOM_FEED` → `kerko.templates.atom_feed`
+    - `KERKO_TEMPLATE_BASE` → `kerko.templates.base`
+    - `KERKO_TEMPLATE_ITEM` → `kerko.templates.item`
+    - `KERKO_TEMPLATE_LAYOUT` → `kerko.templates.layout`
+    - `KERKO_TEMPLATE_SEARCH` → `kerko.templates.search`
+    - `KERKO_TEMPLATE_SEARCH_ITEM` → `kerko.templates.search_item`
+    - `KERKO_TITLE` → `kerko.meta.title`
+    - `KERKO_WHOOSH_LANGUAGE` → `kerko.search.whoosh_language`
+    - `KERKO_WITH_JQUERY` → `kerko.assets.with_jquery`
+    - `KERKO_WITH_POPPER` → `kerko.assets.with_popper`
+    - `KERKO_ZOTERO_API_KEY` → `ZOTERO_API_KEY`
+    - `KERKO_ZOTERO_BATCH_SIZE` → `kerko.zotero.batch_size`
+    - `KERKO_ZOTERO_LIBRARY_ID` → `ZOTERO_LIBRARY_ID`
+    - `KERKO_ZOTERO_LIBRARY_TYPE` → `ZOTERO_LIBRARY_TYPE`
+    - `KERKO_ZOTERO_LOCALE` → `kerko.zotero.locale`
+    - `KERKO_ZOTERO_MAX_ATTEMPTS` → `kerko.zotero.max_attempts`
+    - `KERKO_ZOTERO_WAIT` → `kerko.zotero.wait`
+- `Composer.__init__()` now only takes a configuration object as argument
+  instead of a bunch of arguments. Thus, the initial values of the `Composer`
+  instance now depend solely on the configuration.
 - Remove the `KERKO_USE_TRANSLATIONS` configuration variable. Kerko now relies
   on the application's default Babel domain and translation directories. Custom
   applications that wish to load Kerko's translations should now add
   `kerko.TRANSLATION_DOMAIN` and `kerko.TRANSLATION_DIRECTORIES` to their Babel
   configuration.
-- Arguments of the `__init__()` method of `FacetSpec` and its subclasses must be
-  given as keyword arguments. Positional arguments are no longer accepted.
+- The `__init__()` method of `FacetSpec` and its subclasses now only accept
+  keyword arguments.
 - The `sort_key` argument to `FacetSpec.__init__()` is now `sort_by`.
-- `Composer` built-in fields `z_dateAdded` and `z_dateModified` are now
+- `Composer` built-in fields `z_dateAdded` and `z_dateModified` are now named
   `date_added` and `date_modified` respectively.
-- The data directory now has a default location relative to the instance path,
-  which is determined by Flask.
 
 
 ## 0.9 (2022-12-29)

@@ -1,9 +1,13 @@
-[![License](https://img.shields.io/pypi/l/kerko)][Kerko]
-[![Version](https://img.shields.io/pypi/v/kerko?color=informational)][Kerko_pypi]
-[![Tests status](https://github.com/whiskyechobravo/kerko/workflows/tests/badge.svg)][Kerko_actions]
+!!! warning
 
+    **This documentation is for the development (upcoming) version of Kerko.**
+    This new version brings significant changes to installation and configuration
+    procedures.<br>
+    **If you are looking at Kerko 0.9 (the latest released version), see the
+    [Kerko 0.9
+    documentation](https://github.com/whiskyechobravo/kerko/blob/0.9/README.md).**
 
-# Kerko
+# Overview
 
 [Kerko] is a web application component that provides a user-friendly search and
 browsing interface for sharing a bibliography managed with the [Zotero]
@@ -15,14 +19,46 @@ well-established and powerful bibliographic reference management tool for
 individuals or teams working on the bibliography's content.
 
 
+## How it works
+
+A Kerko-powered bibliography is managed using Zotero, and stored in the cloud on
+zotero.org, while Kerko itself is incorporated into an application which is
+installed on a web server. The bibliographic references may reside in a Zotero
+group library, where multiple users may collaborate to manage the content, or in
+a Zotero private library. On the web server, Kerko maintains a search index,
+which is a copy of the Zotero library that is optimized for search. When users
+interact with the web application, Kerko gets all the required data from that
+search index, without ever contacting zotero.org. It is through a scheduled
+task, which runs at regular intervals, that Kerko automatically brings its
+search index up to date by using the [Zotero Web API][Zotero_web_api] to
+retrieve the latest data from zotero.org.
+
+Kerko is implemented in [Python] using the [Flask] framework. As an application
+component, Kerko only works when incorporated into a Flask application. Such an
+application, [KerkoApp], is available for you to use, and can be deployed on a
+web server. KerkoApp can be seen as just a thin layer over Kerko. It might work
+for you if you like the default appearance, and if the provided configuration
+options are sufficient for your needs.
+
+For more advanced needs, you could consider building a custom application,
+possibly derived from KerkoApp, where additional customizations could be
+implemented in Python. In this scenario, it is not recommended that you change
+Kerko itself, but that you use Kerko's Python API to implement your
+customizations. Kerko is actually a Flask "[blueprint][Flask_blueprint]"
+(similar to what some other systems might call a plugin or an extension), which
+allows a modular architecture where the application integrates and extends
+Kerko, and possibly other blueprints as well; the Kerko-powered bibliography
+could be just one component of a larger Flask application.
+
+
 ## Demo site
 
-A [KerkoApp]-based [demo site][KerkoApp_demo] is available for you to try. You
-may also view the [Zotero library][Zotero_demo] that contains the source data
-for the demo site.
+A [demo site][KerkoApp_demo], which is based on [KerkoApp], is available for you
+to try. You may also view the [Zotero library][Zotero_demo] that contains the
+source data for the demo site.
 
 
-## Powered by Kerko
+## Sites using Kerko
 
 The following sites are powered by Kerko:
 
@@ -32,6 +68,11 @@ The following sites are powered by Kerko:
 - [Open Development & Education Evidence Library](https://docs.opendeved.net/)
 - [The EdTech Hub Evidence Library](http://docs.edtechhub.org/)
 - [University of Saint Joseph Research Output](https://research.usj.edu.mo/)
+
+!!! question "Are you using Kerko?"
+
+    If you would like to add your Kerko-powered site to this list, please
+    [e-mail us][Kerko_email] or submit a pull request.
 
 
 ## Features
@@ -103,11 +144,12 @@ The main features provided by Kerko are:
   must be accessible by URL).
 - **Language support**: the default language of the user interface is English,
   but [some translations][Kerko_translations] are provided. Additional
-  translations may be created using gettext-compatible tools. Also to consider:
-  locales supported by the [Zotero Data Schema][Zotero_schema] (which provides
-  the names of fields, item types and author types displayed by Kerko);
-  languages supported by Whoosh (which provides the search capabilities), i.e.,
-  ar, da, nl, en, fi, fr, de, hu, it, no, pt, ro, ru, es, sv, tr.
+  translations may be created using gettext-compatible tools (see [Translating
+  Kerko](localization.md#translating-kerko)). Also to consider: locales
+  supported by the [Zotero Data Schema][Zotero_schema] (which provides the names
+  of fields, item types and author types displayed by Kerko); languages
+  supported by Whoosh (which provides the search capabilities), i.e., ar, da,
+  nl, en, fi, fr, de, hu, it, no, pt, ro, ru, es, sv, tr.
 - **Semantic markup**: pages generated by Kerko embed HTML markup that can be
   detected by web crawlers (helping the indexing of your records by search
   engines) or by web browsers (allowing users of reference management tools to
@@ -155,18 +197,22 @@ The main features provided by Kerko are:
 - **Relations**: bibliographic record pages show links to related items, if any.
   You may define such relations using Zotero's _Related_ field. Moreover, Kerko
   adds the _Cites_ and _Cited by_ relation types, which can be managed in Zotero
-  through notes. Custom applications can add more types of relations if desired.
+  through notes (see [
+  guide](recipes.md#providing-cites-and-cited-by-relations)). Custom
+  applications can add more types of relations if desired.
 - **Badges**: custom applications can have icons conditionally displayed next to
   items.
 - **Responsive design**: the simple default implementation works on large
   monitors as well as on small screens. It is based on [Bootstrap].
 - **Integration**: as a Flask [blueprint][Flask_blueprint], Kerko can be
   integrated into any Flask application. For a standalone application, however,
-  you may simply install [KerkoApp].
+  you may simply [install
+  KerkoApp](getting-started.md#getting-started-with-kerkoapp).
 - **Customizable front-end**: applications may partly or fully replace the
   default templates, scripts and stylesheets with their own.
 - **Command line interface (CLI)**: Kerko provides commands for synchronizing or
-  deleting its data.
+  deleting its data. These can be invoked through the `flask` command (see
+  [useful commands](synchronization.md#useful-commands)).
 
 [KerkoApp] is a standalone application built around Kerko. It inherits all of
 Kerko's features and it provides a few additions of its own:
@@ -180,31 +226,91 @@ Kerko's features and it provides a few additions of its own:
 - Syslog logging handler (for Unix environments).
 
 
-## Learn more
+## Requirements
 
-Please refer to the [documentation][Kerko_documentation] for more details.
+Kerko requires Python 3.7 or later.
+
+Required Python packages will be automatically installed when installing Kerko.
+The main ones are:
+
+- [Babel]: utilities for internationalization and localization.
+- [Bootstrap-Flask]: helper for integrating [Bootstrap].
+- [Click]: command line interface creation kit.
+- [Flask]: web application framework.
+- [Flask-Babel]: integration of Flask and Babel.
+- [Flask-WTF]: integration of Flask and WTForms.
+- [Jinja2]: template engine.
+- [Pydantic]: configuration validation.
+- [Pyzotero]: Python client for the Zotero API.
+- [w3lib]: URL and HTML manipulation utilities.
+- [Werkzeug]: WSGI web application library (also required by Flask).
+- [Whoosh]: pure Python full-text indexing and searching library.
+- [WTForms]: web forms validation and rendering library.
+
+The following front-end resources are loaded from CDNs by Kerko's default
+templates (but could be completely removed or replaced in custom templates):
+
+- [Bootstrap]: front-end component library for web applications.
+- [FontAwesome]: beautiful open source icons.
+- [jQuery]: JavaScript library (required by Bootstrap).
+- [Popper.js]: JavaScript library for handling tooltips, popovers, etc. (used by
+  Bootstrap).
+
+
+## Known limitations
+
+Before choosing Kerko for your project, you might want to review the following
+known limitations of Kerko:
+
+- The system can probably handle relatively large bibliographies (it has been
+  tested so far with about 15,000 entries), but the number of distinct facet
+  values has more impact on response times than the number of references. For
+  the best response times, it is recommended to limit the number of distinct
+  facet values under a few hundreds.
+- Kerko can only manage a single bibliography per application.
+- Although Kerko can be integrated in a multilingual web application were the
+  visitor may select a language, Zotero does not provide a way to manage tags or
+  collections in multiple languages. Thus, there is no easy way for Kerko to
+  provide those names in the user's selected language.
+- Whoosh does not provide much out-of-the-box support for non-Western languages.
+  Therefore, search might not work very well with such languages.
+- Zotero is the sole reference management tool supported as a back-end to Kerko.
 
 
 [Atom]: https://en.wikipedia.org/wiki/Atom_(web_standard)
+[Babel]: https://pypi.org/project/Babel/
 [BM25F]: https://en.wikipedia.org/wiki/Okapi_BM25
 [Bootstrap]: https://getbootstrap.com/
-[CSL]: https://citationstyles.org/
+[Bootstrap-Flask]: https://pypi.org/project/Bootstrap-Flask/
+[Click]: https://pypi.org/project/click/
 [COinS]: https://en.wikipedia.org/wiki/COinS
 [COinS_clients]: https://en.wikipedia.org/wiki/COinS#Client_tools
+[CSL]: https://citationstyles.org/
 [Dublin_Core]: https://en.wikipedia.org/wiki/Dublin_Core
 [Flask]: https://pypi.org/project/Flask/
 [Flask_blueprint]: https://flask.palletsprojects.com/en/latest/blueprints/
+[Flask-Babel]: https://pypi.org/project/Flask-Babel/
+[Flask-WTF]: https://pypi.org/project/Flask-WTF/
+[FontAwesome]: https://fontawesome.com/icons
+[HighwirePress_Google]: https://scholar.google.ca/intl/en/scholar/inclusion.html#indexing
+[Jinja2]: https://pypi.org/project/Jinja2/
+[jQuery]: https://jquery.com/
 [Kerko]: https://github.com/whiskyechobravo/kerko
-[Kerko_actions]: https://github.com/whiskyechobravo/kerko/actions
-[Kerko_documentation]: https://whiskyechobravo.github.io/kerko/
-[Kerko_pypi]: https://pypi.org/project/Kerko/
+[Kerko_email]: mailto:kerko@whiskyechobravo.com
 [Kerko_translations]: https://github.com/whiskyechobravo/kerko/tree/master/src/kerko/translations
 [KerkoApp]: https://github.com/whiskyechobravo/kerkoapp
 [KerkoApp_demo]: https://demo.kerko.whiskyechobravo.com
+[Popper.js]: https://popper.js.org/
+[Pydantic]: https://pypi.org/project/pydantic/
+[Python]: https://www.python.org/
+[Pyzotero]: https://pypi.org/project/Pyzotero/
 [Snowball]: https://snowballstem.org/
 [TOML]: https://toml.io/
 [Twelve-factor_App]: https://12factor.net/config
+[w3lib]: https://pypi.org/project/w3lib/
+[Werkzeug]: https://pypi.org/project/Werkzeug/
 [Whoosh]: https://pypi.org/project/Whoosh/
+[WTForms]: https://pypi.org/project/WTForms/
 [XML_Sitemap]: https://www.sitemaps.org/
 [Zotero]: https://www.zotero.org/
 [Zotero_Connector]: https://www.zotero.org/download/connectors
@@ -212,3 +318,4 @@ Please refer to the [documentation][Kerko_documentation] for more details.
 [Zotero_export]: https://www.zotero.org/support/dev/web_api/v3/basics#export_formats
 [Zotero_schema]: https://api.zotero.org/schema
 [Zotero_styles]: https://www.zotero.org/styles/
+[Zotero_web_api]: https://www.zotero.org/support/dev/web_api/start
