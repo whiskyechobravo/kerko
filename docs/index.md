@@ -3,8 +3,8 @@
     **This documentation is for the development (upcoming) version of Kerko.**
     This new version brings significant changes to installation and configuration
     procedures.<br>
-    **If you are looking at Kerko 0.9 (the latest released version), see the
-    [Kerko 0.9
+    **If you are looking for information on Kerko 0.9 (the latest released
+    version), see the [Kerko 0.9
     documentation](https://github.com/whiskyechobravo/kerko/blob/0.9/README.md).**
 
 # Overview
