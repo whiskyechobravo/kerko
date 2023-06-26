@@ -61,10 +61,10 @@ tox
 
 ## Working on the documentation
 
-To start a local live-reloading docs server:
+To start a local live-reloading documentation server:
 
 ```bash
-mike serve
+mkdocs serve
 ```
 
 Then view the documentation in your browser at http://localhost:8000/.
