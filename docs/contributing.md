@@ -1,4 +1,7 @@
-# Contributing to Kerko
+# Contributing
+
+This section provides guidance on how to contribute to the Kerko project.
+
 
 ## Reporting issues
 
@@ -58,11 +61,13 @@ tox
 
 ## Working on the documentation
 
-Useful commands:
+To start a local live-reloading docs server:
 
-- `mkdocs serve`: Start the live-reloading docs server.
-- `mkdocs build`: Build the documentation site.
-- `mkdocs -h`: Print help message and exit.
+```bash
+mike serve
+```
+
+Then view the documentation in your browser at http://localhost:8000/.
 
 
 ## Submitting code changes
