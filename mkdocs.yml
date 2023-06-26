@@ -40,6 +40,7 @@ theme:
         icon: material/brightness-4
         name: Switch to light mode
   icon:
+    repo: fontawesome/brands/github
     view: material/eye
     edit: material/lead-pencil
 
