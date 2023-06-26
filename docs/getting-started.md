@@ -129,6 +129,8 @@ your computer.
 
 ### Docker installation
 
+**TODO:docs: Update this outdated section.**
+
 This procedure requires that [Docker] is installed on your computer.
 
 1. Copy the `Makefile`, `sample.env`, and `sample.config.toml` files from
