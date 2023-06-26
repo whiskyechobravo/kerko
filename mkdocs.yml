@@ -28,6 +28,7 @@ theme:
     - search.suggest
     - search.highlight
     - content.code.copy
+    - content.action.view
   palette:
     - scheme: default
       toggle:
@@ -37,12 +38,15 @@ theme:
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
+  icon:
+    view: material/eye
 
 plugins:
   - search
 
 repo_url: https://github.com/whiskyechobravo/kerko
 repo_name: whiskyechobravo/kerko
+edit_uri: blob/master/docs/
 
 markdown_extensions:
   # See https://squidfunk.github.io/mkdocs-material/setup/extensions/
