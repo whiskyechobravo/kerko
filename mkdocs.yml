@@ -29,6 +29,7 @@ theme:
     - search.highlight
     - content.code.copy
     - content.action.view
+    - content.action.edit
   palette:
     - scheme: default
       toggle:
@@ -40,6 +41,7 @@ theme:
         name: Switch to light mode
   icon:
     view: material/eye
+    edit: material/lead-pencil
 
 plugins:
   - search
