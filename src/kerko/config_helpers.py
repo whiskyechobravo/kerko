@@ -59,12 +59,12 @@ class FeaturesModel(BaseModel):
 
     download_attachment_new_window: bool
     download_results_link: bool
-    download_results_max_count: bool
+    download_results_max_count: NonNegativeInt
     open_in_zotero_app: bool
     open_in_zotero_web: bool
     print_item_link: bool
     print_results_link: bool
-    print_results_max_count: bool
+    print_results_max_count: NonNegativeInt
     relations_links: bool
     relations_initial_limit: int = Field(ge=5)
     relations_sort: SlugStr

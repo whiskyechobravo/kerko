@@ -8,7 +8,24 @@ Features:
 
 Bug fixes:
 
-- Fix pattern too restrictive for the `kerko.facets.*.collection_key` parameter.
+- Fix pattern too restrictive for the `kerko.facets.*.collection_key`
+  configuration parameter.
+- Fix incorrect typing for the `kerko.features.download_results_max_count` and
+  `kerko.features.print_results_max_count` configuration parameters.
+
+Other changes:
+
+- Rename the default branch of the repository from 'master' to 'main'. If you
+  have cloned the repository with Git, use the following commands to rename your
+  local branch:
+
+    ```bash
+    git branch -m master main
+    git fetch origin
+    git branch -u origin/main main
+    git remote set-head origin -a
+    ```
+- Improve documentation on configuration parameters.
 
 Backwards incompatible changes:
 
@@ -25,19 +42,6 @@ Backwards incompatible changes:
 - Rename the following views:
     - `item_citation_download` → `item_bib_download`
     - `search_citation_download` → `search_bib_download`
-
-Other changes:
-
-- Rename the default branch of the repository from 'master' to 'main'. If you
-  have cloned the repository with Git, use the following commands to rename your
-  local branch:
-
-    ```bash
-    git branch -m master main
-    git fetch origin
-    git branch -u origin/main main
-    git remote set-head origin -a
-    ```
 
 
 ## 1.0.0alpha0 (2023-06-26)
