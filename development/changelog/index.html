@@ -695,11 +695,18 @@
 <h2 id="latest-unreleased">Latest (unreleased)<a class="headerlink" href="#latest-unreleased" title="Permanent link">&para;</a></h2>
 <p>Features:</p>
 <ul>
-<li>Add the <code>--full</code> option to the sync command line interface command.</li>
+<li>Add the <code>--full</code> option to the <code>sync</code> command line interface (CLI) command.</li>
 </ul>
 <p>Bug fixes:</p>
 <ul>
 <li>Fix pattern too restrictive for the <code>kerko.facets.*.collection_key</code> parameter.</li>
+</ul>
+<p>Backwards incompatible changes:</p>
+<ul>
+<li>Prevent the <code>clean</code> CLI command from cleaning everything by default. To delete
+  everything, you now have to run <code>flask kerko clean everything</code>. This may help
+  accidental deletion of the cache or the search index, which in some instances
+  can take long to rebuild.</li>
 </ul>
 <p>Other changes:</p>
 <ul>
