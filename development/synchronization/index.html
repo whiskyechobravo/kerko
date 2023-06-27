@@ -580,14 +580,6 @@ The <code>flask</code> command will work with your virtual environment active.</
 <dd>
 <p>Lists all commands provided by Kerko.</p>
 </dd>
-<dt><code>flask kerko clean</code></dt>
-<dd>
-<p>Deletes all of Kerko's data: cache, search index, attachments.</p>
-</dd>
-<dt><code>flask kerko clean --help</code></dt>
-<dd>
-<p>Shows help about the clean command.</p>
-</dd>
 <dt><code>flask kerko sync</code></dt>
 <dd>
 <p>Synchronizes everything: the cache (from Zotero), the search index (from the
@@ -603,16 +595,7 @@ what is happening during the synchronization process. For example:</p>
 </dd>
 <dt><code>flask kerko sync --help</code></dt>
 <dd>
-<p>Shows help about the sync command:</p>
-</dd>
-<dt><code>flask kerko clean cache</code></dt>
-<dd>
-<p>Deletes the cache. A subsequent execution of <code>flask kerko sync</code> will perform a
-  full update from Zotero, but it will not re-download all file attachments.</p>
-</dd>
-<dt><code>flask kerko clean index</code></dt>
-<dd>
-<p>Deletes just the search index.</p>
+<p>Shows help specifically about the <code>sync</code> command:</p>
 </dd>
 <dt><code>flask kerko sync index</code></dt>
 <dd>
@@ -628,6 +611,41 @@ directory, you could use Flask's <code>--app</code> command line option, or to s
 <div class="highlight"><pre><span></span><code>flask<span class="w"> </span>--app<span class="o">=</span>/path/to/kerkoapp/wsgi:app<span class="w"> </span>kerko<span class="w"> </span>sync
 </code></pre></div>
 </div>
+<dl>
+<dt><code>flask kerko sync cache --full</code></dt>
+<dd>
+<p>When possible, the synchronization process performs an incremental update of
+  just the new or changed items. Here, the <code>--full</code> option forces a full
+  synchronization of the cache, even if no or just some items have been updated
+  since the last synchronization of the cache.</p>
+<p>This can be useful after changing certain configuration parameters.</p>
+</dd>
+<dt><code>flask kerko clean</code></dt>
+<dd>
+<p>Deletes all of Kerko's data: cache, search index, attachments.</p>
+</dd>
+<dt><code>flask kerko clean --help</code></dt>
+<dd>
+<p>Shows help about the clean command.</p>
+</dd>
+<dt><code>flask kerko clean cache</code></dt>
+<dd>
+<p>Deletes just the cache. A subsequent execution of <code>flask kerko sync</code> will
+  perform a full update from Zotero, but it will not re-download all file
+  attachments.</p>
+<p>This does not affect the search index. Thus, if the index was built before a
+<code>clean cache</code>, users will still be able to access the bibliography using the
+Kerko web interface.</p>
+</dd>
+<dt><code>flask kerko clean index</code></dt>
+<dd>
+<p>Deletes just the search index. The bibliography will become unavailable to the
+  Kerko web interface until the index gets synchronized again.</p>
+<p>It can be necessary to use this command after changing certain configuration
+parameters, and you will usually want to run <code>flask kerko sync index</code>
+immediately after.</p>
+</dd>
+</dl>
 <h2 id="monitoring-data-synchronization">Monitoring data synchronization<a class="headerlink" href="#monitoring-data-synchronization" title="Permanent link">&para;</a></h2>
 <p>Kerko provides a web API endpoint that you could use to monitor data
 synchronization.</p>
