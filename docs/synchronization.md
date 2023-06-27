@@ -90,7 +90,7 @@ Some frequently used commands are:
 
     This can be useful after changing certain configuration parameters.
 
-`flask kerko clean`
+`flask kerko clean everything`
 
 : Deletes all of Kerko's data: cache, search index, attachments.
 

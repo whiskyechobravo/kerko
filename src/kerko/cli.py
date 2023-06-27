@@ -68,15 +68,15 @@ def sync(target, full=False):
 @cli.command()
 @click.argument(
     'target',
-    default='everything',
     type=click.Choice(['cache', 'index', 'attachments', 'everything'], case_sensitive=False),
 )
 @with_appcontext
 def clean(target):
     """
-    Delete the cache, the search index, and/or the attachments immediately.
+    Delete the specified data.
 
-    By default, everything is cleaned.
+    Use the argument to select which data to delete, either the cache, the
+    search index, the attachments, or all of those (everything).
     """
     if target in ['everything', 'cache']:
         delete_storage('cache')
