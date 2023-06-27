@@ -707,6 +707,19 @@
   everything, you now have to run <code>flask kerko clean everything</code>. This may help
   accidental deletion of the cache or the search index, which in some instances
   can take long to rebuild.</li>
+<li>Rename the following configuration parameters:<ul>
+<li><code>kerko.citation_formats.*</code> → <code>kerko.bib_formats.*</code>.</li>
+<li><code>kerko.features.download_citations_link</code> → <code>kerko.features.download_results_link</code></li>
+<li><code>kerko.features.download_citations_max_count</code> → <code>kerko.features.download_results_max_count</code></li>
+<li><code>kerko.features.print_citations_link</code> → <code>kerko.features.print_results_link</code></li>
+<li><code>kerko.features.print_citations_max_count</code> → <code>kerko.features.print_results_max_count</code></li>
+</ul>
+</li>
+<li>Rename the following views:<ul>
+<li><code>item_citation_download</code> → <code>item_bib_download</code></li>
+<li><code>search_citation_download</code> → <code>search_bib_download</code></li>
+</ul>
+</li>
 </ul>
 <p>Other changes:</p>
 <ul>
