@@ -23,7 +23,7 @@ def md5_checksum(path):
         return md5_hash.hexdigest()
 
 
-def sync_attachments():
+def sync_attachments(full=False):
     """
     Synchronize attachments from Zotero into the attachments directory.
 
@@ -42,7 +42,8 @@ def sync_attachments():
         if attachment['id'] in local_files:
             local_files.remove(attachment['id'])
         filepath = attachments_dir / attachment['id']
-        if not filepath.exists() or md5_checksum(filepath) != attachment['data'].get('md5', ''):
+        if full or not filepath.exists() \
+                or md5_checksum(filepath) != attachment['data'].get('md5', ''):
             current_app.logger.debug(f"Requesting attachment {attachment['id']} {context}...")
             try:
                 # Download attachment.

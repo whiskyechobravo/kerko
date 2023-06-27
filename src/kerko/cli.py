@@ -33,9 +33,18 @@ def cli():
     default='everything',
     type=click.Choice(['cache', 'index', 'attachments', 'everything'], case_sensitive=False),
 )
+@click.option(
+    '--full',
+    default=False,
+    is_flag=True,
+    flag_value=True,
+    help="When possible, the synchronization process performs an incremental "
+         "update of just the new or changed items since the last "
+         "synchronization. This option forces a full update."
+)
 @with_appcontext
 @execution_time_logger
-def sync(target):
+def sync(target, full=False):
     """
     Synchronize the cache, the search index, and/or the file attachments.
 
@@ -43,11 +52,11 @@ def sync(target):
     """
     try:
         if target in ['everything', 'cache']:
-            sync_cache()
+            sync_cache(full)
         if target in ['everything', 'index']:
-            sync_index()
+            sync_index(full)
         if target in ['everything', 'attachments']:
-            sync_attachments()
+            sync_attachments(full)
     except SearchIndexError as e:
         current_app.logger.error(e)
         raise click.Abort

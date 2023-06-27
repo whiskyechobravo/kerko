@@ -47,14 +47,6 @@ Some frequently used commands are:
 
 : Lists all commands provided by Kerko.
 
-`flask kerko clean`
-
-: Deletes all of Kerko's data: cache, search index, attachments.
-
-`flask kerko clean --help`
-
-: Shows help about the clean command.
-
 `flask kerko sync`
 
 : Synchronizes everything: the cache (from Zotero), the search index (from the
@@ -72,16 +64,7 @@ Some frequently used commands are:
 
 `flask kerko sync --help`
 
-: Shows help about the sync command:
-
-`flask kerko clean cache`
-
-: Deletes the cache. A subsequent execution of `flask kerko sync` will perform a
-  full update from Zotero, but it will not re-download all file attachments.
-
-`flask kerko clean index`
-
-: Deletes just the search index.
+: Shows help specifically about the `sync` command:
 
 `flask kerko sync index`
 
@@ -97,6 +80,42 @@ Some frequently used commands are:
     ```bash
     flask --app=/path/to/kerkoapp/wsgi:app kerko sync
     ```
+
+`flask kerko sync cache --full`
+
+: When possible, the synchronization process performs an incremental update of
+  just the new or changed items. Here, the `--full` option forces a full
+  synchronization of the cache, even if no or just some items have been updated
+  since the last synchronization of the cache.
+
+    This can be useful after changing certain configuration parameters.
+
+`flask kerko clean`
+
+: Deletes all of Kerko's data: cache, search index, attachments.
+
+`flask kerko clean --help`
+
+: Shows help about the clean command.
+
+`flask kerko clean cache`
+
+: Deletes just the cache. A subsequent execution of `flask kerko sync` will
+  perform a full update from Zotero, but it will not re-download all file
+  attachments.
+
+    This does not affect the search index. Thus, if the index was built before a
+    `clean cache`, users will still be able to access the bibliography using the
+    Kerko web interface.
+
+`flask kerko clean index`
+
+: Deletes just the search index. The bibliography will become unavailable to the
+  Kerko web interface until the index gets synchronized again.
+
+    It can be necessary to use this command after changing certain configuration
+    parameters, and you will usually want to run `flask kerko sync index`
+    immediately after.
 
 
 ## Monitoring data synchronization

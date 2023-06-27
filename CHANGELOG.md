@@ -2,6 +2,10 @@
 
 ## Latest (unreleased)
 
+Features:
+
+- Add the `--full` option to the sync command line interface command.
+
 Bug fixes:
 
 - Fix pattern too restrictive for the `kerko.facets.*.collection_key` parameter.

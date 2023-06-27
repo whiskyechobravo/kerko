@@ -10,7 +10,7 @@ from kerko.storage import (SchemaError, SearchIndexError, load_object,
 from kerko.tags import TagGate
 
 
-def sync_index():
+def sync_index(full=False):
     """
     Build the search index from the local cache.
 
@@ -24,7 +24,7 @@ def sync_index():
     if not cache_version:
         raise SearchIndexError("The cache is empty and needs to be synchronized first.")
     # FIXME: The following does not detect when just the collections have changed in the cache (with no item changes). Should check the collections_version! https://pyzotero.readthedocs.io/en/latest/#zotero.Zotero.collection_versions
-    # if load_object('index', 'version', default=0) == cache_version:
+    # if not full and load_object('index', 'version', default=0) == cache_version:
     #     current_app.logger.warning(f"The index is already up-to-date with cache version {cache_version}, nothing to do.")
     #     return 0
 

@@ -65,7 +65,7 @@ batch_size = 100
 max_attempts = 10
 wait = 120  # In seconds.
 
-# Changing any of the following will require sync cache --force && sync index.
+# Changing any of the following will require sync cache --full && sync index.
 
 csl_style = "apa"
 locale = "en-US"
@@ -80,8 +80,8 @@ tag_exclude_re = '^_'
 [kerko.search]
 
 result_fields = ["id", "attachments", "bib", "coins", "data", "url"]
-fulltext = true         # Changing this will require sync cache --force && sync index.
-whoosh_language = "en"  # Changing this will require sync index --force.
+fulltext = true         # Changing this will require sync cache --full && sync index.
+whoosh_language = "en"  # Changing this will require sync index --full.
 
 [kerko.scopes]
 

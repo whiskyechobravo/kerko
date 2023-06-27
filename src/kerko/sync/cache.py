@@ -37,7 +37,7 @@ def get_cache_schema():
     return schema
 
 
-def sync_cache():
+def sync_cache(full=False):
     """
     Build a cache of items retrieved from Zotero.
 
@@ -47,7 +47,7 @@ def sync_cache():
     count = 0
     zotero_credentials = zotero.init_zotero()
     library_context = zotero.request_library_context(zotero_credentials)  # TODO: Load pickle & sync collections incrementally
-    since = load_object('cache', 'version', default=0)
+    since = load_object('cache', 'version', default=0) if not full else 0
     version = zotero.last_modified_version(zotero_credentials)
 
     cache = open_index('cache', schema=get_cache_schema, auto_create=True, write=True)
