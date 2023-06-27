@@ -11,7 +11,7 @@ nav:
   - recipes.md
   - troubleshooting.md
   - contributing.md
-  - background.md
+  - about.md
   - changelog.md
 
 theme:

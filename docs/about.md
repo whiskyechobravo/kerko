@@ -1,6 +1,7 @@
-# Project background
+# About
 
-Kerko was inspired by two prior projects:
+Kerko was inspired by prior work accomplished by [Whisky Echo
+Bravo][Whisky_Echo_Bravo] on two projects:
 
 - [Bibliographie sur l’histoire de
   Montréal](https://bibliomontreal.uqam.ca/bibliographie/), developed in 2014 by
@@ -13,11 +14,11 @@ Kerko was inspired by two prior projects:
   (QUESCREN)](https://www.concordia.ca/artsci/scpa/quescren.html) (Concordia
   University, Canada).
 
-Later on, it became clear that other organizations needed a similar solution.
-However, software from the prior projects had to be rewritten so it could more
-easily be configured for different bibliographies from organizations with
-different needs. That led to Kerko, whose initial development was made possible
-through the following project:
+In 2019, the advent of another project of similar nature made it clear that a
+general solution would benefit many organizations. However, software from the
+prior projects had to be rewritten in order to be more adaptable to a variety of
+needs. That led to Kerko, whose initial development was made possible through
+the following project:
 
 - [Bibliographie francophone sur l'archivistique](https://bibliopiaf.ebsi.umontreal.ca/),
   funded by the
@@ -25,6 +26,10 @@ through the following project:
   and hosted by the
   [École de bibliothéconomie et des sciences de l’information (EBSI)](https://ebsi.umontreal.ca/)
   (Université de Montréal, Canada).
+
+Since then, Kerko has continued to evolve, mostly thanks to lots of work by
+[Whisky Echo Bravo][Whisky_Echo_Bravo] and other contributors, as well as
+funding from various organizations that are using it.
 
 ## Design choices
 
@@ -54,3 +59,6 @@ The name _Kerko_ is a nod to Zotero as it takes a similar etymological route: it
 derives from the Albanian word _kërkoj_, which means "to ask, to request, to
 seek, to look for, to demand, to search" and seems fit to describe a search
 tool.
+
+
+[Whisky_Echo_Bravo]: https://whiskyechobravo.com/
