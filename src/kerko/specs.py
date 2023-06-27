@@ -572,9 +572,9 @@ class SortSpec:
         return None
 
 
-class CitationFormatSpec:
+class BibFormatSpec:
     """
-    Specifies a record download format.
+    Specifies a bibliographic record download format.
 
     This is a configuration element, with no effect on the search index schema.
     """

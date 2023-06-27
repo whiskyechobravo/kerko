@@ -13,7 +13,7 @@ from whoosh.util.text import rcompile
 from kerko import codecs, extractors, transformers
 from kerko.config_helpers import config_get
 from kerko.datetime import iso_to_datetime, iso_to_timestamp
-from kerko.specs import (BadgeSpec, CitationFormatSpec, CollectionFacetSpec,
+from kerko.specs import (BadgeSpec, BibFormatSpec, CollectionFacetSpec,
                          FacetSpec, FieldSpec, FlatFacetSpec, RelationSpec,
                          ScopeSpec, SortSpec, TreeFacetSpec)
 
@@ -69,14 +69,14 @@ class Composer:
         self.fields: Dict[str, FieldSpec] = {}
         self.facets: Dict[str, FacetSpec] = {}
         self.sorts: Dict[str, SortSpec] = {}
-        self.citation_formats: Dict[str, CitationFormatSpec] = {}
+        self.bib_formats: Dict[str, BibFormatSpec] = {}
         self.relations: Dict[str, RelationSpec] = {}
         self.badges: Dict[str, BadgeSpec] = {}
         self.init_scopes(config)
         self.init_fields(config)
         self.init_facets(config)
         self.init_sorts(config)
-        self.init_citation_formats(config)
+        self.init_bib_formats(config)
         self.init_relations(config)
 
     def init_scopes(self, config: Config) -> None:
@@ -741,13 +741,13 @@ class Composer:
                         )
                     )
 
-    def init_citation_formats(self, config: Config) -> None:
+    def init_bib_formats(self, config: Config) -> None:
         """
-        Initialize a set of `CitationFormatSpec` instances using config settings.
+        Initialize a set of `BibFormatSpec` instances using config settings.
 
         These rely on `FieldSpec` instances, which must have been added beforehand.
         """
-        formats_dict = config_get(config, 'kerko.citation_formats')
+        formats_dict = config_get(config, 'kerko.bib_formats')
         for format_key, format_config in formats_dict.items():
             if format_config['enabled']:
                 kwargs = {
@@ -755,8 +755,8 @@ class Composer:
                     for k, v in format_config.items() if k in ['weight', 'extension', 'mime_type']
                 }
                 if format_key == 'ris':
-                    self.add_citation_format(
-                        CitationFormatSpec(
+                    self.add_bib_format(
+                        BibFormatSpec(
                             key=format_key,
                             field=self.fields['ris'],
                             label=format_config.get('label') or _("RIS"),
@@ -765,8 +765,8 @@ class Composer:
                         )
                     )
                 elif format_key == 'bibtex':
-                    self.add_citation_format(
-                        CitationFormatSpec(
+                    self.add_bib_format(
+                        BibFormatSpec(
                             key=format_key,
                             field=self.fields['bibtex'],
                             label=format_config.get('label') or _("BibTeX"),
@@ -850,11 +850,11 @@ class Composer:
     def remove_sort(self, key):
         del self.sorts[key]
 
-    def add_citation_format(self, citation_format):
-        self.citation_formats[citation_format.key] = citation_format
+    def add_bib_format(self, bib_format):
+        self.bib_formats[bib_format.key] = bib_format
 
-    def remove_citation_format(self, key):
-        del self.citation_formats[key]
+    def remove_bib_format(self, key):
+        del self.bib_formats[key]
 
     def add_badge(self, badge):
         self.badges[badge.key] = badge

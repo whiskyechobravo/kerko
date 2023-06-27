@@ -43,8 +43,8 @@
 {%- block metas %}
     {{- super() }}
     <link rel="canonical" title="{{ title|escape }}" href="{{ item_url }}">
-    {%- for citation_format in config.kerko_composer.get_ordered_specs('citation_formats') %}
-        <link rel="alternate" title="{{ citation_format.label|escape }}" type="{{ citation_format.mime_type|escape }}" href="{{ url_for('kerko.item_citation_download', item_id=item.id, citation_format_key=citation_format.key) }}">
+    {%- for bib_format in config.kerko_composer.get_ordered_specs('bib_formats') %}
+        <link rel="alternate" title="{{ bib_format.label|escape }}" type="{{ bib_format.mime_type|escape }}" href="{{ url_for('kerko.item_bib_download', item_id=item.id, bib_format_key=bib_format.key) }}">
     {%- endfor %}
     {%- for tag in highwirepress_tags %}
         <meta name="{{ tag[0] }}" content="{{ tag[1]|striptags|escape }}">
@@ -54,7 +54,7 @@
 {%- block content_inner %}
     <div class="mt-2 mb-4 item-content">
         {%- block item_actions %}
-            {%- if item.attachments or config.kerko.features.print_item_link or config.kerko_composer.citation_formats or config.kerko.features.open_in_zotero_app or config.kerko.features.open_in_zotero_web %}
+            {%- if item.attachments or config.kerko.features.print_item_link or config.kerko_composer.bib_formats or config.kerko.features.open_in_zotero_app or config.kerko.features.open_in_zotero_web %}
                 <div class="row my-2">
                     <div class="col-auto ml-auto text-right">
                         {%- if item.attachments|length > 1 %}
@@ -86,18 +86,18 @@
                                 </button>
                             </div>
                         {%- endif %}
-                        {%- if config.kerko_composer.citation_formats %}
+                        {%- if config.kerko_composer.bib_formats %}
                             <div class="{% block download_link_wrapper_classes %}d-inline-block d-print-none mb-2{% endblock %}">
                                 <div class="dropdown">
                                     <button class="{% block download_btn_classes %}btn btn-light dropdown-toggle{% endblock %}" type="button" id="download-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <span class="fas fa-download" aria-hidden="true"></span> {% trans count=1, count_formatted='1' %}Download this record{% pluralize %}Download {{ count_formatted }} records{% endtrans -%} {# TODO: Remove pluralization after solving issue where translation is not loaded when the same message is sometimes pluralized, sometimes not. -#}
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labelledby="download-options">
-                                        {%- for citation_format in config.kerko_composer.get_ordered_specs('citation_formats') %}
-                                            <a class="dropdown-item" href="{{ url_for('kerko.item_citation_download', item_id=item.id, citation_format_key=citation_format.key) }}" rel="alternate" type="{{ citation_format.mime_type|escape }}" {{ title_aria_label(_('Download in {download_option} format').format(download_option=citation_format.label|escape)) }}>
-                                                {{- citation_format.label -}}
+                                        {%- for bib_format in config.kerko_composer.get_ordered_specs('bib_formats') %}
+                                            <a class="dropdown-item" href="{{ url_for('kerko.item_bib_download', item_id=item.id, bib_format_key=bib_format.key) }}" rel="alternate" type="{{ bib_format.mime_type|escape }}" {{ title_aria_label(_('Download in {download_option} format').format(download_option=bib_format.label|escape)) }}>
+                                                {{- bib_format.label -}}
                                             </a>
-                                            <p class="px-4 text-muted">{{ citation_format.help_text }}</p>
+                                            <p class="px-4 text-muted">{{ bib_format.help_text }}</p>
                                         {%- endfor %}
                                     </div>
                                 </div>

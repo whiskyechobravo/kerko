@@ -144,7 +144,7 @@ The type of library to get data from, either `"user"` for a personal library, or
 
 This parameter is **required** and has no default value.
 
-## `kerko.citation_formats.*`
+## `kerko.bib_formats.*`
 
 Record download formats. Default formats are: `bibtex`, `ris`.
 

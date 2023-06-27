@@ -298,8 +298,8 @@ class SortsModel(BaseModel):
     label: Optional[str]
 
 
-class CitationFormatsModel(BaseModel):
-    """Model for the kerko.citation_formats config table."""
+class BibFormatsModel(BaseModel):
+    """Model for the kerko.bib_formats config table."""
 
     class Config:
         extra = Extra.forbid
@@ -341,7 +341,7 @@ class KerkoModel(BaseModel):
     search_fields: SearchFieldsModel
     facets: Dict[FieldNameStr, FacetModelUnion]
     sorts: Dict[SlugStr, SortsModel]
-    citation_formats: Dict[SlugStr, CitationFormatsModel]
+    bib_formats: Dict[SlugStr, BibFormatsModel]
     relations: Dict[ElementIdStr, RelationsModel]
 
 

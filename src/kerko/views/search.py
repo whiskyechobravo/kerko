@@ -230,13 +230,13 @@ def search_list(criteria, form):
         context['print_preview'] = criteria.options.get('print-preview', 0)
         context['download_urls'] = {
             key: url_for(
-                '.search_citation_download',
-                citation_format_key=key,
+                '.search_bib_download',
+                bib_format_key=key,
                 **criteria.params(options={
                     'page': None,
                 })
             )
-            for key in composer().citation_formats.keys()
+            for key in composer().bib_formats.keys()
         }
         if 'atom' in config('kerko.feeds.formats'):
             context['atom_feed_url'] = url_for(

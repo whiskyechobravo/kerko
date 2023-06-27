@@ -822,15 +822,15 @@ whoosh_language = "en"  # Changing this will require sync index --full.
     enabled = true
     weight = 31
 
-[kerko.citation_formats]
+[kerko.bib_formats]
 
-    [kerko.citation_formats.ris]
+    [kerko.bib_formats.ris]
     enabled = true
     weight = 10
     extension = "ris"
     mime_type = "application/x-research-info-systems"
 
-    [kerko.citation_formats.bibtex]
+    [kerko.bib_formats.bibtex]
     enabled = true
     weight = 20
     extension = "bib"

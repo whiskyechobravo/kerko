@@ -312,13 +312,13 @@ def standalone_attachment_download(item_id, attachment_filename=None):
     )
 
 
-@blueprint.route('/<path:item_id>/export/<string:citation_format_key>')
+@blueprint.route('/<path:item_id>/export/<string:bib_format_key>')
 @except_abort(SchemaError, 500)
 @except_abort(SearchIndexError, 503)
-def item_citation_download(item_id, citation_format_key):
+def item_bib_download(item_id, bib_format_key):
     """Download a record."""
-    citation_format = composer().citation_formats.get(citation_format_key)
-    if not citation_format:
+    bib_format = composer().bib_formats.get(bib_format_key)
+    if not bib_format:
         return abort(404)
 
     index = open_index('index')
@@ -339,36 +339,36 @@ def item_citation_download(item_id, citation_format_key):
             break  # Found item, or no more id fields to try.
         if results.is_empty():
             return abort(404)
-        item = results.items(composer().select_fields(['id', citation_format.field.key]))[0]
+        item = results.items(composer().select_fields(['id', bib_format.field.key]))[0]
 
-    content = item.get(citation_format.field.key)
+    content = item.get(bib_format.field.key)
     if not content:
         return abort(404)
 
     if fellback:
         return redirect(
             url_for(
-                '.item_citation_download',
+                '.item_bib_download',
                 item_id=item['id'],
-                citation_format_key=citation_format_key
+                bib_format_key=bib_format_key
             ), 301
         )
 
     response = make_response(content)
     response.headers['Content-Disposition'] = \
-        f"attachment; filename={item['id']}.{citation_format.extension}"
+        f"attachment; filename={item['id']}.{bib_format.extension}"
     response.headers['Content-Type'] = \
-        f'{citation_format.mime_type}; charset=utf-8'
+        f'{bib_format.mime_type}; charset=utf-8'
     return response
 
 
-@blueprint.route('/export/<string:citation_format_key>/')
+@blueprint.route('/export/<string:bib_format_key>/')
 @except_abort(SchemaError, 500)
 @except_abort(SearchIndexError, 503)
-def search_citation_download(citation_format_key):
+def search_bib_download(bib_format_key):
     """Download all records resulting from a search."""
-    citation_format = composer().citation_formats.get(citation_format_key)
-    if not citation_format:
+    bib_format = composer().bib_formats.get(bib_format_key)
+    if not bib_format:
         return abort(404)
 
     criteria = create_search_criteria(request.args)
@@ -385,18 +385,18 @@ def search_citation_download(citation_format_key):
         if results.is_empty():
             return abort(404)
         citations = [
-            item.get(citation_format.field.key, '') for item in
-            results.items(field_specs={citation_format.field.key: citation_format.field})
+            item.get(bib_format.field.key, '') for item in
+            results.items(field_specs={bib_format.field.key: bib_format.field})
         ]
     response = make_response(
-        citation_format.group_format.format(
-            citation_format.group_item_delimiter.join(citations)
+        bib_format.group_format.format(
+            bib_format.group_item_delimiter.join(citations)
         )
     )
     response.headers['Content-Disposition'] = \
-        f'attachment; filename=bibliography.{citation_format.extension}'  # TODO: Make filename configurable.
+        f'attachment; filename=bibliography.{bib_format.extension}'  # TODO: Make filename configurable.
     response.headers['Content-Type'] = \
-        f'{citation_format.mime_type}; charset=utf-8'
+        f'{bib_format.mime_type}; charset=utf-8'
     return response
 
 
