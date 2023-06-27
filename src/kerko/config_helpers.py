@@ -269,7 +269,7 @@ class LinkFacetModel(BaseFacetModel):
 class CollectionFacetModel(BaseFacetModel):
     type: Literal["collection"]
     title: str
-    collection_key: str = Field(regex=r'^[A-Z]{8}$')
+    collection_key: str = Field(regex=r'^[A-Z0-9]{8}$')
 
 
 # Note: Discriminated unions ensure that a single unambiguous error gets

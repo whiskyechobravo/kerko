@@ -2,7 +2,11 @@
 
 ## Latest (unreleased)
 
-Changes:
+Bug fixes:
+
+- Fix pattern too restrictive for the `kerko.facets.*.collection_key` parameter.
+
+Other changes:
 
 - Rename the default branch of the repository from 'master' to 'main'. If you
   have cloned the repository with Git, use the following commands to rename your
