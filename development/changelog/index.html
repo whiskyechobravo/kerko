@@ -699,7 +699,24 @@
 </ul>
 <p>Bug fixes:</p>
 <ul>
-<li>Fix pattern too restrictive for the <code>kerko.facets.*.collection_key</code> parameter.</li>
+<li>Fix pattern too restrictive for the <code>kerko.facets.*.collection_key</code>
+  configuration parameter.</li>
+<li>Fix incorrect typing for the <code>kerko.features.download_results_max_count</code> and
+  <code>kerko.features.print_results_max_count</code> configuration parameters.</li>
+</ul>
+<p>Other changes:</p>
+<ul>
+<li>
+<p>Rename the default branch of the repository from 'master' to 'main'. If you
+  have cloned the repository with Git, use the following commands to rename your
+  local branch:</p>
+<p><div class="highlight"><pre><span></span><code>git<span class="w"> </span>branch<span class="w"> </span>-m<span class="w"> </span>master<span class="w"> </span>main
+git<span class="w"> </span>fetch<span class="w"> </span>origin
+git<span class="w"> </span>branch<span class="w"> </span>-u<span class="w"> </span>origin/main<span class="w"> </span>main
+git<span class="w"> </span>remote<span class="w"> </span>set-head<span class="w"> </span>origin<span class="w"> </span>-a
+</code></pre></div>
+- Improve documentation on configuration parameters.</p>
+</li>
 </ul>
 <p>Backwards incompatible changes:</p>
 <ul>
@@ -719,19 +736,6 @@
 <li><code>item_citation_download</code> → <code>item_bib_download</code></li>
 <li><code>search_citation_download</code> → <code>search_bib_download</code></li>
 </ul>
-</li>
-</ul>
-<p>Other changes:</p>
-<ul>
-<li>
-<p>Rename the default branch of the repository from 'master' to 'main'. If you
-  have cloned the repository with Git, use the following commands to rename your
-  local branch:</p>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>branch<span class="w"> </span>-m<span class="w"> </span>master<span class="w"> </span>main
-git<span class="w"> </span>fetch<span class="w"> </span>origin
-git<span class="w"> </span>branch<span class="w"> </span>-u<span class="w"> </span>origin/main<span class="w"> </span>main
-git<span class="w"> </span>remote<span class="w"> </span>set-head<span class="w"> </span>origin<span class="w"> </span>-a
-</code></pre></div>
 </li>
 </ul>
 <h2 id="100alpha0-2023-06-26">1.0.0alpha0 (2023-06-26)<a class="headerlink" href="#100alpha0-2023-06-26" title="Permanent link">&para;</a></h2>
