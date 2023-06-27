@@ -1,12 +1,10 @@
 # Configuration parameters
 
 This section describes most configuration parameters available to Kerko and
-KerkoApp.
+[KerkoApp].
 
 Unless indicated otherwise, all parameters are optional and will take a default
 value if omitted from your configuration.
-
-**TODO:docs: Specify the data type of each parameter**
 
 **TODO:docs: For each parameter, specify if clean and/or sync is required**
 
@@ -36,12 +34,18 @@ value if omitted from your configuration.
 
 ## `BABEL_DEFAULT_LOCALE`
 
-The default language of the user interface. Defaults to `'en'`.
+The default language of the user interface.
+
+Type: String <br>
+Default value: `"en"`
 
 ## `BABEL_DEFAULT_TIMEZONE`
 
-The timezone to use for user facing times. Defaults to `'UTC'`. Any timezone
-name supported by the [pytz] package should work.
+The timezone to use for user facing times. Any timezone name supported by the
+[pytz] package should work.
+
+Type: String <br>
+Default value: `"UTC"`
 
 ## `CONFIG_FILES`
 
@@ -52,13 +56,14 @@ The files are loaded in the specified order. The parameters from each file get
 merged into the previously known configuration. If a given parameter was already
 set, its value is overwritten by the one from the later file.
 
-The default value is `"config.toml;instance.toml;.secrets.toml"`.
-
 Paths may be absolute or relative. Relative paths are resolved from the current
 working directory. If a specified file is not found there, it is searched by
 traversing the directories upwards. If the root directory is reached and the
 file is still not found, then the same search method is reapplied, but this time
 starting from the [`INSTANCE_PATH`](#instance_path).
+
+Type: String <br>
+Default value: `"config.toml;instance.toml;.secrets.toml"`
 
 !!! warning "Environment variable only"
 
@@ -73,22 +78,24 @@ index, and file attachments. This may be provided as an absolute path or as a
 relative path. If a relative path is given, it will be relative to
 [`INSTANCE_PATH`](#instance_path).
 
-The default value is `kerko`.
-
 It is typically unnecessary to set both `DATA_PATH` and `INSTANCE_PATH`.
+
+Type: String <br>
+Default value: `"kerko"`
 
 ## `INSTANCE_PATH`
 
 The instance path specifies a directory where the application may store data and
 configuration files.
 
-The default value is [determined by Flask][Flask_instance_folder]. In practice,
-the default for KerkoApp users is a directory named `instance` located at the
-same level as the `wsgi.py` file. You may set `INSTANCE_PATH` to a different
-directory, which you must provide as an **absolute path**.
-
 It is unnecessary to set `INSTANCE_PATH` if you are already setting
 [`DATA_PATH`](#data_path) as an absolute path.
+
+Type: String <br>
+Default value: [Determined by Flask][Flask_instance_folder]. In practice, the
+default for KerkoApp users is a directory named `instance` located at the same
+level as the `wsgi.py` file. You may set `INSTANCE_PATH` to a different
+directory, which you must provide as an **absolute path**.
 
 !!! warning "Environment variable only"
 
@@ -107,7 +114,8 @@ It is unnecessary to set `INSTANCE_PATH` if you are already setting
 Severity of events to log. Allowed values are `"DEBUG"`, `"INFO"`, `"WARNING"`,
 `"ERROR"`, and `"CRITICAL"`.
 
-Defaults to `"DEBUG"` if the application is running in debug mode, and to
+Type: String <br>
+Default value: `"DEBUG"` if the application is running in debug mode, or
 `"WARNING"` otherwise.
 
 ## `SECRET_KEY`
@@ -117,6 +125,8 @@ have a hard to guess value, and should really remain secret.
 
 This parameter is **required** and has no default value.
 
+Type: String
+
 ## `ZOTERO_API_KEY`
 
 Your Zotero API key, as [created on
@@ -124,6 +134,8 @@ zotero.org](https://www.zotero.org/settings/keys/new). We recommend that you
 create a read-only API key, as Kerko does not need to write to your library.
 
 This parameter is **required** and has no default value.
+
+Type: String
 
 ## `ZOTERO_LIBRARY_ID`
 
@@ -135,12 +147,16 @@ at https://www.zotero.org/groups/2348869/kerko_demo is `"2348869"`).
 
 This parameter is **required** and has no default value.
 
+Type: String
+
 ## `ZOTERO_LIBRARY_TYPE`
 
 The type of library to get data from, either `"user"` for a personal library, or
 `"group"` for a group library.
 
 This parameter is **required** and has no default value.
+
+Type: String
 
 ## `kerko.bib_formats.*.`
 
@@ -158,26 +174,38 @@ The configuration system does not allow adding new formats.
 Enable the format. If this is set to `false`, the format will not be available
 through any download link.
 
+Type: Boolean
+
 ### `extension`
 
 File extension of the downloadable file.
+
+Type: String
 
 ### `help_text`
 
 Description of the format, to show in the help window.
 
+Type: String
+
 ### `label`
 
 Label to use in the format selector.
+
+Type: String
 
 ### `mime_type`
 
 MIME type of the downloadable format.
 
+Type: String
+
 ### `weight`
 
 Relative position of the format in lists. Formats with low weights (small
 numbers) rise above heavier ones (large numbers).
+
+Type: Integer
 
 ## `kerko.facets.*.`
 
@@ -201,13 +229,19 @@ if it contains at least one item.
 
 This parameter is only allowed when the facet's `type` is `"collection"`.
 
+Type: String
+
 ### `enabled`
 
 Enable the facet.
 
+Type: Boolean
+
 ### `filter_key`
 
 Key to use in URLs when filtering with the facet.
+
+Type: String
 
 ### `initial_limit`
 
@@ -215,28 +249,40 @@ Maximum number of filters to show by default under the facet. Excess filters
 will be shown if the user clicks a "view more" button. A value of `0` means no
 limit.
 
+Type: Integer
+
 ### `initial_limit_leeway`
 
 If the number of filters under the facet exceeds `initial_limit` by this
 tolerance margin or less, all filters will be shown. A value of `0` means no
 tolerance margin.
 
+Type: Integer
+
 ### `item_view`
 
 Show the facet on item view pages.
+
+Type: Boolean
 
 ### `sort_by`
 
 List of criteria used for sorting the filters under the facet. Allowed values in
 this list are `"count"` and `"label"`.
 
+Type: Array of strings
+
 ### `sort_reverse`
 
 Reverse the sort order of the filters under the facet.
 
+Type: Boolean
+
 ### `title`
 
 Heading of the facet.
+
+Type: String
 
 ### `type`
 
@@ -250,26 +296,39 @@ Allowed values are:
 - `"tag"`: Use Zotero tags as source.
 - `"year"`: Use the item year field as source.
 
+Type: String
+
 ### `weight`
 
 Relative position of the facet in lists. Facets with low weights (small numbers)
 rise above heavier ones (large numbers).
+
+Type: Integer
 
 ## `kerko.features.`
 
 ### `download_attachment_new_window`
 
 Open attachments in new windows. In other words: add the HTML `target="_blank"`
-attribute to attachment links. Defaults to `false`.
+attribute to attachment links.
+
+Type: Boolean <br>
+Default value: `false`
 
 ### `download_results_link`
 
-Provide a record download button on search results pages. Defaults to `true`.
+Provide a record download button on search results pages.
+
+Type: Boolean <br>
+Default value: `true`
 
 ### `download_results_max_count`
 
 Limit over which the record download button should be hidden from search results
-pages. Defaults to `0` (i.e. no limit).
+pages.
+
+Type: Integer <br>
+Default value: `0` (i.e., no limit)
 
 ### `open_in_zotero_app`
 
@@ -281,8 +340,10 @@ the user's choices in browser cookies). For the link to work, the user must also
 have the Zotero application installed, and have access to the Zotero library.
 This feature is generally only useful to library editors and might confuse other
 users, especially if your Zotero library is private. Thus you should probably
-enable this option only if there is a strong need from the editors. Defaults to
-`false`.
+enable this option only if there is a strong need from the editors.
+
+Type: Boolean <br>
+Default value: `false`
 
 ### `open_in_zotero_web`
 
@@ -294,73 +355,112 @@ cookies). For the link to work, the user must also have access to the Zotero
 library. This feature is generally only useful to library editors and might
 confuse other users, especially if your Zotero library is private. Thus you
 should probably enable this option only if there is a strong need from the
-editors. Defaults to `false`.
+editors.
+
+Type: Boolean <br>
+Default value: `false`
 
 ### `print_item_link`
 
-Provide a print button on item pages. Defaults to `false`.
+Provide a print button on item pages.
+
+Type: Boolean <br>
+Default value: `false`
 
 ### `print_results_link`
 
-Provide a print button on search results pages. Defaults to `false`.
+Provide a print button on search results pages.
+
+Type: Boolean <br>
+Default value: `false`
 
 ### `print_results_max_count`
 
 Limit over which the print button should be hidden from search results pages.
-Defaults to `0` (i.e. no limit).
+
+Type: Integer <br>
+Default value: `0` (i.e., no limit)
 
 ### `relations_initial_limit`
 
-Number of related items to show above the "show more" link. Defaults to `5`.
+Number of related items to show above the "show more" link.
+
+Type: Integer <br>
+Default value: `5`
 
 ### `relations_links`
 
-Show item links in lists of related items. Defaults to `false`. Enabling this
-only has an effect if at least one of the following variables is also set to
-`true`: `kerko.features.results_attachment_links`,
+Show item links in lists of related items.
+
+Enabling this only has an effect if at least one of the following variables is
+also set to `true`: `kerko.features.results_attachment_links`,
 `kerko.features.results_url_links`.
+
+Type: Boolean <br>
+Default value: `false`
 
 ### `results_abstracts`
 
-Show abstracts on search result pages. Defaults to `false` (abstracts are
-hidden).
+Show abstracts on search result pages.
+
+Type: Boolean <br>
+Default value: `false` (i.e., hide abstracts)
 
 ### `results_abstracts_toggler`
 
 Show a button letting users show or hide abstracts on search results pages.
-Defaults to `true` (toggle is displayed).
+
+Type: Boolean <br>
+Defaults value: `true` (i.e., toggle is displayed)
 
 ### `results_abstracts_max_length`
 
 Truncate abstracts at the given length (in number of characters). If text is to
 be truncated in the middle of a word, the whole word is discarded instead.
-Truncated text is appended with an ellipsis sign ("..."). Defaults to `0`
-(abstracts get displayed in their full length, without any truncation).
+Truncated text is appended with an ellipsis sign ("...").
+
+Type: Integer <br>
+Default value: `0` (i.e., abstracts get displayed in their full length, without
+any truncation)
 
 ### `results_abstracts_max_length_leeway`
 
 If the length of an abstract only exceeds
 `kerko.features.results_abstracts_max_length` by this tolerance margin or less
-(in number of characters), it will not be truncated. Defaults to `0` (no
-tolerance margin). No effect if `results_abstracts_max_length` is set to 0 (no
+(in number of characters), it will not be truncated.
+
+This parameter has no effect if `results_abstracts_max_length` is set to `0` (no
 truncation).
+
+Type: Integer <br>
+Default value: `0` (i.e., no tolerance margin).
 
 ### `results_attachment_links`
 
-Provide links to attachments in search results. Defaults to `true`.
+Provide links to attachments in search results.
+
+Type: Boolean <br>
+Default value: `true`
 
 ### `results_url_links`
 
 Provide links to online resources in search results (for items whose URL field
-has a value). Defaults to `true`.
+has a value).
+
+Type: Boolean <br>
+Default value: `true`
 
 ## `kerko.feeds.`
 
 ### `formats`
 
-A list of syndication feed formats to publish. Defaults to `['atom']`. If set to
-an empty list, no web feed will be provided. The only supported format is
-`'atom'`.
+A list of syndication feed formats to publish.
+
+If set to an empty array, no web feed will be provided. The only supported
+format at this time is `'atom'`.
+
+Type: Array of strings <br>
+Default value: `["atom"]`
 
 ### `fields`
 
@@ -371,24 +471,36 @@ the default list when overriding the template to display additional fields. Note
 that some fields from the default list may be required by Kerko, and removing
 those could cause crashes.
 
+Type: Dictionary
+
 ### `max_days`
 
 The age (in number of days) of the oldest items allowed into web feeds. The date
 field of the items is used for that purpose, and when no date is available, the
-date the item was added to Zotero is used instead. Defaults to `0` (no age
-limit). Unless your goal is to promote recent literature only, you should
-probably keep the default value. Note: Items with missing dates will be
-considered as very recent, to prevent them from being excluded from feeds. For
-the same reason, items whose date lack the month and/or the day will be
-considered as from the 12th month of the year and/or the last day of the month.
+date the item was added to Zotero is used instead.
+
+Unless your goal is to promote recent literature only, you should probably keep
+the default value.
+
+Items with missing dates will be considered as very recent, to prevent them from
+being excluded from feeds. For the same reason, items whose date lack the month
+and/or the day will be considered as from the 12th month of the year and/or the
+last day of the month.
+
+Type: Integer <br>
+Default value: `0` (i.e., no age limit)
 
 ## `kerko.meta.`
 
 ### `google_analytics_id`
 
-A Google Analytics stream ID, e.g., `'G-??????????'`. This variable is optional
-and is empty by default. If set and Flask is not running in debug mode, then the
+A Google Analytics stream ID, e.g., `'G-??????????'`.
+
+If the value is not empty *and* Flask is not running in debug mode, then the
 Google Analytics tag is inserted into the pages.
+
+Type: String <br>
+Default value: `""`
 
 ### `highwirepress_tags`
 
@@ -396,22 +508,32 @@ Embed [Highwire Press
 tags](https://scholar.google.ca/intl/en/scholar/inclusion.html#indexing) into
 the HTML of item pages. This should help search engines such as Google Scholar
 index your items more accurately, but works only with book, conference paper,
-journal article, report or thesis items. Defaults to `true` (i.e. enabled).
+journal article, report or thesis items.
+
+Type: Boolean <br>
+Default value: `true` (i.e., enabled).
 
 ### `title`
 
 The title to display in web pages.
 
+Type: String
+
 ## `kerko.pagination.`
 
 ### `page_len`
 
-The number of search results per page. Defaults to `20`.
+The number of search results per page.
+
+Type: Integer <br>
+Default value: `20`
 
 ### `pager_links`
 
-Number of pages to show in the pager (not counting the current page). Defaults
-to `4`.
+Number of pages to show in the pager (not counting the current page).
+
+Type: Integer <br>
+Default value: `4`
 
 ## `kerko.scopes.*.`
 
@@ -451,44 +573,66 @@ criteria.
 
 Enable the scope.
 
+Type: Boolean
+
 ### `help_text`
 
 Description of the scope, to show in the help window.
 
+Type: String
+
 ### `selector_label`
 
 Label to use in the scope selector.
+
+Type: String
 
 ### `weight`
 
 Relative position of the scope in lists. Scopes with low weights (small numbers)
 rise above heavier ones (large numbers).
 
+Type: Integer
+
 ## `kerko.search.`
 
 ### `fulltext`
 
-Allow full-text search of PDF attachments. Defaults to `true`. To get consistent
-results, see [Ensuring full-text indexing of your attachments in
+Allow full-text search of PDF attachments.
+
+To get consistent results, see [Ensuring full-text indexing of your attachments
+in
 Zotero](recipes.md#ensuring-full-text-indexing-of-your-attachments-in-zotero).
+
+Type: Boolean <br>
+Default value: `true`
 
 ### `result_fields`
 
 List of item fields to retrieve for search results (most notably used by the
-`kerko.templates.search_item` template). Values in this list are keys
-identifying fields defined in the `kerko.composer.Composer` instance. One
-probably only needs to change the default list when overriding the template to
-display additional fields. Note that some fields from the default list may be
-required by Kerko, and removing those could cause crashes.
+`kerko.templates.search_item` template).
+
+Values in this list are keys identifying fields defined in the
+`kerko.composer.Composer` instance. One probably only needs to change the
+default list when overriding the template to display additional fields.
+
+Note that some fields from the default list may be required by Kerko, and
+removing those could cause crashes.
+
+Type: Array of strings <br>
+Default value: `["id", "attachments", "bib", "coins", "data", "url"]`
 
 ### `whoosh_language`
 
-The language of search requests. Defaults to `'en'`.
+The language of search requests.
 
 As of this writing, Whoosh supports the following languages: ar, da, nl, en, fi,
 fr, de, hu, it, no, pt, ro, ru, es, sv, tr. You may refer to Whoosh's source
 code to get the list of supported languages (see `whoosh.lang.languages`) and
 the list of languages that support stemming (see `whoosh.lang.has_stemmer()`).
+
+Type: String <br>
+Default value: `"en"`
 
 ## `kerko.search_fields.*.`
 
@@ -508,25 +652,33 @@ The configuration system does not allow adding new fields.
 
 Type of analysis to apply to the field value when building the search index.
 
-Allowed values are:
+Allowed values:
 
 - `"id"`: Index the entire value of the field as one token.
 - `"name"`: Apply standard tokenization and filtering, but without stemming.
 - `"text"`: Apply standard tokenization, stemming and filtering.
 
+Type: String
+
 ### `boost`
 
 Scaling factor to apply to score when matches are found in the field.
 
+Type: Float
+
 ### `enabled`
 
 Enable the field.
+
+Type: Boolean
 
 ### `scopes`
 
 List of keyword search scopes that will exploit the field.
 
 Allowed values are determined by [`kerko.scopes`](#kerkoscopes).
+
+Type: Array of strings
 
 ## `kerko.sorts.*.`
 
@@ -552,46 +704,66 @@ The configuration system does not allow adding new sort options.
 
 Enable the sort option.
 
+Type: Boolean
+
 ### `label`
 
 Label of the sort option.
+
+Type: String
 
 ### `weight`
 
 Relative position of the sort option in lists. Sort options with low weights
 (small numbers) rise above heavier ones (large numbers).
 
+Type: Integer
+
 ## `kerko.templates.`
 
 ### `search`
 
 Name of the Jinja2 template to render for the search page with list of results.
-Defaults to `kerko/search.html.jinja2`.
+
+Type: String <br>
+Default value: `"kerko/search.html.jinja2"`
 
 ### `search_item`
 
 Name of the Jinja2 template to render for the search page with a single
-bibliographic record. Defaults to `kerko/search-item.html.jinja2`.
+bibliographic record.
+
+Type: String <br>
+Default value: `"kerko/search-item.html.jinja2"`
 
 ### `item`
 
 Name of the Jinja2 template to render for the bibliographic record view.
-Defaults to `kerko/item.html.jinja2`.
+
+Type: String <br>
+Default value: `"kerko/item.html.jinja2"`
 
 ### `atom_feed`
 
-Name of the Jinja2 template used to render an Atom feed. Defaults to
-`kerko/atom.xml.jinja2`.
+Name of the Jinja2 template used to render an Atom feed.
+
+Type: String <br>
+Default value: `"kerko/atom.xml.jinja2"`
 
 ### `layout`
 
 Name of the Jinja2 template that is extended by the search, search-item, and
-item templates. Defaults to `kerko/layout.html.jinja2`.
+item templates.
+
+Type: String <br>
+Default value: `"kerko/layout.html.jinja2"`
 
 ### `base`
 
-Name of the Jinja2 template that is extended by the layout template. Defaults to
-`kerko/base.html.jinja2`.
+Name of the Jinja2 template that is extended by the layout template.
+
+Type: String <br>
+Default value: `"kerko/base.html.jinja2"`
 
 ## `kerko.zotero.`
 
@@ -599,17 +771,26 @@ Name of the Jinja2 template that is extended by the layout template. Defaults to
 
 List of allowed MIME types for attachments.
 
+Type: Array of strings <br>
+Default value: `["application/pdf"]`
+
 ### `csl_style`
 
-The citation style to use for formatted references. Can be either the file name
-(without the `.csl` extension) of one of the styles in the [Zotero Styles
-Repository][Zotero_styles] (e.g., `apa`) or the URL of a remote CSL file.
-Defaults to `'apa'`.
+The citation style to use for formatted references.
+
+Allowed values are either a file name (without the `.csl` extension) found in
+the [Zotero Styles Repository][Zotero_styles] (e.g., `"apa"`) or the publicly
+accessible URL of a remote CSL file.
+
+Type: String <br>
+Default value: `"apa"`.
 
 ### `batch_size`
 
-Number of items to request on each call to the Zotero API. Defaults to `100`
-(which is the maximum currently allowed by the API).
+Number of items to request on each call to the Zotero API.
+
+Type: Integer <br>
+Default value: `100` (this is the maximum currently allowed by the Zotero API)
 
 ### `child_include_re`
 
@@ -618,6 +799,9 @@ their tags. Any child which does not have a tag that matches this regular
 expression will be ignored. If this value is empty (which is the default), all
 children will be accepted unless `kerko.zotero.child_exclude_re` is set and
 causes some to be rejected.
+
+Type: String <br>
+Default value: `""`
 
 ### `child_exclude_re`
 
@@ -628,12 +812,18 @@ be ignored. If empty, no children will be rejected unless
 match it. By default, any child having at least one tag that begins with an
 underscore character (`_`) is rejected.
 
+Type: String <br>
+Default value: `"^_"`
+
 ### `item_include_re`
 
 Regular expression to use to include items based on their tags. Any item which
 does not have a tag that matches this regular expression will be ignored. If
 this value is empty (which is the default), all items will be accepted unless
 `kerko.zotero.item_exclude_re` is set which can cause some items to be rejected.
+
+Type: String <br>
+Default value: `""`
 
 ### `item_exclude_re`
 
@@ -643,16 +833,25 @@ have a tag that matches this regular expression will be excluded. If empty
 `kerko.zotero.item_include_re` is set, in which case items that do not have any
 tag that matches it will be excluded.
 
+Type: String <br>
+Default value: `""`
+
 ### `locale`
 
 The locale to use with Zotero API calls. This dictates the locale of Zotero item
-types, field names, creator types and citations. Defaults to `'en-US'`.
+types, field names, creator types and citations.
 Supported locales are listed at https://api.zotero.org/schema, under "locales".
+
+Type: String <br>
+Default value: `"en-US"`
 
 ### `max_attempts`
 
 Maximum number of tries after the Zotero API has returned an error or has not
-responded during indexing. Defaults to `10`.
+responded during indexing.
+
+Type: Integer <br>
+Default value: `10`
 
 ### `tag_include_re`
 
@@ -660,6 +859,9 @@ Regular expression to use to include tags. By default, all tags are accepted.
 Note that record exports (downloads) always include all tags regardless of this
 parameter, which only applies to information displayed by Kerko (exports are
 generated by the Zotero API, not by Kerko).
+
+Type: String <br>
+Default value: `""`
 
 ### `tag_exclude_re`
 
@@ -669,10 +871,15 @@ record exports (downloads) always include all tags regardless of this parameter,
 which only applies to information displayed by Kerko (exports are generated by
 the Zotero API, not by Kerko).
 
+Type: String <br>
+Default value: `"^_"`
+
 ### `wait`
 
 Time to wait (in seconds) between failed attempts to call the Zotero API.
-Defaults to `120`.
+
+Type: Integer <br>
+Default value: `120`
 
 ## `kerkoapp.proxy_fix.`
 
@@ -689,32 +896,52 @@ Refer to [Tell Flask it is behind a proxy][Flask_proxy] for details.
 
 !!! warning
 
-    This parameter is specific to [KerkoApp].
+    This parameter is specific to KerkoApp.
 
 ### `enabled`
 
-Enable the proxy parameters. Defaults to `false`. All other `kerkoapp.proxy_fix`
-parameters are ignored unless this is set to `true`.
+Enable the proxy parameters.
+
+All other `kerkoapp.proxy_fix` parameters are ignored unless this is set to
+`true`.
+
+Type: Boolean <br>
+Default value: `false`
 
 ### `x_for`
 
-Number of values to trust for `X-Forwarded-For`. Defaults to `1`.
+Number of values to trust for `X-Forwarded-For`.
+
+Type: Integer <br>
+Default value: `1`
 
 ### `x_proto`
 
-Number of values to trust for `X-Forwarded-Proto`. Defaults to `1`.
+Number of values to trust for `X-Forwarded-Proto`.
+
+Type: Integer <br>
+Default value: `1`
 
 ### `x_host`
 
-Number of values to trust for `X-Forwarded-Host`. Defaults to `0`.
+Number of values to trust for `X-Forwarded-Host`.
+
+Type: Integer <br>
+Default value: `0`
 
 ### `x_port`
 
-Number of values to trust for `X-Forwarded-Port`. Defaults to `0`.
+Number of values to trust for `X-Forwarded-Port`.
+
+Type: Integer <br>
+Default value: `0`
 
 ### `x_prefix`
 
-Number of values to trust for `X-Forwarded-Prefix`. Defaults to `0`.
+Number of values to trust for `X-Forwarded-Prefix`.
+
+Type: Integer <br>
+Default value: `0`
 
 
 [Flask_instance_folder]: https://flask.palletsprojects.com/en/2.3.x/config/#instance-folders
