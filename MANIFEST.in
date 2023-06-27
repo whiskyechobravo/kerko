@@ -3,8 +3,11 @@ include babel.cfg
 include *.ini
 include *.md
 include *.toml
+include *.yml
+graft docs
 graft src
 graft tests
 global-exclude .env
+global-exclude .secrets.*
 global-exclude *.pot
 global-exclude *.pyc

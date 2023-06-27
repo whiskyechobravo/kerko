@@ -1,13 +1,11 @@
 # Changelog
 
-For changes that might be specific to KerkoApp, please refer to the [KerkoApp
-changelog](https://github.com/whiskyechobravo/kerkoapp/blob/master/CHANGELOG.md).
+## 1.0.0alpha0
 
-
-## Latest (unreleased)
-
-*Warning:* Upgrading from version 0.9 or earlier will require that you rebuild
-your search index. Use the following commands, then restart the application:
+*Warning:* Upgrading from version 0.9 or earlier will require that you adapt
+your installation and configuration files, then rebuild your search index. Use
+the commands below, then restart the application. If you are using KerkoApp,
+make sure to check its [changelog][KerkoApp_changelog].
 
 ```bash
 flask kerko clean index
@@ -618,3 +616,6 @@ Possibly backwards incompatible changes (more or less internal API changes):
 ## 0.3alpha0 (2019-07-16)
 
 - First PyPI release.
+
+
+[KerkoApp_changelog]: https://github.com/whiskyechobravo/kerkoapp/blob/master/CHANGELOG.md
