@@ -58,13 +58,13 @@ class FeaturesModel(BaseModel):
         extra = Extra.forbid
 
     download_attachment_new_window: bool
-    download_citations_link: bool
-    download_citations_max_count: bool
+    download_results_link: bool
+    download_results_max_count: bool
     open_in_zotero_app: bool
     open_in_zotero_web: bool
-    print_citations_link: bool
-    print_citations_max_count: bool
     print_item_link: bool
+    print_results_link: bool
+    print_results_max_count: bool
     relations_links: bool
     relations_initial_limit: int = Field(ge=5)
     relations_sort: SlugStr

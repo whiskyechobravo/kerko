@@ -252,11 +252,11 @@ rise above heavier ones (large numbers).
 Open attachments in new windows. In other words: add the HTML `target="_blank"`
 attribute to attachment links. Defaults to `false`.
 
-### `download_citations_link`
+### `download_results_link`
 
 Provide a record download button on search results pages. Defaults to `true`.
 
-### `download_citations_max_count`
+### `download_results_max_count`
 
 Limit over which the record download button should be hidden from search results
 pages. Defaults to `0` (i.e. no limit).
@@ -290,11 +290,11 @@ editors. Defaults to `false`.
 
 Provide a print button on item pages. Defaults to `false`.
 
-### `print_citations_link`
+### `print_results_link`
 
 Provide a print button on search results pages. Defaults to `false`.
 
-### `print_citations_max_count`
+### `print_results_max_count`
 
 Limit over which the print button should be hidden from search results pages.
 Defaults to `0` (i.e. no limit).

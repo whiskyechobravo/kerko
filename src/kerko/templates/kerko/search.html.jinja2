@@ -1,10 +1,10 @@
 {% extends config.kerko.templates.layout %}
 {% from "kerko/_attributes.html.jinja2" import title_aria_label %}
 
-{%- set show_print_link = config.kerko.features.print_citations_max_count == 0 or total_count <= config.kerko.features.print_citations_max_count %}
-{%- set show_print_link = show_print_link and config.kerko.features.print_citations_link %}
-{%- set show_download_link = config.kerko.features.download_citations_max_count == 0 or total_count <= config.kerko.features.download_citations_max_count %}
-{%- set show_download_link = show_download_link and config.kerko.features.download_citations_link and config.kerko_composer.bib_formats %}
+{%- set show_print_link = config.kerko.features.print_results_max_count == 0 or total_count <= config.kerko.features.print_results_max_count %}
+{%- set show_print_link = show_print_link and config.kerko.features.print_results_link %}
+{%- set show_download_link = config.kerko.features.download_results_max_count == 0 or total_count <= config.kerko.features.download_results_max_count %}
+{%- set show_download_link = show_download_link and config.kerko.features.download_results_link and config.kerko_composer.bib_formats %}
 {%- set abstracts_toggler_title = _('Hide abstracts') if show_abstracts else _('Show abstracts') %}
 
 {%- block metas %}

@@ -182,7 +182,7 @@ class Criteria:
                     self.options['abstracts'] = 0
 
     def initialize_print_preview(self, initial):
-        if config('kerko.features.print_citations_link') and initial.get('print-preview') in [
+        if config('kerko.features.print_results_link') and initial.get('print-preview') in [
             't', '1'
         ]:
             self.options['print-preview'] = 1

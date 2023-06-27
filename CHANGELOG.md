@@ -16,9 +16,13 @@ Backwards incompatible changes:
   everything, you now have to run `flask kerko clean everything`. This may help
   accidental deletion of the cache or the search index, which in some instances
   can take long to rebuild.
-- The following configuration parameters have been renamed:
+- Rename the following configuration parameters:
     - `kerko.citation_formats.*` → `kerko.bib_formats.*`.
-- The following views have been renamed:
+    - `kerko.features.download_citations_link` → `kerko.features.download_results_link`
+    - `kerko.features.download_citations_max_count` → `kerko.features.download_results_max_count`
+    - `kerko.features.print_citations_link` → `kerko.features.print_results_link`
+    - `kerko.features.print_citations_max_count` → `kerko.features.print_results_max_count`
+- Rename the following views:
     - `item_citation_download` → `item_bib_download`
     - `search_citation_download` → `search_bib_download`
 

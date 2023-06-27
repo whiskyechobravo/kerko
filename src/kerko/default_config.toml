@@ -14,13 +14,13 @@ with_popper = true
 [kerko.features]
 
 download_attachment_new_window = false
-download_citations_link = true
-download_citations_max_count = 0
+download_results_link = true
+download_results_max_count = 0
 open_in_zotero_app = false
 open_in_zotero_web = false
-print_citations_link = false
-print_citations_max_count = 0
 print_item_link = false
+print_results_link = false
+print_results_max_count = 0
 relations_links = false
 relations_initial_limit = 5
 relations_sort = "author_asc"
