@@ -28,9 +28,9 @@ directory, where the `wsgi.py` file is found. To run it from other directories,
 you might need to use Flask's `--app` option, or to set the `FLASK_APP`
 environment variable.
 
-## Errors when using the `master` version of Kerko
+## Errors when using the `main` version of Kerko
 
-The `master` branch of KerkoApp is meant to work with the latest published
-release of Kerko. If you have installed the `master` version of Kerko instead
-its latest published release, use the `kerko-head` branch of KerkoApp instead of
-`master`.
+The `main` branch of KerkoApp is meant to work with the latest published
+release of Kerko. If you have installed the `main` version of Kerko instead
+its latest published release, use the `development` branch of KerkoApp instead of
+`main`.

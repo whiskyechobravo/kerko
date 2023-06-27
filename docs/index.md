@@ -295,7 +295,7 @@ known limitations of Kerko:
 [jQuery]: https://jquery.com/
 [Kerko]: https://github.com/whiskyechobravo/kerko
 [Kerko_email]: mailto:kerko@whiskyechobravo.com
-[Kerko_translations]: https://github.com/whiskyechobravo/kerko/tree/master/src/kerko/translations
+[Kerko_translations]: https://github.com/whiskyechobravo/kerko/tree/main/src/kerko/translations
 [KerkoApp]: https://github.com/whiskyechobravo/kerkoapp
 [KerkoApp_demo]: https://demo.kerko.whiskyechobravo.com
 [Popper.js]: https://popper.js.org/

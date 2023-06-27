@@ -2,7 +2,18 @@
 
 ## Latest (unreleased)
 
-TBD.
+Changes:
+
+- Rename the default branch of the repository from 'master' to 'main'. If you
+  have cloned the repository with Git, use the following commands to rename your
+  local branch:
+
+    ```bash
+    git branch -m master main
+    git fetch origin
+    git branch -u origin/main main
+    git remote set-head origin -a
+    ```
 
 
 ## 1.0.0alpha0 (2023-06-26)
@@ -623,4 +634,4 @@ Possibly backwards incompatible changes (more or less internal API changes):
 - First PyPI release.
 
 
-[KerkoApp_changelog]: https://github.com/whiskyechobravo/kerkoapp/blob/master/CHANGELOG.md
+[KerkoApp_changelog]: https://github.com/whiskyechobravo/kerkoapp/blob/main/CHANGELOG.md

@@ -49,7 +49,7 @@ plugins:
 
 repo_url: https://github.com/whiskyechobravo/kerko
 repo_name: whiskyechobravo/kerko
-edit_uri: blob/master/docs/
+edit_uri: blob/main/docs/
 
 markdown_extensions:
   # See https://squidfunk.github.io/mkdocs-material/setup/extensions/
