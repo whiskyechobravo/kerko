@@ -10,8 +10,6 @@ value if omitted from your configuration.
 
 **TODO:docs: For each parameter, specify if clean and/or sync is required**
 
-**TODO:docs: Consider referring to Kerko's `default_config.toml`, especially for viewing the default facets, fields, sorts, etc.**
-
 !!! note
 
     Flask and Flask extensions loaded by the application may provide additional
@@ -144,15 +142,21 @@ The type of library to get data from, either `"user"` for a personal library, or
 
 This parameter is **required** and has no default value.
 
-## `kerko.bib_formats.*`
+## `kerko.bib_formats.*.`
 
-Record download formats. Default formats are: `bibtex`, `ris`.
+Bibliographic record download formats, where `*` is a format key.
+
+The default formats are:
+
+- `bibtex`
+- `ris`
 
 The configuration system does not allow adding new formats.
 
 ### `enabled`
 
-Enable the format.
+Enable the format. If this is set to `false`, the format will not be available
+through any download link.
 
 ### `extension`
 
@@ -175,10 +179,16 @@ MIME type of the downloadable format.
 Relative position of the format in lists. Formats with low weights (small
 numbers) rise above heavier ones (large numbers).
 
-## `kerko.facets.*`
+## `kerko.facets.*.`
 
-Facets to provide in the search interface. Default facets are: `tag`,
-`item_type`, `year`, `link`.
+Facets to provide in the search interface, where `*` is a facet key.
+
+The default facets are:
+
+- `item_type`
+- `link`.
+- `tag`
+- `year`
 
 You may define additional facets.
 
@@ -245,7 +255,7 @@ Allowed values are:
 Relative position of the facet in lists. Facets with low weights (small numbers)
 rise above heavier ones (large numbers).
 
-## `kerko.features`
+## `kerko.features.`
 
 ### `download_attachment_new_window`
 
@@ -344,7 +354,7 @@ Provide links to attachments in search results. Defaults to `true`.
 Provide links to online resources in search results (for items whose URL field
 has a value). Defaults to `true`.
 
-## `kerko.feeds`
+## `kerko.feeds.`
 
 ### `formats`
 
@@ -372,7 +382,7 @@ considered as very recent, to prevent them from being excluded from feeds. For
 the same reason, items whose date lack the month and/or the day will be
 considered as from the 12th month of the year and/or the last day of the month.
 
-## `kerko.meta`
+## `kerko.meta.`
 
 ### `google_analytics_id`
 
@@ -392,7 +402,7 @@ journal article, report or thesis items. Defaults to `true` (i.e. enabled).
 
 The title to display in web pages.
 
-## `kerko.pagination`
+## `kerko.pagination.`
 
 ### `page_len`
 
@@ -403,12 +413,12 @@ The number of search results per page. Defaults to `20`.
 Number of pages to show in the pager (not counting the current page). Defaults
 to `4`.
 
-## `kerko.scopes.*`
+## `kerko.scopes.*.`
 
-List of keyword search scopes. Scopes allow users to restrict the search to some
-fields.
+Keyword search scopes, where `*` is a scope key. Scopes allow users to restrict
+the search to some fields.
 
-Default scopes are:
+The default scopes are:
 
 - `all`
 - `creator`
@@ -454,7 +464,7 @@ Label to use in the scope selector.
 Relative position of the scope in lists. Scopes with low weights (small numbers)
 rise above heavier ones (large numbers).
 
-## `kerko.search`
+## `kerko.search.`
 
 ### `fulltext`
 
@@ -480,9 +490,10 @@ fr, de, hu, it, no, pt, ro, ru, es, sv, tr. You may refer to Whoosh's source
 code to get the list of supported languages (see `whoosh.lang.languages`) and
 the list of languages that support stemming (see `whoosh.lang.has_stemmer()`).
 
-## `kerko.search_fields.*`
+## `kerko.search_fields.*.`
 
-Searchable fields. The default fields fall into different tables:
+Searchable fields, where `*` is a field key. The default fields fall into
+different tables:
 
 - `core.optional.*`: These fields have limited parameters. Their only allowed
   parameters are `boost`, `enabled`, and `scopes`.
@@ -517,9 +528,11 @@ List of keyword search scopes that will exploit the field.
 
 Allowed values are determined by [`kerko.scopes`](#kerkoscopes).
 
-## `kerko.sorts.*`
+## `kerko.sorts.*.`
 
-List of search results sorting options. Default sorts are:
+Search results sorting options, where `*` is a sort option key.
+
+The default sort options are:
 
 - `author_asc`
 - `author_desc`
@@ -529,7 +542,7 @@ List of search results sorting options. Default sorts are:
 - `title_asc`
 - `title_desc`
 
-The configuration system does not allow adding new sorts.
+The configuration system does not allow adding new sort options.
 
 !!! warning
 
@@ -548,7 +561,7 @@ Label of the sort option.
 Relative position of the sort option in lists. Sort options with low weights
 (small numbers) rise above heavier ones (large numbers).
 
-## `kerko.templates`
+## `kerko.templates.`
 
 ### `search`
 
@@ -580,7 +593,7 @@ item templates. Defaults to `kerko/layout.html.jinja2`.
 Name of the Jinja2 template that is extended by the layout template. Defaults to
 `kerko/base.html.jinja2`.
 
-## `kerko.zotero`
+## `kerko.zotero.`
 
 ### `attachment_mime_types`
 
@@ -661,7 +674,7 @@ the Zotero API, not by Kerko).
 Time to wait (in seconds) between failed attempts to call the Zotero API.
 Defaults to `120`.
 
-## `kerkoapp.proxy_fix`
+## `kerkoapp.proxy_fix.`
 
 When an application is running behind a proxy server, WSGI may see the request
 as coming from that server rather than the real client. Proxies set various
@@ -673,6 +686,10 @@ actually running behind a proxy; it would be a security issue to trust values
 that came directly from the client rather than a proxy.
 
 Refer to [Tell Flask it is behind a proxy][Flask_proxy] for details.
+
+!!! warning
+
+    This parameter is specific to [KerkoApp].
 
 ### `enabled`
 
@@ -703,5 +720,6 @@ Number of values to trust for `X-Forwarded-Prefix`. Defaults to `0`.
 [Flask_instance_folder]: https://flask.palletsprojects.com/en/2.3.x/config/#instance-folders
 [Flask_proxy]: https://flask.palletsprojects.com/en/2.3.x/deploying/proxy_fix/
 [Flask-Babel_documentation]: https://python-babel.github.io/flask-babel/
+[KerkoApp]: https://github.com/whiskyechobravo/kerkoapp
 [pytz]: https://pypi.org/project/pytz/
 [Zotero_styles]: https://www.zotero.org/styles/
