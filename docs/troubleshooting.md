@@ -1,9 +1,53 @@
 # Troubleshooting
 
-**TODO:docs: update & clarify that most of these pertain to KerkoApp**
+## No such command "kerko" error when running Flask
+
+Make sure to run the `flask` command from the application's directory, where the
+`wsgi.py` file is found.
+
+To run it from other directories, you might need to use the `--app` option, or
+to set the `FLASK_APP` environment variable.
+
+For example:
+
+```bash
+flask --app=/path/to/kerkoapp/wsgi:app kerko sync
+```
 
 
-## Conflicting package versions with standard installation
+## Configuration parameter change has no effect
+
+Use the following command to verify the desired parameter value is actually
+being used:
+
+```
+flask --debug kerko config
+```
+
+If the parameter's value is not the expected one, check your configuration
+files. If you are uncertain about which configuration files are being loaded by
+the application, check the first few lines printed by the above command; these
+list the [TOML files] in their loading order. Remember that a later file can
+override values set in a previous one. If you are still unable to trace the
+source of an incorrect parameter value, check your [environment variables].
+Environment variables can override parameter values set in TOML configuration
+files!
+
+If, on the other hand, the parameter's value *is* the desired one, then review
+the [documentation](config-params.md) for that parameter. Make sure you
+understand the effect of the parameter value, and check for any notes or
+warnings. Some parameters require a rebuild of the cache or the search index to
+become effective.
+
+
+## KerkoApp: Errors when using the `main` version of Kerko
+
+The `main` branch of KerkoApp is meant to work with the latest published release
+of Kerko. If you have installed the `main` version of Kerko instead its latest
+published release, use the `development` branch of KerkoApp instead of `main`.
+
+
+## Custom application: Conflicting package versions with standard installation
 
 The `requirements/run.txt` file specifies a precise version for each required
 package, ensuring consistent results with the last environment KerkoApp was
@@ -17,20 +61,10 @@ pip install -r requirements/run.in
 ```
 
 Requirements in `run.in` are more flexible regarding the versions. If you still
-have version conflicts with those requirements, you'll have to decide which
-version to use and verify that it is compatible with both KerkoApp and your
-other Python code.
+have version conflicts with those requirements, you'll have to find out which
+version to use, checking that it is compatible with both KerkoApp and your other
+Python code.
 
-## No such command "kerko" error when running Flask
 
-Make sure you are trying to run the `flask` command from the application's
-directory, where the `wsgi.py` file is found. To run it from other directories,
-you might need to use Flask's `--app` option, or to set the `FLASK_APP`
-environment variable.
-
-## Errors when using the `main` version of Kerko
-
-The `main` branch of KerkoApp is meant to work with the latest published
-release of Kerko. If you have installed the `main` version of Kerko instead
-its latest published release, use the `development` branch of KerkoApp instead of
-`main`.
+[environment variables]: config-basics.md#environment-variables
+[TOML files]: config-basics.md#toml-files
