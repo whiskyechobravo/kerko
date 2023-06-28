@@ -2156,7 +2156,6 @@
 <a href="https://github.com/whiskyechobravo/kerkoapp">KerkoApp</a>.</p>
 <p>Unless indicated otherwise, all parameters are optional and will take a default
 value if omitted from your configuration.</p>
-<p><strong>TODO:docs: For each parameter, specify if clean and/or sync is required</strong></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Flask and Flask extensions loaded by the application may provide additional
@@ -2164,21 +2163,20 @@ configuration parameters that are not described in this manual. To find
 those, please refer to the documentation of the relevant package.</p>
 </div>
 <div class="admonition warning">
-<p class="admonition-title">Changing settings can be disruptive</p>
-<p>Changing the configuration requires that you at least restart the
-application for the change to become effective.</p>
-<p>Moreover, many parameters affect the structure of the cache or the search
-index that Kerko depends on. Changing such parameters may require that you
-rebuild the cache or the search index. See <a href="../synchronization/#useful-commands">Useful
-commands</a> for cleaning and
-synchronization operations.</p>
+<p class="admonition-title">Changing configuration can be disruptive</p>
+<p>Making any change to a configuration file requires that you at least restart
+the application afterwards for the change to become effective.</p>
+<p>Moreover, some parameters have an effect on the structure of the cache or
+the search index that Kerko depends on. Changing such parameters may require
+that you rebuild either. The documentation of each concerned parameters
+indicates what actions are required after a change.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Prefix your environment variables</p>
 <p>KerkoApp users must prefix parameter names with <code>KERKOAPP_</code> when configuring
-them as environment variables. However, no prefix should be used in TOML
-files. See <a href="../config-basics/#environment-variables">Environment variables</a>
-for details on setting such variables.</p>
+them as environment variables. However, that prefix should be used when the
+same parameter is set in a TOML file. See <a href="../config-basics/#environment-variables">environment variables</a> for
+details on setting such variables.</p>
 </div>
 <h2 id="babel_default_locale"><code>BABEL_DEFAULT_LOCALE</code><a class="headerlink" href="#babel_default_locale" title="Permanent link">&para;</a></h2>
 <p>The default language of the user interface.</p>
@@ -2206,7 +2204,8 @@ Default value: <code>"config.toml;instance.toml;.secrets.toml"</code></p>
 <p class="admonition-title">Environment variable only</p>
 <p>This parameter is specific to KerkoApp and cannot be set in a TOML file. It
 can only be set as an environment variable, therefore it should actually be
-referenced as <code>KERKOAPP_CONFIG_FILES</code> (see <a href="../config-basics/#environment-variables">Environment variables</a> for details on setting such variables).</p>
+referenced as <code>KERKOAPP_CONFIG_FILES</code>. See <a href="../config-basics/#environment-variables">environment variables</a> for
+details.</p>
 </div>
 <h2 id="data_path"><code>DATA_PATH</code><a class="headerlink" href="#data_path" title="Permanent link">&para;</a></h2>
 <p>The data path specifies a directory where Kerko may store its cache, search
@@ -2230,7 +2229,8 @@ directory, which you must provide as an <strong>absolute path</strong>.</p>
 <p class="admonition-title">Environment variable only</p>
 <p>This parameter is specific to KerkoApp and cannot be set in a TOML file. It
 can only be set as an environment variable, therefore it should actually be
-referenced as <code>KERKOAPP_INSTANCE_PATH</code> (see <a href="../config-basics/#environment-variables">Environment variables</a> for details on setting such variables).</p>
+referenced as <code>KERKOAPP_INSTANCE_PATH</code>. See <a href="../config-basics/#environment-variables">environment variables</a> for
+details.</p>
 </div>
 <h2 id="logging_address"><code>LOGGING_ADDRESS</code><a class="headerlink" href="#logging_address" title="Permanent link">&para;</a></h2>
 <h2 id="logging_format"><code>LOGGING_FORMAT</code><a class="headerlink" href="#logging_format" title="Permanent link">&para;</a></h2>
@@ -2277,6 +2277,12 @@ at https://www.zotero.org/groups/2348869/kerko_demo is <code>"2348869"</code>).<
 <p>Enable the format. If this is set to <code>false</code>, the format will not be available
 through any download link.</p>
 <p>Type: Boolean</p>
+<div class="admonition warning">
+<p class="admonition-title">Modifies the cache and the search index</p>
+<p>Changing this parameter from <code>false</code> to <code>true</code> will require that you run the
+<code>sync cache --full</code> and <code>sync index</code> commands. See <a href="../synchronization/#command-line-interface-cli">synchronization
+commands</a> for details.</p>
+</div>
 <h3 id="extension"><code>extension</code><a class="headerlink" href="#extension" title="Permanent link">&para;</a></h3>
 <p>File extension of the downloadable file.</p>
 <p>Type: String</p>
@@ -2298,11 +2304,17 @@ numbers) rise above heavier ones (large numbers).</p>
 <p>The default facets are:</p>
 <ul>
 <li><code>item_type</code></li>
-<li><code>link</code>.</li>
+<li><code>link</code></li>
 <li><code>tag</code></li>
 <li><code>year</code></li>
 </ul>
 <p>You may define additional facets.</p>
+<div class="admonition warning">
+<p class="admonition-title">Modifies the search index</p>
+<p>Changing any of the <code>kerko.facets.*</code> parameters will require that you run
+the <code>clean index</code> and <code>sync index</code> commands. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a>
+for details.</p>
+</div>
 <h3 id="collection_key"><code>collection_key</code><a class="headerlink" href="#collection_key" title="Permanent link">&para;</a></h3>
 <p>Key of the Zotero collection to map the facet to. This must refer to a
 <strong>top-level collection</strong> containing <strong>at least one hierarchical level of
@@ -2552,6 +2564,11 @@ in
 Zotero</a>.</p>
 <p>Type: Boolean <br>
 Default value: <code>true</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Modifies the cache and the search index</p>
+<p>Changing this parameter will require that you run the <code>sync cache --full</code>
+and <code>sync index</code> commands. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
+</div>
 <h3 id="result_fields"><code>result_fields</code><a class="headerlink" href="#result_fields" title="Permanent link">&para;</a></h3>
 <p>List of item fields to retrieve for search results (most notably used by the
 <code>kerko.templates.search_item</code> template).</p>
@@ -2570,6 +2587,11 @@ code to get the list of supported languages (see <code>whoosh.lang.languages</co
 the list of languages that support stemming (see <code>whoosh.lang.has_stemmer()</code>).</p>
 <p>Type: String <br>
 Default value: <code>"en"</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Modifies the search index</p>
+<p>Changing this parameter will require that you run the <code>sync index --full</code>
+command. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
+</div>
 <h2 id="kerkosearch_fields"><code>kerko.search_fields.*.</code><a class="headerlink" href="#kerkosearch_fields" title="Permanent link">&para;</a></h2>
 <p>Searchable fields, where <code>*</code> is a field key. The default fields fall into
 different tables:</p>
@@ -2582,6 +2604,13 @@ different tables:</p>
   field parameters.</li>
 </ul>
 <p>The configuration system does not allow adding new fields.</p>
+<div class="admonition warning">
+<p class="admonition-title">Modifies the search index</p>
+<p>Changing any of the <code>kerko.search_fields.*</code> parameters will require that you
+run the <code>clean index</code> and <code>sync index</code> commands, except if you are just
+disabling a field or changing its <code>scopes</code> parameter. See <a href="../synchronization/#command-line-interface-cli">synchronization
+commands</a> for details.</p>
+</div>
 <h3 id="analyzer"><code>analyzer</code><a class="headerlink" href="#analyzer" title="Permanent link">&para;</a></h3>
 <p>Type of analysis to apply to the field value when building the search index.</p>
 <p>Allowed values:</p>
@@ -2660,13 +2689,23 @@ Default value: <code>"kerko/base.html.jinja2"</code></p>
 <p>List of allowed MIME types for attachments.</p>
 <p>Type: Array of strings <br>
 Default value: <code>["application/pdf"]</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Modifies the attachments</p>
+<p>Changing this parameter will require that you run the <code>sync attachments</code>
+command. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
+</div>
 <h3 id="csl_style"><code>csl_style</code><a class="headerlink" href="#csl_style" title="Permanent link">&para;</a></h3>
 <p>The citation style to use for formatted references.</p>
 <p>Allowed values are either a file name (without the <code>.csl</code> extension) found in
-the <a href="https://www.zotero.org/styles/">Zotero Styles Repository</a> (e.g., <code>"apa"</code>) or the publicly
-accessible URL of a remote CSL file.</p>
+the <a href="https://www.zotero.org/styles/">Zotero Styles Repository</a> (e.g., <code>"apa"</code>) or the publicly accessible URL of
+a remote CSL file.</p>
 <p>Type: String <br>
 Default value: <code>"apa"</code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Modifies the cache and the search index</p>
+<p>Changing this parameter will require that you run the <code>sync cache --full</code>
+and <code>sync index</code> commands. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
+</div>
 <h3 id="batch_size"><code>batch_size</code><a class="headerlink" href="#batch_size" title="Permanent link">&para;</a></h3>
 <p>Number of items to request on each call to the Zotero API.</p>
 <p>Type: Integer <br>
@@ -2679,6 +2718,11 @@ children will be accepted unless <code>kerko.zotero.child_exclude_re</code> is s
 causes some to be rejected.</p>
 <p>Type: String <br>
 Default value: <code>""</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Modifies the search index and attachments</p>
+<p>Changing this parameter will require that you run the <code>sync index --full</code>
+and <code>sync attachments</code> commands. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
+</div>
 <h3 id="child_exclude_re"><code>child_exclude_re</code><a class="headerlink" href="#child_exclude_re" title="Permanent link">&para;</a></h3>
 <p>Regular expression to use to exclude children (e.g. notes, attachments) based on
 their tags. Any child that have a tag that matches this regular expression will
@@ -2688,6 +2732,11 @@ match it. By default, any child having at least one tag that begins with an
 underscore character (<code>_</code>) is rejected.</p>
 <p>Type: String <br>
 Default value: <code>"^_"</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Modifies the search index and attachments</p>
+<p>Changing this parameter will require that you run the <code>sync index --full</code>
+and <code>sync attachments</code> commands. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
+</div>
 <h3 id="item_include_re"><code>item_include_re</code><a class="headerlink" href="#item_include_re" title="Permanent link">&para;</a></h3>
 <p>Regular expression to use to include items based on their tags. Any item which
 does not have a tag that matches this regular expression will be ignored. If
@@ -2695,6 +2744,11 @@ this value is empty (which is the default), all items will be accepted unless
 <code>kerko.zotero.item_exclude_re</code> is set which can cause some items to be rejected.</p>
 <p>Type: String <br>
 Default value: <code>""</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Modifies the search index</p>
+<p>Changing this parameter will require that you run the <code>sync index --full</code>
+command. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
+</div>
 <h3 id="item_exclude_re"><code>item_exclude_re</code><a class="headerlink" href="#item_exclude_re" title="Permanent link">&para;</a></h3>
 <p>Regular expression to use to exclude items based on their tags. Any item that
 have a tag that matches this regular expression will be excluded. If empty
@@ -2703,12 +2757,22 @@ have a tag that matches this regular expression will be excluded. If empty
 tag that matches it will be excluded.</p>
 <p>Type: String <br>
 Default value: <code>""</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Modifies the search index</p>
+<p>Changing this parameter will require that you run the <code>sync index --full</code>
+command. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
+</div>
 <h3 id="locale"><code>locale</code><a class="headerlink" href="#locale" title="Permanent link">&para;</a></h3>
 <p>The locale to use with Zotero API calls. This dictates the locale of Zotero item
 types, field names, creator types and citations.
 Supported locales are listed at https://api.zotero.org/schema, under "locales".</p>
 <p>Type: String <br>
 Default value: <code>"en-US"</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Modifies the cache and the search index</p>
+<p>Changing this parameter will require that you run the <code>sync cache --full</code>
+and <code>sync index</code> commands. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
+</div>
 <h3 id="max_attempts"><code>max_attempts</code><a class="headerlink" href="#max_attempts" title="Permanent link">&para;</a></h3>
 <p>Maximum number of tries after the Zotero API has returned an error or has not
 responded during indexing.</p>
@@ -2721,6 +2785,11 @@ parameter, which only applies to information displayed by Kerko (exports are
 generated by the Zotero API, not by Kerko).</p>
 <p>Type: String <br>
 Default value: <code>""</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Modifies the search index</p>
+<p>Changing this parameter will require that you run the <code>sync index --full</code>
+command. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
+</div>
 <h3 id="tag_exclude_re"><code>tag_exclude_re</code><a class="headerlink" href="#tag_exclude_re" title="Permanent link">&para;</a></h3>
 <p>Regular expression to use to exclude tags. The default value causes any tag that
 begins with an underscore character (<code>_</code>) to be ignored by Kerko. Note that
@@ -2729,6 +2798,11 @@ which only applies to information displayed by Kerko (exports are generated by
 the Zotero API, not by Kerko).</p>
 <p>Type: String <br>
 Default value: <code>"^_"</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Modifies the search index</p>
+<p>Changing this parameter will require that you run the <code>sync index --full</code>
+command. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
+</div>
 <h3 id="wait"><code>wait</code><a class="headerlink" href="#wait" title="Permanent link">&para;</a></h3>
 <p>Time to wait (in seconds) between failed attempts to call the Zotero API.</p>
 <p>Type: Integer <br>
