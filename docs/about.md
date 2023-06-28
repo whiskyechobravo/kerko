@@ -14,11 +14,11 @@ Bravo][Whisky_Echo_Bravo] on two projects:
   (QUESCREN)](https://www.concordia.ca/artsci/scpa/quescren.html) (Concordia
   University, Canada).
 
-In 2019, the advent of another project of similar nature made it clear that a
-general solution would benefit many organizations. However, software from the
-prior projects had to be rewritten in order to be more adaptable to a variety of
-needs. That led to Kerko, whose initial development was made possible through
-the following project:
+In 2019, [Whisky Echo Bravo][Whisky_Echo_Bravo] was asked to work on another
+similar project. That made it clear that a general solution would benefit many
+organizations. However, software from the prior projects had to be rewritten in
+order to be more adaptable to a variety of needs. That led to Kerko, whose
+initial development was made possible through the following project:
 
 - [Bibliographie francophone sur l'archivistique](https://bibliopiaf.ebsi.umontreal.ca/),
   funded by the
@@ -27,16 +27,16 @@ the following project:
   [École de bibliothéconomie et des sciences de l’information (EBSI)](https://ebsi.umontreal.ca/)
   (Université de Montréal, Canada).
 
-Since then, Kerko has continued to evolve, mostly thanks to lots of work by
-[Whisky Echo Bravo][Whisky_Echo_Bravo] and other contributors, as well as
-funding from various organizations that are using it.
+Since then, Kerko has continued to evolve, thanks to work by [Whisky Echo
+Bravo][Whisky_Echo_Bravo] and other contributors, often through funding provided
+by organizations needing new features or customizations of Kerko.
 
 ## Design choices
 
 Here are some of the design choices that have guided the development of Kerko so
 far:
 
-- Do not build a back-end. Let Zotero act as the "content management" system.
+- Do not build back-end software. Let Zotero manage the data.
 - Allow Kerko to integrate into richer web applications.
 - Only provide features that pertain to the exploration of a bibliography.
   Other features, even when they are common to many web sites, do not belong to
@@ -45,8 +45,8 @@ far:
   needed by Kerko (Flask was selected for this reason).
 - Use pure Python dependencies to keep installation and deployment simple (Hence
   the use of Whoosh for search, for example, instead of Elasticsearch or Solr).
-- Use a classic fullstack architecture. Keep it simple and avoid asset
-  management. Some will want to replace the templates and stylesheets anyway.
+- Use a classic server-side rendering architecture. Keep it simple and avoid
+  asset management when possible.
 
 ## Etymology
 
