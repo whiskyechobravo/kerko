@@ -65,8 +65,6 @@ batch_size = 100
 max_attempts = 10
 wait = 120  # In seconds.
 
-# Changing any of the following will require sync cache --full && sync index.
-
 csl_style = "apa"
 locale = "en-US"
 item_include_re = ''
@@ -80,8 +78,8 @@ tag_exclude_re = '^_'
 [kerko.search]
 
 result_fields = ["id", "attachments", "bib", "coins", "data", "url"]
-fulltext = true         # Changing this will require sync cache --full && sync index.
-whoosh_language = "en"  # Changing this will require sync index --full.
+fulltext = true
+whoosh_language = "en"
 
 [kerko.scopes]
 
@@ -106,9 +104,6 @@ whoosh_language = "en"  # Changing this will require sync index --full.
     weight = 400
 
 [kerko.search_fields]
-
-    # Changing any search field will require clean index && sync index. Except
-    # if you are just disabling the field or changing its 'scopes' parameter.
 
     # How boost factors are applied:
     # - 200.0 for primary identifiers
@@ -747,8 +742,6 @@ whoosh_language = "en"  # Changing this will require sync index --full.
     boost = 4.0
 
 [kerko.facets]
-
-    # Changing any facet will require clean index && sync index.
 
     [kerko.facets.tag]
     enabled = true

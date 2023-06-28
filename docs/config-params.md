@@ -6,31 +6,28 @@ This section describes most configuration parameters available to Kerko and
 Unless indicated otherwise, all parameters are optional and will take a default
 value if omitted from your configuration.
 
-**TODO:docs: For each parameter, specify if clean and/or sync is required**
-
 !!! note
 
     Flask and Flask extensions loaded by the application may provide additional
     configuration parameters that are not described in this manual. To find
     those, please refer to the documentation of the relevant package.
 
-!!! warning "Changing settings can be disruptive"
+!!! warning "Changing configuration can be disruptive"
 
-    Changing the configuration requires that you at least restart the
-    application for the change to become effective.
+    Making any change to a configuration file requires that you at least restart
+    the application afterwards for the change to become effective.
 
-    Moreover, many parameters affect the structure of the cache or the search
-    index that Kerko depends on. Changing such parameters may require that you
-    rebuild the cache or the search index. See [Useful
-    commands](synchronization.md#useful-commands) for cleaning and
-    synchronization operations.
+    Moreover, some parameters have an effect on the structure of the cache or
+    the search index that Kerko depends on. Changing such parameters may require
+    that you rebuild either. The documentation of each concerned parameters
+    indicates what actions are required after a change.
 
 !!! warning "Prefix your environment variables"
 
     KerkoApp users must prefix parameter names with `KERKOAPP_` when configuring
-    them as environment variables. However, no prefix should be used in TOML
-    files. See [Environment variables](config-basics.md#environment-variables)
-    for details on setting such variables.
+    them as environment variables. However, that prefix should be used when the
+    same parameter is set in a TOML file. See [environment variables] for
+    details on setting such variables.
 
 ## `BABEL_DEFAULT_LOCALE`
 
@@ -69,7 +66,8 @@ Default value: `"config.toml;instance.toml;.secrets.toml"`
 
     This parameter is specific to KerkoApp and cannot be set in a TOML file. It
     can only be set as an environment variable, therefore it should actually be
-    referenced as `KERKOAPP_CONFIG_FILES` (see [Environment variables](config-basics.md#environment-variables) for details on setting such variables).
+    referenced as `KERKOAPP_CONFIG_FILES`. See [environment variables] for
+    details.
 
 ## `DATA_PATH`
 
@@ -92,7 +90,7 @@ It is unnecessary to set `INSTANCE_PATH` if you are already setting
 [`DATA_PATH`](#data_path) as an absolute path.
 
 Type: String <br>
-Default value: [Determined by Flask][Flask_instance_folder]. In practice, the
+Default value: [Determined by Flask][Flask instance folder]. In practice, the
 default for KerkoApp users is a directory named `instance` located at the same
 level as the `wsgi.py` file. You may set `INSTANCE_PATH` to a different
 directory, which you must provide as an **absolute path**.
@@ -101,7 +99,8 @@ directory, which you must provide as an **absolute path**.
 
     This parameter is specific to KerkoApp and cannot be set in a TOML file. It
     can only be set as an environment variable, therefore it should actually be
-    referenced as `KERKOAPP_INSTANCE_PATH` (see [Environment variables](config-basics.md#environment-variables) for details on setting such variables).
+    referenced as `KERKOAPP_INSTANCE_PATH`. See [environment variables] for
+    details.
 
 ## `LOGGING_ADDRESS`
 
@@ -176,6 +175,12 @@ through any download link.
 
 Type: Boolean
 
+!!! warning "Modifies the cache and the search index"
+
+    Changing this parameter from `false` to `true` will require that you run the
+    `sync cache --full` and `sync index` commands. See [synchronization
+    commands] for details.
+
 ### `extension`
 
 File extension of the downloadable file.
@@ -214,11 +219,17 @@ Facets to provide in the search interface, where `*` is a facet key.
 The default facets are:
 
 - `item_type`
-- `link`.
+- `link`
 - `tag`
 - `year`
 
 You may define additional facets.
+
+!!! warning "Modifies the search index"
+
+    Changing any of the `kerko.facets.*` parameters will require that you run
+    the `clean index` and `sync index` commands. See [synchronization commands]
+    for details.
 
 ### `collection_key`
 
@@ -607,6 +618,11 @@ Zotero](recipes.md#ensuring-full-text-indexing-of-your-attachments-in-zotero).
 Type: Boolean <br>
 Default value: `true`
 
+!!! warning "Modifies the cache and the search index"
+
+    Changing this parameter will require that you run the `sync cache --full`
+    and `sync index` commands. See [synchronization commands] for details.
+
 ### `result_fields`
 
 List of item fields to retrieve for search results (most notably used by the
@@ -634,6 +650,11 @@ the list of languages that support stemming (see `whoosh.lang.has_stemmer()`).
 Type: String <br>
 Default value: `"en"`
 
+!!! warning "Modifies the search index"
+
+    Changing this parameter will require that you run the `sync index --full`
+    command. See [synchronization commands] for details.
+
 ## `kerko.search_fields.*.`
 
 Searchable fields, where `*` is a field key. The default fields fall into
@@ -647,6 +668,13 @@ different tables:
   field parameters.
 
 The configuration system does not allow adding new fields.
+
+!!! warning "Modifies the search index"
+
+    Changing any of the `kerko.search_fields.*` parameters will require that you
+    run the `clean index` and `sync index` commands, except if you are just
+    disabling a field or changing its `scopes` parameter. See [synchronization
+    commands] for details.
 
 ### `analyzer`
 
@@ -774,16 +802,26 @@ List of allowed MIME types for attachments.
 Type: Array of strings <br>
 Default value: `["application/pdf"]`
 
+!!! warning "Modifies the attachments"
+
+    Changing this parameter will require that you run the `sync attachments`
+    command. See [synchronization commands] for details.
+
 ### `csl_style`
 
 The citation style to use for formatted references.
 
 Allowed values are either a file name (without the `.csl` extension) found in
-the [Zotero Styles Repository][Zotero_styles] (e.g., `"apa"`) or the publicly
-accessible URL of a remote CSL file.
+the [Zotero Styles Repository] (e.g., `"apa"`) or the publicly accessible URL of
+a remote CSL file.
 
 Type: String <br>
 Default value: `"apa"`.
+
+!!! warning "Modifies the cache and the search index"
+
+    Changing this parameter will require that you run the `sync cache --full`
+    and `sync index` commands. See [synchronization commands] for details.
 
 ### `batch_size`
 
@@ -803,6 +841,11 @@ causes some to be rejected.
 Type: String <br>
 Default value: `""`
 
+!!! warning "Modifies the search index and attachments"
+
+    Changing this parameter will require that you run the `sync index --full`
+    and `sync attachments` commands. See [synchronization commands] for details.
+
 ### `child_exclude_re`
 
 Regular expression to use to exclude children (e.g. notes, attachments) based on
@@ -815,6 +858,11 @@ underscore character (`_`) is rejected.
 Type: String <br>
 Default value: `"^_"`
 
+!!! warning "Modifies the search index and attachments"
+
+    Changing this parameter will require that you run the `sync index --full`
+    and `sync attachments` commands. See [synchronization commands] for details.
+
 ### `item_include_re`
 
 Regular expression to use to include items based on their tags. Any item which
@@ -824,6 +872,11 @@ this value is empty (which is the default), all items will be accepted unless
 
 Type: String <br>
 Default value: `""`
+
+!!! warning "Modifies the search index"
+
+    Changing this parameter will require that you run the `sync index --full`
+    command. See [synchronization commands] for details.
 
 ### `item_exclude_re`
 
@@ -836,6 +889,11 @@ tag that matches it will be excluded.
 Type: String <br>
 Default value: `""`
 
+!!! warning "Modifies the search index"
+
+    Changing this parameter will require that you run the `sync index --full`
+    command. See [synchronization commands] for details.
+
 ### `locale`
 
 The locale to use with Zotero API calls. This dictates the locale of Zotero item
@@ -844,6 +902,11 @@ Supported locales are listed at https://api.zotero.org/schema, under "locales".
 
 Type: String <br>
 Default value: `"en-US"`
+
+!!! warning "Modifies the cache and the search index"
+
+    Changing this parameter will require that you run the `sync cache --full`
+    and `sync index` commands. See [synchronization commands] for details.
 
 ### `max_attempts`
 
@@ -863,6 +926,11 @@ generated by the Zotero API, not by Kerko).
 Type: String <br>
 Default value: `""`
 
+!!! warning "Modifies the search index"
+
+    Changing this parameter will require that you run the `sync index --full`
+    command. See [synchronization commands] for details.
+
 ### `tag_exclude_re`
 
 Regular expression to use to exclude tags. The default value causes any tag that
@@ -873,6 +941,11 @@ the Zotero API, not by Kerko).
 
 Type: String <br>
 Default value: `"^_"`
+
+!!! warning "Modifies the search index"
+
+    Changing this parameter will require that you run the `sync index --full`
+    command. See [synchronization commands] for details.
 
 ### `wait`
 
@@ -892,7 +965,7 @@ it knows what values to trust. However, enable this ONLY if the application is
 actually running behind a proxy; it would be a security issue to trust values
 that came directly from the client rather than a proxy.
 
-Refer to [Tell Flask it is behind a proxy][Flask_proxy] for details.
+Refer to [Tell Flask it is behind a proxy][Flask proxy] for details.
 
 !!! warning
 
@@ -944,9 +1017,10 @@ Type: Integer <br>
 Default value: `0`
 
 
-[Flask_instance_folder]: https://flask.palletsprojects.com/en/2.3.x/config/#instance-folders
-[Flask_proxy]: https://flask.palletsprojects.com/en/2.3.x/deploying/proxy_fix/
-[Flask-Babel_documentation]: https://python-babel.github.io/flask-babel/
+[environment variables]: config-basics.md#environment-variables
+[Flask instance folder]: https://flask.palletsprojects.com/en/2.3.x/config/#instance-folders
+[Flask proxy]: https://flask.palletsprojects.com/en/2.3.x/deploying/proxy_fix/
 [KerkoApp]: https://github.com/whiskyechobravo/kerkoapp
 [pytz]: https://pypi.org/project/pytz/
-[Zotero_styles]: https://www.zotero.org/styles/
+[synchronization commands]: synchronization.md#command-line-interface-cli
+[Zotero Styles Repository]: https://www.zotero.org/styles/

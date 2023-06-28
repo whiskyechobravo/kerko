@@ -36,7 +36,7 @@ search index and rebuild it from the cache.
     Zotero. Kerko will never try to write anything to your Zotero library.
 
 
-## Useful commands
+## Command line interface (CLI)
 
 Kerko provides an integration with the [Flask command line interface][Flask_CLI].
 The `flask` command will work with your virtual environment active.

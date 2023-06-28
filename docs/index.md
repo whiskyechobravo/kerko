@@ -209,8 +209,7 @@ The main features provided by Kerko are:
 - **Customizable front-end**: applications may partly or fully replace the
   default templates, scripts and stylesheets with their own.
 - **Command line interface (CLI)**: Kerko provides commands for synchronizing or
-  deleting its data. These can be invoked through the `flask` command (see
-  [useful commands](synchronization.md#useful-commands)).
+  deleting its data.
 
 [KerkoApp] is a standalone application built around Kerko. It inherits all of
 Kerko's features and it provides a few additions of its own:
