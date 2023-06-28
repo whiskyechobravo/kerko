@@ -26,6 +26,7 @@ Other changes:
     git remote set-head origin -a
     ```
 - Improve documentation on configuration parameters.
+- Make the `config` CLI command show the configuration in TOML format.
 
 Backwards incompatible changes:
 

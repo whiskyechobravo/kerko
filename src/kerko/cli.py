@@ -2,10 +2,12 @@ import pprint
 from datetime import datetime
 
 import click
+import tomli_w
 import wrapt
 from flask import current_app
 from flask.cli import with_appcontext
 
+from kerko.config_helpers import is_toml_serializable
 from kerko.storage import (SchemaError, SearchIndexError, delete_storage,
                            get_doc_count)
 from kerko.sync import zotero
@@ -122,9 +124,24 @@ def count(target):
 @with_appcontext
 def config():
     """
-    Show the app's full configuration.
+    Show the configuration of the application.
+
+    Note that unset parameters and parameters that internally have 'None' values
+    will be omitted because such values cannot be represented in TOML files.
     """
-    pprint.pprint(dict(current_app.config))
+    def copy_serializable(src: dict) -> dict:
+        dst = {}
+        for k, v in sorted(src.items()):
+            if isinstance(v, dict):
+                dst_v = copy_serializable(v)
+                if dst_v is not None:
+                    dst[k] = dst_v
+            elif is_toml_serializable(v):
+                dst[k] = v
+        return dst
+
+    serializable_config = copy_serializable(current_app.config)
+    print(tomli_w.dumps(serializable_config))
 
 
 @cli.command()

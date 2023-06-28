@@ -1,5 +1,7 @@
 import abc
 import pathlib
+from datetime import date, datetime, time
+from decimal import Decimal
 from typing import Any, Dict, List, Optional, Type, Union
 
 from typing_extensions import Annotated, Literal
@@ -435,3 +437,14 @@ def parse_config(
             config_set(config, key, model.parse_obj(config[key]).dict())
     except ValidationError as e:
         raise RuntimeError(f"Invalid configuration. {e}") from e
+
+
+def is_toml_serializable(obj: object) -> bool:
+    """
+    Check if the given object would be serializable into a TOML file.
+
+    This only performs a shallow check of the object.
+    """
+    return isinstance(
+        obj, (bool, int, float, date, datetime, time, Decimal, str, list, tuple, dict)
+    )

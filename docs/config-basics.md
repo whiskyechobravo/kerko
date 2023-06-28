@@ -174,6 +174,19 @@ config_set(app.config, "kerko.meta.title", "My Awesome Bibliography")
 Such assignments must be done during the initialization process. The application
 cannot change a setting while responding to a request.
 
+## Verifying the configuration
+
+With configuration parameters potentially taking values from different sources
+(default values defined by Kerko, environment variables, configuration files),
+you may sometimes want to verify the actual values taken by each parameter.
+
+The following command will show the parameters of the application and their
+values:
+
+```bash
+flask kerko config
+```
+
 
 [Flask_dotenv]: https://flask.palletsprojects.com/en/2.3.x/cli/#environment-variables-from-dotenv
 [Flask_instance_folder]: https://flask.palletsprojects.com/en/2.3.x/config/#instance-folders
