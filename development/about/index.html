@@ -554,11 +554,11 @@ Bravo</a> on two projects:</p>
   (QUESCREN)</a> (Concordia
   University, Canada).</li>
 </ul>
-<p>In 2019, the advent of another project of similar nature made it clear that a
-general solution would benefit many organizations. However, software from the
-prior projects had to be rewritten in order to be more adaptable to a variety of
-needs. That led to Kerko, whose initial development was made possible through
-the following project:</p>
+<p>In 2019, <a href="https://whiskyechobravo.com/">Whisky Echo Bravo</a> was asked to work on another
+similar project. That made it clear that a general solution would benefit many
+organizations. However, software from the prior projects had to be rewritten in
+order to be more adaptable to a variety of needs. That led to Kerko, whose
+initial development was made possible through the following project:</p>
 <ul>
 <li><a href="https://bibliopiaf.ebsi.umontreal.ca/">Bibliographie francophone sur l'archivistique</a>,
   funded by the
@@ -567,14 +567,14 @@ the following project:</p>
   <a href="https://ebsi.umontreal.ca/">École de bibliothéconomie et des sciences de l’information (EBSI)</a>
   (Université de Montréal, Canada).</li>
 </ul>
-<p>Since then, Kerko has continued to evolve, mostly thanks to lots of work by
-<a href="https://whiskyechobravo.com/">Whisky Echo Bravo</a> and other contributors, as well as
-funding from various organizations that are using it.</p>
+<p>Since then, Kerko has continued to evolve, thanks to work by <a href="https://whiskyechobravo.com/">Whisky Echo
+Bravo</a> and other contributors, often through funding provided
+by organizations needing new features or customizations of Kerko.</p>
 <h2 id="design-choices">Design choices<a class="headerlink" href="#design-choices" title="Permanent link">&para;</a></h2>
 <p>Here are some of the design choices that have guided the development of Kerko so
 far:</p>
 <ul>
-<li>Do not build a back-end. Let Zotero act as the "content management" system.</li>
+<li>Do not build back-end software. Let Zotero manage the data.</li>
 <li>Allow Kerko to integrate into richer web applications.</li>
 <li>Only provide features that pertain to the exploration of a bibliography.
   Other features, even when they are common to many web sites, do not belong to
@@ -583,8 +583,8 @@ far:</p>
   needed by Kerko (Flask was selected for this reason).</li>
 <li>Use pure Python dependencies to keep installation and deployment simple (Hence
   the use of Whoosh for search, for example, instead of Elasticsearch or Solr).</li>
-<li>Use a classic fullstack architecture. Keep it simple and avoid asset
-  management. Some will want to replace the templates and stylesheets anyway.</li>
+<li>Use a classic server-side rendering architecture. Keep it simple and avoid
+  asset management when possible.</li>
 </ul>
 <h2 id="etymology">Etymology<a class="headerlink" href="#etymology" title="Permanent link">&para;</a></h2>
 <p>The name <em>Zotero</em> reportedly derives from the Albanian word <em>zotëroj</em>, which
