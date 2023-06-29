@@ -34,7 +34,7 @@ collection_key = "KY3BNA6T"
 filter_key = "topic"
 title = "Topic"
 weight = 110
-initial_limit = 10
+initial_limit = 5
 initial_limit_leeway = 2
 
 [kerko.facets.field_of_study]
@@ -44,7 +44,7 @@ collection_key = "7H2Q7L6I"
 filter_key = "field-of-study"
 title = "Field of study"
 weight = 120
-initial_limit = 10
+initial_limit = 5
 initial_limit_leeway = 2
 
 [kerko.facets.contribution]
@@ -54,7 +54,7 @@ collection_key = "JFQRH4X2"
 filter_key = "contribution"
 title = "Contribution"
 weight = 130
-initial_limit = 10
+initial_limit = 5
 initial_limit_leeway = 2
 ```
 
