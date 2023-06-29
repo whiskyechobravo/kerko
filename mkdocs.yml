@@ -41,8 +41,8 @@ theme:
         name: Switch to light mode
   icon:
     repo: fontawesome/brands/github
-    view: material/eye
-    edit: material/lead-pencil
+    view: material/file-eye-outline
+    edit: material/file-edit-outline
 
 plugins:
   - search
