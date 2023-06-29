@@ -202,6 +202,8 @@ The main features provided by Kerko are:
   items.
 - **Responsive design**: the simple default implementation works on large
   monitors as well as on small screens. It is based on [Bootstrap].
+- **Google Analytics integration**: just provide a Google Analytics stream ID to
+  have Kerko automatically include the tracking code into its pages.
 - **Integration**: as a Flask [blueprint][Flask_blueprint], Kerko can be
   integrated into any Flask application. For a standalone application, however,
   you may simply [install
