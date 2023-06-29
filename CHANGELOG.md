@@ -1,6 +1,6 @@
 # Changelog
 
-## Latest (unreleased)
+## 1.0.0alpha1 (2023-06-29)
 
 Features:
 
@@ -8,7 +8,7 @@ Features:
 
 Bug fixes:
 
-- Fix pattern too restrictive for the `kerko.facets.*.collection_key`
+- Fix validation pattern too restrictive for the `kerko.facets.*.collection_key`
   configuration parameter.
 - Fix incorrect typing for the `kerko.features.download_results_max_count` and
   `kerko.features.print_results_max_count` configuration parameters.
@@ -25,10 +25,11 @@ Other changes:
     git branch -u origin/main main
     git remote set-head origin -a
     ```
-- Improve documentation.
+
 - Make the `config` CLI command show the configuration in TOML format.
 - Make the `config` CLI command hide secrets by default. Add a `--show-secrets`
   option.
+- Improve documentation.
 
 Backwards incompatible changes:
 
