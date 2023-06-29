@@ -367,6 +367,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#verifying-the-configuration" class="md-nav__link">
+    Verifying the configuration
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -562,6 +569,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#verifying-the-configuration" class="md-nav__link">
+    Verifying the configuration
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -735,6 +749,14 @@ API provided by Kerko, as in the following example:</p>
 </code></pre></div>
 <p>Such assignments must be done during the initialization process. The application
 cannot change a setting while responding to a request.</p>
+<h2 id="verifying-the-configuration">Verifying the configuration<a class="headerlink" href="#verifying-the-configuration" title="Permanent link">&para;</a></h2>
+<p>With configuration parameters potentially taking values from different sources
+(default values defined by Kerko, environment variables, configuration files),
+you may sometimes want to verify the actual values taken by each parameter.</p>
+<p>The following command will show the parameters of the application and their
+values:</p>
+<div class="highlight"><pre><span></span><code>flask<span class="w"> </span>kerko<span class="w"> </span>config
+</code></pre></div>
 
 
 

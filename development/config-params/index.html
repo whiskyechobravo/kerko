@@ -2300,7 +2300,8 @@ commands</a> for details.</p>
 numbers) rise above heavier ones (large numbers).</p>
 <p>Type: Integer</p>
 <h2 id="kerkofacets"><code>kerko.facets.*.</code><a class="headerlink" href="#kerkofacets" title="Permanent link">&para;</a></h2>
-<p>Facets to provide in the search interface, where <code>*</code> is a facet key.</p>
+<p>Facets to provide in the search interface, where <code>*</code> is a facet key. The facet
+key is used internally by Kerko to identify the facet.</p>
 <p>The default facets are:</p>
 <ul>
 <li><code>item_type</code></li>
@@ -2319,8 +2320,11 @@ for details.</p>
 <p>Key of the Zotero collection to map the facet to. This must refer to a
 <strong>top-level collection</strong> containing <strong>at least one hierarchical level of
 subcollections</strong>. Each subcollection will be mapped to a filter under the facet,
-if it contains at least one item.</p>
-<p>This parameter is only allowed when the facet's <code>type</code> is <code>"collection"</code>.</p>
+if it contains at least one item that is not excluded through the
+<a href="#item_include_re"><code>kerko.zotero.item_include_re</code></a> or
+<a href="#item_exclude_re"><code>kerko.zotero.item_exclude_re</code></a> parameters.</p>
+<p>The <code>collection_key</code> parameter is only allowed when the <a href="#type"><code>type</code></a>
+parameter is set to <code>"collection"</code>.</p>
 <p>Type: String</p>
 <h3 id="enabled_1"><code>enabled</code><a class="headerlink" href="#enabled_1" title="Permanent link">&para;</a></h3>
 <p>Enable the facet.</p>
@@ -2515,8 +2519,9 @@ Default value: <code>20</code></p>
 <p>Type: Integer <br>
 Default value: <code>4</code></p>
 <h2 id="kerkoscopes"><code>kerko.scopes.*.</code><a class="headerlink" href="#kerkoscopes" title="Permanent link">&para;</a></h2>
-<p>Keyword search scopes, where <code>*</code> is a scope key. Scopes allow users to restrict
-the search to some fields.</p>
+<p>Keyword search scopes, where <code>*</code> is a scope key. The scope key is used
+internally by Kerko to identify the scope. Scopes allow users to restrict the
+search to some fields.</p>
 <p>The default scopes are:</p>
 <ul>
 <li><code>all</code></li>
@@ -2527,19 +2532,6 @@ the search to some fields.</p>
 </ul>
 <p>You may define additional scopes. To link fields to scopes, see
 <a href="#scopes"><code>kerko.search_fields.scopes</code></a>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Note that if <code>kerko.search.fulltext</code> is <code>false</code>, the <code>'metadata'</code> and
-<code>'fulltext'</code> scopes are automatically disabled. <strong>TODO:docs: Statement to verify. Not sure this still true.</strong></p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Most fields are referring to the default scopes. If required scopes are disabled, the application may not start. <strong>TODO:docs: Behavior to verify</strong></p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>At least one scope must remain enabled for the application to start. <strong>TODO:docs: Behavior to verify</strong></p>
-</div>
 <h3 id="breadbox_label"><code>breadbox_label</code><a class="headerlink" href="#breadbox_label" title="Permanent link">&para;</a></h3>
 <p>Label to use when the scope appears in the breadbox, i.e. in the list of search
 criteria.</p>
@@ -2559,11 +2551,20 @@ rise above heavier ones (large numbers).</p>
 <h2 id="kerkosearch"><code>kerko.search.</code><a class="headerlink" href="#kerkosearch" title="Permanent link">&para;</a></h2>
 <h3 id="fulltext"><code>fulltext</code><a class="headerlink" href="#fulltext" title="Permanent link">&para;</a></h3>
 <p>Allow full-text search of PDF attachments.</p>
-<p>To get consistent results, see <a href="../recipes/#ensuring-full-text-indexing-of-your-attachments-in-zotero">Ensuring full-text indexing of your attachments
-in
-Zotero</a>.</p>
 <p>Type: Boolean <br>
 Default value: <code>true</code></p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>To get consistent results with full-text search, see <a href="../recipes/#ensuring-full-text-indexing-of-your-attachments-in-zotero">Ensuring full-text
+indexing of your attachments in Zotero</a>.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>When setting <code>kerko.search.fulltext</code> to <code>false</code>, it is recommended that you
+set <code>kerko.scopes.fulltext.enabled</code> and <code>kerko.scopes.metadata.enabled</code> to
+<code>false</code> as well. With full-text data unavailable, the <code>fulltext</code> scope is
+useless, and the <code>metadata</code> scope gives the same results as the <code>all</code> scope.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Modifies the cache and the search index</p>
 <p>Changing this parameter will require that you run the <code>sync cache --full</code>
@@ -2643,10 +2644,6 @@ commands</a> for details.</p>
 <li><code>title_desc</code></li>
 </ul>
 <p>The configuration system does not allow adding new sort options.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>At least one sort must remain enabled for the application to start. <strong>TODO:docs: Behavior to verify</strong></p>
-</div>
 <h3 id="enabled_4"><code>enabled</code><a class="headerlink" href="#enabled_4" title="Permanent link">&para;</a></h3>
 <p>Enable the sort option.</p>
 <p>Type: Boolean</p>
@@ -2656,7 +2653,16 @@ commands</a> for details.</p>
 <h3 id="weight_3"><code>weight</code><a class="headerlink" href="#weight_3" title="Permanent link">&para;</a></h3>
 <p>Relative position of the sort option in lists. Sort options with low weights
 (small numbers) rise above heavier ones (large numbers).</p>
+<p>The default sort option will be the one with the lowest weight.</p>
 <p>Type: Integer</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>It is recommended that <code>kerko.sorts.score.weight</code> has the smallest value of
+all your sort options. Thus, when a keyword search is performed, sorting by
+relevance score will be the default, and when no keywords are used in the
+search, then the sort option with the second smallest weight will be the
+default one.</p>
+</div>
 <h2 id="kerkotemplates"><code>kerko.templates.</code><a class="headerlink" href="#kerkotemplates" title="Permanent link">&para;</a></h2>
 <h3 id="search"><code>search</code><a class="headerlink" href="#search" title="Permanent link">&para;</a></h3>
 <p>Name of the Jinja2 template to render for the search page with list of results.</p>
@@ -2745,9 +2751,9 @@ this value is empty (which is the default), all items will be accepted unless
 <p>Type: String <br>
 Default value: <code>""</code></p>
 <div class="admonition warning">
-<p class="admonition-title">Modifies the search index</p>
+<p class="admonition-title">Modifies the search index and attachments</p>
 <p>Changing this parameter will require that you run the <code>sync index --full</code>
-command. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
+and <code>sync attachments</code> commands. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
 </div>
 <h3 id="item_exclude_re"><code>item_exclude_re</code><a class="headerlink" href="#item_exclude_re" title="Permanent link">&para;</a></h3>
 <p>Regular expression to use to exclude items based on their tags. Any item that
@@ -2758,9 +2764,9 @@ tag that matches it will be excluded.</p>
 <p>Type: String <br>
 Default value: <code>""</code></p>
 <div class="admonition warning">
-<p class="admonition-title">Modifies the search index</p>
+<p class="admonition-title">Modifies the search index and attachments</p>
 <p>Changing this parameter will require that you run the <code>sync index --full</code>
-command. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
+and <code>sync attachments</code> commands. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
 </div>
 <h3 id="locale"><code>locale</code><a class="headerlink" href="#locale" title="Permanent link">&para;</a></h3>
 <p>The locale to use with Zotero API calls. This dictates the locale of Zotero item
@@ -2779,8 +2785,8 @@ responded during indexing.</p>
 <p>Type: Integer <br>
 Default value: <code>10</code></p>
 <h3 id="tag_include_re"><code>tag_include_re</code><a class="headerlink" href="#tag_include_re" title="Permanent link">&para;</a></h3>
-<p>Regular expression to use to include tags. By default, all tags are accepted.
-Note that record exports (downloads) always include all tags regardless of this
+<p>Regular expression to use to include tags. By default, all tags are accepted.</p>
+<p>Note that record exports (downloads) always include all tags regardless of this
 parameter, which only applies to information displayed by Kerko (exports are
 generated by the Zotero API, not by Kerko).</p>
 <p>Type: String <br>
@@ -2792,10 +2798,10 @@ command. See <a href="../synchronization/#command-line-interface-cli">synchroniz
 </div>
 <h3 id="tag_exclude_re"><code>tag_exclude_re</code><a class="headerlink" href="#tag_exclude_re" title="Permanent link">&para;</a></h3>
 <p>Regular expression to use to exclude tags. The default value causes any tag that
-begins with an underscore character (<code>_</code>) to be ignored by Kerko. Note that
-record exports (downloads) always include all tags regardless of this parameter,
-which only applies to information displayed by Kerko (exports are generated by
-the Zotero API, not by Kerko).</p>
+begins with an underscore character (<code>_</code>) to be ignored by Kerko.</p>
+<p>Note that record exports (downloads) always include all tags regardless of this
+parameter, which only applies to information displayed by Kerko (exports are
+generated by the Zotero API, not by Kerko).</p>
 <p>Type: String <br>
 Default value: <code>"^_"</code></p>
 <div class="admonition warning">

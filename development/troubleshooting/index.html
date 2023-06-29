@@ -402,13 +402,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#conflicting-package-versions-with-standard-installation" class="md-nav__link">
-    Conflicting package versions with standard installation
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#no-such-command-kerko-error-when-running-flask" class="md-nav__link">
     No such command "kerko" error when running Flask
   </a>
@@ -416,8 +409,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#errors-when-using-the-main-version-of-kerko" class="md-nav__link">
-    Errors when using the main version of Kerko
+  <a href="#configuration-parameter-change-has-no-effect" class="md-nav__link">
+    Configuration parameter change has no effect
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kerkoapp-errors-when-using-the-main-version-of-kerko" class="md-nav__link">
+    KerkoApp: Errors when using the main version of Kerko
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-application-conflicting-package-versions-with-standard-installation" class="md-nav__link">
+    Custom application: Conflicting package versions with standard installation
   </a>
   
 </li>
@@ -502,13 +509,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#conflicting-package-versions-with-standard-installation" class="md-nav__link">
-    Conflicting package versions with standard installation
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#no-such-command-kerko-error-when-running-flask" class="md-nav__link">
     No such command "kerko" error when running Flask
   </a>
@@ -516,8 +516,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#errors-when-using-the-main-version-of-kerko" class="md-nav__link">
-    Errors when using the main version of Kerko
+  <a href="#configuration-parameter-change-has-no-effect" class="md-nav__link">
+    Configuration parameter change has no effect
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kerkoapp-errors-when-using-the-main-version-of-kerko" class="md-nav__link">
+    KerkoApp: Errors when using the main version of Kerko
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-application-conflicting-package-versions-with-standard-installation" class="md-nav__link">
+    Custom application: Conflicting package versions with standard installation
   </a>
   
 </li>
@@ -554,8 +568,37 @@
 
 
 <h1 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h1>
-<p><strong>TODO:docs: update &amp; clarify that most of these pertain to KerkoApp</strong></p>
-<h2 id="conflicting-package-versions-with-standard-installation">Conflicting package versions with standard installation<a class="headerlink" href="#conflicting-package-versions-with-standard-installation" title="Permanent link">&para;</a></h2>
+<h2 id="no-such-command-kerko-error-when-running-flask">No such command "kerko" error when running Flask<a class="headerlink" href="#no-such-command-kerko-error-when-running-flask" title="Permanent link">&para;</a></h2>
+<p>Make sure to run the <code>flask</code> command from the application's directory, where the
+<code>wsgi.py</code> file is found.</p>
+<p>To run it from other directories, you might need to use the <code>--app</code> option, or
+to set the <code>FLASK_APP</code> environment variable.</p>
+<p>For example:</p>
+<div class="highlight"><pre><span></span><code>flask<span class="w"> </span>--app<span class="o">=</span>/path/to/kerkoapp/wsgi:app<span class="w"> </span>kerko<span class="w"> </span>sync
+</code></pre></div>
+<h2 id="configuration-parameter-change-has-no-effect">Configuration parameter change has no effect<a class="headerlink" href="#configuration-parameter-change-has-no-effect" title="Permanent link">&para;</a></h2>
+<p>Use the following command to verify the desired parameter value is actually
+being used:</p>
+<div class="highlight"><pre><span></span><code>flask --debug kerko config
+</code></pre></div>
+<p>If the parameter's value is not the expected one, check your configuration
+files. If you are uncertain about which configuration files are being loaded by
+the application, check the first few lines printed by the above command; these
+list the <a href="../config-basics/#toml-files">TOML files</a> in their loading order. Remember that a later file can
+override values set in a previous one. If you are still unable to trace the
+source of an incorrect parameter value, check your <a href="../config-basics/#environment-variables">environment variables</a>.
+Environment variables can override parameter values set in TOML configuration
+files!</p>
+<p>If, on the other hand, the parameter's value <em>is</em> the desired one, then review
+the <a href="../config-params/">documentation</a> for that parameter. Make sure you
+understand the effect of the parameter value, and check for any notes or
+warnings. Some parameters require a rebuild of the cache or the search index to
+become effective.</p>
+<h2 id="kerkoapp-errors-when-using-the-main-version-of-kerko">KerkoApp: Errors when using the <code>main</code> version of Kerko<a class="headerlink" href="#kerkoapp-errors-when-using-the-main-version-of-kerko" title="Permanent link">&para;</a></h2>
+<p>The <code>main</code> branch of KerkoApp is meant to work with the latest published release
+of Kerko. If you have installed the <code>main</code> version of Kerko instead its latest
+published release, use the <code>development</code> branch of KerkoApp instead of <code>main</code>.</p>
+<h2 id="custom-application-conflicting-package-versions-with-standard-installation">Custom application: Conflicting package versions with standard installation<a class="headerlink" href="#custom-application-conflicting-package-versions-with-standard-installation" title="Permanent link">&para;</a></h2>
 <p>The <code>requirements/run.txt</code> file specifies a precise version for each required
 package, ensuring consistent results with the last environment KerkoApp was
 tested with. If some of these packages are already present in your Python
@@ -565,19 +608,9 @@ outside KerkoApp might require those versions. In that case, try replacing
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements/run.in
 </code></pre></div>
 <p>Requirements in <code>run.in</code> are more flexible regarding the versions. If you still
-have version conflicts with those requirements, you'll have to decide which
-version to use and verify that it is compatible with both KerkoApp and your
-other Python code.</p>
-<h2 id="no-such-command-kerko-error-when-running-flask">No such command "kerko" error when running Flask<a class="headerlink" href="#no-such-command-kerko-error-when-running-flask" title="Permanent link">&para;</a></h2>
-<p>Make sure you are trying to run the <code>flask</code> command from the application's
-directory, where the <code>wsgi.py</code> file is found. To run it from other directories,
-you might need to use Flask's <code>--app</code> option, or to set the <code>FLASK_APP</code>
-environment variable.</p>
-<h2 id="errors-when-using-the-main-version-of-kerko">Errors when using the <code>main</code> version of Kerko<a class="headerlink" href="#errors-when-using-the-main-version-of-kerko" title="Permanent link">&para;</a></h2>
-<p>The <code>main</code> branch of KerkoApp is meant to work with the latest published
-release of Kerko. If you have installed the <code>main</code> version of Kerko instead
-its latest published release, use the <code>development</code> branch of KerkoApp instead of
-<code>main</code>.</p>
+have version conflicts with those requirements, you'll have to find out which
+version to use, checking that it is compatible with both KerkoApp and your other
+Python code.</p>
 
 
 
