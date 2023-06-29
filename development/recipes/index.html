@@ -553,7 +553,7 @@
   
     <a href="https://github.com/whiskyechobravo/kerko/blob/main/docs/recipes.md" title="Edit this page" class="md-content__button md-icon">
       
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.84 2.73c-.39 0-.77.15-1.07.44l-2.12 2.12 5.3 5.31 2.12-2.1c.6-.61.6-1.56 0-2.14L17.9 3.17c-.3-.29-.68-.44-1.06-.44M12.94 6l-8.1 8.11 2.56.28.18 2.29 2.28.17.29 2.56 8.1-8.11m-14 3.74L2.5 21.73l6.7-1.79-.24-2.16-2.31-.17-.18-2.32"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4v-2m10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1 2.1 2.1Z"/></svg>
     </a>
   
   
@@ -562,7 +562,7 @@
     
     <a href="https://github.com/whiskyechobravo/kerko/raw/main/docs/recipes.md" title="View source of this page" class="md-content__button md-icon">
       
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5 5 5 0 0 1 5-5 5 5 0 0 1 5 5 5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5Z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.15 8.15 0 0 1-1.23-2Z"/></svg>
     </a>
   
 
@@ -582,10 +582,11 @@ Zotero library and the resulting faceted browsing interface in Kerko.</figcaptio
 <p>For such mapping to work, the following conditions must be met:</p>
 <ul>
 <li>The collection that is to be mapped to a facet must be a <strong>top-level
-  collection</strong>. In other words, it must be directly under the root of the Zotero
-  library.</li>
+  collection</strong>. In other words, it must be directly under the root of your
+  Zotero library.</li>
 <li><strong>At least one subcollection</strong> must be present within the chosen top-level
-  collection, and that subcollection must contain at least one item.</li>
+  collection, and that subcollection (or one of its own subcollections) must
+  contain at least one item.</li>
 </ul>
 <p>Once your Zotero library it set up to meet those conditions, you may configure
 the facets. For the example in Figure 1, the configuration looks like this:</p>
@@ -619,8 +620,8 @@ the facets. For the example in Figure 1, the configuration looks like this:</p>
 <span class="n">initial_limit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span>
 <span class="n">initial_limit_leeway</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
 </code></pre></div>
-<p>For details on each parameter, please refer to the
-<a href="../config-params/#kerkofacets">documentation</a>. However, we can highlight some
+<p>For details on each parameter, please refer to the <a href="../config-params/#kerkofacets">parameters
+documentation</a>. However, we can highlight some
 elements:</p>
 <ul>
 <li><code>collection_key</code> is the key assigned by Zotero to identify the collection. An
@@ -629,14 +630,17 @@ elements:</p>
   bar. In our example, the URL of the "Topic" collection is
   <a href="https://www.zotero.org/groups/2348869/kerko_demo/collections/KY3BNA6T">https://www.zotero.org/groups/2348869/kerko_demo/collections/<strong>KY3BNA6T</strong></a>,
   hence the use of <code>"KY3BNA6T"</code> as the collection key.</li>
-<li><code>filter_key</code> is the key to use when a user of your Kerko site selects a filter
-  within the facet. We set this parameter to <code>"topic"</code> as the filter and,
-  consequently, a search URL might look like
+<li><code>filter_key</code> tells Kerko the key to use in URLs when a user of your Kerko site
+  selects a filter within the facet. In our example, for the "Topic" facet we
+  chose to set this parameter to <code>"topic"</code> and, consequently, the search URL
+  will look like
   <a href="https://demo.kerko.whiskyechobravo.com/bibliography/?topic=Z8LT6QZG.2ZGZH2E2">https://demo.kerko.whiskyechobravo.com/bibliography/?<strong>topic</strong>=Z8LT6QZG.2ZGZH2E2</a>.</li>
 <li><code>title</code> is the heading that Kerko will show for the facet. If desired, you may
   choose a title that is different from the collection's name in Zotero.</li>
 <li><code>weight</code> determines the relative position of the facet relatively to the other
-  facets. Small numbers (low weights) rise above large ones (heavier weights).</li>
+  facets. Small numbers (low weights) rise above large ones (heavier weights).
+  This explains why, in our example, Kerko displays "Topic" (weighting 110)
+  above "Field of study" (120) and "Contribution" (130).</li>
 </ul>
 <p>Other things to know:</p>
 <ul>
@@ -649,23 +653,29 @@ flask<span class="w"> </span>kerko<span class="w"> </span>sync<span class="w"> <
 </code></pre></div>
 </li>
 <li>
-<p>New subcollections will automatically appear under the facet after a sync.</p>
+<p>Kerko allows a facet to have any number of hierarchical sublevels (nested
+  subcollections).</p>
 </li>
-<li>The subcollections may contain an arbitrary number of hierarchical levels (of
-  nested subcollections).</li>
-<li>Empty subcollections (that contain no items) will not show up in Kerko.</li>
-<li>An item may belong to multiple collections in Zotero. Use that when designing
-  your faceted structure. The best facets are designed so that they describe
-  different complementary perspectives on the same objects.</li>
-<li>An item only need to be in the subcollection that is most relevant for it. If
-  the item is located at more than one hierarchical level deep, Kerko will
-  automatically include it in its parent levels.</li>
-<li>You do not have to expose all of your top-level collections to Kerko. Kerko
-  will only use those that are specified in the configuration, and ignore the
-  others. Note, however, that unless you use <a href="../config-params/#item_include_re">item
+<li>Any new subcollection will automatically appear under the facet after a sync,
+  if it (or one of its own subcollections) contains at least one item.
+  Collection structures that contain no items will not show up in Kerko.</li>
+<li>An item may belong to multiple collections in Zotero. Take advantage of that
+  capability when designing your faceted classification. Ideally, facets
+  complement each other in describing different perspectives on the same
+  objects. If you are unfamiliar with faceted classification, we highly
+  recommend this paper by William Denton (2003): <a href="https://www.miskatonic.org/library/facet-web-howto.html">How to Make a Faceted
+  Classification and Put It On the
+  Web</a>.</li>
+<li>In Zotero, an item only needs to be assigned to the hierarchical level that is
+  most relevant for it. You do not need to also add the item to the parent
+  collections. The reason is that in Kerko a given filter automatically includes
+  the items from its corresponding subcollection and all of its subcollections.</li>
+<li>You do not have to expose all of your Zotero library's top-level collections
+  to Kerko. Kerko will only use those that are given in the configuration, and
+  ignore the others. Note, however, that unless you use <a href="../config-params/#item_include_re">item
   inclusion</a> or
   <a href="../config-params/#item_exclude_re">exclusion</a> parameters, items will be
-  available in your Kerko site regardless of the collections they belong to.</li>
+  visible in your Kerko site regardless of the collections they belong to.</li>
 </ul>
 <p>Phew! We think that this is simpler to setup in practice than it looks in
 writing. Hopefully you will agree.</p>
