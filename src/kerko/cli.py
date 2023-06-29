@@ -114,7 +114,7 @@ def count(target):
     modified or removed from the module at any time.
     """
     try:
-        pprint.pprint(get_doc_count(target))
+        click.echo(get_doc_count(target))
     except SearchIndexError as e:
         current_app.logger.error(e)
         raise click.Abort
@@ -141,7 +141,7 @@ def config():
         return dst
 
     serializable_config = copy_serializable(current_app.config)
-    print(tomli_w.dumps(serializable_config))
+    click.echo(tomli_w.dumps(serializable_config))
 
 
 @cli.command()
@@ -155,7 +155,7 @@ def zotero_item(item_key):
     modified or removed from the module at any time.
     """
     credentials = zotero.init_zotero()
-    pprint.pprint(zotero.load_item(credentials, item_key))
+    click.echo(pprint.pformat(zotero.load_item(credentials, item_key)))
 
 
 @cli.command()
@@ -168,7 +168,7 @@ def zotero_item_types():
     modified or removed from the module at any time.
     """
     credentials = zotero.init_zotero()
-    pprint.pprint(zotero.load_item_types(credentials))
+    click.echo(pprint.pformat(zotero.load_item_types(credentials)))
 
 
 @cli.command()
@@ -181,7 +181,7 @@ def zotero_item_fields():
     modified or removed from the module at any time.
     """
     credentials = zotero.init_zotero()
-    pprint.pprint(zotero.load_item_fields(credentials))
+    click.echo(pprint.pformat(zotero.load_item_fields(credentials)))
 
 
 @cli.command()
@@ -195,7 +195,7 @@ def zotero_item_type_fields(item_type):
     modified or removed from the module at any time.
     """
     credentials = zotero.init_zotero()
-    pprint.pprint(zotero.load_item_type_fields(credentials, item_type))
+    click.echo(pprint.pformat(zotero.load_item_type_fields(credentials, item_type)))
 
 
 @cli.command()
@@ -209,7 +209,7 @@ def zotero_item_type_creator_types(item_type):
     modified or removed from the module at any time.
     """
     credentials = zotero.init_zotero()
-    pprint.pprint(zotero.load_item_type_creator_types(credentials, item_type))
+    click.echo(pprint.pformat(zotero.load_item_type_creator_types(credentials, item_type)))
 
 
 @cli.command()
@@ -224,7 +224,7 @@ def zotero_top_level_collections():
     credentials = zotero.init_zotero()
     collections = zotero.Collections(credentials, top_level=True)
     for c in collections:
-        print(f"{c.get('key')} {c.get('data', {}).get('name', '')}")
+        click.echo(f"{c.get('key')} {c.get('data', {}).get('name', '')}")
 
 
 def _format_elapsed_time(start_time):
