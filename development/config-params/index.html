@@ -2178,15 +2178,18 @@ them as environment variables. However, that prefix should be used when the
 same parameter is set in a TOML file. See <a href="../config-basics/#environment-variables">environment variables</a> for
 details on setting such variables.</p>
 </div>
+<hr />
 <h2 id="babel_default_locale"><code>BABEL_DEFAULT_LOCALE</code><a class="headerlink" href="#babel_default_locale" title="Permanent link">&para;</a></h2>
 <p>The default language of the user interface.</p>
 <p>Type: String <br>
 Default value: <code>"en"</code></p>
+<hr />
 <h2 id="babel_default_timezone"><code>BABEL_DEFAULT_TIMEZONE</code><a class="headerlink" href="#babel_default_timezone" title="Permanent link">&para;</a></h2>
 <p>The timezone to use for user facing times. Any timezone name supported by the
 <a href="https://pypi.org/project/pytz/">pytz</a> package should work.</p>
 <p>Type: String <br>
 Default value: <code>"UTC"</code></p>
+<hr />
 <h2 id="config_files"><code>CONFIG_FILES</code><a class="headerlink" href="#config_files" title="Permanent link">&para;</a></h2>
 <p>Specifies where to look for one or more TOML configuration files. The value must
 be a semicolon-separated list of file paths.</p>
@@ -2207,6 +2210,7 @@ can only be set as an environment variable, therefore it should actually be
 referenced as <code>KERKOAPP_CONFIG_FILES</code>. See <a href="../config-basics/#environment-variables">environment variables</a> for
 details.</p>
 </div>
+<hr />
 <h2 id="data_path"><code>DATA_PATH</code><a class="headerlink" href="#data_path" title="Permanent link">&para;</a></h2>
 <p>The data path specifies a directory where Kerko may store its cache, search
 index, and file attachments. This may be provided as an absolute path or as a
@@ -2215,6 +2219,7 @@ relative path. If a relative path is given, it will be relative to
 <p>It is typically unnecessary to set both <code>DATA_PATH</code> and <code>INSTANCE_PATH</code>.</p>
 <p>Type: String <br>
 Default value: <code>"kerko"</code></p>
+<hr />
 <h2 id="instance_path"><code>INSTANCE_PATH</code><a class="headerlink" href="#instance_path" title="Permanent link">&para;</a></h2>
 <p>The instance path specifies a directory where the application may store data and
 configuration files.</p>
@@ -2232,26 +2237,33 @@ can only be set as an environment variable, therefore it should actually be
 referenced as <code>KERKOAPP_INSTANCE_PATH</code>. See <a href="../config-basics/#environment-variables">environment variables</a> for
 details.</p>
 </div>
+<hr />
 <h2 id="logging_address"><code>LOGGING_ADDRESS</code><a class="headerlink" href="#logging_address" title="Permanent link">&para;</a></h2>
+<hr />
 <h2 id="logging_format"><code>LOGGING_FORMAT</code><a class="headerlink" href="#logging_format" title="Permanent link">&para;</a></h2>
+<hr />
 <h2 id="logging_handler"><code>LOGGING_HANDLER</code><a class="headerlink" href="#logging_handler" title="Permanent link">&para;</a></h2>
+<hr />
 <h2 id="logging_level"><code>LOGGING_LEVEL</code><a class="headerlink" href="#logging_level" title="Permanent link">&para;</a></h2>
 <p>Severity of events to log. Allowed values are <code>"DEBUG"</code>, <code>"INFO"</code>, <code>"WARNING"</code>,
 <code>"ERROR"</code>, and <code>"CRITICAL"</code>.</p>
 <p>Type: String <br>
 Default value: <code>"DEBUG"</code> if the application is running in debug mode, or
 <code>"WARNING"</code> otherwise.</p>
+<hr />
 <h2 id="secret_key"><code>SECRET_KEY</code><a class="headerlink" href="#secret_key" title="Permanent link">&para;</a></h2>
 <p>This parameter is required for generating secure tokens in web forms. It should
 have a hard to guess value, and should really remain secret.</p>
 <p>This parameter is <strong>required</strong> and has no default value.</p>
 <p>Type: String</p>
+<hr />
 <h2 id="zotero_api_key"><code>ZOTERO_API_KEY</code><a class="headerlink" href="#zotero_api_key" title="Permanent link">&para;</a></h2>
 <p>Your Zotero API key, as <a href="https://www.zotero.org/settings/keys/new">created on
 zotero.org</a>. We recommend that you
 create a read-only API key, as Kerko does not need to write to your library.</p>
 <p>This parameter is <strong>required</strong> and has no default value.</p>
 <p>Type: String</p>
+<hr />
 <h2 id="zotero_library_id"><code>ZOTERO_LIBRARY_ID</code><a class="headerlink" href="#zotero_library_id" title="Permanent link">&para;</a></h2>
 <p>The identifier of the Zotero library to get data from. For a personal library
 the value is your <em>userID</em>, as found on https://www.zotero.org/settings/keys
@@ -2260,11 +2272,13 @@ library, as found in the URL of the library (e.g., the <em>groupID</em> of the l
 at https://www.zotero.org/groups/2348869/kerko_demo is <code>"2348869"</code>).</p>
 <p>This parameter is <strong>required</strong> and has no default value.</p>
 <p>Type: String</p>
+<hr />
 <h2 id="zotero_library_type"><code>ZOTERO_LIBRARY_TYPE</code><a class="headerlink" href="#zotero_library_type" title="Permanent link">&para;</a></h2>
 <p>The type of library to get data from, either <code>"user"</code> for a personal library, or
 <code>"group"</code> for a group library.</p>
 <p>This parameter is <strong>required</strong> and has no default value.</p>
 <p>Type: String</p>
+<hr />
 <h2 id="kerkobib_formats"><code>kerko.bib_formats.*.</code><a class="headerlink" href="#kerkobib_formats" title="Permanent link">&para;</a></h2>
 <p>Bibliographic record download formats, where <code>*</code> is a format key.</p>
 <p>The default formats are:</p>
@@ -2299,6 +2313,7 @@ commands</a> for details.</p>
 <p>Relative position of the format in lists. Formats with low weights (small
 numbers) rise above heavier ones (large numbers).</p>
 <p>Type: Integer</p>
+<hr />
 <h2 id="kerkofacets"><code>kerko.facets.*.</code><a class="headerlink" href="#kerkofacets" title="Permanent link">&para;</a></h2>
 <p>Facets to provide in the search interface, where <code>*</code> is a facet key. The facet
 key is used internally by Kerko to identify the facet.</p>
@@ -2370,6 +2385,7 @@ this list are <code>"count"</code> and <code>"label"</code>.</p>
 <p>Relative position of the facet in lists. Facets with low weights (small numbers)
 rise above heavier ones (large numbers).</p>
 <p>Type: Integer</p>
+<hr />
 <h2 id="kerkofeatures"><code>kerko.features.</code><a class="headerlink" href="#kerkofeatures" title="Permanent link">&para;</a></h2>
 <h3 id="download_attachment_new_window"><code>download_attachment_new_window</code><a class="headerlink" href="#download_attachment_new_window" title="Permanent link">&para;</a></h3>
 <p>Open attachments in new windows. In other words: add the HTML <code>target="_blank"</code>
@@ -2464,6 +2480,7 @@ Default value: <code>true</code></p>
 has a value).</p>
 <p>Type: Boolean <br>
 Default value: <code>true</code></p>
+<hr />
 <h2 id="kerkofeeds"><code>kerko.feeds.</code><a class="headerlink" href="#kerkofeeds" title="Permanent link">&para;</a></h2>
 <h3 id="formats"><code>formats</code><a class="headerlink" href="#formats" title="Permanent link">&para;</a></h3>
 <p>A list of syndication feed formats to publish.</p>
@@ -2491,6 +2508,7 @@ and/or the day will be considered as from the 12<sup>th</sup> month of the year 
 last day of the month.</p>
 <p>Type: Integer <br>
 Default value: <code>0</code> (i.e., no age limit)</p>
+<hr />
 <h2 id="kerkometa"><code>kerko.meta.</code><a class="headerlink" href="#kerkometa" title="Permanent link">&para;</a></h2>
 <h3 id="google_analytics_id"><code>google_analytics_id</code><a class="headerlink" href="#google_analytics_id" title="Permanent link">&para;</a></h3>
 <p>A Google Analytics stream ID, e.g., <code>'G-??????????'</code>.</p>
@@ -2509,6 +2527,7 @@ Default value: <code>true</code> (i.e., enabled).</p>
 <h3 id="title_1"><code>title</code><a class="headerlink" href="#title_1" title="Permanent link">&para;</a></h3>
 <p>The title to display in web pages.</p>
 <p>Type: String</p>
+<hr />
 <h2 id="kerkopagination"><code>kerko.pagination.</code><a class="headerlink" href="#kerkopagination" title="Permanent link">&para;</a></h2>
 <h3 id="page_len"><code>page_len</code><a class="headerlink" href="#page_len" title="Permanent link">&para;</a></h3>
 <p>The number of search results per page.</p>
@@ -2518,6 +2537,7 @@ Default value: <code>20</code></p>
 <p>Number of pages to show in the pager (not counting the current page).</p>
 <p>Type: Integer <br>
 Default value: <code>4</code></p>
+<hr />
 <h2 id="kerkoscopes"><code>kerko.scopes.*.</code><a class="headerlink" href="#kerkoscopes" title="Permanent link">&para;</a></h2>
 <p>Keyword search scopes, where <code>*</code> is a scope key. The scope key is used
 internally by Kerko to identify the scope. Scopes allow users to restrict the
@@ -2548,6 +2568,7 @@ criteria.</p>
 <p>Relative position of the scope in lists. Scopes with low weights (small numbers)
 rise above heavier ones (large numbers).</p>
 <p>Type: Integer</p>
+<hr />
 <h2 id="kerkosearch"><code>kerko.search.</code><a class="headerlink" href="#kerkosearch" title="Permanent link">&para;</a></h2>
 <h3 id="fulltext"><code>fulltext</code><a class="headerlink" href="#fulltext" title="Permanent link">&para;</a></h3>
 <p>Allow full-text search of PDF attachments.</p>
@@ -2593,6 +2614,7 @@ Default value: <code>"en"</code></p>
 <p>Changing this parameter will require that you run the <code>sync index --full</code>
 command. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
 </div>
+<hr />
 <h2 id="kerkosearch_fields"><code>kerko.search_fields.*.</code><a class="headerlink" href="#kerkosearch_fields" title="Permanent link">&para;</a></h2>
 <p>Searchable fields, where <code>*</code> is a field key. The default fields fall into
 different tables:</p>
@@ -2631,6 +2653,7 @@ commands</a> for details.</p>
 <p>List of keyword search scopes that will exploit the field.</p>
 <p>Allowed values are determined by <a href="#kerkoscopes"><code>kerko.scopes</code></a>.</p>
 <p>Type: Array of strings</p>
+<hr />
 <h2 id="kerkosorts"><code>kerko.sorts.*.</code><a class="headerlink" href="#kerkosorts" title="Permanent link">&para;</a></h2>
 <p>Search results sorting options, where <code>*</code> is a sort option key.</p>
 <p>The default sort options are:</p>
@@ -2663,6 +2686,7 @@ relevance score will be the default, and when no keywords are used in the
 search, then the sort option with the second smallest weight will be the
 default one.</p>
 </div>
+<hr />
 <h2 id="kerkotemplates"><code>kerko.templates.</code><a class="headerlink" href="#kerkotemplates" title="Permanent link">&para;</a></h2>
 <h3 id="search"><code>search</code><a class="headerlink" href="#search" title="Permanent link">&para;</a></h3>
 <p>Name of the Jinja2 template to render for the search page with list of results.</p>
@@ -2690,6 +2714,7 @@ Default value: <code>"kerko/layout.html.jinja2"</code></p>
 <p>Name of the Jinja2 template that is extended by the layout template.</p>
 <p>Type: String <br>
 Default value: <code>"kerko/base.html.jinja2"</code></p>
+<hr />
 <h2 id="kerkozotero"><code>kerko.zotero.</code><a class="headerlink" href="#kerkozotero" title="Permanent link">&para;</a></h2>
 <h3 id="attachment_mime_types"><code>attachment_mime_types</code><a class="headerlink" href="#attachment_mime_types" title="Permanent link">&para;</a></h3>
 <p>List of allowed MIME types for attachments.</p>
@@ -2813,6 +2838,7 @@ command. See <a href="../synchronization/#command-line-interface-cli">synchroniz
 <p>Time to wait (in seconds) between failed attempts to call the Zotero API.</p>
 <p>Type: Integer <br>
 Default value: <code>120</code></p>
+<hr />
 <h2 id="kerkoappproxy_fix"><code>kerkoapp.proxy_fix.</code><a class="headerlink" href="#kerkoappproxy_fix" title="Permanent link">&para;</a></h2>
 <p>When an application is running behind a proxy server, WSGI may see the request
 as coming from that server rather than the real client. Proxies set various
