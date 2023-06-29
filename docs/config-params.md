@@ -29,12 +29,16 @@ value if omitted from your configuration.
     same parameter is set in a TOML file. See [environment variables] for
     details on setting such variables.
 
+---
+
 ## `BABEL_DEFAULT_LOCALE`
 
 The default language of the user interface.
 
 Type: String <br>
 Default value: `"en"`
+
+---
 
 ## `BABEL_DEFAULT_TIMEZONE`
 
@@ -43,6 +47,8 @@ The timezone to use for user facing times. Any timezone name supported by the
 
 Type: String <br>
 Default value: `"UTC"`
+
+---
 
 ## `CONFIG_FILES`
 
@@ -69,6 +75,8 @@ Default value: `"config.toml;instance.toml;.secrets.toml"`
     referenced as `KERKOAPP_CONFIG_FILES`. See [environment variables] for
     details.
 
+---
+
 ## `DATA_PATH`
 
 The data path specifies a directory where Kerko may store its cache, search
@@ -80,6 +88,8 @@ It is typically unnecessary to set both `DATA_PATH` and `INSTANCE_PATH`.
 
 Type: String <br>
 Default value: `"kerko"`
+
+---
 
 ## `INSTANCE_PATH`
 
@@ -102,11 +112,19 @@ directory, which you must provide as an **absolute path**.
     referenced as `KERKOAPP_INSTANCE_PATH`. See [environment variables] for
     details.
 
+---
+
 ## `LOGGING_ADDRESS`
+
+---
 
 ## `LOGGING_FORMAT`
 
+---
+
 ## `LOGGING_HANDLER`
+
+---
 
 ## `LOGGING_LEVEL`
 
@@ -117,6 +135,8 @@ Type: String <br>
 Default value: `"DEBUG"` if the application is running in debug mode, or
 `"WARNING"` otherwise.
 
+---
+
 ## `SECRET_KEY`
 
 This parameter is required for generating secure tokens in web forms. It should
@@ -125,6 +145,8 @@ have a hard to guess value, and should really remain secret.
 This parameter is **required** and has no default value.
 
 Type: String
+
+---
 
 ## `ZOTERO_API_KEY`
 
@@ -135,6 +157,8 @@ create a read-only API key, as Kerko does not need to write to your library.
 This parameter is **required** and has no default value.
 
 Type: String
+
+---
 
 ## `ZOTERO_LIBRARY_ID`
 
@@ -148,6 +172,8 @@ This parameter is **required** and has no default value.
 
 Type: String
 
+---
+
 ## `ZOTERO_LIBRARY_TYPE`
 
 The type of library to get data from, either `"user"` for a personal library, or
@@ -156,6 +182,8 @@ The type of library to get data from, either `"user"` for a personal library, or
 This parameter is **required** and has no default value.
 
 Type: String
+
+---
 
 ## `kerko.bib_formats.*.`
 
@@ -211,6 +239,8 @@ Relative position of the format in lists. Formats with low weights (small
 numbers) rise above heavier ones (large numbers).
 
 Type: Integer
+
+---
 
 ## `kerko.facets.*.`
 
@@ -319,6 +349,8 @@ Relative position of the facet in lists. Facets with low weights (small numbers)
 rise above heavier ones (large numbers).
 
 Type: Integer
+
+---
 
 ## `kerko.features.`
 
@@ -465,6 +497,8 @@ has a value).
 Type: Boolean <br>
 Default value: `true`
 
+---
+
 ## `kerko.feeds.`
 
 ### `formats`
@@ -505,6 +539,8 @@ last day of the month.
 Type: Integer <br>
 Default value: `0` (i.e., no age limit)
 
+---
+
 ## `kerko.meta.`
 
 ### `google_analytics_id`
@@ -534,6 +570,8 @@ The title to display in web pages.
 
 Type: String
 
+---
+
 ## `kerko.pagination.`
 
 ### `page_len`
@@ -549,6 +587,8 @@ Number of pages to show in the pager (not counting the current page).
 
 Type: Integer <br>
 Default value: `4`
+
+---
 
 ## `kerko.scopes.*.`
 
@@ -596,6 +636,8 @@ Relative position of the scope in lists. Scopes with low weights (small numbers)
 rise above heavier ones (large numbers).
 
 Type: Integer
+
+---
 
 ## `kerko.search.`
 
@@ -655,6 +697,8 @@ Default value: `"en"`
     Changing this parameter will require that you run the `sync index --full`
     command. See [synchronization commands] for details.
 
+---
+
 ## `kerko.search_fields.*.`
 
 Searchable fields, where `*` is a field key. The default fields fall into
@@ -708,6 +752,8 @@ Allowed values are determined by [`kerko.scopes`](#kerkoscopes).
 
 Type: Array of strings
 
+---
+
 ## `kerko.sorts.*.`
 
 Search results sorting options, where `*` is a sort option key.
@@ -752,6 +798,8 @@ Type: Integer
     relevance score will be the default, and when no keywords are used in the
     search, then the sort option with the second smallest weight will be the
     default one.
+
+---
 
 ## `kerko.templates.`
 
@@ -798,6 +846,8 @@ Name of the Jinja2 template that is extended by the layout template.
 
 Type: String <br>
 Default value: `"kerko/base.html.jinja2"`
+
+---
 
 ## `kerko.zotero.`
 
@@ -961,6 +1011,8 @@ Time to wait (in seconds) between failed attempts to call the Zotero API.
 
 Type: Integer <br>
 Default value: `120`
+
+---
 
 ## `kerkoapp.proxy_fix.`
 
