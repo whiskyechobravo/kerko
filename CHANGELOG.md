@@ -25,7 +25,7 @@ Other changes:
     git branch -u origin/main main
     git remote set-head origin -a
     ```
-- Improve documentation on configuration parameters.
+- Improve documentation.
 - Make the `config` CLI command show the configuration in TOML format.
 
 Backwards incompatible changes:

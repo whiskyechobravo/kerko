@@ -214,7 +214,8 @@ Type: Integer
 
 ## `kerko.facets.*.`
 
-Facets to provide in the search interface, where `*` is a facet key.
+Facets to provide in the search interface, where `*` is a facet key. The facet
+key is used internally by Kerko to identify the facet.
 
 The default facets are:
 
@@ -236,9 +237,12 @@ You may define additional facets.
 Key of the Zotero collection to map the facet to. This must refer to a
 **top-level collection** containing **at least one hierarchical level of
 subcollections**. Each subcollection will be mapped to a filter under the facet,
-if it contains at least one item.
+if it contains at least one item that is not excluded through the
+[`kerko.zotero.item_include_re`](#item_include_re) or
+[`kerko.zotero.item_exclude_re`](#item_exclude_re) parameters.
 
-This parameter is only allowed when the facet's `type` is `"collection"`.
+The `collection_key` parameter is only allowed when the [`type`](#type)
+parameter is set to `"collection"`.
 
 Type: String
 
@@ -548,8 +552,9 @@ Default value: `4`
 
 ## `kerko.scopes.*.`
 
-Keyword search scopes, where `*` is a scope key. Scopes allow users to restrict
-the search to some fields.
+Keyword search scopes, where `*` is a scope key. The scope key is used
+internally by Kerko to identify the scope. Scopes allow users to restrict the
+search to some fields.
 
 The default scopes are:
 

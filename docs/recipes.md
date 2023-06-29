@@ -1,26 +1,111 @@
 # Recipes
 
-## Defining custom facets based on Zotero collections
+## Defining a custom facet based on a Zotero collection
 
-**TODO:docs: Give instructions. Mention required clean index & sync index.**
+Zotero collections can be mapped to custom facets in Kerko. With this scheme, a
+collection in the Zotero library represents a facet, and its subcollections
+correspond to values (or user-selectable filters) within the facet. Figure 1
+below illustrates such mapping, taken from the [demo library] and its
+corresponding [demo site].
 
-```toml title="Facet configuration example"
-[kerko.facets.my_facet]
+<figure markdown>
+![Zotero collections mapped to Kerko facets](assets/images/kerko-zotero-mapping.png){ width="600" }
+<figcaption><b>Figure 1.</b> Side-by-side comparison between the structure of collections in a
+Zotero library and the resulting faceted browsing interface in Kerko.</figcaption>
+</figure>
+
+For such mapping to work, the following conditions must be met:
+
+- The collection that is to be mapped to a facet must be a **top-level
+  collection**. In other words, it must be directly under the root of the Zotero
+  library.
+- **At least one subcollection** must be present within the chosen top-level
+  collection, and that subcollection must contain at least one item.
+
+Once your Zotero library it set up to meet those conditions, you may configure
+the facets. For the example in Figure 1, the configuration looks like this:
+
+```toml
+[kerko.facets.topic]
 enabled = true
 type = "collection"
-collection_key = "AAAAAAAA"
-filter_key = "my_facet"
-title = "My facet"
-weight = 50
+collection_key = "KY3BNA6T"
+filter_key = "topic"
+title = "Topic"
+weight = 110
 initial_limit = 10
 initial_limit_leeway = 2
-sort_by = ["count", "label"]
-sort_reverse = false
-item_view = true
+
+[kerko.facets.field_of_study]
+enabled = true
+type = "collection"
+collection_key = "7H2Q7L6I"
+filter_key = "field-of-study"
+title = "Field of study"
+weight = 120
+initial_limit = 10
+initial_limit_leeway = 2
+
+[kerko.facets.contribution]
+enabled = true
+type = "collection"
+collection_key = "JFQRH4X2"
+filter_key = "contribution"
+title = "Contribution"
+weight = 130
+initial_limit = 10
+initial_limit_leeway = 2
 ```
 
-Please refer to [`kerko.facets`](config-params.md#kerkofacets) for details on
-each parameter.
+For details on each parameter, please refer to the
+[documentation](config-params.md#kerkofacets). However, we can highlight some
+elements:
+
+- `collection_key` is the key assigned by Zotero to identify the collection. An
+  easy way to find this key is to visit your library using Zotero's web
+  interface. Click the collection, and check its URL in your browser's address
+  bar. In our example, the URL of the "Topic" collection is
+  [https://www.zotero.org/groups/2348869/kerko_demo/collections/**KY3BNA6T**](https://www.zotero.org/groups/2348869/kerko_demo/collections/KY3BNA6T),
+  hence the use of `"KY3BNA6T"` as the collection key.
+- `filter_key` is the key to use when a user of your Kerko site selects a filter
+  within the facet. We set this parameter to `"topic"` as the filter and,
+  consequently, a search URL might look like
+  [https://demo.kerko.whiskyechobravo.com/bibliography/?**topic**=Z8LT6QZG.2ZGZH2E2](https://demo.kerko.whiskyechobravo.com/bibliography/?topic=Z8LT6QZG.2ZGZH2E2).
+- `title` is the heading that Kerko will show for the facet. If desired, you may
+  choose a title that is different from the collection's name in Zotero.
+- `weight` determines the relative position of the facet relatively to the other
+  facets. Small numbers (low weights) rise above large ones (heavier weights).
+
+Other things to know:
+
+- After adding a new facet, you must clean and re-sync the search index. Please
+  check the documentation on [synchronization](synchronization.md), but in short
+  you have to use the following commands:
+
+    ```bash
+    flask kerko clean index
+    flask kerko sync index
+    ```
+
+- New subcollections will automatically appear under the facet after a sync.
+- The subcollections may contain an arbitrary number of hierarchical levels (of
+  nested subcollections).
+- Empty subcollections (that contain no items) will not show up in Kerko.
+- An item may belong to multiple collections in Zotero. Use that when designing
+  your faceted structure. The best facets are designed so that they describe
+  different complementary perspectives on the same objects.
+- An item only need to be in the subcollection that is most relevant for it. If
+  the item is located at more than one hierarchical level deep, Kerko will
+  automatically include it in its parent levels.
+- You do not have to expose all of your top-level collections to Kerko. Kerko
+  will only use those that are specified in the configuration, and ignore the
+  others. Note, however, that unless you use [item
+  inclusion](config-params.md#item_include_re) or
+  [exclusion](config-params.md#item_exclude_re) parameters, items will be
+  available in your Kerko site regardless of the collections they belong to.
+
+Phew! We think that this is simpler to setup in practice than it looks in
+writing. Hopefully you will agree.
 
 
 ## Ensuring full-text indexing of your attachments in Zotero
@@ -148,5 +233,7 @@ sitemap can be specified alongside any other sitemaps you might already have.
 
 
 [Kerko]: https://github.com/whiskyechobravo/kerko
+[demo library]: https://www.zotero.org/groups/2348869/kerko_demo/items
+[demo site]: https://demo.kerko.whiskyechobravo.com
 [venv]: https://docs.python.org/3.11/tutorial/venv.html
 [XML_Sitemap]: https://www.sitemaps.org/
