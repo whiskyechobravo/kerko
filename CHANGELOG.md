@@ -27,6 +27,8 @@ Other changes:
     ```
 - Improve documentation.
 - Make the `config` CLI command show the configuration in TOML format.
+- Make the `config` CLI command hide secrets by default. Add a `--show-secrets`
+  option.
 
 Backwards incompatible changes:
 

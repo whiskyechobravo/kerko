@@ -121,10 +121,17 @@ def count(target):
 
 
 @cli.command()
+@click.option(
+    '--show-secrets',
+    default=False,
+    is_flag=True,
+    flag_value=True,
+    help="Secrets are hidden from the output by default. This option causes them to be revealed."
+)
 @with_appcontext
-def config():
+def config(show_secrets=False):
     """
-    Show the configuration of the application.
+    Show the configuration.
 
     Note that unset parameters and parameters that internally have 'None' values
     will be omitted because such values cannot be represented in TOML files.
@@ -137,6 +144,8 @@ def config():
                 if dst_v is not None:
                     dst[k] = dst_v
             elif is_toml_serializable(v):
+                if not show_secrets and k in ['SECRET_KEY', 'ZOTERO_API_KEY']:
+                    v = "*****"
                 dst[k] = v
         return dst
 
