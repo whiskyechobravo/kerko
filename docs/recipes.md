@@ -75,10 +75,10 @@ elements:
   [https://demo.kerko.whiskyechobravo.com/bibliography/?**topic**=Z8LT6QZG.2ZGZH2E2](https://demo.kerko.whiskyechobravo.com/bibliography/?topic=Z8LT6QZG.2ZGZH2E2).
 - `title` is the heading that Kerko will show for the facet. If desired, you may
   choose a title that is different from the collection's name in Zotero.
-- `weight` determines the relative position of the facet relatively to the other
-  facets. Small numbers (low weights) rise above large ones (heavier weights).
-  This explains why, in our example, Kerko displays "Topic" (weighting 110)
-  above "Field of study" (120) and "Contribution" (130).
+- `weight` determines the relative position of the facet. Small numbers (low
+  weights) rise above large ones (heavier weights). This explains why, in our
+  example, Kerko displays "Topic" (weighting 110) above "Field of study" (120)
+  and "Contribution" (130).
 
 Other things to know:
 
