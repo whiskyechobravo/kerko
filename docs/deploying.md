@@ -1,4 +1,4 @@
-# Deployment
+# How to deploy
 
 As there is a great diversity of operating systems, hosting environments, and
 [WSGI servers], it is hard to provide universal and useful instructions for
@@ -321,4 +321,3 @@ sitemap can be specified alongside any other sitemaps you might already have.
 [nginx]: https://nginx.org/en/docs/
 [WSGI servers]: https://flask.palletsprojects.com/en/latest/deploying/
 [XML Sitemap]: https://www.sitemaps.org/
-[Zutilo]: https://github.com/willsALMANJ/Zutilo

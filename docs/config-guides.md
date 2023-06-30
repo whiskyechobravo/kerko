@@ -220,4 +220,4 @@ Remarks:
 [demo library]: https://www.zotero.org/groups/2348869/kerko_demo/items
 [demo site]: https://demo.kerko.whiskyechobravo.com
 [venv]: https://docs.python.org/3.11/tutorial/venv.html
-[Zutilo]: https://github.com/willsALMANJ/Zutilo
+[Zutilo]: https://github.com/wshanks/Zutilo

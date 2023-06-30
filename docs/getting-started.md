@@ -21,7 +21,7 @@ your computer.
 
 1. The first step is to install the desired version of KerkoApp. You may check
    the list of [available versions][KerkoApp versions], but make sure to choose
-   one that matches the documentation version you are currently reading. For
+   one that matches the documentation version you are currently reading! For
    version 1.0.0, for example, replace `VERSION` with `1.0.0` in the commands
    below:
 

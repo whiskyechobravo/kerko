@@ -2,11 +2,13 @@
 
 ## No such command "kerko" error when running Flask
 
-Make sure to run the `flask` command from the application's directory, where the
-`wsgi.py` file is found.
+Make sure to run the `flask` command from the application's directory (where the
+`wsgi.py` file is found).
 
-To run it from other directories, you might need to use the `--app` option, or
-to set the `FLASK_APP` environment variable.
+To run it from other directories, you could use the `--app` option, or to set
+the `FLASK_APP` environment variable. See [application
+discovery](https://flask.palletsprojects.com/en/2.3.x/cli/#application-discovery)
+for details.
 
 For example:
 

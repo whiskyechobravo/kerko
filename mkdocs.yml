@@ -7,11 +7,12 @@ nav:
   - config-basics.md
   - config-params.md
   - config-guides.md
-  - localization.md
-  - deployment.md
   - troubleshooting.md
-  - contributing.md
+  - localization.md
+  - deploying.md
+  - upgrading.md
   - changelog.md
+  - contributing.md
   - about.md
 
 theme:

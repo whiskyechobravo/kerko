@@ -41,6 +41,9 @@ search index and rebuild it from the cache.
 Kerko provides an integration with the [Flask command line interface][Flask_CLI].
 The `flask` command will work with your virtual environment active.
 
+Before running a command, go to the application's directory (where the `wsgi.py`
+file is found). That is the easiest way to help Flask discover the application.
+
 Some frequently used commands are:
 
 `flask kerko --help`
@@ -69,17 +72,6 @@ Some frequently used commands are:
 `flask kerko sync index`
 
 : Synchronizes just the search index (from the cache).
-
-!!! tip "Tip: Running commands from outside the application's directory"
-
-    The above commands should work as-is when you are in the application's
-    directory (where the `wsgi.py` file is found). To run them from another
-    directory, you could use Flask's `--app` command line option, or to set the
-    `FLASK_APP` environment variable. For example:
-
-    ```bash
-    flask --app=/path/to/kerkoapp/wsgi:app kerko sync
-    ```
 
 `flask kerko sync cache --full`
 

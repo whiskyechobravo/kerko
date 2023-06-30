@@ -65,11 +65,12 @@ Features:
 - Add many new configuration parameters. Please refer to the configuration
   parameters documentation for the full list.
 - Add optional "Open in Zotero" and "View on zotero.org" buttons to item pages.
-  These are disabled by default (see the new settings `KERKO_OPEN_IN_ZOTERO_APP`
-  and `KERKO_OPEN_IN_ZOTERO_WEB`). Even when these settings are enabled, a user
-  who wishes to use such button must first enable it from the (also
-  new) Preferences dialog.
-- Add API for retrieving information about the last synchronization from Zotero.
+  These are disabled by default (see new parameters
+  `kerko.features.open_in_zotero_app` and `kerko.features.open_in_zotero_web`).
+  Even when these are enabled, a user who wishes to use such button must first
+  enable it from the (also new) Preferences dialog.
+- Add a web API endpoint for retrieving information about the last
+  synchronization from Zotero.
 - Add the `kerko config` command to the Flask command line interface for
   displaying all configuration parameters.
 
@@ -109,8 +110,6 @@ Backwards incompatible changes:
     - `KERKO_FULLTEXT_SEARCH` → `kerko.search.fulltext`
     - `KERKO_HIGHWIREPRESS_TAGS` → `kerko.meta.highwirepress_tags`
     - `KERKO_JQUERY_VERSION` → `kerko.assets.jquery_version`
-    - `KERKO_OPEN_IN_ZOTERO_APP` → `kerko.features.open_in_zotero_app`
-    - `KERKO_OPEN_IN_ZOTERO_WEB` → `kerko.features.open_in_zotero_web`
     - `KERKO_PAGE_LEN` → `kerko.pagination.page_len`
     - `KERKO_PAGER_LINKS` → `kerko.pagination.pager_links`
     - `KERKO_POPPER_VERSION` → `kerko.assets.popper_version`
@@ -144,6 +143,8 @@ Backwards incompatible changes:
     - `KERKO_ZOTERO_LOCALE` → `kerko.zotero.locale`
     - `KERKO_ZOTERO_MAX_ATTEMPTS` → `kerko.zotero.max_attempts`
     - `KERKO_ZOTERO_WAIT` → `kerko.zotero.wait`
+- The Kerko configuration should now be initialized by a call like
+  `kerko.config_helpers.config_update(app.config, kerko.DEFAULTS)`.
 - `Composer.__init__()` now only takes a configuration object as argument
   instead of a bunch of arguments. Thus, the initial values of the `Composer`
   instance now depend solely on the configuration.
