@@ -119,8 +119,8 @@ The main features provided by Kerko are:
         notes), or in documents (i.e., in the text content of attachments).
         Applications may provide additional choices.
 - **Faceted browsing**: allows filtering by topic (Zotero tag), by resource type
-  (Zotero item type), by publication year. Moreover, you may define additional
-  facets modeled on collections and subcollections; in such case, any collection
+  (Zotero item type), by publication year. Moreover, you may define [additional
+  facets](config-guides.md#defining-custom-facets-based-on-zotero-collections) modeled on collections and subcollections; in such case, any collection
   can be represented as a facet, and each subcollection as a value within that
   facet. By taking advantage of Zotero's ability to assign any given item to
   multiple collections, a faceted classification scheme can be designed,
@@ -196,7 +196,7 @@ The main features provided by Kerko are:
   You may define such relations using Zotero's _Related_ field. Moreover, Kerko
   adds the _Cites_ and _Cited by_ relation types, which can be managed in Zotero
   through notes (see [
-  guide](recipes.md#providing-cites-and-cited-by-relations)). Custom
+  guide](config-guides.md#providing-cites-and-cited-by-relations)). Custom
   applications can add more types of relations if desired.
 - **Badges**: custom applications can have icons conditionally displayed next to
   items.

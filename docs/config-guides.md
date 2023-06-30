@@ -1,6 +1,8 @@
-# Recipes
+# Configuration guides
 
-## Defining a custom facet based on a Zotero collection
+This sections provides guidance on configuring specific aspects of Kerko.
+
+## Defining custom facets based on Zotero collections
 
 Zotero collections can be mapped to custom facets in Kerko. With this scheme, a
 collection in the Zotero library represents a facet, and its subcollections
@@ -214,36 +216,8 @@ Remarks:
   addition to _Cites_ and _Cited by_.
 
 
-## Submitting your sitemap to search engines
-
-Kerko generates an [XML Sitemap][XML_Sitemap] that can help search engines
-discover your bibliographic records.
-
-The path of the sitemap is `BASE_URL/sitemap.xml`, where `BASE_URL` should be
-replaced with the protocol, domain, port, and Kerko URL path prefix that are
-relevant to your installation, e.g.,
-`https://example.com/bibliography/sitemap.xml`.
-
-Different search engines may have different procedures for submitting sitemaps
-([Google](https://developers.google.com/search/docs/advanced/sitemaps/build-sitemap#addsitemap),
-[Bing](https://www.bing.com/webmasters/help/Sitemaps-3b5cf6ed),
-[Yandex](https://yandex.com/support/webmaster/indexing-options/sitemap.html)).
-
-However, a standard method consists in adding a `Sitemap` directive to a
-`robots.txt` file served at the root of your site, to tell web crawlers where to
-find your sitemap. For example, one might add the following line to
-`robots.txt`:
-
-```
-Sitemap: https://example.com/bibliography/sitemap.xml
-```
-
-A `robots.txt` file can have multiple `Sitemap` directives, thus the Kerko
-sitemap can be specified alongside any other sitemaps you might already have.
-
-
 [Kerko]: https://github.com/whiskyechobravo/kerko
 [demo library]: https://www.zotero.org/groups/2348869/kerko_demo/items
 [demo site]: https://demo.kerko.whiskyechobravo.com
 [venv]: https://docs.python.org/3.11/tutorial/venv.html
-[XML_Sitemap]: https://www.sitemaps.org/
+[Zutilo]: https://github.com/willsALMANJ/Zutilo

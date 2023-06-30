@@ -18,9 +18,9 @@ value if omitted from your configuration.
     the application afterwards for the change to become effective.
 
     Moreover, some parameters have an effect on the structure of the cache or
-    the search index that Kerko depends on. Changing such parameters may require
-    that you rebuild either. The documentation of each concerned parameters
-    indicates what actions are required after a change.
+    the search index that Kerko depends on. Changing this kind of parameter may
+    require that you rebuild either. Refer to the documentation of the parameter
+    to check if specific actions need to be taken after a change.
 
 !!! warning "Prefix your environment variables"
 
@@ -1078,7 +1078,7 @@ Default value: `0`
 
 
 [environment variables]: config-basics.md#environment-variables
-[Ensuring full-text indexing of your attachments in Zotero]: recipes.md#ensuring-full-text-indexing-of-your-attachments-in-zotero
+[Ensuring full-text indexing of your attachments in Zotero]: config-guides.md#ensuring-full-text-indexing-of-your-attachments-in-zotero
 [Flask instance folder]: https://flask.palletsprojects.com/en/2.3.x/config/#instance-folders
 [Flask proxy]: https://flask.palletsprojects.com/en/2.3.x/deploying/proxy_fix/
 [KerkoApp]: https://github.com/whiskyechobravo/kerkoapp

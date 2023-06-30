@@ -270,9 +270,10 @@ is left to the reader.
     the application afterwards for the change to become effective.
 
     Moreover, some parameters have an effect on the structure of the cache or
-    the search index that Kerko depends on. Changing such parameters may require
-    that you rebuild either. The documentation of each concerned parameters
-    indicates what actions are required after a change.
+    the search index that Kerko depends on. Changing this kind of parameter may
+    require that you rebuild either. Refer to the [documentation of the
+    parameter](config-params.md) to check if specific actions need to be taken
+    after a change.
 
     The commands below, for example, will allow you to clean and rebuild the
     search index, and to restart KerkoApp:
@@ -285,8 +286,39 @@ is left to the reader.
     ```
 
 
+## Submitting your sitemap to search engines
+
+Kerko generates an [XML Sitemap] that can help search engines discover your
+bibliographic records.
+
+The path of the sitemap is `BASE_URL/sitemap.xml`, where `BASE_URL` should be
+replaced with the protocol, domain, port, and Kerko URL path prefix that are
+relevant to your installation, e.g.,
+`https://example.com/bibliography/sitemap.xml`.
+
+Different search engines may have different procedures for submitting sitemaps
+([Google](https://developers.google.com/search/docs/advanced/sitemaps/build-sitemap#addsitemap),
+[Bing](https://www.bing.com/webmasters/help/Sitemaps-3b5cf6ed),
+[Yandex](https://yandex.com/support/webmaster/indexing-options/sitemap.html)).
+
+However, a standard method consists in adding a `Sitemap` directive to a
+`robots.txt` file served at the root of your site, to tell web crawlers where to
+find your sitemap. For example, one might add the following line to
+`robots.txt`:
+
+```
+Sitemap: https://example.com/bibliography/sitemap.xml
+```
+
+A `robots.txt` file can have multiple `Sitemap` directives, thus the Kerko
+sitemap can be specified alongside any other sitemaps you might already have.
+
+
+
 [Flask]: https://flask.palletsprojects.com/en/latest/deploying/
 [GUnicorn]: https://gunicorn.org/
 [KerkoApp]: https://github.com/whiskyechobravo/kerkoapp
 [nginx]: https://nginx.org/en/docs/
 [WSGI servers]: https://flask.palletsprojects.com/en/latest/deploying/
+[XML Sitemap]: https://www.sitemaps.org/
+[Zutilo]: https://github.com/willsALMANJ/Zutilo

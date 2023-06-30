@@ -6,13 +6,13 @@ nav:
   - synchronization.md
   - config-basics.md
   - config-params.md
+  - config-guides.md
   - localization.md
   - deployment.md
-  - recipes.md
   - troubleshooting.md
   - contributing.md
-  - about.md
   - changelog.md
+  - about.md
 
 theme:
   name: material
