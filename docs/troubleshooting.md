@@ -40,13 +40,6 @@ warnings. Some parameters require a rebuild of the cache or the search index to
 become effective.
 
 
-## KerkoApp: Errors when using the `main` version of Kerko
-
-The `main` branch of KerkoApp is meant to work with the latest published release
-of Kerko. If you have installed the `main` version of Kerko instead its latest
-published release, use the `development` branch of KerkoApp instead of `main`.
-
-
 ## Custom application: Conflicting package versions with standard installation
 
 The `requirements/run.txt` file specifies a precise version for each required

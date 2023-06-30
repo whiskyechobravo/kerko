@@ -19,11 +19,15 @@ installation will suit you best.
 This procedure requires that you have [Python], [pip], and [Git] installed on
 your computer.
 
-1. The first step is to install the software. Use the following commands:
+1. The first step is to install the desired version of KerkoApp. You may check
+   the list of [available versions][KerkoApp versions], but make sure to choose
+   one that matches the documentation version you are currently reading. For
+   version 1.0.0, for example, replace `VERSION` with `1.0.0` in the commands
+   below:
 
     === "POSIX"
         ```bash
-        git clone https://github.com/whiskyechobravo/kerkoapp.git
+        git clone --depth 1 --branch VERSION https://github.com/whiskyechobravo/kerkoapp.git
         cd kerkoapp
         python -m venv venv
         source venv/bin/activate
@@ -32,7 +36,7 @@ your computer.
 
     === "Windows"
         ```
-        git clone https://github.com/whiskyechobravo/kerkoapp.git
+        git clone --depth 1 --branch VERSION https://github.com/whiskyechobravo/kerkoapp.git
         cd kerkoapp
         python -m venv venv
         venv\Scripts\activate.bat
@@ -392,6 +396,7 @@ files, translations loading, a syslog logging handler, and error pages.
 [Git]: https://git-scm.com/
 [Kerko]: https://github.com/whiskyechobravo/kerko
 [KerkoApp]: https://github.com/whiskyechobravo/kerkoapp
+[KerkoApp versions]: https://github.com/whiskyechobravo/kerkoapp/tags
 [KerkoStart]: https://github.com/whiskyechobravo/kerkostart
 [pip]: https://pip.pypa.io/
 [Python]: https://www.python.org/

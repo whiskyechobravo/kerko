@@ -12,7 +12,7 @@ value if omitted from your configuration.
     configuration parameters that are not described in this manual. To find
     those, please refer to the documentation of the relevant package.
 
-!!! warning "Changing configuration can be disruptive"
+!!! warning "Changing the configuration can be disruptive"
 
     Making any change to a configuration file requires that you at least restart
     the application afterwards for the change to become effective.
