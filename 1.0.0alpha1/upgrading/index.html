@@ -9,13 +9,17 @@
       
       
       
+        <link rel="prev" href="../deploying/">
+      
+      
+        <link rel="next" href="../changelog/">
       
       <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.17">
     
     
       
-        <title>Upgrading - Kerko</title>
+        <title>How to upgrade - Kerko</title>
       
     
     
@@ -67,7 +71,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#upgrading" class="md-skip">
+        <a href="#how-to-upgrade" class="md-skip">
           Skip to content
         </a>
       
@@ -106,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Upgrading
+              How to upgrade
             
           </span>
         </div>
@@ -334,36 +338,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../localization/" class="md-nav__link">
-        Localization
-      </a>
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../deployment/" class="md-nav__link">
-        Deployment
-      </a>
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../troubleshooting/" class="md-nav__link">
         Troubleshooting
       </a>
@@ -379,9 +353,107 @@
   
   
     <li class="md-nav__item">
-      <a href="../contributing/" class="md-nav__link">
-        Contributing
+      <a href="../localization/" class="md-nav__link">
+        Localization
       </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deploying/" class="md-nav__link">
+        How to deploy
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          How to upgrade
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        How to upgrade
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#upgrading-from-09-to-10x" class="md-nav__link">
+    Upgrading from 0.9 to 1.0.x
+  </a>
+  
+    <nav class="md-nav" aria-label="Upgrading from 0.9 to 1.0.x">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kerkoapp" class="md-nav__link">
+    KerkoApp
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-templates" class="md-nav__link">
+    Custom templates
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-applications" class="md-nav__link">
+    Custom applications
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -396,6 +468,21 @@
     <li class="md-nav__item">
       <a href="../changelog/" class="md-nav__link">
         Changelog
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/" class="md-nav__link">
+        Contributing
       </a>
     </li>
   
@@ -436,6 +523,48 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#upgrading-from-09-to-10x" class="md-nav__link">
+    Upgrading from 0.9 to 1.0.x
+  </a>
+  
+    <nav class="md-nav" aria-label="Upgrading from 0.9 to 1.0.x">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kerkoapp" class="md-nav__link">
+    KerkoApp
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-templates" class="md-nav__link">
+    Custom templates
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-applications" class="md-nav__link">
+    Custom applications
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -465,7 +594,187 @@
   
 
 
-<h1 id="upgrading">Upgrading<a class="headerlink" href="#upgrading" title="Permanent link">&para;</a></h1>
+<h1 id="how-to-upgrade">How to upgrade<a class="headerlink" href="#how-to-upgrade" title="Permanent link">&para;</a></h1>
+<h2 id="upgrading-from-09-to-10x">Upgrading from 0.9 to 1.0.x<a class="headerlink" href="#upgrading-from-09-to-10x" title="Permanent link">&para;</a></h2>
+<p>Version 1.0.x brings significant changes on how Kerko can be configured. Before
+you attempt an upgrade, reading <a href="../config-basics/">Configuration basics</a> is a
+must.</p>
+<h3 id="kerkoapp">KerkoApp<a class="headerlink" href="#kerkoapp" title="Permanent link">&para;</a></h3>
+<p>The instructions below make the assumption that you have cloned KerkoApp from
+its Git repository.</p>
+<ul>
+<li>Go to the KerkoApp directory.</li>
+<li>
+<p>Rename the default branch of your local KerkoApp repository:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>branch<span class="w"> </span>-m<span class="w"> </span>master<span class="w"> </span>main
+git<span class="w"> </span>fetch<span class="w"> </span>origin
+git<span class="w"> </span>branch<span class="w"> </span>-u<span class="w"> </span>origin/main<span class="w"> </span>main
+git<span class="w"> </span>remote<span class="w"> </span>set-head<span class="w"> </span>origin<span class="w"> </span>-a
+</code></pre></div>
+</li>
+<li>
+<p>Get the desired version of KerkoApp. You may check the list of <a href="https://github.com/whiskyechobravo/kerkoapp/tags">available
+  versions</a>. For version 1.0.0, for example, replace
+  <code>VERSION</code> with <code>1.0.0</code> in the command below:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>checkout<span class="w"> </span>VERSION
+</code></pre></div>
+</li>
+<li>
+<p>Activate your Python <a href="https://docs.python.org/3.11/tutorial/venv.html">virtual environment</a>.</p>
+</li>
+<li>
+<p>Install Python dependencies:</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>--force-reinstall<span class="w"> </span>-r<span class="w"> </span>requirements/run.txt
+</code></pre></div>
+</li>
+<li>
+<p>Rename the <code>.env</code> file to <code>dotenv.old</code>. We no longer want KerkoApp to use that
+  file, but it might be useful to keep it as reference while we migrate the
+  configuration.</p>
+</li>
+<li>Create two files, <code>.secrets.toml</code> and <code>config.toml</code>, in the KerkoApp directory
+  (where <code>wsgi.py</code> is found).</li>
+<li>For each parameter from <code>dotenv.old</code>, copy it to <code>.secrets.toml</code> or
+  <code>config.toml</code>. If the parameter is <code>SECRET_KEY</code> or <code>ZOTERO_API_KEY</code>, it is
+  recommended to put it into <code>.secrets.toml</code>, otherwise it probably belongs to
+  <code>config.toml</code>.</li>
+<li>For each parameter, use the list below to determine if something special needs
+  to be done to migrate it. Almost all configuration parameters have been
+  renamed and/or moved into a hierarchical structure. Check the parameter values
+  too as the syntax of a TOML file is slightly different from that of a <code>.env</code>
+  file, e.g., string values must be surrounded by double quotes (<code>"</code>), booleans
+  values must be either <code>true</code> or <code>false</code> (lowercase, no quotes). Refer to the
+  <a href="../config-params/">parameters documentation</a> for additional information, and
+  have a look at the <code>sample.secrets.toml</code> and <code>sample.config.toml</code> files
+  provided by KerkoApp.<ul>
+<li><code>DEBUG</code>: Removed. Debug mode is now activated with the <code>--debug</code> command
+  line option.</li>
+<li><code>FLASK_APP</code>: Probably not needed anymore. In doubt, please refer to the
+  Flask documentation on <a href="https://flask.palletsprojects.com/en/2.3.x/cli/#application-discovery">application
+  discovery</a>.
+  If you do need this variable, then a <code>.env</code> file could be the right place.
+  It will not work from a TOML file. Note also that the application is now
+  referenced as <code>wsgi.app</code> instead of <code>kerkoapp.app</code>.</li>
+<li><code>FLASK_ENV</code>: Removed. Flask 2.3 stopped supporting it. Debug mode is now
+  activated with the <code>--debug</code> command line option.</li>
+<li><code>KERKO_BOOTSTRAP_VERSION</code> → <code>kerko.assets.bootstrap_version</code></li>
+<li><code>KERKO_CSL_STYLE</code> → <code>kerko.zotero.csl_style</code></li>
+<li><code>KERKO_COMPOSER</code> → <code>kerko_composer</code></li>
+<li><code>KERKO_DATA_DIR</code> → <code>DATA_PATH</code>. Now optional, relative to the instance
+  path, and defaulting to <code>kerko</code> instead of <code>data/kerko</code>.</li>
+<li><code>KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW</code> → <code>kerko.features.download_attachment_new_window</code></li>
+<li><code>KERKO_DOWNLOAD_CITATIONS_LINK</code> → <code>kerko.features.download_results_link</code></li>
+<li><code>KERKO_DOWNLOAD_CITATIONS_MAX_COUNT</code> → <code>kerko.features.download_results_max_count</code></li>
+<li><code>KERKO_FEEDS</code> → <code>kerko.feeds.formats</code></li>
+<li><code>KERKO_FEEDS_FIELDS</code> → <code>kerko.feeds.fields</code></li>
+<li><code>KERKO_FEEDS_MAX_DAYS</code> → <code>kerko.feeds.max_days</code></li>
+<li><code>KERKO_FEEDS_REJECT_ANY</code> → <code>kerko.feeds.reject_any</code></li>
+<li><code>KERKO_FEEDS_REQUIRE_ANY</code> → <code>kerko.feeds.require_any</code></li>
+<li><code>KERKO_FULLTEXT_SEARCH</code> → <code>kerko.search.fulltext</code></li>
+<li><code>KERKO_HIGHWIREPRESS_TAGS</code> → <code>kerko.meta.highwirepress_tags</code></li>
+<li><code>KERKO_JQUERY_VERSION</code> → <code>kerko.assets.jquery_version</code></li>
+<li><code>KERKO_PAGE_LEN</code> → <code>kerko.pagination.page_len</code></li>
+<li><code>KERKO_PAGER_LINKS</code> → <code>kerko.pagination.pager_links</code></li>
+<li><code>KERKO_POPPER_VERSION</code> → <code>kerko.assets.popper_version</code></li>
+<li><code>KERKO_PRINT_CITATIONS_LINK</code> → <code>kerko.features.print_results_link</code></li>
+<li><code>KERKO_PRINT_CITATIONS_MAX_COUNT</code> → <code>kerko.features.print_results_max_count</code></li>
+<li><code>KERKO_PRINT_ITEM_LINK</code> → <code>kerko.features.print_item_link</code></li>
+<li><code>KERKO_RELATIONS_INITIAL_LIMIT</code> → <code>kerko.features.relations_initial_limit</code></li>
+<li><code>KERKO_RELATIONS_LINKS</code> → <code>kerko.features.relations_links</code></li>
+<li><code>KERKO_RELATIONS_SORT</code> → <code>kerko.features.relations_sort</code></li>
+<li><code>KERKO_RESULTS_ABSTRACTS_MAX_LENGTH</code> → <code>kerko.features.results_abstracts_max_length</code></li>
+<li><code>KERKO_RESULTS_ABSTRACTS_MAX_LENGTH_LEEWAY</code> → <code>kerko.features.results_abstracts_max_length_leeway</code></li>
+<li><code>KERKO_RESULTS_ABSTRACTS</code> → <code>kerko.features.results_abstracts</code></li>
+<li><code>KERKO_RESULTS_ABSTRACTS_TOGGLER</code> → <code>kerko.features.results_abstracts_toggler</code></li>
+<li><code>KERKO_RESULTS_ATTACHMENT_LINKS</code> → <code>kerko.features.results_attachment_links</code></li>
+<li><code>KERKO_RESULTS_FIELDS</code> → <code>kerko.search.result_fields</code></li>
+<li><code>KERKO_RESULTS_URL_LINKS</code> → <code>kerko.features.results_url_links</code></li>
+<li><code>KERKO_TEMPLATE_ATOM_FEED</code> → <code>kerko.templates.atom_feed</code></li>
+<li><code>KERKO_TEMPLATE_BASE</code> → <code>kerko.templates.base</code></li>
+<li><code>KERKO_TEMPLATE_ITEM</code> → <code>kerko.templates.item</code></li>
+<li><code>KERKO_TEMPLATE_LAYOUT</code> → <code>kerko.templates.layout</code></li>
+<li><code>KERKO_TEMPLATE_SEARCH</code> → <code>kerko.templates.search</code></li>
+<li><code>KERKO_TEMPLATE_SEARCH_ITEM</code> → <code>kerko.templates.search_item</code></li>
+<li><code>KERKO_TITLE</code> → <code>kerko.meta.title</code></li>
+<li><code>KERKO_USE_TRANSLATIONS</code>: Removed.</li>
+<li><code>KERKO_WHOOSH_LANGUAGE</code> → <code>kerko.search.whoosh_language</code></li>
+<li><code>KERKO_WITH_JQUERY</code> → <code>kerko.assets.with_jquery</code></li>
+<li><code>KERKO_WITH_POPPER</code> → <code>kerko.assets.with_popper</code></li>
+<li><code>KERKO_ZOTERO_API_KEY</code> → <code>ZOTERO_API_KEY</code></li>
+<li><code>KERKO_ZOTERO_BATCH_SIZE</code> → <code>kerko.zotero.batch_size</code></li>
+<li><code>KERKO_ZOTERO_LIBRARY_ID</code> → <code>ZOTERO_LIBRARY_ID</code></li>
+<li><code>KERKO_ZOTERO_LIBRARY_TYPE</code> → <code>ZOTERO_LIBRARY_TYPE</code></li>
+<li><code>KERKO_ZOTERO_LOCALE</code> → <code>kerko.zotero.locale</code></li>
+<li><code>KERKO_ZOTERO_MAX_ATTEMPTS</code> → <code>kerko.zotero.max_attempts</code></li>
+<li><code>KERKO_ZOTERO_WAIT</code> → <code>kerko.zotero.wait</code></li>
+<li><code>KERKOAPP_CHILD_EXCLUDE_RE</code> → <code>kerko.zotero.child_exclude_re</code></li>
+<li><code>KERKOAPP_CHILD_INCLUDE_RE</code> → <code>kerko.zotero.child_include_re</code></li>
+<li><code>KERKOAPP_COLLECTION_FACETS</code> → <code>kerko.facets.*</code>. See sub-parameters <code>type</code>
+  (set it to <code>"collection"</code>), <code>collection_key</code>, and <code>title</code>.</li>
+<li><code>KERKOAPP_EXCLUDE_DEFAULT_BADGES</code>: Removed, with no replacement since
+  Kerko does not provide any default badges at this point.</li>
+<li><code>KERKOAPP_EXCLUDE_DEFAULT_CITATION_FORMATS</code> → <code>kerko.citation_formats.*</code>.
+  See sub-parameter <code>enable</code>.</li>
+<li><code>KERKOAPP_EXCLUDE_DEFAULT_FACETS</code> → <code>kerko.facets.*</code>. See sub-parameter
+  <code>enable</code>.</li>
+<li><code>KERKOAPP_EXCLUDE_DEFAULT_FIELDS</code> → <code>kerko.search_fields.*</code>. See
+  sub-parameter <code>enable</code>.</li>
+<li><code>KERKOAPP_EXCLUDE_DEFAULT_SCOPES</code> → <code>kerko.scopes.*</code>. See sub-parameter
+  <code>enable</code>.</li>
+<li><code>KERKOAPP_EXCLUDE_DEFAULT_SORTS</code> → <code>kerko.sorts.*</code>. See sub-parameter
+  <code>enable</code>.</li>
+<li><code>KERKOAPP_FACET_INITIAL_LIMIT_LEEWAY</code> →
+  <code>kerko.facets.*.initial_limit_leeway</code>. This is now set individually for
+  each facet, and there is no longer a global parameter.</li>
+<li><code>KERKOAPP_FACET_INITIAL_LIMIT</code> → <code>kerko.facets.*.initial_limit</code>. This is
+  now set individually for each facet, and there is no longer a global
+  parameter.</li>
+<li><code>KERKOAPP_ITEM_EXCLUDE_RE</code> → <code>kerko.zotero.item_exclude_re</code></li>
+<li><code>KERKOAPP_ITEM_INCLUDE_RE</code> → <code>kerko.zotero.item_include_re</code></li>
+<li><code>KERKOAPP_MIME_TYPES</code> → <code>kerko.zotero.attachment_mime_types</code></li>
+<li><code>KERKOAPP_TAG_EXCLUDE_RE</code> → <code>kerko.zotero.tag_exclude_re</code></li>
+<li><code>KERKOAPP_TAG_INCLUDE_RE</code> → <code>kerko.zotero.tag_include_re</code></li>
+<li><code>PROXY_FIX</code> → <code>kerkoapp.proxy_fix.*</code></li>
+</ul>
+</li>
+<li>If your configuration changes neither the <code>DATA_PATH</code> nor the <code>INSTANCE_PATH</code>
+  parameters, then rename KerkoApp's <code>data</code> directory to <code>instance</code>.</li>
+<li>If you are running the application under a WSGI server, make sure it is now
+  referenced as <code>wsgi.app</code> (or <code>wsgi:app</code>) instead of <code>kerkoapp.app</code> (or
+  <code>kerkoapp:app</code>).</li>
+<li>
+<p>Rebuild your search index using the following commands, then restart the
+  application:</p>
+<div class="highlight"><pre><span></span><code>flask<span class="w"> </span>kerko<span class="w"> </span>clean<span class="w"> </span>index
+flask<span class="w"> </span>kerko<span class="w"> </span>sync<span class="w"> </span>index
+</code></pre></div>
+</li>
+</ul>
+<h3 id="custom-templates">Custom templates<a class="headerlink" href="#custom-templates" title="Permanent link">&para;</a></h3>
+<p>Occurrences of parameter names in custom templates will need to be edited. For
+example:</p>
+<ul>
+<li><code>config.KERKO_COMPOSER</code> → <code>config.kerko_composer</code></li>
+<li><code>config.KERKO_TITLE</code> → <code>config.kerko.meta.title</code></li>
+<li>... for the full list, please refer to the above section.</li>
+</ul>
+<p>The following item fields have been renamed. Occurrences of these in your
+templates will need to be edited:</p>
+<ul>
+<li><code>z_dateAdded</code> → <code>date_added</code></li>
+<li><code>z_dateModified</code> → <code>date_modified</code></li>
+</ul>
+<p>The following views have been renamed. Occurrences of these in your templates (perhaps in calls to <code>url_for</code>) will need to be edited:</p>
+<ul>
+<li><code>item_citation_download</code> → <code>item_bib_download</code></li>
+<li><code>search_citation_download</code> → <code>search_bib_download</code></li>
+</ul>
+<h3 id="custom-applications">Custom applications<a class="headerlink" href="#custom-applications" title="Permanent link">&para;</a></h3>
+<p>Configuration initialization and loading has greatly changed. If you have a
+custom application, it will need to be adapted even if you do not plan to use
+TOML files. See <a href="../getting-started/#creating-a-custom-application">Creating a custom
+application</a> for a working
+example, and refer to the <a href="../changelog/">changelog</a> for other breaking changes.</p>
 
 
 
@@ -487,6 +796,42 @@
       
         <footer class="md-footer">
   
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../deploying/" class="md-footer__link md-footer__link--prev" aria-label="Previous: How to deploy" rel="prev">
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                How to deploy
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../changelog/" class="md-footer__link md-footer__link--next" aria-label="Next: Changelog" rel="next">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Changelog
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
     
   
   <div class="md-footer-meta md-typeset">
