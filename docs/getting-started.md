@@ -27,7 +27,7 @@ your computer.
 
     === "POSIX"
         ```bash
-        git clone --depth 1 --branch VERSION https://github.com/whiskyechobravo/kerkoapp.git
+        git clone --branch VERSION https://github.com/whiskyechobravo/kerkoapp.git
         cd kerkoapp
         python -m venv venv
         source venv/bin/activate
@@ -36,7 +36,7 @@ your computer.
 
     === "Windows"
         ```
-        git clone --depth 1 --branch VERSION https://github.com/whiskyechobravo/kerkoapp.git
+        git clone --branch VERSION https://github.com/whiskyechobravo/kerkoapp.git
         cd kerkoapp
         python -m venv venv
         venv\Scripts\activate.bat

@@ -39,7 +39,7 @@ use version 1.0.0, for example, replace `VERSION` in the command below with
 
 ```bash
 sudo su kerkoapp
-git clone --depth 1 --branch VERSION https://github.com/whiskyechobravo/kerkoapp.git ~/kerkoapp
+git clone --branch VERSION https://github.com/whiskyechobravo/kerkoapp.git ~/kerkoapp
 ```
 
 Still as user `kerkoapp`, create a Python virtual environment and install the
