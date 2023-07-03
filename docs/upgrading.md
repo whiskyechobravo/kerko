@@ -155,6 +155,9 @@ its Git repository.
     flask kerko sync index
     ```
 
+- Restart the application.
+
+
 ### Custom templates
 
 Occurrences of parameter names in custom templates will need to be edited. For

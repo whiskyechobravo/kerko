@@ -239,7 +239,7 @@ The main ones are:
 - [Flask-Babel]: integration of Flask and Babel.
 - [Flask-WTF]: integration of Flask and WTForms.
 - [Jinja2]: template engine.
-- [Pydantic]: configuration validation.
+- [Pydantic]: configuration parsing and validation.
 - [Pyzotero]: Python client for the Zotero API.
 - [w3lib]: URL and HTML manipulation utilities.
 - [Werkzeug]: WSGI web application library (also required by Flask).

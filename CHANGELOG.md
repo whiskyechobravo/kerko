@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+Changes:
+
+- Improve documentation.
+
+
 ## 1.0.0alpha1 (2023-06-29)
 
 Features:
