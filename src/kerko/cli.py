@@ -1,5 +1,6 @@
 import pprint
 from datetime import datetime
+from typing import Any
 
 import click
 import tomli_w
@@ -136,20 +137,39 @@ def config(show_secrets=False):
     Note that unset parameters and parameters that internally have 'None' values
     will be omitted because such values cannot be represented in TOML files.
     """
-    def copy_serializable(src: dict) -> dict:
-        dst = {}
-        for k, v in sorted(src.items()):
-            if isinstance(v, dict):
-                dst_v = copy_serializable(v)
-                if dst_v is not None:
-                    dst[k] = dst_v
-            elif is_toml_serializable(v):
-                if not show_secrets and k in ['SECRET_KEY', 'ZOTERO_API_KEY']:
-                    v = "*****"
-                dst[k] = v
-        return dst
+
+    def hide_secrets(d: dict):
+        for k in d.keys():
+            if k in ['SECRET_KEY', 'ZOTERO_API_KEY'] or k.find('PASSWORD') >= 0:
+                d[k] = "*****"
+
+    def copy_serializable(obj: Any) -> Any:
+        """
+        Copy the object, with some twists.
+
+        - Filter values that cannot be serialized as TOML.
+        - Sort dicts by key.
+        """
+        if isinstance(obj, dict):
+            new_dict = {}
+            for k, v in sorted(obj.items()):
+                new_v = copy_serializable(v)
+                if new_v is not None:
+                    new_dict[k] = new_v
+            return new_dict
+        elif isinstance(obj, list):
+            new_list = []
+            for v in obj:
+                new_v = copy_serializable(v)
+                if new_v is not None:
+                    new_list.append(new_v)
+            return new_list
+        elif is_toml_serializable(obj):
+            return obj
 
     serializable_config = copy_serializable(current_app.config)
+    if not show_secrets:
+        hide_secrets(serializable_config)
     click.echo(tomli_w.dumps(serializable_config))
 
 
