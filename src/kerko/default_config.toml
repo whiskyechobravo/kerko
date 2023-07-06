@@ -838,3 +838,10 @@ whoosh_language = "en"
     [kerko.relations.related]
     enabled = true
     weight = 20
+
+[kerko.link_groups.navbar]
+
+    [[kerko.link_groups.navbar.links]]
+    type = "endpoint"
+    label = "Bibliography"
+    endpoint = "kerko.search"

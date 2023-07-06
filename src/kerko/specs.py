@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
+from typing import Any, Optional
 
 from babel.numbers import format_decimal
-from flask import url_for
+from flask import Request, url_for
 from flask_babel import get_locale
+from w3lib.url import safe_url_string
 from werkzeug.datastructures import MultiDict
 from whoosh.fields import ID
 from whoosh.query import Prefix, Term
@@ -756,3 +758,76 @@ class BadgeSpec:
         if self.is_active(item):
             return self.renderer.render(field=self.field, item=item, mode=mode)
         return ''
+
+
+class LinkSpec(ABC):
+
+    def __init__(self, *, label: str, new_window=False, weight=0):
+        self.label = label
+        self.new_window = new_window
+        self.weight = weight
+
+    def is_active(self, request: Request) -> bool:  # pylint: disable=unused-argument
+        return False
+
+    @property
+    @abstractmethod
+    def url(self) -> str:
+        pass
+
+
+class LinkByURLSpec(LinkSpec):
+
+    def __init__(self, *, url: str, **kwargs):
+        super().__init__(**kwargs)
+        self._url = url
+
+    @property
+    def url(self) -> str:
+        return safe_url_string(self._url)
+
+
+class LinkByEndpointSpec(LinkSpec):
+
+    def __init__(
+        self,
+        *,
+        endpoint: str,
+        external: bool = False,
+        anchor: Optional[str] = None,
+        scheme: Optional[str] = None,
+        parameters: Optional[dict[str, Any]] = None,
+        **kwargs,
+    ):
+        super().__init__(**kwargs)
+        self.endpoint = endpoint
+        self.external = external
+        self.anchor = anchor or None  # Replace empty string with None.
+        self.scheme = scheme or None  # Replace empty string with None.
+        self.parameters = parameters or {}
+
+    def is_active(self, request: Request) -> bool:
+        return request.endpoint == self.endpoint
+
+    @property
+    def url(self) -> str:
+        return url_for(
+            self.endpoint,
+            _anchor=self.anchor,
+            _scheme=self.scheme,
+            _external=self.external,
+            **self.parameters,
+        )
+
+
+class LinkGroupSpec:
+
+    def __init__(self, key: str, links: Optional[list[LinkSpec]] = None):
+        self.key = key
+        self.links = links or []
+
+    def add_item(self, item: LinkSpec):
+        self.links.append(item)
+
+    def get_ordered_links(self) -> list[LinkSpec]:
+        return sorted(self.links, key=lambda spec: spec.weight)

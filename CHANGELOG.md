@@ -2,7 +2,21 @@
 
 ## Unreleased
 
-Changes:
+Features:
+
+- Add new configuration parameters `kerko.link_groups.*.` for defining sets of
+  links that may be used for things like navigation.
+
+Backwards incompatible changes:
+
+- Items from the default navigation bar are now based on the default
+  `kerko.link_groups.navbar` configuration. There is no default translation for
+  it. To change the default label or to translate it, you must override the
+  default `kerko.link_groups.navbar` in your configuration file. If you have
+  overridden the `_navbar_items.html.jinja2` template and wish to use the link
+  group configuration, you might want to adapt it.
+
+Other changes:
 
 - Improve documentation.
 

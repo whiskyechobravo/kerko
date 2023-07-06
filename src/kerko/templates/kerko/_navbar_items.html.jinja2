@@ -1,4 +1,5 @@
-{%- set in_bibliography = (request.endpoint == 'kerko.search') %}
-<li class="nav-item {% if in_bibliography %}active{% endif %}">
-    <a class="nav-link" href="{{ url_for('kerko.search') }}" {% if in_bibliography %}aria-current="true"{% endif %}>{{ _('Bibliography') }}</a>
-</li>
+{% for item in config.kerko_composer.link_groups.navbar.get_ordered_links() %}
+    <li class="nav-item {% if item.is_active(request) %}active{% endif %}">
+        <a class="nav-link" href="{{ item.url }}" {% if item.new_window %}target="_blank"{% endif %}>{{ item.label }}</a>
+    </li>
+{% endfor %}

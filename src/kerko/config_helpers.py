@@ -1,5 +1,5 @@
-import abc
 import pathlib
+from abc import ABC, abstractmethod
 from datetime import date, datetime, time
 from decimal import Decimal
 from typing import Any, Dict, List, Optional, Type, Union
@@ -16,7 +16,10 @@ import whoosh
 from flask import Config
 from pydantic import (BaseModel,  # pylint: disable=no-name-in-module
                       ConstrainedStr, Extra, Field, NonNegativeInt,
-                      ValidationError, validator)
+                      ValidationError, root_validator, validator)
+
+from kerko.specs import (LinkByEndpointSpec, LinkByURLSpec, LinkGroupSpec,
+                         LinkSpec)
 
 # pylint: disable=too-few-public-methods
 
@@ -228,7 +231,7 @@ class SearchFieldsModel(BaseModel):
     zotero: Dict[FieldNameStr, ZoteroFieldModel]
 
 
-class BaseFacetModel(BaseModel, abc.ABC):
+class BaseFacetModel(BaseModel, ABC):
     """Base model for the kerko.facets config table."""
 
     class Config:
@@ -251,24 +254,28 @@ class TagFacetModel(BaseFacetModel):
 
 
 class ItemTypeFacetModel(BaseFacetModel):
+
     type: Literal["item_type"]
     title: Optional[str]
     item_view: bool = False
 
 
 class YearFacetModel(BaseFacetModel):
+
     type: Literal["year"]
     title: Optional[str]
     item_view: bool = False
 
 
 class LinkFacetModel(BaseFacetModel):
+
     type: Literal["link"]
     title: Optional[str]
     item_view: bool = False
 
 
 class CollectionFacetModel(BaseFacetModel):
+
     type: Literal["collection"]
     title: str
     collection_key: str = Field(regex=r'^[A-Z0-9]{8}$')
@@ -325,6 +332,96 @@ class RelationsModel(BaseModel):
     label: Optional[str]
 
 
+class LinkModel(BaseModel, ABC):
+
+    class Config:
+        extra = Extra.forbid
+
+    label: str
+    weight: int = 0
+    new_window: bool = False
+
+    @abstractmethod
+    def to_spec(self) -> LinkSpec:
+        pass
+
+
+class LinkByEndpointModel(LinkModel):
+    """Model for endpoint items under the kerko.link_groups config table."""
+
+    type: Literal["endpoint"]
+    endpoint: str
+    anchor: Optional[str]
+    scheme: Optional[str]
+    external: bool = False
+    parameters: Optional[Dict[SlugStr, Any]]
+
+    @root_validator
+    def validate_scheme(cls, values):  # pylint: disable=no-self-argument
+        if values.get('scheme') and not values.get('external'):
+            raise ValueError(f"When specifying 'scheme', 'external' must be true.")
+        return values
+
+    def to_spec(self) -> LinkSpec:
+        return LinkByEndpointSpec(
+            label=self.label,
+            weight=self.weight,
+            new_window=self.new_window,
+            endpoint=self.endpoint,
+            anchor=self.anchor,
+            scheme=self.scheme,
+            external=self.external,
+            parameters=self.parameters,
+        )
+
+
+class LinkByURLModel(LinkModel):
+    """Model for URL items under the kerko.link_groups config table."""
+
+    type: Literal["url"]
+    url: str  # TODO: Validate as URL string
+
+    def to_spec(self) -> LinkSpec:
+        return LinkByURLSpec(
+            label=self.label,
+            weight=self.weight,
+            new_window=self.new_window,
+            url=self.url,
+        )
+
+
+LinkModelUnion = Annotated[
+    Union[
+        LinkByEndpointModel,
+        LinkByURLModel,
+    ], Field(discriminator='type')
+]
+
+
+class LinkGroupModel(BaseModel):
+
+    class Config:
+        extra = Extra.forbid
+
+    links: list[LinkModelUnion] = Field(min_items=1)
+
+    def to_spec(self, menu_key: str) -> LinkGroupSpec:
+        return LinkGroupSpec(
+            key=menu_key,
+            links=[item.to_spec() for item in self.links],
+        )
+
+
+class LinkGroupsModel(BaseModel):  # TODO: Pydantic v2: inherit RootModel.
+    __root__: Dict[SlugStr, LinkGroupModel]
+
+    def to_spec(self) -> Dict[str, LinkGroupSpec]:
+        return {
+            menu_key: menu_model.to_spec(menu_key)
+            for menu_key, menu_model in self.__root__.items()
+        }
+
+
 class KerkoModel(BaseModel):
     """Model for the kerko config table."""
 
@@ -345,6 +442,7 @@ class KerkoModel(BaseModel):
     sorts: Dict[SlugStr, SortsModel]
     bib_formats: Dict[SlugStr, BibFormatsModel]
     relations: Dict[ElementIdStr, RelationsModel]
+    link_groups: LinkGroupsModel
 
 
 class ConfigModel(BaseModel):
@@ -418,23 +516,32 @@ def parse_config(
     """
     Parse and validate configuration using `model`.
 
-    Parameter values get replaced by parsed ones. Values may thus get silently
-    coerced into the types specified by the model (unless strict typing is
-    enforced by the model, in which case an error will be raised).
+    Configuration values in the `config` object get replaced by validated ones.
+    Values may thus get silently coerced into the types specified by the model
+    (unless strict typing is enforced by the model, in which case an error will
+    be raised).
+
+    This function also inserts a parsed representation of the configuration
+    under key 'kerko_config'.
 
     If `key` is `None`, then the whole configuration gets parsed with the given
     `model`. Otherwise only the structure at the specified `key` gets parsed.
 
-    If `key` does not exists in the config, parsing is silently skipped.
+    If `key` is not `None` but is absent from the config, parsing is silently
+    skipped.
     """
     try:
         if key is None:
-            config.update(model.parse_obj(config).dict())
+            parsed = model.parse_obj(config)
+            config.update(parsed.dict())
+            config['kerko_config'] = parsed
         elif config.get(key):
             # The parsed models are stored in the config as dicts. This way, the
             # whole configuration structure is made of dicts only, allowing
             # consistent access for any element at any depth.
-            config_set(config, key, model.parse_obj(config[key]).dict())
+            parsed = model.parse_obj(config[key])
+            config_set(config, key, parsed.dict())
+            config[f'kerko_config.{key}'] = parsed
     except ValidationError as e:
         raise RuntimeError(f"Invalid configuration. {e}") from e
 

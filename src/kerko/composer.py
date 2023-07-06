@@ -14,8 +14,8 @@ from kerko import codecs, extractors, transformers
 from kerko.config_helpers import config_get
 from kerko.datetime import iso_to_datetime, iso_to_timestamp
 from kerko.specs import (BadgeSpec, BibFormatSpec, CollectionFacetSpec,
-                         FacetSpec, FieldSpec, FlatFacetSpec, RelationSpec,
-                         ScopeSpec, SortSpec, TreeFacetSpec)
+                         FacetSpec, FieldSpec, FlatFacetSpec, LinkGroupSpec,
+                         RelationSpec, ScopeSpec, SortSpec, TreeFacetSpec)
 
 
 class Composer:
@@ -72,12 +72,14 @@ class Composer:
         self.bib_formats: Dict[str, BibFormatSpec] = {}
         self.relations: Dict[str, RelationSpec] = {}
         self.badges: Dict[str, BadgeSpec] = {}
+        self.link_groups: Dict[str, LinkGroupSpec] = {}
         self.init_scopes(config)
         self.init_fields(config)
         self.init_facets(config)
         self.init_sorts(config)
         self.init_bib_formats(config)
         self.init_relations(config)
+        self.init_link_groups(config)
 
     def init_scopes(self, config: Config) -> None:
         """
@@ -435,8 +437,8 @@ class Composer:
         # Optional searchable fields from Zotero items (configurable).
         #
 
-        # Our field names are prefixed with 'z_' to prevent clashes should
-        # Zotero's schema change.
+        # Those field names are prefixed with 'z_' in the search schema to
+        # prevent clashes with other fields should Zotero's schema change.
         zotero_fields_dict = config_get(config, 'kerko.search_fields.zotero')
         for field_key, field_config in zotero_fields_dict.items():
             if field_config['enabled']:
@@ -549,6 +551,7 @@ class Composer:
         Initialize a set of `FacetSpec` instances using config settings.
         """
         # Note: Default titles are defined here rather than in config so that they are translatable.
+        # TODO: Refactor most of this as factory methods in the models, as done for link_groups.
         facets_dict = config_get(config, 'kerko.facets')
         for facet_key, facet_config in facets_dict.items():
             if facet_config['enabled']:
@@ -810,6 +813,9 @@ class Composer:
                         )
                     )
 
+    def init_link_groups(self, config: Config) -> None:
+        self.link_groups = config['kerko_config'].kerko.link_groups.to_spec()
+
     def add_scope(self, scope):
         self.scopes[scope.key] = scope
 
@@ -867,6 +873,12 @@ class Composer:
 
     def remove_relation(self, key):
         del self.relations[key]
+
+    def add_link_group(self, key: str, link_group: LinkGroupSpec):
+        self.link_groups[key] = link_group
+
+    def remove_link_group(self, key: str):
+        del self.link_groups[key]
 
     def get_ordered_specs(self, attr):
         """

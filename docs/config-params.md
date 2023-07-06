@@ -341,6 +341,8 @@ Allowed values are:
 - `"tag"`: Use Zotero tags as source.
 - `"year"`: Use the item year field as source.
 
+This parameter is **required** and has no default value.
+
 Type: String
 
 ### `weight`
@@ -356,7 +358,7 @@ Type: Integer
 
 ### `download_attachment_new_window`
 
-Open attachments in new windows. In other words: add the HTML `target="_blank"`
+Open attachments in new tabs. In other words: add the HTML `target="_blank"`
 attribute to attachment links.
 
 Type: Boolean <br>
@@ -538,6 +540,123 @@ last day of the month.
 
 Type: Integer <br>
 Default value: `0` (i.e., no age limit)
+
+---
+
+## `kerko.link_groups.*.links.`
+
+Link groups, where `*` is an arbitrary key used for identifying each group. Each
+group has a `links` parameter, which must contain at least one hyperlink defined
+using sub-parameters.
+
+Link groups can be used for navigation or anywhere hyperlinks are needed.
+Templates can use the key to retrieve a desired link group.
+
+Kerko provides a default `navbar` link group. In TOML format, it is defined as
+below (the double brackets indicate a list item):
+
+```toml
+[[kerko.link_groups.navbar.links]]
+type = "endpoint"
+endpoint = "kerko.search"
+label = "Bibliography"
+```
+
+### `anchor`
+
+Anchor to append to the endpoint.
+
+This optional parameter is only allowed when the [`type`](#type_1) parameter is
+set to `"endpoint"`.
+
+Type: String
+
+### `endpoint`
+
+Name of the endpoint within the application. Use this for internal links. For
+example, the endpoint for the Kerko search page is `"kerko.search"`.
+
+This parameter is **required** when the [`type`](#type_1) parameter is set to
+`"endpoint"` and has no default value.
+
+Type: String
+
+### `external`
+
+Generate a full URL (with scheme and domain) for the endpoint instead of an
+internal URL.
+
+This parameter is only allowed when the [`type`](#type_1) parameter is set to
+`"endpoint"`.
+
+Type: Boolean <br>
+Default value: `false`
+
+### `label`
+
+Text to use for the link.
+
+This parameter is **required** and has no default value.
+
+Type: String
+
+### `new_window`
+
+Open the link in a new tab.
+
+Type: Boolean <br>
+Default value: `false`
+
+### `parameters`
+
+Dictionary of parameters to pass to the endpoint. Unknown keys are appended to
+the URL as query string arguments, like `?a=b&c=d`.
+
+This optional parameter is only allowed when the [`type`](#type_1) parameter is
+set to `"endpoint"`.
+
+Type: Dictionary
+
+### `scheme`
+
+Protocol to use with the endpoint.
+
+This parameter is only allowed when the [`type`](#type_1) parameter is set to
+`"endpoint"`.
+
+Type: String <br>
+Default value: Same protocol as the current request
+
+### `type`
+
+Type of link. Other parameters may or may not be available depending on this
+value.
+
+Allowed values are:
+
+- `"endpoint"`: Define an internal link.
+- `"url"`: Define a link to an arbitrary URL.
+
+This parameter is **required** and has no default value.
+
+Type: String
+
+### `url`
+
+URL of the external link.
+
+This parameter is **required** when the [`type`](#type_1) parameter is set to
+`"url"`.
+
+Type: String
+
+### `weight`
+
+Relative position of the link in lists. Links with low weights (small numbers)
+rise above heavier ones (large numbers).
+
+Type: Integer <br>
+Default value: `0`
 
 ---
 
