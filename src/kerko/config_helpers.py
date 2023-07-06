@@ -115,6 +115,18 @@ class PaginationModel(BaseModel):
     pager_links: int = Field(ge=2)
 
 
+class BreadcrumbModel(BaseModel):
+    """Model for the kerko.breadcrumb config table."""
+
+    class Config:
+        extra = Extra.forbid
+
+    enabled: bool
+    include_current: bool
+    text_max_length: NonNegativeInt
+    text_max_length_leeway: NonNegativeInt
+
+
 class TemplatesModel(BaseModel):
     """Model for the kerko.templates config table."""
 
@@ -433,6 +445,8 @@ class KerkoModel(BaseModel):
     feeds: FeedsModel
     meta: MetaModel
     pagination: PaginationModel
+    breadcrumb: BreadcrumbModel
+    link_groups: LinkGroupsModel
     templates: TemplatesModel
     zotero: ZoteroModel
     search: SearchModel
@@ -442,7 +456,6 @@ class KerkoModel(BaseModel):
     sorts: Dict[SlugStr, SortsModel]
     bib_formats: Dict[SlugStr, BibFormatsModel]
     relations: Dict[ElementIdStr, RelationsModel]
-    link_groups: LinkGroupsModel
 
 
 class ConfigModel(BaseModel):

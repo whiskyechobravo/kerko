@@ -280,13 +280,16 @@
 {%- endblock footer_inner %}
 
 {%- block content_header %}
-    <div class="row">
-        <div class="{% block top_link_wrapper_classes %}col-auto ml-auto my-2 d-print-none{% endblock %}">
-            <a class="{% block top_btn_classes %}btn btn-primary{% endblock %}" href="{{ url_for('kerko.search') }}">
-                <span class="fas fa-arrow-up" aria-hidden="true"></span> {{ _("Full bibliography") }}
-            </a>
+    {%- if not config.kerko.breadcrumb.enabled %}
+        {#- The back link is redundant and wastes space if the breadcrumb is present. -#}
+        <div class="row">
+            <div class="{% block top_link_wrapper_classes %}col-auto ml-auto my-2 d-print-none{% endblock %}">
+                <a class="{% block top_btn_classes %}btn btn-primary{% endblock %}" href="{{ url_for('kerko.search') }}">
+                    <span class="fas fa-arrow-up" aria-hidden="true"></span> {{ _("Full bibliography") }}
+                </a>
+            </div>
         </div>
-    </div>
+    {%- endif %}
     <div class="row">
         <div class="{% block item_heading_wrapper_classes %}col-auto my-3{% endblock %}">
             <h1 class="{% block item_heading_classes %}h2 mb-0{% endblock %}">

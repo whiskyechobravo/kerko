@@ -6,6 +6,17 @@
     {%- include "kerko/_search-metas.html.jinja2" %}
 {%- endblock metas %}
 
+{%- block breadcrumb_items %}
+    {%- if config.kerko.breadcrumb.enabled %}
+        {%- if is_searching and back_url %}
+            <li class="breadcrumb-item">
+                <a href="{{ back_url }}">{{ _("Your search") }}</a>
+            </li>
+        {%- endif %}
+        {{ super() }}
+    {%- endif %}
+{%- endblock breadcrumb_items %}
+
 {%- block content_header %}
     <div class="mt-2 row">
         <h1 class="{% block search_heading_classes %}h4 col-auto mr-auto pr-1 d-inline d-print-none{% endblock %}">

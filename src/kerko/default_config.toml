@@ -50,6 +50,25 @@ google_analytics_id = ""
 page_len = 20
 pager_links = 4
 
+[kerko.breadcrumb]
+
+enabled = true
+include_current = true
+text_max_length = 50
+text_max_length_leeway = 10
+
+[kerko.link_groups]
+
+    [[kerko.link_groups.navbar.links]]
+    type = "endpoint"
+    label = "Bibliography"
+    endpoint = "kerko.search"
+
+    [[kerko.link_groups.breadcrumb_base.links]]
+    type = "endpoint"
+    label = "Bibliography"
+    endpoint = "kerko.search"
+
 [kerko.templates]
 
 base = "kerko/base.html.jinja2"
@@ -838,10 +857,3 @@ whoosh_language = "en"
     [kerko.relations.related]
     enabled = true
     weight = 20
-
-[kerko.link_groups.navbar]
-
-    [[kerko.link_groups.navbar.links]]
-    type = "endpoint"
-    label = "Bibliography"
-    endpoint = "kerko.search"

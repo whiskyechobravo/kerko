@@ -242,6 +242,61 @@ Type: Integer
 
 ---
 
+## `kerko.breadcrumb.`
+
+A breadcrumb is a navigational aid that displays the location of the current
+page in relation to the structure of a website.
+
+If enabled, the breadcrumb works in relation with the
+[`kerko.link_groups.breadcrumb_base.links`](#kerkolink_groupslinks) parameter,
+which defines the base (starting links) of the breadcrumb trail, which Kerko
+dynamically completes with one or more links based on the current location
+within Kerko.
+
+### `enabled`
+
+Enable the breadcrumb.
+
+Type: Boolean <br>
+Default value: `true`
+
+### `include_current`
+
+Include the current page at the end of the breadcrumb trail. If set to `false`,
+the breadcrumb trail will end with the parent page instead of the current page.
+
+Type: Boolean <br>
+Default value: `true`
+
+### `text_max_length`
+
+Maximum length for a breadcrumb item's text (in number of characters). If text
+is to be truncated in the middle of a word, the whole word is discarded instead.
+Truncated text is appended with an ellipsis sign ("...").
+
+If set to `0`, no truncation will be applied.
+
+This parameter applies to individual items added by Kerko to the breadcrumb
+trail. Links configured in
+[`kerko.link_groups.breadcrumb_base.links`](#kerkolink_groupslinks) will not be
+truncated.
+
+Type: Integer <br>
+Default value: `50`
+
+### `text_max_length_leeway`
+
+If the length of a breadcrumb item's text only exceeds
+`kerko.breadcrumb.text_max_length` by this tolerance margin or less (in number
+of characters), the text will not be truncated.
+
+This parameter has no effect if `text_max_length` is set to `0` (no truncation).
+
+Type: Integer <br>
+Default value: `10`
+
+---
+
 ## `kerko.facets.*.`
 
 Facets to provide in the search interface, where `*` is a facet key. The facet
@@ -546,20 +601,24 @@ Default value: `0` (i.e., no age limit)
 ## `kerko.link_groups.*.links.`
 
 Link groups, where `*` is an arbitrary key used for identifying each group. Each
-group has a `links` parameter, which must contain at least one hyperlink defined
-using sub-parameters.
+group has a `links` parameter, which must define at least one link.
 
 Link groups can be used for navigation or anywhere hyperlinks are needed.
 Templates can use the key to retrieve a desired link group.
 
-Kerko provides a default `navbar` link group. In TOML format, it is defined as
-below (the double brackets indicate a list item):
+Kerko provides default `navbar` and `breadcrumb_base` link groups. In TOML
+format, these are defined as below (the double brackets indicate a list item):
 
 ```toml
 [[kerko.link_groups.navbar.links]]
 type = "endpoint"
 endpoint = "kerko.search"
 label = "Bibliography"
+
+[[kerko.link_groups.breadcrumb_base.links]]
+type = "endpoint"
+label = "Bibliography"
+endpoint = "kerko.search"
 ```
 
 ### `anchor`

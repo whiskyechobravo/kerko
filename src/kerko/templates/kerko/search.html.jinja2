@@ -12,6 +12,14 @@
     {%- include "kerko/_search-metas.html.jinja2" %}
 {%- endblock metas %}
 
+{%- block breadcrumb_items %}
+    {%- if config.kerko.breadcrumb.enabled and is_searching and config.kerko.breadcrumb.include_current %}
+        <li class="breadcrumb-item active" aria-current="page">
+            {{- _("Your search") -}}
+        </li>
+    {%- endif %}
+{%- endblock breadcrumb_items %}
+
 {%- block content_header %}
     <div class="my-2 row">
         <h1 class="{% block search_heading_classes %}h2 col-auto pr-1 mr-auto d-inline{% endblock %}{% if not is_searching %} d-print-none{% endif %}">
