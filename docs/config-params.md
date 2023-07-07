@@ -612,8 +612,8 @@ format, these are defined as below (the double brackets indicate a list item):
 ```toml
 [[kerko.link_groups.navbar.links]]
 type = "endpoint"
-endpoint = "kerko.search"
 label = "Bibliography"
+endpoint = "kerko.search"
 
 [[kerko.link_groups.breadcrumb_base.links]]
 type = "endpoint"
@@ -681,7 +681,7 @@ Type: Dictionary
 Protocol to use with the endpoint.
 
 This parameter is only allowed when the [`type`](#type_1) parameter is set to
-`"endpoint"`.
+`"endpoint"` and the [`external`](#external) parameter is set to `true`.
 
 Type: String <br>
 Default value: Same protocol as the current request
@@ -693,7 +693,7 @@ value.
 
 Allowed values are:
 
-- `"endpoint"`: Define an internal link.
+- `"endpoint"`: Define an internal link (served by a Flask endpoint).
 - `"url"`: Define a link to an arbitrary URL.
 
 This parameter is **required** and has no default value.
