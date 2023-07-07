@@ -415,7 +415,7 @@ class LinkGroupModel(BaseModel):
     class Config:
         extra = Extra.forbid
 
-    links: list[LinkModelUnion] = Field(min_items=1)
+    links: List[LinkModelUnion] = Field(min_items=1)
 
     def to_spec(self, menu_key: str) -> LinkGroupSpec:
         return LinkGroupSpec(

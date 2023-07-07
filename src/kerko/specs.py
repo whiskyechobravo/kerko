@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
-from typing import Any, Optional
+from typing import Any, Dict, List, Optional
 
 from babel.numbers import format_decimal
 from flask import Request, url_for
@@ -796,7 +796,7 @@ class LinkByEndpointSpec(LinkSpec):
         external: bool = False,
         anchor: Optional[str] = None,
         scheme: Optional[str] = None,
-        parameters: Optional[dict[str, Any]] = None,
+        parameters: Optional[Dict[str, Any]] = None,
         **kwargs,
     ):
         super().__init__(**kwargs)
@@ -822,12 +822,12 @@ class LinkByEndpointSpec(LinkSpec):
 
 class LinkGroupSpec:
 
-    def __init__(self, key: str, links: Optional[list[LinkSpec]] = None):
+    def __init__(self, key: str, links: Optional[List[LinkSpec]] = None):
         self.key = key
         self.links = links or []
 
     def add_item(self, item: LinkSpec):
         self.links.append(item)
 
-    def get_ordered_links(self) -> list[LinkSpec]:
+    def get_ordered_links(self) -> List[LinkSpec]:
         return sorted(self.links, key=lambda spec: spec.weight)
