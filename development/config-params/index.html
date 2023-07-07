@@ -2818,8 +2818,8 @@ Templates can use the key to retrieve a desired link group.</p>
 format, these are defined as below (the double brackets indicate a list item):</p>
 <div class="highlight"><pre><span></span><code><span class="k">[[kerko.link_groups.navbar.links]]</span>
 <span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;endpoint&quot;</span>
-<span class="n">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;kerko.search&quot;</span>
 <span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Bibliography&quot;</span>
+<span class="n">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;kerko.search&quot;</span>
 
 <span class="k">[[kerko.link_groups.breadcrumb_base.links]]</span>
 <span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;endpoint&quot;</span>
@@ -2861,7 +2861,7 @@ set to <code>"endpoint"</code>.</p>
 <h3 id="scheme"><code>scheme</code><a class="headerlink" href="#scheme" title="Permanent link">&para;</a></h3>
 <p>Protocol to use with the endpoint.</p>
 <p>This parameter is only allowed when the <a href="#type_1"><code>type</code></a> parameter is set to
-<code>"endpoint"</code>.</p>
+<code>"endpoint"</code> and the <a href="#external"><code>external</code></a> parameter is set to <code>true</code>.</p>
 <p>Type: String <br>
 Default value: Same protocol as the current request</p>
 <h3 id="type_1"><code>type</code><a class="headerlink" href="#type_1" title="Permanent link">&para;</a></h3>
@@ -2869,7 +2869,7 @@ Default value: Same protocol as the current request</p>
 value.</p>
 <p>Allowed values are:</p>
 <ul>
-<li><code>"endpoint"</code>: Define an internal link.</li>
+<li><code>"endpoint"</code>: Define an internal link (served by a Flask endpoint).</li>
 <li><code>"url"</code>: Define a link to an arbitrary URL.</li>
 </ul>
 <p>This parameter is <strong>required</strong> and has no default value.</p>
