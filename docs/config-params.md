@@ -276,11 +276,6 @@ Truncated text is appended with an ellipsis sign ("...").
 
 If set to `0`, no truncation will be applied.
 
-This parameter applies to individual items added by Kerko to the breadcrumb
-trail. Links configured in
-[`kerko.link_groups.breadcrumb_base.links`](#kerkolink_groupslinks) will not be
-truncated.
-
 Type: Integer <br>
 Default value: `50`
 

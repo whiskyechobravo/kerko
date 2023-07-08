@@ -1,5 +1,6 @@
 {% extends config.kerko.templates.base %}
 {% from "kerko/_attributes.html.jinja2" import title_aria_label %}
+{% from "kerko/_breadcrumb.html.jinja2" import breadcrumb %}
 
 {%- block meta_title_inner -%}
     {%- if title %}{{ title|escape }} | {% endif %}{{ super() -}}
@@ -60,34 +61,9 @@
     {%- endblock header %}
     {%- block main %}
         <main {% block main_attributes %}class="container"{% endblock %}>
-            {%- if config.kerko.breadcrumb.enabled and config.kerko_composer.link_groups.breadcrumb_base %}
-                {%- block breadcrumb %}
-                    <div class="row">
-                        <nav class="col" aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                {%- block breadcrumb_base %}
-                                    {%- for breadcrumb_item in config.kerko_composer.link_groups.breadcrumb_base.get_ordered_links() %}
-                                        <li class="breadcrumb-item">
-                                            <a href="{{ breadcrumb_item.url }}" {% if breadcrumb_item.new_window %}target="_blank"{% endif %}>{{ breadcrumb_item.label }}</a>
-                                        </li>
-                                    {%- endfor %}
-                                {%- endblock breadcrumb_base %}
-                                {%- block breadcrumb_items %}
-                                    {%- if config.kerko.breadcrumb.include_current %}
-                                        <li class="breadcrumb-item active" aria-current="page">
-                                            {%- if config.kerko.breadcrumb.text_max_length %}
-                                                {{- title|escape|truncate(config.kerko.breadcrumb.text_max_length, leeway=config.kerko.breadcrumb.text_max_length_leeway) -}}
-                                            {%- else %}
-                                                {{- title|escape -}}
-                                            {%- endif %}
-                                        </li>
-                                    {% endif %}
-                                {%- endblock breadcrumb_items %}
-                            </ol>
-                        </nav>
-                    </div>
-                {%- endblock breadcrumb %}
-            {%- endif %}
+            {%- block breadcrumb %}
+                {{ breadcrumb([title]) }}
+            {%- endblock breadcrumb %}
             {%- block main_inner %}
                 <div {% block main_inner_attributes %}class="row"{% endblock %}>
                     {%- block content %}

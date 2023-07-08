@@ -1,5 +1,6 @@
 {% extends config.kerko.templates.layout %}
 {% from "kerko/_attributes.html.jinja2" import title_aria_label %}
+{% from "kerko/_breadcrumb.html.jinja2" import breadcrumb %}
 
 {%- set show_print_link = config.kerko.features.print_results_max_count == 0 or total_count <= config.kerko.features.print_results_max_count %}
 {%- set show_print_link = show_print_link and config.kerko.features.print_results_link %}
@@ -12,13 +13,13 @@
     {%- include "kerko/_search-metas.html.jinja2" %}
 {%- endblock metas %}
 
-{%- block breadcrumb_items %}
-    {%- if config.kerko.breadcrumb.enabled and is_searching and config.kerko.breadcrumb.include_current %}
-        <li class="breadcrumb-item active" aria-current="page">
-            {{- _("Your search") -}}
-        </li>
+{%- block breadcrumb %}
+    {%- if is_searching %}
+        {{ breadcrumb([_("Your search")]) }}
+    {%- else %}
+        {{ breadcrumb() }}
     {%- endif %}
-{%- endblock breadcrumb_items %}
+{%- endblock breadcrumb %}
 
 {%- block content_header %}
     <div class="my-2 row">

@@ -1,21 +1,19 @@
 {% set apply_relations_initial_limit = True %}
 {% extends config.kerko.templates.item %}
+{% from "kerko/_breadcrumb.html.jinja2" import breadcrumb %}
 
 {%- block metas %}
     {{- super() }}
     {%- include "kerko/_search-metas.html.jinja2" %}
 {%- endblock metas %}
 
-{%- block breadcrumb_items %}
-    {%- if config.kerko.breadcrumb.enabled %}
-        {%- if is_searching and back_url %}
-            <li class="breadcrumb-item">
-                <a href="{{ back_url }}">{{ _("Your search") }}</a>
-            </li>
-        {%- endif %}
+{%- block breadcrumb %}
+    {%- if is_searching and back_url %}
+        {{ breadcrumb([{'url': back_url, 'label': _("Your search")}, title]) }}
+    {%- else %}
         {{ super() }}
     {%- endif %}
-{%- endblock breadcrumb_items %}
+{%- endblock breadcrumb %}
 
 {%- block content_header %}
     <div class="mt-2 row">
