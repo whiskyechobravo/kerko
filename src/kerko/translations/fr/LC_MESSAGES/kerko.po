@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Kerko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-12 16:19-0400\n"
-"PO-Revision-Date: 2023-05-12 16:19-0400\n"
+"POT-Creation-Date: 2023-07-08 15:46-0400\n"
+"PO-Revision-Date: 2023-07-08 15:46-0400\n"
 "Last-Translator: David Lesieur <kerko@whiskyechobravo.com>\n"
 "Language: fr\n"
 "Language-Team: fr <kerko@whiskyechobravo.com>\n"
@@ -34,11 +34,27 @@ msgstr "En {}"
 msgid "Between {} and {}"
 msgstr "Entre {} et {}"
 
-#: src/kerko/composer.py:247 src/kerko/composer.py:248
+#: src/kerko/composer.py:90 src/kerko/composer.py:97
 msgid "Everywhere"
 msgstr "Partout"
 
-#: src/kerko/composer.py:250
+#: src/kerko/composer.py:91 src/kerko/composer.py:98
+msgid "In authors or contributors"
+msgstr "Dans les auteurs ou contributeurs"
+
+#: src/kerko/composer.py:92 src/kerko/composer.py:99
+msgid "In titles"
+msgstr "Dans les titres"
+
+#: src/kerko/composer.py:93 src/kerko/composer.py:100
+msgid "In all fields"
+msgstr "Dans tous les champs"
+
+#: src/kerko/composer.py:94 src/kerko/composer.py:101
+msgid "In documents"
+msgstr "Dans les documents"
+
+#: src/kerko/composer.py:104
 msgid ""
 "Search your keywords in all bibliographic record fields and in the text "
 "content of the available documents."
@@ -46,113 +62,97 @@ msgstr ""
 "repère vos mots-clés dans tous les champs des références bibliographiques"
 " ainsi que dans le contenu textuel des documents disponibles."
 
-#: src/kerko/composer.py:260 src/kerko/composer.py:261
-msgid "In authors or contributors"
-msgstr "Dans les auteurs ou contributeurs"
-
-#: src/kerko/composer.py:263
+#: src/kerko/composer.py:108
 msgid "Search your keywords in author or contributor names."
 msgstr "repère vos mots-clés dans les noms d’auteurs ou de contributeurs."
 
-#: src/kerko/composer.py:270 src/kerko/composer.py:271
-msgid "In titles"
-msgstr "Dans les titres"
-
-#: src/kerko/composer.py:273
+#: src/kerko/composer.py:109
 msgid "Search your keywords in titles."
 msgstr "repère vos mots-clés dans les titres."
 
-#: src/kerko/composer.py:280 src/kerko/composer.py:281
-msgid "In all fields"
-msgstr "Dans tous les champs"
-
-#: src/kerko/composer.py:283
+#: src/kerko/composer.py:110
 msgid "Search your keywords in all bibliographic record fields."
 msgstr "repère vos mots-clés dans tous les champs des notices bibliographiques."
 
-#: src/kerko/composer.py:290 src/kerko/composer.py:291
-msgid "In documents"
-msgstr "Dans les documents"
-
-#: src/kerko/composer.py:293
+#: src/kerko/composer.py:111
 msgid "Search your keywords in the text content of the available documents."
 msgstr "repère vos mots-clés dans le contenu textuel des documents disponibles."
 
-#: src/kerko/composer.py:1587
+#: src/kerko/composer.py:573
 msgid "Topic"
 msgstr "Sujet"
 
-#: src/kerko/composer.py:1610 src/kerko/templates/kerko/item.html.jinja2:121
+#: src/kerko/composer.py:587 src/kerko/templates/kerko/item.html.jinja2:121
 msgid "Resource type"
 msgstr "Type de ressource"
 
-#: src/kerko/composer.py:1630
+#: src/kerko/composer.py:601
 msgid "Publication year"
 msgstr "Année de publication"
 
-#: src/kerko/composer.py:1638
+#: src/kerko/composer.py:602
 msgid "Unknown"
 msgstr "Inconnue"
 
-#: src/kerko/composer.py:1650
+#: src/kerko/composer.py:615
 msgid "Online resource"
 msgstr "Ressource en ligne"
 
-#: src/kerko/composer.py:1681
+#: src/kerko/composer.py:646
 msgid "Relevance"
 msgstr "Pertinence"
 
-#: src/kerko/composer.py:1692
+#: src/kerko/composer.py:657
 msgid "Newest first"
 msgstr "Date décroissante"
 
-#: src/kerko/composer.py:1710
+#: src/kerko/composer.py:675
 msgid "Oldest first"
 msgstr "Date croissante"
 
-#: src/kerko/composer.py:1723
+#: src/kerko/composer.py:688
 msgid "Author A-Z"
 msgstr "Auteur A-Z"
 
-#: src/kerko/composer.py:1736
+#: src/kerko/composer.py:701
 msgid "Author Z-A"
 msgstr "Auteur Z-A"
 
-#: src/kerko/composer.py:1754
+#: src/kerko/composer.py:719
 msgid "Title A-Z"
 msgstr "Titre A-Z"
 
-#: src/kerko/composer.py:1767
+#: src/kerko/composer.py:732
 msgid "Title Z-A"
 msgstr "Titre Z-A"
 
-#: src/kerko/composer.py:1799
+#: src/kerko/composer.py:765
 msgid "RIS"
 msgstr "RIS"
 
-#: src/kerko/composer.py:1800
+#: src/kerko/composer.py:766
 msgid "Recommended format for most reference management software"
 msgstr ""
 "Format recommandé pour la plupart des logiciels de gestion de références "
 "bibliographiques"
 
-#: src/kerko/composer.py:1811
+#: src/kerko/composer.py:775
 msgid "BibTeX"
 msgstr "BibTeX"
 
-#: src/kerko/composer.py:1812
+#: src/kerko/composer.py:776
 msgid "Recommended format for BibTeX-specific software"
 msgstr "Format recommandé pour les logiciels spécialement conçus pour BibTeX"
 
-#: src/kerko/composer.py:1836
+#: src/kerko/composer.py:795
 msgid "Cites"
 msgstr "Cite"
 
-#: src/kerko/composer.py:1842
+#: src/kerko/composer.py:801
 msgid "Cited by"
 msgstr "Cité par"
 
-#: src/kerko/composer.py:1850
+#: src/kerko/composer.py:809
 msgid "Related"
 msgstr "Connexe"
 
@@ -183,9 +183,13 @@ msgstr "Aucun de vos critères de recherche n’a pu être reconnu."
 
 #: src/kerko/templates/kerko/_breadbox.html.jinja2:29
 #: src/kerko/templates/kerko/_search-help.html.jinja2:22
-#: src/kerko/templates/kerko/search.html.jinja2:41
+#: src/kerko/templates/kerko/search.html.jinja2:50
 msgid "Reset search"
 msgstr "Réinitialiser la recherche"
+
+#: src/kerko/templates/kerko/_breadcrumb.html.jinja2:42
+msgid "Breadcrumb"
+msgstr "Fil d'Ariane"
 
 #: src/kerko/templates/kerko/_collapse.html.jinja2:6
 msgid "Show more"
@@ -214,10 +218,6 @@ msgstr "Afficher les filtres plus spécifiques"
 #: src/kerko/templates/kerko/_facets.html.jinja2:20
 msgid "Collapse subfilters"
 msgstr "Masquer les filtres plus spécifiques"
-
-#: src/kerko/templates/kerko/_navbar_items.html.jinja2:3
-msgid "Bibliography"
-msgstr "Bibliographie"
 
 #: src/kerko/templates/kerko/_pager.html.jinja2:5
 msgid "Previous page"
@@ -300,12 +300,12 @@ msgstr ""
 "Montrer ou cacher le bouton « {} » sur les pages de notices "
 "bibliographiques. Ce bouton vous permet de consulter la notice sur "
 "zotero.org. Celui-ci ne peut être utile que si vous avez obtenu la "
-"permission d’accéder à la bibliothèque Zotero dans laquelle est "
-"consignée la notice."
+"permission d’accéder à la bibliothèque Zotero dans laquelle est consignée"
+" la notice."
 
 #: src/kerko/templates/kerko/_preferences.html.jinja2:41
 #: src/kerko/templates/kerko/_search-help.html.jinja2:72
-#: src/kerko/templates/kerko/search.html.jinja2:191
+#: src/kerko/templates/kerko/search.html.jinja2:200
 msgid "Close"
 msgstr "Fermer"
 
@@ -326,12 +326,12 @@ msgstr "Chercher dans..."
 #: src/kerko/templates/kerko/_search-help.html.jinja2:17
 #: src/kerko/templates/kerko/_search-help.html.jinja2:18
 #: src/kerko/templates/kerko/_search-help.html.jinja2:67
-#: src/kerko/templates/kerko/search.html.jinja2:21
+#: src/kerko/templates/kerko/search.html.jinja2:30
 msgid "Search"
 msgstr "Rechercher"
 
 #: src/kerko/templates/kerko/_search-help.html.jinja2:8
-#: src/kerko/templates/kerko/search.html.jinja2:28
+#: src/kerko/templates/kerko/search.html.jinja2:37
 msgid "Help"
 msgstr "Aide"
 
@@ -354,9 +354,9 @@ msgstr ""
 #: src/kerko/templates/kerko/_search-help.html.jinja2:17
 #: src/kerko/templates/kerko/_search-help.html.jinja2:49
 #: src/kerko/templates/kerko/_search-help.html.jinja2:68
-#: src/kerko/templates/kerko/search.html.jinja2:34
-#: src/kerko/templates/kerko/search.html.jinja2:173
-#: src/kerko/templates/kerko/search.html.jinja2:184
+#: src/kerko/templates/kerko/search.html.jinja2:43
+#: src/kerko/templates/kerko/search.html.jinja2:182
+#: src/kerko/templates/kerko/search.html.jinja2:193
 msgid "Explore"
 msgstr "Explorer"
 
@@ -732,7 +732,7 @@ msgid "Print this record"
 msgstr "Imprimer cette notice"
 
 #: src/kerko/templates/kerko/item.html.jinja2:93
-#: src/kerko/templates/kerko/search.html.jinja2:124
+#: src/kerko/templates/kerko/search.html.jinja2:133
 #, python-format
 msgid "Download this record"
 msgid_plural "Download %(count_formatted)s records"
@@ -740,7 +740,7 @@ msgstr[0] "Télécharger cette notice"
 msgstr[1] "Télécharger %(count_formatted)s notices"
 
 #: src/kerko/templates/kerko/item.html.jinja2:97
-#: src/kerko/templates/kerko/search.html.jinja2:128
+#: src/kerko/templates/kerko/search.html.jinja2:137
 msgid "Download in {download_option} format"
 msgstr "Télécharger au format {download_option}"
 
@@ -787,69 +787,71 @@ msgid "Relations"
 msgstr "Relations"
 
 #: src/kerko/templates/kerko/item.html.jinja2:262
-#: src/kerko/templates/kerko/search.html.jinja2:149
+#: src/kerko/templates/kerko/search.html.jinja2:158
 #, python-format
 msgid "Processing time: %(time)s seconds"
 msgstr "Temps de traitement: %(time)s seconds"
 
-#: src/kerko/templates/kerko/item.html.jinja2:286 src/kerko/views/search.py:122
+#: src/kerko/templates/kerko/item.html.jinja2:288 src/kerko/views/search.py:122
 #: src/kerko/views/search.py:200
 msgid "Full bibliography"
 msgstr "Bibliographie complète"
 
-#: src/kerko/templates/kerko/layout.html.jinja2:42
+#: src/kerko/templates/kerko/layout.html.jinja2:43
 msgid "Toggle navigation"
 msgstr "Basculer la navigation"
 
-#: src/kerko/templates/kerko/layout.html.jinja2:74
+#: src/kerko/templates/kerko/layout.html.jinja2:82
 msgid "Remove this message"
 msgstr "Retirer ce message"
 
-#: src/kerko/templates/kerko/layout.html.jinja2:102
+#: src/kerko/templates/kerko/layout.html.jinja2:110
 msgid "Powered by {zotero} and {kerko}."
 msgstr "Propulsé par {zotero} et {kerko}."
 
-#: src/kerko/templates/kerko/search-item.html.jinja2:17
-msgid "Return to list of results"
-msgstr "Retourner à la liste des résultats"
-
-#: src/kerko/templates/kerko/search.html.jinja2:8
-msgid "Hide abstracts"
-msgstr "Cacher les résumés"
-
-#: src/kerko/templates/kerko/search.html.jinja2:8
-msgid "Show abstracts"
-msgstr "Montrer les résumés"
-
-#: src/kerko/templates/kerko/search.html.jinja2:19
+#: src/kerko/templates/kerko/search-item.html.jinja2:12
+#: src/kerko/templates/kerko/search.html.jinja2:18
+#: src/kerko/templates/kerko/search.html.jinja2:28
 #: src/kerko/views/search.py:120
 msgid "Your search"
 msgstr "Votre recherche"
 
-#: src/kerko/templates/kerko/search.html.jinja2:68
+#: src/kerko/templates/kerko/search-item.html.jinja2:26
+msgid "Return to list of results"
+msgstr "Retourner à la liste des résultats"
+
+#: src/kerko/templates/kerko/search.html.jinja2:9
+msgid "Hide abstracts"
+msgstr "Cacher les résumés"
+
+#: src/kerko/templates/kerko/search.html.jinja2:9
+msgid "Show abstracts"
+msgstr "Montrer les résumés"
+
+#: src/kerko/templates/kerko/search.html.jinja2:77
 #, python-format
 msgid "%(count_formatted)s resource"
 msgid_plural "%(count_formatted)s resources"
 msgstr[0] "%(count_formatted)s ressource"
 msgstr[1] "%(count_formatted)s ressources"
 
-#: src/kerko/templates/kerko/search.html.jinja2:93
+#: src/kerko/templates/kerko/search.html.jinja2:102
 msgid "Abstracts"
 msgstr "Résumés"
 
-#: src/kerko/templates/kerko/search.html.jinja2:116
+#: src/kerko/templates/kerko/search.html.jinja2:125
 #, python-format
 msgid "Print this citation"
 msgid_plural "Print %(count_formatted)s citations"
 msgstr[0] "Imprimer cette référence"
 msgstr[1] "Imprimer %(count_formatted)s références"
 
-#: src/kerko/templates/kerko/search.html.jinja2:152
+#: src/kerko/templates/kerko/search.html.jinja2:161
 #, python-format
 msgid "Last update from database: %(when)s"
 msgstr "Dernière mise à jour depuis la base de données&nbsp;: %(when)s"
 
-#: src/kerko/templates/kerko/search.html.jinja2:157
+#: src/kerko/templates/kerko/search.html.jinja2:166
 msgid ""
 "\n"
 "                <p>Suggestions:</p>\n"
@@ -869,20 +871,20 @@ msgstr ""
 "                    <li>Essayez des termes plus généraux.</li>\n"
 "                </ul>"
 
-#: src/kerko/templates/kerko/search.html.jinja2:185
-#: src/kerko/templates/kerko/search.html.jinja2:191
+#: src/kerko/templates/kerko/search.html.jinja2:194
+#: src/kerko/templates/kerko/search.html.jinja2:200
 msgid "Close Explore panel"
 msgstr "Fermer le panneau d’exploration"
 
-#: src/kerko/views/routes.py:131 src/kerko/views/search.py:250
+#: src/kerko/views/routes.py:126 src/kerko/views/search.py:250
 msgid "Custom feed"
 msgstr "Flux web personnalisé"
 
-#: src/kerko/views/routes.py:133 src/kerko/views/search.py:252
+#: src/kerko/views/routes.py:128 src/kerko/views/search.py:252
 msgid "Main feed"
 msgstr "Flux web principal"
 
-#: src/kerko/views/routes.py:242
+#: src/kerko/views/routes.py:231
 msgid ""
 "The document you have requested has been removed. Please check below for "
 "the latest documents available."
