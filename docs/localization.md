@@ -64,7 +64,7 @@ python setup.py compile_catalog
 Although most user interface messages come from Kerko, KerkoApp also has
 messages of its own, and thus its own separate translation file.
 
-KerkoApp translations are managed with [Babel](http://babel.pocoo.org).
+KerkoApp translations are managed with [Babel].
 
 The following commands should be executed from the directory that contains
 `babel.cfg`, and the [virtual environment][venv] must have been activated
@@ -95,3 +95,7 @@ Compile MO files:
 ```bash
 pybabel compile -l YOUR_LOCALE -d kerkoapp/translations
 ```
+
+
+[Babel]: http://babel.pocoo.org
+[venv]: https://docs.python.org/3.11/tutorial/venv.html

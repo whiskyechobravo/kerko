@@ -87,9 +87,9 @@ its Git repository.
     - `KERKO_RELATIONS_INITIAL_LIMIT` → `kerko.features.relations_initial_limit`
     - `KERKO_RELATIONS_LINKS` → `kerko.features.relations_links`
     - `KERKO_RELATIONS_SORT` → `kerko.features.relations_sort`
+    - `KERKO_RESULTS_ABSTRACTS` → `kerko.features.results_abstracts`
     - `KERKO_RESULTS_ABSTRACTS_MAX_LENGTH` → `kerko.features.results_abstracts_max_length`
     - `KERKO_RESULTS_ABSTRACTS_MAX_LENGTH_LEEWAY` → `kerko.features.results_abstracts_max_length_leeway`
-    - `KERKO_RESULTS_ABSTRACTS` → `kerko.features.results_abstracts`
     - `KERKO_RESULTS_ABSTRACTS_TOGGLER` → `kerko.features.results_abstracts_toggler`
     - `KERKO_RESULTS_ATTACHMENT_LINKS` → `kerko.features.results_attachment_links`
     - `KERKO_RESULTS_FIELDS` → `kerko.search.result_fields`
