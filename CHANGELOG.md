@@ -10,6 +10,11 @@ Features:
   (see configuration parameters `kerko.breadcrumb` and
   `kerko_link_groups.breadcrumb_base.*`).
 
+Bug fixes:
+
+- Fix validation pattern too restrictive for the `kerko.zotero.csl_style`
+  configuration parameter.
+
 Backwards incompatible changes:
 
 - Items from the default navigation bar are now based on the default
