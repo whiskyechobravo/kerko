@@ -417,11 +417,11 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#upgrading-from-09-to-10x" class="md-nav__link">
-    Upgrading from 0.9 to 1.0.x
+  <a href="#from-09-to-10x" class="md-nav__link">
+    From 0.9 to 1.0.x
   </a>
   
-    <nav class="md-nav" aria-label="Upgrading from 0.9 to 1.0.x">
+    <nav class="md-nav" aria-label="From 0.9 to 1.0.x">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -530,11 +530,11 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#upgrading-from-09-to-10x" class="md-nav__link">
-    Upgrading from 0.9 to 1.0.x
+  <a href="#from-09-to-10x" class="md-nav__link">
+    From 0.9 to 1.0.x
   </a>
   
-    <nav class="md-nav" aria-label="Upgrading from 0.9 to 1.0.x">
+    <nav class="md-nav" aria-label="From 0.9 to 1.0.x">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -595,7 +595,7 @@
 
 
 <h1 id="how-to-upgrade">How to upgrade<a class="headerlink" href="#how-to-upgrade" title="Permanent link">&para;</a></h1>
-<h2 id="upgrading-from-09-to-10x">Upgrading from 0.9 to 1.0.x<a class="headerlink" href="#upgrading-from-09-to-10x" title="Permanent link">&para;</a></h2>
+<h2 id="from-09-to-10x">From 0.9 to 1.0.x<a class="headerlink" href="#from-09-to-10x" title="Permanent link">&para;</a></h2>
 <p>Version 1.0.x brings significant changes on how Kerko can be configured. Before
 you attempt an upgrade, reading <a href="../config-basics/">Configuration basics</a> is a
 must.</p>
@@ -632,21 +632,19 @@ git<span class="w"> </span>remote<span class="w"> </span>set-head<span class="w"
   file, but it might be useful to keep it as reference while we migrate the
   configuration.</p>
 </li>
-<li>Create two files, <code>.secrets.toml</code> and <code>config.toml</code>, in the KerkoApp directory
-  (where <code>wsgi.py</code> is found).</li>
-<li>For each parameter from <code>dotenv.old</code>, copy it to <code>.secrets.toml</code> or
-  <code>config.toml</code>. If the parameter is <code>SECRET_KEY</code> or <code>ZOTERO_API_KEY</code>, it is
-  recommended to put it into <code>.secrets.toml</code>, otherwise it probably belongs to
-  <code>config.toml</code>.</li>
+<li>Create two files, <code>.secrets.toml</code> and <code>config.toml</code>, in the KerkoApp
+  directory, i.e., the directory where <code>wsgi.py</code> is found.</li>
+<li>Copy the <code>SECRET_KEY</code> and <code>ZOTERO_API_KEY</code> parameters from <code>dotenv.old</code> into
+  <code>.secrets.toml</code>. Copy the remaining parameters to <code>config.toml</code>.</li>
 <li>For each parameter, use the list below to determine if something special needs
   to be done to migrate it. Almost all configuration parameters have been
   renamed and/or moved into a hierarchical structure. Check the parameter values
   too as the syntax of a TOML file is slightly different from that of a <code>.env</code>
-  file, e.g., string values must be surrounded by double quotes (<code>"</code>), booleans
-  values must be either <code>true</code> or <code>false</code> (lowercase, no quotes). Refer to the
-  <a href="../config-params/">parameters documentation</a> for additional information, and
-  have a look at the <code>sample.secrets.toml</code> and <code>sample.config.toml</code> files
-  provided by KerkoApp.<ul>
+  file, e.g., in TOML string values must be surrounded by double quotes (<code>"</code>),
+  booleans values must be either <code>true</code> or <code>false</code> (lowercase, no quotes). Refer
+  to the <a href="../config-params/">parameters documentation</a> for additional
+  information, and have a look at the <code>sample.secrets.toml</code> and
+  <code>sample.config.toml</code> files provided by KerkoApp.<ul>
 <li><code>DEBUG</code>: Removed. Debug mode is now activated with the <code>--debug</code> command
   line option.</li>
 <li><code>FLASK_APP</code>: Probably not needed anymore. In doubt, please refer to the
@@ -737,11 +735,15 @@ git<span class="w"> </span>remote<span class="w"> </span>set-head<span class="w"
 <li><code>PROXY_FIX</code> → <code>kerkoapp.proxy_fix.*</code></li>
 </ul>
 </li>
+<li>If you are using a translated version of Kerko, the default "Bibliography"
+  link of the navigation bar no longer gets translated because it is now defined
+  by a configuration parameter. To replace it, set the
+  <code>kerko.link_groups.navbar.links</code> parameter (see the <a href="../config-params/">parameters
+  documentation</a> for details).</li>
 <li>If your configuration changes neither the <code>DATA_PATH</code> nor the <code>INSTANCE_PATH</code>
   parameters, then rename KerkoApp's <code>data</code> directory to <code>instance</code>.</li>
-<li>If you are running the application under a WSGI server, make sure it is now
-  referenced as <code>wsgi.app</code> (or <code>wsgi:app</code>) instead of <code>kerkoapp.app</code> (or
-  <code>kerkoapp:app</code>).</li>
+<li>Make sure your WSGI server now reference the application as <code>wsgi.app</code> (or
+  <code>wsgi:app</code>) instead of <code>kerkoapp.app</code> (or <code>kerkoapp:app</code>).</li>
 <li>
 <p>Rebuild your search index using the following commands, then restart the
   application:</p>
