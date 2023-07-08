@@ -1,6 +1,6 @@
 # How to upgrade
 
-## Upgrading from 0.9 to 1.0.x
+## From 0.9 to 1.0.x
 
 Version 1.0.x brings significant changes on how Kerko can be configured. Before
 you attempt an upgrade, reading [Configuration basics](config-basics.md) is a
@@ -39,21 +39,19 @@ its Git repository.
 - Rename the `.env` file to `dotenv.old`. We no longer want KerkoApp to use that
   file, but it might be useful to keep it as reference while we migrate the
   configuration.
-- Create two files, `.secrets.toml` and `config.toml`, in the KerkoApp directory
-  (where `wsgi.py` is found).
-- For each parameter from `dotenv.old`, copy it to `.secrets.toml` or
-  `config.toml`. If the parameter is `SECRET_KEY` or `ZOTERO_API_KEY`, it is
-  recommended to put it into `.secrets.toml`, otherwise it probably belongs to
-  `config.toml`.
+- Create two files, `.secrets.toml` and `config.toml`, in the KerkoApp
+  directory, i.e., the directory where `wsgi.py` is found.
+- Copy the `SECRET_KEY` and `ZOTERO_API_KEY` parameters from `dotenv.old` into
+  `.secrets.toml`. Copy the remaining parameters to `config.toml`.
 - For each parameter, use the list below to determine if something special needs
   to be done to migrate it. Almost all configuration parameters have been
   renamed and/or moved into a hierarchical structure. Check the parameter values
   too as the syntax of a TOML file is slightly different from that of a `.env`
-  file, e.g., string values must be surrounded by double quotes (`"`), booleans
-  values must be either `true` or `false` (lowercase, no quotes). Refer to the
-  [parameters documentation](config-params.md) for additional information, and
-  have a look at the `sample.secrets.toml` and `sample.config.toml` files
-  provided by KerkoApp.
+  file, e.g., in TOML string values must be surrounded by double quotes (`"`),
+  booleans values must be either `true` or `false` (lowercase, no quotes). Refer
+  to the [parameters documentation](config-params.md) for additional
+  information, and have a look at the `sample.secrets.toml` and
+  `sample.config.toml` files provided by KerkoApp.
     - `DEBUG`: Removed. Debug mode is now activated with the `--debug` command
       line option.
     - `FLASK_APP`: Probably not needed anymore. In doubt, please refer to the
@@ -142,11 +140,15 @@ its Git repository.
     - `KERKOAPP_TAG_EXCLUDE_RE` → `kerko.zotero.tag_exclude_re`
     - `KERKOAPP_TAG_INCLUDE_RE` → `kerko.zotero.tag_include_re`
     - `PROXY_FIX` → `kerkoapp.proxy_fix.*`
+- If you are using a translated version of Kerko, the default "Bibliography"
+  link of the navigation bar no longer gets translated because it is now defined
+  by a configuration parameter. To replace it, set the
+  `kerko.link_groups.navbar.links` parameter (see the [parameters
+  documentation](config-params.md) for details).
 - If your configuration changes neither the `DATA_PATH` nor the `INSTANCE_PATH`
   parameters, then rename KerkoApp's `data` directory to `instance`.
-- If you are running the application under a WSGI server, make sure it is now
-  referenced as `wsgi.app` (or `wsgi:app`) instead of `kerkoapp.app` (or
-  `kerkoapp:app`).
+- Make sure your WSGI server now reference the application as `wsgi.app` (or
+  `wsgi:app`) instead of `kerkoapp.app` (or `kerkoapp:app`).
 - Rebuild your search index using the following commands, then restart the
   application:
 

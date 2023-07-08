@@ -5,7 +5,7 @@
 Features:
 
 - Add new configuration parameters `kerko.link_groups.*.` for defining sets of
-  links that may be used for things like navigation.
+  links that may be used for navigation.
 - Add a breadcrumb trail to all pages. One or more base links can be configured
   (see configuration parameters `kerko.breadcrumb` and
   `kerko_link_groups.breadcrumb_base.*`).
