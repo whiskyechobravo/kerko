@@ -41,18 +41,23 @@ its Git repository.
   configuration.
 - Create two files, `.secrets.toml` and `config.toml`, in the KerkoApp
   directory, i.e., the directory where `wsgi.py` is found.
-- Copy the `SECRET_KEY` and `ZOTERO_API_KEY` parameters from `dotenv.old` into
-  `.secrets.toml`. Copy the remaining parameters to `config.toml`.
-- For each parameter, use the list below to determine if something special needs
-  to be done to migrate it. Almost all configuration parameters have been
-  renamed and/or moved into a hierarchical structure. Check the parameter values
-  too as the syntax of a TOML file is slightly different from that of a `.env`
-  file, e.g., in TOML string values must be surrounded by double quotes (`"`),
-  booleans values must be either `true` or `false` (lowercase, no quotes). Refer
-  to the [parameters documentation](config-params.md) for additional
-  information, and have a look at the `sample.secrets.toml` and
-  `sample.config.toml` files provided by KerkoApp.
-    - `DEBUG`: Removed. Debug mode is now activated with the `--debug` command
+- Copy the `SECRET_KEY` and `KERKO_ZOTERO_API_KEY` lines from `dotenv.old` into
+  `.secrets.toml`. In `.secrets.toml`, rename the `KERKO_ZOTERO_API_KEY`
+  parameter to `ZOTERO_API_KEY`. For each of the two parameters, make sure the
+  value following the equal sign (`=`) is surrounded by double quotes (`"`). To
+  ascertain the syntax, you may have a look at the `sample.secrets.toml` file
+  provided by KerkoApp.
+- Copy the remaining lines from `dotenv.old` to `config.toml`. For each
+  parameter, use the list below to determine if something special needs to be
+  done to migrate it. Almost all configuration parameters have been renamed
+  and/or moved into a hierarchical structure (indicated by an arrow (→)). Check
+  the parameter values too as the syntax of a TOML file is slightly different
+  from that of a `.env` file, e.g., in TOML string values must be surrounded by
+  double quotes (`"`), and booleans values must be either `true` or `false`
+  (lowercase, no quotes). Refer to the [parameters
+  documentation](config-params.md) for additional information, and have a look
+  at the `sample.config.toml` file provided by KerkoApp.
+    - `DEBUG`: Remove. Debug mode is now activated with the `--debug` command
       line option.
     - `FLASK_APP`: Probably not needed anymore. In doubt, please refer to the
       Flask documentation on [application
@@ -60,7 +65,7 @@ its Git repository.
       If you do need this variable, then a `.env` file could be the right place.
       It will not work from a TOML file. Note also that the application is now
       referenced as `wsgi.app` instead of `kerkoapp.app`.
-    - `FLASK_ENV`: Removed. Flask 2.3 stopped supporting it. Debug mode is now
+    - `FLASK_ENV`: Remove. Flask 2.3 stopped supporting it. Debug mode is now
       activated with the `--debug` command line option.
     - `KERKO_BOOTSTRAP_VERSION` → `kerko.assets.bootstrap_version`
     - `KERKO_CSL_STYLE` → `kerko.zotero.csl_style`
@@ -101,7 +106,7 @@ its Git repository.
     - `KERKO_TEMPLATE_SEARCH` → `kerko.templates.search`
     - `KERKO_TEMPLATE_SEARCH_ITEM` → `kerko.templates.search_item`
     - `KERKO_TITLE` → `kerko.meta.title`
-    - `KERKO_USE_TRANSLATIONS`: Removed.
+    - `KERKO_USE_TRANSLATIONS`: Remove.
     - `KERKO_WHOOSH_LANGUAGE` → `kerko.search.whoosh_language`
     - `KERKO_WITH_JQUERY` → `kerko.assets.with_jquery`
     - `KERKO_WITH_POPPER` → `kerko.assets.with_popper`
@@ -115,8 +120,8 @@ its Git repository.
     - `KERKOAPP_CHILD_EXCLUDE_RE` → `kerko.zotero.child_exclude_re`
     - `KERKOAPP_CHILD_INCLUDE_RE` → `kerko.zotero.child_include_re`
     - `KERKOAPP_COLLECTION_FACETS` → `kerko.facets.*`. See sub-parameters `type`
-      (set it to `"collection"`), `collection_key`, and `title`.
-    - `KERKOAPP_EXCLUDE_DEFAULT_BADGES`: Removed, with no replacement since
+      (set it to `"collection"`), `collection_key`, `weight`, and `title`.
+    - `KERKOAPP_EXCLUDE_DEFAULT_BADGES`: Remove. There is no replacement since
       Kerko does not provide any default badges at this point.
     - `KERKOAPP_EXCLUDE_DEFAULT_CITATION_FORMATS` → `kerko.citation_formats.*`.
       See sub-parameter `enable`.
@@ -147,7 +152,7 @@ its Git repository.
   documentation](config-params.md) for details).
 - If your configuration changes neither the `DATA_PATH` nor the `INSTANCE_PATH`
   parameters, then rename KerkoApp's `data` directory to `instance`.
-- Make sure your WSGI server now reference the application as `wsgi.app` (or
+- Make sure your WSGI server now references the application as `wsgi.app` (or
   `wsgi:app`) instead of `kerkoapp.app` (or `kerkoapp:app`).
 - Rebuild your search index using the following commands, then restart the
   application:
