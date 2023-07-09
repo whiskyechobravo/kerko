@@ -134,8 +134,8 @@ def config(show_secrets=False):
     """
     Show the configuration.
 
-    Note that unset parameters and parameters that internally have 'None' values
-    will be omitted because such values cannot be represented in TOML files.
+    Note that parameters that internally have 'None' values will be omitted
+    because such values cannot be represented in TOML files.
     """
 
     def hide_secrets(d: dict):

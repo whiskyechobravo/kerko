@@ -136,7 +136,7 @@ specified as an environment variable.
 For hierarchical parameters, each dot separator (`.`) must be replaced by two
 underscore characters (`__`). The `kerko.meta.title` parameter, for example,
 becomes `KERKOAPP_kerko__meta__title` when specified as an environment variable.
-It is much easier to manage hierarchical parameters in TOML files.
+Such conversion is not necessary in TOML files.
 
 Note that Windows does not allow lowercase environment variable names.
 Consequently, Windows users have no choice but to set lowercase parameters in
@@ -145,10 +145,10 @@ TOML files.
 Environment variables may be set from various locations, in the following order
 (refer to the [Flask documentation][Flask_dotenv] for more details):
 
-1. As entries in a file specified by the `--env-file` command line option.
 1. As entries in a `.flaskenv` file.
-1. As entries in a `.env` file.
-1. As environment variables.
+2. As entries in a `.env` file.
+3. As entries in a file specified by the `--env-file` command line option.
+4. As environment variables.
 
 The above list is in ascending order of precedence. This means that a given
 parameter set earlier can be overridden later as values get loaded. Files are
@@ -174,14 +174,14 @@ config_set(app.config, "kerko.meta.title", "My Awesome Bibliography")
 Such assignments must be done during the initialization process. The application
 cannot change a setting while responding to a request.
 
-## Verifying the configuration
+## Viewing the configuration
 
 With configuration parameters potentially taking values from different sources
-(default values defined by Kerko, environment variables, configuration files),
-you may sometimes want to verify the actual values taken by each parameter.
+(default values, configuration files, environment variables), you may sometimes
+want to verify the actual values taken by each parameter.
 
-The following command will show the parameters of the application and their
-values:
+The following command will show the configuration parameters of the application
+and their values:
 
 ```bash
 flask kerko config

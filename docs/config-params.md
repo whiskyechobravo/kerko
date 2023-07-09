@@ -25,9 +25,9 @@ value if omitted from your configuration.
 !!! warning "Prefix your environment variables"
 
     KerkoApp users must prefix parameter names with `KERKOAPP_` when configuring
-    them as environment variables. However, that prefix should be used when the
-    same parameter is set in a TOML file. See [environment variables] for
-    details on setting such variables.
+    them as environment variables. However, that prefix should be omitted when
+    the same parameter is set in a TOML file. See [environment variables] for
+    details.
 
 ---
 
