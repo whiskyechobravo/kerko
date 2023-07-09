@@ -368,8 +368,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#verifying-the-configuration" class="md-nav__link">
-    Verifying the configuration
+  <a href="#viewing-the-configuration" class="md-nav__link">
+    Viewing the configuration
   </a>
   
 </li>
@@ -585,8 +585,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#verifying-the-configuration" class="md-nav__link">
-    Verifying the configuration
+  <a href="#viewing-the-configuration" class="md-nav__link">
+    Viewing the configuration
   </a>
   
 </li>
@@ -734,16 +734,16 @@ specified as an environment variable.</p>
 <p>For hierarchical parameters, each dot separator (<code>.</code>) must be replaced by two
 underscore characters (<code>__</code>). The <code>kerko.meta.title</code> parameter, for example,
 becomes <code>KERKOAPP_kerko__meta__title</code> when specified as an environment variable.
-It is much easier to manage hierarchical parameters in TOML files.</p>
+Such conversion is not necessary in TOML files.</p>
 <p>Note that Windows does not allow lowercase environment variable names.
 Consequently, Windows users have no choice but to set lowercase parameters in
 TOML files.</p>
 <p>Environment variables may be set from various locations, in the following order
 (refer to the <a href="https://flask.palletsprojects.com/en/2.3.x/cli/#environment-variables-from-dotenv">Flask documentation</a> for more details):</p>
 <ol>
-<li>As entries in a file specified by the <code>--env-file</code> command line option.</li>
 <li>As entries in a <code>.flaskenv</code> file.</li>
 <li>As entries in a <code>.env</code> file.</li>
+<li>As entries in a file specified by the <code>--env-file</code> command line option.</li>
 <li>As environment variables.</li>
 </ol>
 <p>The above list is in ascending order of precedence. This means that a given
@@ -764,12 +764,12 @@ API provided by Kerko, as in the following example:</p>
 </code></pre></div>
 <p>Such assignments must be done during the initialization process. The application
 cannot change a setting while responding to a request.</p>
-<h2 id="verifying-the-configuration">Verifying the configuration<a class="headerlink" href="#verifying-the-configuration" title="Permanent link">&para;</a></h2>
+<h2 id="viewing-the-configuration">Viewing the configuration<a class="headerlink" href="#viewing-the-configuration" title="Permanent link">&para;</a></h2>
 <p>With configuration parameters potentially taking values from different sources
-(default values defined by Kerko, environment variables, configuration files),
-you may sometimes want to verify the actual values taken by each parameter.</p>
-<p>The following command will show the parameters of the application and their
-values:</p>
+(default values, configuration files, environment variables), you may sometimes
+want to verify the actual values taken by each parameter.</p>
+<p>The following command will show the configuration parameters of the application
+and their values:</p>
 <div class="highlight"><pre><span></span><code>flask<span class="w"> </span>kerko<span class="w"> </span>config
 </code></pre></div>
 
