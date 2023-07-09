@@ -634,18 +634,23 @@ git<span class="w"> </span>remote<span class="w"> </span>set-head<span class="w"
 </li>
 <li>Create two files, <code>.secrets.toml</code> and <code>config.toml</code>, in the KerkoApp
   directory, i.e., the directory where <code>wsgi.py</code> is found.</li>
-<li>Copy the <code>SECRET_KEY</code> and <code>ZOTERO_API_KEY</code> parameters from <code>dotenv.old</code> into
-  <code>.secrets.toml</code>. Copy the remaining parameters to <code>config.toml</code>.</li>
-<li>For each parameter, use the list below to determine if something special needs
-  to be done to migrate it. Almost all configuration parameters have been
-  renamed and/or moved into a hierarchical structure. Check the parameter values
-  too as the syntax of a TOML file is slightly different from that of a <code>.env</code>
-  file, e.g., in TOML string values must be surrounded by double quotes (<code>"</code>),
-  booleans values must be either <code>true</code> or <code>false</code> (lowercase, no quotes). Refer
-  to the <a href="../config-params/">parameters documentation</a> for additional
-  information, and have a look at the <code>sample.secrets.toml</code> and
-  <code>sample.config.toml</code> files provided by KerkoApp.<ul>
-<li><code>DEBUG</code>: Removed. Debug mode is now activated with the <code>--debug</code> command
+<li>Copy the <code>SECRET_KEY</code> and <code>KERKO_ZOTERO_API_KEY</code> lines from <code>dotenv.old</code> into
+  <code>.secrets.toml</code>. In <code>.secrets.toml</code>, rename the <code>KERKO_ZOTERO_API_KEY</code>
+  parameter to <code>ZOTERO_API_KEY</code>. For each of the two parameters, make sure the
+  value following the equal sign (<code>=</code>) is surrounded by double quotes (<code>"</code>). To
+  ascertain the syntax, you may have a look at the <code>sample.secrets.toml</code> file
+  provided by KerkoApp.</li>
+<li>Copy the remaining lines from <code>dotenv.old</code> to <code>config.toml</code>. For each
+  parameter, use the list below to determine if something special needs to be
+  done to migrate it. Almost all configuration parameters have been renamed
+  and/or moved into a hierarchical structure (indicated by an arrow (→)). Check
+  the parameter values too as the syntax of a TOML file is slightly different
+  from that of a <code>.env</code> file, e.g., in TOML string values must be surrounded by
+  double quotes (<code>"</code>), and booleans values must be either <code>true</code> or <code>false</code>
+  (lowercase, no quotes). Refer to the <a href="../config-params/">parameters
+  documentation</a> for additional information, and have a look
+  at the <code>sample.config.toml</code> file provided by KerkoApp.<ul>
+<li><code>DEBUG</code>: Remove. Debug mode is now activated with the <code>--debug</code> command
   line option.</li>
 <li><code>FLASK_APP</code>: Probably not needed anymore. In doubt, please refer to the
   Flask documentation on <a href="https://flask.palletsprojects.com/en/2.3.x/cli/#application-discovery">application
@@ -653,7 +658,7 @@ git<span class="w"> </span>remote<span class="w"> </span>set-head<span class="w"
   If you do need this variable, then a <code>.env</code> file could be the right place.
   It will not work from a TOML file. Note also that the application is now
   referenced as <code>wsgi.app</code> instead of <code>kerkoapp.app</code>.</li>
-<li><code>FLASK_ENV</code>: Removed. Flask 2.3 stopped supporting it. Debug mode is now
+<li><code>FLASK_ENV</code>: Remove. Flask 2.3 stopped supporting it. Debug mode is now
   activated with the <code>--debug</code> command line option.</li>
 <li><code>KERKO_BOOTSTRAP_VERSION</code> → <code>kerko.assets.bootstrap_version</code></li>
 <li><code>KERKO_CSL_STYLE</code> → <code>kerko.zotero.csl_style</code></li>
@@ -694,7 +699,7 @@ git<span class="w"> </span>remote<span class="w"> </span>set-head<span class="w"
 <li><code>KERKO_TEMPLATE_SEARCH</code> → <code>kerko.templates.search</code></li>
 <li><code>KERKO_TEMPLATE_SEARCH_ITEM</code> → <code>kerko.templates.search_item</code></li>
 <li><code>KERKO_TITLE</code> → <code>kerko.meta.title</code></li>
-<li><code>KERKO_USE_TRANSLATIONS</code>: Removed.</li>
+<li><code>KERKO_USE_TRANSLATIONS</code>: Remove.</li>
 <li><code>KERKO_WHOOSH_LANGUAGE</code> → <code>kerko.search.whoosh_language</code></li>
 <li><code>KERKO_WITH_JQUERY</code> → <code>kerko.assets.with_jquery</code></li>
 <li><code>KERKO_WITH_POPPER</code> → <code>kerko.assets.with_popper</code></li>
@@ -708,8 +713,8 @@ git<span class="w"> </span>remote<span class="w"> </span>set-head<span class="w"
 <li><code>KERKOAPP_CHILD_EXCLUDE_RE</code> → <code>kerko.zotero.child_exclude_re</code></li>
 <li><code>KERKOAPP_CHILD_INCLUDE_RE</code> → <code>kerko.zotero.child_include_re</code></li>
 <li><code>KERKOAPP_COLLECTION_FACETS</code> → <code>kerko.facets.*</code>. See sub-parameters <code>type</code>
-  (set it to <code>"collection"</code>), <code>collection_key</code>, and <code>title</code>.</li>
-<li><code>KERKOAPP_EXCLUDE_DEFAULT_BADGES</code>: Removed, with no replacement since
+  (set it to <code>"collection"</code>), <code>collection_key</code>, <code>weight</code>, and <code>title</code>.</li>
+<li><code>KERKOAPP_EXCLUDE_DEFAULT_BADGES</code>: Remove. There is no replacement since
   Kerko does not provide any default badges at this point.</li>
 <li><code>KERKOAPP_EXCLUDE_DEFAULT_CITATION_FORMATS</code> → <code>kerko.citation_formats.*</code>.
   See sub-parameter <code>enable</code>.</li>
@@ -742,7 +747,7 @@ git<span class="w"> </span>remote<span class="w"> </span>set-head<span class="w"
   documentation</a> for details).</li>
 <li>If your configuration changes neither the <code>DATA_PATH</code> nor the <code>INSTANCE_PATH</code>
   parameters, then rename KerkoApp's <code>data</code> directory to <code>instance</code>.</li>
-<li>Make sure your WSGI server now reference the application as <code>wsgi.app</code> (or
+<li>Make sure your WSGI server now references the application as <code>wsgi.app</code> (or
   <code>wsgi:app</code>) instead of <code>kerkoapp.app</code> (or <code>kerkoapp:app</code>).</li>
 <li>
 <p>Rebuild your search index using the following commands, then restart the
