@@ -778,11 +778,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#kerkolink_groupslinks" class="md-nav__link">
-    kerko.link_groups.*.links.
+  <a href="#kerkolink_groups" class="md-nav__link">
+    kerko.link_groups.*.
   </a>
   
-    <nav class="md-nav" aria-label="kerko.link_groups.*.links.">
+    <nav class="md-nav" aria-label="kerko.link_groups.*.">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -807,13 +807,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#label_1" class="md-nav__link">
-    label
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#new_window" class="md-nav__link">
     new_window
   </a>
@@ -830,6 +823,13 @@
           <li class="md-nav__item">
   <a href="#scheme" class="md-nav__link">
     scheme
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#text" class="md-nav__link">
+    text
   </a>
   
 </li>
@@ -1060,7 +1060,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#label_2" class="md-nav__link">
+  <a href="#label_1" class="md-nav__link">
     label
   </a>
   
@@ -1876,11 +1876,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#kerkolink_groupslinks" class="md-nav__link">
-    kerko.link_groups.*.links.
+  <a href="#kerkolink_groups" class="md-nav__link">
+    kerko.link_groups.*.
   </a>
   
-    <nav class="md-nav" aria-label="kerko.link_groups.*.links.">
+    <nav class="md-nav" aria-label="kerko.link_groups.*.">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1905,13 +1905,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#label_1" class="md-nav__link">
-    label
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#new_window" class="md-nav__link">
     new_window
   </a>
@@ -1928,6 +1921,13 @@
           <li class="md-nav__item">
   <a href="#scheme" class="md-nav__link">
     scheme
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#text" class="md-nav__link">
+    text
   </a>
   
 </li>
@@ -2158,7 +2158,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#label_2" class="md-nav__link">
+  <a href="#label_1" class="md-nav__link">
     label
   </a>
   
@@ -2581,8 +2581,8 @@ numbers) rise above heavier ones (large numbers).</p>
 <p>A breadcrumb is a navigational aid that displays the location of the current
 page in relation to the structure of a website.</p>
 <p>If enabled, the breadcrumb works in relation with the
-<a href="#kerkolink_groupslinks"><code>kerko.link_groups.breadcrumb_base.links</code></a> parameter,
-which defines the base (starting links) of the breadcrumb trail, which Kerko
+<a href="#kerkolink_groups"><code>kerko.link_groups.breadcrumb_base</code></a> parameter, which
+defines the base (starting links) of the breadcrumb trail, which Kerko
 dynamically completes with one or more links based on the current location
 within Kerko.</p>
 <h3 id="enabled_1"><code>enabled</code><a class="headerlink" href="#enabled_1" title="Permanent link">&para;</a></h3>
@@ -2805,25 +2805,26 @@ last day of the month.</p>
 <p>Type: Integer <br>
 Default value: <code>0</code> (i.e., no age limit)</p>
 <hr />
-<h2 id="kerkolink_groupslinks"><code>kerko.link_groups.*.links.</code><a class="headerlink" href="#kerkolink_groupslinks" title="Permanent link">&para;</a></h2>
-<p>Link groups, where <code>*</code> is an arbitrary key used for identifying each group. Each
-group has a <code>links</code> parameter, which must define at least one link.</p>
+<h2 id="kerkolink_groups"><code>kerko.link_groups.*.</code><a class="headerlink" href="#kerkolink_groups" title="Permanent link">&para;</a></h2>
+<p>Link groups, where <code>*</code> is an arbitrary key used for identifying the group. Each
+group is a list which must contain at least one link defined using one or more
+of the sub-parameters described below.</p>
 <p>Link groups can be used for navigation or anywhere hyperlinks are needed.
 Templates can use the key to retrieve a desired link group.</p>
 <p>Kerko provides default <code>navbar</code> and <code>breadcrumb_base</code> link groups. In TOML
 format, these are defined as below (the double brackets indicate a list item):</p>
-<div class="highlight"><pre><span></span><code><span class="k">[[kerko.link_groups.navbar.links]]</span>
+<div class="highlight"><pre><span></span><code><span class="k">[[kerko.link_groups.navbar]]</span>
 <span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;endpoint&quot;</span>
-<span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Bibliography&quot;</span>
 <span class="n">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;kerko.search&quot;</span>
+<span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Bibliography&quot;</span>
 
-<span class="k">[[kerko.link_groups.breadcrumb_base.links]]</span>
+<span class="k">[[kerko.link_groups.breadcrumb_base]]</span>
 <span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;endpoint&quot;</span>
-<span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Bibliography&quot;</span>
 <span class="n">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;kerko.search&quot;</span>
+<span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Bibliography&quot;</span>
 </code></pre></div>
 <h3 id="anchor"><code>anchor</code><a class="headerlink" href="#anchor" title="Permanent link">&para;</a></h3>
-<p>Anchor to append to the endpoint.</p>
+<p>Anchor to append to the endpoint's URL.</p>
 <p>This optional parameter is only allowed when the <a href="#type_1"><code>type</code></a> parameter is
 set to <code>"endpoint"</code>.</p>
 <p>Type: String</p>
@@ -2840,10 +2841,6 @@ internal URL.</p>
 <code>"endpoint"</code>.</p>
 <p>Type: Boolean <br>
 Default value: <code>false</code></p>
-<h3 id="label_1"><code>label</code><a class="headerlink" href="#label_1" title="Permanent link">&para;</a></h3>
-<p>Text to use for the link.</p>
-<p>This parameter is <strong>required</strong> and has no default value.</p>
-<p>Type: String</p>
 <h3 id="new_window"><code>new_window</code><a class="headerlink" href="#new_window" title="Permanent link">&para;</a></h3>
 <p>Open the link in a new tab.</p>
 <p>Type: Boolean <br>
@@ -2855,11 +2852,15 @@ the URL as query string arguments, like <code>?a=b&amp;c=d</code>.</p>
 set to <code>"endpoint"</code>.</p>
 <p>Type: Dictionary</p>
 <h3 id="scheme"><code>scheme</code><a class="headerlink" href="#scheme" title="Permanent link">&para;</a></h3>
-<p>Protocol to use with the endpoint.</p>
+<p>Protocol to use in the endpoint's URL.</p>
 <p>This parameter is only allowed when the <a href="#type_1"><code>type</code></a> parameter is set to
 <code>"endpoint"</code> and the <a href="#external"><code>external</code></a> parameter is set to <code>true</code>.</p>
 <p>Type: String <br>
 Default value: Same protocol as the current request</p>
+<h3 id="text"><code>text</code><a class="headerlink" href="#text" title="Permanent link">&para;</a></h3>
+<p>Text to use for the link.</p>
+<p>This parameter is <strong>required</strong> and has no default value.</p>
+<p>Type: String</p>
 <h3 id="type_1"><code>type</code><a class="headerlink" href="#type_1" title="Permanent link">&para;</a></h3>
 <p>Type of link. Other parameters may or may not be available depending on this
 value.</p>
@@ -2877,7 +2878,8 @@ value.</p>
 <p>Type: String</p>
 <h3 id="weight_2"><code>weight</code><a class="headerlink" href="#weight_2" title="Permanent link">&para;</a></h3>
 <p>Relative position of the link in lists. Links with low weights (small numbers)
-rise above heavier ones (large numbers).</p>
+rise above heavier ones (large numbers). At equal weights, links are ordered
+based on their order of appearance in the configuration.</p>
 <p>Type: Integer <br>
 Default value: <code>0</code></p>
 <hr />
@@ -3042,7 +3044,7 @@ commands</a> for details.</p>
 <h3 id="enabled_5"><code>enabled</code><a class="headerlink" href="#enabled_5" title="Permanent link">&para;</a></h3>
 <p>Enable the sort option.</p>
 <p>Type: Boolean</p>
-<h3 id="label_2"><code>label</code><a class="headerlink" href="#label_2" title="Permanent link">&para;</a></h3>
+<h3 id="label_1"><code>label</code><a class="headerlink" href="#label_1" title="Permanent link">&para;</a></h3>
 <p>Label of the sort option.</p>
 <p>Type: String</p>
 <h3 id="weight_4"><code>weight</code><a class="headerlink" href="#weight_4" title="Permanent link">&para;</a></h3>
