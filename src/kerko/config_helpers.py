@@ -349,7 +349,7 @@ class LinkModel(BaseModel, ABC):
     class Config:
         extra = Extra.forbid
 
-    label: str
+    text: str
     weight: int = 0
     new_window: bool = False
 
@@ -366,17 +366,17 @@ class LinkByEndpointModel(LinkModel):
     anchor: Optional[str]
     scheme: Optional[str]
     external: bool = False
-    parameters: Optional[Dict[SlugStr, Any]]
+    parameters: Optional[Dict[str, Any]]
 
     @root_validator
     def validate_scheme(cls, values):  # pylint: disable=no-self-argument
         if values.get('scheme') and not values.get('external'):
-            raise ValueError(f"When specifying 'scheme', 'external' must be true.")
+            raise ValueError("When specifying 'scheme', 'external' must be true.")
         return values
 
     def to_spec(self) -> LinkSpec:
         return LinkByEndpointSpec(
-            label=self.label,
+            text=self.text,
             weight=self.weight,
             new_window=self.new_window,
             endpoint=self.endpoint,
@@ -395,7 +395,7 @@ class LinkByURLModel(LinkModel):
 
     def to_spec(self) -> LinkSpec:
         return LinkByURLSpec(
-            label=self.label,
+            text=self.text,
             weight=self.weight,
             new_window=self.new_window,
             url=self.url,
@@ -410,27 +410,13 @@ LinkModelUnion = Annotated[
 ]
 
 
-class LinkGroupModel(BaseModel):
-
-    class Config:
-        extra = Extra.forbid
-
-    links: List[LinkModelUnion] = Field(min_items=1)
-
-    def to_spec(self, menu_key: str) -> LinkGroupSpec:
-        return LinkGroupSpec(
-            key=menu_key,
-            links=[item.to_spec() for item in self.links],
-        )
-
-
 class LinkGroupsModel(BaseModel):  # TODO: Pydantic v2: inherit RootModel.
-    __root__: Dict[SlugStr, LinkGroupModel]
+    __root__: Dict[SlugStr, Annotated[List[LinkModelUnion], Field(min_items=1)]]
 
     def to_spec(self) -> Dict[str, LinkGroupSpec]:
         return {
-            menu_key: menu_model.to_spec(menu_key)
-            for menu_key, menu_model in self.__root__.items()
+            key: LinkGroupSpec(key, [link_model.to_spec() for link_model in links])
+            for key, links in self.__root__.items()
         }
 
 

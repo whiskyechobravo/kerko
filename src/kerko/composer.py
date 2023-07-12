@@ -551,7 +551,7 @@ class Composer:
         Initialize a set of `FacetSpec` instances using config settings.
         """
         # Note: Default titles are defined here rather than in config so that they are translatable.
-        # TODO: Refactor most of this as factory methods in the models, as done for link_groups.
+        # TODO: Refactor facet using factory methods in the models, as in init_link_groups().
         facets_dict = config_get(config, 'kerko.facets')
         for facet_key, facet_config in facets_dict.items():
             if facet_config['enabled']:

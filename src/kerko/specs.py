@@ -762,8 +762,8 @@ class BadgeSpec:
 
 class LinkSpec(ABC):
 
-    def __init__(self, *, label: str, new_window=False, weight=0):
-        self.label = label
+    def __init__(self, *, text: str, new_window=False, weight=0):
+        self.text = text
         self.new_window = new_window
         self.weight = weight
 

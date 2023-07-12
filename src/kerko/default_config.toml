@@ -59,14 +59,14 @@ text_max_length_leeway = 10
 
 [kerko.link_groups]
 
-    [[kerko.link_groups.navbar.links]]
+    [[kerko.link_groups.navbar]]
+    text = "Bibliography"
     type = "endpoint"
-    label = "Bibliography"
     endpoint = "kerko.search"
 
-    [[kerko.link_groups.breadcrumb_base.links]]
+    [[kerko.link_groups.breadcrumb_base]]
+    text = "Bibliography"
     type = "endpoint"
-    label = "Bibliography"
     endpoint = "kerko.search"
 
 [kerko.templates]

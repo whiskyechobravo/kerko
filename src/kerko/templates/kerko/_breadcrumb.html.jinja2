@@ -12,15 +12,15 @@
 
         Order of appearance:
         - The breadcrumb base, from configuration.
-        - The given links (items must have 'url', 'label', and 'new_window'
+        - The given links (items must have 'url', 'text', and 'new_window'
           attributes), except for the last one, which may be just a string.
     #}
     {%- for link in config.kerko_composer.link_groups.breadcrumb_base.get_ordered_links() + links|default([]) %}
         {%- if loop.last %}
             {% if config.kerko.breadcrumb.include_current -%}
                 <li class="breadcrumb-item active" aria-current="page">
-                    {%- if link.label -%}
-                        {{- breadcrumb_text(link.label) -}}
+                    {%- if link.text -%}
+                        {{- breadcrumb_text(link.text) -}}
                     {%- else -%}
                         {{- breadcrumb_text(link) -}}
                     {%- endif -%}
@@ -28,7 +28,7 @@
             {%- endif -%}
         {%- else %}
             <li class="breadcrumb-item">
-                <a href="{{ link.url }}" {% if link.new_window %}target="_blank"{% endif %}>{{ breadcrumb_text(link.label) }}</a>
+                <a href="{{ link.url }}" {% if link.new_window %}target="_blank"{% endif %}>{{ breadcrumb_text(link.text) }}</a>
             </li>
         {%- endif %}
     {%- endfor %}

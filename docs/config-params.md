@@ -248,8 +248,8 @@ A breadcrumb is a navigational aid that displays the location of the current
 page in relation to the structure of a website.
 
 If enabled, the breadcrumb works in relation with the
-[`kerko.link_groups.breadcrumb_base.links`](#kerkolink_groupslinks) parameter,
-which defines the base (starting links) of the breadcrumb trail, which Kerko
+[`kerko.link_groups.breadcrumb_base`](#kerkolink_groups) parameter, which
+defines the base (starting links) of the breadcrumb trail, which Kerko
 dynamically completes with one or more links based on the current location
 within Kerko.
 
@@ -593,10 +593,11 @@ Default value: `0` (i.e., no age limit)
 
 ---
 
-## `kerko.link_groups.*.links.`
+## `kerko.link_groups.*.`
 
-Link groups, where `*` is an arbitrary key used for identifying each group. Each
-group has a `links` parameter, which must define at least one link.
+Link groups, where `*` is an arbitrary key used for identifying the group. Each
+group is a list which must contain at least one link defined using one or more
+of the sub-parameters described below.
 
 Link groups can be used for navigation or anywhere hyperlinks are needed.
 Templates can use the key to retrieve a desired link group.
@@ -605,20 +606,20 @@ Kerko provides default `navbar` and `breadcrumb_base` link groups. In TOML
 format, these are defined as below (the double brackets indicate a list item):
 
 ```toml
-[[kerko.link_groups.navbar.links]]
+[[kerko.link_groups.navbar]]
 type = "endpoint"
-label = "Bibliography"
 endpoint = "kerko.search"
+text = "Bibliography"
 
-[[kerko.link_groups.breadcrumb_base.links]]
+[[kerko.link_groups.breadcrumb_base]]
 type = "endpoint"
-label = "Bibliography"
 endpoint = "kerko.search"
+text = "Bibliography"
 ```
 
 ### `anchor`
 
-Anchor to append to the endpoint.
+Anchor to append to the endpoint's URL.
 
 This optional parameter is only allowed when the [`type`](#type_1) parameter is
 set to `"endpoint"`.
@@ -646,14 +647,6 @@ This parameter is only allowed when the [`type`](#type_1) parameter is set to
 Type: Boolean <br>
 Default value: `false`
 
-### `label`
-
-Text to use for the link.
-
-This parameter is **required** and has no default value.
-
-Type: String
-
 ### `new_window`
 
 Open the link in a new tab.
@@ -673,13 +666,21 @@ Type: Dictionary
 
 ### `scheme`
 
-Protocol to use with the endpoint.
+Protocol to use in the endpoint's URL.
 
 This parameter is only allowed when the [`type`](#type_1) parameter is set to
 `"endpoint"` and the [`external`](#external) parameter is set to `true`.
 
 Type: String <br>
 Default value: Same protocol as the current request
+
+### `text`
+
+Text to use for the link.
+
+This parameter is **required** and has no default value.
+
+Type: String
 
 ### `type`
 
@@ -707,7 +708,8 @@ Type: String
 ### `weight`
 
 Relative position of the link in lists. Links with low weights (small numbers)
-rise above heavier ones (large numbers).
+rise above heavier ones (large numbers). At equal weights, links are ordered
+based on their order of appearance in the configuration.
 
 Type: Integer <br>
 Default value: `0`

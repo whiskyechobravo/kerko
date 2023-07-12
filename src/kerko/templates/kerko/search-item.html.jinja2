@@ -9,7 +9,7 @@
 
 {%- block breadcrumb %}
     {%- if is_searching and back_url %}
-        {{ breadcrumb([{'url': back_url, 'label': _("Your search")}, title]) }}
+        {{ breadcrumb([{'url': back_url, 'text': _("Your search")}, title]) }}
     {%- else %}
         {{ super() }}
     {%- endif %}

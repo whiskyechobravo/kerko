@@ -148,7 +148,7 @@ its Git repository.
 - If you are using a translated version of Kerko, the default "Bibliography"
   link of the navigation bar no longer gets translated because it is now defined
   by a configuration parameter. To replace it, set the
-  `kerko.link_groups.navbar.links` parameter (see the [parameters
+  `kerko.link_groups.navbar` parameter (see the [parameters
   documentation](config-params.md) for details).
 - If your configuration changes neither the `DATA_PATH` nor the `INSTANCE_PATH`
   parameters, then rename KerkoApp's `data` directory to `instance`.
