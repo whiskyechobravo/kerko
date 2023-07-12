@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.0.0alpha2 (2023-07-12)
 
 Features:
 
@@ -8,7 +8,7 @@ Features:
   links that may be used for navigation.
 - Add a breadcrumb trail to all pages. One or more base links can be configured
   (see configuration parameters `kerko.breadcrumb` and
-  `kerko_link_groups.breadcrumb_base.*`).
+  `kerko_link_groups.breadcrumb_base`).
 
 Bug fixes:
 
@@ -17,12 +17,12 @@ Bug fixes:
 
 Backwards incompatible changes:
 
-- Items from the default navigation bar are now based on the default
-  `kerko.link_groups.navbar.*` configuration. There is no default translation for
-  it. To change the default label or to translate it, you must override the
+- Items from the main navigation bar are now based on the
+  `kerko.link_groups.navbar` configuration. There is no default translation for
+  it. To change the default text or to translate it, you must override the
   default `kerko.link_groups.navbar` in your configuration file. If you have
-  overridden the `_navbar_items.html.jinja2` template and wish to use the link
-  group configuration, you might want to adapt it.
+  overridden the `_navbar_items.html.jinja2` template and wish to use the
+  configuration, you might want to adapt it, or revert to the default template.
 
 Other changes:
 
