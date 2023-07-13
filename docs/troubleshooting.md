@@ -19,8 +19,11 @@ flask --app=/path/to/kerkoapp/wsgi:app kerko sync
 
 ## Configuration parameter change has no effect
 
-Use the following command to verify the desired parameter value is actually
-being used:
+Restart the application. This is required for any configuration change to take
+effect.
+
+If the change still appears to have no effect after a restart, use the following
+command to verify that the desired parameter value is actually being used:
 
 ```
 flask --debug kerko config
@@ -33,7 +36,7 @@ list the [TOML files] in their loading order. Remember that a later file can
 override values set in a previous one. If you are still unable to trace the
 source of an incorrect parameter value, check your [environment variables].
 Environment variables can override parameter values set in TOML configuration
-files!
+files.
 
 If, on the other hand, the parameter's value *is* the desired one, then review
 the [documentation](config-params.md) for that parameter. Make sure you
