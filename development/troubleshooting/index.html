@@ -580,8 +580,10 @@ for details.</p>
 <div class="highlight"><pre><span></span><code>flask<span class="w"> </span>--app<span class="o">=</span>/path/to/kerkoapp/wsgi:app<span class="w"> </span>kerko<span class="w"> </span>sync
 </code></pre></div>
 <h2 id="configuration-parameter-change-has-no-effect">Configuration parameter change has no effect<a class="headerlink" href="#configuration-parameter-change-has-no-effect" title="Permanent link">&para;</a></h2>
-<p>Use the following command to verify the desired parameter value is actually
-being used:</p>
+<p>Restart the application. This is required for any configuration change to take
+effect.</p>
+<p>If the change still appears to have no effect after a restart, use the following
+command to verify that the desired parameter value is actually being used:</p>
 <div class="highlight"><pre><span></span><code>flask --debug kerko config
 </code></pre></div>
 <p>If the parameter's value is not the expected one, check your configuration
@@ -591,7 +593,7 @@ list the <a href="../config-basics/#toml-files">TOML files</a> in their loading 
 override values set in a previous one. If you are still unable to trace the
 source of an incorrect parameter value, check your <a href="../config-basics/#environment-variables">environment variables</a>.
 Environment variables can override parameter values set in TOML configuration
-files!</p>
+files.</p>
 <p>If, on the other hand, the parameter's value <em>is</em> the desired one, then review
 the <a href="../config-params/">documentation</a> for that parameter. Make sure you
 understand the effect of the parameter value, and check for any notes or
