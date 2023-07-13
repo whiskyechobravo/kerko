@@ -64,8 +64,8 @@ Backwards incompatible changes:
 
 - Prevent the `clean` CLI command from cleaning everything by default. To delete
   everything, you now have to run `flask kerko clean everything`. This may help
-  accidental deletion of the cache or the search index, which in some instances
-  can take long to rebuild.
+  prevent accidental deletion of the cache, which in some instances can take
+  long to rebuild.
 - Rename the following configuration parameters:
     - `kerko.citation_formats.*` → `kerko.bib_formats.*`.
     - `kerko.features.download_citations_link` → `kerko.features.download_results_link`
