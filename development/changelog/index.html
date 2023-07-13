@@ -785,8 +785,8 @@ git<span class="w"> </span>remote<span class="w"> </span>set-head<span class="w"
 <ul>
 <li>Prevent the <code>clean</code> CLI command from cleaning everything by default. To delete
   everything, you now have to run <code>flask kerko clean everything</code>. This may help
-  accidental deletion of the cache or the search index, which in some instances
-  can take long to rebuild.</li>
+  prevent accidental deletion of the cache, which in some instances can take
+  long to rebuild.</li>
 <li>Rename the following configuration parameters:<ul>
 <li><code>kerko.citation_formats.*</code> → <code>kerko.bib_formats.*</code>.</li>
 <li><code>kerko.features.download_citations_link</code> → <code>kerko.features.download_results_link</code></li>
