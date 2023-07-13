@@ -116,13 +116,31 @@ directory, which you must provide as an **absolute path**.
 
 ## `LOGGING_ADDRESS`
 
+Address to send log messages to. Used only if `LOGGING_HANDLER` is set to
+`"syslog"`.
+
+Type: String <br>
+Default value: `"/dev/log"`
+
 ---
 
 ## `LOGGING_FORMAT`
 
+Log message format string, with %-style placeholders. Refer to the [Python
+logging documentation] for allowed attributes.
+
+Type: String <br>
+Default value: `"[%(asctime)s] %(levelname)s in %(module)s: %(message)s"`
+
 ---
 
 ## `LOGGING_HANDLER`
+
+Logging handler to use. At this time, the sole allowed value is `"syslog"`. If
+no value is set, the default handler will write to the default stream (usually
+`sys.stderr`).
+
+Type: String
 
 ---
 
@@ -1257,6 +1275,7 @@ Default value: `0`
 [Flask instance folder]: https://flask.palletsprojects.com/en/2.3.x/config/#instance-folders
 [Flask proxy]: https://flask.palletsprojects.com/en/2.3.x/deploying/proxy_fix/
 [KerkoApp]: https://github.com/whiskyechobravo/kerkoapp
+[Python logging documentation]: https://docs.python.org/3/library/logging.html
 [pytz]: https://pypi.org/project/pytz/
 [synchronization commands]: synchronization.md#command-line-interface-cli
 [Zotero Styles Repository]: https://www.zotero.org/styles/

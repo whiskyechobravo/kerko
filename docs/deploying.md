@@ -70,6 +70,8 @@ specific to your server, but are not secret. Its content should look like the
 following:
 
 ```toml title="instance.toml"
+LOGGING_HANDLER = "syslog"
+
 [kerkoapp.proxy_fix]
 enabled = true
 x_for = 1
