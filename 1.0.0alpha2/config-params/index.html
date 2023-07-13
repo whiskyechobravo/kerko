@@ -2502,10 +2502,22 @@ details.</p>
 </div>
 <hr />
 <h2 id="logging_address"><code>LOGGING_ADDRESS</code><a class="headerlink" href="#logging_address" title="Permanent link">&para;</a></h2>
+<p>Address to send log messages to. Used only if <code>LOGGING_HANDLER</code> is set to
+<code>"syslog"</code>.</p>
+<p>Type: String <br>
+Default value: <code>"/dev/log"</code></p>
 <hr />
 <h2 id="logging_format"><code>LOGGING_FORMAT</code><a class="headerlink" href="#logging_format" title="Permanent link">&para;</a></h2>
+<p>Log message format string, with %-style placeholders. Refer to the <a href="https://docs.python.org/3/library/logging.html">Python
+logging documentation</a> for allowed attributes.</p>
+<p>Type: String <br>
+Default value: <code>"[%(asctime)s] %(levelname)s in %(module)s: %(message)s"</code></p>
 <hr />
 <h2 id="logging_handler"><code>LOGGING_HANDLER</code><a class="headerlink" href="#logging_handler" title="Permanent link">&para;</a></h2>
+<p>Logging handler to use. At this time, the sole allowed value is <code>"syslog"</code>. If
+no value is set, the default handler will write to the default stream (usually
+<code>sys.stderr</code>).</p>
+<p>Type: String</p>
 <hr />
 <h2 id="logging_level"><code>LOGGING_LEVEL</code><a class="headerlink" href="#logging_level" title="Permanent link">&para;</a></h2>
 <p>Severity of events to log. Allowed values are <code>"DEBUG"</code>, <code>"INFO"</code>, <code>"WARNING"</code>,
