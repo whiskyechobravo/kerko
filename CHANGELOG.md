@@ -6,6 +6,13 @@ Features:
 
 - Add new configuration parameter `kerko.features.download_item`.
 
+Backwards incompatible changes:
+
+- Rename the following configuration parameters:
+    - `kerko.features.download_results_link` → `kerko.features.download_results`.
+    - `kerko.features.print_item_link` → `kerko.features.print_item`
+    - `kerko.features.print_results_link` → `kerko.features.print_results`
+
 Other changes:
 
 - Improve documentation.

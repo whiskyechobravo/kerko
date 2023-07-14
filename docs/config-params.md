@@ -442,7 +442,7 @@ To configure the bibliographic formats made available for downloading, see
 Type: Boolean <br>
 Default value: `true`
 
-### `download_results_link`
+### `download_results`
 
 Provide a record download button on search results pages.
 
@@ -490,14 +490,14 @@ editors.
 Type: Boolean <br>
 Default value: `false`
 
-### `print_item_link`
+### `print_item`
 
 Provide a print button on item pages.
 
 Type: Boolean <br>
 Default value: `false`
 
-### `print_results_link`
+### `print_results`
 
 Provide a print button on search results pages.
 

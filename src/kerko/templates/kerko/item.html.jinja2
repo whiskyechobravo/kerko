@@ -57,7 +57,7 @@
     <div class="mt-2 mb-4 item-content">
         {%- block item_actions %}
             {%- with show_download_link = (config.kerko.features.download_item and config.kerko_composer.bib_formats) %}
-                {%- if item.attachments or show_download_link or config.kerko.features.print_item_link or config.kerko.features.open_in_zotero_app or config.kerko.features.open_in_zotero_web %}
+                {%- if item.attachments or show_download_link or config.kerko.features.print_item or config.kerko.features.open_in_zotero_app or config.kerko.features.open_in_zotero_web %}
                     <div class="row my-2">
                         <div class="col-auto ml-auto text-right">
                             {%- if item.attachments|length > 1 %}
@@ -82,7 +82,7 @@
                                     </a>
                                 </div>
                             {%- endif %}
-                            {%- if config.kerko.features.print_item_link %}
+                            {%- if config.kerko.features.print_item %}
                                 <div class="{% block print_link_wrapper_classes %}d-none d-md-inline-block d-print-none mb-2{% endblock %}">
                                     <button id="print-link" class="{% block print_btn_classes %}btn btn-light{% endblock %}" type="button">
                                         <span class="fas fa-print" aria-hidden="true"></span> {{ _('Print this record') }}
@@ -313,7 +313,7 @@
         {%- endif %}
     {%- endblock kerko_item_js %}
     {%- block kerko_print_js %}
-        {%- if config.kerko.features.print_item_link %}
+        {%- if config.kerko.features.print_item %}
             <script src="{{ url_for('kerko.static', filename='kerko/js/print.js') }}"></script>
         {%- endif %}
     {%- endblock kerko_print_js %}

@@ -73,7 +73,7 @@ its Git repository.
     - `KERKO_DATA_DIR` → `DATA_PATH`. Now optional, relative to the instance
       path, and defaulting to `kerko` instead of `data/kerko`.
     - `KERKO_DOWNLOAD_ATTACHMENT_NEW_WINDOW` → `kerko.features.download_attachment_new_window`
-    - `KERKO_DOWNLOAD_CITATIONS_LINK` → `kerko.features.download_results_link`
+    - `KERKO_DOWNLOAD_CITATIONS_LINK` → `kerko.features.download_results`
     - `KERKO_DOWNLOAD_CITATIONS_MAX_COUNT` → `kerko.features.download_results_max_count`
     - `KERKO_FEEDS` → `kerko.feeds.formats`
     - `KERKO_FEEDS_FIELDS` → `kerko.feeds.fields`
@@ -86,9 +86,9 @@ its Git repository.
     - `KERKO_PAGE_LEN` → `kerko.pagination.page_len`
     - `KERKO_PAGER_LINKS` → `kerko.pagination.pager_links`
     - `KERKO_POPPER_VERSION` → `kerko.assets.popper_version`
-    - `KERKO_PRINT_CITATIONS_LINK` → `kerko.features.print_results_link`
+    - `KERKO_PRINT_CITATIONS_LINK` → `kerko.features.print_results`
     - `KERKO_PRINT_CITATIONS_MAX_COUNT` → `kerko.features.print_results_max_count`
-    - `KERKO_PRINT_ITEM_LINK` → `kerko.features.print_item_link`
+    - `KERKO_PRINT_ITEM_LINK` → `kerko.features.print_item`
     - `KERKO_RELATIONS_INITIAL_LIMIT` → `kerko.features.relations_initial_limit`
     - `KERKO_RELATIONS_LINKS` → `kerko.features.relations_links`
     - `KERKO_RELATIONS_SORT` → `kerko.features.relations_sort`

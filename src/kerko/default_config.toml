@@ -15,12 +15,12 @@ with_popper = true
 
 download_attachment_new_window = false
 download_item = true
-download_results_link = true
+download_results = true
 download_results_max_count = 0
 open_in_zotero_app = false
 open_in_zotero_web = false
-print_item_link = false
-print_results_link = false
+print_item = false
+print_results = false
 print_results_max_count = 0
 relations_links = false
 relations_initial_limit = 5
