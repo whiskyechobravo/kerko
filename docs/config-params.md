@@ -432,9 +432,22 @@ attribute to attachment links.
 Type: Boolean <br>
 Default value: `false`
 
+### `download_item`
+
+Provide a record download button on item pages.
+
+To configure the bibliographic formats made available for downloading, see
+[`kerko.bib_formats`](#kerkobib_formats).
+
+Type: Boolean <br>
+Default value: `true`
+
 ### `download_results_link`
 
 Provide a record download button on search results pages.
+
+To configure the bibliographic formats made available for downloading, see
+[`kerko.bib_formats`](#kerkobib_formats).
 
 Type: Boolean <br>
 Default value: `true`

@@ -63,6 +63,7 @@ class FeaturesModel(BaseModel):
         extra = Extra.forbid
 
     download_attachment_new_window: bool
+    download_item: bool
     download_results_link: bool
     download_results_max_count: NonNegativeInt
     open_in_zotero_app: bool

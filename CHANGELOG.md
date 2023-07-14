@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+Features:
+
+- Add new configuration parameter `kerko.features.download_item`.
+
+Other changes:
+
+- Improve documentation.
+
+
 ## 1.0.0alpha2 (2023-07-12)
 
 Features:

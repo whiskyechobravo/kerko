@@ -317,6 +317,9 @@ def standalone_attachment_download(item_id, attachment_filename=None):
 @except_abort(SearchIndexError, 503)
 def item_bib_download(item_id, bib_format_key):
     """Download a record."""
+    if not config('kerko.features.download_item'):
+        return abort(404)
+
     bib_format = composer().bib_formats.get(bib_format_key)
     if not bib_format:
         return abort(404)
