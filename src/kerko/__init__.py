@@ -3,6 +3,7 @@ Kerko: A Flask blueprint that provides faceted search for bibliographies based o
 """
 # pylint: disable=invalid-name
 
+import errno
 import pathlib
 import sys
 
@@ -20,7 +21,7 @@ try:
     DEFAULTS = load_toml(pathlib.Path(__file__).parent / 'default_config.toml')
 except RuntimeError as e:
     print(e, file=sys.stderr)
-    sys.exit(1)
+    sys.exit(errno.EINTR)  # This should make the WSGI server exit as well.
 
 
 def make_blueprint():

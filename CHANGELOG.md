@@ -6,6 +6,11 @@ Features:
 
 - Add new configuration parameter `kerko.features.download_item`.
 
+Bug fixes:
+
+- Fix Gunicorn not exiting if the default TOML config has errors (use the
+  `errno.EINTR` error code). Not an issue anyone should have encountered!
+
 Backwards incompatible changes:
 
 - Rename the following configuration parameters:
