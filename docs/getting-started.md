@@ -405,7 +405,7 @@ Let's now build a minimal app:
     flask --debug run
     ```
 
-7. Open http://127.0.0.1:5000/bibliography/ in your browser and explore the
+7. Open <http://127.0.0.1:5000/bibliography/> in your browser and explore the
    bibliography!
 
 You have just built a really minimal application for Kerko. However, if you are
