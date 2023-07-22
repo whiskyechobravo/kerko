@@ -102,14 +102,7 @@ your computer.
     flask --debug run
     ```
 
-6. Open http://localhost:5000/ in your browser and explore the bibliography!
-
-!!! warning "Not suitable for production"
-
-    The above procedure relies on Flask's built-in server, which is not
-    suitable for production. For production use, you should consider better
-    options such as the [WSGI servers suggested in the Flask
-    documentation][Flask_production].
+6. Open <http://localhost:5000/> in your browser and explore the bibliography!
 
 !!! info "Running your installed application"
 
@@ -130,32 +123,41 @@ your computer.
         flask --debug run
         ```
 
+!!! warning "Not suitable for production"
+
+    The above procedure relies on Flask's built-in server, which is not
+    suitable for production. For production use, you should consider better
+    options such as the [WSGI servers suggested in the Flask
+    documentation][Flask production].
+
 
 ### Docker installation
 
-**TODO:docs: Update this outdated section.**
-
 This procedure requires that [Docker] is installed on your computer.
 
-1. Copy the `Makefile`, `sample.env`, and `sample.config.toml` files from
-   [KerkoApp's repository][KerkoApp] to an empty directory on your computer.
+1. Copy the `Makefile`, `sample.secrets.toml`, and `sample.config.toml` files
+   from the most recent stable branch of the [KerkoApp] repository (e.g.
+   <https://github.com/whiskyechobravo/kerkoapp/tree/stable/1.0.x>) to an empty
+   directory on your computer.
 
-2. Rename your `sample.env` copy to `.env`. Open `.env` in a text editor to
-   assign proper values to the parameters outlined below:
+2. Under the same directory, create a subdirectory named `instance`.
 
-    - `KERKOAPP_SECRET_KEY`: This parameter is required for generating secure
-      tokens in web forms. It should have a hard to guess value, and should
-      really remain secret. For this reason, never add your `.env` file to a
-      code repository.
-    - `KERKOAPP_ZOTERO_API_KEY`: Your Zotero API key, as [created on
+3. Copy `sample.secrets.toml` as `.secrets.toml` into the `instance`
+   subdirectory. Open `instance/.secrets.toml` in a text editor to assign proper
+   values to the configuration parameters outlined below:
+
+    - `SECRET_KEY`: This parameter is required for generating secure tokens in
+      web forms. It should have a hard to guess value, and should really remain
+      secret. For this reason, never add your `.secrets.toml` file to a code
+      repository.
+    - `ZOTERO_API_KEY`: Your Zotero API key, as [created on
       zotero.org](https://www.zotero.org/settings/keys/new). We recommend that
       you create a read-only API key, as Kerko does not need to write to your
       library.
 
-    You do not need to change other values in `.env`.
-
-3. Rename your `sample.config.toml` copy to `config.toml`. Open `config.toml` in
-   a text editor to assign proper values to the parameters outlined below:
+4. Copy `sample.config.toml` as `config.toml` into the `instance` subdirectory.
+   Open `instance/config.toml` in a text editor to assign proper values to the
+   configuration parameters outlined below:
 
     - `ZOTERO_LIBRARY_ID`: The identifier of the Zotero library to get
       data from. For a personal library the value is your _userID_, as found on
@@ -166,46 +168,72 @@ This procedure requires that [Docker] is installed on your computer.
     - `ZOTERO_LIBRARY_TYPE`: The type of library to get data from,
       either `"user"` for a personal library, or `"group"` for a group library.
 
-    You do not need to edit other parameters at this point, but later on
-    `config.toml` is where your configuration changes will take place.
+    It should not be necessary to change other settings at this point. You can
+    always come back later to this file in order to configure KerkoApp to your
+    liking. For now, we suggest that you proceed to the next step and get it
+    running.
 
-    !!! warning
-
-        Do not set the `DATA_DIR` parameter. If you do, the volume bindings
-        defined within the `Makefile` will not be of any use to the application
-        running within the container.
-
-4. Pull the latest KerkoApp Docker image. In the same directory as the
-   `Makefile`, run the following command:
+5. From the same directory as `Makefile`, run KerkoApp:
 
     ```bash
-    docker pull whiskyechobravo/kerkoapp
-    ```
-
-5. Have KerkoApp retrieve your bibliographic data from zotero.org:
-
-    ```bash
-    make kerkosync
-    ```
-
-    If you have a large Zotero library and/or large file attachments, that
-    command may take a while to complete. Wait until the command finishes.
-
-    Kerko's index will be stored in the `data` subdirectory.
-
-6. Run KerkoApp:
-
-    ```
     make run
     ```
 
-7. Open http://localhost:8080/ in your browser and explore the bibliography!
+    This command should do many things:
 
-The provided `Makefile` is only an example on how to run a dockerized KerkoApp.
-For production use, you might want to build your own image.
+    - Download and install the latest KerkoApp Docker image from DockerHub.
+    - Run the Docker container to have KerkoApp retrieve your data from
+      zotero.org.
+    - Run the Docker container to launch the KerkoApp server.
 
-For full documentation on how to run Docker containers, including port mapping
-and volume binding, see the [Docker documentation][Docker_docs].
+    If your configuration files have errors, the process may be interrupted; if
+    that happens, retry `make run` after correcting the problem. Otherwise, if
+    all goes well, you will only have to wait a bit for the data synchronization
+    process to complete. This may take a long time if you have a large Zotero
+    library.
+
+    Kerko's data will be stored in the `instance` subdirectory.
+
+    KerkoApp should launch once the synchronization process has completed. When
+    you see the following message in the terminal, proceed to the next step:
+
+    ```
+    [INFO] Listening at: http://0.0.0.0:80
+    ```
+
+6. Open <http://localhost:8080/> in your browser and explore the bibliography!
+
+To stop the KerkoApp server, press ++ctrl+c++ in the terminal where the
+container is running.
+
+!!! tip
+
+    To use Kerko's command line interface, enter this command from the same
+    directory as `Makefile`:
+
+    ```bash
+    make shell
+    ```
+
+    This will start an interactive shell within the Docker container. From
+    there, you may run Kerko commands, such as this one, which lists all
+    the commands provided by Kerko:
+
+    ```bash
+    flask kerko --help
+    ```
+
+    To exit the interactive shell, enter `exit` or press ++ctrl+d++ at the
+    prompt.
+
+!!! tip
+
+    The `Makefile` is just an example on how to build and interact with a
+    dockerized KerkoApp. For production use, you might want to clone the full
+    [KerkoApp repository][KerkoApp], make some changes, and build your own image.
+
+    For full documentation on how to run Docker containers, including port mapping
+    and volume binding, see the [Docker documentation].
 
 
 ## Creating a custom application
@@ -331,8 +359,8 @@ Let's now build a minimal app:
     sort options, search scopes, record download formats, or badges.
 
     Finally, initialize extensions required by Kerko (see the respective
-    documentations of [Flask-Babel][Flask-Babel_documentation] and
-    [Bootstrap-Flask][Bootstrap-Flask_documentation] for more details), and
+    documentations of [Flask-Babel][Flask-Babel documentation] and
+    [Bootstrap-Flask][Bootstrap-Flask documentation] for more details), and
     register the Kerko blueprint with the application object:
 
     ```python title="wsgi.py" linenums="23"
@@ -387,11 +415,11 @@ KerkoApp adds some structure as well as features such as TOML configuration
 files, translations loading, a syslog logging handler, and error pages.
 
 
-[Bootstrap-Flask_documentation]: https://bootstrap-flask.readthedocs.io/en/latest/basic.html
-[Docker_docs]: https://docs.docker.com/
+[Bootstrap-Flask documentation]: https://bootstrap-flask.readthedocs.io/en/latest/basic.html
+[Docker documentation]: https://docs.docker.com/
 [Docker]: https://www.docker.com/
-[Flask_production]: https://flask.palletsprojects.com/en/latest/deploying/
-[Flask-Babel_documentation]: https://python-babel.github.io/flask-babel/
+[Flask production]: https://flask.palletsprojects.com/en/latest/deploying/
+[Flask-Babel documentation]: https://python-babel.github.io/flask-babel/
 [Flask]: https://pypi.org/project/Flask/
 [Git]: https://git-scm.com/
 [Kerko]: https://github.com/whiskyechobravo/kerko
