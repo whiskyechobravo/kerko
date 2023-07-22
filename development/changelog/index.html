@@ -742,6 +742,11 @@
 <ul>
 <li>Add new configuration parameter <code>kerko.features.download_item</code>.</li>
 </ul>
+<p>Bug fixes:</p>
+<ul>
+<li>Fix Gunicorn not exiting if the default TOML config has errors (use the
+  <code>errno.EINTR</code> error code). Not an issue anyone should have encountered!</li>
+</ul>
 <p>Backwards incompatible changes:</p>
 <ul>
 <li>Rename the following configuration parameters:<ul>
