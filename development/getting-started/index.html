@@ -731,7 +731,9 @@ documentation</a>.</p>
    directory on your computer.</p>
 </li>
 <li>
-<p>Under the same directory, create a subdirectory named <code>instance</code>.</p>
+<p>Under the same directory, create a subdirectory named <code>instance</code>. This is
+   where you will put your configuration files, and where Kerko will save its
+   data.</p>
 </li>
 <li>
 <p>Copy <code>sample.secrets.toml</code> as <code>.secrets.toml</code> into the <code>instance</code>
@@ -795,25 +797,30 @@ you see the following message in the terminal, proceed to the next step:</p>
 </ol>
 <p>To stop the KerkoApp server, press <span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-c">C</kbd></span> in the terminal where the
 container is running.</p>
+<p>The next time you execute <code>make run</code>, it will find that the image has been
+already been downloaded and the data synchronized, and thus it will just launch
+the server.</p>
 <div class="admonition tip">
-<p class="admonition-title">Tip</p>
+<p class="admonition-title">Using the Kerko command line interface (CLI) with Docker</p>
 <p>To use Kerko's command line interface, enter this command from the same
 directory as <code>Makefile</code>:</p>
 <div class="highlight"><pre><span></span><code>make<span class="w"> </span>shell
 </code></pre></div>
 <p>This will start an interactive shell within the Docker container. From
-there, you may run Kerko commands, such as this one, which lists all
-the commands provided by Kerko:</p>
+there, you may run Kerko commands to clean Kerko's data, to synchronize
+from zotero.org, or to check Kerko's configuration. The command below lists
+all the commands provided by Kerko:</p>
 <div class="highlight"><pre><span></span><code>flask<span class="w"> </span>kerko<span class="w"> </span>--help
 </code></pre></div>
 <p>To exit the interactive shell, enter <code>exit</code> or press <span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-d">D</kbd></span> at the
-prompt.</p>
+command prompt.</p>
 </div>
 <div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>The <code>Makefile</code> is just an example on how to build and interact with a
-dockerized KerkoApp. For production use, you might want to clone the full
-<a href="https://github.com/whiskyechobravo/kerkoapp">KerkoApp repository</a>, make some changes, and build your own image.</p>
+<p class="admonition-title">Building a Docker image for production</p>
+<p>The <code>Makefile</code> is just an example that shows how to build and interact with
+a dockerized KerkoApp. For production use, you might want to clone the full
+<a href="https://github.com/whiskyechobravo/kerkoapp">KerkoApp repository</a>, make some changes to its <code>Dockerfile</code>, and
+build your own image.</p>
 <p>For full documentation on how to run Docker containers, including port mapping
 and volume binding, see the <a href="https://docs.docker.com/">Docker documentation</a>.</p>
 </div>
