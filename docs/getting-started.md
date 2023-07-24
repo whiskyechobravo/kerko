@@ -140,7 +140,9 @@ This procedure requires that [Docker] is installed on your computer.
    <https://github.com/whiskyechobravo/kerkoapp/tree/stable/1.0.x>) to an empty
    directory on your computer.
 
-2. Under the same directory, create a subdirectory named `instance`.
+2. Under the same directory, create a subdirectory named `instance`. This is
+   where you will put your configuration files, and where Kerko will save its
+   data.
 
 3. Copy `sample.secrets.toml` as `.secrets.toml` into the `instance`
    subdirectory. Open `instance/.secrets.toml` in a text editor to assign proper
@@ -206,7 +208,11 @@ This procedure requires that [Docker] is installed on your computer.
 To stop the KerkoApp server, press ++ctrl+c++ in the terminal where the
 container is running.
 
-!!! tip
+The next time you execute `make run`, it will find that the image has been
+already been downloaded and the data synchronized, and thus it will just launch
+the server.
+
+!!! tip "Using the Kerko command line interface (CLI) with Docker"
 
     To use Kerko's command line interface, enter this command from the same
     directory as `Makefile`:
@@ -216,21 +222,23 @@ container is running.
     ```
 
     This will start an interactive shell within the Docker container. From
-    there, you may run Kerko commands, such as this one, which lists all
-    the commands provided by Kerko:
+    there, you may run Kerko commands to clean Kerko's data, to synchronize
+    from zotero.org, or to check Kerko's configuration. The command below lists
+    all the commands provided by Kerko:
 
     ```bash
     flask kerko --help
     ```
 
     To exit the interactive shell, enter `exit` or press ++ctrl+d++ at the
-    prompt.
+    command prompt.
 
-!!! tip
+!!! tip "Building a Docker image for production"
 
-    The `Makefile` is just an example on how to build and interact with a
-    dockerized KerkoApp. For production use, you might want to clone the full
-    [KerkoApp repository][KerkoApp], make some changes, and build your own image.
+    The `Makefile` is just an example that shows how to build and interact with
+    a dockerized KerkoApp. For production use, you might want to clone the full
+    [KerkoApp repository][KerkoApp], make some changes to its `Dockerfile`, and
+    build your own image.
 
     For full documentation on how to run Docker containers, including port mapping
     and volume binding, see the [Docker documentation].
