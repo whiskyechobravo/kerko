@@ -1,0 +1,886 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../localization/">
+      
+      
+        <link rel="next" href="../upgrading/">
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.17">
+    
+    
+      
+        <title>How to deploy - Kerko</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.26e3688c.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ecc896b0.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#how-to-deploy" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Kerko" class="md-header__button md-logo" aria-label="Kerko" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Kerko
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              How to deploy
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+            
+              <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+              </label>
+            
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+            
+              <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+              </label>
+            
+          
+        </form>
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/whiskyechobravo/kerko" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    whiskyechobravo/kerko
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Kerko" class="md-nav__button md-logo" aria-label="Kerko" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Kerko
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/whiskyechobravo/kerko" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    whiskyechobravo/kerko
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        Getting started
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../synchronization/" class="md-nav__link">
+        Synchronization
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config-basics/" class="md-nav__link">
+        Configuration basics
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config-params/" class="md-nav__link">
+        Configuration parameters
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config-guides/" class="md-nav__link">
+        Configuration guides
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        Troubleshooting
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../localization/" class="md-nav__link">
+        Localization
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          How to deploy
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        How to deploy
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#deploying-on-ubuntu-2004-or-2204-with-nginx-and-gunicorn" class="md-nav__link">
+    Deploying on Ubuntu 20.04 or 22.04 with nginx and gunicorn
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#submitting-your-sitemap-to-search-engines" class="md-nav__link">
+    Submitting your sitemap to search engines
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../upgrading/" class="md-nav__link">
+        How to upgrade
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        Changelog
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/" class="md-nav__link">
+        Contributing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../about/" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#deploying-on-ubuntu-2004-or-2204-with-nginx-and-gunicorn" class="md-nav__link">
+    Deploying on Ubuntu 20.04 or 22.04 with nginx and gunicorn
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#submitting-your-sitemap-to-search-engines" class="md-nav__link">
+    Submitting your sitemap to search engines
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/whiskyechobravo/kerko/blob/main/docs/deploying.md" title="Edit this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4v-2m10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1 2.1 2.1Z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/whiskyechobravo/kerko/raw/main/docs/deploying.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.15 8.15 0 0 1-1.23-2Z"/></svg>
+    </a>
+  
+
+
+<h1 id="how-to-deploy">How to deploy<a class="headerlink" href="#how-to-deploy" title="Permanent link">&para;</a></h1>
+<p>As there is a great diversity of operating systems, hosting environments, and
+<a href="https://flask.palletsprojects.com/en/latest/deploying/">WSGI servers</a>, it is hard to provide universal and useful instructions for
+setting up <a href="https://github.com/whiskyechobravo/kerkoapp">KerkoApp</a> for use in production.</p>
+<p>You can expect a procedure similar to that of any <a href="https://flask.palletsprojects.com/en/latest/deploying/">Flask</a> application, and there
+are many guides on the web covering this topic for various environments.</p>
+<p>That said, you may refer to the guide below for step-by-step instructions. Even
+if your environment is different from the one this guide was designed for, it
+might provide you with some useful hints.</p>
+<h2 id="deploying-on-ubuntu-2004-or-2204-with-nginx-and-gunicorn">Deploying on Ubuntu 20.04 or 22.04 with nginx and gunicorn<a class="headerlink" href="#deploying-on-ubuntu-2004-or-2204-with-nginx-and-gunicorn" title="Permanent link">&para;</a></h2>
+<p>These instructions will detail the steps and configurations required to get
+<a href="https://github.com/whiskyechobravo/kerkoapp">KerkoApp</a> running on an Ubuntu 20.04 or 22.04 web server, using <a href="https://gunicorn.org/">Gunicorn</a> as
+the WSGI container and <a href="https://nginx.org/en/docs/">nginx</a> as a HTTP proxy.</p>
+<p>The procedure is similar that of any Flask application, but KerkoApp-specific
+steps are also covered here.</p>
+<p>Install some required packages, including Python 3:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>git<span class="w"> </span>nginx<span class="w"> </span>python3<span class="w"> </span>python3-pip<span class="w"> </span>python3-venv
+</code></pre></div>
+<p>Create the user who will run the app:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>groupadd<span class="w"> </span>--system<span class="w"> </span>kerkoapp
+sudo<span class="w"> </span>useradd<span class="w"> </span>--gid<span class="w"> </span>kerkoapp<span class="w"> </span>--shell<span class="w"> </span>/bin/bash<span class="w"> </span>--create-home<span class="w"> </span>--home-dir<span class="w"> </span>/home/kerkoapp<span class="w"> </span>--groups<span class="w"> </span>www-data<span class="w"> </span>kerkoapp
+</code></pre></div>
+<p>Switch to that user and clone the desired version of KerkoApp. If you want to
+use version 1.0.0, for example, replace <code>VERSION</code> in the command below with
+<code>1.0.0</code>:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>su<span class="w"> </span>kerkoapp
+git<span class="w"> </span>clone<span class="w"> </span>--branch<span class="w"> </span>VERSION<span class="w"> </span>https://github.com/whiskyechobravo/kerkoapp.git<span class="w"> </span>~/kerkoapp
+</code></pre></div>
+<p>Still as user <code>kerkoapp</code>, create a Python virtual environment and install the
+Python packages required by KerkoApp:</p>
+<div class="highlight"><pre><span></span><code>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>~/venv
+<span class="nb">source</span><span class="w"> </span>~/venv/bin/activate
+pip3<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>~/kerkoapp/requirements/run.txt
+pip3<span class="w"> </span>install<span class="w"> </span>gunicorn
+</code></pre></div>
+<p>Always as user <code>kerkoapp</code>, create the <code>~/.secrets.toml</code> file. This is where you
+will put secret keys that should only be known to your server. Its content
+should look like the following:</p>
+<div class="highlight"><span class="filename">.secrets.toml</span><pre><span></span><code><span class="n">SECRET_KEY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;MY_SECRET_KEY&quot;</span>
+<span class="n">ZOTERO_API_KEY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;MY_ZOTERO_API_KEY&quot;</span>
+</code></pre></div>
+<p>You <strong>must</strong> set <code>SECRET_KEY</code> with a random string, and <code>ZOTERO_API_KEY</code> with an
+appropriate value (see <a href="../config-params/#zotero_api_key">configuration
+parameters</a>).</p>
+<p>Then create the <code>~/instance.toml</code> file. This file will contain settings that are
+specific to your server, but are not secret. Its content should look like the
+following:</p>
+<div class="highlight"><span class="filename">instance.toml</span><pre><span></span><code><span class="n">LOGGING_HANDLER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;syslog&quot;</span>
+
+<span class="k">[kerkoapp.proxy_fix]</span>
+<span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">x_for</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+<span class="n">x_proto</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+<span class="n">x_host</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+<span class="n">x_port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="n">x_prefix</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+</code></pre></div>
+<p>We are enabling the <code>kerkoapp.proxy_fix</code> parameters because we will configure
+nginx as a reverse proxy.</p>
+<p>Then create the <code>~/config.toml</code> file. This file will contain general settings
+for Kerko. You might have already tested KerkoApp on your desktop computer and
+created such file. If so, you could just copy that file to your server. At the
+very least it should contain the following settings:</p>
+<div class="highlight"><span class="filename">config.toml</span><pre><span></span><code><span class="n">ZOTERO_LIBRARY_ID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;MY_ZOTERO_LIBRARY_ID&quot;</span>
+<span class="n">ZOTERO_LIBRARY_TYPE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;MY_ZOTERO_LIBRARY_TYPE&quot;</span>
+
+<span class="k">[kerko.meta]</span>
+<span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;My Bibliography&quot;</span>
+</code></pre></div>
+<p>You <strong>must</strong> set <code>ZOTERO_LIBRARY_ID</code> and <code>ZOTERO_LIBRARY_TYPE</code> with appropriate
+values (see <a href="../config-params/#zotero_library_id">configuration parameters</a>) so
+that Kerko can connect to your Zotero library.</p>
+<p>It is not absolutely necessary to use three separate configuration files for
+KerkoApp as we just did. You could, for example, have just <code>~/instance.toml</code> and
+put all of the settings there. However, it is a good practice to split the
+configuration, and that allows you to copy <code>config.toml</code> from or to other
+machines, or even share it with other people, without worrying about leaking
+secret keys or messing up your server-specific settings.</p>
+<p>Once the configuration files are ready, Kerko should be able to talk to Zotero.
+Have Kerko retrieve your Zotero library's data by running the following command:</p>
+<div class="highlight"><pre><span></span><code>flask<span class="w"> </span>--debug<span class="w"> </span>kerko<span class="w"> </span>sync
+</code></pre></div>
+<p>The <code>--debug</code> switch is optional. If you use it, some messages will give you an
+better idea of the progress of the sync process. If you omit it, the command
+will run silently unless there are warnings or errors.</p>
+<p>Depending on the size of your library, this process can complete within less
+than a minute or take an hour or more. Zotero throttles API requests to prevent
+its servers from getting overloaded, so sometimes the process might seem to
+freeze, but be patient and Kerko will resume synchronization a few minutes
+later.</p>
+<p>Now that synchronization works, configure the cron task that will synchronize
+data from your Zotero library on a regular basis. Run the following command
+(always from the <code>kerkoapp</code> user):</p>
+<div class="highlight"><pre><span></span><code>crontab<span class="w"> </span>-e
+</code></pre></div>
+<p>That will launch the default <code>nano</code> editor. Add the following line at the very
+bottom, then save the file and exit the editor:</p>
+<div class="highlight"><span class="filename">crontab</span><pre><span></span><code>10 4 * * * cd /home/kerkoapp/kerkoapp &amp;&amp; /home/kerkoapp/venv/bin/flask kerko sync
+</code></pre></div>
+<p>That will synchronize the data once a day, at 4:10am. You may specify a
+different time, of course.</p>
+<p>Now exit from the <code>kerkoapp</code> user's shell, and go back to your usual sudoer
+account to finish the installation.</p>
+<p>Configure a socket that will let Gunicorn to speak with nginx. As the superuser,
+create the <code>/etc/systemd/system/kerkoapp.socket</code> file, with the following
+content:</p>
+<div class="highlight"><span class="filename">kerkoapp.socket</span><pre><span></span><code>[Unit]
+Description=KerkoApp socket
+
+[Socket]
+ListenStream=/run/kerkoapp.socket
+
+[Install]
+WantedBy=kerkoapp.target
+</code></pre></div>
+<p>Configure a service that will run Gunicorn. As the superuser, create the
+<code>/etc/systemd/system/kerkoapp.service</code> file, with the following content:</p>
+<div class="highlight"><span class="filename">kerkoapp.service</span><pre><span></span><code>[Unit]
+Description=KerkoApp daemon
+Requires=kerkoapp.socket
+After=network.target
+
+[Service]
+WorkingDirectory=/home/kerkoapp/kerkoapp
+ExecStart=/home/kerkoapp/venv/bin/gunicorn wsgi:app --name kerkoapp --user kerkoapp --group www-data --workers 4 --log-level warning --error-logfile - --access-logfile - --bind unix:/run/kerkoapp.socket
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+</code></pre></div>
+<p>Reload the systemd configurations, then enable and start the new service by
+running the following commands:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload
+sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>kerkoapp.socket
+sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>kerkoapp.service
+sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>kerkoapp.socket
+</code></pre></div>
+<p>You can check whether the socket is active with this command:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>kerkoapp.socket
+</code></pre></div>
+<p>If it shows up as 'active (listening)', you may now verify that it triggers the
+service:</p>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>--unix-socket<span class="w"> </span>/run/kerkoapp.socket<span class="w"> </span>localhost
+sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>kerkoapp.service
+</code></pre></div>
+<p>The <code>curl</code> command should output some HTML, and the <code>systemctl</code> command should
+now show the KerkoApp daemon as 'active (running)'.</p>
+<p>If either the socket or the service doesn't work, you might want to check for
+errors in the log:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>journalctl<span class="w"> </span>--unit<span class="o">=</span>kerkoapp
+</code></pre></div>
+<p>Once all of the above works, configure nginx to pass requests to Gunicorn. As
+the superuser, create the <code>/etc/nginx/sites-available/kerkoapp.conf</code> file with
+the following content, replacing <code>example.com</code> with your actual domain name:</p>
+<div class="highlight"><span class="filename">kerkoapp.conf</span><pre><span></span><code>server {
+    listen 80;
+    server_name example.com;
+
+    location / {
+        proxy_redirect off;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Host $server_name;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        if (!-f $request_filename) {
+            proxy_pass http://unix:/run/kerkoapp.socket;
+            break;
+        }
+    }
+}
+</code></pre></div>
+<p>Enable the site by running the following command:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>ln<span class="w"> </span>-s<span class="w"> </span>/etc/nginx/sites-available/kerkoapp.conf<span class="w"> </span>/etc/nginx/sites-enabled/
+</code></pre></div>
+<p>Have nginx test the configuration:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>nginx<span class="w"> </span>-t
+</code></pre></div>
+<p>If the command reports the configuration test as successful, reload nginx to
+make the configuration changes effective:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>service<span class="w"> </span>nginx<span class="w"> </span>reload
+</code></pre></div>
+<p>You should now be able to view your KerkoApp site at http://example.com!</p>
+<p>The nginx configuration above will serve the application using the HTTP
+protocol. As for any website, HTTPS is strongly recommended. That will require
+that you install a SSL certificate and configure nginx to use it; that exercise
+is left to the reader.</p>
+<div class="admonition warning">
+<p class="admonition-title">Changing the configuration can be disruptive</p>
+<p>Making any change to a configuration file requires that you at least restart
+the application afterwards for the change to become effective.</p>
+<p>Moreover, some parameters have an effect on the structure of the cache or
+the search index that Kerko depends on. Changing this kind of parameter may
+require that you rebuild either. Refer to the <a href="../config-params/">documentation of the
+parameter</a> to check if specific actions need to be taken
+after a change.</p>
+<p>The commands below, for example, will allow you to clean and rebuild the
+search index, and to restart KerkoApp:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>-iu<span class="w"> </span>kerkoapp<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;cd /home/kerkoapp/kerkoapp &amp;&amp; /home/kerkoapp/venv/bin/flask kerko clean index&#39;</span>
+sudo<span class="w"> </span>-iu<span class="w"> </span>kerkoapp<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;cd /home/kerkoapp/kerkoapp &amp;&amp; /home/kerkoapp/venv/bin/flask kerko sync&#39;</span>
+sudo<span class="w"> </span>systemctl<span class="w"> </span>stop<span class="w"> </span>kerkoapp.socket
+sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>kerkoapp.socket
+</code></pre></div>
+</div>
+<h2 id="submitting-your-sitemap-to-search-engines">Submitting your sitemap to search engines<a class="headerlink" href="#submitting-your-sitemap-to-search-engines" title="Permanent link">&para;</a></h2>
+<p>Kerko generates an <a href="https://www.sitemaps.org/">XML Sitemap</a> that can help search engines discover your
+bibliographic records.</p>
+<p>The path of the sitemap is <code>BASE_URL/sitemap.xml</code>, where <code>BASE_URL</code> should be
+replaced with the protocol, domain, port, and Kerko URL path prefix that are
+relevant to your installation, e.g.,
+<code>https://example.com/bibliography/sitemap.xml</code>.</p>
+<p>Different search engines may have different procedures for submitting sitemaps
+(<a href="https://developers.google.com/search/docs/advanced/sitemaps/build-sitemap#addsitemap">Google</a>,
+<a href="https://www.bing.com/webmasters/help/Sitemaps-3b5cf6ed">Bing</a>,
+<a href="https://yandex.com/support/webmaster/indexing-options/sitemap.html">Yandex</a>).</p>
+<p>However, a standard method consists in adding a <code>Sitemap</code> directive to a
+<code>robots.txt</code> file served at the root of your site, to tell web crawlers where to
+find your sitemap. For example, one might add the following line to
+<code>robots.txt</code>:</p>
+<div class="highlight"><pre><span></span><code>Sitemap: https://example.com/bibliography/sitemap.xml
+</code></pre></div>
+<p>A <code>robots.txt</code> file can have multiple <code>Sitemap</code> directives, thus the Kerko
+sitemap can be specified alongside any other sitemaps you might already have.</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            Back to top
+          </button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../localization/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Localization" rel="prev">
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Localization
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../upgrading/" class="md-footer__link md-footer__link--next" aria-label="Next: How to upgrade" rel="next">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                How to upgrade
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; <a href="https://whiskyechobravo.com" target="_blank" rel="noopener">Whisky Echo Bravo Services inc.­</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/whiskyechobravo/kerko" target="_blank" rel="noopener" title="Kerko on GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "header.autohide", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.action.view", "content.action.edit"], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.b425cdc4.min.js"></script>
+      
+    
+  </body>
+</html>
