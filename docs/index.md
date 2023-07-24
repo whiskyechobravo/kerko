@@ -1,10 +1,3 @@
-!!! warning
-
-    **This documentation is for Kerko version 1.0.x (currently alpha).** This
-    new version brings significant changes to installation and configuration
-    procedures.<br> **If you are looking for information on Kerko 0.9, see the
-    [Kerko 0.9 documentation](https://github.com/whiskyechobravo/kerko/blob/0.9/README.md).**
-
 # Introduction
 
 [Kerko] is a web application component that provides a user-friendly search and
