@@ -1094,8 +1094,8 @@ Default value: `100` (this is the maximum currently allowed by the Zotero API)
 
 ### `child_include_re`
 
-Regular expression to use to include children (e.g. notes, attachments) based on
-their tags. Any child which does not have a tag that matches this regular
+[Regular expression] to use to include children (e.g. notes, attachments) based
+on their tags. Any child which does not have a tag that matches this regular
 expression will be ignored. If this value is empty (which is the default), all
 children will be accepted unless `kerko.zotero.child_exclude_re` is set and
 causes some to be rejected.
@@ -1110,9 +1110,9 @@ Default value: `""`
 
 ### `child_exclude_re`
 
-Regular expression to use to exclude children (e.g. notes, attachments) based on
-their tags. Any child that have a tag that matches this regular expression will
-be ignored. If empty, no children will be rejected unless
+[Regular expression] to use to exclude children (e.g. notes, attachments) based
+on their tags. Any child that have a tag that matches this regular expression
+will be ignored. If empty, no children will be rejected unless
 `kerko.zotero.child_include_re` is set and the tags of those children do not
 match it. By default, any child having at least one tag that begins with an
 underscore character (`_`) is rejected.
@@ -1127,7 +1127,7 @@ Default value: `"^_"`
 
 ### `item_include_re`
 
-Regular expression to use to include items based on their tags. Any item which
+[Regular expression] to use to include items based on their tags. Any item which
 does not have a tag that matches this regular expression will be ignored. If
 this value is empty (which is the default), all items will be accepted unless
 `kerko.zotero.item_exclude_re` is set which can cause some items to be rejected.
@@ -1142,7 +1142,7 @@ Default value: `""`
 
 ### `item_exclude_re`
 
-Regular expression to use to exclude items based on their tags. Any item that
+[Regular expression] to use to exclude items based on their tags. Any item that
 have a tag that matches this regular expression will be excluded. If empty
 (which is the default), no items will be excluded unless
 `kerko.zotero.item_include_re` is set, in which case items that do not have any
@@ -1180,7 +1180,7 @@ Default value: `10`
 
 ### `tag_include_re`
 
-Regular expression to use to include tags. By default, all tags are accepted.
+[Regular expression] to use to include tags. By default, all tags are accepted.
 
 Note that record exports (downloads) always include all tags regardless of this
 parameter, which only applies to information displayed by Kerko (exports are
@@ -1196,8 +1196,8 @@ Default value: `""`
 
 ### `tag_exclude_re`
 
-Regular expression to use to exclude tags. The default value causes any tag that
-begins with an underscore character (`_`) to be ignored by Kerko.
+[Regular expression] to use to exclude tags. The default value causes any tag
+that begins with an underscore character (`_`) to be ignored by Kerko.
 
 Note that record exports (downloads) always include all tags regardless of this
 parameter, which only applies to information displayed by Kerko (exports are
@@ -1290,5 +1290,6 @@ Default value: `0`
 [KerkoApp]: https://github.com/whiskyechobravo/kerkoapp
 [Python logging documentation]: https://docs.python.org/3/library/logging.html
 [pytz]: https://pypi.org/project/pytz/
+[Regular expression]: https://docs.python.org/3/library/re.html
 [synchronization commands]: synchronization.md#command-line-interface-cli
 [Zotero Styles Repository]: https://www.zotero.org/styles/
