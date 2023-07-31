@@ -15,7 +15,7 @@
         <link rel="next" href="../config-guides/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.19">
+      <meta name="generator" content="mkdocs-1.5.1, mkdocs-material-9.1.21">
     
     
       
@@ -919,6 +919,33 @@
           <li class="md-nav__item">
   <a href="#pager_links" class="md-nav__link">
     pager_links
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kerkoperformance" class="md-nav__link">
+    kerko.performance.
+  </a>
+  
+    <nav class="md-nav" aria-label="kerko.performance.">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#whoosh_index_memory_limit" class="md-nav__link">
+    whoosh_index_memory_limit
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#whoosh_index_processors" class="md-nav__link">
+    whoosh_index_processors
   </a>
   
 </li>
@@ -2034,6 +2061,33 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#kerkoperformance" class="md-nav__link">
+    kerko.performance.
+  </a>
+  
+    <nav class="md-nav" aria-label="kerko.performance.">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#whoosh_index_memory_limit" class="md-nav__link">
+    whoosh_index_memory_limit
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#whoosh_index_processors" class="md-nav__link">
+    whoosh_index_processors
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#kerkoscopes" class="md-nav__link">
     kerko.scopes.*.
   </a>
@@ -2945,6 +2999,24 @@ Default value: <code>20</code></p>
 <p>Number of pages to show in the pager (not counting the current page).</p>
 <p>Type: Integer <br>
 Default value: <code>4</code></p>
+<hr />
+<h2 id="kerkoperformance"><code>kerko.performance.</code><a class="headerlink" href="#kerkoperformance" title="Permanent link">&para;</a></h2>
+<h3 id="whoosh_index_memory_limit"><code>whoosh_index_memory_limit</code><a class="headerlink" href="#whoosh_index_memory_limit" title="Permanent link">&para;</a></h3>
+<p>Maximum memory (in megabytes) the Whoosh index writer will use for the indexing
+pool. The higher the number, the faster indexing will be.</p>
+<p>The actual memory used will be higher than this value because of interpreter
+overhead (up to twice as much!). Other operations performed by Kerko at indexing
+time use memory too. Thus, although useful as a tuning parameter, this setting
+does not allow to exactly control the memory usage.</p>
+<p>Type: Integer <br>
+Default value: 128</p>
+<h3 id="whoosh_index_processors"><code>whoosh_index_processors</code><a class="headerlink" href="#whoosh_index_processors" title="Permanent link">&para;</a></h3>
+<p>Controls the number of processors Whoosh will use for indexing.</p>
+<p>Note that when you use multiprocessing, the <code>whoosh_index_memory_limit</code>
+parameter controls the amount of memory used by each process, so the actual
+memory used will be <code>whoosh_index_memory_limit</code> × <code>whoosh_index_processors</code>.</p>
+<p>Type: Integer <br>
+Default value: 1</p>
 <hr />
 <h2 id="kerkoscopes"><code>kerko.scopes.*.</code><a class="headerlink" href="#kerkoscopes" title="Permanent link">&para;</a></h2>
 <p>Keyword search scopes, where <code>*</code> is a scope key. The scope key is used
