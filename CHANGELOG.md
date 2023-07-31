@@ -1,5 +1,21 @@
 # Changelog
 
+## Unreleased
+
+Features:
+
+- Add configuration parameters `kerko.performance.whoosh_index_memory_limit` and
+  `kerko.performance.whoosh_index_processors` to give some control over the
+  Whoosh search engine's indexing performance.
+
+Other changes:
+
+- Reduce the default memory limit used by Whoosh's index writer from 256 MB to
+  128 MB. This can prevent swapping with large libraries on small machines. The
+  limit may now be changed with the
+  `kerko.performance.whoosh_index_memory_limit` parameter.
+
+
 ## 1.0.0 (2023-07-24)
 
 Features:
@@ -31,7 +47,7 @@ Features:
   links that may be used for navigation.
 - Add a breadcrumb trail to all pages. One or more base links can be configured
   (see configuration parameters `kerko.breadcrumb` and
-  `kerko_link_groups.breadcrumb_base`).
+  `kerko.link_groups.breadcrumb_base`).
 
 Bug fixes:
 

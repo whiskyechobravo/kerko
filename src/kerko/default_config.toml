@@ -858,3 +858,8 @@ whoosh_language = "en"
     [kerko.relations.related]
     enabled = true
     weight = 20
+
+[kerko.performance]
+
+whoosh_index_memory_limit = 128
+whoosh_index_processors = 1

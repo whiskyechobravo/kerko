@@ -162,6 +162,16 @@ class ZoteroModel(BaseModel):
     attachment_mime_types: List[str]
 
 
+class PerformanceModel(BaseModel):
+    """Model for the kerko.performance config table."""
+
+    class Config:
+        extra = Extra.forbid
+
+    whoosh_index_memory_limit: int = Field(ge=16)
+    whoosh_index_processors: int = Field(ge=1)
+
+
 class SearchModel(BaseModel):
     """Model for the kerko.search config table."""
 
@@ -436,6 +446,7 @@ class KerkoModel(BaseModel):
     link_groups: LinkGroupsModel
     templates: TemplatesModel
     zotero: ZoteroModel
+    performance: PerformanceModel
     search: SearchModel
     scopes: Dict[SlugStr, ScopesModel]
     search_fields: SearchFieldsModel

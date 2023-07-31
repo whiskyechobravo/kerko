@@ -796,6 +796,34 @@ Default value: `4`
 
 ---
 
+## `kerko.performance.`
+
+### `whoosh_index_memory_limit`
+
+Maximum memory (in megabytes) the Whoosh index writer will use for the indexing
+pool. The higher the number, the faster indexing will be.
+
+The actual memory used will be higher than this value because of interpreter
+overhead (up to twice as much!). Other operations performed by Kerko at indexing
+time use memory too. Thus, although useful as a tuning parameter, this setting
+does not allow to exactly control the memory usage.
+
+Type: Integer <br>
+Default value: 128
+
+### `whoosh_index_processors`
+
+Controls the number of processors Whoosh will use for indexing.
+
+Note that when you use multiprocessing, the `whoosh_index_memory_limit`
+parameter controls the amount of memory used by each process, so the actual
+memory used will be `whoosh_index_memory_limit` × `whoosh_index_processors`.
+
+Type: Integer <br>
+Default value: 1
+
+---
+
 ## `kerko.scopes.*.`
 
 Keyword search scopes, where `*` is a scope key. The scope key is used
