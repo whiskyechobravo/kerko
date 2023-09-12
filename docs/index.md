@@ -254,11 +254,11 @@ templates (but could be completely removed or replaced in custom templates):
 Before choosing Kerko for your project, you might want to review the following
 known limitations of Kerko:
 
-- The system can probably handle relatively large bibliographies (it has been
-  tested so far with about 15,000 entries), but the number of distinct facet
-  values has more impact on response times than the number of references. For
-  the best response times, it is recommended to limit the number of distinct
-  facet values under a few hundreds.
+- The system can handle relatively large bibliographies (it has been tested with
+  over 15,000 references), but the number of distinct facet values can have more
+  impact on response times than the number of records. For the best response
+  times, it is recommended to limit the number of distinct facet values under a
+  few hundreds.
 - Kerko can only manage a single bibliography per application.
 - Although Kerko can be integrated in a multilingual web application were the
   visitor may select a language, Zotero does not provide a way to manage tags or
