@@ -67,7 +67,7 @@ To start a local live-reloading documentation server:
 mkdocs serve
 ```
 
-Then view the documentation in your browser at http://localhost:8000/.
+Then view the documentation in your browser at <http://localhost:8000/>.
 
 
 ## Submitting code changes
