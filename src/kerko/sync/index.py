@@ -42,10 +42,7 @@ def sync_index(full=False):
 
     count = 0
     index = open_index('index', schema=composer().schema, auto_create=True, write=True)
-    writer = index.writer(
-        limitmb=config('kerko.performance.whoosh_index_memory_limit'),
-        procs=config('kerko.performance.whoosh_index_processors'),
-    )
+    writer = index.writer(limitmb=256)
     try:
         writer.mergetype = whoosh.writing.CLEAR
         gate = TagGate(

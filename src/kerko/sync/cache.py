@@ -51,10 +51,7 @@ def sync_cache(full=False):
     version = zotero.last_modified_version(zotero_credentials)
 
     cache = open_index('cache', schema=get_cache_schema, auto_create=True, write=True)
-    writer = cache.writer(
-        limitmb=config('kerko.performance.whoosh_index_memory_limit'),
-        procs=config('kerko.performance.whoosh_index_processors'),
-    )
+    writer = cache.writer(limitmb=256)
     try:
         if config('kerko.search.fulltext'):
             fulltext_items = zotero.load_new_fulltext(zotero_credentials, since)

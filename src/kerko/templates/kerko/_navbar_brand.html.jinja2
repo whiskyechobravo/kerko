@@ -1,1 +1,4 @@
-<a href="{{ url_for('kerko.search') }}" class="navbar-brand">{{ config.kerko.meta.title }}</a>
+<a href="{{ url_for('kerko.search') }}" class="navbar-brand">
+  <img src="{{ config.kerko.brand.url }}" width="{{ config.kerko.brand.width }}" height="{{ config.kerko.brand.height }}" class="d-inline-block align-top" alt="">
+  {{ config.kerko.meta.title }}
+</a>
