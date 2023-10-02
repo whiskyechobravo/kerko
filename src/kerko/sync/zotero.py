@@ -344,7 +344,7 @@ class Items:
             'sort': 'dateAdded',
             'direction': 'asc',
             'include': self.include,
-            'style': config('kerko.zotero.csl_style'),
+            'style': config('kerko.zotero.csl_style')[0],
         }
         self.zotero_batch = getattr(self.zotero_credentials, self.method)(**params)
         if not self.zotero_batch:

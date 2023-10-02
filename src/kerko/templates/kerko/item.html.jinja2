@@ -181,7 +181,9 @@
             {{- field(_("Notes"), item.notes|join('')|safe) if item.notes }}
         {%- endblock item_field_notes %}
         {%- block item_field_citation %}
-            {{- field(_("Citation"), ('<div class="card"><div class="card-body">' + item.bib + '</div></div>')|safe) }}
+        {%- for csl in config.kerko.zotero.csl_style %}
+            {{- field(_("Citation '" + csl + "'"), ('<div class="card"><div class="card-body">' + item.get('cite_'+csl) + '</div></div>')|safe) }}
+        {%- endfor -%}
         {%- endblock item_field_citation %}
         {%- block item_facets %}
             {%- if item.facet_results %}

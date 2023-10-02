@@ -728,3 +728,37 @@ class SortDateExtractor(Extractor):
         parsed_date = item.get('meta', {}).get('parsedDate', '')
         year, month, day = parse_partial_date(parsed_date)
         return int('{:04d}{:02d}{:02d}'.format(year, month, day))
+#Citation generation
+class ConvertCitationExtractor(Extractor):
+    def apply_transformers(self, item, target):
+        transformer = self.getTransformer(target)
+        return transformer(item)
+
+    def getTransformer(self, target):
+        if(target == 'apa'):
+            return self.apa_transformer
+        elif(target == 'abnt'):
+            return self.abnt_transformer
+
+    def apa_transformer(self, value):
+        return value
+
+    def abnt_transformer(self, value):
+        return 'Future conversion to abnt'
+
+    def __init__(self, *, targetFormat, **kwargs):
+        """
+        Initialize the extractor.
+
+        :param Extractor extractor: Base extractor to wrap.
+
+        :param list transformers: List of callables that will be chained to
+            transform the extracted data. Each callable takes a value as
+            argument and returns the transformed value.
+        """
+        super().__init__(**kwargs)
+        self.targetFormat = targetFormat
+
+    def extract(self, item, library_context, spec):
+        value = item.get('bib')
+        return self.apply_transformers(value, self.targetFormat)
