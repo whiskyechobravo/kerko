@@ -728,16 +728,18 @@ class SortDateExtractor(Extractor):
         parsed_date = item.get('meta', {}).get('parsedDate', '')
         year, month, day = parse_partial_date(parsed_date)
         return int('{:04d}{:02d}{:02d}'.format(year, month, day))
-#Citation generation
+
+
+# Citation generation
 class ConvertCitationExtractor(Extractor):
     def apply_transformers(self, item, target):
         transformer = self.getTransformer(target)
         return transformer(item)
 
     def getTransformer(self, target):
-        if(target == 'apa'):
+        if (target == 'apa'):
             return self.apa_transformer
-        elif(target == 'abnt'):
+        elif (target == 'abnt'):
             return self.abnt_transformer
 
     def apa_transformer(self, value):
@@ -758,6 +760,154 @@ class ConvertCitationExtractor(Extractor):
         """
         super().__init__(**kwargs)
         self.targetFormat = targetFormat
+
+    def extract(self, item, library_context, spec):
+        value = item.get('bib')
+        return self.apply_transformers(value, self.targetFormat)
+
+
+# Citation generation
+class CSLGenExtractor(Extractor):
+
+    def generateJson(self, item):
+        return """
+                [
+                    {
+                        "id": "ITEM-1",
+                        "issued": {
+                            "date-parts": [[1987,  8,  3],
+                                           [2003, 10, 23]]
+                        },
+                        "title": "Ignore me",
+                        "type": "book"
+                    },
+                    {
+                      "id" : "ITEM-2",
+                      "page" : "1-7",
+                      "type" : "article-journal",
+                      "issued" : {
+                        "date-parts": [[2006]]
+                      }
+                    },
+                    {
+                        "author": [
+                            {
+                                "family": "Doe",
+                                "given": "John"
+                            }
+                        ],
+                        "id": "ITEM-3",
+                        "issued": {
+                            "date-parts": [["1965", "6", "1"]]
+                        },
+                        "title": "His Anonymous Life",
+                        "type": "book"
+                    },
+                    {
+                        "author": [
+                            {
+                                "family": "Grignon",
+                                "given": "Cyril"
+                            },
+                                        {
+                                "family": "Sentenac",
+                                "given": "Corey"
+                            }
+                        ],
+                        "id": "ITEM-4",
+                        "issued": {
+                            "date-parts": [[2000]]
+                       },
+                        "type": "book"
+                    },
+                    {
+                        "id": "ITEM-5",
+                        "title":"Boundaries of Dissent: Protest and State Power in the Media Age",
+                        "author": [
+                                {
+                                        "family": "D'Arcus",
+                                        "given": "Bruce",
+                                        "static-ordering": false
+                                }
+                        ],
+                        "publisher": "Routledge",
+                        "publisher-place": "New York",
+                        "issued": {
+                            "date-parts":[[2006]]
+                        },
+                        "type": "book",
+                        "URL": "http://www.test01.com"
+                    }
+                ]
+                """
+    def generateBibSource(self, item):
+        import json
+        from citeproc.source.json import CiteProcJSON
+        json_input = self.generateJson(item)
+
+        # Parse the JSON input using json.loads()
+        # (parsing from a file object can be done with json.load)
+
+        json_data = json.loads(json_input)
+
+        return CiteProcJSON(json_data)
+    def apply_transformers(self, item, target):
+        # Import the citeproc-py classes we'll use below.
+        from citeproc import CitationStylesStyle, CitationStylesBibliography
+        from citeproc import Citation, CitationItem
+        from citeproc import formatter
+        bib_source = self.generateBibSource(item)
+
+        bib_style = CitationStylesStyle(target, validate=False)
+
+        # Create the citeproc-py bibliography, passing it the:
+        # * CitationStylesStyle,
+        # * BibliographySource (CiteProcJSON in this case), and
+        # * a formatter (plain, html, or you can write a custom formatter)
+
+        bibliography = CitationStylesBibliography(bib_style, bib_source, formatter.html)
+
+        # Processing citations in a document needs to be done in two passes as for some
+        # CSL styles, a citation can depend on the order of citations in the
+        # bibliography and thus on citations following the current one.
+        # For this reason, we first need to register all citations with the
+        # CitationStylesBibliography.
+
+        citation1 = Citation([CitationItem('ITEM-3')])
+        citation2 = Citation([CitationItem('ITEM-1'), CitationItem('ITEM-2')])
+        citation3 = Citation([CitationItem('ITEM-4')])
+        citation4 = Citation([CitationItem('ITEM-5')])
+        citation5 = Citation([CitationItem('MISSING')])
+
+        bibliography.register(citation1)
+        bibliography.register(citation2)
+        bibliography.register(citation3)
+        bibliography.register(citation4)
+        bibliography.register(citation5)
+
+        # In the second pass, CitationStylesBibliography can generate citations.
+        # CitationStylesBibliography.cite() requires a callback function to be passed
+        # along to be called in case a CitationItem's key is not present in the
+        # bibliography.
+
+        def warn(citation_item):
+            print("WARNING: Reference with key '{}' not found in the bibliography."
+                  .format(citation_item.key))
+
+        print(bibliography.cite(citation1, warn))
+
+    def __init__(self, *, target_format, **kwargs):
+        """
+        Initialize the extractor.
+
+        :param Extractor extractor: Base extractor to wrap.
+
+        :param list transformers: List of callables that will be chained to
+            transform the extracted data. Each callable takes a value as
+            argument and returns the transformed value.
+        """
+        super().__init__(**kwargs)
+        self.targetFormat = target_format
 
     def extract(self, item, library_context, spec):
         value = item.get('bib')
