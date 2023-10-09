@@ -335,7 +335,11 @@ class Composer:
                 FieldSpec(
                     key='cite_' + style,
                     field_type=STORED,
-                    extractor=extractors.ConvertCitationExtractor(targetFormat=style)
+                    extractor=extractors.ConvertCitationExtractor(
+                        target_format=style,
+                        max_attempts=config_get(config, 'kerko.zotero.max_attempts'),
+                        wait=config_get(config, 'kerko.zotero.wait')
+                    )
                 ),
             )
 
