@@ -322,13 +322,13 @@ class Composer:
             )
         )
         # Formatted citation.
-        # self.add_field(
-        #    FieldSpec(
-        #        key='bib',
-        #        field_type=STORED,
-        #        extractor=extractors.ItemExtractor(key='bib', format_='bib'),
-        #    )
-        # )
+        self.add_field(
+           FieldSpec(
+               key='bib',
+               field_type=STORED,
+               extractor=extractors.ItemExtractor(key='bib', format_='bib'),
+           )
+        )
         # Custom citation using csl(to be built)
         for style in config_get(config, 'kerko.zotero.csl_style'):
             self.add_field(
@@ -342,14 +342,6 @@ class Composer:
                     )
                 ),
             )
-
-        self.add_field(
-            FieldSpec(
-                key='cite',
-                field_type=STORED,
-                extractor=extractors.ItemExtractor(key='bib', format_='bib'),
-            )
-        )
         # OpenURL Coins.
         self.add_field(
             FieldSpec(
