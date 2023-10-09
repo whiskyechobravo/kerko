@@ -746,13 +746,38 @@ class ConvertCitationExtractor(Extractor):
         else:
             return self.get_zotero_citation(item, target)
 
-    @staticmethod
-    def get_zotero_citation(item, target):
-        from kerko.sync import zotero
-        api = zotero.init_zotero()
-        return api.item(item, content='citation', style=target)
 
-    def __init__(self, *, target_format, **kwargs):
+    def get_zotero_citation(self, item, target):
+        from kerko.sync import zotero
+        from pyzotero import zotero_errors
+        import requests
+        from time import sleep
+        api = zotero.init_zotero()
+        attempts = 1
+        while True:
+            try:
+                return api.item(item, content='citation', style=target)[0]
+            except (
+                    requests.exceptions.ConnectionError,
+                    zotero_errors.HTTPError,
+                    zotero_errors.UnsupportedParams
+            ) as e:
+                current_app.logger.warning(e)
+                if attempts < self.max_attempts:
+                    current_app.logger.warning(
+                        f"The Zotero API request has failed in {zotero.__name__}. "
+                        f"New attempt in {self.wait} seconds..."
+                    )
+                    attempts += 1
+                    sleep(self.wait)
+                else:
+                    current_app.logger.error(
+                        "The maximum number of API call attempts to Zotero has "
+                        "been reached. Stopping."
+                    )
+                    raise
+
+    def __init__(self, *, target_format, max_attempts, wait, **kwargs):
         """
         Initialize the extractor.
 
@@ -764,6 +789,8 @@ class ConvertCitationExtractor(Extractor):
         """
         super().__init__(**kwargs)
         self.targetFormat = target_format
+        self.max_attempts = max_attempts
+        self.wait = wait
 
     def extract(self, item, library_context, spec):
         value = item.get('key')
