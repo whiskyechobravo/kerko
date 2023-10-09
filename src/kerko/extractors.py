@@ -13,7 +13,7 @@ from markupsafe import Markup
 
 from kerko.datetime import maximize_partial_date, parse_partial_date
 from kerko.tags import TagGate
-from kerko.text import id_normalize, sort_normalize
+from kerko.text import sort_normalize
 from kerko.transformers import (find_item_id_in_zotero_uri_links,
                                 find_item_id_in_zotero_uris_str)
 
@@ -166,7 +166,7 @@ class ChainExtractor(Extractor):
     """
     Extract data using a chain of extractors.
 
-    When the an extractor returns `None`, the following one in the chain is
+    When an extractor returns `None`, the following one in the chain is
     tried, until a value is found or no more extractors are left to try in the
     chain.
     """
@@ -356,13 +356,13 @@ class BaseTagsExtractor(Extractor):
         """
         Initialize the extractor.
 
-        :param str include_re: Any tag that does not matches this regular
+        :param str include_re: Any tag that does not match this regular
             expression will be ignored by the extractor. If empty, all tags will
-            be accepted unless `exclude_re` is set and they match it.
+            be accepted unless `exclude_re` is set, and they match it.
 
         :param str exclude_re: Any tag that matches this regular expression
             will be ignored by the extractor. If empty, all tags will be
-            accepted unless `include_re` is set and they do not match it.
+            accepted unless `include_re` is set, and they do not match it.
         """
         super().__init__(**kwargs)
         self.include = re.compile(include_re) if include_re else None
@@ -565,7 +565,7 @@ class CollectionFacetTreeExtractor(Extractor):
             if len(ancestors) <= 1 or ancestors[0] != spec.collection_key:
                 continue  # Skip collection, unrelated to this facet.
 
-            ancestors = ancestors[1:]  # Facet values come from subcollections.
+            ancestors = ancestors[1:]  # Facet values come from sub-collections.
             for path in _expand_paths(ancestors):
                 label = library_context.collections.get(
                     path[-1], {}
@@ -590,7 +590,7 @@ class InCollectionExtractor(Extractor):
             boolean.
 
         :param bool check_subcollections: If `True` (default), membership is
-            extended to any subcollection of the specified collection.
+            extended to any sub-collection of the specified collection.
         """
         super().__init__(**kwargs)
         self.collection_key = collection_key
@@ -627,7 +627,7 @@ class ItemTypeFacetExtractor(Extractor):
     def extract(self, item, library_context, spec):
         item_type = item.get('data', {}).get('itemType')
         if item_type:
-            return (item_type, library_context.item_types.get(item_type, item_type))
+            return item_type, library_context.item_types.get(item_type, item_type)
         self.warning("Missing itemType", item)
         return None
 
@@ -700,11 +700,11 @@ class SortCreatorExtractor(Extractor):
     def extract(self, item, library_context, spec):
         creators = []
 
-        def append_creator(creator):
+        def append_creator(_creator):
             creator_parts = [
-                _prepare_sort_text(creator.get('lastName', '')),
-                _prepare_sort_text(creator.get('firstName', '')),
-                _prepare_sort_text(creator.get('name', ''))]
+                _prepare_sort_text(_creator.get('lastName', '')),
+                _prepare_sort_text(_creator.get('firstName', '')),
+                _prepare_sort_text(_creator.get('name', ''))]
             creators.append(' zzz '.join([p for p in creator_parts if p]))
 
         # We treat creator types like an ordered list, where the first creator
@@ -712,7 +712,7 @@ class SortCreatorExtractor(Extractor):
         # creator types may not appear in citations. Therefore, we try to sort
         # only by primary creators in order to avoid sorting with data that may
         # be invisible to the user. Only when an item has no primary creator do
-        # we fallback to lesser creators.
+        # we fall back to lesser creators.
         for creator_type in library_context.get_creator_types(item.get('data', {})):
             for creator in item.get('data', {}).get('creators', []):
                 if creator.get('creatorType', '') == creator_type.get('creatorType'):
@@ -737,173 +737,20 @@ class ConvertCitationExtractor(Extractor):
         'ABNT': 'associacao-brasileira-de-normas-tecnicas'
     }
 
-
     def apply_transformers(self, item, target):
-        return self.getTransformer(item, target)
+        return self.get_transformer(item, target)
 
+    def get_transformer(self, item, target):
+        if str.upper(target) in ConvertCitationExtractor.CITATION_STYLE_DICT:
+            return self.get_zotero_citation(item, ConvertCitationExtractor.CITATION_STYLE_DICT[str.upper(target)])
+        else:
+            return self.get_zotero_citation(item, target)
 
-    def getTransformer(self, item, target):
-        if(target in ConvertCitationExtractor.CITATION_STYLE_DICT)
-            return self.getZoteroCitation(item, ConvertCitationExtractor.CITATION_STYLE_DICT[target])
-        else
-            return self.getZoteroCitation(item, target)
-
-    def getZoteroCitation(self, item, target):
+    @staticmethod
+    def get_zotero_citation(item, target):
         from kerko.sync import zotero
         api = zotero.init_zotero()
-        api.add_parameters({
-            'include': 'citation',
-            'style': target
-        })
-        return api.item(item.get('key'))['data']['citation']
-
-    def __init__(self, *, targetFormat, **kwargs):
-        """
-        Initialize the extractor.
-
-        :param Extractor extractor: Base extractor to wrap.
-
-        :param list transformers: List of callables that will be chained to
-            transform the extracted data. Each callable takes a value as
-            argument and returns the transformed value.
-        """
-        super().__init__(**kwargs)
-        self.targetFormat = targetFormat
-
-    def extract(self, item, library_context, spec):
-        value = item.get('bib')
-        return self.apply_transformers(value, self.targetFormat)
-
-
-# Citation generation
-class CSLGenExtractor(Extractor):
-
-    def generateJson(self, item):
-        return """
-                [
-                    {
-                        "id": "ITEM-1",
-                        "issued": {
-                            "date-parts": [[1987,  8,  3],
-                                           [2003, 10, 23]]
-                        },
-                        "title": "Ignore me",
-                        "type": "book"
-                    },
-                    {
-                      "id" : "ITEM-2",
-                      "page" : "1-7",
-                      "type" : "article-journal",
-                      "issued" : {
-                        "date-parts": [[2006]]
-                      }
-                    },
-                    {
-                        "author": [
-                            {
-                                "family": "Doe",
-                                "given": "John"
-                            }
-                        ],
-                        "id": "ITEM-3",
-                        "issued": {
-                            "date-parts": [["1965", "6", "1"]]
-                        },
-                        "title": "His Anonymous Life",
-                        "type": "book"
-                    },
-                    {
-                        "author": [
-                            {
-                                "family": "Grignon",
-                                "given": "Cyril"
-                            },
-                                        {
-                                "family": "Sentenac",
-                                "given": "Corey"
-                            }
-                        ],
-                        "id": "ITEM-4",
-                        "issued": {
-                            "date-parts": [[2000]]
-                       },
-                        "type": "book"
-                    },
-                    {
-                        "id": "ITEM-5",
-                        "title":"Boundaries of Dissent: Protest and State Power in the Media Age",
-                        "author": [
-                                {
-                                        "family": "D'Arcus",
-                                        "given": "Bruce",
-                                        "static-ordering": false
-                                }
-                        ],
-                        "publisher": "Routledge",
-                        "publisher-place": "New York",
-                        "issued": {
-                            "date-parts":[[2006]]
-                        },
-                        "type": "book",
-                        "URL": "http://www.test01.com"
-                    }
-                ]
-                """
-    def generateBibSource(self, item):
-        import json
-        from citeproc.source.json import CiteProcJSON
-        json_input = self.generateJson(item)
-
-        # Parse the JSON input using json.loads()
-        # (parsing from a file object can be done with json.load)
-
-        json_data = json.loads(json_input)
-
-        return CiteProcJSON(json_data)
-    def apply_transformers(self, item, target):
-        # Import the citeproc-py classes we'll use below.
-        from citeproc import CitationStylesStyle, CitationStylesBibliography
-        from citeproc import Citation, CitationItem
-        from citeproc import formatter
-        bib_source = self.generateBibSource(item)
-
-        bib_style = CitationStylesStyle(target, validate=False)
-
-        # Create the citeproc-py bibliography, passing it the:
-        # * CitationStylesStyle,
-        # * BibliographySource (CiteProcJSON in this case), and
-        # * a formatter (plain, html, or you can write a custom formatter)
-
-        bibliography = CitationStylesBibliography(bib_style, bib_source, formatter.html)
-
-        # Processing citations in a document needs to be done in two passes as for some
-        # CSL styles, a citation can depend on the order of citations in the
-        # bibliography and thus on citations following the current one.
-        # For this reason, we first need to register all citations with the
-        # CitationStylesBibliography.
-
-        citation1 = Citation([CitationItem('ITEM-3')])
-        citation2 = Citation([CitationItem('ITEM-1'), CitationItem('ITEM-2')])
-        citation3 = Citation([CitationItem('ITEM-4')])
-        citation4 = Citation([CitationItem('ITEM-5')])
-        citation5 = Citation([CitationItem('MISSING')])
-
-        bibliography.register(citation1)
-        bibliography.register(citation2)
-        bibliography.register(citation3)
-        bibliography.register(citation4)
-        bibliography.register(citation5)
-
-        # In the second pass, CitationStylesBibliography can generate citations.
-        # CitationStylesBibliography.cite() requires a callback function to be passed
-        # along to be called in case a CitationItem's key is not present in the
-        # bibliography.
-
-        def warn(citation_item):
-            print("WARNING: Reference with key '{}' not found in the bibliography."
-                  .format(citation_item.key))
-
-        print(bibliography.cite(citation1, warn))
+        return api.item(item, content='citation', style=target)
 
     def __init__(self, *, target_format, **kwargs):
         """
@@ -919,5 +766,5 @@ class CSLGenExtractor(Extractor):
         self.targetFormat = target_format
 
     def extract(self, item, library_context, spec):
-        value = item.get('bib')
+        value = item.get('key')
         return self.apply_transformers(value, self.targetFormat)
