@@ -756,7 +756,7 @@ class ConvertCitationExtractor(Extractor):
         attempts = 1
         while True:
             try:
-                return api.item(item, content='citation', style=target)[0]
+                return api.item(item, content='bib', style=target)[0]
             except (
                     requests.exceptions.ConnectionError,
                     zotero_errors.HTTPError,
