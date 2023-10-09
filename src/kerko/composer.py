@@ -27,7 +27,7 @@ class Composer:
 
     The schema is the representation of documents and their fields in the search
     index. It is meant to be fully constructed at app configuration time and not
-    changed afterwards. If schema elements need to be modified or removed, the
+    changed afterward. If schema elements need to be modified or removed, the
     application should be stopped, and the search index cleaned and rebuilt.
     """
 
@@ -36,7 +36,7 @@ class Composer:
         Instantiate search elements based on config settings.
 
         This initializes elements based on config settings, but other "manually"
-        instantiated elements may still be added afterwards, using the `add_*()`
+        instantiated elements may still be added afterward, using the `add_*()`
         methods.
         """
 
@@ -113,16 +113,11 @@ class Composer:
         scopes_dict = config_get(config, 'kerko.scopes')
         for scope_key, scope_config in scopes_dict.items():
             if scope_config['enabled']:
-                kwargs = {
-                    'weight': scope_config['weight'],
-                }
-                kwargs['selector_label'] = (
-                    scope_config.get('selector_label') or selector_label.get(scope_key, scope_key)
-                )
-                kwargs['breadbox_label'] = (
-                    scope_config.get('breadbox_label') or breadbox_label.get(scope_key, scope_key)
-                )
-                kwargs['help_text'] = scope_config.get('help_text') or help_text.get(scope_key, '')
+                kwargs = {'weight': scope_config['weight'], 'selector_label': (
+                        scope_config.get('selector_label') or selector_label.get(scope_key, scope_key)
+                ), 'breadbox_label': (
+                        scope_config.get('breadbox_label') or breadbox_label.get(scope_key, scope_key)
+                ), 'help_text': scope_config.get('help_text') or help_text.get(scope_key, '')}
                 self.add_scope(ScopeSpec(key=scope_key, **kwargs))
 
     def init_fields(self, config: Config) -> None:
@@ -327,27 +322,23 @@ class Composer:
             )
         )
         # Formatted citation.
-        #self.add_field(
+        # self.add_field(
         #    FieldSpec(
         #        key='bib',
         #        field_type=STORED,
         #        extractor=extractors.ItemExtractor(key='bib', format_='bib'),
         #    )
-        #)
-        #Custom citation using csl(to be built)
-        for style in config_get(config,'kerko.zotero.csl_style'):
+        # )
+        # Custom citation using csl(to be built)
+        for style in config_get(config, 'kerko.zotero.csl_style'):
             self.add_field(
                 FieldSpec(
-                    key='cite_'+style,
+                    key='cite_' + style,
                     field_type=STORED,
-                    extractor=extractors.ChainExtractor(
-                        extractors=[
-                            extractors.ConvertCitationExtractor(targetFormat=style),
-                            extractors.ItemExtractor(key='bib', format_='bib'),
-                    ]
+                    extractor=extractors.ConvertCitationExtractor(targetFormat=style)
                 ),
             )
-        )
+
         self.add_field(
             FieldSpec(
                 key='cite',
@@ -784,7 +775,8 @@ class Composer:
                             key=format_key,
                             field=self.fields['ris'],
                             label=format_config.get('label') or _("RIS"),
-                            help_text=format_config.get('help_text') or _("Recommended format for most reference management software"),
+                            help_text=format_config.get('help_text') or _(
+                                "Recommended format for most reference management software"),
                             **kwargs,
                         )
                     )
@@ -794,7 +786,8 @@ class Composer:
                             key=format_key,
                             field=self.fields['bibtex'],
                             label=format_config.get('label') or _("BibTeX"),
-                            help_text=format_config.get('help_text') or _("Recommended format for BibTeX-specific software"),
+                            help_text=format_config.get('help_text') or _(
+                                "Recommended format for BibTeX-specific software"),
                             **kwargs,
                         )
                     )
@@ -819,7 +812,7 @@ class Composer:
                             reverse=True,
                             reverse_key='isCitedBy',
                             reverse_field_key='rev_cites',
-                            reverse_label=_("Cited by"),
+                            reverse_label="Cited by",
                         )
                     )
                 elif rel_key == 'related':
@@ -905,7 +898,7 @@ class Composer:
         """
         Return a list of specifications, sorted by weight.
 
-        :param str attr: Attribute name of the specifications dict. The
+        :param str attr: Attribute name of the specification's dict. The
             specifications must themselves have a `weight` attribute.
         """
         return sorted(getattr(self, attr).values(), key=lambda spec: spec.weight)

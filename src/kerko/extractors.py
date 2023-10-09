@@ -732,21 +732,30 @@ class SortDateExtractor(Extractor):
 
 # Citation generation
 class ConvertCitationExtractor(Extractor):
+    CITATION_STYLE_DICT = {
+        'APA': 'apa',
+        'ABNT': 'associacao-brasileira-de-normas-tecnicas'
+    }
+
+
     def apply_transformers(self, item, target):
-        transformer = self.getTransformer(target)
-        return transformer(item)
+        return self.getTransformer(item, target)
 
-    def getTransformer(self, target):
-        if (target == 'apa'):
-            return self.apa_transformer
-        elif (target == 'abnt'):
-            return self.abnt_transformer
 
-    def apa_transformer(self, value):
-        return value
+    def getTransformer(self, item, target):
+        if(target in ConvertCitationExtractor.CITATION_STYLE_DICT)
+            return self.getZoteroCitation(item, ConvertCitationExtractor.CITATION_STYLE_DICT[target])
+        else
+            return self.getZoteroCitation(item, target)
 
-    def abnt_transformer(self, value):
-        return 'Future conversion to abnt'
+    def getZoteroCitation(self, item, target):
+        from kerko.sync import zotero
+        api = zotero.init_zotero()
+        api.add_parameters({
+            'include': 'citation',
+            'style': target
+        })
+        return api.item(item.get('key'))['data']['citation']
 
     def __init__(self, *, targetFormat, **kwargs):
         """
