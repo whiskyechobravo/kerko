@@ -150,7 +150,7 @@ class ZoteroModel(BaseModel):
 
     batch_size: int = Field(ge=20)
     max_attempts: int = Field(ge=1)
-    wait: int = Field(ge=120)
+    wait: int = Field(ge=10)
     csl_style: List[str]
     locale: str = Field(regex=r'^[a-z]{2}-[A-Z]{2}$')
     item_include_re: str
