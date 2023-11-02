@@ -359,6 +359,8 @@ class BaseTagsExtractor(Extractor):
         :param str include_re: Any tag that does not matches this regular
             expression will be ignored by the extractor. If empty, all tags will
             be accepted unless `exclude_re` is set and they match it.
+            If the regular expression includes capturing groups, the tag(s) will
+            be determined by concatenating the captured substrings.
 
         :param str exclude_re: Any tag that matches this regular expression
             will be ignored by the extractor. If empty, all tags will be
@@ -375,6 +377,12 @@ class BaseTagsExtractor(Extractor):
             if tag and \
                     (not self.include or self.include.match(tag)) and \
                     (not self.exclude or not self.exclude.match(tag)):
+                if self.include:
+                    match = self.include.match(tag)
+                    if match:
+                        # Check if there are capturing groups
+                        if len(match.groups()) > 0:
+                            tag = ''.join(match.groups())
                 tags.add(tag)
         return tags or None
 

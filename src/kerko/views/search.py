@@ -119,7 +119,7 @@ def search_single(criteria, form):
         if criteria.is_searching():
             context['search_title'] = gettext('Your search')
         else:
-            context['search_title'] = gettext('Full bibliography')
+            context['search_title'] = gettext('')
 
         # Load item with all available fields.
         item = results.items(composer().fields, composer().facets)[0]
@@ -197,7 +197,7 @@ def search_list(criteria, form):
         if criteria.is_searching():
             context['title'] = ngettext('Result', 'Results', results.item_count)
         else:
-            context['title'] = gettext('Full bibliography')
+            context['title'] = gettext('')
         context['total_count'] = results.item_count
         context['total_count_formatted'] = format_decimal(results.item_count, locale=get_locale())
         context['page_count'] = results.page_count
