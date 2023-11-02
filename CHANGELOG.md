@@ -14,6 +14,8 @@ Other changes:
   128 MB. This can prevent swapping with large libraries on small machines. The
   limit may now be changed with the
   `kerko.performance.whoosh_index_memory_limit` parameter.
+- Replace pylint, pycodestyle, pydocstyle with Ruff.
+- Add pre-commit hooks. Run Ruff and other code checks on pre-commit.
 
 
 ## 1.0.0 (2023-07-24)

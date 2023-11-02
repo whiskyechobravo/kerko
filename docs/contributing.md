@@ -59,6 +59,16 @@ tox
     new tests!
 
 
+## Running the pre-commit hooks
+
+Pre-commit checks should be performed automatically whenever you perform a `git
+commit`. If you wish to run the checks manually, use this command:
+
+```bash
+pre-commit run --all-files
+```
+
+
 ## Working on the documentation
 
 To start a local live-reloading documentation server:
