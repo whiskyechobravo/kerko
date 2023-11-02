@@ -35,4 +35,4 @@ def make_blueprint():
 blueprint = make_blueprint()
 
 
-from kerko import views  # pylint: disable=wrong-import-position
+from kerko import views  # noqa: E402, F401

@@ -5,7 +5,6 @@ Custom filters for Jinja2 templates.
 from __future__ import annotations
 
 import re
-import typing
 from urllib.parse import urlparse
 
 from jinja2 import pass_eval_context
@@ -13,9 +12,6 @@ from markupsafe import Markup
 from w3lib.url import safe_url_string
 
 from kerko.datetime import format_datetime, reformat_date
-
-if typing.TYPE_CHECKING:
-    from flask.blueprints import BlueprintSetupState
 
 
 @pass_eval_context

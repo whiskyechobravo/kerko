@@ -11,7 +11,7 @@ import tempfile
 import unittest
 
 import responses
-from flask import Flask, current_app
+from flask import Flask
 from flask_babel import Babel, Domain
 from flask_bootstrap import Bootstrap4
 

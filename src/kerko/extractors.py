@@ -13,7 +13,7 @@ from markupsafe import Markup
 
 from kerko.datetime import maximize_partial_date, parse_partial_date
 from kerko.tags import TagGate
-from kerko.text import id_normalize, sort_normalize
+from kerko.text import sort_normalize
 from kerko.transformers import (find_item_id_in_zotero_uri_links,
                                 find_item_id_in_zotero_uris_str)
 

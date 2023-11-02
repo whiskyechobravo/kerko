@@ -1,3 +1,3 @@
 """Routed views."""
 
-from kerko.views import routes
+from kerko.views import routes  # noqa: F401
