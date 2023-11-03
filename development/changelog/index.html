@@ -832,8 +832,18 @@
   128 MB. This can prevent swapping with large libraries on small machines. The
   limit may now be changed with the
   <code>kerko.performance.whoosh_index_memory_limit</code> parameter.</li>
+<li>Add support for Python 3.12.</li>
 <li>Replace pylint, pycodestyle, pydocstyle with Ruff.</li>
 <li>Add pre-commit hooks. Run Ruff and other code checks on pre-commit.</li>
+</ul>
+<p>Backwards incompatible changes:</p>
+<ul>
+<li>Drop support for Python 3.7.</li>
+</ul>
+<p>Possibly backwards incompatible changes (more or less internal API changes):</p>
+<ul>
+<li>Upgrade many dependencies, including new major versions of Flask (3.x),
+  Flask-Babel (4.x), Werkzeug (3.x).</li>
 </ul>
 <h2 id="100-2023-07-24">1.0.0 (2023-07-24)<a class="headerlink" href="#100-2023-07-24" title="Permanent link">&para;</a></h2>
 <p>Features:</p>
