@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.7">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.8">
     
     
       
@@ -404,6 +404,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#creating-custom-content-pages-based-on-zotero-standalone-notes" class="md-nav__link">
+    Creating custom content pages based on Zotero standalone notes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ensuring-full-text-indexing-of-your-attachments-in-zotero" class="md-nav__link">
     Ensuring full-text indexing of your attachments in Zotero
   </a>
@@ -592,6 +599,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#creating-custom-content-pages-based-on-zotero-standalone-notes" class="md-nav__link">
+    Creating custom content pages based on Zotero standalone notes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ensuring-full-text-indexing-of-your-attachments-in-zotero" class="md-nav__link">
     Ensuring full-text indexing of your attachments in Zotero
   </a>
@@ -749,6 +763,101 @@ flask<span class="w"> </span>kerko<span class="w"> </span>sync<span class="w"> <
 </ul>
 <p>Phew! We think that this is simpler to setup in practice than it looks in
 writing. Hopefully you will agree.</p>
+<h2 id="creating-custom-content-pages-based-on-zotero-standalone-notes">Creating custom content pages based on Zotero standalone notes<a class="headerlink" href="#creating-custom-content-pages-based-on-zotero-standalone-notes" title="Permanent link">&para;</a></h2>
+<p>If you wish to provide informational pages along with your bibliography, you can
+add standalone notes to your Zotero library, and configure Kerko to provide
+pages whose content will come from those notes.</p>
+<p>Say you want to provide "About" and "Contact Us" pages with simple text content,
+you could implement them by following these steps:</p>
+<ul>
+<li>Create a standalone note in Zotero. In the Zotero note editor, enter the
+  desired text for your "About" page.</li>
+<li>Create another standalone note in Zotero. In the Zotero note editor, enter the
+  desired text for your "Contact Us" page.</li>
+<li>For each note, find its item ID. One way to find it is to visit your library
+  using Zotero's web interface. Click the note, and check its URL in your
+  browser's address bar. It should look a bit like
+  <a href="https://www.zotero.org/groups/2348869/kerko_demo/items/Y48RBWDB/item-list">https://www.zotero.org/groups/2348869/kerko_demo/items/<strong>Y48RBWDB</strong>/item-list</a>.
+  In this example, <code>"Y48RBWDB"</code> is the item ID.</li>
+<li>
+<p>Define the "About" and "Contact Us" pages by adding the following snippet to
+  your Kerko configuration:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[kerko.pages.about]</span>
+<span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/about&quot;</span>
+<span class="n">item_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Y48RBWDB&quot;</span>
+<span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;About&quot;</span>
+
+<span class="k">[kerko.pages.contact_us]</span>
+<span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/contact&quot;</span>
+<span class="n">item_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;REG3CL25&quot;</span>
+<span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Contact Us&quot;</span>
+</code></pre></div>
+<p>... where:</p>
+<ul>
+<li><code>path</code> is the desired URL path for the page;</li>
+<li><code>item_id</code> is the note's item ID (as found earlier);</li>
+<li><code>title</code> is the desired title for the page in the Kerko site.</li>
+</ul>
+<p>For more details on each parameter, please refer to the <a href="../config-params/#kerkopages">parameters
+documentation</a>.</p>
+</li>
+<li>
+<p>Then, you will probably want the navigation bar to provide links to your
+  pages. The following configuration code defines a navigation bar with three
+  links — a link to the bibliography, and links to the "About" and "Contact Us"
+  pages:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[[kerko.link_groups.navbar]]</span>
+<span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;endpoint&quot;</span>
+<span class="n">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;kerko.search&quot;</span>
+<span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Bibliography&quot;</span>
+
+<span class="k">[[kerko.link_groups.navbar]]</span>
+<span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;page&quot;</span>
+<span class="n">page</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;about&quot;</span>
+<span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;About&quot;</span>
+
+<span class="k">[[kerko.link_groups.navbar]]</span>
+<span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;page&quot;</span>
+<span class="n">page</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;contact_us&quot;</span>
+<span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Contact Us&quot;</span>
+</code></pre></div>
+<p>... where:</p>
+<ul>
+<li>the <code>type</code> parameter indicates the type of link (<code>"endpoint"</code> indicates a
+  core Kerko link, while <code>"page"</code> indicates a link to a page defined under
+  <code>kerko.pages.*</code>);</li>
+<li>the <code>page</code> parameter specifies the target of the link, e.g., the unique
+  key of the page (which replaces the <code>*</code> in the <code>kerko.pages.*</code> header);</li>
+<li>the <code>text</code> parameter provides the link's text to show in the navigation
+  bar.</li>
+</ul>
+<p>Navigation bar links will be displayed in the order they appear in the
+configuration file.</p>
+<p>For more details on this configuration section, please refer to the
+<a href="../config-params/#kerkolink_groups">parameters documentation</a></p>
+</li>
+<li>
+<p>Make sure Kerko's database is up-to-date with your new note by running the
+  following command:</p>
+<div class="highlight"><pre><span></span><code>flask<span class="w"> </span>kerko<span class="w"> </span>sync
+</code></pre></div>
+</li>
+<li>
+<p>Restart your Kerko application to load the configuration changes. If all goes
+  well, you will have new "About" and "Contact Us" pages accessible from the
+  navigation bar.</p>
+</li>
+</ul>
+<p>Please note that Kerko does not restructure the HTML that Zotero generates for
+notes. If you use headings in your notes, we recommend that you start with the
+"Heading 2" heading level, because "Heading 1" should be reserved to Kerko (for
+the page title).</p>
+<p>Kerko is not, and never will be, a web content management system. Its sole
+purpose is to provide a nice interface for a Zotero library. Thus, Kerko content
+pages are just a very rudimentary way of providing simple informational content
+along with the library. For more advanced content needs, you might have to
+consider integrating Kerko into a custom Flask application backed with proper
+content editing features.</p>
 <h2 id="ensuring-full-text-indexing-of-your-attachments-in-zotero">Ensuring full-text indexing of your attachments in Zotero<a class="headerlink" href="#ensuring-full-text-indexing-of-your-attachments-in-zotero" title="Permanent link">&para;</a></h2>
 <p>Kerko's full-text indexing relies on text content extracted from attachments by
 Zotero. Consequently, for Kerko's full-text search to work, you must make sure
@@ -939,7 +1048,7 @@ the <em>Cites</em> and <em>Cited by</em> sections of the related bibliographic r
     <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "header.autohide", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.action.view", "content.action.edit"], "search": "../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.aecac24b.min.js"></script>
+      <script src="../assets/javascripts/bundle.81fa17fe.min.js"></script>
       
     
   </body>

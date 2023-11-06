@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.7">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.8">
     
     
       
@@ -857,6 +857,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#page" class="md-nav__link">
+    page
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#parameters" class="md-nav__link">
     parameters
   </a>
@@ -927,6 +934,40 @@
         
           <li class="md-nav__item">
   <a href="#title_1" class="md-nav__link">
+    title
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kerkopages" class="md-nav__link">
+    kerko.pages.*.
+  </a>
+  
+    <nav class="md-nav" aria-label="kerko.pages.*.">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#path" class="md-nav__link">
+    path
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#item_id" class="md-nav__link">
+    item_id
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#title_2" class="md-nav__link">
     title
   </a>
   
@@ -2021,6 +2062,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#page" class="md-nav__link">
+    page
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#parameters" class="md-nav__link">
     parameters
   </a>
@@ -2091,6 +2139,40 @@
         
           <li class="md-nav__item">
   <a href="#title_1" class="md-nav__link">
+    title
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kerkopages" class="md-nav__link">
+    kerko.pages.*.
+  </a>
+  
+    <nav class="md-nav" aria-label="kerko.pages.*.">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#path" class="md-nav__link">
+    path
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#item_id" class="md-nav__link">
+    item_id
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#title_2" class="md-nav__link">
     title
   </a>
   
@@ -2985,9 +3067,10 @@ format, these are defined as below (the double brackets indicate a list item):</
 set to <code>"endpoint"</code>.</p>
 <p>Type: String</p>
 <h3 id="endpoint"><code>endpoint</code><a class="headerlink" href="#endpoint" title="Permanent link">&para;</a></h3>
-<p>Name of the endpoint within the application. Use this for internal links. For
-example, the endpoint for the Kerko search page is <code>"kerko.search"</code>.</p>
-<p>This parameter is <strong>required</strong> when the <a href="#type_1"><code>type</code></a> parameter is set to
+<p>Name of the endpoint within the application to use as target for the link. Use
+this for internal links. For example, the endpoint for the Kerko search page is
+<code>"kerko.search"</code>.</p>
+<p>This parameter is <strong>required</strong> if the <a href="#type_1"><code>type</code></a> parameter is set to
 <code>"endpoint"</code> and has no default value.</p>
 <p>Type: String</p>
 <h3 id="external"><code>external</code><a class="headerlink" href="#external" title="Permanent link">&para;</a></h3>
@@ -3001,6 +3084,12 @@ Default value: <code>false</code></p>
 <p>Open the link in a new tab.</p>
 <p>Type: Boolean <br>
 Default value: <code>false</code></p>
+<h3 id="page"><code>page</code><a class="headerlink" href="#page" title="Permanent link">&para;</a></h3>
+<p>Key of the page to use as target for the link. That page must have been defined
+in <a href="#kerkopages"><code>kerko.pages.*</code></a>.</p>
+<p>This parameter is <strong>required</strong> if the <a href="#type_1"><code>type</code></a> parameter is set to
+<code>"page"</code> (and cannot be used with other <code>type</code> values).</p>
+<p>Type: String <br></p>
 <h3 id="parameters"><code>parameters</code><a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h3>
 <p>Dictionary of parameters to pass to the endpoint. Unknown keys are appended to
 the URL as query string arguments, like <code>?a=b&amp;c=d</code>.</p>
@@ -3018,18 +3107,19 @@ Default value: Same protocol as the current request</p>
 <p>This parameter is <strong>required</strong> and has no default value.</p>
 <p>Type: String</p>
 <h3 id="type_1"><code>type</code><a class="headerlink" href="#type_1" title="Permanent link">&para;</a></h3>
-<p>Type of link. Other parameters may or may not be available depending on this
-value.</p>
+<p>Type of link being configured. Other parameters may or may not be available
+depending on this value.</p>
 <p>Allowed values are:</p>
 <ul>
-<li><code>"endpoint"</code>: Define an internal link (served by a Flask endpoint).</li>
-<li><code>"url"</code>: Define a link to an arbitrary URL.</li>
+<li><code>"endpoint"</code>: Link to an application page (served by a Flask endpoint).</li>
+<li><code>"page"</code>: Link to a page defined in <a href="#kerkopages"><code>kerko.pages.*</code></a>.</li>
+<li><code>"url"</code>: Link to an arbitrary URL.</li>
 </ul>
 <p>This parameter is <strong>required</strong> and has no default value.</p>
 <p>Type: String</p>
 <h3 id="url"><code>url</code><a class="headerlink" href="#url" title="Permanent link">&para;</a></h3>
 <p>URL of the external link.</p>
-<p>This parameter is <strong>required</strong> when the <a href="#type_1"><code>type</code></a> parameter is set to
+<p>This parameter is <strong>required</strong> if the <a href="#type_1"><code>type</code></a> parameter is set to
 <code>"url"</code>.</p>
 <p>Type: String</p>
 <h3 id="weight_2"><code>weight</code><a class="headerlink" href="#weight_2" title="Permanent link">&para;</a></h3>
@@ -3057,6 +3147,22 @@ Default value: <code>true</code> (i.e., enabled).</p>
 <h3 id="title_1"><code>title</code><a class="headerlink" href="#title_1" title="Permanent link">&para;</a></h3>
 <p>The title to display in web pages.</p>
 <p>Type: String</p>
+<hr />
+<h2 id="kerkopages"><code>kerko.pages.*.</code><a class="headerlink" href="#kerkopages" title="Permanent link">&para;</a></h2>
+<p>Simple content pages, where <code>*</code> is an arbitrary key you must choose to uniquely
+identify the page. The content of the page will come from a Zotero standalone
+note of your choosing.</p>
+<p>The key can be used in <a href="#kerkolink_groups"><code>kerko.link_groups.*</code></a> tables to
+define hyperlinks to the page.</p>
+<h3 id="path"><code>path</code><a class="headerlink" href="#path" title="Permanent link">&para;</a></h3>
+<p>The path to use in the URL of the page. Must start with a slash (<code>/</code>) character.</p>
+<p>Type: String <br></p>
+<h3 id="item_id"><code>item_id</code><a class="headerlink" href="#item_id" title="Permanent link">&para;</a></h3>
+<p>The Zotero item ID of the note to use as content for the page.</p>
+<p>Type: String <br></p>
+<h3 id="title_2"><code>title</code><a class="headerlink" href="#title_2" title="Permanent link">&para;</a></h3>
+<p>The title of the page.</p>
+<p>Type: String <br></p>
 <hr />
 <h2 id="kerkopagination"><code>kerko.pagination.</code><a class="headerlink" href="#kerkopagination" title="Permanent link">&para;</a></h2>
 <h3 id="page_len"><code>page_len</code><a class="headerlink" href="#page_len" title="Permanent link">&para;</a></h3>
@@ -3529,7 +3635,7 @@ Default value: <code>0</code></p>
     <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "header.autohide", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.action.view", "content.action.edit"], "search": "../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.aecac24b.min.js"></script>
+      <script src="../assets/javascripts/bundle.81fa17fe.min.js"></script>
       
     
   </body>

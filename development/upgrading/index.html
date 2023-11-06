@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.7">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.8">
     
     
       
@@ -473,6 +473,33 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#from-10x-to-11x" class="md-nav__link">
+    From 1.0.x to 1.1.x
+  </a>
+  
+    <nav class="md-nav" aria-label="From 1.0.x to 1.1.x">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kerkoapp" class="md-nav__link">
+    KerkoApp
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-applications" class="md-nav__link">
+    Custom applications
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#from-09-to-10x" class="md-nav__link">
     From 0.9 to 1.0.x
   </a>
@@ -481,7 +508,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#kerkoapp" class="md-nav__link">
+  <a href="#kerkoapp_1" class="md-nav__link">
     KerkoApp
   </a>
   
@@ -495,7 +522,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#custom-applications" class="md-nav__link">
+  <a href="#custom-applications_1" class="md-nav__link">
     Custom applications
   </a>
   
@@ -598,6 +625,33 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#from-10x-to-11x" class="md-nav__link">
+    From 1.0.x to 1.1.x
+  </a>
+  
+    <nav class="md-nav" aria-label="From 1.0.x to 1.1.x">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kerkoapp" class="md-nav__link">
+    KerkoApp
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-applications" class="md-nav__link">
+    Custom applications
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#from-09-to-10x" class="md-nav__link">
     From 0.9 to 1.0.x
   </a>
@@ -606,7 +660,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#kerkoapp" class="md-nav__link">
+  <a href="#kerkoapp_1" class="md-nav__link">
     KerkoApp
   </a>
   
@@ -620,7 +674,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#custom-applications" class="md-nav__link">
+  <a href="#custom-applications_1" class="md-nav__link">
     Custom applications
   </a>
   
@@ -663,11 +717,54 @@
 
 
 <h1 id="how-to-upgrade">How to upgrade<a class="headerlink" href="#how-to-upgrade" title="Permanent link">&para;</a></h1>
+<p><strong>Before attempting any upgrade</strong>, it is highly recommended that you do a backup
+of all of your code, configuration files, data files, and Python virtual
+environment.</p>
+<h2 id="from-10x-to-11x">From 1.0.x to 1.1.x<a class="headerlink" href="#from-10x-to-11x" title="Permanent link">&para;</a></h2>
+<h3 id="kerkoapp">KerkoApp<a class="headerlink" href="#kerkoapp" title="Permanent link">&para;</a></h3>
+<p>The instructions below make the assumption that you have cloned KerkoApp from
+its Git repository.</p>
+<ul>
+<li>Go to the KerkoApp directory.</li>
+<li>
+<p>Get the desired version of KerkoApp. You may check the list of <a href="https://github.com/whiskyechobravo/kerkoapp/tags">available
+  versions</a>. For version 1.1.0, for example, replace
+  <code>VERSION</code> with <code>1.1.0</code> in the command below:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>fetch<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>checkout<span class="w"> </span>VERSION
+</code></pre></div>
+</li>
+<li>
+<p>Activate your Python <a href="https://docs.python.org/3.11/tutorial/venv.html">virtual environment</a>.</p>
+</li>
+<li>
+<p>Install Python dependencies:</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>--force-reinstall<span class="w"> </span>-r<span class="w"> </span>requirements/run.txt
+</code></pre></div>
+</li>
+<li>
+<p>Restart the application.</p>
+</li>
+</ul>
+<h3 id="custom-applications">Custom applications<a class="headerlink" href="#custom-applications" title="Permanent link">&para;</a></h3>
+<p>If you have a custom application, the following changes will need to be applied:</p>
+<ul>
+<li>
+<p>The application is now responsible for instantiating the blueprint by calling
+  <code>kerko.make_blueprint()</code>. Any previous uses of the global <code>kerko.blueprint</code>
+  object must be replaced, as Kerko no longer provides it. If registration was
+  your application's only use of that object, the change could look like:</p>
+<div class="highlight"><span class="filename">Before</span><pre><span></span><code><span class="n">app</span><span class="o">.</span><span class="n">register_blueprint</span><span class="p">(</span><span class="n">kerko</span><span class="o">.</span><span class="n">blueprint</span><span class="p">,</span> <span class="n">url_prefix</span><span class="o">=</span><span class="s1">&#39;/bibliography&#39;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><span class="filename">After</span><pre><span></span><code><span class="n">app</span><span class="o">.</span><span class="n">register_blueprint</span><span class="p">(</span><span class="n">kerko</span><span class="o">.</span><span class="n">make_blueprint</span><span class="p">(),</span> <span class="n">url_prefix</span><span class="o">=</span><span class="s1">&#39;/bibliography&#39;</span><span class="p">)</span>
+</code></pre></div>
+<p>... where <code>app</code> is the <code>Flask</code> object.</p>
+</li>
+</ul>
 <h2 id="from-09-to-10x">From 0.9 to 1.0.x<a class="headerlink" href="#from-09-to-10x" title="Permanent link">&para;</a></h2>
 <p>Version 1.0.x brings significant changes on how Kerko can be configured. Before
 you attempt an upgrade, reading <a href="../config-basics/">Configuration basics</a> is a
 must.</p>
-<h3 id="kerkoapp">KerkoApp<a class="headerlink" href="#kerkoapp" title="Permanent link">&para;</a></h3>
+<h3 id="kerkoapp_1">KerkoApp<a class="headerlink" href="#kerkoapp_1" title="Permanent link">&para;</a></h3>
 <p>The instructions below make the assumption that you have cloned KerkoApp from
 its Git repository.</p>
 <ul>
@@ -847,7 +944,7 @@ templates will need to be edited:</p>
 <li><code>item_citation_download</code> → <code>item_bib_download</code></li>
 <li><code>search_citation_download</code> → <code>search_bib_download</code></li>
 </ul>
-<h3 id="custom-applications">Custom applications<a class="headerlink" href="#custom-applications" title="Permanent link">&para;</a></h3>
+<h3 id="custom-applications_1">Custom applications<a class="headerlink" href="#custom-applications_1" title="Permanent link">&para;</a></h3>
 <p>Configuration initialization and loading has greatly changed. If you have a
 custom application, it will need to be adapted even if you do not plan to use
 TOML files. See <a href="../getting-started/#creating-a-custom-application">Creating a custom
@@ -956,7 +1053,7 @@ example, and refer to the <a href="../changelog/">changelog</a> for other breaki
     <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "header.autohide", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.action.view", "content.action.edit"], "search": "../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.aecac24b.min.js"></script>
+      <script src="../assets/javascripts/bundle.81fa17fe.min.js"></script>
       
     
   </body>

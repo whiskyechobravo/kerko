@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.7">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.8">
     
     
       
@@ -822,6 +822,10 @@
 <h2 id="unreleased">Unreleased<a class="headerlink" href="#unreleased" title="Permanent link">&para;</a></h2>
 <p>Features:</p>
 <ul>
+<li>Add new configuration parameter <code>kerko.pages.*.</code> for defining content pages
+  whose content come from selected Zotero standalone notes.</li>
+<li>Add a <code>"page"</code> type for the <code>kerko.link_groups.*.</code> configuration table, to
+  allow the creation of links to content pages.</li>
 <li>Add configuration parameters <code>kerko.performance.whoosh_index_memory_limit</code> and
   <code>kerko.performance.whoosh_index_processors</code> to give some control over the
   Whoosh search engine's indexing performance.</li>
@@ -842,6 +846,10 @@
 </ul>
 <p>Possibly backwards incompatible changes (more or less internal API changes):</p>
 <ul>
+<li>Kerko no longer provides a <code>kerko.blueprint</code> global object. Applications must
+  now instantiate the blueprint by calling <code>kerko.make_blueprint()</code> before
+  registering it. This prevents attempts to mutate the object after its
+  registration, especially in tests.</li>
 <li>Upgrade many dependencies, including new major versions of Flask (3.x),
   Flask-Babel (4.x), Werkzeug (3.x).</li>
 </ul>
@@ -1649,7 +1657,7 @@ flask<span class="w"> </span>kerko<span class="w"> </span>sync
     <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "header.autohide", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.action.view", "content.action.edit"], "search": "../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.aecac24b.min.js"></script>
+      <script src="../assets/javascripts/bundle.81fa17fe.min.js"></script>
       
     
   </body>
