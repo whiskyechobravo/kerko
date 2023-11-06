@@ -191,6 +191,8 @@ The main features provided by Kerko are:
   through notes (see [
   guide](config-guides.md#providing-cites-and-cited-by-relations)). Custom
   applications can add more types of relations if desired.
+- **Pages**: simple informational pages can be defined using content from Zotero
+  standalone notes.
 - **Badges**: custom applications can have icons conditionally displayed next to
   items.
 - **Responsive design**: the simple default implementation works on large

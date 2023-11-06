@@ -14,12 +14,25 @@ except ModuleNotFoundError:
 import dpath
 import whoosh
 from flask import Config
-from pydantic import (BaseModel,  # pylint: disable=no-name-in-module
-                      ConstrainedStr, Extra, Field, NonNegativeInt,
-                      ValidationError, root_validator, validator)
+from pydantic import (  # pylint: disable=no-name-in-module
+    BaseModel,
+    ConstrainedStr,
+    Extra,
+    Field,
+    NonNegativeInt,
+    ValidationError,
+    root_validator,
+    validator,
+)
 
-from kerko.specs import (LinkByEndpointSpec, LinkByURLSpec, LinkGroupSpec,
-                         LinkSpec)
+from kerko.specs import (
+    PageLinkSpec,
+    LinkByEndpointSpec,
+    LinkByURLSpec,
+    LinkGroupSpec,
+    LinkSpec,
+    PageSpec,
+)
 
 # pylint: disable=too-few-public-methods
 
@@ -33,6 +46,11 @@ class SlugStr(ConstrainedStr):
     regex = r'^[a-z][a-z0-9_\-]*$'
 
 
+class URLPathStr(ConstrainedStr):
+
+    regex = r'^/[a-z0-9_\-/]*$'
+
+
 class FieldNameStr(ConstrainedStr):
 
     regex = r'^[a-z][a-zA-Z0-9_]*$'
@@ -41,6 +59,16 @@ class FieldNameStr(ConstrainedStr):
 class ElementIdStr(ConstrainedStr):
 
     regex = r'^[a-z][a-zA-Z0-9]*$'
+
+
+class IdentifierStr(ConstrainedStr):
+
+    regex = r'^[a-z][a-z0-9_]*$'
+
+
+class ZoteroItemIdStr(ConstrainedStr):
+
+    regex = r'^[A-Z0-9]{8}$'
 
 
 class AssetsModel(BaseModel):
@@ -139,6 +167,7 @@ class TemplatesModel(BaseModel):
     search: str
     search_item: str
     item: str
+    page: str
     atom_feed: str
 
 
@@ -355,6 +384,38 @@ class RelationsModel(BaseModel):
     label: Optional[str]
 
 
+class PageModel(BaseModel):
+    """Model for items under the kerko.pages config table."""
+
+    class Config:
+        extra = Extra.forbid
+
+    path: URLPathStr
+    item_id: ZoteroItemIdStr
+    title: str
+
+    def to_spec(self) -> PageSpec:
+        return PageSpec(
+            path=self.path,
+            item_id=self.item_id,
+            title=self.title,
+        )
+
+
+class PagesModel(BaseModel):  # TODO: Pydantic v2: inherit RootModel.
+    """
+    Model for the kerko.pages config table.
+
+    The dictionary key will serve as the page's endpoint name, hence the
+    constrained `IdentifierStr` type.
+    """
+
+    __root__: Dict[IdentifierStr, PageModel]
+
+    def to_spec(self) -> Dict[str, PageSpec]:
+        return { key: page_model.to_spec() for key, page_model in self.__root__.items() }
+
+
 class LinkModel(BaseModel, ABC):
 
     class Config:
@@ -413,10 +474,25 @@ class LinkByURLModel(LinkModel):
         )
 
 
+class PageLinkModel(LinkModel):
+    """Model for page items under the kerko.link_groups config table."""
+
+    type: Literal["page"]
+    page: str
+
+    def to_spec(self) -> LinkSpec:
+        return PageLinkSpec(
+            text=self.text,
+            weight=self.weight,
+            page=self.page,
+        )
+
+
 LinkModelUnion = Annotated[
     Union[
         LinkByEndpointModel,
         LinkByURLModel,
+        PageLinkModel,
     ], Field(discriminator='type')
 ]
 
@@ -443,6 +519,7 @@ class KerkoModel(BaseModel):
     meta: MetaModel
     pagination: PaginationModel
     breadcrumb: BreadcrumbModel
+    pages: Optional[PagesModel]
     link_groups: LinkGroupsModel
     templates: TemplatesModel
     zotero: ZoteroModel

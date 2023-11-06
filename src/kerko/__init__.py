@@ -1,16 +1,13 @@
 """
 Kerko: A Flask blueprint that provides faceted search for bibliographies based on Zotero.
 """
-# pylint: disable=invalid-name
 
 import errno
 import pathlib
 import sys
 
-from flask import Blueprint
-
+from kerko.blueprint import Blueprint
 from kerko.config_helpers import load_toml
-from kerko.jinja2 import register_filters
 
 # Kerko won't load translations on its own. To load them, an application may add
 # the following domain and translation directories to its Babel configuration.
@@ -25,14 +22,6 @@ except RuntimeError as e:
 
 
 def make_blueprint():
-    b = Blueprint(
+    return Blueprint(
         'kerko', __name__, static_folder='static', template_folder='templates'
     )
-    register_filters(b)
-    return b
-
-
-blueprint = make_blueprint()
-
-
-from kerko import views  # noqa: E402, F401

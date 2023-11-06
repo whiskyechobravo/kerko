@@ -659,10 +659,11 @@ Type: String
 
 ### `endpoint`
 
-Name of the endpoint within the application. Use this for internal links. For
-example, the endpoint for the Kerko search page is `"kerko.search"`.
+Name of the endpoint within the application to use as target for the link. Use
+this for internal links. For example, the endpoint for the Kerko search page is
+`"kerko.search"`.
 
-This parameter is **required** when the [`type`](#type_1) parameter is set to
+This parameter is **required** if the [`type`](#type_1) parameter is set to
 `"endpoint"` and has no default value.
 
 Type: String
@@ -684,6 +685,16 @@ Open the link in a new tab.
 
 Type: Boolean <br>
 Default value: `false`
+
+### `page`
+
+Key of the page to use as target for the link. That page must have been defined
+in [`kerko.pages.*`](#kerkopages).
+
+This parameter is **required** if the [`type`](#type_1) parameter is set to
+`"page"` (and cannot be used with other `type` values).
+
+Type: String <br>
 
 ### `parameters`
 
@@ -715,13 +726,14 @@ Type: String
 
 ### `type`
 
-Type of link. Other parameters may or may not be available depending on this
-value.
+Type of link being configured. Other parameters may or may not be available
+depending on this value.
 
 Allowed values are:
 
-- `"endpoint"`: Define an internal link (served by a Flask endpoint).
-- `"url"`: Define a link to an arbitrary URL.
+- `"endpoint"`: Link to an application page (served by a Flask endpoint).
+- `"page"`: Link to a page defined in [`kerko.pages.*`](#kerkopages).
+- `"url"`: Link to an arbitrary URL.
 
 This parameter is **required** and has no default value.
 
@@ -731,7 +743,7 @@ Type: String
 
 URL of the external link.
 
-This parameter is **required** when the [`type`](#type_1) parameter is set to
+This parameter is **required** if the [`type`](#type_1) parameter is set to
 `"url"`.
 
 Type: String
@@ -775,6 +787,35 @@ Default value: `true` (i.e., enabled).
 The title to display in web pages.
 
 Type: String
+
+---
+
+## `kerko.pages.*.`
+
+Simple content pages, where `*` is an arbitrary key you must choose to uniquely
+identify the page. The content of the page will come from a Zotero standalone
+note of your choosing.
+
+The key can be used in [`kerko.link_groups.*`](#kerkolink_groups) tables to
+define hyperlinks to the page.
+
+### `path`
+
+The path to use in the URL of the page. Must start with a slash (`/`) character.
+
+Type: String <br>
+
+### `item_id`
+
+The Zotero item ID of the note to use as content for the page.
+
+Type: String <br>
+
+### `title`
+
+The title of the page.
+
+Type: String <br>
 
 ---
 

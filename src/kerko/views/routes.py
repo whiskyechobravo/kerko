@@ -3,19 +3,34 @@ import time
 from collections import deque
 from datetime import datetime, timedelta
 
-from flask import (abort, current_app, flash, make_response, redirect,
-                   render_template, request, send_from_directory, url_for)
+from flask import (
+    abort,
+    current_app,
+    flash,
+    make_response,
+    redirect,
+    render_template,
+    request,
+    send_from_directory,
+    url_for,
+)
 from flask_babel import get_locale, gettext
+from markupsafe import Markup
 
-from kerko import blueprint
 from kerko.criteria import create_feed_criteria, create_search_criteria
 from kerko.exceptions import except_abort
 from kerko.forms import SearchForm
 from kerko.searcher import Searcher
 from kerko.shortcuts import composer, config
 from kerko.specs import SortSpec
-from kerko.storage import (SchemaError, SearchIndexError, get_doc_count,
-                           get_storage_dir, load_object, open_index)
+from kerko.storage import (
+    SchemaError,
+    SearchIndexError,
+    get_doc_count,
+    get_storage_dir,
+    load_object,
+    open_index,
+)
 from kerko.views import pager
 from kerko.views.item import build_item_context, creators, inject_item_data
 from kerko.views.search import search_list, search_single
@@ -23,7 +38,6 @@ from kerko.views.search import search_list, search_single
 SITEMAP_URL_MAX_COUNT = 50000
 
 
-@blueprint.route('/', methods=['GET', 'POST'])
 @except_abort(SchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def search():
@@ -48,7 +62,6 @@ def search():
     return search_list(criteria, form)
 
 
-@blueprint.route('/atom.xml', methods=['GET'])
 @except_abort(SchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def atom_feed():
@@ -157,7 +170,6 @@ def atom_feed():
     return response
 
 
-@blueprint.route('/<path:item_id>')
 @except_abort(SchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def item_view(item_id):
@@ -194,8 +206,31 @@ def item_view(item_id):
     )
 
 
-@blueprint.route('/<path:item_id>/download/<string:attachment_id>/')
-@blueprint.route('/<path:item_id>/download/<string:attachment_id>/<string:attachment_filename>')
+@except_abort(SchemaError, 500)
+@except_abort(SearchIndexError, 503)
+def page(item_id, title):
+    """Render a simple page, using a Zotero note as content."""
+    index = open_index('index')
+    with Searcher(index) as searcher:
+        results = searcher.search(
+            require_all={
+                'id': [item_id],
+                'item_type': ['note'],
+            },
+            limit=1,
+        )
+        if results.is_empty():
+            return abort(404)
+        item = results.items(composer().select_fields(['id', 'data']))[0]
+        note = item['data'].get('note', '')
+    return render_template(
+        config('kerko.templates.page'),
+        title=title,
+        content=Markup(note),
+        locale=get_locale(),
+    )
+
+
 @except_abort(SchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def child_attachment_download(item_id, attachment_id, attachment_filename=None):
@@ -258,8 +293,6 @@ def child_attachment_download(item_id, attachment_id, attachment_filename=None):
     )
 
 
-@blueprint.route('/download/<string:item_id>/')
-@blueprint.route('/download/<string:item_id>/<string:attachment_filename>')
 @except_abort(SchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def standalone_attachment_download(item_id, attachment_filename=None):
@@ -312,7 +345,6 @@ def standalone_attachment_download(item_id, attachment_filename=None):
     )
 
 
-@blueprint.route('/<path:item_id>/export/<string:bib_format_key>')
 @except_abort(SchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def item_bib_download(item_id, bib_format_key):
@@ -365,7 +397,6 @@ def item_bib_download(item_id, bib_format_key):
     return response
 
 
-@blueprint.route('/export/<string:bib_format_key>/')
 @except_abort(SchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def search_bib_download(bib_format_key):
@@ -412,7 +443,6 @@ def get_sitemap_page_count():
     return count
 
 
-@blueprint.route('/sitemap.xml')
 @except_abort(SearchIndexError, 503)
 def sitemap_index():
     """Generate a sitemap index."""
@@ -426,7 +456,6 @@ def sitemap_index():
     return response
 
 
-@blueprint.route('/sitemap<int(min=1):page_num>.xml')
 @except_abort(SchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def sitemap(page_num):
@@ -461,7 +490,6 @@ def sitemap(page_num):
     return response
 
 
-@blueprint.route('/api/last-sync')
 def last_updated_on():
     last_sync = load_object('index', 'last_update_from_zotero')
     if last_sync:

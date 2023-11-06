@@ -120,6 +120,110 @@ Phew! We think that this is simpler to setup in practice than it looks in
 writing. Hopefully you will agree.
 
 
+## Creating custom content pages based on Zotero standalone notes
+
+If you wish to provide informational pages along with your bibliography, you can
+add standalone notes to your Zotero library, and configure Kerko to provide
+pages whose content will come from those notes.
+
+Say you want to provide "About" and "Contact Us" pages with simple text content,
+you could implement them by following these steps:
+
+- Create a standalone note in Zotero. In the Zotero note editor, enter the
+  desired text for your "About" page.
+- Create another standalone note in Zotero. In the Zotero note editor, enter the
+  desired text for your "Contact Us" page.
+- For each note, find its item ID. One way to find it is to visit your library
+  using Zotero's web interface. Click the note, and check its URL in your
+  browser's address bar. It should look a bit like
+  [https://www.zotero.org/groups/2348869/kerko_demo/items/**Y48RBWDB**/item-list](https://www.zotero.org/groups/2348869/kerko_demo/items/Y48RBWDB/item-list).
+  In this example, `"Y48RBWDB"` is the item ID.
+- Define the "About" and "Contact Us" pages by adding the following snippet to
+  your Kerko configuration:
+
+    ```toml
+    [kerko.pages.about]
+    path = "/about"
+    item_id = "Y48RBWDB"
+    title = "About"
+
+    [kerko.pages.contact_us]
+    path = "/contact"
+    item_id = "REG3CL25"
+    title = "Contact Us"
+    ```
+
+    ... where:
+
+    - `path` is the desired URL path for the page;
+    - `item_id` is the note's item ID (as found earlier);
+    - `title` is the desired title for the page in the Kerko site.
+
+    For more details on each parameter, please refer to the [parameters
+    documentation](config-params.md#kerkopages).
+
+- Then, you will probably want the navigation bar to provide links to your
+  pages. The following configuration code defines a navigation bar with three
+  links — a link to the bibliography, and links to the "About" and "Contact Us"
+  pages:
+
+    ```toml
+    [[kerko.link_groups.navbar]]
+    type = "endpoint"
+    endpoint = "kerko.search"
+    text = "Bibliography"
+
+    [[kerko.link_groups.navbar]]
+    type = "page"
+    page = "about"
+    text = "About"
+
+    [[kerko.link_groups.navbar]]
+    type = "page"
+    page = "contact_us"
+    text = "Contact Us"
+    ```
+
+    ... where:
+
+    - the `type` parameter indicates the type of link (`"endpoint"` indicates a
+      core Kerko link, while `"page"` indicates a link to a page defined under
+      `kerko.pages.*`);
+    - the `page` parameter specifies the target of the link, e.g., the unique
+      key of the page (which replaces the `*` in the `kerko.pages.*` header);
+    - the `text` parameter provides the link's text to show in the navigation
+      bar.
+
+    Navigation bar links will be displayed in the order they appear in the
+    configuration file.
+
+    For more details on this configuration section, please refer to the
+    [parameters documentation](config-params.md#kerkolink_groups)
+
+- Make sure Kerko's database is up-to-date with your new note by running the
+  following command:
+
+    ```bash
+    flask kerko sync
+    ```
+
+- Restart your Kerko application to load the configuration changes. If all goes
+  well, you will have new "About" and "Contact Us" pages accessible from the
+  navigation bar.
+
+Please note that Kerko does not restructure the HTML that Zotero generates for
+notes. If you use headings in your notes, we recommend that you start with the
+"Heading 2" heading level, because "Heading 1" should be reserved to Kerko (for
+the page title).
+
+Kerko is not, and never will be, a web content management system. Its sole
+purpose is to provide a nice interface for a Zotero library. Thus, Kerko content
+pages are just a very rudimentary way of providing simple informational content
+along with the library. For more advanced content needs, you might have to
+consider integrating Kerko into a custom Flask application backed with proper
+content editing features.
+
+
 ## Ensuring full-text indexing of your attachments in Zotero
 
 Kerko's full-text indexing relies on text content extracted from attachments by

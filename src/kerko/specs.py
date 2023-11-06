@@ -760,6 +760,17 @@ class BadgeSpec:
         return ''
 
 
+class PageSpec:
+    """
+    Specifies a page whose content is to be extracted from a Zotero note.
+    """
+
+    def __init__(self, path: str, item_id: str, title: str):
+        self.path = path
+        self.item_id = item_id
+        self.title = title
+
+
 class LinkSpec(ABC):
 
     def __init__(self, *, text: str, new_window=False, weight=0):
@@ -818,6 +829,20 @@ class LinkByEndpointSpec(LinkSpec):
             _external=self.external,
             **self.parameters,
         )
+
+
+class PageLinkSpec(LinkSpec):
+
+    def __init__(self, *, page: str, **kwargs):
+        super().__init__(**kwargs)
+        self.endpoint = f"kerko.{page}"
+
+    def is_active(self, request: Request) -> bool:
+        return request.endpoint == self.endpoint
+
+    @property
+    def url(self) -> str:
+        return url_for(self.endpoint)
 
 
 class LinkGroupSpec:

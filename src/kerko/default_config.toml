@@ -61,14 +61,14 @@ text_max_length_leeway = 10
 [kerko.link_groups]
 
     [[kerko.link_groups.navbar]]
-    text = "Bibliography"
     type = "endpoint"
     endpoint = "kerko.search"
+    text = "Bibliography"
 
     [[kerko.link_groups.breadcrumb_base]]
-    text = "Bibliography"
     type = "endpoint"
     endpoint = "kerko.search"
+    text = "Bibliography"
 
 [kerko.templates]
 
@@ -77,6 +77,7 @@ layout = "kerko/layout.html.jinja2"
 search = "kerko/search.html.jinja2"
 search_item = "kerko/search-item.html.jinja2"
 item = "kerko/item.html.jinja2"
+page = "kerko/page.html.jinja2"
 atom_feed = "kerko/atom.xml.jinja2"
 
 [kerko.zotero]

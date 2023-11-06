@@ -4,6 +4,10 @@
 
 Features:
 
+- Add new configuration parameter `kerko.pages.*.` for defining content pages
+  whose content come from selected Zotero standalone notes.
+- Add a `"page"` type for the `kerko.link_groups.*.` configuration table, to
+  allow the creation of links to content pages.
 - Add configuration parameters `kerko.performance.whoosh_index_memory_limit` and
   `kerko.performance.whoosh_index_processors` to give some control over the
   Whoosh search engine's indexing performance.
@@ -24,6 +28,10 @@ Backwards incompatible changes:
 
 Possibly backwards incompatible changes (more or less internal API changes):
 
+- Kerko no longer provides a `kerko.blueprint` global object. Applications must
+  now instantiate the blueprint by calling `kerko.make_blueprint()` before
+  registering it. This prevents attempts to mutate the object after its
+  registration, especially in tests.
 - Upgrade many dependencies, including new major versions of Flask (3.x),
   Flask-Babel (4.x), Werkzeug (3.x).
 

@@ -156,6 +156,8 @@ The main features provided by Kerko are:
   You may define such relations using Zotero's _Related_ field. Moreover, Kerko
   adds the _Cites_ and _Cited by_ relation types, which can be managed in Zotero
   through notes. Custom applications can add more types of relations if desired.
+- **Pages**: simple informational pages can be defined using content from Zotero
+  standalone notes.
 - **Badges**: custom applications can have icons conditionally displayed next to
   items.
 - **Responsive design**: the simple default implementation works on large

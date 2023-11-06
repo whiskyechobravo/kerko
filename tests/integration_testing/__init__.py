@@ -81,7 +81,7 @@ class MockLibraryTestCase(unittest.TestCase):
 
     @classmethod
     def init_blueprints(cls):
-        cls.app.register_blueprint(kerko.blueprint, url_prefix=cls.URL_PREFIX)
+        cls.app.register_blueprint(kerko.make_blueprint(), url_prefix=cls.URL_PREFIX)
 
     @classmethod
     def init_extensions(cls):

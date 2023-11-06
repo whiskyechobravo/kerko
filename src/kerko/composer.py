@@ -13,9 +13,20 @@ from whoosh.util.text import rcompile
 from kerko import codecs, extractors, transformers
 from kerko.config_helpers import config_get
 from kerko.datetime import iso_to_datetime, iso_to_timestamp
-from kerko.specs import (BadgeSpec, BibFormatSpec, CollectionFacetSpec,
-                         FacetSpec, FieldSpec, FlatFacetSpec, LinkGroupSpec,
-                         RelationSpec, ScopeSpec, SortSpec, TreeFacetSpec)
+from kerko.specs import (
+    BadgeSpec,
+    BibFormatSpec,
+    CollectionFacetSpec,
+    FacetSpec,
+    FieldSpec,
+    FlatFacetSpec,
+    LinkGroupSpec,
+    PageSpec,
+    RelationSpec,
+    ScopeSpec,
+    SortSpec,
+    TreeFacetSpec,
+)
 
 
 class Composer:
@@ -72,6 +83,7 @@ class Composer:
         self.bib_formats: Dict[str, BibFormatSpec] = {}
         self.relations: Dict[str, RelationSpec] = {}
         self.badges: Dict[str, BadgeSpec] = {}
+        self.pages: Dict[str, PageSpec] = {}
         self.link_groups: Dict[str, LinkGroupSpec] = {}
         self.init_scopes(config)
         self.init_fields(config)
@@ -79,6 +91,7 @@ class Composer:
         self.init_sorts(config)
         self.init_bib_formats(config)
         self.init_relations(config)
+        self.init_pages(config)
         self.init_link_groups(config)
 
     def init_scopes(self, config: Config) -> None:
@@ -813,6 +826,10 @@ class Composer:
                         )
                     )
 
+    def init_pages(self, config: Config) -> None:
+        pages = config['kerko_config'].kerko.pages
+        self.pages = pages.to_spec() if pages else {}
+
     def init_link_groups(self, config: Config) -> None:
         self.link_groups = config['kerko_config'].kerko.link_groups.to_spec()
 
@@ -873,6 +890,12 @@ class Composer:
 
     def remove_relation(self, key):
         del self.relations[key]
+
+    def add_page(self, key: str, page: PageSpec):
+        self.pages[key] = page
+
+    def remove_page(self, key: str):
+        del self.pages[key]
 
     def add_link_group(self, key: str, link_group: LinkGroupSpec):
         self.link_groups[key] = link_group

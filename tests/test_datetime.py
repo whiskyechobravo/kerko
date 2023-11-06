@@ -156,7 +156,7 @@ class DateStringReformattingTestCase(unittest.TestCase):
 
     def setUp(self):
         self.app = Flask(__name__)
-        self.app.register_blueprint(kerko.blueprint, url_prefix='/bibliography')
+        self.app.register_blueprint(kerko.make_blueprint(), url_prefix='/bibliography')
         self.babel = Babel()
         ctx = self.app.app_context()
         ctx.push()

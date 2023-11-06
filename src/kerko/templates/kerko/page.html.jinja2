@@ -1,0 +1,9 @@
+{% extends config.kerko.templates.layout %}
+
+{% block content_header %}
+    <h1>{{ title|escape }}</h1>
+{% endblock content_header %}
+
+{% block content_inner %}
+    {{ content }}
+{% endblock content_inner %}

@@ -375,7 +375,7 @@ Let's now build a minimal app:
     babel = Babel(app)
     bootstrap = Bootstrap4(app)
 
-    app.register_blueprint(kerko.blueprint, url_prefix='/bibliography')
+    app.register_blueprint(kerko.make_blueprint(), url_prefix='/bibliography')
     ```
 
     The `url_prefix` argument given above defines the base path for every URL
