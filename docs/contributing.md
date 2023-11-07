@@ -87,9 +87,7 @@ consider the following guidelines:
 
 - Before submitting, run the tests and make sure they pass. Add tests relevant
   to your change (those should fail if ran without your patch).
-- Use [Yapf](https://github.com/google/yapf) to autoformat your code (with
-  option `--style='{based_on_style: facebook, column_limit: 100}'`). Many
-  editors provide Yapf integration.
+- Use [Ruff](https://docs.astral.sh/ruff) to format Python code.
 - If a Jinja2 template represents a page fragment or a collection of macros,
   prefix its file name with the underscore character.
 - Update the relevant sections of the documentation.

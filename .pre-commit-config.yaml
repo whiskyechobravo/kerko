@@ -15,7 +15,6 @@ repos:
     rev: v0.1.3
     hooks:
       - id: ruff
-      # TODO: Enable to enforce code formatting: - id: ruff-format
-      # TODO:   args: ["--check"]
+      - id: ruff-format
 
 exclude: '^(tests/.+\.json)$'
