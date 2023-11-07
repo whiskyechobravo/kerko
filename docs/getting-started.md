@@ -334,7 +334,7 @@ Let's now build a minimal app:
     config_update(app.config, kerko.DEFAULTS)
 
     # Update app configuration from environment variables.
-    app.config.from_prefixed_env(prefix='MYAPP')
+    app.config.from_prefixed_env(prefix="MYAPP")
     ```
 
     Next, adjust general application parameters to your liking. For example, we
@@ -344,7 +344,7 @@ Let's now build a minimal app:
 
     ```python title="wsgi.py" linenums="14"
     # Make changes to the Kerko configuration here, if desired.
-    config_set(app.config, 'kerko.meta.title', 'My App')
+    config_set(app.config, "kerko.meta.title", "My App")
     ```
 
     Next, have Kerko parse and validate the configuration. Then create the
@@ -357,7 +357,7 @@ Let's now build a minimal app:
     parse_config(app.config)
 
     # Initialize the Composer object.
-    app.config['kerko_composer'] = Composer(app.config)
+    app.config["kerko_composer"] = Composer(app.config)
 
     # Make changes to the Kerko composer object here, if desired.
     ```
@@ -375,7 +375,7 @@ Let's now build a minimal app:
     babel = Babel(app)
     bootstrap = Bootstrap4(app)
 
-    app.register_blueprint(kerko.make_blueprint(), url_prefix='/bibliography')
+    app.register_blueprint(kerko.make_blueprint(), url_prefix="/bibliography")
     ```
 
     The `url_prefix` argument given above defines the base path for every URL
