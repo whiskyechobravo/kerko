@@ -21,20 +21,18 @@ def _build_keywords(criteria):
             for value in criteria.keywords.getlist(scope.key):
                 keywords[scope.key].append(
                     {
-                        'label':
-                            value,
-                        'remove_url':
-                            url_for(
-                                '.search',
-                                **criteria.params(
-                                    keywords=scope.remove_keywords(value, criteria.keywords),
-                                    options={
-                                        'page': None,
-                                        'page-len': None,
-                                        'id': None,
-                                    },
-                                )
+                        "label": value,
+                        "remove_url": url_for(
+                            ".search",
+                            **criteria.params(
+                                keywords=scope.remove_keywords(value, criteria.keywords),
+                                options={
+                                    "page": None,
+                                    "page-len": None,
+                                    "id": None,
+                                },
                             ),
+                        ),
                     }
                 )
     return keywords
@@ -43,10 +41,10 @@ def _build_keywords(criteria):
 def _get_active_filters(results):
     filters = []
     for item in results:
-        if item.get('remove_url', None):
-            if item.get('children', []):
-                item = copy(item)
-                item['children'] = _get_active_filters(item['children'])
+        if item.get("remove_url", None):
+            if item.get("children", []):
+                item = copy(item)  # noqa: PLW2901
+                item["children"] = _get_active_filters(item["children"])
             filters.append(item)
     return filters
 
@@ -66,10 +64,10 @@ def build_breadbox(criteria, facet_results):
 
     breadbox_keywords = _build_keywords(criteria)
     if breadbox_keywords:
-        breadbox['keywords'] = breadbox_keywords
+        breadbox["keywords"] = breadbox_keywords
 
     breadbox_filters = _build_filters(facet_results)
     if breadbox_filters:
-        breadbox['filters'] = breadbox_filters
+        breadbox["filters"] = breadbox_filters
 
     return breadbox

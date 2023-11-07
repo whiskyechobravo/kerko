@@ -9,12 +9,12 @@ from typing_extensions import Annotated, Literal
 try:
     import tomllib
 except ModuleNotFoundError:
-    import tomli as tomllib  # type: ignore
+    import tomli as tomllib
 
 import dpath
 import whoosh
 from flask import Config
-from pydantic import (  # pylint: disable=no-name-in-module
+from pydantic import (
     BaseModel,
     ConstrainedStr,
     Extra,
@@ -26,15 +26,13 @@ from pydantic import (  # pylint: disable=no-name-in-module
 )
 
 from kerko.specs import (
-    PageLinkSpec,
     LinkByEndpointSpec,
     LinkByURLSpec,
     LinkGroupSpec,
     LinkSpec,
+    PageLinkSpec,
     PageSpec,
 )
-
-# pylint: disable=too-few-public-methods
 
 # Note: To preserve field ordering in Pydantic models, we annotate an
 # attribute's type even when it could be determined by its default value.
@@ -42,33 +40,27 @@ from kerko.specs import (
 
 
 class SlugStr(ConstrainedStr):
-
-    regex = r'^[a-z][a-z0-9_\-]*$'
+    regex = r"^[a-z][a-z0-9_\-]*$"
 
 
 class URLPathStr(ConstrainedStr):
-
-    regex = r'^/[a-z0-9_\-/]*$'
+    regex = r"^/[a-z0-9_\-/]*$"
 
 
 class FieldNameStr(ConstrainedStr):
-
-    regex = r'^[a-z][a-zA-Z0-9_]*$'
+    regex = r"^[a-z][a-zA-Z0-9_]*$"
 
 
 class ElementIdStr(ConstrainedStr):
-
-    regex = r'^[a-z][a-zA-Z0-9]*$'
+    regex = r"^[a-z][a-zA-Z0-9]*$"
 
 
 class IdentifierStr(ConstrainedStr):
-
-    regex = r'^[a-z][a-z0-9_]*$'
+    regex = r"^[a-z][a-z0-9_]*$"
 
 
 class ZoteroItemIdStr(ConstrainedStr):
-
-    regex = r'^[A-Z0-9]{8}$'
+    regex = r"^[A-Z0-9]{8}$"
 
 
 class AssetsModel(BaseModel):
@@ -181,7 +173,7 @@ class ZoteroModel(BaseModel):
     max_attempts: int = Field(ge=1)
     wait: int = Field(ge=120)
     csl_style: str
-    locale: str = Field(regex=r'^[a-z]{2}-[A-Z]{2}$')
+    locale: str = Field(regex=r"^[a-z]{2}-[A-Z]{2}$")
     item_include_re: str
     item_exclude_re: str
     tag_include_re: str
@@ -209,10 +201,10 @@ class SearchModel(BaseModel):
 
     result_fields: List[FieldNameStr]
     fulltext: bool
-    whoosh_language: str = Field(regex=r'^[a-z]{2,3}$')
+    whoosh_language: str = Field(regex=r"^[a-z]{2,3}$")
 
-    @validator('whoosh_language')
-    def validate_whoosh_has_language(cls, v):  # pylint: disable=no-self-argument
+    @validator("whoosh_language")
+    def validate_whoosh_has_language(cls, v):  # noqa: N805
         if not whoosh.lang.has_stemmer(v):
             raise ValueError(f"language '{v}' not supported by Whoosh")
         return v
@@ -265,7 +257,6 @@ class ZoteroFieldModel(BaseModel):
 
 
 class CoreSearchFieldsModel(BaseModel):
-
     class Config:
         extra = Extra.forbid
 
@@ -300,37 +291,32 @@ class BaseFacetModel(BaseModel, ABC):
 
 
 class TagFacetModel(BaseFacetModel):
-
-    type: Literal["tag"]
+    type: Literal["tag"]  # noqa: A003
     title: Optional[str]
 
 
 class ItemTypeFacetModel(BaseFacetModel):
-
-    type: Literal["item_type"]
+    type: Literal["item_type"]  # noqa: A003
     title: Optional[str]
     item_view: bool = False
 
 
 class YearFacetModel(BaseFacetModel):
-
-    type: Literal["year"]
+    type: Literal["year"]  # noqa: A003
     title: Optional[str]
     item_view: bool = False
 
 
 class LinkFacetModel(BaseFacetModel):
-
-    type: Literal["link"]
+    type: Literal["link"]  # noqa: A003
     title: Optional[str]
     item_view: bool = False
 
 
 class CollectionFacetModel(BaseFacetModel):
-
-    type: Literal["collection"]
+    type: Literal["collection"]  # noqa: A003
     title: str
-    collection_key: str = Field(regex=r'^[A-Z0-9]{8}$')
+    collection_key: str = Field(regex=r"^[A-Z0-9]{8}$")
 
 
 # Note: Discriminated unions ensure that a single unambiguous error gets
@@ -344,7 +330,8 @@ FacetModelUnion = Annotated[
         YearFacetModel,
         LinkFacetModel,
         CollectionFacetModel,
-    ], Field(discriminator='type')
+    ],
+    Field(discriminator="type"),
 ]
 
 
@@ -413,11 +400,10 @@ class PagesModel(BaseModel):  # TODO: Pydantic v2: inherit RootModel.
     __root__: Dict[IdentifierStr, PageModel]
 
     def to_spec(self) -> Dict[str, PageSpec]:
-        return { key: page_model.to_spec() for key, page_model in self.__root__.items() }
+        return {key: page_model.to_spec() for key, page_model in self.__root__.items()}
 
 
 class LinkModel(BaseModel, ABC):
-
     class Config:
         extra = Extra.forbid
 
@@ -433,7 +419,7 @@ class LinkModel(BaseModel, ABC):
 class LinkByEndpointModel(LinkModel):
     """Model for endpoint items under the kerko.link_groups config table."""
 
-    type: Literal["endpoint"]
+    type: Literal["endpoint"]  # noqa: A003
     endpoint: str
     anchor: Optional[str]
     scheme: Optional[str]
@@ -441,8 +427,8 @@ class LinkByEndpointModel(LinkModel):
     parameters: Optional[Dict[str, Any]]
 
     @root_validator
-    def validate_scheme(cls, values):  # pylint: disable=no-self-argument
-        if values.get('scheme') and not values.get('external'):
+    def validate_scheme(cls, values):  # noqa: N805
+        if values.get("scheme") and not values.get("external"):
             raise ValueError("When specifying 'scheme', 'external' must be true.")
         return values
 
@@ -462,7 +448,7 @@ class LinkByEndpointModel(LinkModel):
 class LinkByURLModel(LinkModel):
     """Model for URL items under the kerko.link_groups config table."""
 
-    type: Literal["url"]
+    type: Literal["url"]  # noqa: A003
     url: str  # TODO: Validate as URL string
 
     def to_spec(self) -> LinkSpec:
@@ -477,7 +463,7 @@ class LinkByURLModel(LinkModel):
 class PageLinkModel(LinkModel):
     """Model for page items under the kerko.link_groups config table."""
 
-    type: Literal["page"]
+    type: Literal["page"]  # noqa: A003
     page: str
 
     def to_spec(self) -> LinkSpec:
@@ -493,7 +479,8 @@ LinkModelUnion = Annotated[
         LinkByEndpointModel,
         LinkByURLModel,
         PageLinkModel,
-    ], Field(discriminator='type')
+    ],
+    Field(discriminator="type"),
 ]
 
 
@@ -541,7 +528,7 @@ class ConfigModel(BaseModel):
 
     SECRET_KEY: str = Field(min_length=12)
     ZOTERO_API_KEY: str = Field(min_length=16)
-    ZOTERO_LIBRARY_ID: str = Field(regex=r'^[0-9]+$')
+    ZOTERO_LIBRARY_ID: str = Field(regex=r"^[0-9]+$")
     ZOTERO_LIBRARY_TYPE: Union[Literal["user"], Literal["group"]]
     kerko: Optional[KerkoModel]
 
@@ -549,10 +536,10 @@ class ConfigModel(BaseModel):
 def load_toml(filename: Union[str, pathlib.Path], verbose=False) -> Dict[str, Any]:
     """Load the content of a TOML file."""
     try:
-        with open(filename, 'rb') as file:
+        with open(filename, "rb") as file:
             config = tomllib.load(file)
             if verbose:
-                print(f" * Loading configuration file {filename}")
+                print(f" * Loading configuration file {filename}")  # noqa: T201
             return config
     except OSError as e:
         raise RuntimeError(f"Unable to open TOML file.\n{e}") from e
@@ -583,7 +570,7 @@ def config_get(config: Config, path: str) -> Any:
     parameter that does not have a value, is considered a programming error and
     will throw a `KeyError` exception.
     """
-    return dpath.get(config, path, separator='.')
+    return dpath.get(config, path, separator=".")
 
 
 def config_set(config: Config, path: str, value: Any) -> None:
@@ -593,13 +580,13 @@ def config_set(config: Config, path: str, value: Any) -> None:
     `path` is a string of keys separated by dots ('.') acting as hierarchical
     level separators.
     """
-    dpath.new(config, path, value, separator='.')
+    dpath.new(config, path, value, separator=".")
 
 
 def parse_config(
     config: Config,
     key: Optional[str] = None,
-    model: Type[BaseModel] = ConfigModel
+    model: Type[BaseModel] = ConfigModel,
 ) -> None:
     """
     Parse and validate configuration using `model`.
@@ -622,14 +609,14 @@ def parse_config(
         if key is None:
             parsed = model.parse_obj(config)
             config.update(parsed.dict())
-            config['kerko_config'] = parsed
+            config["kerko_config"] = parsed
         elif config.get(key):
             # The parsed models are stored in the config as dicts. This way, the
             # whole configuration structure is made of dicts only, allowing
             # consistent access for any element at any depth.
             parsed = model.parse_obj(config[key])
             config_set(config, key, parsed.dict())
-            config[f'kerko_config.{key}'] = parsed
+            config[f"kerko_config.{key}"] = parsed
     except ValidationError as e:
         raise RuntimeError(f"Invalid configuration. {e}") from e
 

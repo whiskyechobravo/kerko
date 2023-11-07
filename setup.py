@@ -9,15 +9,16 @@ Reference: https://setuptools.readthedocs.io/en/latest/setuptools.html
 """
 
 import setuptools
-from setuptools.command.develop import develop as BaseDevelop
-from setuptools.command.sdist import sdist as BaseSDist
+from setuptools.command.develop import develop as BaseDevelop  # noqa: N812
+from setuptools.command.sdist import sdist as BaseSDist  # noqa: N812
+
 try:
-    from wheel.bdist_wheel import bdist_wheel as BaseBDistWheel
+    from wheel.bdist_wheel import bdist_wheel as BaseBDistWheel  # noqa: N812
 except ImportError:
     BaseBDistWheel = None
 
 
-class CompileCatalogMixin():
+class CompileCatalogMixin:
     """
     Compile MO files with Babel's ``compile_catalog`` command.
 
@@ -31,12 +32,12 @@ class CompileCatalogMixin():
         is_develop = isinstance(self, Develop)
 
         if not is_develop:
-            self.run_command('compile_catalog')
+            self.run_command("compile_catalog")
 
         super().run()
 
         if is_develop and not self.uninstall:
-            self.run_command('compile_catalog')
+            self.run_command("compile_catalog")
 
 
 class Develop(CompileCatalogMixin, BaseDevelop):
@@ -48,8 +49,8 @@ class SDist(CompileCatalogMixin, BaseSDist):
 
 
 cmd_classes = {
-    'develop': Develop,
-    'sdist': SDist,
+    "develop": Develop,
+    "sdist": SDist,
 }
 
 if BaseBDistWheel:
@@ -57,7 +58,7 @@ if BaseBDistWheel:
     class BDistWheel(CompileCatalogMixin, BaseBDistWheel):
         pass
 
-    cmd_classes['bdist_wheel'] = BDistWheel
+    cmd_classes["bdist_wheel"] = BDistWheel
 
 
 if __name__ == "__main__":

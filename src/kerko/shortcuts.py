@@ -8,7 +8,7 @@ from kerko.config_helpers import config_get
 
 
 def composer() -> Composer:
-    return current_app.config['kerko_composer']
+    return current_app.config["kerko_composer"]
 
 
 def data_path() -> str:
@@ -19,7 +19,7 @@ def data_path() -> str:
     resolved as an absolute path under the application's instance folder.
     """
     instance_path = pathlib.Path(current_app.instance_path)
-    config_data_path = pathlib.Path(current_app.config.get('DATA_PATH', 'kerko'))
+    config_data_path = pathlib.Path(current_app.config.get("DATA_PATH", "kerko"))
     return str(instance_path / config_data_path)
 
 

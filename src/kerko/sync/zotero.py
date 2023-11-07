@@ -1,8 +1,7 @@
 from time import sleep
+
 import requests
-
 import wrapt
-
 from flask import current_app
 from pyzotero import zotero, zotero_errors
 
@@ -13,7 +12,14 @@ class LibraryContext:
     """Contains data related to a Zotero library."""
 
     def __init__(
-            self, library_id, library_type, *, collections, item_types, item_fields, creator_types
+        self,
+        library_id,
+        library_type,
+        *,
+        collections,
+        item_types,
+        item_fields,
+        creator_types,
     ):
         self.library_id = library_id
         self.library_type = library_type
@@ -23,7 +29,7 @@ class LibraryContext:
         self.creator_types = creator_types
 
     def get_creator_types(self, item_data):
-        return self.creator_types.get(item_data.get('itemType', ''), [])
+        return self.creator_types.get(item_data.get("itemType", ""), [])
 
 
 @wrapt.decorator
@@ -39,18 +45,18 @@ def retry_zotero(wrapped, _instance, args, kwargs):
         try:
             return wrapped(*args, **kwargs)
         except (
-                requests.exceptions.ConnectionError,
-                zotero_errors.HTTPError,
-                zotero_errors.UnsupportedParams
+            requests.exceptions.ConnectionError,
+            zotero_errors.HTTPError,
+            zotero_errors.UnsupportedParams,
         ) as e:
             current_app.logger.warning(e)
-            if attempts < config('kerko.zotero.max_attempts'):
+            if attempts < config("kerko.zotero.max_attempts"):
                 current_app.logger.warning(
                     f"The Zotero API request has failed in {wrapped.__name__}. "
                     f"New attempt in {config('kerko.zotero.wait')} seconds..."
                 )
                 attempts += 1
-                sleep(config('kerko.zotero.wait'))
+                sleep(config("kerko.zotero.wait"))
             else:
                 current_app.logger.error(
                     "The maximum number of API call attempts to Zotero has "
@@ -61,31 +67,24 @@ def retry_zotero(wrapped, _instance, args, kwargs):
 
 def init_zotero():
     return zotero.Zotero(
-        library_id=config('ZOTERO_LIBRARY_ID'),
-        library_type=config('ZOTERO_LIBRARY_TYPE'),
-        api_key=config('ZOTERO_API_KEY'),
-        locale=config('kerko.zotero.locale')
+        library_id=config("ZOTERO_LIBRARY_ID"),
+        library_type=config("ZOTERO_LIBRARY_TYPE"),
+        api_key=config("ZOTERO_API_KEY"),
+        locale=config("kerko.zotero.locale"),
     )
 
 
 def request_library_context(zotero_credentials):
-    item_types = {
-        t['itemType']: t['localized']
-        for t in load_item_types(zotero_credentials)
-    }
+    item_types = {t["itemType"]: t["localized"] for t in load_item_types(zotero_credentials)}
     return LibraryContext(
         zotero_credentials.library_id,
-        zotero_credentials.library_type.rstrip('s'),  # Remove 's' appended by pyzotero.
+        zotero_credentials.library_type.rstrip("s"),  # Remove 's' appended by pyzotero.
         collections=Collections(zotero_credentials),
         item_types=item_types,
-        item_fields={
-            t: load_item_type_fields(zotero_credentials, t)
-            for t in item_types.keys()
-        },
+        item_fields={t: load_item_type_fields(zotero_credentials, t) for t in item_types.keys()},
         creator_types={
-            t: load_item_type_creator_types(zotero_credentials, t)
-            for t in item_types.keys()
-        }
+            t: load_item_type_creator_types(zotero_credentials, t) for t in item_types.keys()
+        },
     )
 
 
@@ -130,8 +129,8 @@ def load_item_type_creator_types(zotero_credentials, item_type):
 
 @retry_zotero
 def load_deleted_or_trashed_items(zotero_credentials, since):
-    deleted = zotero_credentials.deleted(since=since).get('items', [])
-    trashed = [trashed['key'] for trashed in Items(zotero_credentials, since=since, trash=True)]
+    deleted = zotero_credentials.deleted(since=since).get("items", [])
+    trashed = [trashed["key"] for trashed in Items(zotero_credentials, since=since, trash=True)]
     return deleted + trashed
 
 
@@ -148,10 +147,10 @@ def load_item_fulltext(zotero_credentials, item_key):
     current_app.logger.debug(f"Requesting text content of item {item_key}...")
     try:
         response = zotero_credentials.fulltext_item(item_key)
-        if response.get('content') and (
-            response.get('indexedChars', 0) > 0 or response.get('indexedPages', 0) > 0
+        if response.get("content") and (
+            response.get("indexedChars", 0) > 0 or response.get("indexedPages", 0) > 0
         ):
-            return response['content']
+            return response["content"]
         current_app.logger.info(f"Text content empty for item {item_key}.")
     except zotero_errors.ResourceNotFound:
         current_app.logger.info(f"Text content not available for item {item_key}.")
@@ -224,9 +223,7 @@ class Collections:
     @retry_zotero
     def load_collections(self, zotero_credentials, top_level):
         current_app.logger.info(
-            "Requesting {which} collections...".format(
-                which='top-level' if top_level else 'all'
-            )
+            "Requesting {which} collections...".format(which="top-level" if top_level else "all")
         )
         start = 0
         if top_level:
@@ -234,12 +231,12 @@ class Collections:
         else:
             method = zotero_credentials.collections
         while True:
-            more = method(start=start, limit=config('kerko.zotero.batch_size'))
+            more = method(start=start, limit=config("kerko.zotero.batch_size"))
             if not more:
                 break
             start += len(more)
             for collection in more:
-                self.collections[collection['key']] = collection
+                self.collections[collection["key"]] = collection
 
     def __iter__(self):
         return self
@@ -271,7 +268,7 @@ class Collections:
         """
         collection = self.collections.get(key)
         if collection:
-            parent_key = collection['data'].get('parentCollection')
+            parent_key = collection["data"].get("parentCollection")
             if parent_key:
                 ancestors = self.ancestors(parent_key)
                 ancestors.append(key)
@@ -309,13 +306,13 @@ class Items:
         """
         self.zotero_credentials = zotero_credentials
         self.since = since
-        self.include = ','.join(sorted(formats or ['data']))
+        self.include = ",".join(sorted(formats or ["data"]))
         if trash:
-            self.method = 'trash'
-            self.method_info = 'trashed'
+            self.method = "trash"
+            self.method_info = "trashed"
         else:
-            self.method = 'items'
-            self.method_info = 'updated'
+            self.method = "items"
+            self.method_info = "updated"
         self.start = 0
         self.zotero_batch = []
         self.iterator = iter(self.zotero_batch)
@@ -332,19 +329,19 @@ class Items:
 
     @retry_zotero
     def _next_batch(self):
-        limit = config('kerko.zotero.batch_size')
+        limit = config("kerko.zotero.batch_size")
         current_app.logger.info(
             f"Requesting up to {limit} {self.method_info} items since version {self.since}, "
             f"starting at position {self.start}..."
         )
         params = {
-            'since': self.since,
-            'start': self.start,
-            'limit': limit,
-            'sort': 'dateAdded',
-            'direction': 'asc',
-            'include': self.include,
-            'style': config('kerko.zotero.csl_style'),
+            "since": self.since,
+            "start": self.start,
+            "limit": limit,
+            "sort": "dateAdded",
+            "direction": "asc",
+            "include": self.include,
+            "style": config("kerko.zotero.csl_style"),
         }
         self.zotero_batch = getattr(self.zotero_credentials, self.method)(**params)
         if not self.zotero_batch:

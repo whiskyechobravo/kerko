@@ -34,9 +34,7 @@ class Searcher:
         self.field_specs = field_specs or composer().fields
         self.facet_specs = {  # Reorganize by filter key instead of spec key.
             f.filter_key: f
-            for f in (
-                facet_specs.values() if facet_specs else composer().facets.values()
-            )
+            for f in (facet_specs.values() if facet_specs else composer().facets.values())
         }
         self.search_args = {}  # Arguments to pass to Whoosh's searcher.
 
@@ -52,11 +50,13 @@ class Searcher:
     @except_raise(KeyError, SchemaError, "Schema changes are required. Please clean index.")
     def search(self, *, limit=None, **kwargs):
         self._prepare_search_args(**kwargs)
-        return UnpagedResults(self.searcher.search(
-            q=self.search_args.pop('query'),
-            limit=limit,
-            **self.search_args,
-        ))
+        return UnpagedResults(
+            self.searcher.search(
+                q=self.search_args.pop("query"),
+                limit=limit,
+                **self.search_args,
+            )
+        )
 
     @except_raise(KeyError, SchemaError, "Schema changes are required. Please clean index.")
     def search_page(self, *, page, page_len, **kwargs):
@@ -111,24 +111,23 @@ class Searcher:
                     Not=r"(^|(?<=(\s|[()])))" + re.escape(gettext("NOT")) + r"(?=\s)",
                     AndNot=None,
                     AndMaybe=None,
-                    Require=None
+                    Require=None,
                 ),
                 plugins.BoostPlugin(),
             ]
             for key, value in keywords.items(multi=True):
                 fields = [
                     field_spec.key
-                    for field_spec in self.field_specs.values() if key in field_spec.scopes
+                    for field_spec in self.field_specs.values()
+                    if key in field_spec.scopes
                 ]
                 if not fields:
                     raise KeyError  # No known field for that scope key.
-                parser = MultifieldParser(
-                    fields, schema=self.schema, plugins=text_plugins
-                )
+                parser = MultifieldParser(fields, schema=self.schema, plugins=text_plugins)
                 queries.append(parser.parse(value))
-            self.search_args['query'] = And(queries)
+            self.search_args["query"] = And(queries)
         else:
-            self.search_args['query'] = Every()
+            self.search_args["query"] = Every()
 
     def _prepare_filters(
         self,
@@ -176,11 +175,19 @@ class Searcher:
             for field_key in require_all.keys() & self.field_specs.keys():
                 terms.append(Or([Term(field_key, value) for value in require_all[field_key]]))
         if require_any:
-            terms.append(Or(list(chain(
-                *[[Term(field_name, value) for value in allow_values]
-                    for field_name, allow_values in require_any.items()
-                    if field_name in self.field_specs.keys()]
-            ))))
+            terms.append(
+                Or(
+                    list(
+                        chain(
+                            *[
+                                [Term(field_name, value) for value in allow_values]
+                                for field_name, allow_values in require_any.items()
+                                if field_name in self.field_specs.keys()
+                            ]
+                        )
+                    )
+                )
+            )
         if require_date_ranges:
             for field_key in require_date_ranges.keys() & self.field_specs.keys():
                 terms.append(DateRange(field_key, *require_date_ranges[field_key]))
@@ -193,35 +200,35 @@ class Searcher:
                 spec = self.facet_specs.get(filter_key)
                 if spec:
                     for v in filter_values:
-                        if v == '':  # If trying to filter with a missing value.
+                        if v == "":  # If trying to filter with a missing value.
                             # Exclude all results with a value in facet field.
                             terms.append(Not(Every(spec.key)))
                         else:
-                            v = spec.codec.transform_for_query(v)
+                            v = spec.codec.transform_for_query(v)  # noqa: PLW2901
                             terms.append(spec.query_class(spec.key, v))
         if terms:
-            self.search_args['filter'] = And(terms)
+            self.search_args["filter"] = And(terms)
 
     def _prepare_sorting(self, sort_spec=None):
         if sort_spec and sort_spec.fields:  # Else will sort by relevance score.
             if isinstance(sort_spec.reverse, Iterable):
                 # Per-field reverse values require to use `FieldFacet` objects.
-                self.search_args['sortedby'] = [
+                self.search_args["sortedby"] = [
                     FieldFacet(field_key, reverse=reverse)
                     for field_key, reverse in zip(sort_spec.get_field_keys(), sort_spec.reverse)
                 ]
             else:
                 # With a single reverse value, we may specify the field names directly.
-                self.search_args['sortedby'] = sort_spec.get_field_keys()
-                self.search_args['reverse'] = sort_spec.reverse
+                self.search_args["sortedby"] = sort_spec.get_field_keys()
+                self.search_args["reverse"] = sort_spec.reverse
 
     def _prepare_faceting(self):
-        self.search_args['groupedby'] = Facets()
+        self.search_args["groupedby"] = Facets()
         for facet_spec in self.facet_specs.values():
-            self.search_args['groupedby'].add_field(
+            self.search_args["groupedby"].add_field(
                 facet_spec.key, allow_overlap=facet_spec.allow_overlap
             )
-        self.search_args['maptype'] = Count
+        self.search_args["maptype"] = Count
 
 
 class Results(ABC):
@@ -307,10 +314,8 @@ class Results(ABC):
         """
         facet_specs = facet_specs or {}
         return {
-            **{key: field_specs[key].decode(hit[key])
-               for key in field_specs.keys() & hit.keys()},
-            **{key: hit[key]
-               for key in facet_specs.keys() & hit.keys()}
+            **{key: field_specs[key].decode(hit[key]) for key in field_specs.keys() & hit.keys()},
+            **{key: hit[key] for key in facet_specs.keys() & hit.keys()},
         }
 
     @abstractmethod

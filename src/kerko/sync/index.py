@@ -5,8 +5,7 @@ from flask import current_app
 from whoosh.query import Term
 
 from kerko.shortcuts import composer, config
-from kerko.storage import (SchemaError, SearchIndexError, load_object,
-                           open_index, save_object)
+from kerko.storage import SchemaError, SearchIndexError, load_object, open_index, save_object
 from kerko.tags import TagGate
 
 
@@ -17,45 +16,50 @@ def sync_index(full=False):
     Return the number of synchronized items.
     """
     current_app.logger.info("Starting index sync...")
-    library_context = load_object('cache', 'library')
+    library_context = load_object("cache", "library")
 
-    cache = open_index('cache')
-    cache_version = load_object('cache', 'version', default=0)
+    cache = open_index("cache")
+    cache_version = load_object("cache", "version", default=0)
     if not cache_version:
         raise SearchIndexError("The cache is empty and needs to be synchronized first.")
-    # FIXME: The following does not detect when just the collections have changed in the cache (with no item changes). Should check the collections_version! https://pyzotero.readthedocs.io/en/latest/#zotero.Zotero.collection_versions
+
+    # FIXME: The following does not detect when just the collections have changed in the cache
+    #        (with no item changes). Should check the collections_version!
+    #        https://pyzotero.readthedocs.io/en/latest/#zotero.Zotero.collection_versions
     # if not full and load_object('index', 'version', default=0) == cache_version:
-    #     current_app.logger.warning(f"The index is already up-to-date with cache version {cache_version}, nothing to do.")
+    #     current_app.logger.warning(
+    #         f"The index is already up-to-date with cache version {cache_version}, nothing to do."
+    #     )
     #     return 0
 
     def yield_items(parent_key):
         with cache.searcher() as searcher:
-            results = searcher.search(Term('parentItem', parent_key), limit=None)
+            results = searcher.search(Term("parentItem", parent_key), limit=None)
             for hit in results:
                 yield hit.fields()
 
     def yield_top_level_items():
-        return yield_items('')
+        return yield_items("")
 
     def yield_children(parent):
-        return yield_items(parent['key'])
+        return yield_items(parent["key"])
 
     count = 0
-    index = open_index('index', schema=composer().schema, auto_create=True, write=True)
+    index = open_index("index", schema=composer().schema, auto_create=True, write=True)
     writer = index.writer(
-        limitmb=config('kerko.performance.whoosh_index_memory_limit'),
-        procs=config('kerko.performance.whoosh_index_processors'),
+        limitmb=config("kerko.performance.whoosh_index_memory_limit"),
+        procs=config("kerko.performance.whoosh_index_processors"),
     )
     try:
         writer.mergetype = whoosh.writing.CLEAR
         gate = TagGate(
-            config('kerko.zotero.item_include_re'),
-            config('kerko.zotero.item_exclude_re'),
+            config("kerko.zotero.item_include_re"),
+            config("kerko.zotero.item_exclude_re"),
         )
         for item in yield_top_level_items():
             count += 1
-            if gate.check(item['data']):
-                item['children'] = list(yield_children(item))  # Extend the base Zotero item dict.
+            if gate.check(item["data"]):
+                item["children"] = list(yield_children(item))  # Extend the base Zotero item dict.
                 document = {}
                 for spec in list(composer().fields.values()) + list(composer().facets.values()):
                     spec.extract_to_document(document, item, library_context)
@@ -70,7 +74,7 @@ def sync_index(full=False):
         writer.cancel()
         current_app.logger.error(e)
         raise SchemaError("Schema changes are required. Please clean index.") from e
-    except Exception:  # pylint: disable=broad-except
+    except Exception:
         writer.cancel()
         raise
     else:
@@ -81,8 +85,8 @@ def sync_index(full=False):
         # (i.e., the current content of the index) is still in sync with the
         # cache (the cache might have been cleaned, or it might have been just
         # updated, with an index update still pending).
-        save_object('index', 'last_update_from_zotero', cache.last_modified())
-        save_object('index', 'version', cache_version)
+        save_object("index", "last_update_from_zotero", cache.last_modified())
+        save_object("index", "version", cache_version)
         current_app.logger.info(
             f"Index sync successful, now at version {cache_version} "
             f"({count} top level item(s) processed)."

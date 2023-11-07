@@ -88,8 +88,7 @@ class BaseFacetCodec:
 
 
 class BooleanFacetCodec(BaseFacetCodec):
-
-    def __init__(self, true_value='t', false_value='f', true_label=_('yes'), false_label=_('no')):
+    def __init__(self, true_value="t", false_value="f", true_label=_("yes"), false_label=_("no")):
         self.true_value = true_value
         self.false_value = false_value
         self.true_label = true_label
@@ -100,7 +99,7 @@ class BooleanFacetCodec(BaseFacetCodec):
         # booleans as 't' or 'f' values. However the value returned by Whoosh
         # is not consistent whether it comes from group (faceting) results
         # (where it is returned as 't' or 'f') or stored document fields (where
-        # it is returned as a bool). Therefore, we also check for bool values.
+        # it is returned as a bool). Therefore, we also check for bool values.
         if isinstance(encoded_value, bool):
             encoded_value = self.true_value if encoded_value else self.false_value
         return encoded_value, (
@@ -111,7 +110,7 @@ class BooleanFacetCodec(BaseFacetCodec):
 class LabelFacetCodec(BaseFacetCodec):
     """Decode a value suffixed with its label."""
 
-    def __init__(self, label_separator=':', **kwargs):
+    def __init__(self, label_separator=":", **kwargs):
         super().__init__(**kwargs)
         self.label_separator = label_separator
 
@@ -125,9 +124,8 @@ class LabelFacetCodec(BaseFacetCodec):
 
 
 class CollectionFacetCodec(LabelFacetCodec):
-
-    def __init__(self, path_separator='.', **kwargs):
-        kwargs.setdefault('label_separator', ' ')
+    def __init__(self, path_separator=".", **kwargs):
+        kwargs.setdefault("label_separator", " ")
         super().__init__(**kwargs)
         self.path_separator = path_separator
 
@@ -148,9 +146,8 @@ class CollectionFacetCodec(LabelFacetCodec):
 
 
 class ItemTypeFacetCodec(LabelFacetCodec):
-
     def __init__(self, **kwargs):
-        kwargs.setdefault('label_separator', ':')
+        kwargs.setdefault("label_separator", ":")
         super().__init__(**kwargs)
 
     def encode(self, value):
@@ -183,8 +180,7 @@ class ItemTypeFacetCodec(LabelFacetCodec):
 
 
 class YearTreeFacetCodec(BaseFacetCodec):
-
-    def __init__(self, path_separator='.', **kwargs):
+    def __init__(self, path_separator=".", **kwargs):
         super().__init__(**kwargs)
         self.path_separator = path_separator
 
@@ -198,7 +194,7 @@ class YearTreeFacetCodec(BaseFacetCodec):
         path = encoded_value.split(self.path_separator)
         assert len(path) in [1, 2, 3]
 
-        if len(path) == 3:
+        if len(path) == 3:  # noqa: PLR2004
             return encoded_value, path[-1]
 
         if len(path) == 1:
@@ -212,5 +208,5 @@ class YearTreeFacetCodec(BaseFacetCodec):
         if end >= datetime.datetime.now().year:
             end = datetime.datetime.now().year
             if start == end:
-                return encoded_value, _('In {}').format(end)
-        return encoded_value, _('Between {} and {}').format(start, end)
+                return encoded_value, _("In {}").format(end)
+        return encoded_value, _("Between {} and {}").format(start, end)

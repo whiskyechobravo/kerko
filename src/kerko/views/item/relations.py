@@ -30,9 +30,7 @@ def _get_reverse_rel_filters(item, relation_spec):
             identifiers.append(value)
         else:
             identifiers.extend(value)
-    return {
-        relation_spec.field.key: [identifier for identifier in identifiers]
-    }
+    return {relation_spec.field.key: [identifier for identifier in identifiers]}
 
 
 def _get_bidirectional_rel_filters(item, relation_spec):
@@ -47,21 +45,23 @@ def inject_relations(item):
     Search and inject relations into the given item.
     """
     common_search_args = {
-        'limit': None,
-        'reject_any': {'item_type': ['note', 'attachment']},
-        'sort_spec': composer().sorts.get(config('kerko.features.relations_sort')),
-        'faceting': False,
+        "limit": None,
+        "reject_any": {"item_type": ["note", "attachment"]},
+        "sort_spec": composer().sorts.get(config("kerko.features.relations_sort")),
+        "faceting": False,
     }
     # For each related item, load the same fields as in normal search result
     # lists, except for the COinS field because we don't want it to get rendered
     # when displaying relations.
     related_item_fields = composer().select_fields(
         [
-            key for key in config('kerko.search.result_fields') +
-            [badge.field.key for badge in composer().badges.values()] if key != 'coins'
+            key
+            for key in config("kerko.search.result_fields")
+            + [badge.field.key for badge in composer().badges.values()]
+            if key != "coins"
         ],
     )
-    index = open_index('index')
+    index = open_index("index")
     with Searcher(index) as searcher:
         for relation_spec in composer().relations.values():
             if relation_spec.directed:

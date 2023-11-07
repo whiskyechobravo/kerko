@@ -9,8 +9,7 @@ from flask import current_app
 from flask.cli import with_appcontext
 
 from kerko.config_helpers import is_toml_serializable
-from kerko.storage import (SchemaError, SearchIndexError, delete_storage,
-                           get_doc_count)
+from kerko.storage import SchemaError, SearchIndexError, delete_storage, get_doc_count
 from kerko.sync import zotero
 from kerko.sync.attachments import delete_attachments, sync_attachments
 from kerko.sync.cache import sync_cache
@@ -32,18 +31,20 @@ def cli():
 
 @cli.command()
 @click.argument(
-    'target',
-    default='everything',
-    type=click.Choice(['cache', 'index', 'attachments', 'everything'], case_sensitive=False),
+    "target",
+    default="everything",
+    type=click.Choice(["cache", "index", "attachments", "everything"], case_sensitive=False),
 )
 @click.option(
-    '--full',
+    "--full",
     default=False,
     is_flag=True,
     flag_value=True,
-    help="When possible, the synchronization process performs an incremental "
-         "update of just the new or changed items since the last "
-         "synchronization. This option forces a full update."
+    help=(
+        "When possible, the synchronization process performs an incremental "
+        "update of just the new or changed items since the last "
+        "synchronization. This option forces a full update."
+    ),
 )
 @with_appcontext
 @execution_time_logger
@@ -54,11 +55,11 @@ def sync(target, full=False):
     By default, everything is synchronized.
     """
     try:
-        if target in ['everything', 'cache']:
+        if target in ["everything", "cache"]:
             sync_cache(full)
-        if target in ['everything', 'index']:
+        if target in ["everything", "index"]:
             sync_index(full)
-        if target in ['everything', 'attachments']:
+        if target in ["everything", "attachments"]:
             sync_attachments(full)
     except SearchIndexError as e:
         current_app.logger.error(e)
@@ -70,8 +71,8 @@ def sync(target, full=False):
 
 @cli.command()
 @click.argument(
-    'target',
-    type=click.Choice(['cache', 'index', 'attachments', 'everything'], case_sensitive=False),
+    "target",
+    type=click.Choice(["cache", "index", "attachments", "everything"], case_sensitive=False),
 )
 @with_appcontext
 def clean(target):
@@ -81,18 +82,18 @@ def clean(target):
     Use the argument to select which data to delete, either the cache, the
     search index, the attachments, or all of those (everything).
     """
-    if target in ['everything', 'cache']:
-        delete_storage('cache')
-    if target in ['everything', 'index']:
-        delete_storage('index')
-    if target in ['everything', 'attachments']:
+    if target in ["everything", "cache"]:
+        delete_storage("cache")
+    if target in ["everything", "index"]:
+        delete_storage("index")
+    if target in ["everything", "attachments"]:
         delete_attachments()
 
 
 @cli.command()
 @click.argument(
-    'target',
-    type=click.Choice(['cache', 'index'], case_sensitive=False),
+    "target",
+    type=click.Choice(["cache", "index"], case_sensitive=False),
 )
 @with_appcontext
 def count(target):
@@ -123,11 +124,11 @@ def count(target):
 
 @cli.command()
 @click.option(
-    '--show-secrets',
+    "--show-secrets",
     default=False,
     is_flag=True,
     flag_value=True,
-    help="Secrets are hidden from the output by default. This option causes them to be revealed."
+    help="Secrets are hidden from the output by default. This option causes them to be revealed.",
 )
 @with_appcontext
 def config(show_secrets=False):
@@ -140,7 +141,7 @@ def config(show_secrets=False):
 
     def hide_secrets(d: dict):
         for k in d.keys():
-            if k in ['SECRET_KEY', 'ZOTERO_API_KEY'] or k.find('PASSWORD') >= 0:
+            if k in ["SECRET_KEY", "ZOTERO_API_KEY"] or k.find("PASSWORD") >= 0:
                 d[k] = "*****"
 
     def copy_serializable(obj: Any) -> Any:
@@ -174,7 +175,7 @@ def config(show_secrets=False):
 
 
 @cli.command()
-@click.argument('item_key')
+@click.argument("item_key")
 @with_appcontext
 def zotero_item(item_key):
     """
@@ -214,7 +215,7 @@ def zotero_item_fields():
 
 
 @cli.command()
-@click.argument('item_type')
+@click.argument("item_type")
 @with_appcontext
 def zotero_item_type_fields(item_type):
     """
@@ -228,7 +229,7 @@ def zotero_item_type_fields(item_type):
 
 
 @cli.command()
-@click.argument('item_type')
+@click.argument("item_type")
 @with_appcontext
 def zotero_item_type_creator_types(item_type):
     """
@@ -259,10 +260,10 @@ def zotero_top_level_collections():
 def _format_elapsed_time(start_time):
     elapsed_time = int(round((datetime.now() - start_time).total_seconds()))
     elapsed_min, elapsed_sec = elapsed_time // 60, elapsed_time % 60
-    s = 'Execution time:'
+    s = "Execution time:"
     if elapsed_min > 0:
-        s += (' {n} minutes' if elapsed_min > 1 else ' {n} minute').format(n=elapsed_min)
-        s += (' {n:02} seconds' if elapsed_sec > 1 else ' {n:02d} second').format(n=elapsed_sec)
+        s += (" {n} minutes" if elapsed_min > 1 else " {n} minute").format(n=elapsed_min)
+        s += (" {n:02} seconds" if elapsed_sec > 1 else " {n:02d} second").format(n=elapsed_sec)
     else:
-        s += (' {n} seconds' if elapsed_sec > 1 else ' {n} second').format(n=elapsed_sec)
+        s += (" {n} seconds" if elapsed_sec > 1 else " {n} second").format(n=elapsed_sec)
     return s

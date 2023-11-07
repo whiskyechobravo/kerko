@@ -21,23 +21,19 @@ def inject_item_data(item):
 
 def build_item_context(item):
     context = {
-        'item':
-            item,
-        'item_url':
-            url_for('.item_view', item_id=item['id'], _external=True),
-        'title':
-            item.get('data', {}).get('title', ''),
-        'highwirepress_tags':
-            meta.build_highwirepress_tags(item),
+        "item": item,
+        "item_url": url_for(".item_view", item_id=item["id"], _external=True),
+        "title": item.get("data", {}).get("title", ""),
+        "highwirepress_tags": meta.build_highwirepress_tags(item),
     }
-    if config('kerko.features.open_in_zotero_app'):
-        context['open_in_zotero_app'] = bool(request.cookies.get('open-in-zotero-app'))
-        url = item.get('zotero_app_url', '')
+    if config("kerko.features.open_in_zotero_app"):
+        context["open_in_zotero_app"] = bool(request.cookies.get("open-in-zotero-app"))
+        url = item.get("zotero_app_url", "")
         if url and is_valid_url(url):
-            context['open_in_zotero_app_url'] = url
-    if config('kerko.features.open_in_zotero_web'):
-        context['open_in_zotero_web'] = bool(request.cookies.get('open-in-zotero-web'))
-        url = item.get('zotero_web_url', '')
+            context["open_in_zotero_app_url"] = url
+    if config("kerko.features.open_in_zotero_web"):
+        context["open_in_zotero_web"] = bool(request.cookies.get("open-in-zotero-web"))
+        url = item.get("zotero_web_url", "")
         if url and is_valid_url(url):
-            context['open_in_zotero_web_url'] = url
+            context["open_in_zotero_web_url"] = url
     return context

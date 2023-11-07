@@ -124,14 +124,14 @@ class Criteria:
 
     def fit_page(self, page_count):
         """Ensure that the page number is less than or equal to the given page count."""
-        self.options['page'] = min(self.options.get('page', 1), page_count)
+        self.options["page"] = min(self.options.get("page", 1), page_count)
 
     def get_active_sort_spec(self):
         """Return the spec of the active sort or, if none is active, the default sort to use."""
-        sort_key = self.options.get('sort')
+        sort_key = self.options.get("sort")
         if sort_key:
             return composer().sorts[sort_key]
-        for sort_spec in composer().get_ordered_specs('sorts'):
+        for sort_spec in composer().get_ordered_specs("sorts"):
             if sort_spec.is_allowed(self):
                 return sort_spec
         return None
@@ -150,43 +150,41 @@ class Criteria:
 
     def initialize_page(self, initial):
         try:
-            page = int(initial.get('page', 0))
+            page = int(initial.get("page", 0))
             if page >= 1:
-                self.options['page'] = page
+                self.options["page"] = page
         except ValueError:
             pass
 
     def initialize_page_len(self, initial):
-        page_len = initial.get('page-len', 0)
+        page_len = initial.get("page-len", 0)
         try:
-            if page_len == 'all':
-                self.options['page-len'] = page_len
+            if page_len == "all":
+                self.options["page-len"] = page_len
             elif int(page_len) >= 1:
-                self.options['page-len'] = int(page_len)
+                self.options["page-len"] = int(page_len)
         except ValueError:
             pass
 
     def initialize_sort(self, initial):
-        sort_spec = composer().sorts.get(initial.get('sort', ''))
+        sort_spec = composer().sorts.get(initial.get("sort", ""))
         if sort_spec and sort_spec.is_allowed(self):
-            self.options['sort'] = sort_spec.key
+            self.options["sort"] = sort_spec.key
 
     def initialize_abstracts(self, initial):
-        if config('kerko.features.results_abstracts_toggler'):
-            enabled_by_default = config('kerko.features.results_abstracts')
-            abstracts = initial.get('abstracts')
+        if config("kerko.features.results_abstracts_toggler"):
+            enabled_by_default = config("kerko.features.results_abstracts")
+            abstracts = initial.get("abstracts")
             if abstracts:
-                if abstracts in ['t', '1'] and not enabled_by_default:
-                    self.options['abstracts'] = 1
-                elif abstracts in ['f', '0'] and enabled_by_default:
-                    self.options['abstracts'] = 0
+                if abstracts in ["t", "1"] and not enabled_by_default:
+                    self.options["abstracts"] = 1
+                elif abstracts in ["f", "0"] and enabled_by_default:
+                    self.options["abstracts"] = 0
 
     def initialize_print_preview(self, initial):
-        if config('kerko.features.print_results') and initial.get('print-preview') in [
-            't', '1'
-        ]:
-            self.options['print-preview'] = 1
+        if config("kerko.features.print_results") and initial.get("print-preview") in ["t", "1"]:
+            self.options["print-preview"] = 1
 
     def initialize_id(self, initial):
-        if self.options.get('page-len') == 1 and initial.get('id'):
-            self.options['id'] = initial.get('id')
+        if self.options.get("page-len") == 1 and initial.get("id"):
+            self.options["id"] = initial.get("id")

@@ -18,7 +18,7 @@ def parse_partial_date(text, default_year=0, default_month=0, default_day=0):
     value.
     """
     year, month, day = default_year, default_month, default_day
-    matches = re.match(r'^([0-9]{4})(-([0-9]{2})(-([0-9]{2}))?)?', text)
+    matches = re.match(r"^([0-9]{4})(-([0-9]{2})(-([0-9]{2}))?)?", text)
     if matches:
         if matches.group(1):
             year = int(matches.group(1))
@@ -78,10 +78,14 @@ def reformat_date(value, **kwargs):
     # 3.7, because the %z directive didn't support the colon separator.
     # Reference: https://docs.python.org/3/library/datetime.html#technical-detail
     formats_to_try = [
-        '%Y-%m-%dT%H:%M:%S.%fZ', '%Y-%m-%dT%H:%M:%S.%f%z',
-        '%Y-%m-%dT%H:%M:%SZ', '%Y-%m-%dT%H:%M:%S%z',
-        '%Y-%m-%dT%H:%MZ', '%Y-%m-%dT%H:%M%z',
-        '%Y-%m-%dT%HZ', '%Y-%m-%dT%H%z',
+        "%Y-%m-%dT%H:%M:%S.%fZ",
+        "%Y-%m-%dT%H:%M:%S.%f%z",
+        "%Y-%m-%dT%H:%M:%SZ",
+        "%Y-%m-%dT%H:%M:%S%z",
+        "%Y-%m-%dT%H:%MZ",
+        "%Y-%m-%dT%H:%M%z",
+        "%Y-%m-%dT%HZ",
+        "%Y-%m-%dT%H%z",
     ]
 
     for fmt in formats_to_try:
@@ -108,7 +112,7 @@ def format_datetime(dt, *, convert_tz=False, show_tz=False):
     """
     parts = [
         dates.format_datetime(
-            dt, format='short', tzinfo=get_timezone() if convert_tz else None, locale=get_locale()
+            dt, format="short", tzinfo=get_timezone() if convert_tz else None, locale=get_locale()
         ),
     ]
     if show_tz:
@@ -116,7 +120,7 @@ def format_datetime(dt, *, convert_tz=False, show_tz=False):
             parts.append(f"({dt.astimezone(get_timezone()).tzname()})")
         else:
             parts.append(f"({dt.tzname()})")
-    return ' '.join(parts)
+    return " ".join(parts)
 
 
 def iso_to_timestamp(date_str):
@@ -140,6 +144,6 @@ def iso_to_datetime(date_str):
 
     :return datetime: `datetime` object.
     """
-    return datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%SZ')
+    return datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%SZ")
     # Note: Using strptime() instead of fromisoformat(), because the latter only
     # accepts the specific string format since Python 3.11+.

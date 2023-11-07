@@ -5,7 +5,6 @@ from flask import render_template, render_template_string
 
 
 class Renderer(ABC):
-
     @abstractmethod
     def render(self, **context):
         pass
@@ -36,12 +35,13 @@ class TemplateResolverRenderer:
         """
         self.template = template
         self.extra_context = extra_context
-        self.fields = re.findall(r'\{(.*?)\}', self.template)
+        self.fields = re.findall(r"\{(.*?)\}", self.template)
 
     def render(self, **context):
         return render_template(
             self.template.format(**{kw: context[kw] for kw in self.fields if kw in context}),
-            **context, **self.extra_context
+            **context,
+            **self.extra_context,
         )
 
 

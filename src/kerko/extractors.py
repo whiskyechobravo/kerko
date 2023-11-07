@@ -14,10 +14,9 @@ from markupsafe import Markup
 from kerko.datetime import maximize_partial_date, parse_partial_date
 from kerko.tags import TagGate
 from kerko.text import sort_normalize
-from kerko.transformers import (find_item_id_in_zotero_uri_links,
-                                find_item_id_in_zotero_uris_str)
+from kerko.transformers import find_item_id_in_zotero_uri_links, find_item_id_in_zotero_uris_str
 
-RECORD_SEPARATOR = '\x1e'
+RECORD_SEPARATOR = "\x1e"
 
 
 def encode_single(value, spec):
@@ -37,13 +36,13 @@ def is_file_attachment(item, mime_types=None):
     :param mime_types: If a list is provided, the item must also match one of
         the given MIME types. If empty or `None`, the MIME type is not checked.
     """
-    if not item.get('data'):
+    if not item.get("data"):
         return False
-    if not item['data'].get('key'):
+    if not item["data"].get("key"):
         return False
-    if item['data'].get('linkMode') not in ['imported_file', 'imported_url']:
+    if item["data"].get("linkMode") not in ["imported_file", "imported_url"]:
         return False
-    if mime_types and item['data'].get('contentType', 'octet-stream') not in mime_types:
+    if mime_types and item["data"].get("contentType", "octet-stream") not in mime_types:
         return False
     return True
 
@@ -52,13 +51,13 @@ def is_link_attachment(item):
     """
     Return `True` if a given item is a link attachment.
     """
-    if not item.get('data'):
+    if not item.get("data"):
         return False
-    if not item['data'].get('key'):
+    if not item["data"].get("key"):
         return False
-    if item['data'].get('linkMode') != 'linked_url':
+    if item["data"].get("linkMode") != "linked_url":
         return False
-    if not item['data'].get('url'):
+    if not item["data"].get("url"):
         return False
     return True
 
@@ -74,7 +73,7 @@ class Extractor(ABC):
     assign the resulting data to.
     """
 
-    def __init__(self, format_='data', encode=encode_single, **kwargs):
+    def __init__(self, format_="data", encode=encode_single, **kwargs):
         """
         Initialize the extractor.
 
@@ -107,9 +106,7 @@ class Extractor(ABC):
             document[spec.key] = self.encode(extracted_value, spec)
 
     def warning(self, message, item):
-        current_app.logger.warning(
-            f"{self.__class__.__name__}: {message} ({item.get('key')})"
-        )
+        current_app.logger.warning(f"{self.__class__.__name__}: {message} ({item.get('key')})")
 
 
 class TransformerExtractor(Extractor):
@@ -185,8 +182,7 @@ class ChainExtractor(Extractor):
         return value
 
 
-class KeyExtractor(Extractor):  # pylint: disable=abstract-method
-
+class KeyExtractor(Extractor):
     def __init__(self, *, key, **kwargs):
         """
         Initialize the extractor.
@@ -208,13 +204,12 @@ class ItemDataExtractor(KeyExtractor):
     """Extract a value from item data."""
 
     def extract(self, item, library_context, spec):
-        return item.get('data', {}).get(self.key)
+        return item.get("data", {}).get(self.key)
 
 
 class RawDataExtractor(Extractor):
-
     def extract(self, item, library_context, spec):
-        return item.get('data')
+        return item.get("data")
 
 
 class ItemRelationsExtractor(Extractor):
@@ -225,7 +220,7 @@ class ItemRelationsExtractor(Extractor):
         self.predicate = predicate
 
     def extract(self, item, library_context, spec):
-        relations = item.get('data', {}).get('relations', {}).get(self.predicate, [])
+        relations = item.get("data", {}).get("relations", {}).get(self.predicate, [])
         if relations and isinstance(relations, str):
             relations = [relations]
         assert isinstance(relations, Iterable)
@@ -236,10 +231,10 @@ class ItemTypeLabelExtractor(Extractor):
     """Extract the label of the item's type."""
 
     def extract(self, item, library_context, spec):
-        item_type = item.get('data', {}).get('itemType')
+        item_type = item.get("data", {}).get("itemType")
         if item_type and item_type in library_context.item_types:
             return library_context.item_types[item_type]
-        if item_type != 'attachment':  # Attachment has no label, no need to warn.
+        if item_type != "attachment":  # Attachment has no label, no need to warn.
             self.warning(f"Missing or unknown item type '{item_type}'", item)
         return None
 
@@ -248,13 +243,13 @@ class ItemFieldsExtractor(Extractor):
     """Extract field metadata."""
 
     def extract(self, item, library_context, spec):
-        item_type = item.get('data', {}).get('itemType')
+        item_type = item.get("data", {}).get("itemType")
         if item_type and item_type in library_context.item_fields:
             fields = library_context.item_fields[item_type]
             # Retain metadata for fields that are actually present in the item.
-            item_fields = [f for f in fields if f.get('field') in item['data']]
+            item_fields = [f for f in fields if f.get("field") in item["data"]]
             return item_fields
-        if item_type != 'attachment':  # Attachment has no field metadata, no need to warn.
+        if item_type != "attachment":  # Attachment has no field metadata, no need to warn.
             self.warning(f"Missing or unknown item type '{item_type}'", item)
         return None
 
@@ -268,9 +263,9 @@ class ItemLinkExtractor(Extractor):
         self.link_type = link_type
 
     def extract(self, item, library_context, spec):
-        link = item.get('links', {}).get(self.link_key, {})
-        if link and link.get('type') == self.link_type:
-            return link.get('href')
+        link = item.get("links", {}).get(self.link_key, {})
+        if link and link.get("type") == self.link_type:
+            return link.get("href")
         return None
 
 
@@ -278,14 +273,14 @@ class ZoteroWebItemURLExtractor(ItemLinkExtractor):
     """Extract an item's zotero.org link."""
 
     def __init__(self, *args, **kwargs):
-        super().__init__(link_key='alternate', link_type='text/html', *args, **kwargs)
+        super().__init__(link_key="alternate", link_type="text/html", *args, **kwargs)
 
 
 class ZoteroAppItemURLExtractor(Extractor):
     """Extract a link for opening the item in the Zotero app."""
 
     def extract(self, item, library_context, spec):
-        if library_context.library_type == 'group':
+        if library_context.library_type == "group":
             return f"zotero://select/groups/{library_context.library_id}/items/{item.get('key')}"
         return f"zotero://select/library/items/{item.get('key')}"
 
@@ -294,22 +289,22 @@ class CreatorTypesExtractor(Extractor):
     """Extract creator types metadata."""
 
     def extract(self, item, library_context, spec):
-        item_type = item.get('data', {}).get('itemType')
+        item_type = item.get("data", {}).get("itemType")
         if item_type and item_type in library_context.creator_types:
             library_creator_types = library_context.creator_types[item_type]
             # Retain metadata for creator types that are actually present in the item.
             item_creator_types = []
             for library_creator_type in library_creator_types:
-                for item_creator in item['data'].get('creators', []):
-                    creator_type = item_creator.get('creatorType')
-                    if creator_type and creator_type == library_creator_type.get('creatorType'):
+                for item_creator in item["data"].get("creators", []):
+                    creator_type = item_creator.get("creatorType")
+                    if creator_type and creator_type == library_creator_type.get("creatorType"):
                         item_creator_types.append(library_creator_type)
                         break
             if item_creator_types:
                 return item_creator_types
-            if item['data'].get('creators', False):
+            if item["data"].get("creators", False):
                 self.warning(f"Missing creator types for item type '{item_type}'.", item)
-        elif item_type != 'attachment':  # Attachment has no creator types, no need to warn.
+        elif item_type != "attachment":  # Attachment has no creator types, no need to warn.
             self.warning(f"Missing or unknown item type '{item_type}'", item)
         return None
 
@@ -319,17 +314,17 @@ class CreatorsExtractor(Extractor):
 
     def extract(self, item, library_context, spec):
         creators = []
-        for creator in item.get('data', {}).get('creators', []):
-            n = creator.get('name', '').strip()
+        for creator in item.get("data", {}).get("creators", []):
+            n = creator.get("name", "").strip()
             if n:
                 creators.append(n)
-            firstname = creator.get('firstName', '').strip()
-            lastname = creator.get('lastName', '').strip()
+            firstname = creator.get("firstName", "").strip()
+            lastname = creator.get("lastName", "").strip()
             if firstname and lastname:
                 # Combine firstname and lastname in different orders to help
                 # phrase searches.
-                creators.append(' '.join([firstname, lastname]))
-                creators.append(', '.join([lastname, firstname]))
+                creators.append(" ".join([firstname, lastname]))
+                creators.append(", ".join([lastname, firstname]))
             elif firstname:
                 creators.append(firstname)
             elif lastname:
@@ -342,17 +337,16 @@ class CollectionNamesExtractor(Extractor):
 
     def extract(self, item, library_context, spec):
         names = set()
-        for k in item.get('data', {}).get('collections', []):
+        for k in item.get("data", {}).get("collections", []):
             if k in library_context.collections:
-                name = library_context.collections[k].get('data', {}).get('name', '').strip()
+                name = library_context.collections[k].get("data", {}).get("name", "").strip()
                 if name:
                     names.add(name)
         return RECORD_SEPARATOR.join(names) if names else None
 
 
 class BaseTagsExtractor(Extractor):
-
-    def __init__(self, *, include_re='', exclude_re='', **kwargs):
+    def __init__(self, *, include_re="", exclude_re="", **kwargs):
         """
         Initialize the extractor.
 
@@ -370,11 +364,13 @@ class BaseTagsExtractor(Extractor):
 
     def extract(self, item, library_context, spec):
         tags = set()
-        for tag_data in item.get('data', {}).get('tags', []):
-            tag = tag_data.get('tag', '').strip()
-            if tag and \
-                    (not self.include or self.include.match(tag)) and \
-                    (not self.exclude or not self.exclude.match(tag)):
+        for tag_data in item.get("data", {}).get("tags", []):
+            tag = tag_data.get("tag", "").strip()
+            if (
+                tag
+                and (not self.include or self.include.match(tag))
+                and (not self.exclude or not self.exclude.match(tag))
+            ):
                 tags.add(tag)
         return tags or None
 
@@ -388,8 +384,7 @@ class TagsTextExtractor(BaseTagsExtractor):
 
 
 class BaseChildrenExtractor(Extractor):
-
-    def __init__(self, *, item_type, include_re='', exclude_re='', **kwargs):
+    def __init__(self, *, item_type, include_re="", exclude_re="", **kwargs):
         """
         Initialize the extractor.
 
@@ -414,17 +409,17 @@ class BaseChildrenExtractor(Extractor):
 
     def extract(self, item, library_context, spec):
         accepted_children = []
-        for child in item.get('children', []):
-            if child.get('data', {}).get('itemType') == self.item_type \
-                    and self.gate.check(child.get('data', {})):
+        for child in item.get("children", []):
+            if child.get("data", {}).get("itemType") == self.item_type and self.gate.check(
+                child.get("data", {})
+            ):
                 accepted_children.append(child)
         return accepted_children or None
 
 
 class BaseChildAttachmentsExtractor(BaseChildrenExtractor):
-
     def __init__(self, **kwargs):
-        super().__init__(item_type='attachment', **kwargs)
+        super().__init__(item_type="attachment", **kwargs)
 
 
 class ChildFileAttachmentsExtractor(BaseChildAttachmentsExtractor):
@@ -438,17 +433,23 @@ class ChildFileAttachmentsExtractor(BaseChildAttachmentsExtractor):
 
     def extract(self, item, library_context, spec):
         children = super().extract(item, library_context, spec)
-        return [
-            {
-                'id': child['key'],
-                'data': {
-                    'contentType': child['data'].get('contentType'),
-                    'filename': child['data'].get('filename'),
-                    'md5': child['data'].get('md5'),
-                    'mtime': child['data'].get('mtime'),
+        return (
+            [
+                {
+                    "id": child["key"],
+                    "data": {
+                        "contentType": child["data"].get("contentType"),
+                        "filename": child["data"].get("filename"),
+                        "md5": child["data"].get("md5"),
+                        "mtime": child["data"].get("mtime"),
+                    },
                 }
-            } for child in children if is_file_attachment(child, self.mime_types)
-        ] if children else None
+                for child in children
+                if is_file_attachment(child, self.mime_types)
+            ]
+            if children
+            else None
+        )
 
 
 class ChildLinkedURIAttachmentsExtractor(BaseChildAttachmentsExtractor):
@@ -461,10 +462,11 @@ class ChildLinkedURIAttachmentsExtractor(BaseChildAttachmentsExtractor):
         if children:
             return [
                 {
-                    'title': child['data'].get('title', child['data'].get('url')),
-                    'url': child['data'].get('url')
+                    "title": child["data"].get("title", child["data"].get("url")),
+                    "url": child["data"].get("url"),
                 }
-                for child in children if is_link_attachment(child)
+                for child in children
+                if is_link_attachment(child)
             ]
         return None
 
@@ -481,17 +483,17 @@ class ChildAttachmentsFulltextExtractor(BaseChildAttachmentsExtractor):
         if children:
             return RECORD_SEPARATOR.join(
                 [
-                    Markup(child['fulltext']).striptags() for child in children
-                    if is_file_attachment(child, self.mime_types) and child.get('fulltext')
+                    Markup(child["fulltext"]).striptags()
+                    for child in children
+                    if is_file_attachment(child, self.mime_types) and child.get("fulltext")
                 ]
             )
         return None
 
 
-class BaseChildNotesExtractor(BaseChildrenExtractor):  # pylint: disable=abstract-method
-
+class BaseChildNotesExtractor(BaseChildrenExtractor):
     def __init__(self, **kwargs):
-        super().__init__(item_type='note', **kwargs)
+        super().__init__(item_type="note", **kwargs)
 
 
 class ChildNotesTextExtractor(BaseChildNotesExtractor):
@@ -502,8 +504,9 @@ class ChildNotesTextExtractor(BaseChildNotesExtractor):
         if children:
             return RECORD_SEPARATOR.join(
                 [
-                    Markup(child['data']['note']).striptags()
-                    for child in children if child.get('data', {}).get('note')
+                    Markup(child["data"]["note"]).striptags()
+                    for child in children
+                    if child.get("data", {}).get("note")
                 ]
             )
         return None
@@ -516,8 +519,7 @@ class RawChildNotesExtractor(BaseChildNotesExtractor):
         children = super().extract(item, library_context, spec)
         if children:
             return [
-                child['data']['note']
-                for child in children if child.get('data', {}).get('note')
+                child["data"]["note"] for child in children if child.get("data", {}).get("note")
             ]
         return None
 
@@ -530,11 +532,11 @@ class RelationsInChildNotesExtractor(BaseChildNotesExtractor):
         children = super().extract(item, library_context, spec)
         if children:
             for child in children:
-                note = child.get('data', {}).get('note', '')
+                note = child.get("data", {}).get("note", "")
                 # Find in the href attribute of <a> elements.
                 refs.update(find_item_id_in_zotero_uri_links(note))
                 # Find in plain text.
-                note = Markup(re.sub(r'<br\s*/>', '\n', note)).striptags()
+                note = Markup(re.sub(r"<br\s*/>", "\n", note)).striptags()
                 refs.update(find_item_id_in_zotero_uris_str(note))
         return list(refs) or None
 
@@ -546,7 +548,7 @@ def _expand_paths(path):
     If the given path is ['a', 'b', 'c'], the returned list of paths is:
     [['a'], ['a', 'b'], ['a', 'b', 'c']]
     """
-    return [path[0:i + 1] for i in range(len(path))]
+    return [path[0 : i + 1] for i in range(len(path))]
 
 
 class CollectionFacetTreeExtractor(Extractor):
@@ -558,7 +560,7 @@ class CollectionFacetTreeExtractor(Extractor):
     def extract(self, item, library_context, spec):
         # Sets prevent duplication when multiple collections share common ancestors.
         encoded_ancestors = set()
-        for collection_key in item.get('data', {}).get('collections', []):
+        for collection_key in item.get("data", {}).get("collections", []):
             if collection_key not in library_context.collections:
                 continue  # Skip unknown collection.
             ancestors = library_context.collections.ancestors(collection_key)
@@ -567,9 +569,12 @@ class CollectionFacetTreeExtractor(Extractor):
 
             ancestors = ancestors[1:]  # Facet values come from subcollections.
             for path in _expand_paths(ancestors):
-                label = library_context.collections.get(
-                    path[-1], {}
-                ).get('data', {}).get('name', '').strip()
+                label = (
+                    library_context.collections.get(path[-1], {})
+                    .get("data", {})
+                    .get("name", "")
+                    .strip()
+                )
                 encoded_ancestors.add((tuple(path), label))  # Cast path to make it hashable.
         return encoded_ancestors or None
 
@@ -602,7 +607,7 @@ class InCollectionExtractor(Extractor):
             itertools.chain(
                 *[
                     library_context.collections.ancestors(c) if self.check_subcollections else c
-                    for c in item.get('data', {}).get('collections', [])
+                    for c in item.get("data", {}).get("collections", [])
                 ]
             )
         )
@@ -625,7 +630,7 @@ class ItemTypeFacetExtractor(Extractor):
     """Index the Zotero item's type for faceting."""
 
     def extract(self, item, library_context, spec):
-        item_type = item.get('data', {}).get('itemType')
+        item_type = item.get("data", {}).get("itemType")
         if item_type:
             return (item_type, library_context.item_types.get(item_type, item_type))
         self.warning("Missing itemType", item)
@@ -636,7 +641,7 @@ class YearExtractor(Extractor):
     """Parse the Zotero item's publication date to get just the year."""
 
     def extract(self, item, library_context, spec):
-        parsed_date = item.get('meta', {}).get('parsedDate', '')
+        parsed_date = item.get("meta", {}).get("parsedDate", "")
         if parsed_date:
             year, _month, _day = parse_partial_date(parsed_date)
             return str(year)
@@ -650,7 +655,7 @@ class YearFacetExtractor(Extractor):
         super().__init__(encode=encode, **kwargs)
 
     def extract(self, item, library_context, spec):
-        parsed_date = item.get('meta', {}).get('parsedDate', '')
+        parsed_date = item.get("meta", {}).get("parsedDate", "")
         if parsed_date:
             year, _month, _day = parse_partial_date(parsed_date)
             decade = int(int(year) / 10) * 10
@@ -660,16 +665,15 @@ class YearFacetExtractor(Extractor):
 
 
 class ItemDataLinkFacetExtractor(ItemDataExtractor):
-
     def extract(self, item, library_context, spec):
-        return item.get('data', {}).get(self.key, '').strip() != ''
+        return item.get("data", {}).get(self.key, "").strip() != ""
 
 
 class MaximizeParsedDateExtractor(Extractor):
     """Extract and "maximize" a `datetime` object from the item's `parsedDate` meta field."""
 
     def extract(self, item, library_context, spec):
-        parsed_date = item.get('meta', {}).get('parsedDate', None)
+        parsed_date = item.get("meta", {}).get("parsedDate", None)
         if parsed_date:
             try:
                 return datetime(*maximize_partial_date(*parse_partial_date(parsed_date)))
@@ -690,22 +694,21 @@ def _prepare_sort_text(text):
 
 
 class SortItemDataExtractor(ItemDataExtractor):
-
     def extract(self, item, library_context, spec):
-        return _prepare_sort_text(item.get('data', {}).get(self.key, ''))
+        return _prepare_sort_text(item.get("data", {}).get(self.key, ""))
 
 
 class SortCreatorExtractor(Extractor):
-
     def extract(self, item, library_context, spec):
         creators = []
 
         def append_creator(creator):
             creator_parts = [
-                _prepare_sort_text(creator.get('lastName', '')),
-                _prepare_sort_text(creator.get('firstName', '')),
-                _prepare_sort_text(creator.get('name', ''))]
-            creators.append(' zzz '.join([p for p in creator_parts if p]))
+                _prepare_sort_text(creator.get("lastName", "")),
+                _prepare_sort_text(creator.get("firstName", "")),
+                _prepare_sort_text(creator.get("name", "")),
+            ]
+            creators.append(" zzz ".join([p for p in creator_parts if p]))
 
         # We treat creator types like an ordered list, where the first creator
         # type is for primary creators. Depending on the citation style, lesser
@@ -713,18 +716,17 @@ class SortCreatorExtractor(Extractor):
         # only by primary creators in order to avoid sorting with data that may
         # be invisible to the user. Only when an item has no primary creator do
         # we fallback to lesser creators.
-        for creator_type in library_context.get_creator_types(item.get('data', {})):
-            for creator in item.get('data', {}).get('creators', []):
-                if creator.get('creatorType', '') == creator_type.get('creatorType'):
+        for creator_type in library_context.get_creator_types(item.get("data", {})):
+            for creator in item.get("data", {}).get("creators", []):
+                if creator.get("creatorType", "") == creator_type.get("creatorType"):
                     append_creator(creator)
             if creators:
                 break  # No need to include lesser creator types.
-        return ' zzzzzz '.join(creators)
+        return " zzzzzz ".join(creators)
 
 
 class SortDateExtractor(Extractor):
-
     def extract(self, item, library_context, spec):
-        parsed_date = item.get('meta', {}).get('parsedDate', '')
+        parsed_date = item.get("meta", {}).get("parsedDate", "")
         year, month, day = parse_partial_date(parsed_date)
-        return int('{:04d}{:02d}{:02d}'.format(year, month, day))
+        return int("{:04d}{:02d}{:02d}".format(year, month, day))

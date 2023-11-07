@@ -10,7 +10,6 @@ from kerko.views.urls import urls
 
 
 class Blueprint(BaseBlueprint):
-
     def register(self, app: App, options: dict) -> None:
         register_filters(self)
         self._add_core_urls()
@@ -32,8 +31,8 @@ class Blueprint(BaseBlueprint):
 
         This must be called before the blueprint is registered on the app.
         """
-        if 'kerko_composer' in config:
-            for key, page_spec in config['kerko_composer'].pages.items():
+        if "kerko_composer" in config:
+            for key, page_spec in config["kerko_composer"].pages.items():
                 self.add_url_rule(
                     rule=page_spec.path,
                     endpoint=key,

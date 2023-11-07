@@ -15,31 +15,31 @@ class PopulatedSitemapTestCase(SynchronizedTestCase):
 
     def setUp(self):
         self.namespaces = {
-            'ns': 'http://www.sitemaps.org/schemas/sitemap/0.9',
+            "ns": "http://www.sitemaps.org/schemas/sitemap/0.9",
         }
 
     def test_sitemap_index(self):
         """Test the XML sitemap index."""
 
         with self.app.test_client() as client:
-            response = client.get(f'{self.URL_PREFIX}/sitemap.xml')
+            response = client.get(f"{self.URL_PREFIX}/sitemap.xml")
             self.assertEqual(response.status_code, 200)
 
-            root = etree.fromstring(response.get_data(as_text=True).encode('utf-8'))
+            root = etree.fromstring(response.get_data(as_text=True).encode("utf-8"))
             self.assertEqual(
-                root.xpath('/ns:sitemapindex/ns:sitemap/ns:loc/text()', namespaces=self.namespaces),
-                [url_for('kerko.sitemap', page_num=1, _external=True)],
+                root.xpath("/ns:sitemapindex/ns:sitemap/ns:loc/text()", namespaces=self.namespaces),
+                [url_for("kerko.sitemap", page_num=1, _external=True)],
             )
 
     def test_sitemap(self):
         """Test the XML sitemap."""
 
         with self.app.test_client() as client:
-            response = client.get(f'{self.URL_PREFIX}/sitemap1.xml')
+            response = client.get(f"{self.URL_PREFIX}/sitemap1.xml")
             self.assertEqual(response.status_code, 200)
 
-            root = etree.fromstring(response.get_data(as_text=True).encode('utf-8'))
-            urls = root.xpath('/ns:urlset/ns:url/ns:loc/text()', namespaces=self.namespaces)
+            root = etree.fromstring(response.get_data(as_text=True).encode("utf-8"))
+            urls = root.xpath("/ns:urlset/ns:url/ns:loc/text()", namespaces=self.namespaces)
             self.assertEqual(
                 len(set(urls)),
                 len(urls),
@@ -47,7 +47,7 @@ class PopulatedSitemapTestCase(SynchronizedTestCase):
             )
             self.assertEqual(
                 len(urls),
-                len(Searcher(open_index('index')).search()),
+                len(Searcher(open_index("index")).search()),
                 "The number of URLs in the sitemap does not match the number of items.",
             )
             for url in urls:
@@ -57,13 +57,13 @@ class PopulatedSitemapTestCase(SynchronizedTestCase):
         """Test out of range sitemaps."""
 
         with self.app.test_client() as client:
-            response = client.get(f'{self.URL_PREFIX}/sitemap0.xml')
+            response = client.get(f"{self.URL_PREFIX}/sitemap0.xml")
             self.assertEqual(response.status_code, 404)
 
         with self.app.test_client() as client:
-            response = client.get(f'{self.URL_PREFIX}/sitemap500.xml')
+            response = client.get(f"{self.URL_PREFIX}/sitemap500.xml")
             self.assertEqual(response.status_code, 404)
 
         with self.app.test_client() as client:
-            response = client.get(f'{self.URL_PREFIX}/sitemapbomb.xml')
+            response = client.get(f"{self.URL_PREFIX}/sitemapbomb.xml")
             self.assertEqual(response.status_code, 404)

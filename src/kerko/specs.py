@@ -11,8 +11,7 @@ from whoosh.fields import ID
 from whoosh.query import Prefix, Term
 
 from kerko import extractors, renderers
-from kerko.codecs import (BaseFacetCodec, CollectionFacetCodec,
-                          IdentityFieldCodec)
+from kerko.codecs import BaseFacetCodec, CollectionFacetCodec, IdentityFieldCodec
 from kerko.text import slugify, sort_normalize
 from kerko.tree import Tree
 
@@ -24,7 +23,7 @@ class ScopeSpec:
     This is a configuration element, with no effect on the search index schema.
     """
 
-    def __init__(self, key, selector_label, breadbox_label, weight=0, help_text=''):
+    def __init__(self, key, selector_label, breadbox_label, weight=0, help_text=""):
         self.key = key
         self.selector_label = selector_label
         self.breadbox_label = breadbox_label
@@ -64,12 +63,11 @@ class ScopeSpec:
 
 
 class BaseFieldSpec(ABC):
-
     def __init__(
-            self,
-            key,
-            field_type,
-            extractor,
+        self,
+        key,
+        field_type,
+        extractor,
     ):
         """
         Initialize this field specification.
@@ -97,12 +95,7 @@ class BaseFieldSpec(ABC):
 class FieldSpec(BaseFieldSpec):
     """Specifies a schema field."""
 
-    def __init__(
-            self,
-            codec=None,
-            scopes=None,
-            **kwargs
-    ):
+    def __init__(self, codec=None, scopes=None, **kwargs):
         """
         Initialize this field specification.
 
@@ -127,22 +120,22 @@ class FacetSpec(BaseFieldSpec):
     """Specifies a facet for search grouping and filtering."""
 
     def __init__(
-            self,
-            *,
-            title,
-            filter_key,
-            weight=0,
-            initial_limit=0,
-            initial_limit_leeway=2,
-            codec=None,
-            missing_label=None,
-            sort_by=None,
-            sort_reverse=False,
-            item_view=True,
-            allow_overlap=True,
-            query_class=None,
-            renderer=None,
-            **kwargs
+        self,
+        *,
+        title,
+        filter_key,
+        weight=0,
+        initial_limit=0,
+        initial_limit_leeway=2,
+        codec=None,
+        missing_label=None,
+        sort_by=None,
+        sort_reverse=False,
+        item_view=True,
+        allow_overlap=True,
+        query_class=None,
+        renderer=None,
+        **kwargs,
     ):
         """
         Initialize this facet specification.
@@ -198,7 +191,7 @@ class FacetSpec(BaseFieldSpec):
         self.allow_overlap = allow_overlap
         self.query_class = query_class or Term
         self.renderer = renderer or renderers.TemplateResolverRenderer(
-            'kerko/_facet_{mode}.html.jinja2'
+            "kerko/_facet_{mode}.html.jinja2"
         )
 
     def encode(self, value):
@@ -206,7 +199,7 @@ class FacetSpec(BaseFieldSpec):
 
     def decode(self, encoded_value, default_value=None, default_label=None):
         if encoded_value is None:
-            return '', ''
+            return "", ""
         return self.codec.decode(encoded_value, default_value, default_label)
 
     @abstractmethod
@@ -257,20 +250,21 @@ class FacetSpec(BaseFieldSpec):
             items,
             key=lambda x: (
                 # First sort key: show active items first.
-                not x['remove_url'],
+                not x["remove_url"],
                 # Second sort key: show items with missing labels last.
-                bool(x['label']) if self.sort_reverse else not x['label'],
+                bool(x["label"]) if self.sort_reverse else not x["label"],
                 # Third sort key: sort items according to the facet's specified
                 # sort keys. If 'count' is used as key, multiply the count value
                 # by -1 to reverse order (because the desired default when
                 # ordering by count is the descending order).
                 *[
-                    x[k] * -1 if k == 'count' else
-                    (sort_normalize(x[k]) if isinstance(x[k], str) else x[k])
+                    x[k] * -1
+                    if k == "count"
+                    else (sort_normalize(x[k]) if isinstance(x[k], str) else x[k])
                     for k in self.sort_by
-                ]
+                ],
             ),
-            reverse=self.sort_reverse
+            reverse=self.sort_reverse,
         )
 
     def render(self, items, mode):
@@ -278,10 +272,9 @@ class FacetSpec(BaseFieldSpec):
 
 
 class FlatFacetSpec(FacetSpec):
-
     def add_filter(self, value, active_filters):
         if value is None:  # Special case for missing value (None is returned by Whoosh).
-            value = ''
+            value = ""
         filters = active_filters.deepcopy()
         active_values = filters.getlist(self.filter_key)
         if active_values and value in active_values:
@@ -291,7 +284,7 @@ class FlatFacetSpec(FacetSpec):
 
     def remove_filter(self, value, active_filters):
         if value is None:  # Special case for missing value (None is returned by Whoosh).
-            value = ''
+            value = ""
         filters = active_filters.deepcopy()
         active_values = filters.getlist(self.filter_key)
         if not active_values or value not in active_values:
@@ -304,19 +297,19 @@ class FlatFacetSpec(FacetSpec):
         items = []
         for value, count in results.items():
             if value or self.missing_label:
-                value, label = self.decode(value, default_value=value, default_label=value)
+                value, label = self.decode(value, default_value=value, default_label=value)  # noqa: PLW2901
                 new_filters = self.remove_filter(value, criteria.filters)
                 if new_filters:
                     remove_url = url_for(
-                        '.search',
+                        ".search",
                         **criteria.params(
                             filters=new_filters,
                             options={
-                                'page': None,
-                                'page-len': None,
-                                'id': None,
+                                "page": None,
+                                "page-len": None,
+                                "id": None,
                             },
-                        )
+                        ),
                     )
                 else:
                     remove_url = None
@@ -326,32 +319,33 @@ class FlatFacetSpec(FacetSpec):
                     new_filters = self.add_filter(value, criteria.filters)
                     if new_filters:
                         add_url = url_for(
-                            '.search',
+                            ".search",
                             **criteria.params(
                                 filters=new_filters,
                                 options={
-                                    'page': None,
-                                    'page-len': None,
-                                    'id': None,
+                                    "page": None,
+                                    "page-len": None,
+                                    "id": None,
                                 },
-                            )
+                            ),
                         )
                     else:
                         add_url = None
                 if remove_url or add_url:  # Only items with an URL get displayed.
-                    items.append({
-                        'label': label,
-                        'count': count,
-                        'count_formatted': format_decimal(count, locale=get_locale()),
-                        'remove_url': remove_url,
-                        'add_url': add_url,
-                    })
+                    items.append(
+                        {
+                            "label": label,
+                            "count": count,
+                            "count_formatted": format_decimal(count, locale=get_locale()),
+                            "remove_url": remove_url,
+                            "add_url": add_url,
+                        }
+                    )
         return self.sort_items(items)
 
 
 class TreeFacetSpec(FacetSpec):
-
-    def __init__(self, path_separator='.', **kwargs):
+    def __init__(self, path_separator=".", **kwargs):
         super().__init__(**kwargs)
         self.path_separator = path_separator
 
@@ -376,7 +370,7 @@ class TreeFacetSpec(FacetSpec):
     def add_filter(self, value, active_filters):
         if value is None:
             # Special case for missing value (None is returned by Whoosh).
-            value = ''
+            value = ""
         filters = active_filters.deepcopy()
         active_values = filters.getlist(self.filter_key)
         for i, active_value in enumerate(active_values):
@@ -396,7 +390,7 @@ class TreeFacetSpec(FacetSpec):
     def remove_filter(self, value, active_filters):
         if value is None:
             # Special case for missing value (None is returned by Whoosh).
-            value = ''
+            value = ""
         filters = active_filters.deepcopy()
         active_values = filters.getlist(self.filter_key)
         if not active_values:
@@ -428,28 +422,28 @@ class TreeFacetSpec(FacetSpec):
         an extra 'children' key.
         """
         lst = []
-        for child in tree['children'].values():
-            child['node']['children'] = self.sort_tree(child)
-            lst.append(child['node'])
+        for child in tree["children"].values():
+            child["node"]["children"] = self.sort_tree(child)
+            lst.append(child["node"])
         return self.sort_items(lst)
 
     def build(self, results, criteria, active_only=False):
         tree = Tree()
         for value, count in results.items():
             if value or self.missing_label:
-                value, label = self.decode(value, default_value=value, default_label=value)
+                value, label = self.decode(value, default_value=value, default_label=value)  # noqa: PLW2901
                 new_filters = self.remove_filter(value, criteria.filters)
                 if new_filters:
                     remove_url = url_for(
-                        '.search',
+                        ".search",
                         **criteria.params(
                             filters=new_filters,
                             options={
-                                'page': None,
-                                'page-len': None,
-                                'id': None,
+                                "page": None,
+                                "page-len": None,
+                                "id": None,
                             },
-                        )
+                        ),
                     )
                 else:
                     remove_url = None
@@ -459,15 +453,15 @@ class TreeFacetSpec(FacetSpec):
                     new_filters = self.add_filter(value, criteria.filters)
                     if new_filters:
                         add_url = url_for(
-                            '.search',
+                            ".search",
                             **criteria.params(
                                 filters=new_filters,
                                 options={
-                                    'page': None,
-                                    'page-len': None,
-                                    'id': None,
+                                    "page": None,
+                                    "page-len": None,
+                                    "id": None,
                                 },
-                            )
+                            ),
                         )
                     else:
                         add_url = None
@@ -478,15 +472,15 @@ class TreeFacetSpec(FacetSpec):
                     # exist as the facet values are not ordered.
                     node = tree  # Start at tree root.
                     for component in path:
-                        node = node['children'][component]
+                        node = node["children"][component]
                     # Add data at the leaf.
-                    node['node'] = {
-                        'id': '-'.join(path),
-                        'label': label,
-                        'count': count,
-                        'count_formatted': format_decimal(count, locale=get_locale()),
-                        'remove_url': remove_url,
-                        'add_url': add_url,
+                    node["node"] = {
+                        "id": "-".join(path),
+                        "label": label,
+                        "count": count,
+                        "count_formatted": format_decimal(count, locale=get_locale()),
+                        "remove_url": remove_url,
+                        "add_url": add_url,
                     }
         return self.sort_tree(tree)
 
@@ -501,12 +495,12 @@ class CollectionFacetSpec(TreeFacetSpec):
 
     def __init__(self, *, collection_key, **kwargs):
         # Provide some convenient defaults for this type of facet.
-        kwargs.setdefault('key', f'facet_collection_{collection_key}')
-        kwargs.setdefault('field_type', ID(stored=True))
-        kwargs.setdefault('filter_key', slugify(str(kwargs.get('title'))))
-        kwargs.setdefault('codec', CollectionFacetCodec())
-        kwargs.setdefault('query_class', Prefix)
-        kwargs.setdefault('extractor', extractors.CollectionFacetTreeExtractor())
+        kwargs.setdefault("key", f"facet_collection_{collection_key}")
+        kwargs.setdefault("field_type", ID(stored=True))
+        kwargs.setdefault("filter_key", slugify(str(kwargs.get("title"))))
+        kwargs.setdefault("codec", CollectionFacetCodec())
+        kwargs.setdefault("query_class", Prefix)
+        kwargs.setdefault("extractor", extractors.CollectionFacetTreeExtractor())
         super().__init__(**kwargs)
         self.collection_key = collection_key
 
@@ -519,13 +513,13 @@ class SortSpec:
     """
 
     def __init__(
-            self,
-            key,
-            label,
-            fields,
-            weight=0,
-            reverse=False,
-            is_allowed=True
+        self,
+        key,
+        label,
+        fields,
+        weight=0,
+        reverse=False,
+        is_allowed=True,
     ):
         """
         Initialize a sort option.
@@ -582,16 +576,16 @@ class BibFormatSpec:
     """
 
     def __init__(
-            self,
-            key,
-            field,
-            label,
-            help_text,
-            weight,
-            extension,
-            mime_type,
-            group_format='{}',
-            group_item_delimiter=''
+        self,
+        key,
+        field,
+        label,
+        help_text,
+        weight,
+        extension,
+        mime_type,
+        group_format="{}",
+        group_item_delimiter="",
     ):
         """
         Initialize a format.
@@ -633,18 +627,18 @@ class RelationSpec:
     """
 
     def __init__(
-            self,
-            *,
-            key,
-            field,
-            label,
-            weight,
-            id_fields,
-            directed=True,
-            reverse=False,
-            reverse_key='',
-            reverse_field_key='',
-            reverse_label=''
+        self,
+        *,
+        key,
+        field,
+        label,
+        weight,
+        id_fields,
+        directed=True,
+        reverse=False,
+        reverse_key="",
+        reverse_field_key="",
+        reverse_label="",
     ):
         """
         Initialize a relation type.
@@ -708,12 +702,12 @@ class BadgeSpec:
     """
 
     def __init__(
-            self,
-            key,
-            field,
-            activator,
-            renderer,
-            weight=0,
+        self,
+        key,
+        field,
+        activator,
+        renderer,
+        weight=0,
     ):
         """
         Initialize this badge specification.
@@ -757,7 +751,7 @@ class BadgeSpec:
         """
         if self.is_active(item):
             return self.renderer.render(field=self.field, item=item, mode=mode)
-        return ''
+        return ""
 
 
 class PageSpec:
@@ -772,13 +766,12 @@ class PageSpec:
 
 
 class LinkSpec(ABC):
-
     def __init__(self, *, text: str, new_window=False, weight=0):
         self.text = text
         self.new_window = new_window
         self.weight = weight
 
-    def is_active(self, request: Request) -> bool:  # pylint: disable=unused-argument
+    def is_active(self, request: Request) -> bool:
         return False
 
     @property
@@ -788,7 +781,6 @@ class LinkSpec(ABC):
 
 
 class LinkByURLSpec(LinkSpec):
-
     def __init__(self, *, url: str, **kwargs):
         super().__init__(**kwargs)
         self._url = url
@@ -799,7 +791,6 @@ class LinkByURLSpec(LinkSpec):
 
 
 class LinkByEndpointSpec(LinkSpec):
-
     def __init__(
         self,
         *,
@@ -832,7 +823,6 @@ class LinkByEndpointSpec(LinkSpec):
 
 
 class PageLinkSpec(LinkSpec):
-
     def __init__(self, *, page: str, **kwargs):
         super().__init__(**kwargs)
         self.endpoint = f"kerko.{page}"
@@ -846,7 +836,6 @@ class PageLinkSpec(LinkSpec):
 
 
 class LinkGroupSpec:
-
     def __init__(self, key: str, links: Optional[List[LinkSpec]] = None):
         self.key = key
         self.links = links or []

@@ -39,7 +39,7 @@ def find(regex, flags=0, group=1, max_matches=1, iterate=False):
         if max_matches == 1 and not iterate:
             if matches:
                 return matches[0]
-            return ''
+            return ""
         return matches
 
     def _iterate_find(value):
@@ -56,17 +56,18 @@ def split(sep=None, maxsplit=-1):
         if isinstance(value, str):
             return [v.strip() for v in value.split(sep, maxsplit)]
         return []
+
     return _split
 
 
 ZOTERO_URI_REGEX = (
-    r'(https?://(www\.)?zotero\.org/|zotero://select/)'
-    r'(library|((groups|users)/[0-9]+))/items/([A-Z0-9]+)'
+    r"(https?://(www\.)?zotero\.org/|zotero://select/)"
+    r"(library|((groups|users)/[0-9]+))/items/([A-Z0-9]+)"
 )
 ZOTERO_URI_REGEX_GROUP_ITEM_ID = 6
 
 find_item_id_in_zotero_uris_list = find(
-    regex=r'(?:^|\s)' + ZOTERO_URI_REGEX + r'(?=$|\s)',
+    regex=r"(?:^|\s)" + ZOTERO_URI_REGEX + r"(?=$|\s)",
     flags=re.MULTILINE,
     group=ZOTERO_URI_REGEX_GROUP_ITEM_ID,
     max_matches=1,
@@ -74,7 +75,7 @@ find_item_id_in_zotero_uris_list = find(
 )
 
 find_item_id_in_zotero_uris_str = find(
-    regex=r'(?:^|\s)' + ZOTERO_URI_REGEX + r'(?=$|\s)',
+    regex=r"(?:^|\s)" + ZOTERO_URI_REGEX + r"(?=$|\s)",
     flags=re.MULTILINE,
     group=ZOTERO_URI_REGEX_GROUP_ITEM_ID,
     max_matches=0,

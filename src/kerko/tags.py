@@ -7,7 +7,7 @@ from collections.abc import Iterable
 class TagGate:
     """Determine whether an object is included or excluded based on its tags."""
 
-    def __init__(self, include_re='', exclude_re=''):
+    def __init__(self, include_re="", exclude_re=""):
         """
         Initialize the instance.
 
@@ -63,8 +63,8 @@ class TagGate:
     @staticmethod
     def _check_expressions(obj, expressions, expr_results):
         for i, expr in enumerate(expressions):
-            for tag_data in obj.get('tags', []):
-                tag = tag_data.get('tag', '').strip()
+            for tag_data in obj.get("tags", []):
+                tag = tag_data.get("tag", "").strip()
                 if expr.match(tag):
                     expr_results[i] = True
                     break

@@ -16,6 +16,7 @@ def except_abort(exc, status):
 
     :param int status: HTTP response status code to return in case of an exception.
     """
+
     @wrapt.decorator
     def wrapper(wrapped, _instance, args, kwargs):
         try:
@@ -23,6 +24,7 @@ def except_abort(exc, status):
         except exc as e:
             current_app.logger.error(e)
             abort(status)
+
     return wrapper
 
 
@@ -38,6 +40,7 @@ def except_raise(catch_exc, raise_exc, raise_args):
 
     :param raise_args: Arguments to pass to the exception constructor.
     """
+
     @wrapt.decorator
     def wrapper(wrapped, _instance, args, kwargs):
         try:
@@ -45,4 +48,5 @@ def except_raise(catch_exc, raise_exc, raise_args):
         except catch_exc as e:
             current_app.logger.error(e)
             raise raise_exc(raise_args) from e
+
     return wrapper

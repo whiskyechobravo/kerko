@@ -21,7 +21,7 @@ def get_storage_dir(storage):
 
 def load_object(storage, key, default=None):
     try:
-        with open(get_storage_dir(storage) / f'{key}.pickle', 'rb') as f:
+        with open(get_storage_dir(storage) / f"{key}.pickle", "rb") as f:
             return pickle.load(f)
     except IOError:
         return default
@@ -29,7 +29,7 @@ def load_object(storage, key, default=None):
 
 def save_object(storage, key, obj):
     get_storage_dir(storage).mkdir(parents=True, exist_ok=True)
-    with open(get_storage_dir(storage) / f'{key}.pickle', 'wb') as f:
+    with open(get_storage_dir(storage) / f"{key}.pickle", "wb") as f:
         pickle.dump(obj, f)
 
 
@@ -47,14 +47,12 @@ def open_index(storage, *, write=False, schema=None, auto_create=False):
 
     :param bool write: If `True`, make the index writable instead of read-only.
     """
-    index_dir = get_storage_dir(storage) / 'whoosh'
+    index_dir = get_storage_dir(storage) / "whoosh"
     try:
         index = None
         if not index_dir.exists() and auto_create and write:
             index_dir.mkdir(parents=True, exist_ok=True)
-            index = whoosh.index.create_in(
-                str(index_dir), schema() if callable(schema) else schema
-            )
+            index = whoosh.index.create_in(str(index_dir), schema() if callable(schema) else schema)
         elif index_dir.exists():
             index = whoosh.index.open_dir(str(index_dir), readonly=not write)
 
@@ -65,8 +63,8 @@ def open_index(storage, *, write=False, schema=None, auto_create=False):
                 return index
             raise SearchIndexError(f"Empty {storage} in directory '{index_dir}'.")
         raise SearchIndexError(
-            f"Could not open {storage} from directory '{index_dir}'. " +
-            (f"Please sync {storage}." if not write else '')
+            f"Could not open {storage} from directory '{index_dir}'. "
+            + (f"Please sync {storage}." if not write else "")
         )
     except whoosh.index.IndexError as e:
         raise SearchIndexError(f"Error with {storage} in directory '{index_dir}': '{e}'.") from e

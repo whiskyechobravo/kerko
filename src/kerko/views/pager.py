@@ -14,21 +14,21 @@ def get_sections(page_num, page_count):
 
     sections = {}
     page_num = min(max(page_num, 1), page_count)
-    first = max(1, int(page_num - config('kerko.pagination.pager_links') / 2))
-    last = min(page_count + 1, first + config('kerko.pagination.pager_links') + 1)
-    first = max(1, last - config('kerko.pagination.pager_links') - 1)
+    first = max(1, int(page_num - config("kerko.pagination.pager_links") / 2))
+    last = min(page_count + 1, first + config("kerko.pagination.pager_links") + 1)
+    first = max(1, last - config("kerko.pagination.pager_links") - 1)
 
     if page_num > 1:
-        sections['first'] = [1]
-        sections['previous'] = [max(1, page_num - 1)]
+        sections["first"] = [1]
+        sections["previous"] = [max(1, page_num - 1)]
 
-    sections['before'] = list(range(first, page_num))
-    sections['current'] = [page_num]
-    sections['after'] = list(range(page_num + 1, last))
+    sections["before"] = list(range(first, page_num))
+    sections["current"] = [page_num]
+    sections["after"] = list(range(page_num + 1, last))
 
     if page_num < page_count:
-        sections['next'] = [min(page_count, page_num + 1)]
-        sections['last'] = [page_count]
+        sections["next"] = [min(page_count, page_num + 1)]
+        sections["last"] = [page_count]
 
     return sections
 
@@ -40,7 +40,7 @@ def get_page_numbers(sections):
     return []
 
 
-def build_pager(sections, criteria, page_options=None, endpoint='kerko.search', **kwargs):
+def build_pager(sections, criteria, page_options=None, endpoint="kerko.search", **kwargs):
     """
     Build pager links for use in a search view.
 
@@ -56,18 +56,19 @@ def build_pager(sections, criteria, page_options=None, endpoint='kerko.search', 
         for section, pages in sections.items():
             pager[section] = [
                 {
-                    'page_num': p,
-                    'page_num_formatted': format_decimal(p, locale=get_locale()),
-                    'url': url_for(
+                    "page_num": p,
+                    "page_num_formatted": format_decimal(p, locale=get_locale()),
+                    "url": url_for(
                         endpoint,
                         **criteria.params(
                             options={
-                                'page': p if p > 1 else None,
-                                **(page_options.get(p, {}) if page_options else {})
+                                "page": p if p > 1 else None,
+                                **(page_options.get(p, {}) if page_options else {}),
                             }
                         ),
                         **kwargs,
                     ),
-                } for p in pages
+                }
+                for p in pages
             ]
     return pager

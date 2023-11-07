@@ -14,17 +14,19 @@ class Tree(defaultdict):
 
     def to_dict(self):
         """Convert to regular dict (prettier when printed)."""
+
         def convert(x):
             try:
                 return x.to_dict()
             except AttributeError:
                 return x
+
         return {k: convert(self[k]) for k in self}
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import pprint
 
-    dummy = Tree()  # pylint: disable=invalid-name
-    dummy['some']['dummy']['path'] = 'data'
-    pprint.pprint(dummy.to_dict())
+    dummy = Tree()
+    dummy["some"]["dummy"]["path"] = "data"
+    pprint.pprint(dummy.to_dict())  # noqa: T203

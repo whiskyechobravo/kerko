@@ -12,6 +12,5 @@ class SearchForm(FlaskForm):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.scope.choices = [
-            (s.key, s.selector_label)
-            for s in composer().get_ordered_specs('scopes')
+            (s.key, s.selector_label) for s in composer().get_ordered_specs("scopes")
         ]
