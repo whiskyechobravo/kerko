@@ -989,7 +989,7 @@ values set in <code>.env</code>:</p>
 <span class="n">config_update</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">kerko</span><span class="o">.</span><span class="n">DEFAULTS</span><span class="p">)</span>
 
 <span class="c1"># Update app configuration from environment variables.</span>
-<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">from_prefixed_env</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;MYAPP&#39;</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">from_prefixed_env</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;MYAPP&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
 <p>Next, adjust general application parameters to your liking. For example, we
 can use the <code>config_set</code> function to set the main title of the web
@@ -997,7 +997,7 @@ application to <code>"My App"</code>. This function can be called each time you 
 set a <a href="../config-basics/">configuration option</a>.</p>
 <div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">wsgi.py</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">14</span>
 <span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># Make changes to the Kerko configuration here, if desired.</span>
-<span class="n">config_set</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="s1">&#39;kerko.meta.title&#39;</span><span class="p">,</span> <span class="s1">&#39;My App&#39;</span><span class="p">)</span>
+<span class="n">config_set</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="s2">&quot;kerko.meta.title&quot;</span><span class="p">,</span> <span class="s2">&quot;My App&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
 <p>Next, have Kerko parse and validate the configuration. Then create the
 <code>kerko_composer</code> object, which provides key elements needed by Kerko such as
@@ -1013,7 +1013,7 @@ filtering:</p>
 <span class="n">parse_config</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
 
 <span class="c1"># Initialize the Composer object.</span>
-<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;kerko_composer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Composer</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;kerko_composer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Composer</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
 
 <span class="c1"># Make changes to the Kerko composer object here, if desired.</span>
 </code></pre></div></td></tr></table></div>
@@ -1030,7 +1030,7 @@ register the Kerko blueprint with the application object:</p>
 <span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">babel</span> <span class="o">=</span> <span class="n">Babel</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
 <span class="n">bootstrap</span> <span class="o">=</span> <span class="n">Bootstrap4</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
 
-<span class="n">app</span><span class="o">.</span><span class="n">register_blueprint</span><span class="p">(</span><span class="n">kerko</span><span class="o">.</span><span class="n">make_blueprint</span><span class="p">(),</span> <span class="n">url_prefix</span><span class="o">=</span><span class="s1">&#39;/bibliography&#39;</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">register_blueprint</span><span class="p">(</span><span class="n">kerko</span><span class="o">.</span><span class="n">make_blueprint</span><span class="p">(),</span> <span class="n">url_prefix</span><span class="o">=</span><span class="s2">&quot;/bibliography&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
 <p>The <code>url_prefix</code> argument given above defines the base path for every URL
 provided by Kerko.</p>
