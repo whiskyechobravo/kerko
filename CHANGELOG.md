@@ -20,6 +20,7 @@ Other changes:
   `kerko.performance.whoosh_index_memory_limit` parameter.
 - Add support for Python 3.12.
 - Replace pylint, pycodestyle, pydocstyle with Ruff.
+- Replace Yapf with Ruff formatter. Reformat whole code base.
 - Add pre-commit hooks. Run Ruff and other code checks on pre-commit.
 
 Backwards incompatible changes:
