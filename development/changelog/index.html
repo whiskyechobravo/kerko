@@ -819,6 +819,8 @@
 
 
 <h1 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">&para;</a></h1>
+<p>Before doing an upgrade, please check the "How to upgrade" section of the Kerko
+documentation.</p>
 <h2 id="unreleased">Unreleased<a class="headerlink" href="#unreleased" title="Permanent link">&para;</a></h2>
 <p>Features:</p>
 <ul>
@@ -829,6 +831,13 @@
 <li>Add configuration parameters <code>kerko.performance.whoosh_index_memory_limit</code> and
   <code>kerko.performance.whoosh_index_processors</code> to give some control over the
   Whoosh search engine's indexing performance.</li>
+</ul>
+<p>Bug fixes:</p>
+<ul>
+<li>Fix item title missing from item pages and from Atom feeds when item type is
+  Case, Email, or Statute.</li>
+<li>Fix incorrect sorting of search results by title when item type is Case,
+  Email, or Statute.</li>
 </ul>
 <p>Other changes:</p>
 <ul>

@@ -2659,6 +2659,13 @@ them as environment variables. However, that prefix should be omitted when
 the same parameter is set in a TOML file. See <a href="../config-basics/#environment-variables">environment variables</a> for
 details.</p>
 </div>
+<div class="admonition tip">
+<p class="admonition-title">Be a minimalist, only set a parameter when necessary</p>
+<p>If a parameter's default value works for you, just omit that parameter from
+your configuration file. Your configuration file will be much smaller and
+easier to read, and you will have less things to check when eventually
+upgrading Kerko.</p>
+</div>
 <hr />
 <h2 id="babel_default_locale"><code>BABEL_DEFAULT_LOCALE</code><a class="headerlink" href="#babel_default_locale" title="Permanent link">&para;</a></h2>
 <p>The default language of the user interface.</p>
@@ -3023,12 +3030,13 @@ format at this time is <code>'atom'</code>.</p>
 <p>Type: Array of strings <br>
 Default value: <code>["atom"]</code></p>
 <h3 id="fields"><code>fields</code><a class="headerlink" href="#fields" title="Permanent link">&para;</a></h3>
-<p>List of fields to retrieve for each feed item (these may be used by the
-<code>kerko.templates.atom_feed</code> template). Values in this list are keys identifying
-fields defined in the <code>kerko_composer</code> object. One probably only needs to change
-the default list when overriding the template to display additional fields. Note
-that some fields from the default list may be required by Kerko, and removing
-those could cause crashes.</p>
+<p>List of fields to retrieve for each feed item. Values in this list are keys
+identifying fields defined in the <code>kerko_composer</code> object, and the list must
+contain all fields that are used by the <code>kerko.templates.atom_feed</code> template.</p>
+<p>One probably only needs to change the default list when overriding the template
+to display additional fields.</p>
+<p>Note that some fields from the default list may be required by Kerko, and
+removing those could cause crashes.</p>
 <p>Type: Dictionary</p>
 <h3 id="max_days"><code>max_days</code><a class="headerlink" href="#max_days" title="Permanent link">&para;</a></h3>
 <p>The age (in number of days) of the oldest items allowed into web feeds. The date

@@ -742,8 +742,12 @@ its Git repository.</p>
 </code></pre></div>
 </li>
 <li>
-<p>Restart the application.</p>
+<p>Adapt your configuration file:</p>
+<ul>
+<li>Make sure the <code>kerko.feeds.fields</code> parameter is either omitted or has at least the following values: <code>["id", "data", "item_fields"]</code>.</li>
+</ul>
 </li>
+<li>Restart the application.</li>
 </ul>
 <h3 id="custom-applications">Custom applications<a class="headerlink" href="#custom-applications" title="Permanent link">&para;</a></h3>
 <p>If you have a custom application, the following changes will need to be applied:</p>
