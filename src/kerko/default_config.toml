@@ -35,7 +35,7 @@ results_url_links = true
 [kerko.feeds]
 
 formats = ["atom"]
-fields = ["id", "data"]
+fields = ["id", "data", "item_fields"]
 max_days = 0
 require_any = {}
 reject_any = {}

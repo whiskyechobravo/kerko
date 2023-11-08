@@ -33,7 +33,7 @@
         {%- for item in items %}
             <entry>
                 {%- block feed_entry scoped %}
-                    <title type="html">{{ item.data.title|escape }}</title>
+                    <title type="html">{{ kerko_item_title(item)|escape }}</title>
                     <link type="text/html" href="{{ url_for('kerko.item_view', item_id=item.id, _external=True)|escape }}"/>
                     <id>{{ url_for('kerko.item_view', item_id=item.id, _external=True)|escape }}</id>
                     <published>{{ item.data.dateAdded|escape }}</published>
@@ -70,7 +70,7 @@
                     {%- if item.data.rights %}
                         <dc:rights>{{ item.data.rights|escape }}</dc:rights>
                     {%- endif %}
-                    <dc:title>{{ item.data.title|escape }}</dc:title>
+                    <dc:title>{{ kerko_item_title(item)|escape }}</dc:title>
                 {%- endblock feed_entry %}
             </entry>
         {%- endfor %}

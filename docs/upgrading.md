@@ -27,6 +27,8 @@ its Git repository.
     pip install --force-reinstall -r requirements/run.txt
     ```
 
+- Adapt your configuration file:
+    - Make sure the `kerko.feeds.fields` parameter is either omitted or has at least the following values: `["id", "data", "item_fields"]`.
 - Restart the application.
 
 ### Custom applications

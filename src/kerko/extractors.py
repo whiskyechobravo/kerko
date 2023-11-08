@@ -66,7 +66,7 @@ class Extractor(ABC):
     """
     Data extractor.
 
-    An extractor can retrieve elements from item or `LibraryContext`` objects,
+    An extractor can retrieve elements from item or ``LibraryContext`` objects,
     and add elements to a document. The document is represented by a `dict`. A
     ``BaseFieldSpec`` object provides both an ``encode()`` method that may
     transform the data before its assignment into the document, and the key to
@@ -205,6 +205,26 @@ class ItemDataExtractor(KeyExtractor):
 
     def extract(self, item, library_context, spec):
         return item.get("data", {}).get(self.key)
+
+
+class ItemTitleExtractor(Extractor):
+    """
+    Extract the title of an item.
+
+    The name of the field that can be considered the title varies depending on
+    the item type ("title", "caseName", "subject", etc.), but in the Zotero
+    schema it is always the first field. This extractor uses that premise for
+    getting the title, instead of using hardcoded field names.
+    """
+
+    def extract(self, item, library_context, spec):
+        item_data = item.get("data", {})
+        item_type = item_data.get("itemType")
+        if item_type not in ["annotation", "note"] and (
+            item_fields := library_context.item_fields.get(item_type)
+        ):
+            return item_data.get(item_fields[0].get("field"), "")
+        return ""
 
 
 class RawDataExtractor(Extractor):
@@ -695,7 +715,12 @@ def _prepare_sort_text(text):
 
 class SortItemDataExtractor(ItemDataExtractor):
     def extract(self, item, library_context, spec):
-        return _prepare_sort_text(item.get("data", {}).get(self.key, ""))
+        return _prepare_sort_text(super().extract(item, library_context, spec))
+
+
+class SortTitleExtractor(ItemTitleExtractor):
+    def extract(self, item, library_context, spec):
+        return _prepare_sort_text(super().extract(item, library_context, spec))
 
 
 class SortCreatorExtractor(Extractor):

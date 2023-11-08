@@ -4,6 +4,7 @@ import whoosh
 from flask import current_app
 from whoosh.query import Term
 
+from kerko.extractors import ItemTitleExtractor
 from kerko.shortcuts import composer, config
 from kerko.storage import SchemaError, SearchIndexError, load_object, open_index, save_object
 from kerko.tags import TagGate
@@ -66,7 +67,7 @@ def sync_index(full=False):
                 writer.update_document(**document)
                 current_app.logger.debug(
                     f"Item {count} updated ({item['key']}, {item.get('itemType')}): "
-                    f"{document.get('data', {}).get('title')}"
+                    f"{ItemTitleExtractor().extract(item, library_context, None)}"
                 )
             else:
                 current_app.logger.debug(f"Item {count} excluded ({item['key']})")

@@ -19,11 +19,28 @@ def inject_item_data(item):
     facets.inject_facet_results(item)
 
 
+def get_item_title(item):
+    """
+    Extract the title of an item.
+
+    The name of the field that can be considered the title varies depending on
+    the item type ("title", "caseName", "subject", etc.), but in the Zotero
+    schema it is always the first field. This extractor uses that premise for
+    getting the title (instead of using hardcoded field names).
+    """
+    item_data = item.get("data", {})
+    if item_data.get("itemType") not in ["annotation", "note"] and (
+        item_fields := item.get("item_fields")
+    ):
+        return item_data.get(item_fields[0].get("field"), "")
+    return ""
+
+
 def build_item_context(item):
     context = {
         "item": item,
         "item_url": url_for(".item_view", item_id=item["id"], _external=True),
-        "title": item.get("data", {}).get("title", ""),
+        "title": get_item_title(item),
         "highwirepress_tags": meta.build_highwirepress_tags(item),
     }
     if config("kerko.features.open_in_zotero_app"):

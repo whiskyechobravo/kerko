@@ -1,5 +1,8 @@
 # Changelog
 
+Before doing an upgrade, please check the "How to upgrade" section of the Kerko
+documentation.
+
 ## Unreleased
 
 Features:
@@ -11,6 +14,13 @@ Features:
 - Add configuration parameters `kerko.performance.whoosh_index_memory_limit` and
   `kerko.performance.whoosh_index_processors` to give some control over the
   Whoosh search engine's indexing performance.
+
+Bug fixes:
+
+- Fix item title missing from item pages and from Atom feeds when item type is
+  Case, Email, or Statute.
+- Fix incorrect sorting of search results by title when item type is Case,
+  Email, or Statute.
 
 Other changes:
 

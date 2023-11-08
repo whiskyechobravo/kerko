@@ -4,14 +4,15 @@ from flask import Blueprint as BaseBlueprint
 from flask import Config
 from flask.app import App
 
-from kerko.jinja2 import register_filters
+from kerko import jinja2
 from kerko.views.routes import page
 from kerko.views.urls import urls
 
 
 class Blueprint(BaseBlueprint):
     def register(self, app: App, options: dict) -> None:
-        register_filters(self)
+        jinja2.register_filters(self)
+        jinja2.register_globals(self)
         self._add_core_urls()
         self._add_page_urls(app.config)
         super().register(app, options)

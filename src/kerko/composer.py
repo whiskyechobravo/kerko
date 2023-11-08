@@ -500,7 +500,7 @@ class Composer:
             FieldSpec(
                 key="sort_title",
                 field_type=TEXT(phrase=False, sortable=True),
-                extractor=extractors.SortItemDataExtractor(key="title"),
+                extractor=extractors.SortTitleExtractor(),
             )
         )
         self.add_field(

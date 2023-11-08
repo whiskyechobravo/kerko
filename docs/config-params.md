@@ -29,6 +29,13 @@ value if omitted from your configuration.
     the same parameter is set in a TOML file. See [environment variables] for
     details.
 
+!!! tip "Be a minimalist, only set a parameter when necessary"
+
+    If a parameter's default value works for you, just omit that parameter from
+    your configuration file. Your configuration file will be much smaller and
+    easier to read, and you will have less things to check when eventually
+    upgrading Kerko.
+
 ---
 
 ## `BABEL_DEFAULT_LOCALE`
@@ -596,12 +603,15 @@ Default value: `["atom"]`
 
 ### `fields`
 
-List of fields to retrieve for each feed item (these may be used by the
-`kerko.templates.atom_feed` template). Values in this list are keys identifying
-fields defined in the `kerko_composer` object. One probably only needs to change
-the default list when overriding the template to display additional fields. Note
-that some fields from the default list may be required by Kerko, and removing
-those could cause crashes.
+List of fields to retrieve for each feed item. Values in this list are keys
+identifying fields defined in the `kerko_composer` object, and the list must
+contain all fields that are used by the `kerko.templates.atom_feed` template.
+
+One probably only needs to change the default list when overriding the template
+to display additional fields.
+
+Note that some fields from the default list may be required by Kerko, and
+removing those could cause crashes.
 
 Type: Dictionary
 
