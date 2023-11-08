@@ -32,7 +32,7 @@ select = [
     "TCH",  # flake8-type-checking
     "PGH",  # pygrep-hooks
     "PL",   # Pylint
-    # TODO: "UP",  # pyupgrade
+    "UP",   # pyupgrade
     # TODO: "B",   # flake8-bugbear
     # TODO: "C4",  # flake8-comprehensions
     # TODO: "EM",  # flake8-errmsg

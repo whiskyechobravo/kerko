@@ -23,7 +23,7 @@ def load_object(storage, key, default=None):
     try:
         with open(get_storage_dir(storage) / f"{key}.pickle", "rb") as f:
             return pickle.load(f)
-    except IOError:
+    except OSError:
         return default
 
 

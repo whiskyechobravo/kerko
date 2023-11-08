@@ -754,4 +754,4 @@ class SortDateExtractor(Extractor):
     def extract(self, item, library_context, spec):
         parsed_date = item.get("meta", {}).get("parsedDate", "")
         year, month, day = parse_partial_date(parsed_date)
-        return int("{:04d}{:02d}{:02d}".format(year, month, day))
+        return int(f"{year:04d}{month:02d}{day:02d}")
