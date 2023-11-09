@@ -21,6 +21,7 @@ Bug fixes:
   Case, Email, or Statute.
 - Fix incorrect sorting of search results by title when item type is Case,
   Email, or Statute.
+- Fix incorrect scope, analyzer, and boost factor associated with the `caseName` search field.
 
 Other changes:
 
