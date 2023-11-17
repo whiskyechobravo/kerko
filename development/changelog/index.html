@@ -834,17 +834,23 @@ documentation.</p>
 </ul>
 <p>Bug fixes:</p>
 <ul>
+<li>Allow italic, bold, subscript, superscript and small-caps on Zotero fields
+  (such as titles and abstracts) when Zotero's <a href="https://www.zotero.org/support/kb/rich_text_bibliography">rich text formatting
+  tags</a> are used.</li>
 <li>Fix item title missing from item pages and from Atom feeds when item type is
   Case, Email, or Statute.</li>
 <li>Fix incorrect sorting of search results by title when item type is Case,
   Email, or Statute.</li>
-<li>Fix incorrect scope, analyzer, and boost factor associated with the <code>caseName</code> search field.</li>
+<li>Fix incorrect escaping of HTML markup in the HTML content elements of Atom
+  feeds.</li>
+<li>Fix incorrect scope, analyzer, and boost factor associated with the <code>caseName</code>
+  search field.</li>
 </ul>
 <p>Other changes:</p>
 <ul>
-<li>Reduce the default memory limit used by Whoosh's index writer from 256 MB to
-  128 MB. This can prevent swapping with large libraries on small machines. The
-  limit may now be changed with the
+<li>Reduce the default memory limit for Whoosh's index writer from 256 MB to 128
+  MB. This can prevent swapping with large libraries on small machines. The
+  default limit may now be changed with the
   <code>kerko.performance.whoosh_index_memory_limit</code> parameter.</li>
 <li>Add support for Python 3.12.</li>
 <li>Replace pylint, pycodestyle, pydocstyle with Ruff.</li>
@@ -853,7 +859,7 @@ documentation.</p>
 </ul>
 <p>Backwards incompatible changes:</p>
 <ul>
-<li>Drop support for Python 3.7.</li>
+<li>Drop support for Python 3.7 (EOL).</li>
 </ul>
 <p>Possibly backwards incompatible changes (more or less internal API changes):</p>
 <ul>
