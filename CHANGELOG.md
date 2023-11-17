@@ -24,13 +24,16 @@ Bug fixes:
   Case, Email, or Statute.
 - Fix incorrect sorting of search results by title when item type is Case,
   Email, or Statute.
-- Fix incorrect scope, analyzer, and boost factor associated with the `caseName` search field.
+- Fix incorrect escaping of HTML markup in the HTML content elements of Atom
+  feeds.
+- Fix incorrect scope, analyzer, and boost factor associated with the `caseName`
+  search field.
 
 Other changes:
 
-- Reduce the default memory limit used by Whoosh's index writer from 256 MB to
-  128 MB. This can prevent swapping with large libraries on small machines. The
-  limit may now be changed with the
+- Reduce the default memory limit for Whoosh's index writer from 256 MB to 128
+  MB. This can prevent swapping with large libraries on small machines. The
+  default limit may now be changed with the
   `kerko.performance.whoosh_index_memory_limit` parameter.
 - Add support for Python 3.12.
 - Replace pylint, pycodestyle, pydocstyle with Ruff.
@@ -39,7 +42,7 @@ Other changes:
 
 Backwards incompatible changes:
 
-- Drop support for Python 3.7.
+- Drop support for Python 3.7 (EOL).
 
 Possibly backwards incompatible changes (more or less internal API changes):
 

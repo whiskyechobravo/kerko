@@ -33,44 +33,44 @@
         {%- for item in items %}
             <entry>
                 {%- block feed_entry scoped %}
-                    <title type="html">{{ kerko_item_title(item)|escape }}</title>
+                    <title type="html">{{ kerko_item_title(item)|kerko_zotero_escape|forceescape }}</title>
                     <link type="text/html" href="{{ url_for('kerko.item_view', item_id=item.id, _external=True)|escape }}"/>
-                    <id>{{ url_for('kerko.item_view', item_id=item.id, _external=True)|escape }}</id>
-                    <published>{{ item.data.dateAdded|escape }}</published>
-                    <updated>{{ item.data.dateModified|escape }}</updated>
+                    <id>{{ url_for('kerko.item_view', item_id=item.id, _external=True)|escape|forceescape }}</id>
+                    <published>{{ item.data.dateAdded|escape|forceescape }}</published>
+                    <updated>{{ item.data.dateModified|escape|forceescape }}</updated>
                     {%- if item.data.abstractNote %}
-                        <summary type="html">{{ item.data.abstractNote|escape }}</summary>
+                        <summary type="html">{{ item.data.abstractNote|kerko_zotero_escape|forceescape }}</summary>
                     {%- endif %}
                     {%- for creator in item.data.creators %}
                         {%- if creator.display %}
-                            <dc:creator>{{ creator.display|escape }}</dc:creator>
+                            <dc:creator>{{ creator.display|kerko_zotero_escape|forceescape }}</dc:creator>
                         {%- endif %}
                     {%- endfor %}
                     {%- with item_date = [item.data.date, item.data.dateDecided, item.data.dateEnacted, item.data.filingDate, item.data.issueDate]|select|first %}
                         {%- if item_date %}
-                            <dc:date>{{ item_date|escape }}</dc:date>
+                            <dc:date>{{ item_date|escape|forceescape }}</dc:date>
                         {%- endif %}
                     {%- endwith %}
                     {%- if item.data.DOI %}
-                        <dc:identifier>{{ item.data.DOI|escape|kerko_urlize_doi(link=False)|escape }}</dc:identifier>
+                        <dc:identifier>{{ item.data.DOI|kerko_urlize_doi(link=False)|escape|forceescape }}</dc:identifier>
                         {#- TODO: If item.data.DOI empty, check if it can be parsed from the Extra field. #}
                     {%- endif %}
                     {%- if item.data.ISBN %}
-                        <dc:identifier>{{ item.data.ISBN|escape }}</dc:identifier>
+                        <dc:identifier>{{ item.data.ISBN|kerko_zotero_escape|forceescape }}</dc:identifier>
                     {%- endif %}
                     {%- if item.data.ISSN %}
-                        <dc:identifier>{{ item.data.ISSN|escape }}</dc:identifier>
+                        <dc:identifier>{{ item.data.ISSN|kerko_zotero_escape|forceescape }}</dc:identifier>
                     {%- endif %}
                     {%- if item.data.language %}
-                        <dc:language>{{ item.data.language|escape }}</dc:language>
+                        <dc:language>{{ item.data.language|kerko_zotero_escape|forceescape }}</dc:language>
                     {%- endif %}
                     {%- if item.data.publisher %}
-                        <dc:publisher>{{ item.data.publisher|escape }}</dc:publisher>
+                        <dc:publisher>{{ item.data.publisher|kerko_zotero_escape|forceescape }}</dc:publisher>
                     {%- endif %}
                     {%- if item.data.rights %}
-                        <dc:rights>{{ item.data.rights|escape }}</dc:rights>
+                        <dc:rights>{{ item.data.rights|striptags|escape|forceescape }}</dc:rights>
                     {%- endif %}
-                    <dc:title>{{ kerko_item_title(item)|escape }}</dc:title>
+                    <dc:title>{{ kerko_item_title(item)|kerko_zotero_escape|forceescape }}</dc:title>
                 {%- endblock feed_entry %}
             </entry>
         {%- endfor %}
