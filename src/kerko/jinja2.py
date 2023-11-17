@@ -11,6 +11,7 @@ from jinja2 import pass_eval_context
 from markupsafe import Markup
 from w3lib.url import safe_url_string
 
+from kerko import html
 from kerko.datetime import format_datetime, reformat_date
 from kerko.views.item import get_item_title
 
@@ -59,6 +60,7 @@ def register_filters(blueprint):
     blueprint.add_app_template_filter(safe_url_string, name="kerko_url_sanitize")
     blueprint.add_app_template_filter(urlize_doi, name="kerko_urlize_doi")
     blueprint.add_app_template_filter(parse_and_urlize_doi, name="kerko_parse_and_urlize_doi")
+    blueprint.add_app_template_filter(html.zotero_escape, name="kerko_zotero_escape")
 
 
 def register_globals(blueprint):

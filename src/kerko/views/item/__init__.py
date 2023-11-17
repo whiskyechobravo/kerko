@@ -4,6 +4,7 @@ from urllib.parse import urlparse
 
 from flask import request, url_for
 
+from kerko.html import zotero_escape
 from kerko.shortcuts import config
 from kerko.views.item import creators, facets, meta, relations
 
@@ -40,7 +41,7 @@ def build_item_context(item):
     context = {
         "item": item,
         "item_url": url_for(".item_view", item_id=item["id"], _external=True),
-        "title": get_item_title(item),
+        "title": zotero_escape(get_item_title(item)),
         "highwirepress_tags": meta.build_highwirepress_tags(item),
     }
     if config("kerko.features.open_in_zotero_app"):

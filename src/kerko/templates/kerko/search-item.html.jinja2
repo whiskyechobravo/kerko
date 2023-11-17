@@ -44,7 +44,7 @@
         {%- include "kerko/_pager.html.jinja2" %}
         <h2 class="{% block item_heading_classes %}my-3 clearfix{% endblock %}">
             {{- badges(item, mode='item') -}}
-            {{- title|escape -}}
+            {{- title|kerko_zotero_escape -}}
         </h2>
     {%- endblock search_results %}
     {{- super() }}

@@ -17,6 +17,9 @@ Features:
 
 Bug fixes:
 
+- Allow italic, bold, subscript, superscript and small-caps on Zotero fields
+  (such as titles and abstracts) when Zotero's [rich text formatting
+  tags](https://www.zotero.org/support/kb/rich_text_bibliography) are used.
 - Fix item title missing from item pages and from Atom feeds when item type is
   Case, Email, or Statute.
 - Fix incorrect sorting of search results by title when item type is Case,

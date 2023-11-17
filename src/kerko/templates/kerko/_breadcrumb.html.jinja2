@@ -1,8 +1,8 @@
 {%- macro breadcrumb_text(text) -%}
     {%- if config.kerko.breadcrumb.text_max_length -%}
-        {{- text|escape|truncate(config.kerko.breadcrumb.text_max_length, leeway=config.kerko.breadcrumb.text_max_length_leeway) -}}
+        {{- text|truncate(config.kerko.breadcrumb.text_max_length, leeway=config.kerko.breadcrumb.text_max_length_leeway) -}}
     {%- else -%}
-        {{- text|escape -}}
+        {{- text -}}
     {%- endif -%}
 {%- endmacro %}
 
@@ -20,7 +20,7 @@
             {% if config.kerko.breadcrumb.include_current -%}
                 <li class="breadcrumb-item active" aria-current="page">
                     {%- if link.text -%}
-                        {{- breadcrumb_text(link.text) -}}
+                        {{- breadcrumb_text(link.text|escape) -}}
                     {%- else -%}
                         {{- breadcrumb_text(link) -}}
                     {%- endif -%}

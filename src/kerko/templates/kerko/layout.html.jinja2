@@ -3,7 +3,7 @@
 {% from "kerko/_breadcrumb.html.jinja2" import breadcrumb %}
 
 {%- block meta_title_inner -%}
-    {%- if title %}{{ title|escape }} | {% endif %}{{ super() -}}
+    {%- if title %}{{ title|striptags|escape }} | {% endif %}{{ super() -}}
 {%- endblock %}
 
 {%- block metas %}
