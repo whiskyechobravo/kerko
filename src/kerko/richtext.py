@@ -1,4 +1,4 @@
-"""HTML utilities."""
+"""Rich text utilities."""
 
 import re
 from typing import Any
