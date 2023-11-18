@@ -1,5 +1,6 @@
 from flask import url_for
 
+from kerko.richtext import richtext_striptags
 from kerko.shortcuts import composer
 
 
@@ -44,5 +45,7 @@ def inject_creator_display_names(item, link=True):
                     if creator_scope:
                         creator["url"] = url_for(
                             ".search",
-                            **creator_scope.add_keywords(value=f"\"{creator['display']}\""),
+                            **creator_scope.add_keywords(
+                                value=f"\"{richtext_striptags(creator['display'])}\""
+                            ),
                         )

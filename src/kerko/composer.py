@@ -13,6 +13,7 @@ from whoosh.util.text import rcompile
 from kerko import codecs, extractors, transformers
 from kerko.config_helpers import config_get
 from kerko.datetime import iso_to_datetime, iso_to_timestamp
+from kerko.richtext import richtext_striptags
 from kerko.specs import (
     BadgeSpec,
     BibFormatSpec,
@@ -475,7 +476,10 @@ class Composer:
                                 field_boost=field_config["boost"],
                             ),
                             scopes=field_config["scopes"],
-                            extractor=extractors.ItemDataExtractor(key=field_key),
+                            extractor=extractors.TransformerExtractor(
+                                extractor=extractors.ItemDataExtractor(key=field_key),
+                                transformers=[richtext_striptags],
+                            ),
                         )
                     )
                 elif analyzer == "name":
@@ -488,7 +492,10 @@ class Composer:
                                 field_boost=field_config["boost"],
                             ),
                             scopes=field_config["scopes"],
-                            extractor=extractors.ItemDataExtractor(key=field_key),
+                            extractor=extractors.TransformerExtractor(
+                                extractor=extractors.ItemDataExtractor(key=field_key),
+                                transformers=[richtext_striptags],
+                            ),
                         )
                     )
 

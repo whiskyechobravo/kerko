@@ -14,12 +14,12 @@ Features:
 - Add configuration parameters `kerko.performance.whoosh_index_memory_limit` and
   `kerko.performance.whoosh_index_processors` to give some control over the
   Whoosh search engine's indexing performance.
-
-Bug fixes:
-
 - Allow italic, bold, subscript, superscript and small-caps on Zotero fields
   (such as titles and abstracts) when Zotero's [rich text formatting
   tags](https://www.zotero.org/support/kb/rich_text_bibliography) are used.
+
+Bug fixes:
+
 - Fix item title missing from item pages and from Atom feeds when item type is
   Case, Email, or Statute.
 - Fix incorrect sorting of search results by title when item type is Case,
@@ -52,6 +52,10 @@ Possibly backwards incompatible changes (more or less internal API changes):
   registration, especially in tests.
 - Upgrade many dependencies, including new major versions of Flask (3.x),
   Flask-Babel (4.x), Werkzeug (3.x).
+- `kerko.extractors.TransformerExtractor` no longer applies transformers on
+  `None` values. If you need a transformer to process a `None` value (Kerko
+  itself has no such transformer), you now have to set the new `skip_none_value`
+  argument to `False` when instantiating the extractor.
 
 
 ## 1.0.0 (2023-07-24)

@@ -12,6 +12,7 @@ from flask import current_app
 from markupsafe import Markup
 
 from kerko.datetime import maximize_partial_date, parse_partial_date
+from kerko.richtext import richtext_striptags
 from kerko.tags import TagGate
 from kerko.text import sort_normalize
 from kerko.transformers import find_item_id_in_zotero_uri_links, find_item_id_in_zotero_uris_str
@@ -114,7 +115,7 @@ class TransformerExtractor(Extractor):
     Wrap an extractor to transform data before encoding it into the document.
     """
 
-    def __init__(self, *, extractor, transformers, **kwargs):
+    def __init__(self, *, extractor, transformers, skip_none_value=True, **kwargs):
         """
         Initialize the extractor.
 
@@ -123,14 +124,19 @@ class TransformerExtractor(Extractor):
         :param list transformers: List of callables that will be chained to
             transform the extracted data. Each callable takes a value as
             argument and returns the transformed value.
+
+        :param bool skip_none_value: If ``true`` (which is the default),
+            transformers will not be applied on a ``None`` value.
         """
         super().__init__(format_=extractor.format, **kwargs)
         self.extractor = extractor
         self.transformers = transformers
+        self.skip_none_value = skip_none_value
 
     def apply_transformers(self, value):
-        for transformer in self.transformers:
-            value = transformer(value)
+        if value is not None or not self.skip_none_value:
+            for transformer in self.transformers:
+                value = transformer(value)
         return value
 
     def extract(self, item, library_context, spec):
@@ -335,11 +341,11 @@ class CreatorsExtractor(Extractor):
     def extract(self, item, library_context, spec):
         creators = []
         for creator in item.get("data", {}).get("creators", []):
-            n = creator.get("name", "").strip()
-            if n:
-                creators.append(n)
-            firstname = creator.get("firstName", "").strip()
-            lastname = creator.get("lastName", "").strip()
+            fullname = creator.get("name")
+            if fullname:
+                creators.append(richtext_striptags(fullname).strip())
+            firstname = richtext_striptags(creator.get("firstName", "")).strip()
+            lastname = richtext_striptags(creator.get("lastName", "")).strip()
             if firstname and lastname:
                 # Combine firstname and lastname in different orders to help
                 # phrase searches.
