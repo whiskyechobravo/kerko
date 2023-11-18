@@ -68,7 +68,7 @@
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labelledby="attachment-options">
                                             {%- for attachment in item.attachments %}
-                                                <a class="dropdown-item" href="{{ url_for('kerko.child_attachment_download', item_id=item.id, attachment_id=attachment['id'], attachment_filename=attachment['data']['filename']) }}"{% if config.kerko.features.download_attachment_new_window %} target="_blank"{% endif %}>
+                                                <a class="dropdown-item" href="{{ url_for('kerko.child_attachment_download', item_id=item.id, attachment_id=attachment['id'], attachment_filename=attachment['data']['filename']) }}"{% if config.kerko.features.download_attachment_new_window %} target="_blank" rel="noopener"{% endif %}>
                                                     {{- attachment['data']['filename']|escape }}
                                                 </a>
                                             {%- endfor %}
@@ -77,7 +77,7 @@
                                 </div>
                             {%- elif item.attachments|length == 1 %}
                                 <div class="{% block attachment_link_wrapper_classes %}d-inline-block d-print-none mb-2{% endblock %}">
-                                    <a class="{% block attachment_link_btn_classes %}btn btn-primary{% endblock %}" href="{{ url_for('kerko.child_attachment_download', item_id=item.id, attachment_id=item.attachments[0]['id'], attachment_filename=item.attachments[0]['data']['filename']) }}"{% if config.kerko.features.download_attachment_new_window %} target="_blank"{% endif %} {{ title_aria_label(_('Read \'{}\'').format(item.attachments[0]['data']['filename']|escape)) }}>
+                                    <a class="{% block attachment_link_btn_classes %}btn btn-primary{% endblock %}" href="{{ url_for('kerko.child_attachment_download', item_id=item.id, attachment_id=item.attachments[0]['id'], attachment_filename=item.attachments[0]['data']['filename']) }}"{% if config.kerko.features.download_attachment_new_window %} target="_blank" rel="noopener"{% endif %} {{ title_aria_label(_('Read \'{}\'').format(item.attachments[0]['data']['filename']|escape)) }}>
                                         <span class="fas fa-file" aria-hidden="true"></span> {{ _('Read document') -}}
                                     </a>
                                 </div>
@@ -113,7 +113,7 @@
                             {%- endif %}
                             {%- if config.kerko.features.open_in_zotero_web and open_in_zotero_web_url %}
                                 <div id="open-in-zotero-web" class="text-right d-inline-block d-print-none mb-2 {% if not open_in_zotero_web %}d-none-important{% endif %}">
-                                    <a class="btn btn-light" href="{{ open_in_zotero_web_url }}" target="_blank"><span class="fas fa-external-link-alt" aria-hidden="true"></span> {{ _("View on zotero.org") }}</a>
+                                    <a class="btn btn-light" href="{{ open_in_zotero_web_url }}" target="_blank" rel="noopener noreferrer nofollow"><span class="fas fa-external-link-alt" aria-hidden="true"></span> {{ _("View on zotero.org") }}</a>
                                 </div>
                             {%- endif %}
                         </div>
@@ -157,11 +157,11 @@
                     {%- elif f.field in ['date', 'dateDecided', 'dateEnacted', 'filingDate', 'issueDate'] %}
                         {{- field(f.localized, item.data[f.field]|kerko_reformat_date|escape) }}
                     {%- elif f.field == 'DOI' %}
-                        {{- field(f.localized, item.data[f.field]|escape|kerko_urlize_doi(target='_blank')) }}
+                        {{- field(f.localized, item.data[f.field]|escape|kerko_urlize_doi(target='_blank', rel="noopener noreferrer")) }}
                     {%- elif f.field == 'extra' %}
-                        {{- field(f.localized, item.data[f.field]|kerko_richtext_escape|urlize(target='_blank')|kerko_parse_and_urlize_doi(target='_blank'), value_class='pre-line') }}
+                        {{- field(f.localized, item.data[f.field]|kerko_richtext_escape|urlize(target='_blank', rel="noopener noreferrer")|kerko_parse_and_urlize_doi(target='_blank', rel="noopener noreferrer"), value_class='pre-line') }}
                     {%- else %}
-                        {{- field(f.localized, item.data[f.field]|kerko_richtext_escape|urlize(target='_blank'), value_class='pre-line' if f.field == 'abstractNote') }}
+                        {{- field(f.localized, item.data[f.field]|kerko_richtext_escape|urlize(target='_blank', rel="noopener noreferrer"), value_class='pre-line' if f.field == 'abstractNote') }}
                     {%- endif %}
                 {%- endif %}
             {%- endfor %}
@@ -173,7 +173,7 @@
                     <div class="col-md-8 col-lg-9 break-word">
                         <ul class="list-unstyled">
                             {%- for link in item.links %}
-                                <li><a href="{{ link.url }}" target="_blank">{{ link.title|escape }}</a></li>
+                                <li><a href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link.title|escape }}</a></li>
                             {%- endfor %}
                         </ul>
                     </div>
@@ -200,7 +200,7 @@
                     <div class="col-md-8 col-lg-9 break-word">
                         <ul class="list-unstyled">
                             {%- for attachment in item.attachments %}
-                                <li><a href="{{ url_for('kerko.child_attachment_download', item_id=item.id, attachment_id=attachment['id'], attachment_filename=attachment['data']['filename']) }}"{% if config.kerko.features.download_attachment_new_window %} target="_blank"{% endif %}><span class="fas fa-file d-print-none no-decorate mr-1" aria-hidden="true"></span>{{ attachment['data']['filename']|escape }}</a></li>
+                                <li><a href="{{ url_for('kerko.child_attachment_download', item_id=item.id, attachment_id=attachment['id'], attachment_filename=attachment['data']['filename']) }}"{% if config.kerko.features.download_attachment_new_window %} target="_blank" rel="noopener"{% endif %}><span class="fas fa-file d-print-none no-decorate mr-1" aria-hidden="true"></span>{{ attachment['data']['filename']|escape }}</a></li>
                             {%- endfor %}
                         </ul>
                     </div>

@@ -28,7 +28,7 @@
             {%- endif -%}
         {%- else %}
             <li class="breadcrumb-item">
-                <a href="{{ link.url }}" {% if link.new_window %}target="_blank"{% endif %}>{{ breadcrumb_text(link.text) }}</a>
+                <a href="{{ link.url }}" {% if link.new_window %}target="_blank" rel="noopener"{% endif %}>{{ breadcrumb_text(link.text) }}</a>
             </li>
         {%- endif %}
     {%- endfor %}

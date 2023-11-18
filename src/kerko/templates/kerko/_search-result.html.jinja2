@@ -29,9 +29,9 @@
                 {{- result.data['abstractNote']|truncate(
                         config.kerko.features.results_abstracts_max_length,
                         leeway=config.kerko.features.results_abstracts_max_length_leeway
-                    )|kerko_richtext_escape|urlize(target='_blank')|trim -}}
+                    )|kerko_richtext_escape|urlize(target='_blank', rel="noopener noreferrer")|trim -}}
             {%- else %}
-                {{- result.data['abstractNote']|kerko_richtext_escape|urlize(target='_blank')|trim -}}
+                {{- result.data['abstractNote']|kerko_richtext_escape|urlize(target='_blank', rel="noopener noreferrer")|trim -}}
             {%- endif %}
         </p>
     {%- endif %}
@@ -47,7 +47,7 @@
                                 </button>
                                 <span class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labelledby="attachment-options-{{ result.id|escape }}">
                                     {%- for attachment in result.attachments %}
-                                        <a class="dropdown-item" href="{{ url_for('kerko.child_attachment_download', item_id=result.id, attachment_id=attachment['id'], attachment_filename=attachment['data']['filename']) }}"{% if config.kerko.features.download_attachment_new_window %} target="_blank"{% endif %}>
+                                        <a class="dropdown-item" href="{{ url_for('kerko.child_attachment_download', item_id=result.id, attachment_id=attachment['id'], attachment_filename=attachment['data']['filename']) }}"{% if config.kerko.features.download_attachment_new_window %} target="_blank" rel="noopener"{% endif %}>
                                             {{- attachment['data']['filename']|escape }}
                                         </a>
                                     {%- endfor %}
@@ -56,13 +56,13 @@
                         {%- endblock search_result_link_multiple_attachments %}
                     {%- elif config.kerko.features.results_attachment_links and result.attachments|length == 1 %}
                         {%- block search_result_link_single_attachment %}
-                            <a class="{% block search_item_attachment_btn_classes %}btn btn-sm btn-link text-nowrap{% endblock %}" href="{{ url_for('kerko.child_attachment_download', item_id=result.id, attachment_id=result.attachments[0]['id'], attachment_filename=result.attachments[0]['data']['filename']) }}"{% if config.kerko.features.download_attachment_new_window %} target="_blank"{% endif %} {{ title_aria_label(_('Read \'{}\'').format(result.attachments[0]['data']['filename']|escape)) }}>
+                            <a class="{% block search_item_attachment_btn_classes %}btn btn-sm btn-link text-nowrap{% endblock %}" href="{{ url_for('kerko.child_attachment_download', item_id=result.id, attachment_id=result.attachments[0]['id'], attachment_filename=result.attachments[0]['data']['filename']) }}"{% if config.kerko.features.download_attachment_new_window %} target="_blank" rel="noopener"{% endif %} {{ title_aria_label(_('Read \'{}\'').format(result.attachments[0]['data']['filename']|escape)) }}>
                                 <span class="fas fa-file mr-1" aria-hidden="true"></span>{{ _('Read document') -}}
                             </a>
                         {%- endblock search_result_link_single_attachment %}
                     {%- elif config.kerko.features.results_url_links and result.url|kerko_url_hostname %}
                         {%- block search_result_link_url %}
-                            <a class="{% block search_item_link_btn_classes %}btn btn-sm btn-link text-nowrap{% endblock %}" href="{{ result.url|kerko_url_sanitize|escape }}" target="_blank">
+                            <a class="{% block search_item_link_btn_classes %}btn btn-sm btn-link text-nowrap{% endblock %}" href="{{ result.url|kerko_url_sanitize|escape }}" target="_blank" rel="noopener noreferrer">
                                 <span class="fas fa-external-link-alt mr-1" aria-hidden="true"></span>{{ _('View on {}').format(result.url|kerko_url_hostname|escape) -}}
                             </a>
                         {%- endblock search_result_link_url %}
