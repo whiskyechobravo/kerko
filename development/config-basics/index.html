@@ -757,22 +757,22 @@ be set in TOML files, such as <code>FLASK_APP</code> and <code>KERKOAPP_CONFIG_F
 <p>The <a href="https://toml.io/">TOML syntax</a> allows organizing parameters under headers to avoid
 repetition and to make the file more readable. Therefore, two following two
 examples are equivalent ways of setting the <code>kerko.meta.title</code> parameter:</p>
-<div class="highlight"><span class="filename">TOML example 1</span><pre><span></span><code><span class="n">kerko</span><span class="p">.</span><span class="n">meta</span><span class="p">.</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;My Awesome Bibliography&quot;</span>
+<div class="highlight"><span class="filename">TOML example 1</span><pre><span></span><code><span class="n">kerko</span><span class="p">.</span><span class="n">meta</span><span class="p">.</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;My Awesome Bibliography&quot;</span>
 </code></pre></div>
 <div class="highlight"><span class="filename">TOML example 2</span><pre><span></span><code><span class="k">[kerko.meta]</span>
-<span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;My Awesome Bibliography&quot;</span>
+<span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;My Awesome Bibliography&quot;</span>
 </code></pre></div>
 <p>Note that if headers are used in a TOML file, any top-level parameter must be
 set above the first header:</p>
-<div class="highlight"><span class="filename">Correct TOML example</span><pre><span></span><code><span class="n">ZOTERO_LIBRARY_ID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;123456&quot;</span>
+<div class="highlight"><span class="filename">Correct TOML example</span><pre><span></span><code><span class="n">ZOTERO_LIBRARY_ID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;123456&quot;</span>
 
 <span class="k">[kerko.meta]</span>
-<span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;My Awesome Bibliography&quot;</span>
+<span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;My Awesome Bibliography&quot;</span>
 </code></pre></div>
 <div class="highlight"><span class="filename">Incorrect TOML example</span><pre><span></span><code><span class="k">[kerko.meta]</span>
-<span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;My Awesome Bibliography&quot;</span>
+<span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;My Awesome Bibliography&quot;</span>
 
-<span class="n">ZOTERO_LIBRARY_ID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;123456&quot;</span>
+<span class="n">ZOTERO_LIBRARY_ID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;123456&quot;</span>
 </code></pre></div>
 <p>By default, KerkoApp will look for a series of TOML files:</p>
 <ol>

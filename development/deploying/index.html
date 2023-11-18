@@ -668,8 +668,8 @@ pip3<span class="w"> </span>install<span class="w"> </span>gunicorn
 <p>Always as user <code>kerkoapp</code>, create the <code>~/.secrets.toml</code> file. This is where you
 will put secret keys that should only be known to your server. Its content
 should look like the following:</p>
-<div class="highlight"><span class="filename">.secrets.toml</span><pre><span></span><code><span class="n">SECRET_KEY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;MY_SECRET_KEY&quot;</span>
-<span class="n">ZOTERO_API_KEY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;MY_ZOTERO_API_KEY&quot;</span>
+<div class="highlight"><span class="filename">.secrets.toml</span><pre><span></span><code><span class="n">SECRET_KEY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;MY_SECRET_KEY&quot;</span>
+<span class="n">ZOTERO_API_KEY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;MY_ZOTERO_API_KEY&quot;</span>
 </code></pre></div>
 <p>You <strong>must</strong> set <code>SECRET_KEY</code> with a random string, and <code>ZOTERO_API_KEY</code> with an
 appropriate value (see <a href="../config-params/#zotero_api_key">configuration
@@ -677,7 +677,7 @@ parameters</a>).</p>
 <p>Then create the <code>~/instance.toml</code> file. This file will contain settings that are
 specific to your server, but are not secret. Its content should look like the
 following:</p>
-<div class="highlight"><span class="filename">instance.toml</span><pre><span></span><code><span class="n">LOGGING_HANDLER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;syslog&quot;</span>
+<div class="highlight"><span class="filename">instance.toml</span><pre><span></span><code><span class="n">LOGGING_HANDLER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;syslog&quot;</span>
 
 <span class="k">[kerkoapp.proxy_fix]</span>
 <span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
@@ -693,11 +693,11 @@ nginx as a reverse proxy.</p>
 for Kerko. You might have already tested KerkoApp on your desktop computer and
 created such file. If so, you could just copy that file to your server. At the
 very least it should contain the following settings:</p>
-<div class="highlight"><span class="filename">config.toml</span><pre><span></span><code><span class="n">ZOTERO_LIBRARY_ID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;MY_ZOTERO_LIBRARY_ID&quot;</span>
-<span class="n">ZOTERO_LIBRARY_TYPE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;MY_ZOTERO_LIBRARY_TYPE&quot;</span>
+<div class="highlight"><span class="filename">config.toml</span><pre><span></span><code><span class="n">ZOTERO_LIBRARY_ID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;MY_ZOTERO_LIBRARY_ID&quot;</span>
+<span class="n">ZOTERO_LIBRARY_TYPE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;MY_ZOTERO_LIBRARY_TYPE&quot;</span>
 
 <span class="k">[kerko.meta]</span>
-<span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;My Bibliography&quot;</span>
+<span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;My Bibliography&quot;</span>
 </code></pre></div>
 <p>You <strong>must</strong> set <code>ZOTERO_LIBRARY_ID</code> and <code>ZOTERO_LIBRARY_TYPE</code> with appropriate
 values (see <a href="../config-params/#zotero_library_id">configuration parameters</a>) so

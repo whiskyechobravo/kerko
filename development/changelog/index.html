@@ -896,7 +896,7 @@ documentation.</p>
   <code>kerko.performance.whoosh_index_processors</code> to give some control over the
   Whoosh search engine's indexing performance.</li>
 <li>Allow italic, bold, subscript, superscript and small-caps on Zotero fields
-  (such as titles and abstracts) when Zotero's <a href="https://www.zotero.org/support/kb/rich_text_bibliography">rich text formatting
+  (such as titles and abstracts) where <a href="https://www.zotero.org/support/kb/rich_text_bibliography">rich text formatting
   tags</a> are used.</li>
 </ul>
 <p>Bug fixes:</p>
@@ -912,6 +912,9 @@ documentation.</p>
 </ul>
 <p>Other changes:</p>
 <ul>
+<li>Add <code>rel="noopener"</code> to <code>target="_blank"</code> links.</li>
+<li>Add <code>rel="noreferrer"</code> to links derived from Zotero library data, e.g.,
+  user-provided URLs, DOIs, link attachments.</li>
 <li>Reduce the default memory limit for Whoosh's index writer from 256 MB to 128
   MB. This can prevent swapping with large libraries on small machines. The
   default limit may now be changed with the
