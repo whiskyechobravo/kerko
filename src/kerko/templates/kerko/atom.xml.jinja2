@@ -68,7 +68,7 @@
                         <dc:publisher>{{ item.data.publisher|kerko_zotero_escape|striptags|forceescape }}</dc:publisher>
                     {%- endif %}
                     {%- if item.data.rights %}
-                        <dc:rights>{{ item.data.rights|striptags|escape|forceescape }}</dc:rights>
+                        <dc:rights>{{ item.data.rights|kerko_zotero_escape|striptags|escape|forceescape }}</dc:rights>
                     {%- endif %}
                     <dc:title>{{ kerko_item_title(item)|kerko_zotero_escape|striptags|forceescape }}</dc:title>
                 {%- endblock feed_entry %}
