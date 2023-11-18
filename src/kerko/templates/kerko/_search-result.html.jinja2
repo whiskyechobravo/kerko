@@ -29,9 +29,9 @@
                 {{- result.data['abstractNote']|truncate(
                         config.kerko.features.results_abstracts_max_length,
                         leeway=config.kerko.features.results_abstracts_max_length_leeway
-                    )|kerko_zotero_escape|urlize(target='_blank')|trim -}}
+                    )|kerko_richtext_escape|urlize(target='_blank')|trim -}}
             {%- else %}
-                {{- result.data['abstractNote']|kerko_zotero_escape|urlize(target='_blank')|trim -}}
+                {{- result.data['abstractNote']|kerko_richtext_escape|urlize(target='_blank')|trim -}}
             {%- endif %}
         </p>
     {%- endif %}

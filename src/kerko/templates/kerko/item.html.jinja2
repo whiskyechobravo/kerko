@@ -42,14 +42,14 @@
 
 {%- block metas %}
     {{- super() }}
-    <link rel="canonical" title="{{ title|kerko_zotero_escape|striptags|escape }}" href="{{ item_url }}">
+    <link rel="canonical" title="{{ title|kerko_richtext_escape|striptags|escape }}" href="{{ item_url }}">
     {%- if config.kerko.features.download_item %}
         {%- for bib_format in config.kerko_composer.get_ordered_specs('bib_formats') %}
             <link rel="alternate" title="{{ bib_format.label|escape }}" type="{{ bib_format.mime_type|escape }}" href="{{ url_for('kerko.item_bib_download', item_id=item.id, bib_format_key=bib_format.key) }}">
         {%- endfor %}
     {%- endif %}
     {%- for tag in highwirepress_tags %}
-        <meta name="{{ tag[0] }}" content="{{ tag[1]|kerko_zotero_escape|striptags|escape }}">
+        <meta name="{{ tag[0] }}" content="{{ tag[1]|kerko_richtext_escape|striptags|escape }}">
     {%- endfor %}
 {%- endblock metas %}
 
@@ -133,7 +133,7 @@
                             {%- for creator in item.data.creators %}
                                 <li>
                                     {%- if creator.url %}<a href="{{ creator.url }}" {{ title_aria_label(_('Search \'{}\'').format(creator.display|striptags|escape)) }}>{% endif %}
-                                    {{- creator.display|kerko_zotero_escape }}
+                                    {{- creator.display|kerko_richtext_escape }}
                                     {%- if creator.url %}</a>{% endif %}
                                     {%- if creator.label %}
                                         ({{ creator.label }})
@@ -151,7 +151,7 @@
                 {%- if item.data[f.field] %}
                     {%- if loop.first %}
                         {#- First field is always the title, and Zotero allows some rich text in titles. #}
-                        {{- field(f.localized, item.data[f.field]|kerko_zotero_escape) }}
+                        {{- field(f.localized, item.data[f.field]|kerko_richtext_escape) }}
                     {%- elif f.field == 'accessDate' %}
                         {{- field(f.localized, item.data[f.field]|kerko_reformat_date(convert_tz=True)|escape) }}
                     {%- elif f.field in ['date', 'dateDecided', 'dateEnacted', 'filingDate', 'issueDate'] %}
@@ -159,9 +159,9 @@
                     {%- elif f.field == 'DOI' %}
                         {{- field(f.localized, item.data[f.field]|escape|kerko_urlize_doi(target='_blank')) }}
                     {%- elif f.field == 'extra' %}
-                        {{- field(f.localized, item.data[f.field]|kerko_zotero_escape|urlize(target='_blank')|kerko_parse_and_urlize_doi(target='_blank'), value_class='pre-line') }}
+                        {{- field(f.localized, item.data[f.field]|kerko_richtext_escape|urlize(target='_blank')|kerko_parse_and_urlize_doi(target='_blank'), value_class='pre-line') }}
                     {%- else %}
-                        {{- field(f.localized, item.data[f.field]|kerko_zotero_escape|urlize(target='_blank'), value_class='pre-line' if f.field == 'abstractNote') }}
+                        {{- field(f.localized, item.data[f.field]|kerko_richtext_escape|urlize(target='_blank'), value_class='pre-line' if f.field == 'abstractNote') }}
                     {%- endif %}
                 {%- endif %}
             {%- endfor %}
@@ -301,7 +301,7 @@
         <div class="{% block item_heading_wrapper_classes %}col-auto my-3{% endblock %}">
             <h1 class="{% block item_heading_classes %}h2 mb-0{% endblock %}">
                 {{- badges(item, mode='item') -}}
-                {{- title|kerko_zotero_escape -}}
+                {{- title|kerko_richtext_escape -}}
             </h1>
         </div>
     </div>

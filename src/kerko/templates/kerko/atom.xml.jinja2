@@ -33,17 +33,17 @@
         {%- for item in items %}
             <entry>
                 {%- block feed_entry scoped %}
-                    <title type="html">{{ kerko_item_title(item)|kerko_zotero_escape|forceescape }}</title>
+                    <title type="html">{{ kerko_item_title(item)|kerko_richtext_escape|forceescape }}</title>
                     <link type="text/html" href="{{ url_for('kerko.item_view', item_id=item.id, _external=True)|escape }}"/>
                     <id>{{ url_for('kerko.item_view', item_id=item.id, _external=True)|escape }}</id>
                     <published>{{ item.data.dateAdded|escape }}</published>
                     <updated>{{ item.data.dateModified|escape }}</updated>
                     {%- if item.data.abstractNote %}
-                        <summary type="html">{{ item.data.abstractNote|kerko_zotero_escape|forceescape }}</summary>
+                        <summary type="html">{{ item.data.abstractNote|kerko_richtext_escape|forceescape }}</summary>
                     {%- endif %}
                     {%- for creator in item.data.creators %}
                         {%- if creator.display %}
-                            <dc:creator>{{ creator.display|kerko_zotero_escape|striptags|forceescape }}</dc:creator>
+                            <dc:creator>{{ creator.display|kerko_richtext_escape|striptags|forceescape }}</dc:creator>
                         {%- endif %}
                     {%- endfor %}
                     {%- with item_date = [item.data.date, item.data.dateDecided, item.data.dateEnacted, item.data.filingDate, item.data.issueDate]|select|first %}
@@ -56,21 +56,21 @@
                         {#- TODO: If item.data.DOI empty, check if it can be parsed from the Extra field. #}
                     {%- endif %}
                     {%- if item.data.ISBN %}
-                        <dc:identifier>{{ item.data.ISBN|kerko_zotero_escape|striptags|forceescape }}</dc:identifier>
+                        <dc:identifier>{{ item.data.ISBN|kerko_richtext_escape|striptags|forceescape }}</dc:identifier>
                     {%- endif %}
                     {%- if item.data.ISSN %}
-                        <dc:identifier>{{ item.data.ISSN|kerko_zotero_escape|striptags|forceescape }}</dc:identifier>
+                        <dc:identifier>{{ item.data.ISSN|kerko_richtext_escape|striptags|forceescape }}</dc:identifier>
                     {%- endif %}
                     {%- if item.data.language %}
-                        <dc:language>{{ item.data.language|kerko_zotero_escape|striptags|forceescape }}</dc:language>
+                        <dc:language>{{ item.data.language|kerko_richtext_escape|striptags|forceescape }}</dc:language>
                     {%- endif %}
                     {%- if item.data.publisher %}
-                        <dc:publisher>{{ item.data.publisher|kerko_zotero_escape|striptags|forceescape }}</dc:publisher>
+                        <dc:publisher>{{ item.data.publisher|kerko_richtext_escape|striptags|forceescape }}</dc:publisher>
                     {%- endif %}
                     {%- if item.data.rights %}
-                        <dc:rights>{{ item.data.rights|kerko_zotero_escape|striptags|escape|forceescape }}</dc:rights>
+                        <dc:rights>{{ item.data.rights|kerko_richtext_escape|striptags|escape|forceescape }}</dc:rights>
                     {%- endif %}
-                    <dc:title>{{ kerko_item_title(item)|kerko_zotero_escape|striptags|forceescape }}</dc:title>
+                    <dc:title>{{ kerko_item_title(item)|kerko_richtext_escape|striptags|forceescape }}</dc:title>
                 {%- endblock feed_entry %}
             </entry>
         {%- endfor %}

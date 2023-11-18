@@ -60,7 +60,7 @@ def register_filters(blueprint):
     blueprint.add_app_template_filter(safe_url_string, name="kerko_url_sanitize")
     blueprint.add_app_template_filter(urlize_doi, name="kerko_urlize_doi")
     blueprint.add_app_template_filter(parse_and_urlize_doi, name="kerko_parse_and_urlize_doi")
-    blueprint.add_app_template_filter(richtext.richtext_escape, name="kerko_zotero_escape")
+    blueprint.add_app_template_filter(richtext.richtext_escape, name="kerko_richtext_escape")
 
 
 def register_globals(blueprint):
