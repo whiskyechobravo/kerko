@@ -45,6 +45,7 @@ Other changes:
 - Replace pylint, pycodestyle, pydocstyle with Ruff.
 - Replace Yapf with Ruff formatter. Reformat whole code base.
 - Add pre-commit hooks. Run Ruff and other code checks on pre-commit.
+- Improve documentation.
 
 Backwards incompatible changes:
 

@@ -175,9 +175,31 @@ Type: String
 
 ## `ZOTERO_API_KEY`
 
-Your Zotero API key, as [created on
-zotero.org](https://www.zotero.org/settings/keys/new). We recommend that you
-create a read-only API key, as Kerko does not need to write to your library.
+This parameter specifies your Zotero API key, as [created on
+zotero.org](https://www.zotero.org/settings/keys/new).
+
+Kerko does not need to write to your library. Thus, we recommend that your API
+key be read-only, and that it does not grant any more access to your Zotero data
+than strictly necessary.
+
+On zotero.org, the API key creation options vary on whether you want to connect
+Kerko to a personal library or to a group library:
+
+=== "Personal library"
+
+    Make sure to check **Allow library access**, as well as **Allow notes
+    access**, unless you are certain you won't need any Kerko feature that
+    relies on notes. If you are unsure at this point, we recommend that you
+    allow notes access, otherwise some features might not work, and when that
+    happens you might not remember that it is the API key that is blocking notes
+    access. You can always edit the API key later.
+
+=== "Group library"
+
+    We recommend that you use **Per group permissions** so that access is
+    strictly restricted to the chosen group. Make sure that **Read Only** is
+    selected for that group. This will grant read-only access to all items of
+    that group, including notes.
 
 This parameter is **required** and has no default value.
 
@@ -187,11 +209,20 @@ Type: String
 
 ## `ZOTERO_LIBRARY_ID`
 
-The identifier of the Zotero library to get data from. For a personal library
-the value is your _userID_, as found on https://www.zotero.org/settings/keys
-(you must be logged-in). For a group library this value is the _groupID_ of the
-library, as found in the URL of the library (e.g., the _groupID_ of the library
-at https://www.zotero.org/groups/2348869/kerko_demo is `"2348869"`).
+The identifier of the Zotero library to get data from.
+
+Finding your library ID:
+
+=== "Personal library"
+
+    For a personal library, the value is your _userID_, as [found on
+    zotero.org](https://www.zotero.org/settings/keys) (you must be logged-in).
+
+=== "Group library"
+
+    For a group library this value is the _groupID_ of the library, as found in
+    the URL of the library (e.g., the _groupID_ of the library at
+    `https://www.zotero.org/groups/2348869/kerko_demo` is `"2348869"`).
 
 This parameter is **required** and has no default value.
 

@@ -54,10 +54,8 @@ your computer.
       web forms. It should have a hard to guess value, and should really remain
       secret. For this reason, never add your `.secrets.toml` file to a code
       repository.
-    - `ZOTERO_API_KEY`: Your Zotero API key, as [created on
-      zotero.org](https://www.zotero.org/settings/keys/new). We recommend that
-      you create a read-only API key, as Kerko does not need to write to your
-      library.
+    - `ZOTERO_API_KEY`: Your Zotero API key. [See API key creation
+      instructions](config-params.md#zotero_api_key).
 
 3. Copy the `sample.config.toml` file to `config.toml` in the same directory.
    Open `config.toml` in a text editor to assign proper values to the parameters
@@ -152,10 +150,8 @@ This procedure requires that [Docker] is installed on your computer.
       web forms. It should have a hard to guess value, and should really remain
       secret. For this reason, never add your `.secrets.toml` file to a code
       repository.
-    - `ZOTERO_API_KEY`: Your Zotero API key, as [created on
-      zotero.org](https://www.zotero.org/settings/keys/new). We recommend that
-      you create a read-only API key, as Kerko does not need to write to your
-      library.
+    - `ZOTERO_API_KEY`: Your Zotero API key. [See API key creation
+      instructions](config-params.md#zotero_api_key).
 
 4. Copy `sample.config.toml` as `config.toml` into the `instance` subdirectory.
    Open `instance/config.toml` in a text editor to assign proper values to the
@@ -295,10 +291,8 @@ Let's now build a minimal app:
       tokens in web forms. It should have a hard to guess value, and should
       really remain secret. For this reason, never add your `.env` file to a
       code repository.
-    - `MYAPP_ZOTERO_API_KEY`: Your Zotero API key, as [created on
-      zotero.org](https://www.zotero.org/settings/keys/new). We recommend that
-      you create a read-only API key, as Kerko does not need to write to your
-      library.
+    - `MYAPP_ZOTERO_API_KEY`: Your Zotero API key. [See API key creation
+      instructions](config-params.md#zotero_api_key).
     - `MYAPP_ZOTERO_LIBRARY_ID`: The identifier of the Zotero library to get
       data from. For a personal library the value is your _userID_, as found on
       https://www.zotero.org/settings/keys (you must be logged-in). For a group

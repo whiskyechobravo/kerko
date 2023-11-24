@@ -28,7 +28,15 @@ its Git repository.
     ```
 
 - Adapt your configuration file:
-    - Make sure the `kerko.feeds.fields` parameter is either omitted or has at least the following values: `["id", "data", "item_fields"]`.
+    - Make sure the `kerko.feeds.fields` parameter is either omitted or has at
+      least the following values: `["id", "data", "item_fields"]`.
+- Rebuild your search index using the following commands:
+
+    ```bash
+    flask kerko clean index
+    flask kerko sync index
+    ```
+
 - Restart the application.
 
 ### Custom applications
@@ -204,8 +212,7 @@ its Git repository.
   parameters, then rename KerkoApp's `data` directory to `instance`.
 - Make sure your WSGI server now references the application as `wsgi.app` (or
   `wsgi:app`) instead of `kerkoapp.app` (or `kerkoapp:app`).
-- Rebuild your search index using the following commands, then restart the
-  application:
+- Rebuild your search index using the following commands:
 
     ```bash
     flask kerko clean index
