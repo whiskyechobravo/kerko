@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.11">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.12">
     
     
       
@@ -772,10 +772,19 @@ its Git repository.</p>
 <li>
 <p>Adapt your configuration file:</p>
 <ul>
-<li>Make sure the <code>kerko.feeds.fields</code> parameter is either omitted or has at least the following values: <code>["id", "data", "item_fields"]</code>.</li>
+<li>Make sure the <code>kerko.feeds.fields</code> parameter is either omitted or has at
+  least the following values: <code>["id", "data", "item_fields"]</code>.</li>
 </ul>
 </li>
-<li>Restart the application.</li>
+<li>
+<p>Rebuild your search index using the following commands:</p>
+<div class="highlight"><pre><span></span><code>flask<span class="w"> </span>kerko<span class="w"> </span>clean<span class="w"> </span>index
+flask<span class="w"> </span>kerko<span class="w"> </span>sync<span class="w"> </span>index
+</code></pre></div>
+</li>
+<li>
+<p>Restart the application.</p>
+</li>
 </ul>
 <h3 id="custom-applications">Custom applications<a class="headerlink" href="#custom-applications" title="Permanent link">&para;</a></h3>
 <p>If you have a custom application, the following changes will need to be applied:</p>
@@ -947,8 +956,7 @@ git<span class="w"> </span>remote<span class="w"> </span>set-head<span class="w"
 <li>Make sure your WSGI server now references the application as <code>wsgi.app</code> (or
   <code>wsgi:app</code>) instead of <code>kerkoapp.app</code> (or <code>kerkoapp:app</code>).</li>
 <li>
-<p>Rebuild your search index using the following commands, then restart the
-  application:</p>
+<p>Rebuild your search index using the following commands:</p>
 <div class="highlight"><pre><span></span><code>flask<span class="w"> </span>kerko<span class="w"> </span>clean<span class="w"> </span>index
 flask<span class="w"> </span>kerko<span class="w"> </span>sync<span class="w"> </span>index
 </code></pre></div>

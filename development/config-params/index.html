@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.11">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.12">
     
     
       
@@ -3282,18 +3282,50 @@ have a hard to guess value, and should really remain secret.</p>
 <p>Type: String</p>
 <hr />
 <h2 id="zotero_api_key"><code>ZOTERO_API_KEY</code><a class="headerlink" href="#zotero_api_key" title="Permanent link">&para;</a></h2>
-<p>Your Zotero API key, as <a href="https://www.zotero.org/settings/keys/new">created on
-zotero.org</a>. We recommend that you
-create a read-only API key, as Kerko does not need to write to your library.</p>
+<p>This parameter specifies your Zotero API key, as <a href="https://www.zotero.org/settings/keys/new">created on
+zotero.org</a>.</p>
+<p>Kerko does not need to write to your library. Thus, we recommend that your API
+key be read-only, and that it does not grant any more access to your Zotero data
+than strictly necessary.</p>
+<p>On zotero.org, the API key creation options vary on whether you want to connect
+Kerko to a personal library or to a group library:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Personal library</label><label for="__tabbed_1_2">Group library</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Make sure to check <strong>Allow library access</strong>, as well as <strong>Allow notes
+access</strong>, unless you are certain you won't need any Kerko feature that
+relies on notes. If you are unsure at this point, we recommend that you
+allow notes access, otherwise some features might not work, and when that
+happens you might not remember that it is the API key that is blocking notes
+access. You can always edit the API key later.</p>
+</div>
+<div class="tabbed-block">
+<p>We recommend that you use <strong>Per group permissions</strong> so that access is
+strictly restricted to the chosen group. Make sure that <strong>Read Only</strong> is
+selected for that group. This will grant read-only access to all items of
+that group, including notes.</p>
+</div>
+</div>
+</div>
 <p>This parameter is <strong>required</strong> and has no default value.</p>
 <p>Type: String</p>
 <hr />
 <h2 id="zotero_library_id"><code>ZOTERO_LIBRARY_ID</code><a class="headerlink" href="#zotero_library_id" title="Permanent link">&para;</a></h2>
-<p>The identifier of the Zotero library to get data from. For a personal library
-the value is your <em>userID</em>, as found on https://www.zotero.org/settings/keys
-(you must be logged-in). For a group library this value is the <em>groupID</em> of the
-library, as found in the URL of the library (e.g., the <em>groupID</em> of the library
-at https://www.zotero.org/groups/2348869/kerko_demo is <code>"2348869"</code>).</p>
+<p>The identifier of the Zotero library to get data from.</p>
+<p>Finding your library ID:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Personal library</label><label for="__tabbed_2_2">Group library</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>For a personal library, the value is your <em>userID</em>, as <a href="https://www.zotero.org/settings/keys">found on
+zotero.org</a> (you must be logged-in).</p>
+</div>
+<div class="tabbed-block">
+<p>For a group library this value is the <em>groupID</em> of the library, as found in
+the URL of the library (e.g., the <em>groupID</em> of the library at
+<code>https://www.zotero.org/groups/2348869/kerko_demo</code> is <code>"2348869"</code>).</p>
+</div>
+</div>
+</div>
 <p>This parameter is <strong>required</strong> and has no default value.</p>
 <p>Type: String</p>
 <hr />
