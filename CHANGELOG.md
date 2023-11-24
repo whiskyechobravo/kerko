@@ -29,6 +29,8 @@ Bug fixes:
 - Fix incorrect scope, analyzer, and boost factor associated with the `caseName`
   search field.
 - Fix crash when a facet specifies no sort order.
+- Fix crash on empty search result pages when configuration parameter
+  `kerko.features.print_results_max_count` is greater than zero.
 
 Other changes:
 

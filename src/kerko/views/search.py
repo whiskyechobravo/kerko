@@ -65,6 +65,8 @@ def empty_results(criteria, form):
     context = {}
     facets = {}
     context["title"] = gettext("Your search did not match any resources")
+    context["total_count"] = context["total_count_formatted"] = 0
+    context["page_count"] = context["page_count_formatted"] = 0
     if criteria.has_filters():
         # When search results are empty, Whoosh cannot provide any groupings,
         # thus our facets cannot be built. However, we still want to display the
