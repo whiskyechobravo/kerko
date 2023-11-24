@@ -1,6 +1,6 @@
 {%- macro breadcrumb_text(text) -%}
     {%- if config.kerko.breadcrumb.text_max_length -%}
-        {{- text|truncate(config.kerko.breadcrumb.text_max_length, leeway=config.kerko.breadcrumb.text_max_length_leeway) -}}
+        {{- text|striptags|truncate(config.kerko.breadcrumb.text_max_length, leeway=config.kerko.breadcrumb.text_max_length_leeway)|escape -}}
     {%- else -%}
         {{- text -}}
     {%- endif -%}
