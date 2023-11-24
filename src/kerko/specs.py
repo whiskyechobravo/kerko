@@ -243,7 +243,7 @@ class FacetSpec(BaseFieldSpec):
 
     def sort_items(self, items):
         if self.sort_by is None:
-            return
+            return items
 
         # Sort items based on multiple-keys.
         return sorted(

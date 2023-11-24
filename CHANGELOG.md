@@ -28,6 +28,7 @@ Bug fixes:
   feeds.
 - Fix incorrect scope, analyzer, and boost factor associated with the `caseName`
   search field.
+- Fix crash when a facet specifies no sort order.
 
 Other changes:
 
