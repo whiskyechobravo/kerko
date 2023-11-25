@@ -74,7 +74,7 @@
                 <h2 class="{% block results_heading_classes %}d-inline mb-2{% endblock %}">
                     {{- title }}
                     {%- if search_results %}
-                        <span class="badge badge-light">{% trans count=total_count, count_formatted=total_count_formatted|safe %}{{ count_formatted }} resource{% pluralize %}{{ count_formatted }} resources{% endtrans %}</span>
+                        <span class="{% block results_count_classes %}badge badge-light{% endblock %}">{% trans count=total_count, count_formatted=total_count_formatted|safe %}{{ count_formatted }} resource{% pluralize %}{{ count_formatted }} resources{% endtrans %}</span>
                     {%- endif %}
                 </h2>
             </div>
