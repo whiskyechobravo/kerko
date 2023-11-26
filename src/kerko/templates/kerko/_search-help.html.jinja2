@@ -68,10 +68,12 @@
                             <li>{{ _("Categories selected in the <strong>{explore}</strong> section have no effect on the relevance score. Their only effect is to filter the list of results.").format(explore=_("Explore")) }}</li>
                         {%- endif %}
                     </ul>
+                {%- endblock search_help_inner %}
+                {%- block search_help_inner_end %}
                     <div class="my-3 text-right">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="{{ _('Close Help panel') }}">{{ _("Close") }}</button>
                     </div>
-                {%- endblock search_help_inner %}
+                {%- endblock search_help_inner_end %}
             </div>
         </div>
     </div>

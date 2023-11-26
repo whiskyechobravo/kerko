@@ -45,7 +45,7 @@ Other changes:
 - Replace pylint, pycodestyle, pydocstyle with Ruff.
 - Replace Yapf with Ruff formatter. Reformat whole code base.
 - Add pre-commit hooks. Run Ruff and other code checks on pre-commit.
-- Add block to template `search.html.jinja2` to facilitate theming.
+- Add template blocks to facilitate theming.
 - Improve documentation.
 
 Backwards incompatible changes:

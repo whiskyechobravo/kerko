@@ -190,15 +190,19 @@
                 <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h2 id="facets-modal-label" class="modal-title">{{ _("Explore") }}</h2>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal" {{ title_aria_label(_('Close Explore panel')) }}>
-                                <span class="fas fa-times" aria-hidden="true"></span>
-                            </button>
+                            {%- block facets_modal_header %}
+                                <h2 id="facets-modal-label" class="modal-title">{{ _("Explore") }}</h2>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" {{ title_aria_label(_('Close Explore panel')) }}>
+                                    <span class="fas fa-times" aria-hidden="true"></span>
+                                </button>
+                            {%- endblock facets_modal_header %}
                         </div>
                         <div id="facets-modal-body" class="modal-body">
-                            <div class="my-3 text-right">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="{{ _('Close Explore panel') }}">{{ _("Close") }}</button>
-                            </div>
+                            {%- block facets_modal_inner %}
+                                <div class="my-3 text-right">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="{{ _('Close Explore panel') }}">{{ _("Close") }}</button>
+                                </div>
+                            {%- endblock facets_modal_inner %}
                         </div>
                     </div>
                 </div>
