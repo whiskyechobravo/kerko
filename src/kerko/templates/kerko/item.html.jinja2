@@ -126,10 +126,10 @@
         {%- endblock item_field_resource_type %}
         {%- block item_field_creators %}
             {%- if item.data.creators %}
-                <div class="row">
+                <div class="row mb-3">
                     <div class="col-md-4 col-lg-3 font-weight-bold break-word text-md-right text-print-left">{% trans count=item.data.creators|length %}Author/contributor{% pluralize %}Authors/contributors{% endtrans %}</div>
                     <div class="col-md-8 col-lg-9 break-word">
-                        <ul class="list-unstyled">
+                        <ul class="list-unstyled mb-0">
                             {%- for creator in item.data.creators %}
                                 <li>
                                     {%- if creator.url %}<a href="{{ creator.url }}" {{ title_aria_label(_('Search \'{}\'').format(creator.display|striptags|escape)) }}>{% endif %}
