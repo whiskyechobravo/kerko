@@ -7,7 +7,7 @@
 
 {%- if sorter %}
     <div class="dropdown">
-        <button class="{% block sorter_btn_classes %}btn btn-secondary btn-light dropdown-toggle{% endblock %}" type="button" id="sort-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="{{ _('Sort by...') }}">
+        <button class="{% block sorter_btn_classes %}btn btn-light dropdown-toggle{% endblock %}" type="button" id="sort-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="{{ _('Sort by...') }}">
             <span aria-hidden="true">{{ _('Sort by: {sort_option}').format(sort_option=sorter.active) }}</span>{# -#}
         </button>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="sort-options">
