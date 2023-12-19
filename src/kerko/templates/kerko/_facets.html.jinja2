@@ -110,7 +110,7 @@
                 {%- if list_id and initial_limit and items|length > initial_limit + initial_limit_leeway %}
                     {#- Note: initial_limit can't be enabled without a list_id, hence the above check. #}
                     {{- facet_items(missing_label, items[:initial_limit], list_id=list_id, list_class_top=[list_class_top, 'mb-0', 'continued', 'continued-hint']|join(' '), top_level=True, **kwargs) }}
-                    {{- facet_items(missing_label, items[initial_limit:], list_id=list_id, list_class_top=[list_class_top, 'mb-0', 'collapse']|join(' '), top_level=True, collapse=True, more=True, **kwargs) }}
+                    {{- facet_items(missing_label, items[initial_limit:], list_id=list_id, list_class_top=[list_class_top, 'mb-0']|join(' '), top_level=True, collapse=True, more=True, **kwargs) }}
                     <div class="mb-3 d-print-none">
                         {{- expand_collapse_buttons(collapse_id=list_id + '-more') -}}
                     </div>
