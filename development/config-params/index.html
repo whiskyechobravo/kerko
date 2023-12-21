@@ -3181,9 +3181,9 @@ configuration parameters that are not described in this manual. To find
 those, please refer to the documentation of the relevant package.</p>
 </div>
 <div class="admonition warning">
-<p class="admonition-title">Changing the configuration can be disruptive</p>
-<p>Making any change to a configuration file requires that you at least restart
-the application afterwards for the change to become effective.</p>
+<p class="admonition-title">Changing the Kerko configuration can be disruptive</p>
+<p>Making any change to a Kerko configuration file requires that you at least
+restart the application afterwards for the change to become effective.</p>
 <p>Moreover, some parameters have an effect on the structure of the cache or
 the search index that Kerko depends on. Changing this kind of parameter may
 require that you rebuild either. Refer to the documentation of the parameter
@@ -3779,10 +3779,11 @@ search to some fields.</p>
 <li><code>creator</code></li>
 <li><code>fulltext</code></li>
 <li><code>metadata</code></li>
+<li><code>pubyear</code></li>
 <li><code>title</code></li>
 </ul>
-<p>You may define additional scopes. To link fields to scopes, see
-<a href="#scopes"><code>kerko.search_fields.scopes</code></a>.</p>
+<p>You may define additional scopes.</p>
+<p>To link fields to scopes, see <a href="#scopes"><code>kerko.search_fields.scopes</code></a>.</p>
 <h3 id="breadbox_label"><code>breadbox_label</code><a class="headerlink" href="#breadbox_label" title="Permanent link">&para;</a></h3>
 <p>Label to use when the scope appears in the breadbox, i.e. in the list of search
 criteria.</p>
