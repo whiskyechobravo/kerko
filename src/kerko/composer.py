@@ -104,6 +104,7 @@ class Composer:
             "all": _("Everywhere"),
             "creator": _("In authors or contributors"),
             "title": _("In titles"),
+            "pubyear": _("As publication year"),
             "metadata": _("In all fields"),
             "fulltext": _("In documents"),
         }
@@ -111,6 +112,7 @@ class Composer:
             "all": _("Everywhere"),
             "creator": _("In authors or contributors"),
             "title": _("In titles"),
+            "pubyear": _("As publication year"),
             "metadata": _("In all fields"),
             "fulltext": _("In documents"),
         }
@@ -121,6 +123,12 @@ class Composer:
             ),
             "creator": _("Search your keywords in author or contributor names."),
             "title": _("Search your keywords in titles."),
+            "pubyear": _(
+                "Search a specific publication year (you may use the <strong>%(or_op)s</strong> "
+                "operator with your keywords to find records having different publication years, "
+                "e.g., <code>2020 %(or_op)s 2021</code>).",
+                or_op=_("OR"),
+            ),
             "metadata": _("Search your keywords in all bibliographic record fields."),
             "fulltext": _("Search your keywords in the text content of the available documents."),
         }
@@ -201,6 +209,16 @@ class Composer:
                 ),
                 scopes=field_dict["scopes"],
                 extractor=extractors.ItemTypeLabelExtractor(),
+            )
+        )
+        # Publication year, based on a parsing of Zotero's Date field, searchable and stored.
+        field_dict = config_get(config, "kerko.search_fields.core.required.year")
+        self.add_field(
+            FieldSpec(
+                key="year",
+                field_type=ID(stored=True, field_boost=field_dict["boost"]),
+                scopes=field_dict["scopes"],
+                extractor=extractors.YearExtractor(),
             )
         )
 
@@ -329,14 +347,6 @@ class Composer:
                 key="url",
                 field_type=STORED,
                 extractor=extractors.ItemDataExtractor(key="url"),
-            )
-        )
-        # Year, based on a parsing of Zotero's Date field.
-        self.add_field(
-            FieldSpec(
-                key="year",
-                field_type=STORED,
-                extractor=extractors.YearExtractor(),
             )
         )
         # Formatted citation.

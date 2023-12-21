@@ -116,13 +116,20 @@ whoosh_language = "en"
     enabled = true
     weight = 200
 
-    [kerko.scopes.metadata]
+    [kerko.scopes.pubyear]
+    # Since the scope key is used in URLs, we use "pubyear" as key because
+    # "year" would clash in URLs with the key of the Year facet
+    # (kerko.facets.year.filter_key).
     enabled = true
     weight = 300
 
-    [kerko.scopes.fulltext]
+    [kerko.scopes.metadata]
     enabled = true
     weight = 400
+
+    [kerko.scopes.fulltext]
+    enabled = true
+    weight = 500
 
 [kerko.search_fields]
 
@@ -150,6 +157,12 @@ whoosh_language = "en"
     [kerko.search_fields.core.required.item_type_label]
     scopes = ["all", "metadata"]
     boost = 4.0
+
+    [kerko.search_fields.core.required.year]
+    # It would be redundant to include this field in scopes "all" or "metadata"
+    # because date fields are already included in those.
+    scopes = ["pubyear"]
+    boost = 8.0
 
     #
     # Optional fields.

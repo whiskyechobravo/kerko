@@ -12,10 +12,10 @@ value if omitted from your configuration.
     configuration parameters that are not described in this manual. To find
     those, please refer to the documentation of the relevant package.
 
-!!! warning "Changing the configuration can be disruptive"
+!!! warning "Changing the Kerko configuration can be disruptive"
 
-    Making any change to a configuration file requires that you at least restart
-    the application afterwards for the change to become effective.
+    Making any change to a Kerko configuration file requires that you at least
+    restart the application afterwards for the change to become effective.
 
     Moreover, some parameters have an effect on the structure of the cache or
     the search index that Kerko depends on. Changing this kind of parameter may
@@ -918,10 +918,12 @@ The default scopes are:
 - `creator`
 - `fulltext`
 - `metadata`
+- `pubyear`
 - `title`
 
-You may define additional scopes. To link fields to scopes, see
-[`kerko.search_fields.scopes`](#scopes).
+You may define additional scopes.
+
+To link fields to scopes, see [`kerko.search_fields.scopes`](#scopes).
 
 ### `breadbox_label`
 

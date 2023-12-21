@@ -7,6 +7,9 @@ documentation.
 
 Features:
 
+- Add the "Publication year" search scope. It is enabled by default, but can be
+  disabled by setting the `kerko.scopes.pubyear.enabled` configuration parameter
+  to `false`.
 - Add new configuration parameter `kerko.pages.*.` for defining content pages
   whose content come from selected Zotero standalone notes.
 - Add a `"page"` type for the `kerko.link_groups.*.` configuration table, to
