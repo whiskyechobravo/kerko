@@ -34,6 +34,7 @@ Bug fixes:
 - Fix crash when a facet specifies no sort order.
 - Fix crash on empty search result pages when configuration parameter
   `kerko.features.print_results_max_count` is greater than zero.
+- Fix badges displayed too close to title on item pages.
 
 Other changes:
 
