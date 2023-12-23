@@ -939,6 +939,11 @@ documentation.</p>
   MB. This can prevent swapping with large libraries on small machines. The
   default limit may now be changed with the
   <code>kerko.performance.whoosh_index_memory_limit</code> parameter.</li>
+<li>Improve speed of single-item search pages, i.e., search pages having the
+  <code>page-len=1</code> URL parameter. This is achieved through removal of the <code>id</code>
+  parameter from pagination URLs. Obtaining those ids was requiring extra
+  processing. Instead, the <code>id</code> parameter is now added through the browser
+  History API when a pagination link is visited.</li>
 <li>Add support for Python 3.12.</li>
 <li>Replace pylint, pycodestyle, pydocstyle with Ruff.</li>
 <li>Replace Yapf with Ruff formatter. Reformat whole code base.</li>
