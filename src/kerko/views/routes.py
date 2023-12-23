@@ -430,9 +430,7 @@ def search_bib_download(bib_format_key):
     )
     response.headers[
         "Content-Disposition"
-    ] = (
-        f"attachment; filename=bibliography.{bib_format.extension}"
-    )  # TODO: Make filename configurable.
+    ] = f"attachment; filename=bibliography.{bib_format.extension}"
     response.headers["Content-Type"] = f"{bib_format.mime_type}; charset=utf-8"
     return response
 
