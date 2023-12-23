@@ -3,7 +3,7 @@
 Before doing an upgrade, please check the "How to upgrade" section of the Kerko
 documentation.
 
-## Unreleased
+## 1.1.0 (2023-12-23)
 
 Features:
 
@@ -20,6 +20,8 @@ Features:
 - Allow italic, bold, subscript, superscript and small-caps on Zotero fields
   (such as titles and abstracts) where [rich text formatting
   tags](https://www.zotero.org/support/kb/rich_text_bibliography) are used.
+- Add Spanish translation. Thanks to [Albert
+  Ormazabal](https://github.com/aormazabal).
 
 Bug fixes:
 
