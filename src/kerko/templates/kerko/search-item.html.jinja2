@@ -50,3 +50,12 @@
     {{- super() }}
     {%- include "kerko/_pager.html.jinja2" %}
 {%- endblock content_inner %}
+
+{%- block body_scripts %}
+    {{ super() }}
+    {%- if preferred_url %}
+        <script>
+            history.replaceState({}, "", "{{ preferred_url }}");
+        </script>
+    {%- endif %}
+{%- endblock body_scripts %}

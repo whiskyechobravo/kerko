@@ -40,12 +40,9 @@ def get_page_numbers(sections):
     return []
 
 
-def build_pager(sections, criteria, page_options=None, endpoint="kerko.search", **kwargs):
+def build_pager(sections, criteria, endpoint="kerko.search", **kwargs):
     """
     Build pager links for use in a search view.
-
-    :param dict page_options: A dict keyed by page number, where each value is a
-        dict of search options to pass along when building that page's URL.
 
     :param str endpoint: The endpoint to pass to `url_for()`.
 
@@ -63,7 +60,7 @@ def build_pager(sections, criteria, page_options=None, endpoint="kerko.search", 
                         **criteria.params(
                             options={
                                 "page": p if p > 1 else None,
-                                **(page_options.get(p, {}) if page_options else {}),
+                                "id": None,
                             }
                         ),
                         **kwargs,

@@ -35,31 +35,6 @@ def _build_item_search_urls(items, criteria):
     return [build_url(item, position) for position, item in enumerate(items)]
 
 
-def _get_page_item_ids(criteria, page_numbers, current_item_id):
-    """Retrieve the id of each item corresponding to the specified search result pages."""
-    assert criteria.options.get("page-len") == 1
-    item_ids = {}  # Dict of item ids, keyed by page number.
-    index = open_index("index")
-    with Searcher(index) as searcher:
-        for p in page_numbers:
-            if p == criteria.options.get("page", 1):
-                # We already know the current page's item id. No further query necessary.
-                item_ids[p] = current_item_id
-            else:
-                # Run a search query to get the item id corresponding to the page number.
-                page_results = searcher.search_page(
-                    page=p,
-                    page_len=1,
-                    keywords=criteria.keywords,
-                    filters=criteria.filters,
-                    reject_any={"item_type": ["note", "attachment"]},
-                    sort_spec=criteria.get_active_sort_spec(),
-                    faceting=False,
-                )
-                item_ids[p] = page_results.items(composer().select_fields(["id"]))[0]["id"]
-    return item_ids
-
-
 def empty_results(criteria, form):
     """Prepare the template context variables for an empty search results page."""
     context = {}
@@ -124,6 +99,19 @@ def search_single(criteria, form):
         else:
             context["search_title"] = gettext("Full bibliography")
 
+        if not criteria_id:
+            # Item id is not present in the URL. Inject it into the preferred URL, which will allow
+            # this view to redirect to the item page, should the same URL be accessed later but the
+            # search results be different.
+            context["preferred_url"] = url_for(
+                ".search",
+                **criteria.params(
+                    options={
+                        "id": results[0]["id"],
+                    },
+                ),
+            )
+
         # Load item with all available fields.
         item = results.items(composer().fields, composer().facets)[0]
         facets = results.facets(composer().facets, criteria, active_only=True)
@@ -135,14 +123,7 @@ def search_single(criteria, form):
         context["page_count"] = results.page_count
         context["page_count_formatted"] = format_decimal(results.page_count, locale=get_locale())
         pager_sections = pager.get_sections(criteria.options["page"], results.page_count)
-        page_item_ids = _get_page_item_ids(
-            criteria, pager.get_page_numbers(pager_sections), item["id"]
-        )
-        context["pager"] = pager.build_pager(
-            pager_sections,
-            criteria,
-            page_options={p: {"id": item_id} for p, item_id in page_item_ids.items()},
-        )
+        context["pager"] = pager.build_pager(pager_sections, criteria)
         context["breadbox"] = breadbox.build_breadbox(criteria, facets)
         context["back_url"] = url_for(
             ".search",
