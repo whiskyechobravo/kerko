@@ -6,13 +6,13 @@ repos:
       - id: check-added-large-files
       - id: check-ast
       - id: check-toml
-      # TODO: Enable after upgrading mkdocs to > 9.4.x: - id: check-yaml
+      # TODO: Enable after upgrading mkdocs-material to > 9.4.x: - id: check-yaml
       - id: debug-statements
       - id: detect-private-key
       - id: end-of-file-fixer
       - id: trailing-whitespace
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.1.3
+    rev: v0.1.9
     hooks:
       - id: ruff
       - id: ruff-format
