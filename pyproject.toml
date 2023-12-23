@@ -61,6 +61,7 @@ ignore = [
     "D212",    # Multi-line docstring summary should start at the first line.
     "D213",    # Multi-line docstring summary should start at the second line.
     "COM812",  # Missing trailing comma.
+    "ISC001",  # single-line-implicit-string-concatenation, conflicts with Ruff formatter.
     "PLR0912", # Too many branches.
     "PLR0913", # Too many arguments in function definition.
     "PLR0915", # Too many statements.
