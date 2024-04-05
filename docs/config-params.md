@@ -91,8 +91,6 @@ index, and file attachments. This may be provided as an absolute path or as a
 relative path. If a relative path is given, it will be relative to
 [`INSTANCE_PATH`](#instance_path).
 
-It is typically unnecessary to set both `DATA_PATH` and `INSTANCE_PATH`.
-
 Type: String <br>
 Default value: `"kerko"`
 
@@ -103,14 +101,11 @@ Default value: `"kerko"`
 The instance path specifies a directory where the application may store data and
 configuration files.
 
-It is unnecessary to set `INSTANCE_PATH` if you are already setting
-[`DATA_PATH`](#data_path) as an absolute path.
-
 Type: String <br>
 Default value: [Determined by Flask][Flask instance folder]. In practice, the
 default for KerkoApp users is a directory named `instance` located at the same
 level as the `wsgi.py` file. You may set `INSTANCE_PATH` to a different
-directory, which you must provide as an **absolute path**.
+directory, which you must specify as an **absolute path**.
 
 !!! warning "Environment variable only"
 
