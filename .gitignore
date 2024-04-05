@@ -1,6 +1,5 @@
 # Byte-compiled / optimized / caches.
-.cache
-.mypy_cache/
+.*cache/
 __pycache__/
 *.py[cod]
 
