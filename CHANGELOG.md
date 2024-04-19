@@ -3,6 +3,19 @@
 Before doing an upgrade, please check the "How to upgrade" section of the Kerko
 documentation.
 
+## Unreleased changes
+
+Backwards incompatible changes:
+
+- The Python variable `kerko.TRANSLATION_DIRECTORIES` is now
+  `kerko.TRANSLATION_DIRECTORY`, and a string instead of a list. If you have a
+  custom application, you may need to adapt your Babel configuration.
+
+Other changes:
+
+- Improve documentation.
+
+
 ## 1.1.0 (2023-12-23)
 
 Features:

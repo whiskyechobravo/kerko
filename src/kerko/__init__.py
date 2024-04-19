@@ -10,9 +10,9 @@ from kerko.blueprint import Blueprint
 from kerko.config_helpers import load_toml
 
 # Kerko won't load translations on its own. To load them, an application may add
-# the following domain and translation directories to its Babel configuration.
+# the following domain and translation directory to its Babel configuration.
 TRANSLATION_DOMAIN = "kerko"
-TRANSLATION_DIRECTORIES = [str(pathlib.Path(__file__).parent / "translations")]
+TRANSLATION_DIRECTORY = str(pathlib.Path(__file__).parent / "translations")
 
 try:
     DEFAULTS = load_toml(pathlib.Path(__file__).parent / "default_config.toml")
