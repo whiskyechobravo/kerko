@@ -35,7 +35,9 @@ from kerko.views import pager
 from kerko.views.item import build_item_context, creators, inject_item_data
 from kerko.views.search import search_list, search_single
 
-SITEMAP_URL_MAX_COUNT = 50000
+# Google allows up to 50k URLs per sitemap, but we prefer shorter pages to
+# respond more quickly. The sitemap index ties all those pages together.
+SITEMAP_URL_MAX_COUNT = 1000
 
 
 @except_abort(SchemaError, 500)

@@ -14,6 +14,7 @@ Backwards incompatible changes:
 Other changes:
 
 - Improve documentation.
+- Reduce XML sitemaps size.
 
 
 ## 1.1.0 (2023-12-23)
