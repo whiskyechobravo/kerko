@@ -1,14 +1,14 @@
 # French translations for Kerko.
-# Copyright (C) 2023 Kerko Contributors
+# Copyright (C) 2024 Kerko Contributors
 # This file is distributed under the same license as the Kerko project.
-# David Lesieur <kerko@whiskyechobravo.com>, 2023.
+# David Lesieur <kerko@whiskyechobravo.com>, 2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version:  Kerko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-20 20:03-0500\n"
-"PO-Revision-Date: 2023-12-20 20:03-0500\n"
+"POT-Creation-Date: 2024-04-20 10:25-0400\n"
+"PO-Revision-Date: 2024-04-20 10:25-0400\n"
 "Last-Translator: David Lesieur <kerko@whiskyechobravo.com>\n"
 "Language: fr\n"
 "Language-Team: fr <kerko@whiskyechobravo.com>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.1\n"
+"Generated-By: Babel 2.14.0\n"
 
 #: src/kerko/codecs.py:91
 msgid "yes"
@@ -47,8 +47,8 @@ msgid "In titles"
 msgstr "Dans les titres"
 
 #: src/kerko/composer.py:107 src/kerko/composer.py:115
-msgid "As publication year"
-msgstr "Comme année de publication"
+msgid "In publication years"
+msgstr "Dans les années de publication"
 
 #: src/kerko/composer.py:108 src/kerko/composer.py:116
 msgid "In all fields"
@@ -809,8 +809,8 @@ msgstr "Relations"
 msgid "Processing time: %(time)s seconds"
 msgstr "Temps de traitement: %(time)s seconds"
 
-#: src/kerko/templates/kerko/item.html.jinja2:295 src/kerko/views/search.py:125
-#: src/kerko/views/search.py:204
+#: src/kerko/templates/kerko/item.html.jinja2:295 src/kerko/views/search.py:100
+#: src/kerko/views/search.py:185
 msgid "Full bibliography"
 msgstr "Bibliographie complète"
 
@@ -828,8 +828,7 @@ msgstr "Propulsé par {zotero} et {kerko}."
 
 #: src/kerko/templates/kerko/search-item.html.jinja2:12
 #: src/kerko/templates/kerko/search.html.jinja2:18
-#: src/kerko/templates/kerko/search.html.jinja2:28
-#: src/kerko/views/search.py:123
+#: src/kerko/templates/kerko/search.html.jinja2:28 src/kerko/views/search.py:98
 msgid "Your search"
 msgstr "Votre recherche"
 
@@ -893,15 +892,15 @@ msgstr ""
 msgid "Close Explore panel"
 msgstr "Fermer le panneau d’exploration"
 
-#: src/kerko/views/routes.py:140 src/kerko/views/search.py:263
+#: src/kerko/views/routes.py:142 src/kerko/views/search.py:244
 msgid "Custom feed"
 msgstr "Flux web personnalisé"
 
-#: src/kerko/views/routes.py:142 src/kerko/views/search.py:265
+#: src/kerko/views/routes.py:144 src/kerko/views/search.py:246
 msgid "Main feed"
 msgstr "Flux web principal"
 
-#: src/kerko/views/routes.py:267
+#: src/kerko/views/routes.py:269
 msgid ""
 "The document you have requested has been removed. Please check below for "
 "the latest documents available."
@@ -909,16 +908,16 @@ msgstr ""
 "Le document demandé a été supprimé. Voyez ci-dessous pour les plus "
 "récents documents disponibles."
 
-#: src/kerko/views/search.py:67
+#: src/kerko/views/search.py:42
 msgid "Your search did not match any resources"
 msgstr "Aucune ressource ne correspond à vos critères de recherche"
 
-#: src/kerko/views/search.py:202
+#: src/kerko/views/search.py:183
 msgid "Result"
 msgid_plural "Results"
 msgstr[0] "Résultat"
 msgstr[1] "Résultats"
 
-#: src/kerko/views/search.py:262
+#: src/kerko/views/search.py:243
 msgid "Custom feed based on your search"
 msgstr "Flux web personnalisé d’après vos critères de recherche"
