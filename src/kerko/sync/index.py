@@ -10,7 +10,7 @@ from kerko.storage import SchemaError, SearchIndexError, load_object, open_index
 from kerko.tags import TagGate
 
 
-def sync_index(full=False):
+def sync_index(full=False):  # noqa: ARG001
     """
     Build the search index from the local cache.
 
@@ -22,7 +22,8 @@ def sync_index(full=False):
     cache = open_index("cache")
     cache_version = load_object("cache", "version", default=0)
     if not cache_version:
-        raise SearchIndexError("The cache is empty and needs to be synchronized first.")
+        msg = "The cache is empty and needs to be synchronized first."
+        raise SearchIndexError(msg)
 
     # FIXME: The following does not detect when just the collections have changed in the cache
     #        (with no item changes). Should check the collections_version!
@@ -74,7 +75,8 @@ def sync_index(full=False):
     except (whoosh.fields.FieldConfigurationError, whoosh.fields.UnknownFieldError) as e:
         writer.cancel()
         current_app.logger.error(e)
-        raise SchemaError("Schema changes are required. Please clean index.") from e
+        msg = "Schema changes are required. Please clean index."
+        raise SchemaError(msg) from e
     except Exception:
         writer.cancel()
         raise

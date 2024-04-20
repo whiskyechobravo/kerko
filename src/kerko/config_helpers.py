@@ -206,7 +206,8 @@ class SearchModel(BaseModel):
     @validator("whoosh_language")
     def validate_whoosh_has_language(cls, v):  # noqa: N805
         if not whoosh.lang.has_stemmer(v):
-            raise ValueError(f"language '{v}' not supported by Whoosh")
+            msg = f"language '{v}' not supported by Whoosh"
+            raise ValueError(msg)
         return v
 
 
@@ -429,7 +430,8 @@ class LinkByEndpointModel(LinkModel):
     @root_validator
     def validate_scheme(cls, values):  # noqa: N805
         if values.get("scheme") and not values.get("external"):
-            raise ValueError("When specifying 'scheme', 'external' must be true.")
+            msg = "When specifying 'scheme', 'external' must be true."
+            raise ValueError(msg)
         return values
 
     def to_spec(self) -> LinkSpec:
@@ -536,15 +538,17 @@ class ConfigModel(BaseModel):
 def load_toml(filename: Union[str, pathlib.Path], verbose=False) -> Dict[str, Any]:
     """Load the content of a TOML file."""
     try:
-        with open(filename, "rb") as file:
+        with pathlib.Path(filename).open("rb") as file:
             config = tomllib.load(file)
             if verbose:
                 print(f" * Loading configuration file {filename}")  # noqa: T201
             return config
     except OSError as e:
-        raise RuntimeError(f"Unable to open TOML file.\n{e}") from e
+        msg = f"Unable to open TOML file.\n{e}"
+        raise RuntimeError(msg) from e
     except tomllib.TOMLDecodeError as e:
-        raise RuntimeError(f"Invalid TOML format in file '{filename}'.\n{e}") from e
+        msg = f"Invalid TOML format in file '{filename}'.\n{e}"
+        raise RuntimeError(msg) from e
 
 
 def config_update(config: Config, new_data: Dict[str, Any]) -> None:
@@ -618,7 +622,8 @@ def parse_config(
             config_set(config, key, parsed.dict())
             config[f"kerko_config.{key}"] = parsed
     except ValidationError as e:
-        raise RuntimeError(f"Invalid configuration. {e}") from e
+        msg = f"Invalid configuration. {e}"
+        raise RuntimeError(msg) from e
 
 
 def is_toml_serializable(obj: object) -> bool:

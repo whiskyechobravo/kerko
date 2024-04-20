@@ -771,7 +771,7 @@ class LinkSpec(ABC):
         self.new_window = new_window
         self.weight = weight
 
-    def is_active(self, request: Request) -> bool:
+    def is_active(self, request: Request) -> bool:  # noqa: ARG002
         return False
 
     @property

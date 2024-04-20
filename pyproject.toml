@@ -13,16 +13,19 @@ select = [
     "I",    # isort
     "N",    # pep8-naming
     "D",    # pydocstyle
+    "UP",   # pyupgrade
     "YTT",  # flake8-2020
     "BLE",  # flake8-blind-except
     "A",    # flake8-builtins
     "COM",  # flake8-commas
     "T10",  # flake8-debugger
+    "EM",   # flake8-errmsg
     "EXE",  # flake8-executable
     "INT",  # flake8-gettext
     "ISC",  # flake8-implicit-str-concat
     "ICN",  # flake8-import-conventions
     "INP",  # flake8-no-pep420
+    "PIE",  # flake8-pie
     "T20",  # flake8-print
     "Q",    # flake8-quotes
     "RSE",  # flake8-raise
@@ -30,21 +33,21 @@ select = [
     "SLOT", # flake8-slots
     "TID",  # flake8-tidy-imports
     "TCH",  # flake8-type-checking
+    "ARG",  # flake8-unused-arguments
+    "PTH",  # flake8-use-pathlib
     "PGH",  # pygrep-hooks
     "PL",   # Pylint
-    "UP",   # pyupgrade
-    # TODO: "B",   # flake8-bugbear
-    # TODO: "C4",  # flake8-comprehensions
-    # TODO: "EM",  # flake8-errmsg
-    # TODO: "G",   # flake8-logging-format
-    # TODO: "PIE", # flake8-pie
-    # TODO: "PYI", # flake8-pyi
-    # TODO: "RET", # flake8-return
-    # TODO: "SIM", # flake8-simplify
-    # TODO: "ARG", # flake8-unused-arguments
-    # TODO: "PTH", # flake8-use-pathlib
-    # TODO: "ERA", # eradicate
-    # TODO: "RUF", # Ruff-specific rules
+    "FLY",  # flynt
+    # TODO: "TRY",  # tryceratops
+    # TODO: "PERF", # Perflint
+    # TODO: "B",    # flake8-bugbear
+    # TODO: "C4",   # flake8-comprehensions
+    # TODO: "G",    # flake8-logging-format
+    # TODO: "PYI",  # flake8-pyi
+    # TODO: "RET",  # flake8-return
+    # TODO: "SIM",  # flake8-simplify
+    # TODO: "ERA",  # eradicate
+    # TODO: "RUF",  # Ruff-specific rules
 ]
 ignore = [
     "D100",    # Missing docstring in public module.

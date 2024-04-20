@@ -202,14 +202,14 @@ class KeyExtractor(Extractor):
 class ItemExtractor(KeyExtractor):
     """Extract a value from an item."""
 
-    def extract(self, item, library_context, spec):
+    def extract(self, item, library_context, spec):  # noqa: ARG002
         return item.get(self.key)
 
 
 class ItemDataExtractor(KeyExtractor):
     """Extract a value from item data."""
 
-    def extract(self, item, library_context, spec):
+    def extract(self, item, library_context, spec):  # noqa: ARG002
         return item.get("data", {}).get(self.key)
 
 
@@ -223,7 +223,7 @@ class ItemTitleExtractor(Extractor):
     getting the title, instead of using hardcoded field names.
     """
 
-    def extract(self, item, library_context, spec):
+    def extract(self, item, library_context, spec):  # noqa: ARG002
         item_data = item.get("data", {})
         item_type = item_data.get("itemType")
         if item_type not in ["annotation", "note"] and (
@@ -234,7 +234,7 @@ class ItemTitleExtractor(Extractor):
 
 
 class RawDataExtractor(Extractor):
-    def extract(self, item, library_context, spec):
+    def extract(self, item, library_context, spec):  # noqa: ARG002
         return item.get("data")
 
 
@@ -245,7 +245,7 @@ class ItemRelationsExtractor(Extractor):
         super().__init__(**kwargs)
         self.predicate = predicate
 
-    def extract(self, item, library_context, spec):
+    def extract(self, item, library_context, spec):  # noqa: ARG002
         relations = item.get("data", {}).get("relations", {}).get(self.predicate, [])
         if relations and isinstance(relations, str):
             relations = [relations]
@@ -256,7 +256,7 @@ class ItemRelationsExtractor(Extractor):
 class ItemTypeLabelExtractor(Extractor):
     """Extract the label of the item's type."""
 
-    def extract(self, item, library_context, spec):
+    def extract(self, item, library_context, spec):  # noqa: ARG002
         item_type = item.get("data", {}).get("itemType")
         if item_type and item_type in library_context.item_types:
             return library_context.item_types[item_type]
@@ -268,7 +268,7 @@ class ItemTypeLabelExtractor(Extractor):
 class ItemFieldsExtractor(Extractor):
     """Extract field metadata."""
 
-    def extract(self, item, library_context, spec):
+    def extract(self, item, library_context, spec):  # noqa: ARG002
         item_type = item.get("data", {}).get("itemType")
         if item_type and item_type in library_context.item_fields:
             fields = library_context.item_fields[item_type]
@@ -288,7 +288,7 @@ class ItemLinkExtractor(Extractor):
         self.link_key = link_key
         self.link_type = link_type
 
-    def extract(self, item, library_context, spec):
+    def extract(self, item, library_context, spec):  # noqa: ARG002
         link = item.get("links", {}).get(self.link_key, {})
         if link and link.get("type") == self.link_type:
             return link.get("href")
@@ -305,7 +305,7 @@ class ZoteroWebItemURLExtractor(ItemLinkExtractor):
 class ZoteroAppItemURLExtractor(Extractor):
     """Extract a link for opening the item in the Zotero app."""
 
-    def extract(self, item, library_context, spec):
+    def extract(self, item, library_context, spec):  # noqa: ARG002
         if library_context.library_type == "group":
             return f"zotero://select/groups/{library_context.library_id}/items/{item.get('key')}"
         return f"zotero://select/library/items/{item.get('key')}"
@@ -314,7 +314,7 @@ class ZoteroAppItemURLExtractor(Extractor):
 class CreatorTypesExtractor(Extractor):
     """Extract creator types metadata."""
 
-    def extract(self, item, library_context, spec):
+    def extract(self, item, library_context, spec):  # noqa: ARG002
         item_type = item.get("data", {}).get("itemType")
         if item_type and item_type in library_context.creator_types:
             library_creator_types = library_context.creator_types[item_type]
@@ -338,7 +338,7 @@ class CreatorTypesExtractor(Extractor):
 class CreatorsExtractor(Extractor):
     """Flatten and extract creator data."""
 
-    def extract(self, item, library_context, spec):
+    def extract(self, item, library_context, spec):  # noqa: ARG002
         creators = []
         for creator in item.get("data", {}).get("creators", []):
             fullname = creator.get("name")
@@ -349,8 +349,8 @@ class CreatorsExtractor(Extractor):
             if firstname and lastname:
                 # Combine firstname and lastname in different orders to help
                 # phrase searches.
-                creators.append(" ".join([firstname, lastname]))
-                creators.append(", ".join([lastname, firstname]))
+                creators.append(f"{firstname} {lastname}")
+                creators.append(f"{lastname}, {firstname}")
             elif firstname:
                 creators.append(firstname)
             elif lastname:
@@ -361,7 +361,7 @@ class CreatorsExtractor(Extractor):
 class CollectionNamesExtractor(Extractor):
     """Extract item collections for text search."""
 
-    def extract(self, item, library_context, spec):
+    def extract(self, item, library_context, spec):  # noqa: ARG002
         names = set()
         for k in item.get("data", {}).get("collections", []):
             if k in library_context.collections:
@@ -388,7 +388,7 @@ class BaseTagsExtractor(Extractor):
         self.include = re.compile(include_re) if include_re else None
         self.exclude = re.compile(exclude_re) if exclude_re else None
 
-    def extract(self, item, library_context, spec):
+    def extract(self, item, library_context, spec):  # noqa: ARG002
         tags = set()
         for tag_data in item.get("data", {}).get("tags", []):
             tag = tag_data.get("tag", "").strip()
@@ -433,7 +433,7 @@ class BaseChildrenExtractor(Extractor):
         self.item_type = item_type
         self.gate = TagGate(include_re, exclude_re)
 
-    def extract(self, item, library_context, spec):
+    def extract(self, item, library_context, spec):  # noqa: ARG002
         accepted_children = []
         for child in item.get("children", []):
             if child.get("data", {}).get("itemType") == self.item_type and self.gate.check(
@@ -628,7 +628,7 @@ class InCollectionExtractor(Extractor):
         self.true_only = true_only
         self.check_subcollections = check_subcollections
 
-    def extract(self, item, library_context, spec):
+    def extract(self, item, library_context, spec):  # noqa: ARG002
         item_collections = list(
             itertools.chain(
                 *[
@@ -655,7 +655,7 @@ class TagsFacetExtractor(BaseTagsExtractor):
 class ItemTypeFacetExtractor(Extractor):
     """Index the Zotero item's type for faceting."""
 
-    def extract(self, item, library_context, spec):
+    def extract(self, item, library_context, spec):  # noqa: ARG002
         item_type = item.get("data", {}).get("itemType")
         if item_type:
             return (item_type, library_context.item_types.get(item_type, item_type))
@@ -666,7 +666,7 @@ class ItemTypeFacetExtractor(Extractor):
 class YearExtractor(Extractor):
     """Parse the Zotero item's publication date to get just the year."""
 
-    def extract(self, item, library_context, spec):
+    def extract(self, item, library_context, spec):  # noqa: ARG002
         parsed_date = item.get("meta", {}).get("parsedDate", "")
         if parsed_date:
             year, _month, _day = parse_partial_date(parsed_date)
@@ -680,7 +680,7 @@ class YearFacetExtractor(Extractor):
     def __init__(self, encode=encode_multiple, **kwargs):
         super().__init__(encode=encode, **kwargs)
 
-    def extract(self, item, library_context, spec):
+    def extract(self, item, library_context, spec):  # noqa: ARG002
         parsed_date = item.get("meta", {}).get("parsedDate", "")
         if parsed_date:
             year, _month, _day = parse_partial_date(parsed_date)
@@ -691,14 +691,14 @@ class YearFacetExtractor(Extractor):
 
 
 class ItemDataLinkFacetExtractor(ItemDataExtractor):
-    def extract(self, item, library_context, spec):
+    def extract(self, item, library_context, spec):  # noqa: ARG002
         return item.get("data", {}).get(self.key, "").strip() != ""
 
 
 class MaximizeParsedDateExtractor(Extractor):
     """Extract and "maximize" a `datetime` object from the item's `parsedDate` meta field."""
 
-    def extract(self, item, library_context, spec):
+    def extract(self, item, library_context, spec):  # noqa: ARG002
         parsed_date = item.get("meta", {}).get("parsedDate", None)
         if parsed_date:
             try:
@@ -730,7 +730,7 @@ class SortTitleExtractor(ItemTitleExtractor):
 
 
 class SortCreatorExtractor(Extractor):
-    def extract(self, item, library_context, spec):
+    def extract(self, item, library_context, spec):  # noqa: ARG002
         creators = []
 
         def append_creator(creator):
@@ -757,7 +757,7 @@ class SortCreatorExtractor(Extractor):
 
 
 class SortDateExtractor(Extractor):
-    def extract(self, item, library_context, spec):
+    def extract(self, item, library_context, spec):  # noqa: ARG002
         parsed_date = item.get("meta", {}).get("parsedDate", "")
         year, month, day = parse_partial_date(parsed_date)
         return int(f"{year:04d}{month:02d}{day:02d}")

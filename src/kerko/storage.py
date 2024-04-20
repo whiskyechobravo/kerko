@@ -21,7 +21,7 @@ def get_storage_dir(storage):
 
 def load_object(storage, key, default=None):
     try:
-        with open(get_storage_dir(storage) / f"{key}.pickle", "rb") as f:
+        with pathlib.Path(get_storage_dir(storage) / f"{key}.pickle").open("rb") as f:
             return pickle.load(f)
     except OSError:
         return default
@@ -29,7 +29,7 @@ def load_object(storage, key, default=None):
 
 def save_object(storage, key, obj):
     get_storage_dir(storage).mkdir(parents=True, exist_ok=True)
-    with open(get_storage_dir(storage) / f"{key}.pickle", "wb") as f:
+    with pathlib.Path(get_storage_dir(storage) / f"{key}.pickle").open("wb") as f:
         pickle.dump(obj, f)
 
 
@@ -61,13 +61,15 @@ def open_index(storage, *, write=False, schema=None, auto_create=False):
                 return index
             if index.doc_count() > 0:  # In read mode, we expect some docs to be available.
                 return index
-            raise SearchIndexError(f"Empty {storage} in directory '{index_dir}'.")
+            msg = f"Empty {storage} in directory '{index_dir}'."
+            raise SearchIndexError(msg)
         raise SearchIndexError(
             f"Could not open {storage} from directory '{index_dir}'. "
             + (f"Please sync {storage}." if not write else "")
         )
     except whoosh.index.IndexError as e:
-        raise SearchIndexError(f"Error with {storage} in directory '{index_dir}': '{e}'.") from e
+        msg = f"Error with {storage} in directory '{index_dir}': '{e}'."
+        raise SearchIndexError(msg) from e
 
 
 def delete_storage(storage):

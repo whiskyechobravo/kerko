@@ -119,7 +119,8 @@ def sync_cache(full=False):
     except (FieldConfigurationError, UnknownFieldError) as e:
         writer.cancel()
         current_app.logger.error(e)
-        raise SchemaError("Schema changes are required. Please clean cache.") from e
+        msg = "Schema changes are required. Please clean cache."
+        raise SchemaError(msg) from e
     except Exception:
         writer.cancel()
         raise
