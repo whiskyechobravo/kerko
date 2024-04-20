@@ -104,7 +104,7 @@ class Composer:
             "all": _("Everywhere"),
             "creator": _("In authors or contributors"),
             "title": _("In titles"),
-            "pubyear": _("As publication year"),
+            "pubyear": _("In publication years"),
             "metadata": _("In all fields"),
             "fulltext": _("In documents"),
         }
@@ -112,7 +112,7 @@ class Composer:
             "all": _("Everywhere"),
             "creator": _("In authors or contributors"),
             "title": _("In titles"),
-            "pubyear": _("As publication year"),
+            "pubyear": _("In publication years"),
             "metadata": _("In all fields"),
             "fulltext": _("In documents"),
         }
