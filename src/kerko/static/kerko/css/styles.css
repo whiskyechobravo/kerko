@@ -12,24 +12,18 @@
 .no-js .print-link {
   display: none;
 }
-.collapse-toggle > .fas.collapse-icon:before {
-  content: "\f107";  /* fa-angle-down */
-}
-.collapse-toggle.collapsed > .fas.collapse-icon:before {
-  content: "\f104";  /* fa-angle-left */
-}
 .break-word {
-  word-wrap: break-word;  /* Older, non-standard name for overflow-wrap. */
+  word-wrap: break-word; /* Older, non-standard name for overflow-wrap. */
   overflow-wrap: break-word;
 }
 .pre-line {
   white-space: pre-line;
 }
 .breadbox > .card-body > * {
-    margin-top: 1rem;
+  margin-top: 1rem;
 }
 .breadbox > .card-body > *:first-child {
-    margin-top: 0;
+  margin-top: 0;
 }
 @media print {
   .row {
