@@ -520,7 +520,7 @@ To choose what to do with invalid terms, see the
 
 For the best results with the `normalize` option, we recommend that you record
 languages in Zotero using 2-letter ISO 639-1 codes (because they also happen to
-be [supported by the Citation Style Language][CSL_locale]), and 3-letter [ISO
+be [supported by the Citation Style Language][CSL_locale]), or 3-letter [ISO
 639-3] codes for languages not covered by ISO 639-1.
 
 If `normalize` is set to `false`, item language values will be used verbatim. In
