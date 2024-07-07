@@ -350,18 +350,19 @@ key is used internally by Kerko to identify the facet.
 
 The default facets are:
 
-- `item_type`
-- `link`
-- `tag`
-- `year`
+- `item_type` (item types facet, enabled by default)
+- `language` (item languages facet, disabled by default)
+- `link` (items with links facet, disabled by default)
+- `tag` (item tags facet, enabled by default)
+- `year` (item years facet, enabled by default)
 
-You may define additional facets.
+You may define additional facets. See [Defining custom facets based on Zotero collections].
 
 !!! warning "Modifies the search index"
 
-    Changing any of the `kerko.facets.*` parameters will require that you run
-    the `clean index` and `sync index` commands. See [synchronization commands]
-    for details.
+    Most of the `kerko.facets.*` parameters require that you run the
+    `clean index` and `sync index` commands after you have changed them.
+    See [synchronization commands] for details.
 
 ### `collection_key`
 
@@ -372,22 +373,24 @@ if it contains at least one item that is not excluded through the
 [`kerko.zotero.item_include_re`](#item_include_re) or
 [`kerko.zotero.item_exclude_re`](#item_exclude_re) parameters.
 
-The `collection_key` parameter is only allowed when the [`type`](#type)
-parameter is set to `"collection"`.
+This parameter has no default value and is **required** for facets whose
+[`type`](#type) parameter is set to `"collection"`.
 
-Type: String
+Type: String <br>
 
 ### `enabled`
 
 Enable the facet.
 
-Type: Boolean
+Type: Boolean <br>
+Default value: depends on which facet you are looking at.
 
 ### `filter_key`
 
 Key to use in URLs when filtering with the facet.
 
-Type: String
+Type: String <br>
+Default value: depends on which facet you are looking at.
 
 ### `initial_limit`
 
@@ -395,7 +398,8 @@ Maximum number of filters to show by default under the facet. Excess filters
 will be shown if the user clicks a "view more" button. A value of `0` means no
 limit.
 
-Type: Integer
+Type: Integer <br>
+Default value: depends on which facet you are looking at.
 
 ### `initial_limit_leeway`
 
@@ -403,32 +407,37 @@ If the number of filters under the facet exceeds `initial_limit` by this
 tolerance margin or less, all filters will be shown. A value of `0` means no
 tolerance margin.
 
-Type: Integer
+Type: Integer <br>
+Default value: depends on which facet you are looking at.
 
 ### `item_view`
 
 Show the facet on item view pages.
 
-Type: Boolean
+Type: Boolean <br>
+Default value: depends on which facet you are looking at.
 
 ### `sort_by`
 
 List of criteria used for sorting the filters under the facet. Allowed values in
 this list are `"count"` and `"label"`.
 
-Type: Array of strings
+Type: Array of strings <br>
+Default value: depends on which facet you are looking at.
 
 ### `sort_reverse`
 
 Reverse the sort order of the filters under the facet.
 
-Type: Boolean
+Type: Boolean <br>
+Default value: depends on which facet you are looking at.
 
 ### `title`
 
 Heading of the facet.
 
-Type: String
+Type: String <br>
+Default value: depends on which facet you are looking at.
 
 ### `type`
 
@@ -438,6 +447,7 @@ Allowed values are:
 
 - `"collection"`: Use a Zotero collection as source.
 - `"item_type"`: Use the item type as source.
+- `"language"`: Use item Language field as source.
 - `"link"`: Use item URL field as source.
 - `"tag"`: Use Zotero tags as source.
 - `"year"`: Use the item year field as source.
@@ -451,7 +461,85 @@ Type: String
 Relative position of the facet in lists. Facets with low weights (small numbers)
 rise above heavier ones (large numbers).
 
-Type: Integer
+Type: Integer <br>
+Default value: depends on which facet you are looking at.
+
+## `kerko.facets.language.`
+
+The parameters in this section only apply to the `language` facet.
+
+Source values for the language facet are extracted from the Language field of
+Zotero items.
+
+### `allow_invalid`
+
+Allow values that are not found in the [pycountry] language database.
+
+This parameter has an effect only if [`normalize`](#normalize) is set to `true`.
+
+If this parameter is set to `true`, non-standard or badly entered language names
+will be allowed to appear in the language facet. You may find that you have to
+clean your data in Zotero if you wish to make the facet usable.
+
+If this parameter is set to `false`, non-standard or badly entered language
+names will be omitted from the language facet. The facet will only show
+recognized languages but may give an incomplete picture of all the languages
+present in your library.
+
+Type: Boolean <br>
+Default value: `true`
+
+### `locale`
+
+The locale to use when displaying language names in the language facet.
+Translations are provided by [pycountry].
+
+This parameter has an effect only if [`normalize`](#normalize) is set to `true`.
+
+Type: String <br>
+Default value: `"en"`
+
+### `normalize`
+
+Normalize language names using the [pycountry] language database.
+
+If this parameter is set to `true`, slight inconsistencies in your data can be
+attenuated, preventing unwanted duplicates in the facet. For example, values
+such as `fr`, `FR`, `fra`, `Fra`, `fre`, `fr-FR`, `fr-fr`, `fr-CA`, or `French`
+will all fall under a single `French` term in the facet. The normalization
+process is case insensitive, ignores country or area codes, and recognizes:
+
+- 3-letter ISO 639-3 language codes;
+- 3-letter ISO 639-2 bibliographic (B) codes;
+- 2-letter ISO 639-1 codes;
+- English language names.
+
+Terms not falling into any of the above categories will be considered invalid.
+To choose what to do with invalid terms, see the
+[`allow_invalid`](#allow_invalid) parameter.
+
+For the best results with the `normalize` option, we recommend that you record
+languages in Zotero using 2-letter ISO 639-1 codes (because they also happen to
+be [supported by the Citation Style Language][CSL_locale]), and 3-letter [ISO
+639-3] codes for languages not covered by ISO 639-1.
+
+If `normalize` is set to `false`, item language values will be used verbatim. In
+that case, the facet will work equally well if your language data is well
+controlled and consistent. This is the way to go if languages are consistently
+recorded using their non-English names in your Zotero library.
+
+Type: Boolean <br>
+Default value: `true`
+
+### `values_separator_re`
+
+[Regular expression] to use for splitting the content of Zotero's Language field
+into multiple languages, e.g., `en; de; it`. We do not necessarily recommend
+recording multiple languages in the Language field, but in practice some people
+do when describing multilingual resources.
+
+Type: String <br>
+Default value: `";"`
 
 ---
 
@@ -1390,12 +1478,16 @@ Type: Integer <br>
 Default value: `0`
 
 
+[CSL_locale]: https://github.com/citation-style-language/locales/wiki
 [environment variables]: config-basics.md#environment-variables
 [Ensuring full-text indexing of your attachments in Zotero]: config-guides.md#ensuring-full-text-indexing-of-your-attachments-in-zotero
+[Defining custom facets based on Zotero collections]: config-guides.md#defining-custom-facets-based-on-zotero-collections
 [Flask instance folder]: https://flask.palletsprojects.com/en/2.3.x/config/#instance-folders
 [Flask proxy]: https://flask.palletsprojects.com/en/2.3.x/deploying/proxy_fix/
+[ISO 639-3]: https://iso639-3.sil.org/code_tables/639/data/all
 [KerkoApp]: https://github.com/whiskyechobravo/kerkoapp
 [Python logging documentation]: https://docs.python.org/3/library/logging.html
+[pycountry]: https://github.com/pycountry/pycountry
 [pytz]: https://pypi.org/project/pytz/
 [Regular expression]: https://docs.python.org/3/library/re.html
 [synchronization commands]: synchronization.md#command-line-interface-cli

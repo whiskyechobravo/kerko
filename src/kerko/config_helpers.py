@@ -173,7 +173,7 @@ class ZoteroModel(BaseModel):
     max_attempts: int = Field(ge=1)
     wait: int = Field(ge=120)
     csl_style: str
-    locale: str = Field(regex=r"^[a-z]{2}-[A-Z]{2}$")
+    locale: str = Field(regex=r"^[a-z]{2,3}-[A-Za-z]+$")
     item_include_re: str
     item_exclude_re: str
     tag_include_re: str
@@ -308,6 +308,16 @@ class YearFacetModel(BaseFacetModel):
     item_view: bool = False
 
 
+class LanguageFacetModel(BaseFacetModel):
+    type: Literal["language"]  # noqa: A003
+    title: Optional[str]
+    item_view: bool = False
+    values_separator_re: str = Field(";", min_length=1)
+    normalize: bool = True
+    locale: str = Field("en", regex=r"^[a-z]{2,3}(-[A-Za-z]+)?$")
+    allow_invalid: bool = False
+
+
 class LinkFacetModel(BaseFacetModel):
     type: Literal["link"]  # noqa: A003
     title: Optional[str]
@@ -329,6 +339,7 @@ FacetModelUnion = Annotated[
         TagFacetModel,
         ItemTypeFacetModel,
         YearFacetModel,
+        LanguageFacetModel,
         LinkFacetModel,
         CollectionFacetModel,
     ],

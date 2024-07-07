@@ -810,6 +810,19 @@ whoosh_language = "en"
     sort_reverse = false
     item_view = false
 
+    [kerko.facets.language]
+    enabled = false
+    type = "language"
+    filter_key = "lang"
+    weight = 320
+    sort_by = ["label"]
+    sort_reverse = false
+    item_view = false
+    values_separator_re = ";"
+    normalize = true
+    locale = "en"
+    allow_invalid = true
+
     [kerko.facets.link]
     enabled = false
     type = "link"

@@ -2,12 +2,14 @@
 Functions for extracting data from Zotero items.
 """
 
+import gettext
 import itertools
 import re
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
 from datetime import datetime
 
+import pycountry
 from flask import current_app
 from markupsafe import Markup
 
@@ -106,8 +108,9 @@ class Extractor(ABC):
         if extracted_value is not None:
             document[spec.key] = self.encode(extracted_value, spec)
 
-    def warning(self, message, item):
-        current_app.logger.warning(f"{self.__class__.__name__}: {message} ({item.get('key')})")
+    def warning(self, message, item=None):
+        item_ref = f"({item.get('key')})" if item else ""
+        current_app.logger.warning(f"{self.__class__.__name__}: {message} {item_ref}")
 
 
 class TransformerExtractor(Extractor):
@@ -407,6 +410,119 @@ class TagsTextExtractor(BaseTagsExtractor):
     def extract(self, item, library_context, spec):
         tags = super().extract(item, library_context, spec)
         return RECORD_SEPARATOR.join(tags) if tags else None
+
+
+class LanguageExtractor(Extractor):
+    """
+    Extract item language(s) into tuples of ISO 639-3 code and language name.
+
+    This uses the language database and translations provided by the pycountry
+    library.
+    """
+
+    def __init__(
+        self,
+        *,
+        values_separator_re=r";",
+        normalize=True,
+        locale="en",
+        allow_invalid=True,
+        normalize_invalid=None,
+        **kwargs,
+    ):
+        """
+        Initialize the extractor.
+
+        :param str locale: Locale to translate normalized language names into.
+            Ignored when `normalize` is `False`.
+
+        :param str values_separator_re: Regular expression for separating
+            multiple values that may have been entered in an item's language
+            field.
+
+        :param bool normalize: If `True`, normalize values using the language
+            database. If `False`, values are used verbatim.
+
+        :param bool allow_invalid: If `True`, allow values that are not found in
+            the language database. Ignored when `normalize` is `False`.
+
+        :param normalize_invalid: Callable to use for normalizing the label when
+            the value is invalid. If `None`, then `str.title` will be used.
+        """
+        super().__init__(encode=encode_multiple, **kwargs)
+        self.values_separator = re.compile(values_separator_re)
+        self.normalize = normalize
+        self.locale = locale
+        self.allow_invalid = allow_invalid
+        self.normalize_invalid = normalize_invalid or str.title
+        self.translations = None
+        self.translations_initialized = False
+
+    def extract(self, item, library_context, spec):  # noqa: ARG002
+        """
+        Extract item language(s) into (value, label) tuples.
+
+        When normalizing, this looks into the language database to replace the
+        item's language value by its corresponding ISO 639-3 code and language
+        name. If the value has the form "lang-AREA", "AREA" is ignored when
+        searching a corresponding language. Matching is case-insensitive and
+        proceeds in the following order, stopping at the first match found:
+
+        1. Search a matching 3-letter code from ISO 639-3.
+        2. Search a matching 3-letter bibliographic (B) code from ISO 639-2.
+        3. Search a matching 2-letter code from ISO 639-1.
+        4. Search a matching English language name.
+
+        When a matching language is found, the encoded value uses the 3-letter
+        ISO 639-3 code, and the encoded label is the language name, translated
+        in the locale specified at initialization time.
+
+        When no matching language is found, the value is encoded in its
+        lowercase form, and the label is normalized using the `normalize_case`
+        callable specified at initialization time.
+        """
+        values = self.values_separator.split(item.get("data", {}).get("language", ""))
+        if self.normalize:
+            values = [self.normalize_language(value) for value in values]
+        else:
+            values = [(value.strip(), value.strip()) for value in values if value]
+        # Going through a dict.fromkeys() to eliminate duplicates while preserving ordering.
+        return [value for value in dict.fromkeys(values).keys() if value] or None
+
+    def normalize_language(self, value):
+        value = value.strip()
+        lang = value.split("-", maxsplit=1)[0]
+        match = None
+        if len(lang) == 3:  # noqa: PLR2004
+            match = pycountry.languages.get(alpha_3=lang)
+            if not match:
+                match = pycountry.languages.get(bibliographic=lang)
+        elif len(lang) == 2:  # noqa: PLR2004
+            match = pycountry.languages.get(alpha_2=lang)
+        else:
+            match = pycountry.languages.get(name=value)
+        if match:
+            return (match.alpha_3, self.translate_language(match.name))
+        if value and self.allow_invalid:
+            return (value.lower(), self.normalize_invalid(value))
+        return None
+
+    def translate_language(self, name):
+        if not self.translations_initialized:
+            locale = self.locale.replace("-", "_")
+            try:
+                if locale.split("_", maxsplit=1)[0].strip() != "en":
+                    self.translations = gettext.translation(
+                        "iso639-3", pycountry.LOCALES_DIR, languages=[locale]
+                    )
+            except FileNotFoundError:
+                self.warning(f"No language translations found in pycountry for locale '{locale}'.")
+            finally:
+                self.translations_initialized = True
+
+        if self.translations:
+            return self.translations.gettext(name)
+        return name
 
 
 class BaseChildrenExtractor(Extractor):

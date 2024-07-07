@@ -109,6 +109,12 @@ Some frequently used commands are:
     parameters, and you will usually want to run `flask kerko sync index`
     immediately after.
 
+`flask kerko config`
+
+: Output a consolidated view of all configuration parameters, from all of your
+  configuration files, and including the defaults provided by Kerko that you may
+  not have explicitly configured.
+
 
 ## Monitoring data synchronization
 

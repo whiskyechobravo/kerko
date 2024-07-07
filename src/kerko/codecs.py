@@ -63,7 +63,7 @@ class BaseFacetCodec:
         """
         return value
 
-    def decode(self, encoded_value, _default_value=None, _default_label=None):
+    def decode(self, encoded_value, default_value=None, default_label=None):  # noqa: ARG002
         """
         Decode the given value into its original value and label components.
 
@@ -94,7 +94,7 @@ class BooleanFacetCodec(BaseFacetCodec):
         self.true_label = true_label
         self.false_label = false_label
 
-    def decode(self, encoded_value, _default_value=None, _default_label=None):
+    def decode(self, encoded_value, default_value=None, default_label=None):  # noqa: ARG002
         # Note: explicit encode not necessary as Whoosh automatically encodes
         # booleans as 't' or 'f' values. However the value returned by Whoosh
         # is not consistent whether it comes from group (faceting) results
@@ -114,6 +114,19 @@ class LabelFacetCodec(BaseFacetCodec):
         super().__init__(**kwargs)
         self.label_separator = label_separator
 
+    def encode(self, value):
+        """
+        Encode a (value, label) tuple into a proper string for faceting.
+
+        The label is not needed for facet queries, but is appended to the value
+        for display purposes, to avoid extra queries at search time for getting
+        those labels.
+
+        :param value: A (value, label) tuple.
+        """
+        value, label = value
+        return value + self.label_separator + label
+
     def decode(self, encoded_value, default_value=None, default_label=None):
         if not encoded_value:
             return default_value, default_label
@@ -121,6 +134,21 @@ class LabelFacetCodec(BaseFacetCodec):
             value, label = encoded_value.split(self.label_separator, 1)
             return value, label
         return encoded_value, encoded_value
+
+    def transform_for_query(self, value):
+        """
+        Transform a value before use in a query.
+
+        This assumes a Prefix query is being performed.
+
+        Encoded item type values are composed of the query value, a separator,
+        and the label. Queries normally search by prefix to search the value and
+        ignore the label. However, some values may be a prefix of others (e.g.
+        "book" is a prefix of "bookSection"). To avoid these ambiguities, this
+        method transforms the query value to include the separator (e.g. "book:"
+        and "bookSection:").
+        """
+        return value + self.label_separator
 
 
 class CollectionFacetCodec(LabelFacetCodec):
@@ -149,34 +177,6 @@ class ItemTypeFacetCodec(LabelFacetCodec):
     def __init__(self, **kwargs):
         kwargs.setdefault("label_separator", ":")
         super().__init__(**kwargs)
-
-    def encode(self, value):
-        """
-        Encode an item type name into a proper string for faceting.
-
-        The item type name is stored as-is, but its label is appended for
-        display purposes since we do not want to query Zotero at search time to
-        get those labels.
-
-        :param value: A (value, label) tuple.
-        """
-        value, label = value
-        return value + self.label_separator + label
-
-    def transform_for_query(self, value):
-        """
-        Transform a value before use in a query.
-
-        This assumes a Prefix query is being performed.
-
-        Encoded item type values are composed of the query value, a separator,
-        and the label. Queries normally search by prefix to search the value
-        and ignore the label. However, some values are a prefix of others (e.g.
-        "book" is a prefix of "bookSection"). To avoid these ambiguities, this
-        method transforms the query value to include the separator (e.g.
-        "book:" and "bookSection:").
-        """
-        return value + self.label_separator
 
 
 class YearTreeFacetCodec(BaseFacetCodec):

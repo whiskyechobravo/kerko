@@ -10,8 +10,7 @@ from werkzeug.datastructures import MultiDict
 from whoosh.fields import ID
 from whoosh.query import Prefix, Term
 
-from kerko import extractors, renderers
-from kerko.codecs import BaseFacetCodec, CollectionFacetCodec, IdentityFieldCodec
+from kerko import codecs, extractors, renderers
 from kerko.text import slugify, sort_normalize
 from kerko.tree import Tree
 
@@ -107,7 +106,7 @@ class FieldSpec(BaseFieldSpec):
         """
         super().__init__(**kwargs)
         self.scopes = scopes or []
-        self.codec = codec or IdentityFieldCodec()
+        self.codec = codec or codecs.IdentityFieldCodec()
 
     def encode(self, value):
         return self.codec.encode(value)
@@ -159,7 +158,7 @@ class FacetSpec(BaseFieldSpec):
         :param str missing_label: Label to use for items that do not have any
             value for this facet. Defaults to `None` (show no label at all).
 
-        :param BaseFacetCodec codec: Value encoder/decoder for this facet.
+        :param codecs.BaseFacetCodec codec: Value encoder/decoder for this facet.
 
         :param bool item_view: Show this facet on item view pages.
 
@@ -183,7 +182,7 @@ class FacetSpec(BaseFieldSpec):
         self.weight = weight
         self.initial_limit = initial_limit
         self.initial_limit_leeway = initial_limit_leeway
-        self.codec = codec or BaseFacetCodec()
+        self.codec = codec or codecs.BaseFacetCodec()
         self.missing_label = missing_label
         self.sort_by = sort_by
         self.sort_reverse = sort_reverse
@@ -485,6 +484,32 @@ class TreeFacetSpec(FacetSpec):
         return self.sort_tree(tree)
 
 
+class LanguageFacetSpec(FlatFacetSpec):
+    """
+    Specifies a facet based on the Zotero language field.
+    """
+
+    def __init__(
+        self, *, values_separator_re=";", normalize=True, locale="en", allow_invalid=True, **kwargs
+    ):
+        # Provide some convenient defaults for this type of facet.
+        kwargs.setdefault("field_type", ID(stored=True))
+        kwargs.setdefault("filter_key", "lang")
+        kwargs.setdefault(
+            "extractor",
+            extractors.LanguageExtractor(
+                values_separator_re=values_separator_re,
+                normalize=normalize,
+                locale=locale,
+                allow_invalid=allow_invalid,
+            ),
+        )
+        kwargs.setdefault("codec", codecs.LabelFacetCodec(label_separator=" "))
+        kwargs.setdefault("allow_overlap", True)
+        kwargs.setdefault("query_class", Prefix)
+        super().__init__(**kwargs)
+
+
 class CollectionFacetSpec(TreeFacetSpec):
     """
     Specifies a facet based on a top-level Zotero collection.
@@ -498,7 +523,7 @@ class CollectionFacetSpec(TreeFacetSpec):
         kwargs.setdefault("key", f"facet_collection_{collection_key}")
         kwargs.setdefault("field_type", ID(stored=True))
         kwargs.setdefault("filter_key", slugify(str(kwargs.get("title"))))
-        kwargs.setdefault("codec", CollectionFacetCodec())
+        kwargs.setdefault("codec", codecs.CollectionFacetCodec())
         kwargs.setdefault("query_class", Prefix)
         kwargs.setdefault("extractor", extractors.CollectionFacetTreeExtractor())
         super().__init__(**kwargs)

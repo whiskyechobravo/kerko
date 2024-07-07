@@ -5,11 +5,20 @@ documentation.
 
 ## Unreleased changes
 
+Features:
+
+- Add the "Language" facet. It is disabled by default, but can be enabled by
+  setting the `kerko.facets.language.enabled` configuration parameter to `true`.
+  By default, Kerko will try to normalize the language names to make the facet
+  more usable; see `kerko.facets.language.` in the configuration parameters
+  documentation for details.
+
 Backwards incompatible changes:
 
-- The Python variable `kerko.TRANSLATION_DIRECTORIES` is now
-  `kerko.TRANSLATION_DIRECTORY`, and a string instead of a list. If you have a
-  custom application, you may need to adapt your Babel configuration.
+- The Python variable `kerko.TRANSLATION_DIRECTORIES` is renamed to
+  `kerko.TRANSLATION_DIRECTORY`, and its type is a string instead of a list. If
+  you have a custom application, you may need to adapt it accordingly (check
+  KerkoApp for an example).
 
 Other changes:
 

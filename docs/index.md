@@ -80,39 +80,40 @@ The main features provided by Kerko are:
   interface, it is possible to combine them.
 - **Keyword search** features:
     - Boolean operators:
-        - `AND`: matches items that contain all specified terms. This is the default
-        relation between terms when no operator is specified, e.g., `a b` is the
-        same as `a AND b`.
-        - `OR`: matches items that contain any of the specified terms, e.g., `a OR
-        b`.
+        - `AND`: matches items that contain all specified terms. This is the
+          default relation between terms when no operator is specified, e.g.,
+          `a b` is the same as `a AND b`.
+        - `OR`: matches items that contain any of the specified terms, e.g.,
+          `a OR b`.
         - `NOT`: excludes items that match the term, e.g., `NOT a`.
-        - Boolean operators must be specified in uppercase and may be translated in
-        other languages.
+        - Boolean operators must be specified in uppercase and may be translated
+          in other languages.
     - Logical grouping (with parentheses), e.g., `(a OR b) AND c`.
     - Sequence of words (with double quotes), e.g., `"a b c"`. The default
-        difference between word positions is 1, meaning that an item will match if
-        it contains the words next to each other, but a different maximum distance
-        may be selected (with the tilde character), e.g. `"web search"~2` allows up
-        to 1 word between `web` and `search`, meaning it could match `web site
-        search` as well as `web search`.
+      difference between word positions is 1, meaning that an item will match if
+      it contains the words next to each other, but a different maximum distance
+      may be selected (with the tilde character), e.g. `"web search"~2` allows
+      up to 1 word between `web` and `search`, meaning it could match `web site
+      search` as well as `web search`.
     - Term boosting (with the caret), e.g., `faceted^2 search browsing^0.5`
-        specifies that `faceted` is twice as important as `search` when computing
-        the relevance score of results, while `browsing` is half as important.
-        Boosting may be applied to a logical grouping, e.g., `(a b)^3 c`.
+      specifies that `faceted` is twice as important as `search` when computing
+      the relevance score of results, while `browsing` is half as important.
+      Boosting may be applied to a logical grouping, e.g., `(a b)^3 c`.
     - Keyword search is case-insensitive, accents are folded, and punctuation is
-        ignored. To further improve recall (albeit at the cost of precision),
-        stemming is also performed on terms from most text fields, e.g., title,
-        abstract, notes. Stemming relieves the user from having to specify all
-        variants of a word when searching, e.g., terms such as `search`, `searches`,
-        and `searching` all return the same results. The [Snowball] algorithm is
-        used for that purpose.
+      ignored. To further improve recall (albeit at the cost of precision),
+      stemming is also performed on terms from most text fields, e.g., title,
+      abstract, notes. Stemming relieves the user from having to specify all
+      variants of a word when searching, e.g., terms such as `search`,
+      `searches`, and `searching` all return the same results. The [Snowball]
+      algorithm is used for that purpose.
     - Full-text search: the text content of PDF attachments can be searched.
     - Scope of search: users may choose to search everywhere, in
-        author/contributor names, in titles, in all fields (i.e., in metadata and
-        notes), or in documents (i.e., in the text content of attachments).
-        Applications may provide additional choices.
+      author/contributor names, in titles, in publication years, in all fields
+      (i.e., in metadata and notes), or in documents (i.e., in the text content
+      of attachments). Applications may provide additional choices.
 - **Faceted browsing**: allows filtering by topic (Zotero tag), by resource type
-  (Zotero item type), by publication year. Moreover, you may define [additional
+  (Zotero item type), by publication year, or by resource language. Moreover,
+  you may define [additional
   facets](config-guides.md#defining-custom-facets-based-on-zotero-collections)
   modeled on collections and subcollections; in such case, any collection can be
   represented as a facet, and each subcollection as a value within that facet.
@@ -192,7 +193,7 @@ The main features provided by Kerko are:
   through notes (see [
   guide](config-guides.md#providing-cites-and-cited-by-relations)). Custom
   applications can add more types of relations if desired.
-- **Pages**: simple informational pages can be defined using content from Zotero
+- **Pages**: basic informational pages can be defined using content from Zotero
   standalone notes (see
   [guide](config-guides.md#creating-custom-content-pages-based-on-zotero-standalone-notes)).
 - **Badges**: custom applications can have icons conditionally displayed next to

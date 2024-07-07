@@ -21,6 +21,7 @@ from kerko.specs import (
     FacetSpec,
     FieldSpec,
     FlatFacetSpec,
+    LanguageFacetSpec,
     LinkGroupSpec,
     PageSpec,
     RelationSpec,
@@ -630,6 +631,15 @@ class Composer:
                             missing_label=_("Unknown"),  # TODO:config: Allow in config.
                             allow_overlap=True,
                             query_class=Prefix,
+                            **kwargs,
+                        )
+                    )
+                elif facet_type == "language":
+                    self.add_facet(
+                        LanguageFacetSpec(
+                            key=f"facet_{facet_key}",
+                            title=facet_config.get("title") or _("Language"),
+                            missing_label=None,  # TODO:config: Allow in config.
                             **kwargs,
                         )
                     )
