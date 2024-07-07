@@ -780,43 +780,44 @@ source data for the demo site.</p>
   interface, it is possible to combine them.</li>
 <li><strong>Keyword search</strong> features:<ul>
 <li>Boolean operators:<ul>
-<li><code>AND</code>: matches items that contain all specified terms. This is the default
-relation between terms when no operator is specified, e.g., <code>a b</code> is the
-same as <code>a AND b</code>.</li>
-<li><code>OR</code>: matches items that contain any of the specified terms, e.g., <code>a OR
-b</code>.</li>
+<li><code>AND</code>: matches items that contain all specified terms. This is the
+  default relation between terms when no operator is specified, e.g.,
+  <code>a b</code> is the same as <code>a AND b</code>.</li>
+<li><code>OR</code>: matches items that contain any of the specified terms, e.g.,
+  <code>a OR b</code>.</li>
 <li><code>NOT</code>: excludes items that match the term, e.g., <code>NOT a</code>.</li>
-<li>Boolean operators must be specified in uppercase and may be translated in
-other languages.</li>
+<li>Boolean operators must be specified in uppercase and may be translated
+  in other languages.</li>
 </ul>
 </li>
 <li>Logical grouping (with parentheses), e.g., <code>(a OR b) AND c</code>.</li>
 <li>Sequence of words (with double quotes), e.g., <code>"a b c"</code>. The default
-    difference between word positions is 1, meaning that an item will match if
-    it contains the words next to each other, but a different maximum distance
-    may be selected (with the tilde character), e.g. <code>"web search"~2</code> allows up
-    to 1 word between <code>web</code> and <code>search</code>, meaning it could match <code>web site
-    search</code> as well as <code>web search</code>.</li>
+  difference between word positions is 1, meaning that an item will match if
+  it contains the words next to each other, but a different maximum distance
+  may be selected (with the tilde character), e.g. <code>"web search"~2</code> allows
+  up to 1 word between <code>web</code> and <code>search</code>, meaning it could match <code>web site
+  search</code> as well as <code>web search</code>.</li>
 <li>Term boosting (with the caret), e.g., <code>faceted^2 search browsing^0.5</code>
-    specifies that <code>faceted</code> is twice as important as <code>search</code> when computing
-    the relevance score of results, while <code>browsing</code> is half as important.
-    Boosting may be applied to a logical grouping, e.g., <code>(a b)^3 c</code>.</li>
+  specifies that <code>faceted</code> is twice as important as <code>search</code> when computing
+  the relevance score of results, while <code>browsing</code> is half as important.
+  Boosting may be applied to a logical grouping, e.g., <code>(a b)^3 c</code>.</li>
 <li>Keyword search is case-insensitive, accents are folded, and punctuation is
-    ignored. To further improve recall (albeit at the cost of precision),
-    stemming is also performed on terms from most text fields, e.g., title,
-    abstract, notes. Stemming relieves the user from having to specify all
-    variants of a word when searching, e.g., terms such as <code>search</code>, <code>searches</code>,
-    and <code>searching</code> all return the same results. The <a href="https://snowballstem.org/">Snowball</a> algorithm is
-    used for that purpose.</li>
+  ignored. To further improve recall (albeit at the cost of precision),
+  stemming is also performed on terms from most text fields, e.g., title,
+  abstract, notes. Stemming relieves the user from having to specify all
+  variants of a word when searching, e.g., terms such as <code>search</code>,
+  <code>searches</code>, and <code>searching</code> all return the same results. The <a href="https://snowballstem.org/">Snowball</a>
+  algorithm is used for that purpose.</li>
 <li>Full-text search: the text content of PDF attachments can be searched.</li>
 <li>Scope of search: users may choose to search everywhere, in
-    author/contributor names, in titles, in all fields (i.e., in metadata and
-    notes), or in documents (i.e., in the text content of attachments).
-    Applications may provide additional choices.</li>
+  author/contributor names, in titles, in publication years, in all fields
+  (i.e., in metadata and notes), or in documents (i.e., in the text content
+  of attachments). Applications may provide additional choices.</li>
 </ul>
 </li>
 <li><strong>Faceted browsing</strong>: allows filtering by topic (Zotero tag), by resource type
-  (Zotero item type), by publication year. Moreover, you may define <a href="config-guides/#defining-custom-facets-based-on-zotero-collections">additional
+  (Zotero item type), by publication year, or by resource language. Moreover,
+  you may define <a href="config-guides/#defining-custom-facets-based-on-zotero-collections">additional
   facets</a>
   modeled on collections and subcollections; in such case, any collection can be
   represented as a facet, and each subcollection as a value within that facet.
@@ -900,7 +901,7 @@ other languages.</li>
   through notes (see <a href="config-guides/#providing-cites-and-cited-by-relations">
   guide</a>). Custom
   applications can add more types of relations if desired.</li>
-<li><strong>Pages</strong>: simple informational pages can be defined using content from Zotero
+<li><strong>Pages</strong>: basic informational pages can be defined using content from Zotero
   standalone notes (see
   <a href="config-guides/#creating-custom-content-pages-based-on-zotero-standalone-notes">guide</a>).</li>
 <li><strong>Badges</strong>: custom applications can have icons conditionally displayed next to

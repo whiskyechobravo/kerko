@@ -734,6 +734,57 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#kerkofacetslanguage" class="md-nav__link">
+    <span class="md-ellipsis">
+      kerko.facets.language.
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="kerko.facets.language.">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#allow_invalid" class="md-nav__link">
+    <span class="md-ellipsis">
+      allow_invalid
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#locale" class="md-nav__link">
+    <span class="md-ellipsis">
+      locale
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#normalize" class="md-nav__link">
+    <span class="md-ellipsis">
+      normalize
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#values_separator_re" class="md-nav__link">
+    <span class="md-ellipsis">
+      values_separator_re
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#kerkofeatures" class="md-nav__link">
     <span class="md-ellipsis">
       kerko.features.
@@ -1545,7 +1596,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#locale" class="md-nav__link">
+  <a href="#locale_1" class="md-nav__link">
     <span class="md-ellipsis">
       locale
     </span>
@@ -2209,6 +2260,57 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#kerkofacetslanguage" class="md-nav__link">
+    <span class="md-ellipsis">
+      kerko.facets.language.
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="kerko.facets.language.">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#allow_invalid" class="md-nav__link">
+    <span class="md-ellipsis">
+      allow_invalid
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#locale" class="md-nav__link">
+    <span class="md-ellipsis">
+      locale
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#normalize" class="md-nav__link">
+    <span class="md-ellipsis">
+      normalize
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#values_separator_re" class="md-nav__link">
+    <span class="md-ellipsis">
+      values_separator_re
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#kerkofeatures" class="md-nav__link">
     <span class="md-ellipsis">
       kerko.features.
@@ -3020,7 +3122,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#locale" class="md-nav__link">
+  <a href="#locale_1" class="md-nav__link">
     <span class="md-ellipsis">
       locale
     </span>
@@ -3417,17 +3519,18 @@ Default value: <code>10</code></p>
 key is used internally by Kerko to identify the facet.</p>
 <p>The default facets are:</p>
 <ul>
-<li><code>item_type</code></li>
-<li><code>link</code></li>
-<li><code>tag</code></li>
-<li><code>year</code></li>
+<li><code>item_type</code> (item types facet, enabled by default)</li>
+<li><code>language</code> (item languages facet, disabled by default)</li>
+<li><code>link</code> (items with links facet, disabled by default)</li>
+<li><code>tag</code> (item tags facet, enabled by default)</li>
+<li><code>year</code> (item years facet, enabled by default)</li>
 </ul>
-<p>You may define additional facets.</p>
+<p>You may define additional facets. See <a href="../config-guides/#defining-custom-facets-based-on-zotero-collections">Defining custom facets based on Zotero collections</a>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Modifies the search index</p>
-<p>Changing any of the <code>kerko.facets.*</code> parameters will require that you run
-the <code>clean index</code> and <code>sync index</code> commands. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a>
-for details.</p>
+<p>Most of the <code>kerko.facets.*</code> parameters require that you run the
+<code>clean index</code> and <code>sync index</code> commands after you have changed them.
+See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
 </div>
 <h3 id="collection_key"><code>collection_key</code><a class="headerlink" href="#collection_key" title="Permanent link">&para;</a></h3>
 <p>Key of the Zotero collection to map the facet to. This must refer to a
@@ -3436,44 +3539,53 @@ subcollections</strong>. Each subcollection will be mapped to a filter under the
 if it contains at least one item that is not excluded through the
 <a href="#item_include_re"><code>kerko.zotero.item_include_re</code></a> or
 <a href="#item_exclude_re"><code>kerko.zotero.item_exclude_re</code></a> parameters.</p>
-<p>The <code>collection_key</code> parameter is only allowed when the <a href="#type"><code>type</code></a>
-parameter is set to <code>"collection"</code>.</p>
-<p>Type: String</p>
+<p>This parameter has no default value and is <strong>required</strong> for facets whose
+<a href="#type"><code>type</code></a> parameter is set to <code>"collection"</code>.</p>
+<p>Type: String <br></p>
 <h3 id="enabled_2"><code>enabled</code><a class="headerlink" href="#enabled_2" title="Permanent link">&para;</a></h3>
 <p>Enable the facet.</p>
-<p>Type: Boolean</p>
+<p>Type: Boolean <br>
+Default value: depends on which facet you are looking at.</p>
 <h3 id="filter_key"><code>filter_key</code><a class="headerlink" href="#filter_key" title="Permanent link">&para;</a></h3>
 <p>Key to use in URLs when filtering with the facet.</p>
-<p>Type: String</p>
+<p>Type: String <br>
+Default value: depends on which facet you are looking at.</p>
 <h3 id="initial_limit"><code>initial_limit</code><a class="headerlink" href="#initial_limit" title="Permanent link">&para;</a></h3>
 <p>Maximum number of filters to show by default under the facet. Excess filters
 will be shown if the user clicks a "view more" button. A value of <code>0</code> means no
 limit.</p>
-<p>Type: Integer</p>
+<p>Type: Integer <br>
+Default value: depends on which facet you are looking at.</p>
 <h3 id="initial_limit_leeway"><code>initial_limit_leeway</code><a class="headerlink" href="#initial_limit_leeway" title="Permanent link">&para;</a></h3>
 <p>If the number of filters under the facet exceeds <code>initial_limit</code> by this
 tolerance margin or less, all filters will be shown. A value of <code>0</code> means no
 tolerance margin.</p>
-<p>Type: Integer</p>
+<p>Type: Integer <br>
+Default value: depends on which facet you are looking at.</p>
 <h3 id="item_view"><code>item_view</code><a class="headerlink" href="#item_view" title="Permanent link">&para;</a></h3>
 <p>Show the facet on item view pages.</p>
-<p>Type: Boolean</p>
+<p>Type: Boolean <br>
+Default value: depends on which facet you are looking at.</p>
 <h3 id="sort_by"><code>sort_by</code><a class="headerlink" href="#sort_by" title="Permanent link">&para;</a></h3>
 <p>List of criteria used for sorting the filters under the facet. Allowed values in
 this list are <code>"count"</code> and <code>"label"</code>.</p>
-<p>Type: Array of strings</p>
+<p>Type: Array of strings <br>
+Default value: depends on which facet you are looking at.</p>
 <h3 id="sort_reverse"><code>sort_reverse</code><a class="headerlink" href="#sort_reverse" title="Permanent link">&para;</a></h3>
 <p>Reverse the sort order of the filters under the facet.</p>
-<p>Type: Boolean</p>
+<p>Type: Boolean <br>
+Default value: depends on which facet you are looking at.</p>
 <h3 id="title"><code>title</code><a class="headerlink" href="#title" title="Permanent link">&para;</a></h3>
 <p>Heading of the facet.</p>
-<p>Type: String</p>
+<p>Type: String <br>
+Default value: depends on which facet you are looking at.</p>
 <h3 id="type"><code>type</code><a class="headerlink" href="#type" title="Permanent link">&para;</a></h3>
 <p>Type of facet. Determines the data source of the facet.</p>
 <p>Allowed values are:</p>
 <ul>
 <li><code>"collection"</code>: Use a Zotero collection as source.</li>
 <li><code>"item_type"</code>: Use the item type as source.</li>
+<li><code>"language"</code>: Use item Language field as source.</li>
 <li><code>"link"</code>: Use item URL field as source.</li>
 <li><code>"tag"</code>: Use Zotero tags as source.</li>
 <li><code>"year"</code>: Use the item year field as source.</li>
@@ -3483,7 +3595,63 @@ this list are <code>"count"</code> and <code>"label"</code>.</p>
 <h3 id="weight_1"><code>weight</code><a class="headerlink" href="#weight_1" title="Permanent link">&para;</a></h3>
 <p>Relative position of the facet in lists. Facets with low weights (small numbers)
 rise above heavier ones (large numbers).</p>
-<p>Type: Integer</p>
+<p>Type: Integer <br>
+Default value: depends on which facet you are looking at.</p>
+<h2 id="kerkofacetslanguage"><code>kerko.facets.language.</code><a class="headerlink" href="#kerkofacetslanguage" title="Permanent link">&para;</a></h2>
+<p>The parameters in this section only apply to the <code>language</code> facet.</p>
+<p>Source values for the language facet are extracted from the Language field of
+Zotero items.</p>
+<h3 id="allow_invalid"><code>allow_invalid</code><a class="headerlink" href="#allow_invalid" title="Permanent link">&para;</a></h3>
+<p>Allow values that are not found in the <a href="https://github.com/pycountry/pycountry">pycountry</a> language database.</p>
+<p>This parameter has an effect only if <a href="#normalize"><code>normalize</code></a> is set to <code>true</code>.</p>
+<p>If this parameter is set to <code>true</code>, non-standard or badly entered language names
+will be allowed to appear in the language facet. You may find that you have to
+clean your data in Zotero if you wish to make the facet usable.</p>
+<p>If this parameter is set to <code>false</code>, non-standard or badly entered language
+names will be omitted from the language facet. The facet will only show
+recognized languages but may give an incomplete picture of all the languages
+present in your library.</p>
+<p>Type: Boolean <br>
+Default value: <code>true</code></p>
+<h3 id="locale"><code>locale</code><a class="headerlink" href="#locale" title="Permanent link">&para;</a></h3>
+<p>The locale to use when displaying language names in the language facet.
+Translations are provided by <a href="https://github.com/pycountry/pycountry">pycountry</a>.</p>
+<p>This parameter has an effect only if <a href="#normalize"><code>normalize</code></a> is set to <code>true</code>.</p>
+<p>Type: String <br>
+Default value: <code>"en"</code></p>
+<h3 id="normalize"><code>normalize</code><a class="headerlink" href="#normalize" title="Permanent link">&para;</a></h3>
+<p>Normalize language names using the <a href="https://github.com/pycountry/pycountry">pycountry</a> language database.</p>
+<p>If this parameter is set to <code>true</code>, slight inconsistencies in your data can be
+attenuated, preventing unwanted duplicates in the facet. For example, values
+such as <code>fr</code>, <code>FR</code>, <code>fra</code>, <code>Fra</code>, <code>fre</code>, <code>fr-FR</code>, <code>fr-fr</code>, <code>fr-CA</code>, or <code>French</code>
+will all fall under a single <code>French</code> term in the facet. The normalization
+process is case insensitive, ignores country or area codes, and recognizes:</p>
+<ul>
+<li>3-letter ISO 639-3 language codes;</li>
+<li>3-letter ISO 639-2 bibliographic (B) codes;</li>
+<li>2-letter ISO 639-1 codes;</li>
+<li>English language names.</li>
+</ul>
+<p>Terms not falling into any of the above categories will be considered invalid.
+To choose what to do with invalid terms, see the
+<a href="#allow_invalid"><code>allow_invalid</code></a> parameter.</p>
+<p>For the best results with the <code>normalize</code> option, we recommend that you record
+languages in Zotero using 2-letter ISO 639-1 codes (because they also happen to
+be <a href="https://github.com/citation-style-language/locales/wiki">supported by the Citation Style Language</a>), and 3-letter <a href="https://iso639-3.sil.org/code_tables/639/data/all">ISO
+639-3</a> codes for languages not covered by ISO 639-1.</p>
+<p>If <code>normalize</code> is set to <code>false</code>, item language values will be used verbatim. In
+that case, the facet will work equally well if your language data is well
+controlled and consistent. This is the way to go if languages are consistently
+recorded using their non-English names in your Zotero library.</p>
+<p>Type: Boolean <br>
+Default value: <code>true</code></p>
+<h3 id="values_separator_re"><code>values_separator_re</code><a class="headerlink" href="#values_separator_re" title="Permanent link">&para;</a></h3>
+<p><a href="https://docs.python.org/3/library/re.html">Regular expression</a> to use for splitting the content of Zotero's Language field
+into multiple languages, e.g., <code>en; de; it</code>. We do not necessarily recommend
+recording multiple languages in the Language field, but in practice some people
+do when describing multilingual resources.</p>
+<p>Type: String <br>
+Default value: <code>";"</code></p>
 <hr />
 <h2 id="kerkofeatures"><code>kerko.features.</code><a class="headerlink" href="#kerkofeatures" title="Permanent link">&para;</a></h2>
 <h3 id="download_attachment_new_window"><code>download_attachment_new_window</code><a class="headerlink" href="#download_attachment_new_window" title="Permanent link">&para;</a></h3>
@@ -4022,7 +4190,7 @@ Default value: <code>""</code></p>
 <p>Changing this parameter will require that you run the <code>sync index --full</code>
 and <code>sync attachments</code> commands. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
 </div>
-<h3 id="locale"><code>locale</code><a class="headerlink" href="#locale" title="Permanent link">&para;</a></h3>
+<h3 id="locale_1"><code>locale</code><a class="headerlink" href="#locale_1" title="Permanent link">&para;</a></h3>
 <p>The locale to use with Zotero API calls. This dictates the locale of Zotero item
 types, field names, creator types and citations.
 Supported locales are listed at https://api.zotero.org/schema, under "locales".</p>
