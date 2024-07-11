@@ -7,11 +7,11 @@ documentation.
 
 Features:
 
-- Add the "Language" facet. It is disabled by default, but can be enabled by
-  setting the `kerko.facets.language.enabled` configuration parameter to `true`.
-  By default, Kerko will try to normalize the language names to make the facet
-  more usable; see `kerko.facets.language.` in the configuration parameters
-  documentation for details.
+- Add the "Resource language" facet. It is disabled by default, but can be
+  enabled by setting the `kerko.facets.language.enabled` configuration parameter
+  to `true`. By default, Kerko will try to normalize the language names to make
+  the facet more usable; see `kerko.facets.language.` in the configuration
+  parameters documentation for details.
 
 Backwards incompatible changes:
 
@@ -22,6 +22,13 @@ Backwards incompatible changes:
 
 Other changes:
 
+- Change the default configuration for some parameters:
+    - `kerko.facets.item_type.initial_limit`, now `10` instead of `0`.
+    - `kerko.facets.item_type.initial_limit_leeway`, now `4` instead of `2`.
+    - `kerko.facets.link.initial_limit_leeway`, now `0` instead of `2`.
+    - `kerko.facets.tag.initial_limit`, now `10` instead of `0`.
+    - `kerko.facets.tag.initial_limit_leeway`, now `4` instead of `2`.
+    - `kerko.facets.year.initial_limit_leeway`, now `0` instead of `2`.
 - Improve documentation.
 - Reduce XML sitemaps size.
 
