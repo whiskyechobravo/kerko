@@ -717,26 +717,21 @@ msgstr "Lesen"
 msgid "Last update from database: {}"
 msgstr "Letztes Update der Datenbank: {}"
 
-#: kerko/templates/kerko/search.html.jinja2:162
-msgid ""
-"\n"
-"                <p>Suggestions:</p>\n"
-"                <ul>\n"
-"                    <li>Make sure that all words are spelled "
-"correctly.</li>\n"
-"                    <li>Try different words.</li>\n"
-"                    <li>Try more general terms.</li>\n"
-"                </ul>"
-msgstr ""
-"\n"
-"                <p>Vorschläge:</p>\n"
-"                <ul>\n"
-"                    <li>Stellen Sie sicher, dass alle Wörter richtig "
-"geschrieben sind.</li>\n"
-"                    <li>Probieren Sie andere Suchbegriffe aus.</li>\n"
-"                    <li>Versuchen Sie es mit allgemeineren Suchbegriffen."
-"</li>\n"
-"                </ul>"
+#: src/kerko/templates/kerko/search.html.jinja2:166
+msgid "Suggestions:"
+msgstr "Vorschläge:"
+
+#: src/kerko/templates/kerko/search.html.jinja2:168
+msgid "Make sure that all words are spelled correctly."
+msgstr "Stellen Sie sicher, dass alle Wörter richtig geschrieben sind."
+
+#: src/kerko/templates/kerko/search.html.jinja2:169
+msgid "Try different words."
+msgstr "Probieren Sie andere Suchbegriffe aus."
+
+#: src/kerko/templates/kerko/search.html.jinja2:170
+msgid "Try more general terms."
+msgstr "Versuchen Sie es mit allgemeineren Suchbegriffen."
 
 #: kerko/templates/kerko/search.html.jinja2:190
 #: kerko/templates/kerko/search.html.jinja2:196

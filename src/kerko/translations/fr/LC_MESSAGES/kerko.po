@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Kerko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-20 10:25-0400\n"
-"PO-Revision-Date: 2024-04-20 10:25-0400\n"
+"POT-Creation-Date: 2024-07-11 11:22-0400\n"
+"PO-Revision-Date: 2024-07-11 11:22-0400\n"
 "Last-Translator: David Lesieur <kerko@whiskyechobravo.com>\n"
 "Language: fr\n"
 "Language-Team: fr <kerko@whiskyechobravo.com>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.15.0\n"
 
 #: src/kerko/codecs.py:91
 msgid "yes"
@@ -34,31 +34,31 @@ msgstr "En {}"
 msgid "Between {} and {}"
 msgstr "Entre {} et {}"
 
-#: src/kerko/composer.py:104 src/kerko/composer.py:112
+#: src/kerko/composer.py:105 src/kerko/composer.py:113
 msgid "Everywhere"
 msgstr "Partout"
 
-#: src/kerko/composer.py:105 src/kerko/composer.py:113
+#: src/kerko/composer.py:106 src/kerko/composer.py:114
 msgid "In authors or contributors"
 msgstr "Dans les auteurs ou contributeurs"
 
-#: src/kerko/composer.py:106 src/kerko/composer.py:114
+#: src/kerko/composer.py:107 src/kerko/composer.py:115
 msgid "In titles"
 msgstr "Dans les titres"
 
-#: src/kerko/composer.py:107 src/kerko/composer.py:115
+#: src/kerko/composer.py:108 src/kerko/composer.py:116
 msgid "In publication years"
 msgstr "Dans les années de publication"
 
-#: src/kerko/composer.py:108 src/kerko/composer.py:116
+#: src/kerko/composer.py:109 src/kerko/composer.py:117
 msgid "In all fields"
 msgstr "Dans tous les champs"
 
-#: src/kerko/composer.py:109 src/kerko/composer.py:117
+#: src/kerko/composer.py:110 src/kerko/composer.py:118
 msgid "In documents"
 msgstr "Dans les documents"
 
-#: src/kerko/composer.py:120
+#: src/kerko/composer.py:121
 msgid ""
 "Search your keywords in all bibliographic record fields and in the text "
 "content of the available documents."
@@ -66,15 +66,15 @@ msgstr ""
 "repère vos mots-clés dans tous les champs des références bibliographiques"
 " ainsi que dans le contenu textuel des documents disponibles."
 
-#: src/kerko/composer.py:124
+#: src/kerko/composer.py:125
 msgid "Search your keywords in author or contributor names."
 msgstr "repère vos mots-clés dans les noms d’auteurs ou de contributeurs."
 
-#: src/kerko/composer.py:125
+#: src/kerko/composer.py:126
 msgid "Search your keywords in titles."
 msgstr "repère vos mots-clés dans les titres."
 
-#: src/kerko/composer.py:126
+#: src/kerko/composer.py:127
 #, python-format
 msgid ""
 "Search a specific publication year (you may use the "
@@ -87,95 +87,99 @@ msgstr ""
 "trouver des références ayant différentes années de publication. Par "
 "exemple, <code>2020 %(or_op)s 2021</code>)."
 
-#: src/kerko/composer.py:130 src/kerko/searcher.py:110
+#: src/kerko/composer.py:131 src/kerko/searcher.py:110
 #: src/kerko/templates/kerko/_search-help.html.jinja2:38
 #: src/kerko/templates/kerko/_search-help.html.jinja2:43
 msgid "OR"
 msgstr "OU"
 
-#: src/kerko/composer.py:132
+#: src/kerko/composer.py:133
 msgid "Search your keywords in all bibliographic record fields."
 msgstr "repère vos mots-clés dans tous les champs des notices bibliographiques."
 
-#: src/kerko/composer.py:133
+#: src/kerko/composer.py:134
 msgid "Search your keywords in the text content of the available documents."
 msgstr "repère vos mots-clés dans le contenu textuel des documents disponibles."
 
-#: src/kerko/composer.py:601
+#: src/kerko/composer.py:602
 msgid "Topic"
 msgstr "Sujet"
 
-#: src/kerko/composer.py:615 src/kerko/templates/kerko/item.html.jinja2:125
+#: src/kerko/composer.py:616 src/kerko/templates/kerko/item.html.jinja2:125
 msgid "Resource type"
 msgstr "Type de ressource"
 
-#: src/kerko/composer.py:629
+#: src/kerko/composer.py:630
 msgid "Publication year"
 msgstr "Année de publication"
 
-#: src/kerko/composer.py:630
+#: src/kerko/composer.py:631
 msgid "Unknown"
 msgstr "Inconnue"
 
-#: src/kerko/composer.py:643
+#: src/kerko/composer.py:641
+msgid "Resource language"
+msgstr "Langue de la ressource"
+
+#: src/kerko/composer.py:653
 msgid "Online resource"
 msgstr "Ressource en ligne"
 
-#: src/kerko/composer.py:674
+#: src/kerko/composer.py:684
 msgid "Relevance"
 msgstr "Pertinence"
 
-#: src/kerko/composer.py:685
+#: src/kerko/composer.py:695
 msgid "Newest first"
 msgstr "Date décroissante"
 
-#: src/kerko/composer.py:703
+#: src/kerko/composer.py:713
 msgid "Oldest first"
 msgstr "Date croissante"
 
-#: src/kerko/composer.py:716
+#: src/kerko/composer.py:726
 msgid "Author A-Z"
 msgstr "Auteur A-Z"
 
-#: src/kerko/composer.py:729
+#: src/kerko/composer.py:739
 msgid "Author Z-A"
 msgstr "Auteur Z-A"
 
-#: src/kerko/composer.py:747
+#: src/kerko/composer.py:757
 msgid "Title A-Z"
 msgstr "Titre A-Z"
 
-#: src/kerko/composer.py:760
+#: src/kerko/composer.py:770
 msgid "Title Z-A"
 msgstr "Titre Z-A"
 
-#: src/kerko/composer.py:794
+#: src/kerko/composer.py:804
 msgid "RIS"
 msgstr "RIS"
 
-#: src/kerko/composer.py:796
+#: src/kerko/composer.py:806
 msgid "Recommended format for most reference management software"
 msgstr ""
 "Format recommandé pour la plupart des logiciels de gestion de références "
 "bibliographiques"
 
-#: src/kerko/composer.py:805
+#: src/kerko/composer.py:815
 msgid "BibTeX"
 msgstr "BibTeX"
 
-#: src/kerko/composer.py:807
+#: src/kerko/composer.py:817
 msgid "Recommended format for BibTeX-specific software"
 msgstr "Format recommandé pour les logiciels spécialement conçus pour BibTeX"
 
-#: src/kerko/composer.py:826
+#: src/kerko/composer.py:836
 msgid "Cites"
 msgstr "Cite"
 
-#: src/kerko/composer.py:832
+#: src/kerko/composer.py:842
 msgid "Cited by"
 msgstr "Cité par"
 
-#: src/kerko/composer.py:840
+#: src/kerko/composer.py:850
 msgid "Related"
 msgstr "Connexe"
 
@@ -322,7 +326,7 @@ msgstr ""
 
 #: src/kerko/templates/kerko/_preferences.html.jinja2:41
 #: src/kerko/templates/kerko/_search-help.html.jinja2:74
-#: src/kerko/templates/kerko/search.html.jinja2:203
+#: src/kerko/templates/kerko/search.html.jinja2:201
 msgid "Close"
 msgstr "Fermer"
 
@@ -372,8 +376,8 @@ msgstr ""
 #: src/kerko/templates/kerko/_search-help.html.jinja2:49
 #: src/kerko/templates/kerko/_search-help.html.jinja2:68
 #: src/kerko/templates/kerko/search.html.jinja2:43
-#: src/kerko/templates/kerko/search.html.jinja2:182
-#: src/kerko/templates/kerko/search.html.jinja2:194
+#: src/kerko/templates/kerko/search.html.jinja2:180
+#: src/kerko/templates/kerko/search.html.jinja2:192
 msgid "Explore"
 msgstr "Explorer"
 
@@ -868,27 +872,23 @@ msgid "Last update from database: %(when)s"
 msgstr "Dernière mise à jour depuis la base de données&nbsp;: %(when)s"
 
 #: src/kerko/templates/kerko/search.html.jinja2:166
-msgid ""
-"\n"
-"                <p>Suggestions:</p>\n"
-"                <ul>\n"
-"                    <li>Make sure that all words are spelled "
-"correctly.</li>\n"
-"                    <li>Try different words.</li>\n"
-"                    <li>Try more general terms.</li>\n"
-"                </ul>"
-msgstr ""
-"\n"
-"                <p>Suggestions :</p>\n"
-"                <ul>\n"
-"                    <li>Vérifiez que tous les mots sont orthographiés "
-"correctement.</li>\n"
-"                    <li>Essayez des termes différents.</li>\n"
-"                    <li>Essayez des termes plus généraux.</li>\n"
-"                </ul>"
+msgid "Suggestions:"
+msgstr "Suggestions:"
 
-#: src/kerko/templates/kerko/search.html.jinja2:195
-#: src/kerko/templates/kerko/search.html.jinja2:203
+#: src/kerko/templates/kerko/search.html.jinja2:168
+msgid "Make sure that all words are spelled correctly."
+msgstr "Vérifiez que tous les mots sont orthographiés correctement."
+
+#: src/kerko/templates/kerko/search.html.jinja2:169
+msgid "Try different words."
+msgstr "Essayez des mots différents."
+
+#: src/kerko/templates/kerko/search.html.jinja2:170
+msgid "Try more general terms."
+msgstr "Essayez des termes plus généraux."
+
+#: src/kerko/templates/kerko/search.html.jinja2:193
+#: src/kerko/templates/kerko/search.html.jinja2:201
 msgid "Close Explore panel"
 msgstr "Fermer le panneau d’exploration"
 

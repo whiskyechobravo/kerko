@@ -163,14 +163,14 @@
                 </div>
             {%- endblock search_results_footer %}
         {%- else %}
-            {%- trans %}
-                <p>Suggestions:</p>
+            {%- block search_suggestions %}
+                <p>{{ _("Suggestions:") }}</p>
                 <ul>
-                    <li>Make sure that all words are spelled correctly.</li>
-                    <li>Try different words.</li>
-                    <li>Try more general terms.</li>
+                    <li>{{ _("Make sure that all words are spelled correctly.") }}</li>
+                    <li>{{ _("Try different words.") }}</li>
+                    <li>{{ _("Try more general terms.") }}</li>
                 </ul>
-            {%- endtrans %}
+            {%- endblock search_suggestions %}
         {%- endif %}
     {%- endblock search_results %}
 {%- endblock content_inner %}
