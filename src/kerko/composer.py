@@ -638,7 +638,7 @@ class Composer:
                     self.add_facet(
                         LanguageFacetSpec(
                             key=f"facet_{facet_key}",
-                            title=facet_config.get("title") or _("Language"),
+                            title=facet_config.get("title") or _("Resource language"),
                             missing_label=None,  # TODO:config: Allow in config.
                             **kwargs,
                         )
