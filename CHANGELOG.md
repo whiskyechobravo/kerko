@@ -29,6 +29,7 @@ Other changes:
     - `kerko.facets.tag.initial_limit`, now `10` instead of `0`.
     - `kerko.facets.tag.initial_limit_leeway`, now `4` instead of `2`.
     - `kerko.facets.year.initial_limit_leeway`, now `0` instead of `2`.
+- Update Portuguese translations. Thanks to Gonçalo Cordeiro.
 - Improve documentation.
 - Reduce XML sitemaps size.
 
