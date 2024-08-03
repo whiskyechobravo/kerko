@@ -4,7 +4,7 @@
 of all of your code, configuration files, data files, and Python virtual
 environment.
 
-## From 1.0.x to 1.1.x
+## From 1.0.x to 1.1.x or 1.2.x
 
 ### KerkoApp
 
