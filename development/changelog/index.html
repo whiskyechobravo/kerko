@@ -917,7 +917,7 @@
 <p>Before doing an upgrade, please check the "How to upgrade" section of the Kerko
 documentation.</p>
 <h2 id="unreleased-changes">Unreleased changes<a class="headerlink" href="#unreleased-changes" title="Permanent link">&para;</a></h2>
-<p>Features:</p>
+<p>New features:</p>
 <ul>
 <li>Add the "Resource language" facet. It is disabled by default, but can be
   enabled by setting the <code>kerko.facets.language.enabled</code> configuration parameter
@@ -925,12 +925,8 @@ documentation.</p>
   the facet more usable; see <code>kerko.facets.language.</code> in the configuration
   parameters documentation for details.</li>
 </ul>
-<p>Backwards incompatible changes:</p>
+<p>Removed features:</p>
 <ul>
-<li>The Python variable <code>kerko.TRANSLATION_DIRECTORIES</code> is renamed to
-  <code>kerko.TRANSLATION_DIRECTORY</code>, and its type is a string instead of a list. If
-  you have a custom application, you may need to adapt it accordingly (check
-  KerkoApp's <code>__init__.py</code> for an example).</li>
 <li>Custom translation management commands that depended on Setuptools and
   <code>setup.py</code> have been removed. Equivalent <code>pybabel</code> commands can be used
   instead (see the updated Localization section of the documentation).</li>
@@ -950,9 +946,18 @@ documentation.</p>
 <li>Move project metadata from <code>setup.cfg</code> to <code>pyproject.toml</code>.</li>
 <li>Build distribution package with Hatch instead of Setuptools.</li>
 <li>Use dynamic package versioning so that installers such as <code>pip</code> do not mistake
-  a development version for a previously published version.</li>
+  a development version for a previously published version. Version numbers are
+  now extracted from the tags and revisions of the Git repository.</li>
 <li>Reduce XML sitemaps size.</li>
 <li>Improve documentation.</li>
+</ul>
+<p>Deprecated APIs:</p>
+<ul>
+<li>The Python variable <code>kerko.TRANSLATION_DIRECTORIES</code> is deprecated and will be
+  removed in Kerko 2.x. The variable <code>kerko.TRANSLATION_DIRECTORY</code> should be
+  used instead, and its type is a string instead of a list. If you are using a
+  custom application, please adapt it accordingly (you may check KerkoApp's
+  <code>__init__.py</code> for an example).</li>
 </ul>
 <h2 id="110-2023-12-23">1.1.0 (2023-12-23)<a class="headerlink" href="#110-2023-12-23" title="Permanent link">&para;</a></h2>
 <p>Features:</p>
