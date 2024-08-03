@@ -80,6 +80,27 @@ mkdocs serve
 Then view the documentation in your browser at <http://localhost:8000/>.
 
 
+## Building the distribution package
+
+When building the distribution package, a version number is dynamically
+extracted from the Git repository. For an official release, the Git head
+revision must be tagged prior to building the distribution package. When the
+revision is not tagged, a dev version number gets derived from the branch's most
+recent tag, with a suffix appended.
+
+To check the version number that will be generated:
+
+```bash
+hatch version
+```
+
+To build the distribution package in sdist and wheel formats:
+
+```bash
+hatch build
+```
+
+
 ## Submitting code changes
 
 Pull requests may be submitted against [Kerko's repository][Kerko]. Please
@@ -113,10 +134,10 @@ issues).
 
 ## Supporting the project
 
-Nurturing an open source project such as Kerko, following up on issues and
-helping others in working with the system is a lot of work, but hiring the
-original developers of Kerko can do a lot in ensuring continued support and
-development of the project.
+Nurturing an open source project, following up on issues and helping others in
+working with the system is a lot of work. Hiring the original developers of
+Kerko can help make the project sustainable. It is the best way to ensure
+continued support and development of the project.
 
 If you need professional support related to Kerko, have requirements not
 currently implemented in Kerko, want to make sure that some Kerko issue

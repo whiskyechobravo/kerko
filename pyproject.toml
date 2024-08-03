@@ -1,6 +1,122 @@
+[project]
+name = "Kerko"
+description = "A Flask blueprint that provides a faceted search interface for bibliographies based on Zotero."
+authors = [
+    {name = "David Lesieur", email="kerko@whiskyechobravo.com"},
+]
+readme = "README.md"
+keywords = ["academia", "bibliography", "bibliographies", "flask", "search", "zotero"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Framework :: Flask",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Database :: Front-Ends",
+    "Topic :: Education",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+    "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
+    "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dynamic = ["version"]
+requires-python = ">= 3.8"
+dependencies = [
+    "Babel >= 2.14.0",
+    "Bootstrap-Flask >= 2.0.1",
+    "click >= 8.0.1",
+    "dpath >= 2.1.0",
+    "Flask >= 2.2.5",
+    "Flask-Babel >= 3.0.1",
+    "Flask-WTF >= 0.14.2",
+    "Jinja2 >= 3.0.1",
+    "pycountry >= 24",
+    "pydantic >= 1.10.7, < 2.0",
+    "python-dotenv >= 0.21.1",
+    "pytz",  # Babel does not require it (since 2.12.0), but will use it if present.
+    "Pyzotero >= 1.4.26",
+    "tomli >= 2.0.1",
+    "tomli-w >= 1.0.0",
+    "w3lib >= 1.22.0",
+    "Werkzeug >= 2.0.1",
+    "Whoosh >= 2.7.4",
+    "wrapt >= 1.10.0",
+    "WTForms >= 3.0.0",
+]
+
+[project.optional-dependencies]
+tests = [
+    "coverage >= 6.1.2, < 8",
+    "elementpath >= 2.4.0, < 5",
+    "lxml >= 4.9.3, < 5",
+    "responses >= 0.17.0",
+    "tox >= 3.8, < 5",
+]
+dev = [
+    "mypy >= 0.910",
+    "pip-tools >= 5.5.0",
+    "pre-commit >= 3.5.0",
+    "rope",
+    "ruff >= 0.1.3",
+]
+docs = [
+    "mkdocs-material >= 9.4, < 10",
+    "mike >= 1.1.2, < 3",
+]
+
+[project.urls]
+Documentation = "https://whiskyechobravo.github.io/kerko/"
+Code = "https://github.com/whiskyechobravo/kerko"
+Changes = "https://github.com/whiskyechobravo/kerko/blob/main/CHANGELOG.md"
+Issues = "https://github.com/whiskyechobravo/kerko/issues"
+
+[project.entry-points."flask.commands"]
+kerko = "kerko.cli:cli"
+
 [build-system]
-requires = ["setuptools >= 44.0.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+artifacts = [
+    "*.mo",
+]
+exclude = [
+    ".git-blame-ignore-revs",
+]
+
+[tool.hatch.build.hooks.custom]
+dependencies = [
+    "Babel >= 2.14.0",
+]
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.coverage.run]
+branch = true
+source = ["kerko"]
+
+[tool.coverage.paths]
+source = [
+    "src",
+    ".tox/*/site-packages",
+]
+
+[tool.mypy]
+python_version = "3.8"
+plugins = ["pydantic.mypy"]
 
 [tool.ruff]
 line-length = 100

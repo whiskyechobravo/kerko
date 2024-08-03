@@ -20,36 +20,36 @@ purpose, the main issues to consider are:
 
 ## Translating Kerko
 
-Kerko's translations are managed through Babel's [setuptools
-integration](http://babel.pocoo.org/en/latest/setup.html).
+Kerko translations are managed with [Babel].
 
-The following commands should be executed from the directory that contains
-`setup.py`, and the [virtual environment][venv] must have been activated
-beforehand.
+The following commands should be executed from the root Kerko directory (the one
+that contains `babel.cfg`), and the [virtual environment][venv] must have been
+activated beforehand.
 
-Create or update the PO template (POT) file:
+Create or update the PO template (POT) file. Replace `CURRENT_VERSION` with the
+current Kerko version:
 
 ```bash
-python setup.py extract_messages
+pybabel extract -F babel.cfg -o src/kerko/translations/kerko.pot --project=Kerko --version=CURRENT_VERSION --copyright-holder="Kerko Contributors" src/kerko
 ```
 
 Create a new PO file (for a new locale) based on the POT file. Replace
 `YOUR_LOCALE` with the appropriate language code, e.g., `de`, `es`, `fr`:
 
 ```bash
-python setup.py init_catalog --locale YOUR_LOCALE
+pybabel init -l YOUR_LOCALE -D kerko -i src/kerko/translations/kerko.pot -d src/kerko/translations
 ```
 
 Update an existing PO file based on the POT file:
 
 ```bash
-python setup.py update_catalog --locale YOUR_LOCALE
+pybabel update -l YOUR_LOCALE -D kerko -i src/kerko/translations/kerko.pot -d src/kerko/translations
 ```
 
 Compile MO files:
 
 ```bash
-python setup.py compile_catalog
+pybabel compile -l YOUR_LOCALE -D kerko -d src/kerko/translations --statistics
 ```
 
 !!! tip "Contributing your translation"
@@ -66,9 +66,9 @@ messages of its own, and thus its own separate translation file.
 
 KerkoApp translations are managed with [Babel].
 
-The following commands should be executed from the directory that contains
-`babel.cfg`, and the [virtual environment][venv] must have been activated
-beforehand.
+The following commands should be executed from the root KerkoApp directory (the
+one that contains `babel.cfg`), and the [virtual environment][venv] must have
+been activated beforehand.
 
 Create or update the PO file template (POT). Replace `CURRENT_VERSION` with your
 current KerkoApp version:

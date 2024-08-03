@@ -18,7 +18,10 @@ Backwards incompatible changes:
 - The Python variable `kerko.TRANSLATION_DIRECTORIES` is renamed to
   `kerko.TRANSLATION_DIRECTORY`, and its type is a string instead of a list. If
   you have a custom application, you may need to adapt it accordingly (check
-  KerkoApp for an example).
+  KerkoApp's `__init__.py` for an example).
+- Custom translation management commands that depended on Setuptools and
+  `setup.py` have been removed. Equivalent `pybabel` commands can be used
+  instead (see the updated Localization section of the documentation).
 
 Other changes:
 
@@ -30,8 +33,12 @@ Other changes:
     - `kerko.facets.tag.initial_limit_leeway`, now `4` instead of `2`.
     - `kerko.facets.year.initial_limit_leeway`, now `0` instead of `2`.
 - Update Portuguese translations. Thanks to Gonçalo Cordeiro.
-- Improve documentation.
+- Move project metadata from `setup.cfg` to `pyproject.toml`.
+- Build distribution package with Hatch instead of Setuptools.
+- Use dynamic package versioning so that installers such as `pip` do not mistake
+  a development version for a previously published version.
 - Reduce XML sitemaps size.
+- Improve documentation.
 
 
 ## 1.1.0 (2023-12-23)
