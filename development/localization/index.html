@@ -662,23 +662,23 @@ purpose, the main issues to consider are:</p>
   see <a href="../config-params/#whoosh_language"><code>kerko.search.whoosh_language</code></a>.</li>
 </ul>
 <h2 id="translating-kerko">Translating Kerko<a class="headerlink" href="#translating-kerko" title="Permanent link">&para;</a></h2>
-<p>Kerko's translations are managed through Babel's <a href="http://babel.pocoo.org/en/latest/setup.html">setuptools
-integration</a>.</p>
-<p>The following commands should be executed from the directory that contains
-<code>setup.py</code>, and the <a href="https://docs.python.org/3.11/tutorial/venv.html">virtual environment</a> must have been activated
-beforehand.</p>
-<p>Create or update the PO template (POT) file:</p>
-<div class="highlight"><pre><span></span><code>python<span class="w"> </span>setup.py<span class="w"> </span>extract_messages
+<p>Kerko translations are managed with <a href="http://babel.pocoo.org">Babel</a>.</p>
+<p>The following commands should be executed from the root Kerko directory (the one
+that contains <code>babel.cfg</code>), and the <a href="https://docs.python.org/3.11/tutorial/venv.html">virtual environment</a> must have been
+activated beforehand.</p>
+<p>Create or update the PO template (POT) file. Replace <code>CURRENT_VERSION</code> with the
+current Kerko version:</p>
+<div class="highlight"><pre><span></span><code>pybabel<span class="w"> </span>extract<span class="w"> </span>-F<span class="w"> </span>babel.cfg<span class="w"> </span>-o<span class="w"> </span>src/kerko/translations/kerko.pot<span class="w"> </span>--project<span class="o">=</span>Kerko<span class="w"> </span>--version<span class="o">=</span>CURRENT_VERSION<span class="w"> </span>--copyright-holder<span class="o">=</span><span class="s2">&quot;Kerko Contributors&quot;</span><span class="w"> </span>src/kerko
 </code></pre></div>
 <p>Create a new PO file (for a new locale) based on the POT file. Replace
 <code>YOUR_LOCALE</code> with the appropriate language code, e.g., <code>de</code>, <code>es</code>, <code>fr</code>:</p>
-<div class="highlight"><pre><span></span><code>python<span class="w"> </span>setup.py<span class="w"> </span>init_catalog<span class="w"> </span>--locale<span class="w"> </span>YOUR_LOCALE
+<div class="highlight"><pre><span></span><code>pybabel<span class="w"> </span>init<span class="w"> </span>-l<span class="w"> </span>YOUR_LOCALE<span class="w"> </span>-D<span class="w"> </span>kerko<span class="w"> </span>-i<span class="w"> </span>src/kerko/translations/kerko.pot<span class="w"> </span>-d<span class="w"> </span>src/kerko/translations
 </code></pre></div>
 <p>Update an existing PO file based on the POT file:</p>
-<div class="highlight"><pre><span></span><code>python<span class="w"> </span>setup.py<span class="w"> </span>update_catalog<span class="w"> </span>--locale<span class="w"> </span>YOUR_LOCALE
+<div class="highlight"><pre><span></span><code>pybabel<span class="w"> </span>update<span class="w"> </span>-l<span class="w"> </span>YOUR_LOCALE<span class="w"> </span>-D<span class="w"> </span>kerko<span class="w"> </span>-i<span class="w"> </span>src/kerko/translations/kerko.pot<span class="w"> </span>-d<span class="w"> </span>src/kerko/translations
 </code></pre></div>
 <p>Compile MO files:</p>
-<div class="highlight"><pre><span></span><code>python<span class="w"> </span>setup.py<span class="w"> </span>compile_catalog
+<div class="highlight"><pre><span></span><code>pybabel<span class="w"> </span>compile<span class="w"> </span>-l<span class="w"> </span>YOUR_LOCALE<span class="w"> </span>-D<span class="w"> </span>kerko<span class="w"> </span>-d<span class="w"> </span>src/kerko/translations<span class="w"> </span>--statistics
 </code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">Contributing your translation</p>
@@ -690,9 +690,9 @@ user contributions that Kerko is available in multiple languages.</p>
 <p>Although most user interface messages come from Kerko, KerkoApp also has
 messages of its own, and thus its own separate translation file.</p>
 <p>KerkoApp translations are managed with <a href="http://babel.pocoo.org">Babel</a>.</p>
-<p>The following commands should be executed from the directory that contains
-<code>babel.cfg</code>, and the <a href="https://docs.python.org/3.11/tutorial/venv.html">virtual environment</a> must have been activated
-beforehand.</p>
+<p>The following commands should be executed from the root KerkoApp directory (the
+one that contains <code>babel.cfg</code>), and the <a href="https://docs.python.org/3.11/tutorial/venv.html">virtual environment</a> must have
+been activated beforehand.</p>
 <p>Create or update the PO file template (POT). Replace <code>CURRENT_VERSION</code> with your
 current KerkoApp version:</p>
 <div class="highlight"><pre><span></span><code>pybabel<span class="w"> </span>extract<span class="w"> </span>-F<span class="w"> </span>babel.cfg<span class="w"> </span>-o<span class="w"> </span>kerkoapp/translations/messages.pot<span class="w"> </span>--project<span class="o">=</span>KerkoApp<span class="w"> </span>--version<span class="o">=</span>CURRENT_VERSION<span class="w"> </span>--copyright-holder<span class="o">=</span><span class="s2">&quot;Kerko Contributors&quot;</span><span class="w"> </span>kerkoapp

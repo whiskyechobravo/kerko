@@ -930,7 +930,10 @@ documentation.</p>
 <li>The Python variable <code>kerko.TRANSLATION_DIRECTORIES</code> is renamed to
   <code>kerko.TRANSLATION_DIRECTORY</code>, and its type is a string instead of a list. If
   you have a custom application, you may need to adapt it accordingly (check
-  KerkoApp for an example).</li>
+  KerkoApp's <code>__init__.py</code> for an example).</li>
+<li>Custom translation management commands that depended on Setuptools and
+  <code>setup.py</code> have been removed. Equivalent <code>pybabel</code> commands can be used
+  instead (see the updated Localization section of the documentation).</li>
 </ul>
 <p>Other changes:</p>
 <ul>
@@ -944,8 +947,12 @@ documentation.</p>
 </ul>
 </li>
 <li>Update Portuguese translations. Thanks to Gonçalo Cordeiro.</li>
-<li>Improve documentation.</li>
+<li>Move project metadata from <code>setup.cfg</code> to <code>pyproject.toml</code>.</li>
+<li>Build distribution package with Hatch instead of Setuptools.</li>
+<li>Use dynamic package versioning so that installers such as <code>pip</code> do not mistake
+  a development version for a previously published version.</li>
 <li>Reduce XML sitemaps size.</li>
+<li>Improve documentation.</li>
 </ul>
 <h2 id="110-2023-12-23">1.1.0 (2023-12-23)<a class="headerlink" href="#110-2023-12-23" title="Permanent link">&para;</a></h2>
 <p>Features:</p>

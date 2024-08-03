@@ -568,6 +568,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#building-the-distribution-package" class="md-nav__link">
+    <span class="md-ellipsis">
+      Building the distribution package
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#submitting-code-changes" class="md-nav__link">
     <span class="md-ellipsis">
       Submitting code changes
@@ -694,6 +703,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#building-the-distribution-package" class="md-nav__link">
+    <span class="md-ellipsis">
+      Building the distribution package
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#submitting-code-changes" class="md-nav__link">
     <span class="md-ellipsis">
       Submitting code changes
@@ -801,6 +819,18 @@ commit</code>. If you wish to run the checks manually, use this command:</p>
 <div class="highlight"><pre><span></span><code>mkdocs<span class="w"> </span>serve
 </code></pre></div>
 <p>Then view the documentation in your browser at <a href="http://localhost:8000/">http://localhost:8000/</a>.</p>
+<h2 id="building-the-distribution-package">Building the distribution package<a class="headerlink" href="#building-the-distribution-package" title="Permanent link">&para;</a></h2>
+<p>When building the distribution package, a version number is dynamically
+extracted from the Git repository. For an official release, the Git head
+revision must be tagged prior to building the distribution package. When the
+revision is not tagged, a dev version number gets derived from the branch's most
+recent tag, with a suffix appended.</p>
+<p>To check the version number that will be generated:</p>
+<div class="highlight"><pre><span></span><code>hatch<span class="w"> </span>version
+</code></pre></div>
+<p>To build the distribution package in sdist and wheel formats:</p>
+<div class="highlight"><pre><span></span><code>hatch<span class="w"> </span>build
+</code></pre></div>
 <h2 id="submitting-code-changes">Submitting code changes<a class="headerlink" href="#submitting-code-changes" title="Permanent link">&para;</a></h2>
 <p>Pull requests may be submitted against <a href="https://github.com/whiskyechobravo/kerko">Kerko's repository</a>. Please
 consider the following guidelines:</p>
@@ -828,10 +858,10 @@ with the PO file included as an attachment (<strong>do not</strong> copy the PO 
 content into an e-mail's body, since that could introduce formatting or encoding
 issues).</p>
 <h2 id="supporting-the-project">Supporting the project<a class="headerlink" href="#supporting-the-project" title="Permanent link">&para;</a></h2>
-<p>Nurturing an open source project such as Kerko, following up on issues and
-helping others in working with the system is a lot of work, but hiring the
-original developers of Kerko can do a lot in ensuring continued support and
-development of the project.</p>
+<p>Nurturing an open source project, following up on issues and helping others in
+working with the system is a lot of work. Hiring the original developers of
+Kerko can help make the project sustainable. It is the best way to ensure
+continued support and development of the project.</p>
 <p>If you need professional support related to Kerko, have requirements not
 currently implemented in Kerko, want to make sure that some Kerko issue
 important to you gets resolved, or if you just like our work and would like to
