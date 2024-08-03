@@ -5,7 +5,7 @@ documentation.
 
 ## Unreleased changes
 
-Features:
+New features:
 
 - Add the "Resource language" facet. It is disabled by default, but can be
   enabled by setting the `kerko.facets.language.enabled` configuration parameter
@@ -13,12 +13,8 @@ Features:
   the facet more usable; see `kerko.facets.language.` in the configuration
   parameters documentation for details.
 
-Backwards incompatible changes:
+Removed features:
 
-- The Python variable `kerko.TRANSLATION_DIRECTORIES` is renamed to
-  `kerko.TRANSLATION_DIRECTORY`, and its type is a string instead of a list. If
-  you have a custom application, you may need to adapt it accordingly (check
-  KerkoApp's `__init__.py` for an example).
 - Custom translation management commands that depended on Setuptools and
   `setup.py` have been removed. Equivalent `pybabel` commands can be used
   instead (see the updated Localization section of the documentation).
@@ -36,9 +32,18 @@ Other changes:
 - Move project metadata from `setup.cfg` to `pyproject.toml`.
 - Build distribution package with Hatch instead of Setuptools.
 - Use dynamic package versioning so that installers such as `pip` do not mistake
-  a development version for a previously published version.
+  a development version for a previously published version. Version numbers are
+  now extracted from the tags and revisions of the Git repository.
 - Reduce XML sitemaps size.
 - Improve documentation.
+
+Deprecated APIs:
+
+- The Python variable `kerko.TRANSLATION_DIRECTORIES` is deprecated and will be
+  removed in Kerko 2.x. The variable `kerko.TRANSLATION_DIRECTORY` should be
+  used instead, and its type is a string instead of a list. If you are using a
+  custom application, please adapt it accordingly (you may check KerkoApp's
+  `__init__.py` for an example).
 
 
 ## 1.1.0 (2023-12-23)
