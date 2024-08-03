@@ -6,7 +6,7 @@ repos:
       - id: check-added-large-files
       - id: check-ast
       - id: check-toml
-      # TODO: Enable after upgrading mkdocs-material to > 9.4.x: - id: check-yaml
+      - id: check-yaml
       - id: debug-statements
       - id: detect-private-key
       - id: end-of-file-fixer
