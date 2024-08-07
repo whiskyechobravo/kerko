@@ -887,7 +887,7 @@ Default value: `0`
 
 ### `google_analytics_id`
 
-A Google Analytics stream ID, e.g., `'G-??????????'`.
+A Google Analytics measurement ID, e.g., `'G-??????????'`.
 
 If the value is not empty *and* Flask is not running in debug mode, then the
 Google Analytics tag is inserted into the pages.
