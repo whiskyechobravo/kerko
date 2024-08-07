@@ -11,10 +11,10 @@ That said, you may refer to the guide below for step-by-step instructions. Even
 if your environment is different from the one this guide was designed for, it
 might provide you with some useful hints.
 
-## Deploying on Ubuntu 20.04 or 22.04 with nginx and gunicorn
+## Deploying on Ubuntu with nginx and gunicorn
 
 These instructions will detail the steps and configurations required to get
-[KerkoApp] running on an Ubuntu 20.04 or 22.04 web server, using [Gunicorn] as
+[KerkoApp] running on an Ubuntu 22.04 or 24.04 web server, using [Gunicorn] as
 the WSGI container and [nginx] as a HTTP proxy.
 
 The procedure is similar that of any Flask application, but KerkoApp-specific
