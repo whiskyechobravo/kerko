@@ -54,10 +54,13 @@ source data for the demo site.
 The following sites are powered by Kerko:
 
 - [Bibliographie francophone sur l'archivistique](https://bibliopiaf.ebsi.umontreal.ca/)
+- [Bibliographie sur l'histoire de Montréal](https://bibliographies.uqam.ca/bhm/)
 - [Community Knowledge Open Library on English-Speaking Quebec](https://ckol.quescren.ca/)
 - [Lipedema Foundation LEGATO Lipedema Library](https://library.lipedema.org/)
 - [Open Development & Education Evidence Library](https://docs.opendeved.net/)
+- [Rights and Records Knowledge Base](https://rightsandrecords.ica.org/)
 - [The EdTech Hub Evidence Library](http://docs.edtechhub.org/)
+- [Transitional Justice Evaluation Tools Reference Library](https://library.transitionaljusticedata.org/)
 - [University of Saint Joseph Research Output](https://research.usj.edu.mo/)
 
 !!! question "Are you using Kerko?"

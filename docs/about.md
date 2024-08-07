@@ -4,10 +4,11 @@ Kerko was inspired by prior work accomplished by [Whisky Echo
 Bravo][Whisky_Echo_Bravo] on two projects:
 
 - [Bibliographie sur l’histoire de
-  Montréal](https://bibliomontreal.uqam.ca/bibliographie/), developed in 2014 by
-  David Lesieur and Patrick Fournier, of Whisky Echo Bravo, for the [Laboratoire
+  Montréal](https://bibliographies.uqam.ca/bhm/), developed in 2014 by David
+  Lesieur and Patrick Fournier, of Whisky Echo Bravo, for the [Laboratoire
   d'histoire et de patrimoine de Montréal](https://lhpm.uqam.ca/) (Université du
-  Québec à Montréal, Canada).
+  Québec à Montréal, Canada). The original custom application got a few minor
+  updates over time, and was eventually replaced with Kerko in 2024.
 - [Bibliography on English-speaking Quebec](http://quescren.concordia.ca/),
   developed in 2017 by David Lesieur, for the [Quebec English-Speaking
   Communities Research Network
@@ -20,12 +21,12 @@ organizations. However, software from the prior projects had to be rewritten in
 order to be more adaptable to a variety of needs. That led to Kerko, whose
 initial development was made possible through the following project:
 
-- [Bibliographie francophone sur l'archivistique](https://bibliopiaf.ebsi.umontreal.ca/),
-  funded by the
-  [Association internationale des archives francophones (AIAF)](http://www.aiaf.org/)
-  and hosted by the
-  [École de bibliothéconomie et des sciences de l’information (EBSI)](https://ebsi.umontreal.ca/)
-  (Université de Montréal, Canada).
+- [Bibliographie francophone sur
+  l'archivistique](https://bibliopiaf.ebsi.umontreal.ca/), funded by the
+  [Association internationale des archives francophones
+  (AIAF)](https://www.piaf-archives.org/AIAF/association-internationale-des-archives-francophones)
+  and hosted by the [École de bibliothéconomie et des sciences de l’information
+  (EBSI)](https://ebsi.umontreal.ca/) (Université de Montréal, Canada).
 
 Since then, Kerko has continued to evolve, thanks to work by [Whisky Echo
 Bravo][Whisky_Echo_Bravo] and other contributors, often through funding provided
