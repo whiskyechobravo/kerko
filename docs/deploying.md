@@ -125,23 +125,25 @@ its servers from getting overloaded, so sometimes the process might seem to
 freeze, but be patient and Kerko will resume synchronization a few minutes
 later.
 
-Now that synchronization works, configure the cron task that will synchronize
-data from your Zotero library on a regular basis. Run the following command
-(always from the `kerkoapp` user):
+Now that synchronization works, configure a cron task that will periodically
+synchronize data from your Zotero library. Run the following command (again from
+the `kerkoapp` user):
 
 ```bash
 crontab -e
 ```
 
-That will launch the default `nano` editor. Add the following line at the very
-bottom, then save the file and exit the editor:
+That will launch the default text editor. Add the following line at the end of
+the file, then save the file and exit the editor:
 
 ``` title="crontab"
-10 4 * * * cd /home/kerkoapp/kerkoapp && /home/kerkoapp/venv/bin/flask kerko sync
+10 4 * * * cd /home/kerkoapp/kerkoapp && nice -n 10 /home/kerkoapp/venv/bin/flask kerko sync
 ```
 
-That will synchronize the data once a day, at 4:10am. You may specify a
-different time, of course.
+That line instructs cron to run the `sync` command once a day, at 4:10am. You
+may specify a different time, of course. The `nice` command will cause the
+synchronization process to gently relinquish its priority to other processes,
+should the server be busy at that time.
 
 Now exit from the `kerkoapp` user's shell, and go back to your usual sudoer
 account to finish the installation.
