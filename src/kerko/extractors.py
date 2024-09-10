@@ -382,6 +382,8 @@ class BaseTagsExtractor(Extractor):
         :param str include_re: Any tag that does not matches this regular
             expression will be ignored by the extractor. If empty, all tags will
             be accepted unless `exclude_re` is set and they match it.
+            If this regular expression contains a capture group named "kerko",
+            then only this capture group will be used.
 
         :param str exclude_re: Any tag that matches this regular expression
             will be ignored by the extractor. If empty, all tags will be
@@ -390,6 +392,14 @@ class BaseTagsExtractor(Extractor):
         super().__init__(**kwargs)
         self.include = re.compile(include_re) if include_re else None
         self.exclude = re.compile(exclude_re) if exclude_re else None
+
+        # This is the capture group name used to extract.
+        self.capture_group_name = "kerko"
+        # Whether `include_re` contains the named capture group
+        self._has_named_capture_group = (
+            isinstance(self.include, re.Pattern)
+            and self.capture_group_name in self.include.groupindex
+        )
 
     def extract(self, item, library_context, spec):  # noqa: ARG002
         tags = set()
@@ -400,7 +410,11 @@ class BaseTagsExtractor(Extractor):
                 and (not self.include or self.include.match(tag))
                 and (not self.exclude or not self.exclude.match(tag))
             ):
-                tags.add(tag)
+                include_match = self.include.match(tag) if self.include else None
+                if include_match and self._has_named_capture_group:
+                    tags.add(include_match.group(self.capture_group_name))
+                else:
+                    tags.add(tag)
         return tags or None
 
 
