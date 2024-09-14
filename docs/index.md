@@ -58,6 +58,7 @@ The following sites are powered by Kerko:
 - [Community Knowledge Open Library on English-Speaking Quebec](https://ckol.quescren.ca/)
 - [Lipedema Foundation LEGATO Lipedema Library](https://library.lipedema.org/)
 - [Open Development & Education Evidence Library](https://docs.opendeved.net/)
+- [PhDs.io - Knowledge That Transforms](https://phds.io/)
 - [Rights and Records Knowledge Base](https://rightsandrecords.ica.org/)
 - [The EdTech Hub Evidence Library](http://docs.edtechhub.org/)
 - [Transitional Justice Evaluation Tools Reference Library](https://library.transitionaljusticedata.org/)
