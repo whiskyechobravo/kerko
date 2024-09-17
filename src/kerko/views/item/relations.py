@@ -1,6 +1,5 @@
-from kerko.searcher import Searcher
+from kerko.searcher import SearcherSingleton
 from kerko.shortcuts import composer, config
-from kerko.storage import open_index
 
 
 def _get_forward_rel_filters(item, relation_spec):
@@ -61,8 +60,7 @@ def inject_relations(item):
             if key != "coins"
         ],
     )
-    index = open_index("index")
-    with Searcher(index) as searcher:
+    with SearcherSingleton() as searcher:
         for relation_spec in composer().relations.values():
             if relation_spec.directed:
                 item[relation_spec.field.key] = searcher.search(

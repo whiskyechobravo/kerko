@@ -20,7 +20,7 @@ from markupsafe import Markup
 from kerko.criteria import create_feed_criteria, create_search_criteria
 from kerko.exceptions import except_abort
 from kerko.forms import SearchForm
-from kerko.searcher import Searcher
+from kerko.searcher import SearcherSingleton
 from kerko.shortcuts import composer, config
 from kerko.specs import SortSpec
 from kerko.storage import (
@@ -29,7 +29,6 @@ from kerko.storage import (
     get_doc_count,
     get_storage_dir,
     load_object,
-    open_index,
 )
 from kerko.views import pager
 from kerko.views.item import build_item_context, creators, inject_item_data
@@ -74,8 +73,7 @@ def atom_feed():
 
     context = {}
     criteria = create_feed_criteria(request.args)
-    index = open_index("index")
-    with Searcher(index) as searcher:
+    with SearcherSingleton() as searcher:
         extra_args = {}
 
         sort_field = composer().fields.get("sort_date_added")
@@ -179,8 +177,7 @@ def item_view(item_id):
     """View a full bibliographic record."""
     start_time = time.process_time()
 
-    index = open_index("index")
-    with Searcher(index) as searcher:
+    with SearcherSingleton() as searcher:
         # Try matching the item by id, with fallback to alternate id.
         try_id_fields = deque(["id", "alternate_id"])
         fellback = False
@@ -213,8 +210,7 @@ def item_view(item_id):
 @except_abort(SearchIndexError, 503)
 def page(item_id, title):
     """Render a simple page, using a Zotero note as content."""
-    index = open_index("index")
-    with Searcher(index) as searcher:
+    with SearcherSingleton() as searcher:
         results = searcher.search(
             require_all={
                 "id": [item_id],
@@ -244,8 +240,7 @@ def child_attachment_download(item_id, attachment_id, attachment_filename=None):
     filename, a redirect is performed to a corrected URL so that the client gets
     a proper filename.
     """
-    index = open_index("index")
-    with Searcher(index) as searcher:
+    with SearcherSingleton() as searcher:
         # Try matching the item by id, with fallback to alternate id.
         try_id_fields = deque(["id", "alternate_id"])
         fellback = False
@@ -309,8 +304,7 @@ def standalone_attachment_download(item_id, attachment_filename=None):
     filename, a redirect is performed to a corrected URL so that the client gets
     a proper filename.
     """
-    index = open_index("index")
-    with Searcher(index) as searcher:
+    with SearcherSingleton() as searcher:
         # Try matching the item by id, with fallback to alternate id.
         try_id_fields = deque(["id", "alternate_id"])
         fellback = False
@@ -365,8 +359,7 @@ def item_bib_download(item_id, bib_format_key):
     if not bib_format:
         return abort(404)
 
-    index = open_index("index")
-    with Searcher(index) as searcher:
+    with SearcherSingleton() as searcher:
         # Try matching the item by id, with fallback to alternate id.
         try_id_fields = deque(["id", "alternate_id"])
         fellback = False
@@ -411,8 +404,7 @@ def search_bib_download(bib_format_key):
         return abort(404)
 
     criteria = create_search_criteria(request.args)
-    index = open_index("index")
-    with Searcher(index) as searcher:
+    with SearcherSingleton() as searcher:
         results = searcher.search(
             limit=None,
             keywords=criteria.keywords,
@@ -466,8 +458,7 @@ def sitemap(page_num):
     if page_num > get_sitemap_page_count():
         return abort(404)
 
-    index = open_index("index")
-    with Searcher(index) as searcher:
+    with SearcherSingleton() as searcher:
         sort_field = composer().fields.get("sort_date_modified")
         if sort_field:
             sort_spec = SortSpec(

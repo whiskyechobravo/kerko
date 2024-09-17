@@ -11,7 +11,7 @@ from whoosh.sorting import Count, Facets, FieldFacet
 
 from kerko.exceptions import except_raise
 from kerko.shortcuts import composer
-from kerko.storage import SchemaError
+from kerko.storage import SchemaError, open_index
 
 
 class Searcher:
@@ -229,6 +229,28 @@ class Searcher:
                 facet_spec.key, allow_overlap=facet_spec.allow_overlap
             )
         self.search_args["maptype"] = Count
+
+
+class SearcherSingleton(Searcher):
+    _instance = None
+    _initialized = False
+
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = super(SearcherSingleton, cls).__new__(cls)
+        return cls._instance
+
+    def __init__(self, schema=None, field_specs=None, facet_specs=None):
+        if not self._initialized:
+            super().__init__(open_index("index"), schema, field_specs, facet_specs)
+            self._initialized = True
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        # Do not close the searcher
+        pass
 
 
 class Results(ABC):
