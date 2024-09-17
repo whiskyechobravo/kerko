@@ -1,3 +1,4 @@
+import functools
 import pathlib
 from typing import Any
 
@@ -23,6 +24,7 @@ def data_path() -> str:
     return str(instance_path / config_data_path)
 
 
+@functools.lru_cache
 def config(path: str) -> Any:
     """
     Retrieve an arbitrarily nested setting from the current_app's configuration.
