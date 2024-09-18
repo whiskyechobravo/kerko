@@ -239,35 +239,32 @@ class FacetSpec(BaseFieldSpec):
         :param active_only: Only build the items that are related to active
             filters, i.e., filters actually present in the search criteria.
         """
-    
-    def _compute_sort_key(self, item):
-        """
-        Precompute the sort keys for each item to avoid repeated computations
-        """
-        # First sort key: show active items first.
-        active_first = not item["remove_url"]
-        # Second sort key: show items with missing labels last.
-        missing_label_last = bool(item["label"]) if self.sort_reverse else not item["label"]
-        # Third sort key: sort items according to the facet's specified
-        # sort keys. If 'count' is used as key, multiply the count value
-        # by -1 to reverse order (because the desired default when
-        # ordering by count is the descending order).
-        sort_keys = [
-            item[k] * -1 if k == "count" else (sort_normalize(item[k]) if isinstance(item[k], str) else item[k])
-            for k in self.sort_by
-        ]
-        return (active_first, missing_label_last, *sort_keys)
 
     def sort_items(self, items):
         if self.sort_by is None:
             return items
-    
-        # Compute sort keys for all items
-        items_with_keys = [(self._compute_sort_key(item), item) for item in items]
-        # Sort items based on the precomputed keys
-        sorted_items = sorted(items_with_keys, key=lambda x: x[0], reverse=self.sort_reverse)
-        # Extract the sorted items
-        return [item for _, item in sorted_items]
+
+        # Sort items based on multiple-keys.
+        return sorted(
+            items,
+            key=lambda x: (
+                # First sort key: show active items first.
+                not x["remove_url"],
+                # Second sort key: show items with missing labels last.
+                bool(x["label"]) if self.sort_reverse else not x["label"],
+                # Third sort key: sort items according to the facet's specified
+                # sort keys. If 'count' is used as key, multiply the count value
+                # by -1 to reverse order (because the desired default when
+                # ordering by count is the descending order).
+                *[
+                    x[k] * -1
+                    if k == "count"
+                    else (sort_normalize(x[k]) if isinstance(x[k], str) else x[k])
+                    for k in self.sort_by
+                ],
+            ),
+            reverse=self.sort_reverse,
+        )
 
     def render(self, items, mode):
         return self.renderer.render(spec=self, items=items, mode=mode)
@@ -297,26 +294,42 @@ class FlatFacetSpec(FacetSpec):
 
     def build(self, results, criteria, active_only=False):
         items = []
-        cached_params = criteria.params(options={"page": None, "page-len": None, "id": None})
-
         for value, count in results.items():
             if value or self.missing_label:
                 value, label = self.decode(value, default_value=value, default_label=value)  # noqa: PLW2901
-                new_filters_remove = self.remove_filter(value, criteria.filters)
-                new_filters_add = self.add_filter(value, criteria.filters)
-
-                remove_url = (
-                    url_for(".search", **{**cached_params, "filters": new_filters_remove})
-                    if new_filters_remove
-                    else None
-                )
-
-                add_url = (
-                    url_for(".search", **{**cached_params, "filters": new_filters_add})
-                    if new_filters_add and not (remove_url or active_only)
-                    else None
-                )
-
+                new_filters = self.remove_filter(value, criteria.filters)
+                if new_filters:
+                    remove_url = url_for(
+                        ".search",
+                        **criteria.params(
+                            filters=new_filters,
+                            options={
+                                "page": None,
+                                "page-len": None,
+                                "id": None,
+                            },
+                        ),
+                    )
+                else:
+                    remove_url = None
+                if remove_url or active_only:
+                    add_url = None
+                else:
+                    new_filters = self.add_filter(value, criteria.filters)
+                    if new_filters:
+                        add_url = url_for(
+                            ".search",
+                            **criteria.params(
+                                filters=new_filters,
+                                options={
+                                    "page": None,
+                                    "page-len": None,
+                                    "id": None,
+                                },
+                            ),
+                        )
+                    else:
+                        add_url = None
                 if remove_url or add_url:  # Only items with an URL get displayed.
                     items.append(
                         {
@@ -327,7 +340,6 @@ class FlatFacetSpec(FacetSpec):
                             "add_url": add_url,
                         }
                     )
-
         return self.sort_items(items)
 
 
@@ -416,7 +428,6 @@ class TreeFacetSpec(FacetSpec):
 
     def build(self, results, criteria, active_only=False):
         tree = Tree()
-        cached_options={"page": None, "page-len": None, "id": None}
         for value, count in results.items():
             if value or self.missing_label:
                 value, label = self.decode(value, default_value=value, default_label=value)  # noqa: PLW2901
@@ -426,7 +437,11 @@ class TreeFacetSpec(FacetSpec):
                         ".search",
                         **criteria.params(
                             filters=new_filters,
-                            options=cached_options,
+                            options={
+                                "page": None,
+                                "page-len": None,
+                                "id": None,
+                            },
                         ),
                     )
                 else:
@@ -440,7 +455,11 @@ class TreeFacetSpec(FacetSpec):
                             ".search",
                             **criteria.params(
                                 filters=new_filters,
-                                options=cached_options,
+                                options={
+                                    "page": None,
+                                    "page-len": None,
+                                    "id": None,
+                                },
                             ),
                         )
                     else:
