@@ -154,7 +154,7 @@
                     </div>
                 {%- endif %}
                 <div class="text-right mb-4 text-muted d-print-none">
-                    {%- if config.DEBUG %}
+                    {%- if config.DEBUG or config.SHOW_PROCESSING_TIME %}
                         {% trans time="%.2f"|format(time) %}Processing time: {{ time }} seconds{% endtrans %} &mdash;
                     {%- endif %}
                     {%- if last_sync %}

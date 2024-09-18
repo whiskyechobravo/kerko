@@ -265,7 +265,7 @@
 {%- endblock content_inner %}
 
 {%- block content_footer %}
-    {%- if config.DEBUG %}
+    {%- if config.DEBUG or config.SHOW_PROCESSING_TIME %}
         <div class="text-right mb-4 mt-2 text-muted">{% trans time="%.2f"|format(time) %}Processing time: {{time}} seconds{% endtrans %}</div>
     {%- endif %}
 {%- endblock content_footer %}
