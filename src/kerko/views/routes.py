@@ -28,8 +28,8 @@ from kerko.storage import (
     SearchIndexError,
     get_doc_count,
     get_storage_dir,
-    load_object,
 )
+from kerko.sync import kerko_last_sync
 from kerko.views import pager
 from kerko.views.item import build_item_context, creators, inject_item_data
 from kerko.views.search import search_list, search_single
@@ -128,7 +128,7 @@ def atom_feed():
         criteria.fit_page(results.page_count or 1)
         pager_sections = pager.get_sections(criteria.options["page"], results.page_count or 1)
 
-    last_sync = load_object("index", "last_update_from_zotero")
+    last_sync = kerko_last_sync()
     if last_sync:
         context["last_sync"] = datetime.fromtimestamp(
             last_sync, tz=datetime.now().astimezone().tzinfo
@@ -485,7 +485,7 @@ def sitemap(page_num):
 
 
 def last_updated_on():
-    last_sync = load_object("index", "last_update_from_zotero")
+    last_sync = kerko_last_sync()
     if last_sync:
         return {
             "when": datetime.fromtimestamp(

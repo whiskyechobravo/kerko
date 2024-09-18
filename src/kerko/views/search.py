@@ -9,7 +9,7 @@ from werkzeug.datastructures import MultiDict
 from kerko.criteria import create_feed_criteria
 from kerko.searcher import SearcherSingleton
 from kerko.shortcuts import composer, config
-from kerko.storage import load_object
+from kerko.sync import kerko_last_sync
 from kerko.views import breadbox, pager, sorter
 from kerko.views.item import build_item_context, inject_item_data
 
@@ -253,7 +253,7 @@ def search_list(criteria, form):
         context["facet_results"] = results_facets
         context["breadbox"] = breadbox.build_breadbox(criteria, results_facets)
 
-        last_sync = load_object("index", "last_update_from_zotero")
+        last_sync = kerko_last_sync()
         if last_sync:
             context["last_sync"] = datetime.fromtimestamp(
                 last_sync,
