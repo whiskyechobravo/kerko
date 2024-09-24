@@ -1,4 +1,5 @@
 import hashlib
+import os
 import shutil
 from functools import partial
 
@@ -31,7 +32,8 @@ class Blueprint(BaseBlueprint):
 
     def _setup_cache(self, app: App) -> Cache:
         # Clear cache folder on startup
-        shutil.rmtree(".flask_cache")
+        if os.path.exists(".flask_cache"):
+            shutil.rmtree(".flask_cache")
         app.config["CACHE_TYPE"] = "filesystem"
         app.config["CACHE_DIR"] = ".flask_cache"
         app.config["CACHE_THRESHOLD"] = 10000
