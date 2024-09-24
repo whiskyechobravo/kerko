@@ -39,6 +39,7 @@ dependencies = [
     "dpath >= 2.1.0",
     "Flask >= 2.2.5",
     "Flask-Babel >= 3.0.1",
+    "Flask-Caching >= 2.3.0",
     "Flask-WTF >= 0.14.2",
     "Jinja2 >= 3.0.1",
     "pycountry >= 24",

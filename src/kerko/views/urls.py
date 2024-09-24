@@ -6,6 +6,7 @@ urls = [
         "rule": "/",
         "view_func": routes.search,
         "methods": ["GET", "POST"],
+        "cache": True,
     },
     {
         "rule": "/atom.xml",
