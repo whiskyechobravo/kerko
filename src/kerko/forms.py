@@ -9,6 +9,10 @@ class SearchForm(FlaskForm):
     scope = SelectField()
     keywords = SearchField(validators=[validators.optional(), validators.length(max=1000)])
 
+    # https://stackoverflow.com/a/54719911
+    class Meta:
+        csrf = False
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.scope.choices = [
