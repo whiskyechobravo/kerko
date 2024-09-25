@@ -606,6 +606,26 @@ class Composer:
                             **kwargs,
                         )
                     )
+                elif facet_type == "tag_based_facet":
+                    include_re = kwargs.pop("tag_include_re")
+                    exclude_re = kwargs.pop("tag_exclude_re")
+                    exclude_re = "" if exclude_re is None else exclude_re
+                    self.add_facet(
+                        FlatFacetSpec(
+                            key=f"facet_{facet_key}",
+                            field_type=ID(stored=True),
+                            extractor=extractors.TagsFacetExtractor(
+                                include_re=include_re,
+                                exclude_re=exclude_re,
+                            ),
+                            codec=codecs.BaseFacetCodec(),
+                            title=facet_config.get("title") or _("Topic"),
+                            missing_label=None,  # TODO:config: Allow in config.
+                            allow_overlap=True,
+                            query_class=Term,
+                            **kwargs,
+                        )
+                    )
                 elif facet_type == "item_type":
                     self.add_facet(
                         FlatFacetSpec(

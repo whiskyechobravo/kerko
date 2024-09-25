@@ -296,6 +296,14 @@ class TagFacetModel(BaseFacetModel):
     title: Optional[str]
 
 
+class TagBasedFacetModel(BaseFacetModel):
+
+    type: Literal["tag_based_facet"]  # noqa: A003
+    title: Optional[str]
+    tag_include_re: str
+    tag_exclude_re: Optional[str]
+
+
 class ItemTypeFacetModel(BaseFacetModel):
     type: Literal["item_type"]  # noqa: A003
     title: Optional[str]
@@ -337,6 +345,7 @@ class CollectionFacetModel(BaseFacetModel):
 FacetModelUnion = Annotated[
     Union[
         TagFacetModel,
+        TagBasedFacetModel,
         ItemTypeFacetModel,
         YearFacetModel,
         LanguageFacetModel,
