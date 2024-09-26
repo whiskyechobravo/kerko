@@ -1,6 +1,7 @@
 import re
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
+from datetime import datetime, timedelta
 from itertools import chain
 
 from flask_babel import gettext
@@ -234,10 +235,14 @@ class Searcher:
 class SearcherSingleton(Searcher):
     _instance = None
     _initialized = False
+    _last_created = datetime.now()
 
     def __new__(cls, *args, **kwargs):
-        if not cls._instance:
+        if not cls._instance or datetime.now() - cls._last_created > timedelta(hours=12):
+            if cls._instance:
+                cls._instance.close()
             cls._instance = super(SearcherSingleton, cls).__new__(cls)
+            cls._last_created = datetime.now()
         return cls._instance
 
     def __init__(self, schema=None, field_specs=None, facet_specs=None):
