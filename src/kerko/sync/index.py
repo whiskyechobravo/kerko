@@ -53,7 +53,7 @@ def sync_index(full=False):  # noqa: ARG001
         procs=config("kerko.performance.whoosh_index_processors"),
     )
     try:
-        writer.mergetype = whoosh.writing.CLEAR
+        # writer.mergetype = whoosh.writing.CLEAR
         gate = TagGate(
             config("kerko.zotero.item_include_re"),
             config("kerko.zotero.item_exclude_re"),
@@ -70,6 +70,19 @@ def sync_index(full=False):  # noqa: ARG001
                     f"Item {count} updated ({item['key']}, {item.get('itemType')}): "
                     f"{ItemTitleExtractor().extract(item, library_context, None)}"
                 )
+                # Commit after 500 items.
+                # Recreate the writer because it closes after commit.
+                # Cannot set `writer.mergetype` to `whoosh.writing.CLEAR`,
+                # because this would clear existing index.
+                # Removing it has no impact since `update_document` deletes old
+                # then adds new doc with the same key.
+                if count % 500 == 0:
+                    writer.commit()
+                    current_app.logger.info(f"Item {count} updated.")
+                    writer = index.writer(
+                        limitmb=config("kerko.performance.whoosh_index_memory_limit"),
+                        procs=config("kerko.performance.whoosh_index_processors"),
+                    )
             else:
                 current_app.logger.debug(f"Item {count} excluded ({item['key']})")
     except (whoosh.fields.FieldConfigurationError, whoosh.fields.UnknownFieldError) as e:
@@ -81,6 +94,7 @@ def sync_index(full=False):  # noqa: ARG001
         writer.cancel()
         raise
     else:
+        # This commit takes care of the remaining documents in writer.
         writer.commit()
         # Save the cache's last_modified timestamp. Later, we cannot access the
         # cache directly to show the user when the data was last synchronized
