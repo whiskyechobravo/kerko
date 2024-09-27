@@ -87,3 +87,13 @@ main {
 .d-none-important {
   display: none !important;
 }
+
+.facet-item {
+  margin-left: 20px;
+}
+.facet-item .add-remove-icon {
+  line-height: 1.5;
+  margin-left: 1px;
+  top: -1px;
+  left: -20px;
+}

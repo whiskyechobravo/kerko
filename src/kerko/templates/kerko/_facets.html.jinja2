@@ -22,16 +22,16 @@
         )
     -%}
     {%- if item.label or missing_label -%}
-        <{{ item_tag }}{% if icon_left %} class="position-relative"{% endif %}{% if top_level and icon_left %} style="margin-left:{{ icon_left }};"{% endif %}>
+        <{{ item_tag }}{% if icon_left %} class="position-relative {% if top_level %}facet-item{% endif %}"{% endif %}>
             {%- set label = item.label|escape|trim(' _') or (('<em>' + missing_label + '</em>')|safe) -%}
             {%- if item.remove_url -%}
                 <a class="no-decorate" href="{{ item.remove_url }}" {{ title_aria_label(remove_title.format(label|striptags|escape)) }} rel="nofollow">
-                    {%- if remove_icon %}<span class="far fa-check-square{% if icon_left %} position-absolute{% endif %}" aria-hidden="true"{% if icon_left %} style="margin-left:1px;{% if icon_top %}top:{{ icon_top }};{% endif %}left:-{{ icon_left }};{% if icon_line_height %}line-height:1.5;{% endif %}"{% endif %}></span>{% endif %}
+                    {%- if remove_icon %}<span class="far fa-check-square{% if icon_left %} position-absolute add-remove-icon{% endif %}" aria-hidden="true"{% if icon_left %} {% endif %}></span>{% endif %}
                     <span class="facet-item-label parent-decorate">{{ label }}</span>{#- No whitespace -#}
                 </a>
             {%- elif item.add_url -%}
                 <a class="no-decorate" href="{{ item.add_url }}" {{ title_aria_label(add_title.format(label|striptags|escape)) }} rel="nofollow">
-                    {%- if add_icon %}<span class="far fa-square{% if icon_left %} position-absolute{% endif %}" aria-hidden="true"{% if icon_left %} style="margin-left:1px;{% if icon_top %}top:{{ icon_top }};{% endif %}left:-{{ icon_left }};{% if icon_line_height %}line-height:1.5;{% endif %}"{% endif %}></span>{% endif %}
+                    {%- if add_icon %}<span class="far fa-square{% if icon_left %} position-absolute add-remove-icon{% endif %}" aria-hidden="true"{% if icon_left %} {% endif %}></span>{% endif %}
                     <span class="facet-item-label parent-decorate">{{ label }}</span>{#- No whitespace -#}
                 </a>
             {%- else -%}
