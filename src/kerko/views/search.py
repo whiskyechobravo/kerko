@@ -250,7 +250,10 @@ def search_list(criteria, form):
         items = results.items(field_specs)
         results_facets = results.facets(composer().facets, criteria)
         context["search_results"] = zip(items, _build_item_search_urls(items, criteria))
-        context["facet_results"] = results_facets
+        context["facet_results"] = "".join(
+            spec.render(results_facets[spec.key], "search")
+            for spec in composer().get_ordered_specs("facets")
+        )
         context["breadbox"] = breadbox.build_breadbox(criteria, results_facets)
 
         last_sync = kerko_last_sync()

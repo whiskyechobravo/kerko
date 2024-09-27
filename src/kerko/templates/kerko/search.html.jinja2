@@ -181,9 +181,7 @@
             <div id="facets-container" class="d-none d-lg-block d-print-none">
                 <h2 class="{% block facets_heading_classes %}mt-2 mb-4{% endblock %}">{{ _("Explore") }}</h2>
                 <div id="facets" class="facets">
-                    {%- for f in config.kerko_composer.get_ordered_specs('facets') %}
-                        {{ f.render(facet_results[f.key], 'search') }}
-                    {%- endfor %}
+                    {{ facet_results|safe }}
                 </div>
             </div>
             <div id="facets-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="facets-modal-label" aria-hidden="true">
