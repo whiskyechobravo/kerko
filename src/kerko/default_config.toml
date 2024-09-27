@@ -84,7 +84,7 @@ atom_feed = "kerko/atom.xml.jinja2"
 
 batch_size = 100
 max_attempts = 10
-wait = 120  # In seconds.
+wait = 10  # In seconds.
 
 csl_style = "apa"
 locale = "en-US"
