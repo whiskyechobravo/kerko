@@ -3,6 +3,18 @@
 Before doing an upgrade, please check the "How to upgrade" section of the Kerko
 documentation.
 
+## Unreleased
+
+New features:
+
+- Allow the "lang_AREA" form (e.g., "en_US", "fr_FR") when normalizing language
+  values for the "Resource language" facet.
+
+Other changes:
+
+- Improve documentation.
+
+
 ## 1.2.0 (2024-08-03)
 
 New features:

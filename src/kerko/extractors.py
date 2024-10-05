@@ -462,24 +462,7 @@ class LanguageExtractor(Extractor):
         """
         Extract item language(s) into (value, label) tuples.
 
-        When normalizing, this looks into the language database to replace the
-        item's language value by its corresponding ISO 639-3 code and language
-        name. If the value has the form "lang-AREA", "AREA" is ignored when
-        searching a corresponding language. Matching is case-insensitive and
-        proceeds in the following order, stopping at the first match found:
-
-        1. Search a matching 3-letter code from ISO 639-3.
-        2. Search a matching 3-letter bibliographic (B) code from ISO 639-2.
-        3. Search a matching 2-letter code from ISO 639-1.
-        4. Search a matching English language name.
-
-        When a matching language is found, the encoded value uses the 3-letter
-        ISO 639-3 code, and the encoded label is the language name, translated
-        in the locale specified at initialization time.
-
-        When no matching language is found, the value is encoded in its
-        lowercase form, and the label is normalized using the `normalize_case`
-        callable specified at initialization time.
+        Multiple values are separated using the `self.values_separator` regex.
         """
         values = self.values_separator.split(item.get("data", {}).get("language", ""))
         if self.normalize:
@@ -490,8 +473,30 @@ class LanguageExtractor(Extractor):
         return [value for value in dict.fromkeys(values).keys() if value] or None
 
     def normalize_language(self, value):
+        """
+        Given a str value, return a corresponding (language code, name) tuple.
+
+        This searches the language database and tries to find an ISO 639-3 code
+        corresponding to the given value. If the value has the form "lang-AREA"
+        or "lang_AREA", "AREA" is ignored when searching for a language code.
+        Matching is case-insensitive and proceeds in the following order,
+        stopping at the first match found:
+
+        1. Search for a 3-letter ISO 639-3 code.
+        2. Search for a 3-letter ISO 639-2 bibliographic (B) code.
+        3. Search for a 2-letter ISO 639-1 code.
+        4. Search for an English language name.
+
+        If a matching language is found, a tuple is returned with the 3-letter
+        ISO 639-3 code, and the language name. The language name is translated
+        in the locale specified by `self.locale`.
+
+        If no matching language is found, a tuple is returned with the value
+        converted to lowercase form, and a label. The label is normalized using
+        the `self.normalize_case` callable.
+        """
         value = value.strip()
-        lang = value.split("-", maxsplit=1)[0]
+        lang = re.split(r"[-_]", value, maxsplit=1)[0]
         match = None
         if len(lang) == 3:  # noqa: PLR2004
             match = pycountry.languages.get(alpha_3=lang)

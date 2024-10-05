@@ -46,6 +46,8 @@ class LanguageExtractorTestCase(unittest.TestCase):
     def test_iso639_eng_alpha2_area(self):
         result = self.do_extract_test("en-US")
         self.assertListEqual(result, [("eng", "English")])
+        result = self.do_extract_test("en_US")
+        self.assertListEqual(result, [("eng", "English")])
 
     def test_iso639_eng_alpha3(self):
         result = self.do_extract_test("eng")
@@ -106,6 +108,8 @@ class LanguageExtractorTestCase(unittest.TestCase):
     def test_unknown_name_area(self):
         result = self.do_extract_test("xx-XX")
         self.assertListEqual(result, [("xx-xx", "Xx-Xx")])
+        result = self.do_extract_test("xx_XX")
+        self.assertListEqual(result, [("xx_xx", "Xx_Xx")])
 
     def test_unknown_name_invalid(self):
         result = self.do_extract_test("Newspeak", allow_invalid=False)
