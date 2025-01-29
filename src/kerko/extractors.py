@@ -371,7 +371,7 @@ class CollectionNamesExtractor(Extractor):
                 name = library_context.collections[k].get("data", {}).get("name", "").strip()
                 if name:
                     names.add(name)
-        return RECORD_SEPARATOR.join(names) if names else None
+        return RECORD_SEPARATOR.join(sorted(names, key=sort_normalize)) if names else None
 
 
 class BaseTagsExtractor(Extractor):
@@ -409,7 +409,7 @@ class TagsTextExtractor(BaseTagsExtractor):
 
     def extract(self, item, library_context, spec):
         tags = super().extract(item, library_context, spec)
-        return RECORD_SEPARATOR.join(tags) if tags else None
+        return RECORD_SEPARATOR.join(sorted(tags, key=sort_normalize)) if tags else None
 
 
 class LanguageExtractor(Extractor):

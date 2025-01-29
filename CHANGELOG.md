@@ -13,6 +13,9 @@ New features:
 Other changes:
 
 - Improve documentation.
+- Make `CollectionNamesExtractor` and `TagsTextExtractor` sort their extracted
+  values. Although this has no effect on normal uses of Kerko, this may be
+  useful to customizations that rely on those extractors.
 
 
 ## 1.2.0 (2024-08-03)

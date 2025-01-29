@@ -29,15 +29,15 @@ class LanguageExtractorTestCase(unittest.TestCase):
 
     def test_empty(self):
         result = self.do_extract_test("")
-        self.assertEqual(result, None)
+        self.assertIsNone(result)
 
     def test_space(self):
         result = self.do_extract_test("  ")
-        self.assertEqual(result, None)
+        self.assertIsNone(result)
 
     def test_separators(self):
         result = self.do_extract_test(" ; ; ")
-        self.assertEqual(result, None)
+        self.assertIsNone(result)
 
     def test_iso639_eng_alpha2(self):
         result = self.do_extract_test("en")
@@ -155,3 +155,179 @@ class LanguageExtractorTestCase(unittest.TestCase):
     def test_no_normalize_duplicates(self):
         result = self.do_extract_test("en; en", normalize=False)
         self.assertListEqual(result, [("en", "en")])
+
+
+class CollectionNamesExtractorTestCase(unittest.TestCase):
+    """Test the `CollectionNamesExtractor`."""
+
+    class FakeLibraryContext:
+        """Mock the interface of `kerko.sync.zotero.LibraryContext`."""
+
+        def __init__(self, collections):
+            self.collections = collections
+
+    def setUp(self):
+        self.app = Flask(__name__)
+        self.app.register_blueprint(kerko.make_blueprint(), url_prefix="/bibliography")
+        ctx = self.app.app_context()
+        ctx.push()
+
+    @classmethod
+    def do_extract_test(cls, library_collections, item_collections, **kwargs):
+        extractor = extractors.CollectionNamesExtractor(**kwargs)
+        return extractor.extract(
+            # Build fake item data.
+            item={"data": {"collections": item_collections}},
+            # Build fake library data.
+            library_context=cls.FakeLibraryContext(
+                collections={
+                    key: {"data": {"name": name}} for key, name in library_collections.items()
+                }
+            ),
+            # Extractor doesn't use this arg.
+            spec=None,
+        )
+
+    def test_empty(self):
+        library_collections = {}
+        item_collections = []
+        result = self.do_extract_test(library_collections, item_collections)
+        self.assertIsNone(result)
+
+    def test_none(self):
+        library_collections = {"0": "a", "1": "b"}
+        item_collections = []
+        result = self.do_extract_test(library_collections, item_collections)
+        self.assertIsNone(result)
+
+    def test_unknown(self):
+        library_collections = {}
+        item_collections = ["0"]
+        result = self.do_extract_test(library_collections, item_collections)
+        self.assertIsNone(result)
+
+    def test_single(self):
+        library_collections = {"0": "a", "1": "b", "2": "c"}
+        item_collections = ["0"]
+        result = self.do_extract_test(library_collections, item_collections)
+        self.assertEqual(result, "a")
+
+    def test_multiple_empty(self):
+        library_collections = {"0": "", "1": " ", "2": "   "}
+        item_collections = ["0", "1", "2"]
+        result = self.do_extract_test(library_collections, item_collections)
+        self.assertIsNone(result)
+
+    def test_multiple_sorted(self):
+        library_collections = {
+            "x0": "ggg",
+            "40": "a",
+            "01": "Y",
+            "22": "zz",
+            "32": "x",
+            "x1": "hhh",
+            "24": "f",
+            "15": "bbb",
+            "06": "CCC",
+            "17": "d",
+            "08": "E",
+        }
+        item_collections = ["40", "01", "22", "32", "24", "15", "06", "17", "08"]
+        result = self.do_extract_test(library_collections, item_collections)
+        self.assertEqual(
+            result,
+            extractors.RECORD_SEPARATOR.join(["a", "bbb", "CCC", "d", "E", "f", "x", "Y", "zz"]),
+        )
+
+    def test_strip(self):
+        library_collections = {
+            "0": " a",
+            "1": "b ",
+            "2": " c ",
+            "3": "\nd\n",
+            "4": " e e ",
+            "5": " ",
+        }
+        item_collections = ["0", "1", "2", "3", "4", "5"]
+        result = self.do_extract_test(library_collections, item_collections)
+        self.assertEqual(
+            result,
+            extractors.RECORD_SEPARATOR.join(["a", "b", "c", "d", "e e"]),
+        )
+
+
+class TagsTextExtractorTestCase(unittest.TestCase):
+    """Test the `TagsTextExtractor`."""
+
+    def setUp(self):
+        self.app = Flask(__name__)
+        self.app.register_blueprint(kerko.make_blueprint(), url_prefix="/bibliography")
+        ctx = self.app.app_context()
+        ctx.push()
+
+    @staticmethod
+    def do_extract_test(tags, **kwargs):
+        extractor = extractors.TagsTextExtractor(**kwargs)
+        return extractor.extract(
+            # Build fake item data.
+            item={"data": {"tags": [{"tag": tag} for tag in tags]}},
+            # Extractor doesn't use this arg.
+            library_context={},
+            # Extractor doesn't use this arg.
+            spec=None,
+        )
+
+    def test_empty(self):
+        tags = []
+        result = self.do_extract_test(tags)
+        self.assertIsNone(result)
+
+    def test_single(self):
+        tags = ["a"]
+        result = self.do_extract_test(tags)
+        self.assertEqual(result, "a")
+
+    def test_multiple_empty(self):  ########## TODO: Redondant avec test_strip
+        tags = ["", " ", "   "]
+        result = self.do_extract_test(tags)
+        self.assertIsNone(result)
+
+    def test_multiple_sorted(self):
+        tags = ["a", "Y", "zz", "x", "f", "bbb", "CCC", "d", "E"]
+        result = self.do_extract_test(tags)
+        self.assertEqual(
+            result,
+            extractors.RECORD_SEPARATOR.join(["a", "bbb", "CCC", "d", "E", "f", "x", "Y", "zz"]),
+        )
+
+    def test_strip(self):
+        tags = [" a", "b ", " c ", " ", "\nd\n", " e e "]
+        result = self.do_extract_test(tags)
+        self.assertEqual(
+            result,
+            extractors.RECORD_SEPARATOR.join(["a", "b", "c", "d", "e e"]),
+        )
+
+    def test_include_re(self):
+        tags = ["a", "_b", "_c", "d", "ex", "x", "xx"]
+        result = self.do_extract_test(tags, include_re=r"((^_)|(.*x))")
+        self.assertEqual(
+            result,
+            extractors.RECORD_SEPARATOR.join(["_b", "_c", "ex", "x", "xx"]),
+        )
+
+    def test_exclude_re(self):
+        tags = ["a", "_b", "_c", "d", "ex", "x", "xx"]
+        result = self.do_extract_test(tags, exclude_re=r"((^_)|(.*x))")
+        self.assertEqual(
+            result,
+            extractors.RECORD_SEPARATOR.join(["a", "d"]),
+        )
+
+    def test_include_exclude_re(self):
+        tags = ["a", "_b", "_c", "d", "ex", "x", "xx"]
+        result = self.do_extract_test(tags, include_re=r"(^_)", exclude_re=r"(.*x)")
+        self.assertEqual(
+            result,
+            extractors.RECORD_SEPARATOR.join(["_b", "_c"]),
+        )
