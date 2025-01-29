@@ -842,6 +842,10 @@ whoosh_language = "en"
     enabled = true
     weight = 0
 
+    [kerko.sorts.recently_added]
+    enabled = true
+    weight = 1
+
     [kerko.sorts.date_desc]
     enabled = true
     weight = 10

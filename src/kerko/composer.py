@@ -688,6 +688,26 @@ class Composer:
                             is_allowed=lambda criteria: criteria.has_keywords(),
                         )
                     )
+                elif sort_key == "recently_added":
+                    self.add_sort(
+                        SortSpec(
+                            key=sort_key,
+                            label=sort_config.get("label") or _("Recently added"),
+                            weight=sort_config["weight"],
+                            fields=[
+                                self.fields["sort_date_added"],
+                                self.fields["sort_date"],
+                                self.fields["sort_creator"],
+                                self.fields["sort_title"],
+                            ],
+                            reverse=[
+                                True,
+                                True,
+                                False,
+                                False,
+                            ],
+                        )
+                    )
                 elif sort_key == "date_desc":
                     self.add_sort(
                         SortSpec(

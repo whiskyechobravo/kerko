@@ -1159,21 +1159,28 @@ Type: Array of strings
 
 Search results sorting options, where `*` is a sort option key.
 
-The default sort options are:
+The default sort options, ordered by default weight (in parentheses) are:
 
-- `author_asc`
-- `author_desc`
-- `date_asc`
-- `date_desc`
-- `score`
-- `title_asc`
-- `title_desc`
+- `score` (0)
+- `recently_added` (1)
+- `date_desc` (10)
+- `date_asc` (11)
+- `author_asc` (20)
+- `author_desc` (21)
+- `title_asc` (30)
+- `title_desc` (31)
 
 The configuration system does not allow adding new sort options.
 
 ### `enabled`
 
 Enable the sort option.
+
+!!! tip
+
+    If the bibliography is considered finished, with no future additions to be
+    expected, it may make sense to disable the "Recently added" sort option by
+    setting the `kerko.sorts.recently_added.enabled` parameter to `false`.
 
 Type: Boolean
 

@@ -7,6 +7,14 @@ documentation.
 
 New features:
 
+- Add the "Recently added" sort option, which uses the dates items were added to
+  Zotero. This is now the default sort, allowing regular visitors of the landing
+  page to see recently added items.
+    - If you prefer a default sort by publication date (as in previous Kerko
+      versions), set the `kerko.sorts.recently_added.weight` configuration
+      parameter to `40`.
+    - To remove the "Recently added" sort option, set the
+      `kerko.sorts.recently_added.enabled` configuration parameter to `false`.
 - Allow the "lang_AREA" form (e.g., "en_US", "fr_FR") when normalizing language
   values for the "Resource language" facet.
 
