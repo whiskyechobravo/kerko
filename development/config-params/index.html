@@ -4057,19 +4057,26 @@ commands</a> for details.</p>
 <hr />
 <h2 id="kerkosorts"><code>kerko.sorts.*.</code><a class="headerlink" href="#kerkosorts" title="Permanent link">&para;</a></h2>
 <p>Search results sorting options, where <code>*</code> is a sort option key.</p>
-<p>The default sort options are:</p>
+<p>The default sort options, ordered by default weight (in parentheses) are:</p>
 <ul>
-<li><code>author_asc</code></li>
-<li><code>author_desc</code></li>
-<li><code>date_asc</code></li>
-<li><code>date_desc</code></li>
-<li><code>score</code></li>
-<li><code>title_asc</code></li>
-<li><code>title_desc</code></li>
+<li><code>score</code> (0)</li>
+<li><code>recently_added</code> (1)</li>
+<li><code>date_desc</code> (10)</li>
+<li><code>date_asc</code> (11)</li>
+<li><code>author_asc</code> (20)</li>
+<li><code>author_desc</code> (21)</li>
+<li><code>title_asc</code> (30)</li>
+<li><code>title_desc</code> (31)</li>
 </ul>
 <p>The configuration system does not allow adding new sort options.</p>
 <h3 id="enabled_5"><code>enabled</code><a class="headerlink" href="#enabled_5" title="Permanent link">&para;</a></h3>
 <p>Enable the sort option.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If the bibliography is considered finished, with no future additions to be
+expected, it may make sense to disable the "Recently added" sort option by
+setting the <code>kerko.sorts.recently_added.enabled</code> parameter to <code>false</code>.</p>
+</div>
 <p>Type: Boolean</p>
 <h3 id="label_1"><code>label</code><a class="headerlink" href="#label_1" title="Permanent link">&para;</a></h3>
 <p>Label of the sort option.</p>

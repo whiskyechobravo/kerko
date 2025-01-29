@@ -941,6 +941,16 @@ documentation.</p>
 <h2 id="unreleased">Unreleased<a class="headerlink" href="#unreleased" title="Permanent link">&para;</a></h2>
 <p>New features:</p>
 <ul>
+<li>Add the "Recently added" sort option, which uses the dates items were added to
+  Zotero. This is now the default sort, allowing regular visitors of the landing
+  page to see recently added items.<ul>
+<li>If you prefer a default sort by publication date (as in previous Kerko
+  versions), set the <code>kerko.sorts.recently_added.weight</code> configuration
+  parameter to <code>40</code>.</li>
+<li>To remove the "Recently added" sort option, set the
+  <code>kerko.sorts.recently_added.enabled</code> configuration parameter to <code>false</code>.</li>
+</ul>
+</li>
 <li>Allow the "lang_AREA" form (e.g., "en_US", "fr_FR") when normalizing language
   values for the "Resource language" facet.</li>
 </ul>
