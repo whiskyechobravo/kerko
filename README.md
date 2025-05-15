@@ -2,7 +2,6 @@
 [![Version](https://img.shields.io/pypi/v/kerko?color=informational)][Kerko_pypi]
 [![Tests status](https://github.com/whiskyechobravo/kerko/workflows/tests/badge.svg)][Kerko_actions]
 
-
 # Kerko
 
 [Kerko] is a web application component that provides a user-friendly search and
@@ -14,13 +13,11 @@ but easy to use web interface for end-users of the bibliography, and a
 well-established and powerful bibliographic reference management tool for
 individuals or teams working on the bibliography's content.
 
-
 ## Demo site
 
 A [KerkoApp]-based [demo site][KerkoApp_demo] is available for you to try. You
 may also view the [Zotero library][Zotero_demo] that contains the source data
 for the demo site.
-
 
 ## Powered by Kerko
 
@@ -29,13 +26,12 @@ Here are some sites that are powered by Kerko:
 - [Bibliographie francophone sur l'archivistique](https://bibliopiaf.ebsi.umontreal.ca/)
 - [Bibliographie sur l'histoire de Montréal](https://bibliographies.uqam.ca/bhm/)
 - [Community Knowledge Open Library on English-Speaking Quebec](https://ckol.quescren.ca/)
+- [Gaius : Conception et évaluation d’un nouveau modèle d’indexation de la documentation juridique - Bibliographie](https://gaius.ebsi.umontreal.ca/bibliographie/)
 - [Lipedema Foundation LEGATO Lipedema Library](https://library.lipedema.org/)
-- [Open Development & Education Evidence Library](https://docs.opendeved.net/)
 - [Rights and Records Knowledge Base](https://rightsandrecords.ica.org/)
 - [The EdTech Hub Evidence Library](https://docs.edtechhub.org/)
 - [Transitional Justice Evaluation Tools Reference Library](https://library.transitionaljusticedata.org/)
 - [University of Saint Joseph Research Output](https://research.usj.edu.mo/)
-
 
 ## Features
 
@@ -50,38 +46,38 @@ The main features provided by Kerko are:
   narrow or broaden their search. Since both modes are integrated into a single
   interface, it is possible to combine them.
 - **Keyword search** features:
-    - Boolean operators:
-        - `AND`: matches items that contain all specified terms. This is the
-          default relation between terms when no operator is specified, e.g.,
-          `a b` is the same as `a AND b`.
-        - `OR`: matches items that contain any of the specified terms, e.g.,
-          `a OR b`.
-        - `NOT`: excludes items that match the term, e.g., `NOT a`.
-        - Boolean operators must be specified in uppercase and may be translated
-          in other languages.
-    - Logical grouping (with parentheses), e.g., `(a OR b) AND c`.
-    - Sequence of words (with double quotes), e.g., `"a b c"`. The default
-      difference between word positions is 1, meaning that an item will match if
-      it contains the words next to each other, but a different maximum distance
-      may be selected (with the tilde character), e.g. `"web search"~2` allows
-      up to 1 word between `web` and `search`, meaning it could match `web site
-      search` as well as `web search`.
-    - Term boosting (with the caret), e.g., `faceted^2 search browsing^0.5`
-      specifies that `faceted` is twice as important as `search` when computing
-      the relevance score of results, while `browsing` is half as important.
-      Boosting may be applied to a logical grouping, e.g., `(a b)^3 c`.
-    - Keyword search is case-insensitive, accents are folded, and punctuation is
-      ignored. To further improve recall (albeit at the cost of precision),
-      stemming is also performed on terms from most text fields, e.g., title,
-      abstract, notes. Stemming relieves the user from having to specify all
-      variants of a word when searching, e.g., terms such as `search`,
-      `searches`, and `searching` all return the same results. The [Snowball]
-      algorithm is used for that purpose.
-    - Full-text search: the text content of PDF attachments can be searched.
-    - Scope of search: users may choose to search everywhere, in
-      author/contributor names, in titles, in publication years, in all fields
-      (i.e., in metadata and notes), or in documents (i.e., in the text content
-      of attachments). Applications may provide additional choices.
+  - Boolean operators:
+    - `AND`: matches items that contain all specified terms. This is the
+      default relation between terms when no operator is specified, e.g.,
+      `a b` is the same as `a AND b`.
+    - `OR`: matches items that contain any of the specified terms, e.g.,
+      `a OR b`.
+    - `NOT`: excludes items that match the term, e.g., `NOT a`.
+    - Boolean operators must be specified in uppercase and may be translated
+      in other languages.
+  - Logical grouping (with parentheses), e.g., `(a OR b) AND c`.
+  - Sequence of words (with double quotes), e.g., `"a b c"`. The default
+    difference between word positions is 1, meaning that an item will match if
+    it contains the words next to each other, but a different maximum distance
+    may be selected (with the tilde character), e.g. `"web search"~2` allows
+    up to 1 word between `web` and `search`, meaning it could match `web site
+search` as well as `web search`.
+  - Term boosting (with the caret), e.g., `faceted^2 search browsing^0.5`
+    specifies that `faceted` is twice as important as `search` when computing
+    the relevance score of results, while `browsing` is half as important.
+    Boosting may be applied to a logical grouping, e.g., `(a b)^3 c`.
+  - Keyword search is case-insensitive, accents are folded, and punctuation is
+    ignored. To further improve recall (albeit at the cost of precision),
+    stemming is also performed on terms from most text fields, e.g., title,
+    abstract, notes. Stemming relieves the user from having to specify all
+    variants of a word when searching, e.g., terms such as `search`,
+    `searches`, and `searching` all return the same results. The [Snowball]
+    algorithm is used for that purpose.
+  - Full-text search: the text content of PDF attachments can be searched.
+  - Scope of search: users may choose to search everywhere, in
+    author/contributor names, in titles, in publication years, in all fields
+    (i.e., in metadata and notes), or in documents (i.e., in the text content
+    of attachments). Applications may provide additional choices.
 - **Faceted browsing**: allows filtering by topic (Zotero tag), by resource type
   (Zotero item type), by publication year, or by resource language. Moreover,
   you may define additional facets modeled on collections and subcollections; in
@@ -116,30 +112,30 @@ The main features provided by Kerko are:
   detected by web crawlers (helping the indexing of your records by search
   engines) or by web browsers (allowing users of reference management tools to
   easily import metadata in their library). Supported schemes are:
-    - [OpenURL COinS][COinS], in search results pages and individual
-      bibliographic record pages. COinS is recognized by [many reference
-      management tools][COinS_clients], including the [Zotero
-      Connector][Zotero_Connector] browser extension.
-    - Highwire Press tags, in the individual bibliographic record pages of book,
-      conference paper, journal article, report or thesis items. These tags are
-      recommended for indexing by [Google Scholar][HighwirePress_Google], and
-      are recognized by many other databases and reference management tools,
-      including the [Zotero Connector][Zotero_Connector] browser extension.
+  - [OpenURL COinS][COinS], in search results pages and individual
+    bibliographic record pages. COinS is recognized by [many reference
+    management tools][COinS_clients], including the [Zotero
+    Connector][Zotero_Connector] browser extension.
+  - Highwire Press tags, in the individual bibliographic record pages of book,
+    conference paper, journal article, report or thesis items. These tags are
+    recommended for indexing by [Google Scholar][HighwirePress_Google], and
+    are recognized by many other databases and reference management tools,
+    including the [Zotero Connector][Zotero_Connector] browser extension.
 - **Web feeds**: users of news aggregators or feed readers may get updates when
   new bibliographic records are added. They may subscribe to the main feed, or
   to one or more custom feeds.
-    - The main feed lists the most recently added bibliographic records.
-    - Any search page has a related custom feed that lists the most recently
-      added bibliographic records that match the search criteria. Thus, a user
-      can obtain a custom feed for a particular area of interest simply by
-      entering keywords to search and/or selecting filters.
-    - Feeds are provided in the [Atom syndication format][Atom].
-    - Basic metadata is provided directly in the feeds, using both Atom and
-      unqualified [Dublin Core][Dublin_Core] elements.
-    - An age limit may be configured to exclude older items from the feeds. This
-      may be useful to bibliographies that are frequently updated and mostly
-      meant to promote recent literature (all resources still remain visible to
-      the search interface regardless of their age).
+  - The main feed lists the most recently added bibliographic records.
+  - Any search page has a related custom feed that lists the most recently
+    added bibliographic records that match the search criteria. Thus, a user
+    can obtain a custom feed for a particular area of interest simply by
+    entering keywords to search and/or selecting filters.
+  - Feeds are provided in the [Atom syndication format][Atom].
+  - Basic metadata is provided directly in the feeds, using both Atom and
+    unqualified [Dublin Core][Dublin_Core] elements.
+  - An age limit may be configured to exclude older items from the feeds. This
+    may be useful to bibliographies that are frequently updated and mostly
+    meant to promote recent literature (all resources still remain visible to
+    the search interface regardless of their age).
 - **Sitemap**: an [XML Sitemap][XML_Sitemap] is automatically generated, and you
   may use it to help search engines discover your bibliographic records.
 - **Exporting**: users may export individual records as well as complete
@@ -187,11 +183,9 @@ Kerko's features and it provides a few additions of its own:
 - Page templates for common HTTP errors.
 - Syslog logging handler (for Unix environments).
 
-
 ## Learn more
 
 Please refer to the [documentation][Kerko_documentation] for more details.
-
 
 [Atom]: https://en.wikipedia.org/wiki/Atom_(web_standard)
 [BM25F]: https://en.wikipedia.org/wiki/Okapi_BM25
