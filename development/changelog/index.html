@@ -1549,11 +1549,13 @@ flask<span class="w"> </span>kerko<span class="w"> </span>sync
 <li>Allow inclusion or exclusion of items based on their tags
   (<a href="https://github.com/whiskyechobravo/kerko/issues/4">#4</a>).</li>
 <li>Show attached links to URIs on item pages.</li>
-<li>Show relations on item pages. The relation types provided by default are:</li>
+<li>Show relations on item pages. The relation types provided by default are:<ul>
 <li><em>Related</em>, based on Zotero's <em>Related</em> field.</li>
-<li><em>Cites</em>, managed through child notes containing Zotero URIs and tagged with
-    the <code>_cites</code> tag.</li>
+<li><em>Cites</em>, managed through child notes containing Zotero URIs and tagged
+  with the <code>_cites</code> tag.</li>
 <li><em>Cited by</em>, automatically inferred from <em>Cites</em> relations.</li>
+</ul>
+</li>
 <li>The Extra field is now searched when searching "in any fields".</li>
 <li>Items that have a DOI, ISBN or ISSN identifier can be referenced by appending
   their identifier to your Kerko site's base URL.</li>
@@ -1567,15 +1569,17 @@ flask<span class="w"> </span>kerko<span class="w"> </span>sync
   matches because of database changes.</li>
 <li>Redirect to the parent item's page when the user tries to request an
   attachment that no longer exists.</li>
-<li>Improve accessibility based on WCAG recommendations and WAI-ARIA standards:</li>
+<li>Improve accessibility based on WCAG recommendations and WAI-ARIA standards:<ul>
 <li>Add labels to search form elements.</li>
 <li>Add landmark role <code>search</code> to the search form.</li>
 <li>Make the purpose of various links more obvious through improved or added
-    labels.</li>
+  labels.</li>
 <li>Add the <code>aria-label</code> attribute to many elements.</li>
 <li>Add text to indicate the current value of widgets.</li>
 <li>Add the <code>aria-current</code> attribute to indicate the current value of widgets.</li>
 <li>Remove useless link to the current page from the pagination widget.</li>
+</ul>
+</li>
 </ul>
 <p>Bug fixes:</p>
 <ul>
@@ -1624,13 +1628,16 @@ flask<span class="w"> </span>kerko<span class="w"> </span>sync
   been inserted), and <code>{url_prefix}/export/{format}/</code> for search result pages
   (<code>'download'</code> has been replaced by <code>'export'</code>).</li>
 <li>The <code>Extractor</code> class' interface has changed, improving consistency and
-  separation of concerns:</li>
+  separation of concerns:<ul>
 <li>All arguments to <code>__init__()</code> must now be specified as keyword arguments.</li>
-<li>The <code>extract()</code> method no longer have a <code>document</code> argument, and the <code>spec</code>
-    argument is now the last one. The method now returns a value instead of
-    assigning it to the document.</li>
+<li>The <code>extract()</code> method no longer have a <code>document</code> argument, and the
+  <code>spec</code> argument is now the last one. The method now returns a value
+  instead of assigning it to the document.</li>
 <li>The new <code>extract_and_store()</code> method handles extraction, encoding, and
-    assignment to the document, assigning the value only when it is not <code>None</code>.</li>
+  assignment to the document, assigning the value only when it is not
+  <code>None</code>.</li>
+</ul>
+</li>
 <li>The <code>AttachmentsExtractor</code> class has been renamed to
   <code>StoredFileAttachmentsExtractor</code>.</li>
 <li><code>InCollectionExtractor</code> now extends collection membership to subcollections.
@@ -1708,12 +1715,14 @@ flask<span class="w"> </span>kerko<span class="w"> </span>sync
 <li>Allow configuration of badges on items. The 'attachment' badge is provided by
   default, displaying an icon on items that have one or more attachments.</li>
 <li>Add help modal.</li>
-<li>Improve customizability:</li>
+<li>Improve customizability:<ul>
 <li>Add <code>KERKO_TEMPLATE_*</code> configuration variables for page template names.</li>
 <li>Use configurable, separate templates to render facets and badges (see the
-    <code>renderer</code> argument to <code>kerko.specs.FacetSpec</code>, <code>kerko.specs.BadgeSpec</code>).</li>
+  <code>renderer</code> argument to <code>kerko.specs.FacetSpec</code>, <code>kerko.specs.BadgeSpec</code>).</li>
 <li>Add the <code>KERKO_RESULTS_FIELDS</code> configuration variable to specify which
-    fields to retrieve with search queries.</li>
+  fields to retrieve with search queries.</li>
+</ul>
+</li>
 <li>Add building blocks for creating boolean facets based on collection membership
   (new class <code>kerko.extractors.InCollectionExtractor</code>, new parameters for
   <code>kerko.codecs.BooleanFacetCodec</code>).</li>
