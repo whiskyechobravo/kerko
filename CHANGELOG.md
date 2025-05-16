@@ -595,10 +595,10 @@ Features:
   ([#4](https://github.com/whiskyechobravo/kerko/issues/4)).
 - Show attached links to URIs on item pages.
 - Show relations on item pages. The relation types provided by default are:
-  - _Related_, based on Zotero's _Related_ field.
-  - _Cites_, managed through child notes containing Zotero URIs and tagged with
-    the `_cites` tag.
-  - _Cited by_, automatically inferred from _Cites_ relations.
+    - _Related_, based on Zotero's _Related_ field.
+    - _Cites_, managed through child notes containing Zotero URIs and tagged
+      with the `_cites` tag.
+    - _Cited by_, automatically inferred from _Cites_ relations.
 - The Extra field is now searched when searching "in any fields".
 - Items that have a DOI, ISBN or ISSN identifier can be referenced by appending
   their identifier to your Kerko site's base URL.
@@ -613,14 +613,14 @@ Features:
 - Redirect to the parent item's page when the user tries to request an
   attachment that no longer exists.
 - Improve accessibility based on WCAG recommendations and WAI-ARIA standards:
-  - Add labels to search form elements.
-  - Add landmark role `search` to the search form.
-  - Make the purpose of various links more obvious through improved or added
-    labels.
-  - Add the `aria-label` attribute to many elements.
-  - Add text to indicate the current value of widgets.
-  - Add the `aria-current` attribute to indicate the current value of widgets.
-  - Remove useless link to the current page from the pagination widget.
+    - Add labels to search form elements.
+    - Add landmark role `search` to the search form.
+    - Make the purpose of various links more obvious through improved or added
+      labels.
+    - Add the `aria-label` attribute to many elements.
+    - Add text to indicate the current value of widgets.
+    - Add the `aria-current` attribute to indicate the current value of widgets.
+    - Remove useless link to the current page from the pagination widget.
 
 Bug fixes:
 
@@ -670,12 +670,13 @@ Backwards incompatible changes:
   (`'download'` has been replaced by `'export'`).
 - The `Extractor` class' interface has changed, improving consistency and
   separation of concerns:
-  - All arguments to `__init__()` must now be specified as keyword arguments.
-  - The `extract()` method no longer have a `document` argument, and the `spec`
-    argument is now the last one. The method now returns a value instead of
-    assigning it to the document.
-  - The new `extract_and_store()` method handles extraction, encoding, and
-    assignment to the document, assigning the value only when it is not `None`.
+    - All arguments to `__init__()` must now be specified as keyword arguments.
+    - The `extract()` method no longer have a `document` argument, and the
+      `spec` argument is now the last one. The method now returns a value
+      instead of assigning it to the document.
+    - The new `extract_and_store()` method handles extraction, encoding, and
+      assignment to the document, assigning the value only when it is not
+      `None`.
 - The `AttachmentsExtractor` class has been renamed to
   `StoredFileAttachmentsExtractor`.
 - `InCollectionExtractor` now extends collection membership to subcollections.
@@ -759,11 +760,11 @@ Features:
   default, displaying an icon on items that have one or more attachments.
 - Add help modal.
 - Improve customizability:
-  - Add `KERKO_TEMPLATE_*` configuration variables for page template names.
-  - Use configurable, separate templates to render facets and badges (see the
-    `renderer` argument to `kerko.specs.FacetSpec`, `kerko.specs.BadgeSpec`).
-  - Add the `KERKO_RESULTS_FIELDS` configuration variable to specify which
-    fields to retrieve with search queries.
+    - Add `KERKO_TEMPLATE_*` configuration variables for page template names.
+    - Use configurable, separate templates to render facets and badges (see the
+      `renderer` argument to `kerko.specs.FacetSpec`, `kerko.specs.BadgeSpec`).
+    - Add the `KERKO_RESULTS_FIELDS` configuration variable to specify which
+      fields to retrieve with search queries.
 - Add building blocks for creating boolean facets based on collection membership
   (new class `kerko.extractors.InCollectionExtractor`, new parameters for
   `kerko.codecs.BooleanFacetCodec`).
