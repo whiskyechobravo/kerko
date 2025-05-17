@@ -25,18 +25,18 @@
         <{{ item_tag }}{% if icon_left %} class="position-relative"{% endif %}{% if top_level and icon_left %} style="margin-left:{{ icon_left }};"{% endif %}>
             {%- set label = item.label|escape|trim(' _') or (('<em>' + missing_label + '</em>')|safe) -%}
             {%- if item.remove_url -%}
-                <button class="facet-item btn btn-link px-0 py-0 border-0 rounded-0 align-baseline" data-href="{{ item.remove_url }}" {{ title_aria_label(remove_title.format(label|striptags|escape)) }}>
+                <span class="facet-item btn btn-link px-0 py-0 border-0 rounded-0 align-baseline" tabindex="0" role="button" data-href="{{ item.remove_url }}" {{ title_aria_label(remove_title.format(label|striptags|escape)) }}>
                     {%- if remove_icon %}<span class="far fa-check-square{% if icon_left %} position-absolute{% endif %}" aria-hidden="true"{% if icon_left %} style="margin-left:1px;{% if icon_top %}top:{{ icon_top }};{% endif %}left:-{{ icon_left }};{% if icon_line_height %}line-height:1.5;{% endif %}"{% endif %}></span>{% endif %}
                     <span class="facet-item-label parent-decorate">{{ label }}</span>{#- No whitespace -#}
-                </button>
+                </span>
             {%- elif item.add_url -%}
-                <button class="facet-item btn btn-link px-0 py-0 border-0 rounded-0 align-baseline" data-href="{{ item.add_url }}" {{ title_aria_label(add_title.format(label|striptags|escape)) }}>
+                <span class="facet-item btn btn-link px-0 py-0 border-0 rounded-0 align-baseline" tabindex="0" role="button" data-href="{{ item.add_url }}" {{ title_aria_label(add_title.format(label|striptags|escape)) }}>
                     {%- if add_icon %}<span class="far fa-square{% if icon_left %} position-absolute{% endif %}" aria-hidden="true"{% if icon_left %} style="margin-left:1px;{% if icon_top %}top:{{ icon_top }};{% endif %}left:-{{ icon_left }};{% if icon_line_height %}line-height:1.5;{% endif %}"{% endif %}></span>{% endif %}
                     <span class="facet-item-label parent-decorate">{{ label }}</span>{#- No whitespace -#}
-                </button>
+                </span>
             {%- else -%}
                 {{- label }}
-            {% endif %}
+            {%- endif %}
             {% if not item.remove_url and item.count > 0 %}<span class="facet-item-count"> ({{ item.count_formatted|safe }}) </span>{% endif %}
             {%- if subtree %}
                 {%- if list_id and item.id %}
