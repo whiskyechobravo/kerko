@@ -25,15 +25,15 @@
         <{{ item_tag }}{% if icon_left %} class="position-relative"{% endif %}{% if top_level and icon_left %} style="margin-left:{{ icon_left }};"{% endif %}>
             {%- set label = item.label|escape|trim(' _') or (('<em>' + missing_label + '</em>')|safe) -%}
             {%- if item.remove_url -%}
-                <a class="no-decorate" href="{{ item.remove_url }}" {{ title_aria_label(remove_title.format(label|striptags|escape)) }} rel="nofollow">
+                <button class="facet-item btn btn-link px-0 py-0 border-0 rounded-0 align-baseline" data-href="{{ item.remove_url }}" {{ title_aria_label(remove_title.format(label|striptags|escape)) }}>
                     {%- if remove_icon %}<span class="far fa-check-square{% if icon_left %} position-absolute{% endif %}" aria-hidden="true"{% if icon_left %} style="margin-left:1px;{% if icon_top %}top:{{ icon_top }};{% endif %}left:-{{ icon_left }};{% if icon_line_height %}line-height:1.5;{% endif %}"{% endif %}></span>{% endif %}
                     <span class="facet-item-label parent-decorate">{{ label }}</span>{#- No whitespace -#}
-                </a>
+                </button>
             {%- elif item.add_url -%}
-                <a class="no-decorate" href="{{ item.add_url }}" {{ title_aria_label(add_title.format(label|striptags|escape)) }} rel="nofollow">
+                <button class="facet-item btn btn-link px-0 py-0 border-0 rounded-0 align-baseline" data-href="{{ item.add_url }}" {{ title_aria_label(add_title.format(label|striptags|escape)) }}>
                     {%- if add_icon %}<span class="far fa-square{% if icon_left %} position-absolute{% endif %}" aria-hidden="true"{% if icon_left %} style="margin-left:1px;{% if icon_top %}top:{{ icon_top }};{% endif %}left:-{{ icon_left }};{% if icon_line_height %}line-height:1.5;{% endif %}"{% endif %}></span>{% endif %}
                     <span class="facet-item-label parent-decorate">{{ label }}</span>{#- No whitespace -#}
-                </a>
+                </button>
             {%- else -%}
                 {{- label }}
             {% endif %}

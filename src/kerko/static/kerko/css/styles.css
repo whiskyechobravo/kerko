@@ -84,6 +84,10 @@ main {
 .btn-toggle:not([active]) > .btn-toggle-icon-on {
   display: none;
 }
+.btn-link:focus {
+  outline: initial;
+  box-shadow: initial;
+}
 .d-none-important {
   display: none !important;
 }
