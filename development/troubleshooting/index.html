@@ -453,6 +453,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#gateway-time-out-504-errors-when-synchronizing-with-zotero" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gateway Time-out (504) errors when synchronizing with Zotero
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#configuration-parameter-change-has-no-effect" class="md-nav__link">
     <span class="md-ellipsis">
       Configuration parameter change has no effect
@@ -648,6 +657,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#gateway-time-out-504-errors-when-synchronizing-with-zotero" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gateway Time-out (504) errors when synchronizing with Zotero
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#configuration-parameter-change-has-no-effect" class="md-nav__link">
     <span class="md-ellipsis">
       Configuration parameter change has no effect
@@ -707,6 +725,16 @@ discovery</a>
 for details.</p>
 <p>For example:</p>
 <div class="highlight"><pre><span></span><code>flask<span class="w"> </span>--app<span class="o">=</span>/path/to/kerkoapp/wsgi:app<span class="w"> </span>kerko<span class="w"> </span>sync
+</code></pre></div>
+<h2 id="gateway-time-out-504-errors-when-synchronizing-with-zotero">Gateway Time-out (504) errors when synchronizing with Zotero<a class="headerlink" href="#gateway-time-out-504-errors-when-synchronizing-with-zotero" title="Permanent link">&para;</a></h2>
+<p>This error sometimes happen when Zotero's servers are busier than usual. Kerko
+handles this by waiting a little bit, and then retrying the request that has
+failed. Thus, although you may see Gateway Time-out error messages during
+synchronization, you may usually ignore them.</p>
+<p>However, if you are finding that Kerko doesn't finish synchronization because
+too many requests fail, we recommend that you put the following setting in your
+configuration file:</p>
+<div class="highlight"><pre><span></span><code><span class="n">kerko</span><span class="p">.</span><span class="n">zotero</span><span class="p">.</span><span class="n">batch_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span>
 </code></pre></div>
 <h2 id="configuration-parameter-change-has-no-effect">Configuration parameter change has no effect<a class="headerlink" href="#configuration-parameter-change-has-no-effect" title="Permanent link">&para;</a></h2>
 <p>Restart the application. This is required for any configuration change to take
