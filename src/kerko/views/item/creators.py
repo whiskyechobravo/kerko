@@ -46,6 +46,6 @@ def inject_creator_display_names(item, link=True):
                         creator["url"] = url_for(
                             ".search",
                             **creator_scope.add_keywords(
-                                value=f"\"{richtext_striptags(creator['display'])}\""
+                                value=f'"{richtext_striptags(creator["display"])}"'
                             ),
                         )

@@ -59,8 +59,7 @@ def retry_zotero(wrapped, _instance, args, kwargs):
                 sleep(config("kerko.zotero.wait"))
             else:
                 current_app.logger.error(
-                    "The maximum number of API call attempts to Zotero has "
-                    "been reached. Stopping."
+                    "The maximum number of API call attempts to Zotero has been reached. Stopping."
                 )
                 raise
 

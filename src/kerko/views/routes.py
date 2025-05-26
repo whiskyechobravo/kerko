@@ -395,9 +395,9 @@ def item_bib_download(item_id, bib_format_key):
         )
 
     response = make_response(content)
-    response.headers[
-        "Content-Disposition"
-    ] = f"attachment; filename={item['id']}.{bib_format.extension}"
+    response.headers["Content-Disposition"] = (
+        f"attachment; filename={item['id']}.{bib_format.extension}"
+    )
     response.headers["Content-Type"] = f"{bib_format.mime_type}; charset=utf-8"
     return response
 
@@ -430,9 +430,9 @@ def search_bib_download(bib_format_key):
     response = make_response(
         bib_format.group_format.format(bib_format.group_item_delimiter.join(citations))
     )
-    response.headers[
-        "Content-Disposition"
-    ] = f"attachment; filename=bibliography.{bib_format.extension}"
+    response.headers["Content-Disposition"] = (
+        f"attachment; filename=bibliography.{bib_format.extension}"
+    )
     response.headers["Content-Type"] = f"{bib_format.mime_type}; charset=utf-8"
     return response
 
