@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 from babel.numbers import format_decimal
 from flask import Request, url_for
@@ -100,7 +100,7 @@ class FieldSpec(BaseFieldSpec):
 
         :param BaseFieldCodec codec: Value encoder/decoder for this field.
 
-        :param list scopes: List of keys to `ScopeSpec` instances to which this
+        :param list scopes: list of keys to `ScopeSpec` instances to which this
             field applies. If `None`, the field won't be available for keyword
             search.
         """
@@ -553,7 +553,7 @@ class SortSpec:
 
         :param str label: Label of this sort option.
 
-        :param list fields: List of `FieldSpec` instances to use when doing
+        :param list fields: list of `FieldSpec` instances to use when doing
             search queries with this sort option, in order of precedence.
 
         :param int weight: Determine the position of this option relative to the
@@ -679,7 +679,7 @@ class RelationSpec:
         :param int weight: Determine the position of this relation type
             relatively to other relation types in lists.
 
-        :paras list id_fields: List of `FieldSpec` instances representing the
+        :paras list id_fields: list of `FieldSpec` instances representing the
             fields to search when trying to resolve an item identifier.
 
         :param bool directed: Whether a relation is directed (i.e.
@@ -823,7 +823,7 @@ class LinkByEndpointSpec(LinkSpec):
         external: bool = False,
         anchor: Optional[str] = None,
         scheme: Optional[str] = None,
-        parameters: Optional[Dict[str, Any]] = None,
+        parameters: Optional[dict[str, Any]] = None,
         **kwargs,
     ):
         super().__init__(**kwargs)
@@ -861,12 +861,12 @@ class PageLinkSpec(LinkSpec):
 
 
 class LinkGroupSpec:
-    def __init__(self, key: str, links: Optional[List[LinkSpec]] = None):
+    def __init__(self, key: str, links: Optional[list[LinkSpec]] = None):
         self.key = key
         self.links = links or []
 
     def add_item(self, item: LinkSpec):
         self.links.append(item)
 
-    def get_ordered_links(self) -> List[LinkSpec]:
+    def get_ordered_links(self) -> list[LinkSpec]:
         return sorted(self.links, key=lambda spec: spec.weight)

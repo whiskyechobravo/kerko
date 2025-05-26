@@ -2,9 +2,9 @@ import pathlib
 from abc import ABC, abstractmethod
 from datetime import date, datetime, time
 from decimal import Decimal
-from typing import Any, Dict, List, Optional, Type, Union
+from typing import Annotated, Any, Optional, Union
 
-from typing_extensions import Annotated, Literal
+from typing_extensions import Literal
 
 try:
     import tomllib
@@ -108,11 +108,11 @@ class FeedsModel(BaseModel):
     class Config:
         extra = Extra.forbid
 
-    formats: List[Optional[Literal["atom"]]]
-    fields: List[FieldNameStr]
+    formats: list[Optional[Literal["atom"]]]
+    fields: list[FieldNameStr]
     max_days: NonNegativeInt
-    require_any: Dict[FieldNameStr, List[Union[str, bool, int, float]]]
-    reject_any: Dict[FieldNameStr, List[Union[str, bool, int, float]]]
+    require_any: dict[FieldNameStr, list[Union[str, bool, int, float]]]
+    reject_any: dict[FieldNameStr, list[Union[str, bool, int, float]]]
 
 
 class MetaModel(BaseModel):
@@ -180,7 +180,7 @@ class ZoteroModel(BaseModel):
     tag_exclude_re: str
     child_include_re: str
     child_exclude_re: str
-    attachment_mime_types: List[str]
+    attachment_mime_types: list[str]
 
 
 class PerformanceModel(BaseModel):
@@ -199,7 +199,7 @@ class SearchModel(BaseModel):
     class Config:
         extra = Extra.forbid
 
-    result_fields: List[FieldNameStr]
+    result_fields: list[FieldNameStr]
     fulltext: bool
     whoosh_language: str = Field(regex=r"^[a-z]{2,3}$")
 
@@ -230,7 +230,7 @@ class CoreRequiredSearchFieldModel(BaseModel):
     class Config:
         extra = Extra.forbid
 
-    scopes: List[SlugStr]
+    scopes: list[SlugStr]
     boost: float
 
 
@@ -241,7 +241,7 @@ class CoreOptionalSearchFieldModel(BaseModel):
         extra = Extra.forbid
 
     enabled: bool = True
-    scopes: List[SlugStr]
+    scopes: list[SlugStr]
     boost: float
 
 
@@ -252,7 +252,7 @@ class ZoteroFieldModel(BaseModel):
         extra = Extra.forbid
 
     enabled: bool = True
-    scopes: List[SlugStr]
+    scopes: list[SlugStr]
     analyzer: Union[Literal["id"], Literal["text"], Literal["name"]]
     boost: float
 
@@ -261,8 +261,8 @@ class CoreSearchFieldsModel(BaseModel):
     class Config:
         extra = Extra.forbid
 
-    required: Dict[FieldNameStr, CoreRequiredSearchFieldModel]
-    optional: Dict[FieldNameStr, CoreOptionalSearchFieldModel]
+    required: dict[FieldNameStr, CoreRequiredSearchFieldModel]
+    optional: dict[FieldNameStr, CoreOptionalSearchFieldModel]
 
 
 class SearchFieldsModel(BaseModel):
@@ -272,7 +272,7 @@ class SearchFieldsModel(BaseModel):
         extra = Extra.forbid
 
     core: CoreSearchFieldsModel
-    zotero: Dict[FieldNameStr, ZoteroFieldModel]
+    zotero: dict[FieldNameStr, ZoteroFieldModel]
 
 
 class BaseFacetModel(BaseModel, ABC):
@@ -286,7 +286,7 @@ class BaseFacetModel(BaseModel, ABC):
     weight: int = 0
     initial_limit: NonNegativeInt = 0
     initial_limit_leeway: NonNegativeInt = 2
-    sort_by: List[Union[Literal["label"], Literal["count"]]] = ["label"]
+    sort_by: list[Union[Literal["label"], Literal["count"]]] = ["label"]
     sort_reverse: bool = False
     item_view: bool = True
 
@@ -409,9 +409,9 @@ class PagesModel(BaseModel):  # TODO: Pydantic v2: inherit RootModel.
     constrained `IdentifierStr` type.
     """
 
-    __root__: Dict[IdentifierStr, PageModel]
+    __root__: dict[IdentifierStr, PageModel]
 
-    def to_spec(self) -> Dict[str, PageSpec]:
+    def to_spec(self) -> dict[str, PageSpec]:
         return {key: page_model.to_spec() for key, page_model in self.__root__.items()}
 
 
@@ -436,7 +436,7 @@ class LinkByEndpointModel(LinkModel):
     anchor: Optional[str]
     scheme: Optional[str]
     external: bool = False
-    parameters: Optional[Dict[str, Any]]
+    parameters: Optional[dict[str, Any]]
 
     @root_validator
     def validate_scheme(cls, values):  # noqa: N805
@@ -498,9 +498,9 @@ LinkModelUnion = Annotated[
 
 
 class LinkGroupsModel(BaseModel):  # TODO: Pydantic v2: inherit RootModel.
-    __root__: Dict[SlugStr, Annotated[List[LinkModelUnion], Field(min_items=1)]]
+    __root__: dict[SlugStr, Annotated[list[LinkModelUnion], Field(min_items=1)]]
 
-    def to_spec(self) -> Dict[str, LinkGroupSpec]:
+    def to_spec(self) -> dict[str, LinkGroupSpec]:
         return {
             key: LinkGroupSpec(key, [link_model.to_spec() for link_model in links])
             for key, links in self.__root__.items()
@@ -525,12 +525,12 @@ class KerkoModel(BaseModel):
     zotero: ZoteroModel
     performance: PerformanceModel
     search: SearchModel
-    scopes: Dict[SlugStr, ScopesModel]
+    scopes: dict[SlugStr, ScopesModel]
     search_fields: SearchFieldsModel
-    facets: Dict[FieldNameStr, FacetModelUnion]
-    sorts: Dict[SlugStr, SortsModel]
-    bib_formats: Dict[SlugStr, BibFormatsModel]
-    relations: Dict[ElementIdStr, RelationsModel]
+    facets: dict[FieldNameStr, FacetModelUnion]
+    sorts: dict[SlugStr, SortsModel]
+    bib_formats: dict[SlugStr, BibFormatsModel]
+    relations: dict[ElementIdStr, RelationsModel]
 
 
 class ConfigModel(BaseModel):
@@ -546,7 +546,7 @@ class ConfigModel(BaseModel):
     kerko: Optional[KerkoModel]
 
 
-def load_toml(filename: Union[str, pathlib.Path], verbose=False) -> Dict[str, Any]:
+def load_toml(filename: Union[str, pathlib.Path], verbose=False) -> dict[str, Any]:
     """Load the content of a TOML file."""
     try:
         with pathlib.Path(filename).open("rb") as file:
@@ -562,7 +562,7 @@ def load_toml(filename: Union[str, pathlib.Path], verbose=False) -> Dict[str, An
         raise RuntimeError(msg) from e
 
 
-def config_update(config: Config, new_data: Dict[str, Any]) -> None:
+def config_update(config: Config, new_data: dict[str, Any]) -> None:
     """
     Update the configuration with the specified `dict`.
 
@@ -601,7 +601,7 @@ def config_set(config: Config, path: str, value: Any) -> None:
 def parse_config(
     config: Config,
     key: Optional[str] = None,
-    model: Type[BaseModel] = ConfigModel,
+    model: type[BaseModel] = ConfigModel,
 ) -> None:
     """
     Parse and validate configuration using `model`.

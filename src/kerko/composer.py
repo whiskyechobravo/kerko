@@ -1,5 +1,4 @@
 import re
-from typing import Dict
 
 from flask import Config
 from flask_babel import lazy_gettext as _
@@ -78,15 +77,15 @@ class Composer:
         )
 
         self.schema = Schema()
-        self.scopes: Dict[str, ScopeSpec] = {}
-        self.fields: Dict[str, FieldSpec] = {}
-        self.facets: Dict[str, FacetSpec] = {}
-        self.sorts: Dict[str, SortSpec] = {}
-        self.bib_formats: Dict[str, BibFormatSpec] = {}
-        self.relations: Dict[str, RelationSpec] = {}
-        self.badges: Dict[str, BadgeSpec] = {}
-        self.pages: Dict[str, PageSpec] = {}
-        self.link_groups: Dict[str, LinkGroupSpec] = {}
+        self.scopes: dict[str, ScopeSpec] = {}
+        self.fields: dict[str, FieldSpec] = {}
+        self.facets: dict[str, FacetSpec] = {}
+        self.sorts: dict[str, SortSpec] = {}
+        self.bib_formats: dict[str, BibFormatSpec] = {}
+        self.relations: dict[str, RelationSpec] = {}
+        self.badges: dict[str, BadgeSpec] = {}
+        self.pages: dict[str, PageSpec] = {}
+        self.link_groups: dict[str, LinkGroupSpec] = {}
         self.init_scopes(config)
         self.init_fields(config)
         self.init_facets(config)
