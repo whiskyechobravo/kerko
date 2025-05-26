@@ -25,6 +25,10 @@ Other changes:
   values. Although this has no effect on normal uses of Kerko, this may be
   useful to customizations that rely on those extractors.
 
+Backwards incompatible changes:
+
+- Drop support for Python 3.8 (EOL).
+
 
 ## 1.2.0 (2024-08-03)
 

@@ -224,7 +224,7 @@ Kerko's features and it provides a few additions of its own:
 
 ## Requirements
 
-Kerko requires Python 3.8 or later.
+Kerko requires Python 3.9 or later.
 
 Required Python packages will be automatically installed when installing Kerko.
 The main ones are:
