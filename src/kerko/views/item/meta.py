@@ -38,7 +38,7 @@ def build_highwirepress_tags(item):
         pages = data.get("pages")
         if pages:
             pages = re.sub("[-\u2013]", "-", pages)  # Replace hyphens and en-dashes.
-            pages = [p.strip() for p in re.split(r"\W*-\W*", data["pages"], 2)]
+            pages = [p.strip() for p in re.split(r"\W*-\W*", data["pages"], maxsplit=2)]
             if pages and pages[0]:
                 tags.append(("citation_firstpage", pages[0]))
             if len(pages) > 1 and pages[1]:

@@ -24,6 +24,7 @@ Other changes:
 - Make `CollectionNamesExtractor` and `TagsTextExtractor` sort their extracted
   values. Although this has no effect on normal uses of Kerko, this may be
   useful to customizations that rely on those extractors.
+- Add support for Python 3.13.
 
 Backwards incompatible changes:
 

@@ -21,6 +21,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Database :: Front-Ends",
     "Topic :: Education",
     "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
@@ -57,8 +58,8 @@ dependencies = [
 [project.optional-dependencies]
 tests = [
     "coverage >= 6.1.2, < 8",
-    "elementpath >= 2.4.0, < 5",
-    "lxml >= 4.9.3, < 5",
+    "elementpath >= 5, < 6",
+    "lxml >= 5.0.2, < 6",
     "responses >= 0.17.0",
     "tox >= 3.8, < 5",
 ]
