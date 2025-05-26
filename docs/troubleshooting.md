@@ -17,6 +17,22 @@ flask --app=/path/to/kerkoapp/wsgi:app kerko sync
 ```
 
 
+## Gateway Time-out (504) errors when synchronizing with Zotero
+
+This error sometimes happen when Zotero's servers are busier than usual. Kerko
+handles this by waiting a little bit, and then retrying the request that has
+failed. Thus, although you may see Gateway Time-out error messages during
+synchronization, you may usually ignore them.
+
+However, if you are finding that Kerko doesn't finish synchronization because
+too many requests fail, we recommend that you put the following setting in your
+configuration file:
+
+```toml
+kerko.zotero.batch_size = 20
+```
+
+
 ## Configuration parameter change has no effect
 
 Restart the application. This is required for any configuration change to take
