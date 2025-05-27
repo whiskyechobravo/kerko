@@ -4,26 +4,20 @@ from datetime import date, datetime, time
 from decimal import Decimal
 from typing import Annotated, Any, Optional, Union
 
-from typing_extensions import Literal
-
-try:
-    import tomllib
-except ModuleNotFoundError:
-    import tomli as tomllib
-
 import dpath
 import whoosh
 from flask import Config
 from pydantic import (
     BaseModel,
-    ConstrainedStr,
-    Extra,
+    ConfigDict,
     Field,
     NonNegativeInt,
+    RootModel,
     ValidationError,
-    root_validator,
-    validator,
+    field_validator,
+    model_validator,
 )
+from typing_extensions import Literal
 
 from kerko.specs import (
     LinkByEndpointSpec,
@@ -34,40 +28,28 @@ from kerko.specs import (
     PageSpec,
 )
 
+try:
+    import tomllib
+except ModuleNotFoundError:
+    import tomli as tomllib
+
+
 # Note: To preserve field ordering in Pydantic models, we annotate an
 # attribute's type even when it could be determined by its default value.
 # See https://docs.pydantic.dev/latest/usage/models/#field-ordering
 
-
-class SlugStr(ConstrainedStr):
-    regex = r"^[a-z][a-z0-9_\-]*$"
-
-
-class URLPathStr(ConstrainedStr):
-    regex = r"^/[a-z0-9_\-/]*$"
-
-
-class FieldNameStr(ConstrainedStr):
-    regex = r"^[a-z][a-zA-Z0-9_]*$"
-
-
-class ElementIdStr(ConstrainedStr):
-    regex = r"^[a-z][a-zA-Z0-9]*$"
-
-
-class IdentifierStr(ConstrainedStr):
-    regex = r"^[a-z][a-z0-9_]*$"
-
-
-class ZoteroItemIdStr(ConstrainedStr):
-    regex = r"^[A-Z0-9]{8}$"
+SlugStr = Annotated[str, Field(pattern=r"^[a-z][a-z0-9_\-]*$")]
+URLPathStr = Annotated[str, Field(pattern=r"^/[a-z0-9_\-/]*$")]
+FieldNameStr = Annotated[str, Field(pattern=r"^[a-z][a-zA-Z0-9_]*$")]
+ElementIdStr = Annotated[str, Field(pattern=r"^[a-z][a-zA-Z0-9]*$")]
+IdentifierStr = Annotated[str, Field(pattern=r"^[a-z][a-z0-9_]*$")]
+ZoteroItemIdStr = Annotated[str, Field(pattern=r"^[A-Z0-9]{8}$")]
 
 
 class AssetsModel(BaseModel):
     """Model for the kerko.assets config table."""
 
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
     bootstrap_version: str
     jquery_version: str
@@ -79,8 +61,7 @@ class AssetsModel(BaseModel):
 class FeaturesModel(BaseModel):
     """Model for the kerko.features config table."""
 
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
     download_attachment_new_window: bool
     download_item: bool
@@ -105,8 +86,7 @@ class FeaturesModel(BaseModel):
 class FeedsModel(BaseModel):
     """Model for the kerko.feeds config table."""
 
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
     formats: list[Optional[Literal["atom"]]]
     fields: list[FieldNameStr]
@@ -118,8 +98,7 @@ class FeedsModel(BaseModel):
 class MetaModel(BaseModel):
     """Model for the kerko.meta config table."""
 
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
     title: str
     highwirepress_tags: bool
@@ -129,8 +108,7 @@ class MetaModel(BaseModel):
 class PaginationModel(BaseModel):
     """Model for the kerko.pagination config table."""
 
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
     page_len: int = Field(ge=2)
     pager_links: int = Field(ge=2)
@@ -139,8 +117,7 @@ class PaginationModel(BaseModel):
 class BreadcrumbModel(BaseModel):
     """Model for the kerko.breadcrumb config table."""
 
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
     enabled: bool
     include_current: bool
@@ -151,8 +128,7 @@ class BreadcrumbModel(BaseModel):
 class TemplatesModel(BaseModel):
     """Model for the kerko.templates config table."""
 
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
     base: str
     layout: str
@@ -166,14 +142,13 @@ class TemplatesModel(BaseModel):
 class ZoteroModel(BaseModel):
     """Model for the kerko.zotero config table."""
 
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
     batch_size: int = Field(ge=20)
     max_attempts: int = Field(ge=1)
     wait: int = Field(ge=120)
     csl_style: str
-    locale: str = Field(regex=r"^[a-z]{2,3}-[A-Za-z]+$")
+    locale: str = Field(pattern=r"^[a-z]{2,3}-[A-Za-z]+$")
     item_include_re: str
     item_exclude_re: str
     tag_include_re: str
@@ -186,8 +161,7 @@ class ZoteroModel(BaseModel):
 class PerformanceModel(BaseModel):
     """Model for the kerko.performance config table."""
 
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
     whoosh_index_memory_limit: int = Field(ge=16)
     whoosh_index_processors: int = Field(ge=1)
@@ -196,15 +170,15 @@ class PerformanceModel(BaseModel):
 class SearchModel(BaseModel):
     """Model for the kerko.search config table."""
 
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
     result_fields: list[FieldNameStr]
     fulltext: bool
-    whoosh_language: str = Field(regex=r"^[a-z]{2,3}$")
+    whoosh_language: str = Field(pattern=r"^[a-z]{2,3}$")
 
-    @validator("whoosh_language")
-    def validate_whoosh_has_language(cls, v):  # noqa: N805
+    @field_validator("whoosh_language")
+    @classmethod
+    def validate_whoosh_has_language(cls, v):
         if not whoosh.lang.has_stemmer(v):
             msg = f"language '{v}' not supported by Whoosh"
             raise ValueError(msg)
@@ -214,21 +188,19 @@ class SearchModel(BaseModel):
 class ScopesModel(BaseModel):
     """Model for the kerko.scopes config table."""
 
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
     enabled: bool = True
-    selector_label: Optional[str]
-    breadbox_label: Optional[str]
-    help_text: Optional[str]
+    selector_label: Optional[str] = None
+    breadbox_label: Optional[str] = None
+    help_text: Optional[str] = None
     weight: int = 0
 
 
 class CoreRequiredSearchFieldModel(BaseModel):
     """Model for the kerko.search_fields.core.required config table."""
 
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
     scopes: list[SlugStr]
     boost: float
@@ -237,8 +209,7 @@ class CoreRequiredSearchFieldModel(BaseModel):
 class CoreOptionalSearchFieldModel(BaseModel):
     """Model for the kerko.search_fields.core.optional config table."""
 
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
     enabled: bool = True
     scopes: list[SlugStr]
@@ -248,18 +219,16 @@ class CoreOptionalSearchFieldModel(BaseModel):
 class ZoteroFieldModel(BaseModel):
     """Model for the kerko.search_fields.zotero config table."""
 
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
     enabled: bool = True
     scopes: list[SlugStr]
-    analyzer: Union[Literal["id"], Literal["text"], Literal["name"]]
+    analyzer: Literal["id", "text", "name"]
     boost: float
 
 
 class CoreSearchFieldsModel(BaseModel):
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
     required: dict[FieldNameStr, CoreRequiredSearchFieldModel]
     optional: dict[FieldNameStr, CoreOptionalSearchFieldModel]
@@ -268,8 +237,7 @@ class CoreSearchFieldsModel(BaseModel):
 class SearchFieldsModel(BaseModel):
     """Base model for the kerko.search_fields config table."""
 
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
     core: CoreSearchFieldsModel
     zotero: dict[FieldNameStr, ZoteroFieldModel]
@@ -278,56 +246,55 @@ class SearchFieldsModel(BaseModel):
 class BaseFacetModel(BaseModel, ABC):
     """Base model for the kerko.facets config table."""
 
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
     enabled: bool = True
     filter_key: SlugStr
     weight: int = 0
     initial_limit: NonNegativeInt = 0
     initial_limit_leeway: NonNegativeInt = 2
-    sort_by: list[Union[Literal["label"], Literal["count"]]] = ["label"]
+    sort_by: list[Literal["label", "count"]] = ["label"]
     sort_reverse: bool = False
     item_view: bool = True
 
 
 class TagFacetModel(BaseFacetModel):
-    type: Literal["tag"]  # noqa: A003
-    title: Optional[str]
+    type: Literal["tag"]
+    title: Optional[str] = None
 
 
 class ItemTypeFacetModel(BaseFacetModel):
-    type: Literal["item_type"]  # noqa: A003
-    title: Optional[str]
+    type: Literal["item_type"]
+    title: Optional[str] = None
     item_view: bool = False
 
 
 class YearFacetModel(BaseFacetModel):
-    type: Literal["year"]  # noqa: A003
-    title: Optional[str]
+    type: Literal["year"]
+    title: Optional[str] = None
     item_view: bool = False
 
 
 class LanguageFacetModel(BaseFacetModel):
-    type: Literal["language"]  # noqa: A003
-    title: Optional[str]
+    type: Literal["language"]
+    title: Optional[str] = None
     item_view: bool = False
     values_separator_re: str = Field(";", min_length=1)
     normalize: bool = True
-    locale: str = Field("en", regex=r"^[a-z]{2,3}(-[A-Za-z]+)?$")
+    locale: str = Field("en", pattern=r"^[a-z]{2,3}(-[A-Za-z]+)?$")
     allow_invalid: bool = False
 
 
 class LinkFacetModel(BaseFacetModel):
-    type: Literal["link"]  # noqa: A003
-    title: Optional[str]
+    type: Literal["link"]
+    title: Optional[str] = None
     item_view: bool = False
 
 
 class CollectionFacetModel(BaseFacetModel):
-    type: Literal["collection"]  # noqa: A003
+    type: Literal["collection"]
     title: str
-    collection_key: str = Field(regex=r"^[A-Z0-9]{8}$")
+    collection_key: str = Field(pattern=r"^[A-Z0-9]{8}$")
 
 
 # Note: Discriminated unions ensure that a single unambiguous error gets
@@ -350,24 +317,22 @@ FacetModelUnion = Annotated[
 class SortsModel(BaseModel):
     """Model for the kerko.sorts config table."""
 
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
     enabled: bool = True
     weight: int = 0
-    label: Optional[str]
+    label: Optional[str] = None
 
 
 class BibFormatsModel(BaseModel):
     """Model for the kerko.bib_formats config table."""
 
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
     enabled: bool = True
     weight: int = 0
-    label: Optional[str]
-    help_text: Optional[str]
+    label: Optional[str] = None
+    help_text: Optional[str] = None
     extension: SlugStr
     mime_type: str
 
@@ -375,19 +340,17 @@ class BibFormatsModel(BaseModel):
 class RelationsModel(BaseModel):
     """Model for the kerko.relations config table."""
 
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
     enabled: bool = True
     weight: int = 0
-    label: Optional[str]
+    label: Optional[str] = None
 
 
 class PageModel(BaseModel):
     """Model for items under the kerko.pages config table."""
 
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
     path: URLPathStr
     item_id: ZoteroItemIdStr
@@ -401,7 +364,7 @@ class PageModel(BaseModel):
         )
 
 
-class PagesModel(BaseModel):  # TODO: Pydantic v2: inherit RootModel.
+class PagesModel(RootModel):
     """
     Model for the kerko.pages config table.
 
@@ -409,15 +372,14 @@ class PagesModel(BaseModel):  # TODO: Pydantic v2: inherit RootModel.
     constrained `IdentifierStr` type.
     """
 
-    __root__: dict[IdentifierStr, PageModel]
+    root: dict[IdentifierStr, PageModel]
 
     def to_spec(self) -> dict[str, PageSpec]:
-        return {key: page_model.to_spec() for key, page_model in self.__root__.items()}
+        return {key: page_model.to_spec() for key, page_model in self.root.items()}
 
 
 class LinkModel(BaseModel, ABC):
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
     text: str
     weight: int = 0
@@ -431,19 +393,19 @@ class LinkModel(BaseModel, ABC):
 class LinkByEndpointModel(LinkModel):
     """Model for endpoint items under the kerko.link_groups config table."""
 
-    type: Literal["endpoint"]  # noqa: A003
+    type: Literal["endpoint"]
     endpoint: str
-    anchor: Optional[str]
-    scheme: Optional[str]
+    anchor: Optional[str] = None
+    scheme: Optional[str] = None
     external: bool = False
-    parameters: Optional[dict[str, Any]]
+    parameters: Optional[dict[str, Any]] = None
 
-    @root_validator
-    def validate_scheme(cls, values):  # noqa: N805
-        if values.get("scheme") and not values.get("external"):
+    @model_validator(mode="after")
+    def validate_scheme(self):
+        if self.scheme and not self.external:
             msg = "When specifying 'scheme', 'external' must be true."
             raise ValueError(msg)
-        return values
+        return self
 
     def to_spec(self) -> LinkSpec:
         return LinkByEndpointSpec(
@@ -461,7 +423,7 @@ class LinkByEndpointModel(LinkModel):
 class LinkByURLModel(LinkModel):
     """Model for URL items under the kerko.link_groups config table."""
 
-    type: Literal["url"]  # noqa: A003
+    type: Literal["url"]
     url: str  # TODO: Validate as URL string
 
     def to_spec(self) -> LinkSpec:
@@ -476,7 +438,7 @@ class LinkByURLModel(LinkModel):
 class PageLinkModel(LinkModel):
     """Model for page items under the kerko.link_groups config table."""
 
-    type: Literal["page"]  # noqa: A003
+    type: Literal["page"]
     page: str
 
     def to_spec(self) -> LinkSpec:
@@ -497,21 +459,20 @@ LinkModelUnion = Annotated[
 ]
 
 
-class LinkGroupsModel(BaseModel):  # TODO: Pydantic v2: inherit RootModel.
-    __root__: dict[SlugStr, Annotated[list[LinkModelUnion], Field(min_items=1)]]
+class LinkGroupsModel(RootModel):
+    root: dict[SlugStr, Annotated[list[LinkModelUnion], Field(min_items=1)]]
 
     def to_spec(self) -> dict[str, LinkGroupSpec]:
         return {
             key: LinkGroupSpec(key, [link_model.to_spec() for link_model in links])
-            for key, links in self.__root__.items()
+            for key, links in self.root.items()
         }
 
 
 class KerkoModel(BaseModel):
     """Model for the kerko config table."""
 
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
     assets: AssetsModel
     features: FeaturesModel
@@ -519,7 +480,7 @@ class KerkoModel(BaseModel):
     meta: MetaModel
     pagination: PaginationModel
     breadcrumb: BreadcrumbModel
-    pages: Optional[PagesModel]
+    pages: Optional[PagesModel] = None
     link_groups: LinkGroupsModel
     templates: TemplatesModel
     zotero: ZoteroModel
@@ -539,11 +500,13 @@ class ConfigModel(BaseModel):
     # Note: This model allows extra fields since we cannot cover all variables
     # that Flask, Flask extensions, and applications might support.
 
+    model_config = ConfigDict(coerce_numbers_to_str=True)
+
     SECRET_KEY: str = Field(min_length=12)
     ZOTERO_API_KEY: str = Field(min_length=16)
-    ZOTERO_LIBRARY_ID: str = Field(regex=r"^[0-9]+$")
-    ZOTERO_LIBRARY_TYPE: Union[Literal["user"], Literal["group"]]
-    kerko: Optional[KerkoModel]
+    ZOTERO_LIBRARY_ID: str = Field(pattern=r"^[0-9]+$")
+    ZOTERO_LIBRARY_TYPE: Literal["user", "group"]
+    kerko: Optional[KerkoModel] = None
 
 
 def load_toml(filename: Union[str, pathlib.Path], verbose=False) -> dict[str, Any]:
@@ -622,15 +585,15 @@ def parse_config(
     """
     try:
         if key is None:
-            parsed = model.parse_obj(config)
-            config.update(parsed.dict())
+            parsed = model.model_validate(config)
+            config.update(parsed.model_dump())
             config["kerko_config"] = parsed
         elif config.get(key):
             # The parsed models are stored in the config as dicts. This way, the
             # whole configuration structure is made of dicts only, allowing
             # consistent access for any element at any depth.
-            parsed = model.parse_obj(config[key])
-            config_set(config, key, parsed.dict())
+            parsed = model.model_validate(config[key])
+            config_set(config, key, parsed.model_dump())
             config[f"kerko_config.{key}"] = parsed
     except ValidationError as e:
         msg = f"Invalid configuration. {e}"

@@ -30,6 +30,10 @@ Backwards incompatible changes:
 
 - Drop support for Python 3.8 (EOL).
 
+Possibly backwards incompatible changes (more or less internal API changes):
+
+- Upgrade many dependencies, including new major version of Pydantic (2.x),
+
 
 ## 1.2.0 (2024-08-03)
 

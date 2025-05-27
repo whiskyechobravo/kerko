@@ -1,6 +1,6 @@
 import unittest
 
-from flask import Flask, current_app
+from flask import Flask
 
 import kerko
 from kerko import extractors
@@ -287,7 +287,7 @@ class TagsTextExtractorTestCase(unittest.TestCase):
         result = self.do_extract_test(tags)
         self.assertEqual(result, "a")
 
-    def test_multiple_empty(self):  ########## TODO: Redondant avec test_strip
+    def test_multiple_empty(self):
         tags = ["", " ", "   "]
         result = self.do_extract_test(tags)
         self.assertIsNone(result)
