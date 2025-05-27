@@ -32,4 +32,4 @@ jobs:
           echo "=====  PYTHON  ====="
           python --version
       - name: Run tests
-        run: tox -e py${{ matrix.python-version }}
+        run: tox -e ${{ matrix.python-version }}
