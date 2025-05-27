@@ -64,7 +64,6 @@ tests = [
     "tox >= 3.8, < 5",
 ]
 dev = [
-    "mypy >= 0.910",
     "pip-tools >= 5.5.0",
     "pre-commit >= 3.5.0",
     "rope",
@@ -113,10 +112,6 @@ source = [
     "src",
     ".tox/*/site-packages",
 ]
-
-[tool.mypy]
-python_version = "3.9"
-plugins = ["pydantic.mypy"]
 
 [tool.ruff]
 line-length = 100
