@@ -3657,8 +3657,8 @@ Translations are provided by <a href="https://github.com/pycountry/pycountry">py
 Default value: <code>"en"</code></p>
 <h3 id="normalize"><code>normalize</code><a class="headerlink" href="#normalize" title="Permanent link">&para;</a></h3>
 <p>Normalize language names using the <a href="https://github.com/pycountry/pycountry">pycountry</a> language database.</p>
-<p>If this parameter is set to <code>true</code>, slight inconsistencies in your data can be
-attenuated, preventing unwanted duplicates in the facet. For example, values
+<p>If this parameter is set to <code>true</code>, then slight inconsistencies in your data may
+be attenuated, preventing unwanted duplicates in the facet. For example, values
 such as <code>fr</code>, <code>FR</code>, <code>fra</code>, <code>Fra</code>, <code>fre</code>, <code>fr-FR</code>, <code>fr-fr</code>, <code>fr-CA</code>, or <code>French</code>
 will all fall under a single <code>French</code> term in the facet. The normalization
 process is case insensitive, ignores country or area codes, and recognizes:</p>
@@ -3676,9 +3676,8 @@ languages in Zotero using 2-letter ISO 639-1 codes (because they also happen to
 be <a href="https://github.com/citation-style-language/locales/wiki">supported by the Citation Style Language</a>), or 3-letter <a href="https://iso639-3.sil.org/code_tables/639/data/all">ISO
 639-3</a> codes for languages not covered by ISO 639-1.</p>
 <p>If <code>normalize</code> is set to <code>false</code>, item language values will be used verbatim. In
-that case, the facet will work equally well if your language data is well
-controlled and consistent. This is the way to go if languages are consistently
-recorded using their non-English names in your Zotero library.</p>
+that case, the facet will work well if your language data is well controlled and
+consistent.</p>
 <p>Type: Boolean <br>
 Default value: <code>true</code></p>
 <h3 id="values_separator_re"><code>values_separator_re</code><a class="headerlink" href="#values_separator_re" title="Permanent link">&para;</a></h3>
