@@ -48,7 +48,7 @@ source data for the demo site.
 
 ## Sites using Kerko
 
-The following sites are powered by Kerko:
+Here are some sites that are powered by Kerko:
 
 - [Bibliographie francophone sur l'archivistique](https://bibliopiaf.ebsi.umontreal.ca/)
 - [Bibliographie sur l'histoire de Montréal](https://bibliographies.uqam.ca/bhm/)
@@ -57,7 +57,7 @@ The following sites are powered by Kerko:
 - [Lipedema Foundation LEGATO Lipedema Library](https://library.lipedema.org/)
 - [PhDs.io - Knowledge That Transforms](https://phds.io/)
 - [Rights and Records Knowledge Base](https://rightsandrecords.ica.org/)
-- [The EdTech Hub Evidence Library](http://docs.edtechhub.org/)
+- [The EdTech Hub Evidence Library](https://docs.edtechhub.org/)
 - [Transitional Justice Evaluation Tools Reference Library](https://library.transitionaljusticedata.org/)
 - [University of Saint Joseph Research Output](https://research.usj.edu.mo/)
 
@@ -81,8 +81,8 @@ The main features provided by Kerko are:
 - **Keyword search** features:
     - Boolean operators:
         - `AND`: matches items that contain all specified terms. This is the
-          default relation between terms when no operator is specified, e.g., `a
-          b` is the same as `a AND b`.
+          default relation between terms when no operator is specified, e.g.,
+          `a b` is the same as `a AND b`.
         - `OR`: matches items that contain any of the specified terms, e.g.,
           `a OR b`.
         - `NOT`: excludes items that match the term, e.g., `NOT a`.

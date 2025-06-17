@@ -3,7 +3,8 @@
 Before doing an upgrade, please check the "How to upgrade" section of the Kerko
 documentation.
 
-## Unreleased
+
+## 1.3.0 (2025-06-17)
 
 New features:
 
@@ -15,7 +16,7 @@ New features:
       parameter to `40`.
     - To remove the "Recently added" sort option, set the
       `kerko.sorts.recently_added.enabled` configuration parameter to `false`.
-- Allow the "lang_AREA" form (e.g., "en_US", "fr_FR") when normalizing language
+- Handle the "lang_AREA" form (e.g., "en_US", "fr_FR") when normalizing language
   values for the "Resource language" facet.
 
 Other changes:
@@ -32,7 +33,7 @@ Backwards incompatible changes:
 
 Possibly backwards incompatible changes (more or less internal API changes):
 
-- Upgrade many dependencies, including new major version of Pydantic (2.x),
+- Upgrade dependencies, including new major version of Pydantic (2.x),
 
 
 ## 1.2.0 (2024-08-03)

@@ -4,7 +4,7 @@
 of all of your code, configuration files, data files, and Python virtual
 environment.
 
-## From 1.0.x to 1.1.x or 1.2.x
+## From 1.2.x to 1.3.x
 
 ### KerkoApp
 
@@ -13,17 +13,69 @@ its Git repository.
 
 - Go to the KerkoApp directory.
 - Get the desired version of KerkoApp. You may check the list of [available
-  versions][KerkoApp versions]. For version 1.1.0, for example, replace
-  `VERSION` with `1.1.0` in the command below:
+  versions][KerkoApp versions]. To retrieve version 1.3.0, use the command
+  below:
 
-    ```bash
-    git fetch && git checkout VERSION
+    ```
+    git fetch && git checkout 1.3.0
     ```
 
 - Activate your Python [virtual environment][venv].
 - Install Python dependencies:
 
-    ```bash
+    ```
+    pip install --force-reinstall -r requirements/run.txt
+    ```
+
+- Restart the application.
+
+
+## From 1.1.x to 1.2.x
+
+### KerkoApp
+
+The instructions below make the assumption that you have cloned KerkoApp from
+its Git repository.
+
+- Go to the KerkoApp directory.
+- Get the desired version of KerkoApp. You may check the list of [available
+  versions][KerkoApp versions]. To retrieve version 1.2.0, use the command
+  below:
+
+    ```
+    git fetch && git checkout 1.2.0
+    ```
+
+- Activate your Python [virtual environment][venv].
+- Install Python dependencies:
+
+    ```
+    pip install --force-reinstall -r requirements/run.txt
+    ```
+
+- Restart the application.
+
+
+## From 1.0.x to 1.1.x
+
+### KerkoApp
+
+The instructions below make the assumption that you have cloned KerkoApp from
+its Git repository.
+
+- Go to the KerkoApp directory.
+- Get the desired version of KerkoApp. You may check the list of [available
+  versions][KerkoApp versions]. To retrieve version 1.1.0, use the command
+  below:
+
+    ```
+    git fetch && git checkout 1.1.0
+    ```
+
+- Activate your Python [virtual environment][venv].
+- Install Python dependencies:
+
+    ```
     pip install --force-reinstall -r requirements/run.txt
     ```
 
@@ -32,7 +84,7 @@ its Git repository.
       least the following values: `["id", "data", "item_fields"]`.
 - Rebuild your search index using the following commands:
 
-    ```bash
+    ```
     flask kerko clean index
     flask kerko sync index
     ```
@@ -72,7 +124,7 @@ its Git repository.
 - Go to the KerkoApp directory.
 - Rename the default branch of your local KerkoApp repository:
 
-    ```bash
+    ```
     git branch -m master main
     git fetch origin
     git branch -u origin/main main
@@ -80,17 +132,17 @@ its Git repository.
     ```
 
 - Get the desired version of KerkoApp. You may check the list of [available
-  versions][KerkoApp versions]. For version 1.0.0, for example, replace
-  `VERSION` with `1.0.0` in the command below:
+  versions][KerkoApp versions]. To retrieve version 1.0.0, use the command
+  below:
 
-    ```bash
-    git checkout VERSION
+    ```
+    git fetch && git checkout 1.0.0
     ```
 
 - Activate your Python [virtual environment][venv].
 - Install Python dependencies:
 
-    ```bash
+    ```
     pip install --force-reinstall -r requirements/run.txt
     ```
 
@@ -214,7 +266,7 @@ its Git repository.
   `wsgi:app`) instead of `kerkoapp.app` (or `kerkoapp:app`).
 - Rebuild your search index using the following commands:
 
-    ```bash
+    ```
     flask kerko clean index
     flask kerko sync index
     ```

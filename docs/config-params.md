@@ -503,8 +503,8 @@ Default value: `"en"`
 
 Normalize language names using the [pycountry] language database.
 
-If this parameter is set to `true`, slight inconsistencies in your data can be
-attenuated, preventing unwanted duplicates in the facet. For example, values
+If this parameter is set to `true`, then slight inconsistencies in your data may
+be attenuated, preventing unwanted duplicates in the facet. For example, values
 such as `fr`, `FR`, `fra`, `Fra`, `fre`, `fr-FR`, `fr-fr`, `fr-CA`, or `French`
 will all fall under a single `French` term in the facet. The normalization
 process is case insensitive, ignores country or area codes, and recognizes:
@@ -524,9 +524,8 @@ be [supported by the Citation Style Language][CSL_locale]), or 3-letter [ISO
 639-3] codes for languages not covered by ISO 639-1.
 
 If `normalize` is set to `false`, item language values will be used verbatim. In
-that case, the facet will work equally well if your language data is well
-controlled and consistent. This is the way to go if languages are consistently
-recorded using their non-English names in your Zotero library.
+that case, the facet will work well if your language data is well controlled and
+consistent.
 
 Type: Boolean <br>
 Default value: `true`
