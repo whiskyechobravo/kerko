@@ -4,21 +4,27 @@ jQuery(function ($) {
     return v ? v[2] : null;
   }
   function setCookie(key, value, days) {
-    var days = (days === undefined ? 365 : days);
-    document.cookie = key + "=" + value + ";path=/;samesite=none;max-age=" + 60*60*24*days;
+    var days = days === undefined ? 365 : days;
+    document.cookie = [
+      key,
+      "=",
+      value,
+      ";path=/;samesite=lax;max-age=",
+      60 * 60 * 24 * days,
+    ].join("");
   }
   function deleteCookie(key) {
-    setCookie(key, "", -1);
+    document.cookie = key + "=;path=/;samesite=lax;max-age=-1";
   }
   function enableOpenInZotero(toggleEl, key) {
     toggleEl.setAttribute("aria-pressed", "true");
     toggleEl.setAttribute("active", "");
-    $('#' + key).removeClass('d-none-important');
+    $("#" + key).removeClass("d-none-important");
   }
   function disableOpenInZotero(toggleEl, key) {
     toggleEl.setAttribute("aria-pressed", "false");
     toggleEl.removeAttribute("active");
-    $('#' + key).addClass('d-none-important');
+    $("#" + key).addClass("d-none-important");
   }
   function toggleOpenInZotero(toggleEl, key) {
     if (!getCookie(key)) {
@@ -31,9 +37,9 @@ jQuery(function ($) {
   }
   // Attach handler.
   $("#open-in-zotero-app-toggle").click(function (e) {
-    toggleOpenInZotero(e.currentTarget, 'open-in-zotero-app');
+    toggleOpenInZotero(e.currentTarget, "open-in-zotero-app");
   });
   $("#open-in-zotero-web-toggle").click(function (e) {
-    toggleOpenInZotero(e.currentTarget, 'open-in-zotero-web');
+    toggleOpenInZotero(e.currentTarget, "open-in-zotero-web");
   });
 });

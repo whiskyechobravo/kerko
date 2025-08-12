@@ -3,6 +3,15 @@
 Before doing an upgrade, please check the "How to upgrade" section of the Kerko
 documentation.
 
+## Unreleased
+
+Bug fixes:
+
+- Fix "Open in Zotero" preferences not getting saved (changed the cookie
+  SameSite attribute).
+- Fix incorrect version requirement for the `pre-commit` package (issue
+  affected dev requirements only).
+
 
 ## 1.3.0 (2025-06-17)
 
