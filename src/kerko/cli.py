@@ -22,31 +22,25 @@ def execution_time_logger(wrapped, _instance, args, kwargs):
 
 
 @click.group()
-def cli():
+def cli() -> None:
     """Run a Kerko subcommand."""
 
 
-@cli.command()
+@cli.command(context_settings={"show_default": True})
 @click.argument(
     "target",
     default="everything",
     type=click.Choice(["cache", "index", "everything"], case_sensitive=False),
 )
 @click.option(
-    "--full",
+    "--full/--incremental",
     default=False,
-    is_flag=True,
-    flag_value=True,
-    help=(
-        "When possible, the synchronization process performs an incremental "
-        "update of just the new or changed items since the last "
-        "synchronization. This option forces a full update."
-    ),
+    help=("Force a full synchronization or let an incremental synchronization."),
 )
 @except_raise(KerkoError, click.Abort)
 @with_appcontext
 @execution_time_logger
-def sync(target, full=False):
+def sync(target: str, full: bool) -> None:
     """Synchronize the cache and/or the search index."""
     # TODO:R5770:R6388: Lock whole sync process (use a context manager?).
     if target in ["everything", "cache"]:
@@ -55,13 +49,13 @@ def sync(target, full=False):
         sync_index(full)
 
 
-@cli.command()
+@cli.command(context_settings={"show_default": True})
 @click.argument(
     "target",
     type=click.Choice(["cache", "index", "everything"], case_sensitive=False),
 )
 @with_appcontext
-def clean(target):
+def clean(target: str) -> None:
     """Delete the cache and/or the search index."""
     if target in ["everything", "cache"]:
         delete_cache()
@@ -69,10 +63,10 @@ def clean(target):
         delete_index()
 
 
-@cli.command()
+@cli.command(context_settings={"show_default": True})
 @except_raise(KerkoError, click.Abort)
 @with_appcontext
-def count():
+def count() -> None:
     """
     Show the number of records available in the search index.
 
@@ -86,18 +80,16 @@ def count():
     click.echo(doc_count())
 
 
-@cli.command()
+@cli.command(context_settings={"show_default": True})
 @click.option(
-    "--show-secrets",
+    "--show-secrets/--hide-secrets",
     default=False,
-    is_flag=True,
-    flag_value=True,
-    help="Secrets are hidden from the output by default. This option causes them to be revealed.",
+    help="Whether to reveal secrets in the output.",
 )
 @with_appcontext
-def config(show_secrets=False):
+def config(show_secrets: bool) -> None:
     """
-    Show the configuration.
+    Show the configuration in TOML format.
 
     Note that parameters that internally have 'None' values will be omitted
     because such values cannot be represented in TOML files.

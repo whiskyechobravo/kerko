@@ -16,6 +16,7 @@ Other changes:
 - The "Last update from database" message is now simply "Last update", because
   it no longer indicate the last time the library was synchronized with Zotero,
   but the last time actual changes were synchronized.
+- Improve command line interface help text.
 
 Bug fixes:
 
