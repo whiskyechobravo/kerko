@@ -2,7 +2,7 @@ import pathlib
 from abc import ABC, abstractmethod
 from datetime import date, datetime, time
 from decimal import Decimal
-from typing import Annotated, Any, Optional, Union
+from typing import Annotated, Any, Literal
 
 import dpath
 import whoosh
@@ -17,7 +17,6 @@ from pydantic import (
     field_validator,
     model_validator,
 )
-from typing_extensions import Literal
 
 from kerko.specs import (
     LinkByEndpointSpec,
@@ -88,11 +87,11 @@ class FeedsModel(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    formats: list[Optional[Literal["atom"]]]
+    formats: list[Literal["atom"] | None]
     fields: list[FieldNameStr]
     max_days: NonNegativeInt
-    require_any: dict[FieldNameStr, list[Union[str, bool, int, float]]]
-    reject_any: dict[FieldNameStr, list[Union[str, bool, int, float]]]
+    require_any: dict[FieldNameStr, list[str | bool | int | float]]
+    reject_any: dict[FieldNameStr, list[str | bool | int | float]]
 
 
 class MetaModel(BaseModel):
@@ -144,9 +143,9 @@ class ZoteroModel(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    batch_size: int = Field(ge=20)
-    max_attempts: int = Field(ge=1)
-    wait: int = Field(ge=120)
+    batch_size: int = Field(ge=20, le=50)
+    max_attempts: int = Field(ge=1, le=25)
+    wait: int = Field(ge=1, le=600)
     csl_style: str
     locale: str = Field(pattern=r"^[a-z]{2,3}-[A-Za-z]+$")
     item_include_re: str
@@ -155,6 +154,7 @@ class ZoteroModel(BaseModel):
     tag_exclude_re: str
     child_include_re: str
     child_exclude_re: str
+    files: bool
     attachment_mime_types: list[str]
 
 
@@ -191,9 +191,9 @@ class ScopesModel(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     enabled: bool = True
-    selector_label: Optional[str] = None
-    breadbox_label: Optional[str] = None
-    help_text: Optional[str] = None
+    selector_label: str | None = None
+    breadbox_label: str | None = None
+    help_text: str | None = None
     weight: int = 0
 
 
@@ -260,24 +260,24 @@ class BaseFacetModel(BaseModel, ABC):
 
 class TagFacetModel(BaseFacetModel):
     type: Literal["tag"]
-    title: Optional[str] = None
+    title: str | None = None
 
 
 class ItemTypeFacetModel(BaseFacetModel):
     type: Literal["item_type"]
-    title: Optional[str] = None
+    title: str | None = None
     item_view: bool = False
 
 
 class YearFacetModel(BaseFacetModel):
     type: Literal["year"]
-    title: Optional[str] = None
+    title: str | None = None
     item_view: bool = False
 
 
 class LanguageFacetModel(BaseFacetModel):
     type: Literal["language"]
-    title: Optional[str] = None
+    title: str | None = None
     item_view: bool = False
     values_separator_re: str = Field(";", min_length=1)
     normalize: bool = True
@@ -287,7 +287,7 @@ class LanguageFacetModel(BaseFacetModel):
 
 class LinkFacetModel(BaseFacetModel):
     type: Literal["link"]
-    title: Optional[str] = None
+    title: str | None = None
     item_view: bool = False
 
 
@@ -302,14 +302,12 @@ class CollectionFacetModel(BaseFacetModel):
 # https://docs.pydantic.dev/latest/usage/types/#discriminated-unions-aka-tagged-unions
 
 FacetModelUnion = Annotated[
-    Union[
-        TagFacetModel,
-        ItemTypeFacetModel,
-        YearFacetModel,
-        LanguageFacetModel,
-        LinkFacetModel,
-        CollectionFacetModel,
-    ],
+    TagFacetModel
+    | ItemTypeFacetModel
+    | YearFacetModel
+    | LanguageFacetModel
+    | LinkFacetModel
+    | CollectionFacetModel,
     Field(discriminator="type"),
 ]
 
@@ -321,7 +319,7 @@ class SortsModel(BaseModel):
 
     enabled: bool = True
     weight: int = 0
-    label: Optional[str] = None
+    label: str | None = None
 
 
 class BibFormatsModel(BaseModel):
@@ -331,8 +329,8 @@ class BibFormatsModel(BaseModel):
 
     enabled: bool = True
     weight: int = 0
-    label: Optional[str] = None
-    help_text: Optional[str] = None
+    label: str | None = None
+    help_text: str | None = None
     extension: SlugStr
     mime_type: str
 
@@ -344,7 +342,7 @@ class RelationsModel(BaseModel):
 
     enabled: bool = True
     weight: int = 0
-    label: Optional[str] = None
+    label: str | None = None
 
 
 class PageModel(BaseModel):
@@ -395,10 +393,10 @@ class LinkByEndpointModel(LinkModel):
 
     type: Literal["endpoint"]
     endpoint: str
-    anchor: Optional[str] = None
-    scheme: Optional[str] = None
+    anchor: str | None = None
+    scheme: str | None = None
     external: bool = False
-    parameters: Optional[dict[str, Any]] = None
+    parameters: dict[str, Any] | None = None
 
     @model_validator(mode="after")
     def validate_scheme(self):
@@ -450,11 +448,7 @@ class PageLinkModel(LinkModel):
 
 
 LinkModelUnion = Annotated[
-    Union[
-        LinkByEndpointModel,
-        LinkByURLModel,
-        PageLinkModel,
-    ],
+    LinkByEndpointModel | LinkByURLModel | PageLinkModel,
     Field(discriminator="type"),
 ]
 
@@ -480,7 +474,7 @@ class KerkoModel(BaseModel):
     meta: MetaModel
     pagination: PaginationModel
     breadcrumb: BreadcrumbModel
-    pages: Optional[PagesModel] = None
+    pages: PagesModel | None = None
     link_groups: LinkGroupsModel
     templates: TemplatesModel
     zotero: ZoteroModel
@@ -490,7 +484,7 @@ class KerkoModel(BaseModel):
     search_fields: SearchFieldsModel
     facets: dict[FieldNameStr, FacetModelUnion]
     sorts: dict[SlugStr, SortsModel]
-    bib_formats: dict[SlugStr, BibFormatsModel]
+    bib_formats: dict[SlugStr, BibFormatsModel]  # TODO:R5770: Rename to export_formats
     relations: dict[ElementIdStr, RelationsModel]
 
 
@@ -506,10 +500,10 @@ class ConfigModel(BaseModel):
     ZOTERO_API_KEY: str = Field(min_length=16)
     ZOTERO_LIBRARY_ID: str = Field(pattern=r"^[0-9]+$")
     ZOTERO_LIBRARY_TYPE: Literal["user", "group"]
-    kerko: Optional[KerkoModel] = None
+    kerko: KerkoModel | None = None
 
 
-def load_toml(filename: Union[str, pathlib.Path], verbose=False) -> dict[str, Any]:
+def load_toml(filename: str | pathlib.Path, verbose=False) -> dict[str, Any]:
     """Load the content of a TOML file."""
     try:
         with pathlib.Path(filename).open("rb") as file:
@@ -563,7 +557,7 @@ def config_set(config: Config, path: str, value: Any) -> None:
 
 def parse_config(
     config: Config,
-    key: Optional[str] = None,
+    key: str | None = None,
     model: type[BaseModel] = ConfigModel,
 ) -> None:
     """
@@ -607,5 +601,5 @@ def is_toml_serializable(obj: object) -> bool:
     This only performs a shallow check of the object.
     """
     return isinstance(
-        obj, (bool, int, float, date, datetime, time, Decimal, str, list, tuple, dict)
+        obj, bool | int | float | date | datetime | time | Decimal | str | list | tuple | dict
     )

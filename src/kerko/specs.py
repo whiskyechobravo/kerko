@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
-from typing import Any, Optional
+from typing import Any
 
 from babel.numbers import format_decimal
 from flask import Request, url_for
@@ -66,7 +66,7 @@ class BaseFieldSpec(ABC):
         self,
         key,
         field_type,
-        extractor,
+        extractor: "extractors.Extractor",
     ):
         """
         Initialize this field specification.
@@ -85,10 +85,6 @@ class BaseFieldSpec(ABC):
         self.key = key
         self.field_type = field_type
         self.extractor = extractor
-
-    def extract_to_document(self, document, item, library_context):
-        """Extract the value of this element from a Zotero item."""
-        self.extractor.extract_and_store(document, item, library_context, self)
 
 
 class FieldSpec(BaseFieldSpec):
@@ -593,9 +589,9 @@ class SortSpec:
         return None
 
 
-class BibFormatSpec:
+class ExportFormatSpec:
     """
-    Specifies a bibliographic record download format.
+    Specifies a bibliographic record export format.
 
     This is a configuration element, with no effect on the search index schema.
     """
@@ -821,9 +817,9 @@ class LinkByEndpointSpec(LinkSpec):
         *,
         endpoint: str,
         external: bool = False,
-        anchor: Optional[str] = None,
-        scheme: Optional[str] = None,
-        parameters: Optional[dict[str, Any]] = None,
+        anchor: str | None = None,
+        scheme: str | None = None,
+        parameters: dict[str, Any] | None = None,
         **kwargs,
     ):
         super().__init__(**kwargs)
@@ -861,7 +857,7 @@ class PageLinkSpec(LinkSpec):
 
 
 class LinkGroupSpec:
-    def __init__(self, key: str, links: Optional[list[LinkSpec]] = None):
+    def __init__(self, key: str, links: list[LinkSpec] | None = None):
         self.key = key
         self.links = links or []
 

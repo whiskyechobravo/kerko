@@ -1,4 +1,4 @@
-import pathlib
+from pathlib import Path
 from typing import Any
 
 from flask import current_app
@@ -11,16 +11,16 @@ def composer() -> Composer:
     return current_app.config["kerko_composer"]
 
 
-def data_path() -> str:
+def data_path() -> Path:
     """
     Get the absolute path of the data directory.
 
     If the configuration parameter was set as a relative path, it will be
     resolved as an absolute path under the application's instance folder.
     """
-    instance_path = pathlib.Path(current_app.instance_path)
-    config_data_path = pathlib.Path(current_app.config.get("DATA_PATH", "kerko"))
-    return str(instance_path / config_data_path)
+    instance_path = Path(current_app.instance_path)
+    config_data_path = Path(current_app.config.get("DATA_PATH", "kerko"))
+    return instance_path / config_data_path
 
 
 def config(path: str) -> Any:

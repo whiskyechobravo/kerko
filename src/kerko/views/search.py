@@ -1,5 +1,4 @@
 import time
-from datetime import datetime
 
 from babel.numbers import format_decimal
 from flask import redirect, render_template, url_for
@@ -7,9 +6,9 @@ from flask_babel import get_locale, gettext, ngettext
 from werkzeug.datastructures import MultiDict
 
 from kerko.criteria import create_feed_criteria
+from kerko.index import load_object, open_index
 from kerko.searcher import Searcher
 from kerko.shortcuts import composer, config
-from kerko.storage import load_object, open_index
 from kerko.views import breadbox, pager, sorter
 from kerko.views.item import build_item_context, inject_item_data
 
@@ -49,8 +48,7 @@ def empty_results(criteria, form):
         # separate search query for each active facet, each time ignoring all
         # other search criteria. Unless a given facet value alone leads to empty
         # results, we'll be able to get to build that facet.
-        index = open_index("index")
-        with Searcher(index) as searcher:
+        with Searcher(open_index()) as searcher:
             for key, value in criteria.filters.lists():
                 results = searcher.search(
                     filters=MultiDict({key: value}),
@@ -73,8 +71,7 @@ def search_single(criteria, form):
     """Perform search, and prepare template context for a results page containing a single item."""
     start_time = time.process_time()
     context = {}
-    index = open_index("index")
-    with Searcher(index) as searcher:
+    with Searcher(open_index()) as searcher:
         results = searcher.search_page(
             page=criteria.options.get("page", 1),
             page_len=1,
@@ -152,8 +149,7 @@ def search_list(criteria, form):
     """Perform search, and prepare the template context variables for a list of search results."""
     start_time = time.process_time()
     context = {}
-    index = open_index("index")
-    with Searcher(index) as searcher:
+    with Searcher(open_index()) as searcher:
         page_len = criteria.options.get("page-len", config("kerko.pagination.page_len"))
         common_search_args = {
             "keywords": criteria.keywords,
@@ -228,7 +224,7 @@ def search_list(criteria, form):
                     }
                 ),
             )
-            for key in composer().bib_formats.keys()
+            for key in composer().export_formats.keys()
         }
         if "atom" in config("kerko.feeds.formats"):
             context["atom_feed_url"] = url_for(
@@ -255,13 +251,7 @@ def search_list(criteria, form):
         context["search_results"] = zip(items, _build_item_search_urls(items, criteria))
         context["facet_results"] = results_facets
         context["breadbox"] = breadbox.build_breadbox(criteria, results_facets)
-
-        last_sync = load_object("index", "last_update_from_zotero")
-        if last_sync:
-            context["last_sync"] = datetime.fromtimestamp(
-                last_sync,
-                tz=datetime.now().astimezone().tzinfo,
-            )
+        context["last_sync"] = load_object("cache_timestamp")
     return render_template(
         config("kerko.templates.search"),
         form=form,

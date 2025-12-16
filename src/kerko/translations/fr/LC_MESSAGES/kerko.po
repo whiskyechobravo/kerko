@@ -842,7 +842,7 @@ msgstr "Relations"
 #: src/kerko/templates/kerko/search.html.jinja2:158
 #, python-format
 msgid "Processing time: %(time)s seconds"
-msgstr "Temps de traitement: %(time)s seconds"
+msgstr "Temps de traitement&nbsp;: %(time)s seconds"
 
 #: src/kerko/templates/kerko/item.html.jinja2:295 src/kerko/views/search.py:100
 #: src/kerko/views/search.py:185
@@ -900,8 +900,8 @@ msgstr[1] "Imprimer %(count_formatted)s références"
 
 #: src/kerko/templates/kerko/search.html.jinja2:161
 #, python-format
-msgid "Last update from database: %(when)s"
-msgstr "Dernière mise à jour depuis la base de données&nbsp;: %(when)s"
+msgid "Last update: %(when)s"
+msgstr "Dernière mise à jour&nbsp;: %(when)s"
 
 #: src/kerko/templates/kerko/search.html.jinja2:167
 msgid "Suggestions:"

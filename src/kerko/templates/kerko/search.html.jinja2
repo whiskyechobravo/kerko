@@ -5,7 +5,7 @@
 {%- set show_print_link = config.kerko.features.print_results_max_count == 0 or total_count <= config.kerko.features.print_results_max_count %}
 {%- set show_print_link = show_print_link and config.kerko.features.print_results %}
 {%- set show_download_link = config.kerko.features.download_results_max_count == 0 or total_count <= config.kerko.features.download_results_max_count %}
-{%- set show_download_link = show_download_link and config.kerko.features.download_results and config.kerko_composer.bib_formats %}
+{%- set show_download_link = show_download_link and config.kerko.features.download_results and config.kerko_composer.export_formats %}
 {%- set abstracts_toggler_title = _('Hide abstracts') if show_abstracts else _('Show abstracts') %}
 
 {%- block metas %}
@@ -133,7 +133,7 @@
                                             <span class="fas fa-download" aria-hidden="true"></span> {% trans count=total_count, count_formatted=total_count_formatted|safe %}Download this record{% pluralize %}Download {{ count_formatted }} records{% endtrans -%}
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labelledby="download-options">
-                                            {%- for bib_format in config.kerko_composer.get_ordered_specs('bib_formats') %}
+                                            {%- for bib_format in config.kerko_composer.get_ordered_specs('export_formats') %}
                                                 <a class="dropdown-item" href="{{ download_urls[bib_format.key] }}" rel="nofollow" type="{{ bib_format.mime_type|escape }}" {{ title_aria_label(_('Download in {download_option} format').format(download_option=bib_format.label|escape)) }}>
                                                     {{- bib_format.label -}}
                                                 </a>
@@ -158,7 +158,7 @@
                         {% trans time="%.2f"|format(time) %}Processing time: {{ time }} seconds{% endtrans %} &mdash;
                     {%- endif %}
                     {%- if last_sync %}
-                        {% trans when=last_sync|kerko_format_datetime(convert_tz=True, show_tz=True) %}Last update from database: {{ when }}{% endtrans %}
+                        {% trans when=last_sync|kerko_format_datetime(convert_tz=True, show_tz=True) %}Last update: {{ when }}{% endtrans %}
                     {%- endif %}
                 </div>
             {%- endblock search_results_footer %}

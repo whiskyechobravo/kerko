@@ -2,16 +2,17 @@
 
 import re
 from collections.abc import Iterable
+from typing import Any
 
 
 class TagGate:
     """Determine whether an object is included or excluded based on its tags."""
 
-    def __init__(self, include_re="", exclude_re=""):
+    def __init__(self, include_re: str | Iterable[str] = "", exclude_re: str | Iterable[str] = ""):
         """
         Initialize the instance.
 
-        :param [str,list] include_re: Regular expression pattern to use to
+        :param include_re: Regular expression pattern to use to
             include objects based on their tags. Any object which does not have
             a tag that matches this pattern will be excluded. If empty (which is
             the default), all objects will be included unless the `exclude_re`
@@ -19,7 +20,7 @@ class TagGate:
             every pattern of the list must match at least a tag for the object
             to be included.
 
-        :param [str,list] exclude_re: Regular expression pattern to use to
+        :param exclude_re: Regular expression pattern to use to
             exclude objects based on their tags. Any object that have a tag that
             matches this pattern will be excluded. If empty (which is the
             default), no objects will be excluded unless the `include_re`
@@ -28,7 +29,6 @@ class TagGate:
             the list must match at least a tag for the object to be excluded.
         """
         if include_re:
-            assert isinstance(include_re, Iterable)
             if isinstance(include_re, str):
                 include_re = [include_re]
             self.include_re = [re.compile(pattern) for pattern in include_re]
@@ -36,14 +36,13 @@ class TagGate:
             self.include_re = None
 
         if exclude_re:
-            assert isinstance(exclude_re, Iterable)
             if isinstance(exclude_re, str):
                 exclude_re = [exclude_re]
             self.exclude_re = [re.compile(pattern) for pattern in exclude_re]
         else:
             self.exclude_re = None
 
-    def check(self, obj):
+    def check(self, obj: dict[str, Any]) -> bool:
         """
         Check whether the object is to be included or excluded.
 

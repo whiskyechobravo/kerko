@@ -31,21 +31,21 @@ def inject_creator_display_names(item, link=True):
     """
     for spec in item.keys():
         if spec == "data" and "creators" in item["data"]:
-            for creator in item["data"]["creators"]:
+            for item_creator in item["data"]["creators"]:
                 # Add creator display name.
-                creator["display"] = format_creator_name(creator)
+                item_creator["display"] = format_creator_name(item_creator)
                 # Add creator type labels.
                 if "creator_types" in item:
-                    for t in item["creator_types"]:
-                        if t["creatorType"] == creator["creatorType"]:
-                            creator["label"] = t["localized"]
+                    for ct in item["creator_types"]:
+                        if ct["creator_type"] == item_creator["creatorType"]:
+                            item_creator["label"] = ct["localized"]
                             break
                 if link:
                     creator_scope = composer().scopes.get("creator")
                     if creator_scope:
-                        creator["url"] = url_for(
+                        item_creator["url"] = url_for(
                             ".search",
                             **creator_scope.add_keywords(
-                                value=f'"{richtext_striptags(creator["display"])}"'
+                                value=f'"{richtext_striptags(item_creator["display"])}"'
                             ),
                         )

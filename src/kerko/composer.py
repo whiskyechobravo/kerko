@@ -15,8 +15,8 @@ from kerko.datetime import iso_to_datetime, iso_to_timestamp
 from kerko.richtext import richtext_striptags
 from kerko.specs import (
     BadgeSpec,
-    BibFormatSpec,
     CollectionFacetSpec,
+    ExportFormatSpec,
     FacetSpec,
     FieldSpec,
     FlatFacetSpec,
@@ -81,7 +81,7 @@ class Composer:
         self.fields: dict[str, FieldSpec] = {}
         self.facets: dict[str, FacetSpec] = {}
         self.sorts: dict[str, SortSpec] = {}
-        self.bib_formats: dict[str, BibFormatSpec] = {}
+        self.export_formats: dict[str, ExportFormatSpec] = {}
         self.relations: dict[str, RelationSpec] = {}
         self.badges: dict[str, BadgeSpec] = {}
         self.pages: dict[str, PageSpec] = {}
@@ -90,7 +90,7 @@ class Composer:
         self.init_fields(config)
         self.init_facets(config)
         self.init_sorts(config)
-        self.init_bib_formats(config)
+        self.init_export_formats(config)
         self.init_relations(config)
         self.init_pages(config)
         self.init_link_groups(config)
@@ -153,6 +153,12 @@ class Composer:
         """
 
         #
+        # Add non-searchable, non-configurable fields required for the indexing process.
+        #
+        self.schema.add("source_collections", ID)
+        self.schema.add("source_items", ID)
+
+        #
         # Required searchable fields (partially configurable).
         #
 
@@ -163,7 +169,7 @@ class Composer:
                 key="id",
                 field_type=ID(unique=True, stored=True, field_boost=field_dict["boost"]),
                 scopes=field_dict["scopes"],
-                extractor=extractors.ItemExtractor(key="key"),
+                extractor=extractors.ItemExtractor(key="item_key"),
             )
         )
         # Alternate IDs used when the primary ID cannot be resolved.
@@ -208,7 +214,9 @@ class Composer:
                     analyzer=self.text_chain, stored=True, field_boost=field_dict["boost"]
                 ),
                 scopes=field_dict["scopes"],
-                extractor=extractors.ItemTypeLabelExtractor(),
+                extractor=extractors.ItemTypeLabelExtractor(
+                    locale=config_get(config, "kerko.zotero.locale")
+                ),
             )
         )
         # Publication year, based on a parsing of Zotero's Date field, searchable and stored.
@@ -354,7 +362,10 @@ class Composer:
             FieldSpec(
                 key="bib",
                 field_type=STORED,
-                extractor=extractors.ItemExtractor(key="bib", format_="bib"),
+                extractor=extractors.ItemBibExtractor(
+                    style=config_get(config, "kerko.zotero.csl_style"),
+                    locale=config_get(config, "kerko.zotero.locale"),
+                ),
             )
         )
         # OpenURL Coins.
@@ -362,7 +373,7 @@ class Composer:
             FieldSpec(
                 key="coins",
                 field_type=STORED,
-                extractor=extractors.ItemExtractor(key="coins", format_="coins"),
+                extractor=extractors.ItemExportFormatExtractor("coins"),
             )
         )
         # RIS.
@@ -370,7 +381,7 @@ class Composer:
             FieldSpec(
                 key="ris",
                 field_type=STORED,
-                extractor=extractors.ItemExtractor(key="ris", format_="ris"),
+                extractor=extractors.ItemExportFormatExtractor("ris"),
             )
         )
         # BibTeX.
@@ -378,7 +389,7 @@ class Composer:
             FieldSpec(
                 key="bibtex",
                 field_type=STORED,
-                extractor=extractors.ItemExtractor(key="bibtex", format_="bibtex"),
+                extractor=extractors.ItemExportFormatExtractor("bibtex"),
             )
         )
         # Raw item data.
@@ -417,6 +428,7 @@ class Composer:
                 key="attachments",
                 field_type=STORED,
                 extractor=extractors.ChildFileAttachmentsExtractor(
+                    files=config_get(config, "kerko.zotero.files"),
                     mime_types=config_get(config, "kerko.zotero.attachment_mime_types"),
                     include_re=config_get(config, "kerko.zotero.child_include_re"),
                     exclude_re=config_get(config, "kerko.zotero.child_exclude_re"),
@@ -428,7 +440,9 @@ class Composer:
             FieldSpec(
                 key="item_fields",
                 field_type=STORED,
-                extractor=extractors.ItemFieldsExtractor(),
+                extractor=extractors.ItemFieldsExtractor(
+                    locale=config_get(config, "kerko.zotero.locale")
+                ),
             )
         )
         # Creator types for this item type, for convenient access.
@@ -436,7 +450,9 @@ class Composer:
             FieldSpec(
                 key="creator_types",
                 field_type=STORED,
-                extractor=extractors.CreatorTypesExtractor(),
+                extractor=extractors.CreatorTypesExtractor(
+                    locale=config_get(config, "kerko.zotero.locale")
+                ),
             )
         )
         # URL for opening item in Zotero app.
@@ -610,7 +626,9 @@ class Composer:
                         FlatFacetSpec(
                             key=f"facet_{facet_key}",
                             field_type=ID(stored=True),
-                            extractor=extractors.ItemTypeFacetExtractor(),
+                            extractor=extractors.ItemTypeFacetExtractor(
+                                locale=config_get(config, "kerko.zotero.locale")
+                            ),
                             codec=codecs.ItemTypeFacetCodec(),
                             title=facet_config.get("title") or _("Resource type"),
                             missing_label=None,  # TODO:config: Allow in config.
@@ -647,7 +665,7 @@ class Composer:
                         FlatFacetSpec(
                             key=f"facet_{facet_key}",
                             field_type=BOOLEAN(stored=True),
-                            extractor=extractors.ItemDataLinkFacetExtractor(key="url"),
+                            extractor=extractors.ItemDataLinkFacetExtractor(),
                             codec=codecs.BooleanFacetCodec(),
                             title=facet_config.get("title") or _("Online resource"),
                             missing_label=None,
@@ -801,9 +819,9 @@ class Composer:
                         )
                     )
 
-    def init_bib_formats(self, config: Config) -> None:
+    def init_export_formats(self, config: Config) -> None:
         """
-        Initialize a set of `BibFormatSpec` instances using config settings.
+        Initialize a set of ExportFormatSpec instances using config settings.
 
         These rely on `FieldSpec` instances, which must have been added beforehand.
         """
@@ -816,8 +834,8 @@ class Composer:
                     if k in ["weight", "extension", "mime_type"]
                 }
                 if format_key == "ris":
-                    self.add_bib_format(
-                        BibFormatSpec(
+                    self.add_export_format(
+                        ExportFormatSpec(
                             key=format_key,
                             field=self.fields["ris"],
                             label=format_config.get("label") or _("RIS"),
@@ -827,8 +845,8 @@ class Composer:
                         )
                     )
                 elif format_key == "bibtex":
-                    self.add_bib_format(
-                        BibFormatSpec(
+                    self.add_export_format(
+                        ExportFormatSpec(
                             key=format_key,
                             field=self.fields["bibtex"],
                             label=format_config.get("label") or _("BibTeX"),
@@ -920,11 +938,11 @@ class Composer:
     def remove_sort(self, key):
         del self.sorts[key]
 
-    def add_bib_format(self, bib_format):
-        self.bib_formats[bib_format.key] = bib_format
+    def add_export_format(self, export_format):
+        self.export_formats[export_format.key] = export_format
 
-    def remove_bib_format(self, key):
-        del self.bib_formats[key]
+    def remove_export_format(self, key):
+        del self.export_formats[key]
 
     def add_badge(self, badge):
         self.badges[badge.key] = badge

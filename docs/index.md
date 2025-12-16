@@ -224,7 +224,7 @@ Kerko's features and it provides a few additions of its own:
 
 ## Requirements
 
-Kerko requires Python 3.9 or later.
+Kerko requires Python 3.11 or later.
 
 Required Python packages will be automatically installed when installing Kerko.
 The main ones are:
@@ -236,8 +236,8 @@ The main ones are:
 - [Flask-Babel]: integration of Flask and Babel.
 - [Flask-WTF]: integration of Flask and WTForms.
 - [Jinja2]: template engine.
+- [Karboni]: mirror a Zotero library into a SQL database.
 - [Pydantic]: configuration parsing and validation.
-- [Pyzotero]: Python client for the Zotero API.
 - [w3lib]: URL and HTML manipulation utilities.
 - [Werkzeug]: WSGI web application library (also required by Flask).
 - [Whoosh]: pure Python full-text indexing and searching library.
@@ -289,6 +289,7 @@ known limitations of Kerko:
 [HighwirePress_Google]: https://scholar.google.ca/intl/en/scholar/inclusion.html#indexing
 [Jinja2]: https://pypi.org/project/Jinja2/
 [jQuery]: https://jquery.com/
+[Karboni]: https://github.com/whiskyechobravo/karboni
 [Kerko]: https://github.com/whiskyechobravo/kerko
 [Kerko_email]: mailto:kerko@whiskyechobravo.com
 [Kerko_translations]: https://github.com/whiskyechobravo/kerko/tree/main/src/kerko/translations
@@ -297,7 +298,6 @@ known limitations of Kerko:
 [Popper.js]: https://popper.js.org/
 [Pydantic]: https://pypi.org/project/pydantic/
 [Python]: https://www.python.org/
-[Pyzotero]: https://pypi.org/project/Pyzotero/
 [Snowball]: https://snowballstem.org/
 [TOML]: https://toml.io/
 [Twelve-factor_App]: https://12factor.net/config

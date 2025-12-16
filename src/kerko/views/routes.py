@@ -1,7 +1,7 @@
+import datetime
 import math
 import time
 from collections import deque
-from datetime import datetime, timedelta
 
 from flask import (
     abort,
@@ -18,19 +18,12 @@ from flask_babel import get_locale, gettext
 from markupsafe import Markup
 
 from kerko.criteria import create_feed_criteria, create_search_criteria
-from kerko.exceptions import except_abort
+from kerko.exceptions import IndexSchemaError, SearchIndexError, except_abort
 from kerko.forms import SearchForm
+from kerko.index import doc_count, get_attachments_dir, load_object, open_index
 from kerko.searcher import Searcher
 from kerko.shortcuts import composer, config
 from kerko.specs import SortSpec
-from kerko.storage import (
-    SchemaError,
-    SearchIndexError,
-    get_doc_count,
-    get_storage_dir,
-    load_object,
-    open_index,
-)
 from kerko.views import pager
 from kerko.views.item import build_item_context, creators, inject_item_data
 from kerko.views.search import search_list, search_single
@@ -40,7 +33,7 @@ from kerko.views.search import search_list, search_single
 SITEMAP_URL_MAX_COUNT = 1000
 
 
-@except_abort(SchemaError, 500)
+@except_abort(IndexSchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def search():
     """View the results of a search."""
@@ -64,7 +57,7 @@ def search():
     return search_list(criteria, form)
 
 
-@except_abort(SchemaError, 500)
+@except_abort(IndexSchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def atom_feed():
     """Build a feed based on the search criteria."""
@@ -74,8 +67,7 @@ def atom_feed():
 
     context = {}
     criteria = create_feed_criteria(request.args)
-    index = open_index("index")
-    with Searcher(index) as searcher:
+    with Searcher(open_index()) as searcher:
         extra_args = {}
 
         sort_field = composer().fields.get("sort_date_added")
@@ -94,8 +86,8 @@ def atom_feed():
 
         if config("kerko.feeds.max_days"):
             if "filter_date" in composer().fields:
-                today = datetime.today()
-                start = datetime(today.year, today.month, today.day) - timedelta(
+                today = datetime.datetime.today()
+                start = datetime.datetime(today.year, today.month, today.day) - datetime.timedelta(
                     config("kerko.feeds.max_days")
                 )
                 current_app.logger.debug(
@@ -130,13 +122,12 @@ def atom_feed():
         criteria.fit_page(results.page_count or 1)
         pager_sections = pager.get_sections(criteria.options["page"], results.page_count or 1)
 
-    last_sync = load_object("index", "last_update_from_zotero")
+    last_sync = load_object("cache_timestamp")
     if last_sync:
-        context["last_sync"] = datetime.fromtimestamp(
-            last_sync, tz=datetime.now().astimezone().tzinfo
-        ).isoformat()
+        assert isinstance(last_sync, datetime.datetime)
+        context["last_sync"] = last_sync.isoformat()
     else:
-        context["last_sync"] = datetime.now().isoformat()
+        context["last_sync"] = datetime.datetime.now(datetime.UTC).isoformat()
 
     if criteria.is_searching():
         context["feed_title"] = gettext("Custom feed")
@@ -173,14 +164,13 @@ def atom_feed():
     return response
 
 
-@except_abort(SchemaError, 500)
+@except_abort(IndexSchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def item_view(item_id):
     """View a full bibliographic record."""
     start_time = time.process_time()
 
-    index = open_index("index")
-    with Searcher(index) as searcher:
+    with Searcher(open_index()) as searcher:
         # Try matching the item by id, with fallback to alternate id.
         try_id_fields = deque(["id", "alternate_id"])
         fellback = False
@@ -209,12 +199,11 @@ def item_view(item_id):
     )
 
 
-@except_abort(SchemaError, 500)
+@except_abort(IndexSchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def page(item_id, title):
     """Render a simple page, using a Zotero note as content."""
-    index = open_index("index")
-    with Searcher(index) as searcher:
+    with Searcher(open_index()) as searcher:
         results = searcher.search(
             require_all={
                 "id": [item_id],
@@ -234,7 +223,7 @@ def page(item_id, title):
     )
 
 
-@except_abort(SchemaError, 500)
+@except_abort(IndexSchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def child_attachment_download(item_id, attachment_id, attachment_filename=None):
     """
@@ -244,8 +233,7 @@ def child_attachment_download(item_id, attachment_id, attachment_filename=None):
     filename, a redirect is performed to a corrected URL so that the client gets
     a proper filename.
     """
-    index = open_index("index")
-    with Searcher(index) as searcher:
+    with Searcher(open_index()) as searcher:
         # Try matching the item by id, with fallback to alternate id.
         try_id_fields = deque(["id", "alternate_id"])
         fellback = False
@@ -275,7 +263,7 @@ def child_attachment_download(item_id, attachment_id, attachment_filename=None):
         return redirect(url_for(".item_view", item_id=item["id"]), 301)
     attachment = matching_attachments[0]
 
-    filepath = get_storage_dir("attachments") / attachment_id
+    filepath = get_attachments_dir() / attachment_id
     if not filepath.exists():
         return abort(404)
 
@@ -292,14 +280,14 @@ def child_attachment_download(item_id, attachment_id, attachment_filename=None):
         )
 
     return send_from_directory(
-        get_storage_dir("attachments"),
+        get_attachments_dir(),
         attachment_id,
         download_name=filename,
         mimetype=attachment["data"].get("contentType", "octet-stream"),
     )
 
 
-@except_abort(SchemaError, 500)
+@except_abort(IndexSchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def standalone_attachment_download(item_id, attachment_filename=None):
     """
@@ -309,8 +297,7 @@ def standalone_attachment_download(item_id, attachment_filename=None):
     filename, a redirect is performed to a corrected URL so that the client gets
     a proper filename.
     """
-    index = open_index("index")
-    with Searcher(index) as searcher:
+    with Searcher(open_index()) as searcher:
         # Try matching the item by id, with fallback to alternate id.
         try_id_fields = deque(["id", "alternate_id"])
         fellback = False
@@ -331,7 +318,7 @@ def standalone_attachment_download(item_id, attachment_filename=None):
             return abort(404)
         item = results.items(composer().select_fields(["id", "data"]))[0]
 
-    filepath = get_storage_dir("attachments") / item["id"]
+    filepath = get_attachments_dir() / item["id"]
     if not filepath.exists():
         return abort(404)
 
@@ -347,26 +334,25 @@ def standalone_attachment_download(item_id, attachment_filename=None):
         )
 
     return send_from_directory(
-        get_storage_dir("attachments"),
+        get_attachments_dir(),
         item["id"],
         download_name=filename,
         mimetype=item["data"].get("contentType", "octet-stream"),
     )
 
 
-@except_abort(SchemaError, 500)
+@except_abort(IndexSchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def item_bib_download(item_id, bib_format_key):
     """Download a record."""
     if not config("kerko.features.download_item"):
         return abort(404)
 
-    bib_format = composer().bib_formats.get(bib_format_key)
+    bib_format = composer().export_formats.get(bib_format_key)
     if not bib_format:
         return abort(404)
 
-    index = open_index("index")
-    with Searcher(index) as searcher:
+    with Searcher(open_index()) as searcher:
         # Try matching the item by id, with fallback to alternate id.
         try_id_fields = deque(["id", "alternate_id"])
         fellback = False
@@ -402,17 +388,16 @@ def item_bib_download(item_id, bib_format_key):
     return response
 
 
-@except_abort(SchemaError, 500)
+@except_abort(IndexSchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def search_bib_download(bib_format_key):
     """Download all records resulting from a search."""
-    bib_format = composer().bib_formats.get(bib_format_key)
+    bib_format = composer().export_formats.get(bib_format_key)
     if not bib_format:
         return abort(404)
 
     criteria = create_search_criteria(request.args)
-    index = open_index("index")
-    with Searcher(index) as searcher:
+    with Searcher(open_index()) as searcher:
         results = searcher.search(
             limit=None,
             keywords=criteria.keywords,
@@ -438,7 +423,7 @@ def search_bib_download(bib_format_key):
 
 
 def get_sitemap_page_count():
-    count = get_doc_count("index")
+    count = doc_count()
     if count:
         count = math.ceil(count / SITEMAP_URL_MAX_COUNT)
         # Note: count may include items that will be excluded from the
@@ -459,15 +444,14 @@ def sitemap_index():
     return response
 
 
-@except_abort(SchemaError, 500)
+@except_abort(IndexSchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def sitemap(page_num):
     """Generate a sitemap."""
     if page_num > get_sitemap_page_count():
         return abort(404)
 
-    index = open_index("index")
-    with Searcher(index) as searcher:
+    with Searcher(open_index()) as searcher:
         sort_field = composer().fields.get("sort_date_modified")
         if sort_field:
             sort_spec = SortSpec(
@@ -494,12 +478,13 @@ def sitemap(page_num):
 
 
 def last_updated_on():
-    last_sync = load_object("index", "last_update_from_zotero")
+    last_sync = load_object("cache_timestamp")
     if last_sync:
+        assert isinstance(last_sync, datetime.datetime)
         return {
-            "when": datetime.fromtimestamp(
-                last_sync, tz=datetime.now().astimezone().tzinfo
-            ).isoformat(),
-            "hours_ago": round((time.time() - last_sync) / 3600, 3),
+            "when": last_sync.isoformat(),
+            "hours_ago": round(
+                (datetime.datetime.now(datetime.UTC) - last_sync).total_seconds() / 3600, 3
+            ),
         }
     return {}

@@ -5,13 +5,41 @@ documentation.
 
 ## Unreleased
 
+New features:
+
+
+Other changes:
+
+- Much faster synchronization from Zotero:
+    - Use Karboni to handle the synchronization process.
+    - Perform incremental indexing of just the changed items.
+- The "Last update from database" message is now simply "Last update", because
+  it no longer indicate the last time the library was synchronized with Zotero,
+  but the last time actual changes were synchronized.
+
 Bug fixes:
 
+- Fix sometimes inconsistent item version when the Zotero library changes while
+  Kerko synchronizes its cache.
 - Fix "Open in Zotero" preferences not getting saved (changed the cookie
   SameSite attribute).
 - Fix incorrect version requirement for the `pre-commit` package (issue
-  affected dev requirements only).
+  affected `dev` requirements only).
 
+Backwards incompatible changes:
+
+- Drop support for Python 3.9 (EOL) and 3.10 (not supported by Karboni).
+- Remove all command line interface (CLI) commands related to attachments.
+  Attachments are now automatically handled by the `sync cache` command.
+- Configuration parameter changes:
+    - `kerko.zotero.batch_size` now has a default (and maximum) value of `50`.
+    - `kerko.zotero.max_attempts` now has a maximum value of `25`.
+    - `kerko.zotero.wait` now has a default value of `2` and a maximum value of
+      `600`.
+
+Possibly backwards incompatible changes (more or less internal API changes):
+
+- `kerko.shortcuts.data_path()` now returns a `pathlib.Path` instead of a `str`.
 
 ## 1.3.0 (2025-06-17)
 

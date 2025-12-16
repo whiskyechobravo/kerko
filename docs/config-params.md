@@ -1267,7 +1267,7 @@ Default value: `["application/pdf"]`
 
 !!! warning "Modifies the attachments"
 
-    Changing this parameter will require that you run the `sync attachments`
+    Changing this parameter will require that you run the `sync cache --full`
     command. See [synchronization commands] for details.
 
 ### `csl_style`
@@ -1288,10 +1288,11 @@ Default value: `"apa"`.
 
 ### `batch_size`
 
-Number of items to request on each call to the Zotero API.
+Number of items to request on a single call to the Zotero API. Actual batch
+sizes can get reduced based on responses received from the Zotero API.
 
 Type: Integer <br>
-Default value: `100` (this is the maximum currently allowed by the Zotero API)
+Default value: `50` (this is the maximum currently allowed)
 
 ### `child_include_re`
 
@@ -1325,6 +1326,22 @@ Default value: `"^_"`
 
     Changing this parameter will require that you run the `sync index --full`
     and `sync attachments` commands. See [synchronization commands] for details.
+
+### `files`
+
+Enable file attachments. If set to `true`, files are downloaded from Zotero and
+saved on the server as part of the cache. Files may be made available for
+download by end users depending on other configuration parameters
+`kerko.zotero.attachments_mime_types`, `kerko.zotero.item_include_re`,
+`kerko.zotero.item_exclude_re`.
+
+Type: Boolean <br>
+Default value: `true`
+
+!!! warning "Modifies the cache and the search index"
+
+    Changing this parameter will require that you run the `sync cache --full`
+    and `sync index` commands. See [synchronization commands] for details.
 
 ### `item_include_re`
 
@@ -1373,8 +1390,8 @@ Default value: `"en-US"`
 
 ### `max_attempts`
 
-Maximum number of tries after the Zotero API has returned an error or has not
-responded during indexing.
+Maximum number of tries for a Zotero API call that returns an error or that does
+not respond.
 
 Type: Integer <br>
 Default value: `10`
@@ -1414,10 +1431,12 @@ Default value: `"^_"`
 
 ### `wait`
 
-Time to wait (in seconds) between failed attempts to call the Zotero API.
+Time to wait (in seconds) between failed attempts to call the Zotero API. The
+delay between attempts might increase based on responses received from the
+Zotero API.
 
 Type: Integer <br>
-Default value: `120`
+Default value: `2`
 
 ---
 
