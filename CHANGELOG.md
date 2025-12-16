@@ -10,13 +10,13 @@ New features:
 
 Other changes:
 
-- Much faster synchronization from Zotero:
-    - Use Karboni to handle the synchronization process.
-    - Perform incremental indexing of just the changed items.
+- Much faster synchronization from Zotero (using Karboni).
+- Much faster updating of the search index (through incremental indexing).
+- Add a `--files` option for deleting file attachments with the `clean` command.
+- Improve command line interface help texts.
 - The "Last update from database" message is now simply "Last update", because
   it no longer indicate the last time the library was synchronized with Zotero,
   but the last time actual changes were synchronized.
-- Improve command line interface help text.
 
 Bug fixes:
 

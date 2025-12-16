@@ -1,12 +1,12 @@
 """Synchronize the Zotero library into a local cache."""
 
 import datetime
-import shutil
 from pathlib import Path
 from urllib.parse import quote
 
 import karboni
 from flask import current_app
+from karboni.database import clean
 from karboni.database import schema as cache
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -65,10 +65,8 @@ def sync_cache(full: bool = False) -> None:
         raise CacheSyncError
 
 
-def delete_cache():
-    path = get_cache_dir()
-    if path.is_dir():
-        shutil.rmtree(path)
+def delete_cache(files: bool) -> None:
+    clean(database_url=get_cache_database_url(), data_path=get_cache_dir(), files=files)
 
 
 class CacheStatus:

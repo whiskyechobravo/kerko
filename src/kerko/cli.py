@@ -54,13 +54,18 @@ def sync(target: str, full: bool) -> None:
     "target",
     type=click.Choice(["cache", "index", "everything"], case_sensitive=False),
 )
+@click.option(
+    "--files/--no-files",
+    default=False,
+    help="Whether to delete the file attachments.",
+)
 @with_appcontext
-def clean(target: str) -> None:
+def clean(target: str, files: bool) -> None:
     """Delete the cache and/or the search index."""
     if target in ["everything", "cache"]:
-        delete_cache()
+        delete_cache(files)
     if target in ["everything", "index"]:
-        delete_index()
+        delete_index(files)
 
 
 @cli.command(context_settings={"show_default": True})

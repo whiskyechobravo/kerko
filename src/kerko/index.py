@@ -160,10 +160,14 @@ def sync_index(full: bool = False) -> None:
     current_app.logger.info("Indexing completed, now at version %s", cache_status.to_version)
 
 
-def delete_index():
-    path = get_index_dir()
-    if path.is_dir():
-        shutil.rmtree(path)
+def delete_index(files: bool) -> None:
+    index_dir = get_index_dir()
+    if index_dir.is_dir():
+        shutil.rmtree(index_dir)
+    if files:
+        attachments_dir = get_attachments_dir()
+        if attachments_dir.is_dir():
+            shutil.rmtree(attachments_dir)
 
 
 def doc_count():
