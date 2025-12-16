@@ -23,16 +23,14 @@ for the demo site.
 
 Here are some sites that are powered by Kerko:
 
-- [Bibliographie francophone sur l'archivistique](https://bibliopiaf.ebsi.umontreal.ca/)
-- [Bibliographie sur l'histoire de Montréal](https://bibliographies.uqam.ca/bhm/)
+- [Bibliographie francophone sur l’archivistique](https://bibliopiaf.ebsi.umontreal.ca/)
+- [Bibliographie sur l’histoire de Montréal](https://bibliographies.uqam.ca/bhm/)
+- [Bibliothèque de l’Observatoire FORCES-Santé](https://bibliotheque.forces-sante.ca/)
 - [Community Knowledge Open Library on English-Speaking Quebec](https://ckol.quescren.ca/)
 - [Gaius : Conception et évaluation d’un nouveau modèle d’indexation de la documentation juridique - Bibliographie](https://gaius.ebsi.umontreal.ca/bibliographie/)
 - [Lipedema Foundation LEGATO Lipedema Library](https://library.lipedema.org/)
-- [PhDs.io - Knowledge That Transforms](https://phds.io/)
 - [Rights and Records Knowledge Base](https://rightsandrecords.ica.org/)
-- [The EdTech Hub Evidence Library](https://docs.edtechhub.org/)
 - [Transitional Justice Evaluation Tools Reference Library](https://library.transitionaljusticedata.org/)
-- [University of Saint Joseph Research Output](https://research.usj.edu.mo/)
 
 ## Features
 
