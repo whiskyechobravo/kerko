@@ -132,7 +132,6 @@ Log message format string, with %-style placeholders. Refer to the [Python
 logging documentation] for allowed attributes.
 
 Type: String <br>
-Default value: `"[%(asctime)s] %(levelname)s in %(name)s - %(message)s"`
 
 ---
 

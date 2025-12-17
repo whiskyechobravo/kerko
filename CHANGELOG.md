@@ -22,8 +22,6 @@ Other changes:
   it no longer indicate the last time the library was synchronized with Zotero,
   but the last time actual changes were synchronized.
 - Configuration parameter changes:
-    - `LOGGING_FORMAT` now defaults to `"[%(asctime)s] %(levelname)s in %(name)s - %(message)s"`
-      instead of `"[%(asctime)s] %(levelname)s in %(module)s: %(message)s"`.
     - `kerko.zotero.batch_size` now has a default (and maximum) value of `50`.
     - `kerko.zotero.max_attempts` now has a maximum value of `25`.
     - `kerko.zotero.wait` now has a default value of `2` and a maximum value of
