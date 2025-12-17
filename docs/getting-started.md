@@ -84,9 +84,9 @@ your computer.
     production use, this command is usually added to the crontab file for regular
     execution.
 
-    The `--debug` switch is optional. If you use it, some messages will give you
-    an idea of the sync process' progress. If you omit it, the command will run
-    silently unless there are warnings or errors.
+    The `--debug` switch is optional and causes additional messages to be
+    displayed during the process. In general this option can be omitted, but it
+    can be useful if you wish to get a better idea of what's happening.
 
     To list all commands provided by Kerko:
 

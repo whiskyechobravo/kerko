@@ -60,6 +60,49 @@ tox
     new tests!
 
 
+## Updating the test fixtures
+
+Some tests rely on fixtures that were generated from actual Zotero libraries.
+Each fixture is like a pre-built Kerko cache, allowing complex integration tests
+to run without any connection to Zotero.
+
+The sources for those fixtures are publicly accessible Zotero group libraries.
+To rebuild the fixtures from zotero.org, use the following commands, replacing
+`MY_ZOTERO_API_KEY` with your actual Zotero API key:
+
+```bash
+export ZOTERO_API_KEY=MY_ZOTERO_API_KEY
+make fixtures
+```
+
+For more details about the test fixtures, including the URLs of the source
+libraries:
+
+```bash
+make help
+```
+
+If you need to write new tests and need to add items to a source library, you
+could:
+
+1. Clone the source Zotero library;
+2. Add your new item(s);
+3. Temporarily set the clone's id for the fixture in the `Makefile`;
+4. Rebuild the fixture with `make`.
+
+Any new test item must have a line in the form of `KerkoTestID: MY-UNIQUE-ID` in
+its `Extra` field, where `MY-UNIQUE-ID` is a unique key for this item. Any test
+must use this key wherever a Zotero item ID would normally be used. This way,
+the test will still pass even if the item is copied into a different library and
+has gotten a different item ID.
+
+For examples of such tests, look for test cases that inherit
+`SyncIndexTestCase`.
+
+Once your tests are implemented, we will be able to copy your new item(s) into
+the original fixture library, update the fixtures, and the tests will pass.
+
+
 ## Running the pre-commit hooks
 
 Pre-commit checks should be performed automatically whenever you perform a `git

@@ -132,7 +132,7 @@ Log message format string, with %-style placeholders. Refer to the [Python
 logging documentation] for allowed attributes.
 
 Type: String <br>
-Default value: `"[%(asctime)s] %(levelname)s in %(module)s: %(message)s"`
+Default value: `"[%(asctime)s] %(levelname)s in %(name)s - %(message)s"`
 
 ---
 
@@ -256,9 +256,8 @@ Type: Boolean
 
 !!! warning "Modifies the cache and the search index"
 
-    Changing this parameter from `false` to `true` will require that you run the
-    `sync cache --full` and `sync index` commands. See [synchronization
-    commands] for details.
+    Changing this parameter will require that you run the `sync --full` command.
+    See [synchronization commands] for details.
 
 ### `extension`
 
@@ -361,7 +360,7 @@ You may define additional facets. See [Defining custom facets based on Zotero co
 !!! warning "Modifies the search index"
 
     Most of the `kerko.facets.*` parameters require that you run the
-    `clean index` and `sync index` commands after you have changed them.
+    `sync index --full` command after you have changed them.
     See [synchronization commands] for details.
 
 ### `collection_key`
@@ -688,6 +687,8 @@ Default value: `0` (i.e., no tolerance margin).
 ### `results_attachment_links`
 
 Provide links to attachments in search results.
+
+This parameter has no effect if `kerko.zotero.files` is set to `false`.
 
 Type: Boolean <br>
 Default value: `true`
@@ -1062,8 +1063,8 @@ Default value: `true`
 
 !!! warning "Modifies the cache and the search index"
 
-    Changing this parameter will require that you run the `sync cache --full`
-    and `sync index` commands. See [synchronization commands] for details.
+    Changing this parameter will require that you run the `sync --full` command.
+    See [synchronization commands] for details.
 
 ### `result_fields`
 
@@ -1116,9 +1117,9 @@ The configuration system does not allow adding new fields.
 !!! warning "Modifies the search index"
 
     Changing any of the `kerko.search_fields.*` parameters will require that you
-    run the `clean index` and `sync index` commands, except if you are just
-    disabling a field or changing its `scopes` parameter. See [synchronization
-    commands] for details.
+    run the `sync index --full` command, except if you are just disabling a
+    field or changing its `scopes` parameter. See [synchronization commands] for
+    details.
 
 ### `analyzer`
 
@@ -1262,13 +1263,15 @@ Default value: `"kerko/base.html.jinja2"`
 
 List of allowed MIME types for attachments.
 
+This parameter has no effect if `files` is set to `false`.
+
 Type: Array of strings <br>
 Default value: `["application/pdf"]`
 
-!!! warning "Modifies the attachments"
+!!! warning "Modifies the cache"
 
-    Changing this parameter will require that you run the `sync cache --full`
-    command. See [synchronization commands] for details.
+    Changing this parameter will require that you run the `sync --full` command.
+    See [synchronization commands] for details.
 
 ### `csl_style`
 
@@ -1283,8 +1286,8 @@ Default value: `"apa"`.
 
 !!! warning "Modifies the cache and the search index"
 
-    Changing this parameter will require that you run the `sync cache --full`
-    and `sync index` commands. See [synchronization commands] for details.
+    Changing this parameter will require that you run the `sync --full` command.
+    See [synchronization commands] for details.
 
 ### `batch_size`
 
@@ -1305,10 +1308,10 @@ causes some to be rejected.
 Type: String <br>
 Default value: `""`
 
-!!! warning "Modifies the search index and attachments"
+!!! warning "Modifies the search index"
 
     Changing this parameter will require that you run the `sync index --full`
-    and `sync attachments` commands. See [synchronization commands] for details.
+    command. See [synchronization commands] for details.
 
 ### `child_exclude_re`
 
@@ -1322,10 +1325,10 @@ underscore character (`_`) is rejected.
 Type: String <br>
 Default value: `"^_"`
 
-!!! warning "Modifies the search index and attachments"
+!!! warning "Modifies the search index"
 
     Changing this parameter will require that you run the `sync index --full`
-    and `sync attachments` commands. See [synchronization commands] for details.
+    command. See [synchronization commands] for details.
 
 ### `files`
 
@@ -1340,8 +1343,8 @@ Default value: `true`
 
 !!! warning "Modifies the cache and the search index"
 
-    Changing this parameter will require that you run the `sync cache --full`
-    and `sync index` commands. See [synchronization commands] for details.
+    Changing this parameter will require that you run the `sync --full` command.
+    See [synchronization commands] for details.
 
 ### `item_include_re`
 
@@ -1353,10 +1356,10 @@ this value is empty (which is the default), all items will be accepted unless
 Type: String <br>
 Default value: `""`
 
-!!! warning "Modifies the search index and attachments"
+!!! warning "Modifies the search index"
 
     Changing this parameter will require that you run the `sync index --full`
-    and `sync attachments` commands. See [synchronization commands] for details.
+    command. See [synchronization commands] for details.
 
 ### `item_exclude_re`
 
@@ -1369,10 +1372,10 @@ tag that matches it will be excluded.
 Type: String <br>
 Default value: `""`
 
-!!! warning "Modifies the search index and attachments"
+!!! warning "Modifies the search index"
 
     Changing this parameter will require that you run the `sync index --full`
-    and `sync attachments` commands. See [synchronization commands] for details.
+    command. See [synchronization commands] for details.
 
 ### `locale`
 
@@ -1385,8 +1388,8 @@ Default value: `"en-US"`
 
 !!! warning "Modifies the cache and the search index"
 
-    Changing this parameter will require that you run the `sync cache --full`
-    and `sync index` commands. See [synchronization commands] for details.
+    Changing this parameter will require that you run the `sync --full` command.
+    See [synchronization commands] for details.
 
 ### `max_attempts`
 

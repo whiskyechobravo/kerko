@@ -7,16 +7,27 @@ documentation.
 
 New features:
 
+- Add a `kerko.zotero.files` configuration parameter for enabling or disabling
+  file attachments (this is more direct than other parameters that can have the
+  same effect).
 
 Other changes:
 
 - Much faster synchronization from Zotero (using Karboni).
 - Much faster updating of the search index (through incremental indexing).
-- Add a `--files` option for deleting file attachments with the `clean` command.
+- Add a `--files` option for deleting file attachments with the `clean` command
+  line interface (CLI) command.
 - Improve command line interface help texts.
 - The "Last update from database" message is now simply "Last update", because
   it no longer indicate the last time the library was synchronized with Zotero,
   but the last time actual changes were synchronized.
+- Configuration parameter changes:
+    - `LOGGING_FORMAT` now defaults to `"[%(asctime)s] %(levelname)s in %(name)s - %(message)s"`
+      instead of `"[%(asctime)s] %(levelname)s in %(module)s: %(message)s"`.
+    - `kerko.zotero.batch_size` now has a default (and maximum) value of `50`.
+    - `kerko.zotero.max_attempts` now has a maximum value of `25`.
+    - `kerko.zotero.wait` now has a default value of `2` and a maximum value of
+      `600`.
 
 Bug fixes:
 
@@ -27,20 +38,41 @@ Bug fixes:
 - Fix incorrect version requirement for the `pre-commit` package (issue
   affected `dev` requirements only).
 
-Backwards incompatible changes:
+Backwards incompatible changes, removed features:
 
+- Remove the `attachments` target from all CLI commands (such as `sync
+  attachments` and `clean attachments`). File attachments are now automatically
+  handled by the `sync cache` and `sync index` commands.
+- Remove development CLI commands:
+    - `count cache`
+    - `count index` (the `count` command remains and applies just to the index)
+    - `zotero-item`
+    - `zotero-item-fields`
+    - `zotero-item-types`
+    - `zotero-item-type-creator-types`
+    - `zotero-item-type-fields`
+    - `zotero-top-level-collections`
 - Drop support for Python 3.9 (EOL) and 3.10 (not supported by Karboni).
-- Remove all command line interface (CLI) commands related to attachments.
-  Attachments are now automatically handled by the `sync cache` command.
-- Configuration parameter changes:
-    - `kerko.zotero.batch_size` now has a default (and maximum) value of `50`.
-    - `kerko.zotero.max_attempts` now has a maximum value of `25`.
-    - `kerko.zotero.wait` now has a default value of `2` and a maximum value of
-      `600`.
 
 Possibly backwards incompatible changes (more or less internal API changes):
 
 - `kerko.shortcuts.data_path()` now returns a `pathlib.Path` instead of a `str`.
+- New modules `cache` and `index` replace the `storage` and `sync.*` modules.
+- Extractors now retrieve data from cache using the SQLAlchemy ORM, with models
+  imported from `karboni.database.schema`. Class `LibraryContext` is removed.
+  The signature of `Extractor.extract()` is changed.
+- Some extractors must now be initialized with a `locale` argument:
+    - `CreatorTypesExtractor`
+    - `ItemFieldsExtractor`
+    - `ItemTypeFacetExtractor`
+    - `ItemTypeLabelExtractor`
+- Notable renames:
+    - `Composer.bib_formats` → `Composer.export_formats`
+    - `BibFormatSpec` → `ExportFormatSpec`
+- `BaseFieldSpec.extract_to_document()` is removed.
+- Custom exceptions are now in the `exceptions` module and should be raised
+  without passing a message argument.
+
 
 ## 1.3.0 (2025-06-17)
 
