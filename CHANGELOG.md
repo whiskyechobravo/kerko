@@ -26,6 +26,8 @@ Other changes:
     - `kerko.zotero.max_attempts` now has a maximum value of `25`.
     - `kerko.zotero.wait` now has a default value of `2` and a maximum value of
       `600`.
+- Change icon for the "Read documents" button (to emphasize the availability of
+  multiple attachments).
 
 Bug fixes:
 

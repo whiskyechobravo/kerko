@@ -43,7 +43,7 @@
                         {%- block search_result_link_multiple_attachments %}
                             <div class="dropdown">
                                 <button class="{% block search_item_attachments_btn_classes %}btn btn-sm btn-link dropdown-toggle text-nowrap{% endblock %}" type="button" id="attachment-options-{{ result.id|escape }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="fas fa-file mr-1" aria-hidden="true"></span>{{ _('Read documents') -}}
+                                    <span class="fas fa-copy mr-1" aria-hidden="true"></span>{{ _('Read documents') -}}
                                 </button>
                                 <span class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labelledby="attachment-options-{{ result.id|escape }}">
                                     {%- for attachment in result.attachments %}
