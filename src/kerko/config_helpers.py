@@ -458,7 +458,7 @@ LinkModelUnion = Annotated[
 
 
 class LinkGroupsModel(RootModel):
-    root: dict[SlugStr, Annotated[list[LinkModelUnion], Field(min_items=1)]]
+    root: dict[SlugStr, Annotated[list[LinkModelUnion], Field(min_length=1)]]
 
     def to_spec(self) -> dict[str, LinkGroupSpec]:
         return {

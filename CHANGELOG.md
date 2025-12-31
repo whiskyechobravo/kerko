@@ -30,6 +30,7 @@ Other changes:
       `kerko.export_formats.*`.
 - Use a distinct icon for the "Read documents" button when multiple attachments
   are available.
+- Fix Pydantic deprecation warning (use `min_length` instead of `min_items`).
 
 Bug fixes:
 
