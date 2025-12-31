@@ -529,13 +529,13 @@ class ConfigModel(BaseModel):
     kerko: KerkoModel | None = None
 
 
-def load_toml(filename: str | pathlib.Path, verbose=False) -> dict[str, Any]:
+def load_toml(filename: str | pathlib.Path, logger: logging.Logger | None = None) -> dict[str, Any]:
     """Load the content of a TOML file."""
     try:
         with pathlib.Path(filename).open("rb") as file:
             config = tomllib.load(file)
-            if verbose:
-                print(f" * Loading configuration file {filename}")  # noqa: T201
+            if logger:
+                logger.debug(f"Loading configuration file {filename}")
             return config
     except OSError as e:
         msg = f"Unable to open TOML file.\n{e}"

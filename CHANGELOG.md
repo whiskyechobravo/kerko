@@ -77,6 +77,8 @@ Possibly backwards incompatible changes (more or less internal API changes):
 - `BaseFieldSpec.extract_to_document()` is removed.
 - Custom exceptions are now in the `exceptions` module and should be raised
   without passing a message argument.
+- `config_helpers.load_toml()` takes a `logging.Logger` object as argument
+  instead of the `verbose` boolean argument.
 
 
 ## 1.3.0 (2025-06-17)
