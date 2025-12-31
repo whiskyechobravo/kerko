@@ -237,9 +237,15 @@ Type: String
 
 ## `kerko.bib_formats.*.`
 
+Deprecated. Use [`kerko.export_formats.*`](#kerkoexport_formats).
+
+---
+
+## `kerko.export_formats.*.`
+
 Bibliographic record download formats, where `*` is a format key.
 
-The default formats are:
+The supported format keys are:
 
 - `bibtex`
 - `ris`
@@ -552,20 +558,20 @@ Default value: `false`
 
 ### `download_item`
 
-Provide a record download button on item pages.
+Provide a bibliographic record download button on item pages.
 
-To configure the bibliographic formats made available for downloading, see
-[`kerko.bib_formats`](#kerkobib_formats).
+To configure the formats made available for downloading, see
+[`kerko.export_formats`](#kerkoexport_formats).
 
 Type: Boolean <br>
 Default value: `true`
 
 ### `download_results`
 
-Provide a record download button on search results pages.
+Provide a bibliographic record download button on search results pages.
 
-To configure the bibliographic formats made available for downloading, see
-[`kerko.bib_formats`](#kerkobib_formats).
+To configure the formats made available for downloading, see
+[`kerko.export_formats`](#kerkoexport_formats).
 
 Type: Boolean <br>
 Default value: `true`

@@ -133,11 +133,11 @@
                                             <span class="fas fa-download" aria-hidden="true"></span> {% trans count=total_count, count_formatted=total_count_formatted|safe %}Download this record{% pluralize %}Download {{ count_formatted }} records{% endtrans -%}
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-width-300" aria-labelledby="download-options">
-                                            {%- for bib_format in config.kerko_composer.get_ordered_specs('export_formats') %}
-                                                <a class="dropdown-item" href="{{ download_urls[bib_format.key] }}" rel="nofollow" type="{{ bib_format.mime_type|escape }}" {{ title_aria_label(_('Download in {download_option} format').format(download_option=bib_format.label|escape)) }}>
-                                                    {{- bib_format.label -}}
+                                            {%- for f in config.kerko_composer.get_ordered_specs('export_formats') %}
+                                                <a class="dropdown-item" href="{{ download_urls[f.key] }}" rel="nofollow" type="{{ f.mime_type|escape }}" {{ title_aria_label(_('Download in {download_option} format').format(download_option=f.label|escape)) }}>
+                                                    {{- f.label -}}
                                                 </a>
-                                                <p class="px-4 text-muted">{{ bib_format.help_text }}</p>
+                                                <p class="px-4 text-muted">{{ f.help_text }}</p>
                                             {%- endfor %}
                                         </div>
                                     </div>

@@ -53,7 +53,8 @@ def sync_cache(full: bool = False) -> None:
         full=full,
         locales=[config("kerko.zotero.locale")],
         styles=[config("kerko.zotero.csl_style")],
-        export_formats=["coins"] + list(composer().export_formats.keys()),
+        export_formats=["coins"]
+        + list(composer().export_formats.keys()),  # TODO:R5770: Exclude disabled formats.
         fulltext=config("kerko.search.fulltext"),
         files=config("kerko.zotero.files"),
         media_types=config(

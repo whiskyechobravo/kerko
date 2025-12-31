@@ -825,7 +825,7 @@ class Composer:
 
         These rely on `FieldSpec` instances, which must have been added beforehand.
         """
-        formats_dict = config_get(config, "kerko.bib_formats")
+        formats_dict = config_get(config, "kerko.export_formats")
         for format_key, format_config in formats_dict.items():
             if format_config["enabled"]:
                 kwargs = {

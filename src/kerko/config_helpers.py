@@ -1,3 +1,4 @@
+import logging
 import pathlib
 from abc import ABC, abstractmethod
 from datetime import date, datetime, time
@@ -8,6 +9,7 @@ import dpath
 import whoosh
 from flask import Config
 from pydantic import (
+    AliasChoices,
     BaseModel,
     ConfigDict,
     Field,
@@ -31,6 +33,8 @@ try:
     import tomllib
 except ModuleNotFoundError:
     import tomli as tomllib
+
+logger = logging.getLogger(__name__)
 
 
 # Note: To preserve field ordering in Pydantic models, we annotate an
@@ -322,8 +326,8 @@ class SortsModel(BaseModel):
     label: str | None = None
 
 
-class BibFormatsModel(BaseModel):
-    """Model for the kerko.bib_formats config table."""
+class ExportFormatsModel(BaseModel):
+    """Model for the kerko.export_formats config table."""
 
     model_config = ConfigDict(extra="forbid")
 
@@ -484,8 +488,30 @@ class KerkoModel(BaseModel):
     search_fields: SearchFieldsModel
     facets: dict[FieldNameStr, FacetModelUnion]
     sorts: dict[SlugStr, SortsModel]
-    bib_formats: dict[SlugStr, BibFormatsModel]  # TODO:R5770: Rename to export_formats
+    export_formats: dict[SlugStr, ExportFormatsModel] = Field(
+        validation_alias=AliasChoices("export_formats", "bib_formats")
+    )
     relations: dict[ElementIdStr, RelationsModel]
+
+    @model_validator(mode="before")
+    @classmethod
+    def warn_deprecated_aliases(cls, value: dict[str, Any]):
+        if isinstance(value, dict) and "bib_formats" in value:
+            # Deprecated in Kerko 1.4.0.
+            logger.warning(
+                "The 'kerko.bib_formats' config table is deprecated. "
+                "Use 'kerko.export_formats' instead."
+            )
+            # Rename the deprecated key so that the rest of the validation
+            # doesn't fail because the model forbids extra keys.
+            if "export_formats" not in value:
+                value["export_formats"] = value.pop("bib_formats")
+            else:
+                dpath.merge(
+                    value["export_formats"], value["bib_formats"], flags=dpath.MergeType.REPLACE
+                )
+                value.pop("bib_formats")
+        return value
 
 
 class ConfigModel(BaseModel):

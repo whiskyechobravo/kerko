@@ -344,12 +344,12 @@ def standalone_attachment_download(item_id, attachment_filename=None):
 @except_abort(IndexSchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def item_bib_download(item_id, bib_format_key):
-    """Download a record."""
+    """Download a bibliographic record."""
     if not config("kerko.features.download_item"):
         return abort(404)
 
-    bib_format = composer().export_formats.get(bib_format_key)
-    if not bib_format:
+    export_format = composer().export_formats.get(bib_format_key)
+    if not export_format:
         return abort(404)
 
     with Searcher(open_index()) as searcher:
@@ -369,9 +369,9 @@ def item_bib_download(item_id, bib_format_key):
             break  # Found item, or no more id fields to try.
         if results.is_empty():
             return abort(404)
-        item = results.items(composer().select_fields(["id", bib_format.field.key]))[0]
+        item = results.items(composer().select_fields(["id", export_format.field.key]))[0]
 
-    content = item.get(bib_format.field.key)
+    content = item.get(export_format.field.key)
     if not content:
         return abort(404)
 
@@ -382,18 +382,18 @@ def item_bib_download(item_id, bib_format_key):
 
     response = make_response(content)
     response.headers["Content-Disposition"] = (
-        f"attachment; filename={item['id']}.{bib_format.extension}"
+        f"attachment; filename={item['id']}.{export_format.extension}"
     )
-    response.headers["Content-Type"] = f"{bib_format.mime_type}; charset=utf-8"
+    response.headers["Content-Type"] = f"{export_format.mime_type}; charset=utf-8"
     return response
 
 
 @except_abort(IndexSchemaError, 500)
 @except_abort(SearchIndexError, 503)
 def search_bib_download(bib_format_key):
-    """Download all records resulting from a search."""
-    bib_format = composer().export_formats.get(bib_format_key)
-    if not bib_format:
+    """Download all bibliographic records resulting from a search."""
+    export_format = composer().export_formats.get(bib_format_key)
+    if not export_format:
         return abort(404)
 
     criteria = create_search_criteria(request.args)
@@ -408,17 +408,17 @@ def search_bib_download(bib_format_key):
         )
         if results.is_empty():
             return abort(404)
-        citations = [
-            item.get(bib_format.field.key, "")
-            for item in results.items(field_specs={bib_format.field.key: bib_format.field})
+        records = [
+            item.get(export_format.field.key, "")
+            for item in results.items(field_specs={export_format.field.key: export_format.field})
         ]
     response = make_response(
-        bib_format.group_format.format(bib_format.group_item_delimiter.join(citations))
+        export_format.group_format.format(export_format.group_item_delimiter.join(records))
     )
     response.headers["Content-Disposition"] = (
-        f"attachment; filename=bibliography.{bib_format.extension}"
+        f"attachment; filename=bibliography.{export_format.extension}"
     )
-    response.headers["Content-Type"] = f"{bib_format.mime_type}; charset=utf-8"
+    response.headers["Content-Type"] = f"{export_format.mime_type}; charset=utf-8"
     return response
 
 

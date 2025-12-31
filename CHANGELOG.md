@@ -26,8 +26,10 @@ Other changes:
     - `kerko.zotero.max_attempts` now has a maximum value of `25`.
     - `kerko.zotero.wait` now has a default value of `2` and a maximum value of
       `600`.
-- Change icon for the "Read documents" button (to emphasize the availability of
-  multiple attachments).
+    - `kerko.bib_formats.*` parameters are deprecated. Use
+      `kerko.export_formats.*`.
+- Use a distinct icon for the "Read documents" button when multiple attachments
+  are available.
 
 Bug fixes:
 
@@ -38,7 +40,7 @@ Bug fixes:
 - Fix incorrect version requirement for the `pre-commit` package (issue
   affected `dev` requirements only).
 
-Backwards incompatible changes, removed features:
+Removed features:
 
 - Remove the `attachments` target from all CLI commands (such as `sync
   attachments` and `clean attachments`). File attachments are now automatically
@@ -52,7 +54,13 @@ Backwards incompatible changes, removed features:
     - `zotero-item-type-creator-types`
     - `zotero-item-type-fields`
     - `zotero-top-level-collections`
+
+Backwards incompatible changes:
+
 - Drop support for Python 3.9 (EOL) and 3.10 (not supported by Karboni).
+- Rename the following classes and attributes:
+    - `BibFormatSpec` → `ExportFormatSpec`
+    - `Composer.bib_formats` → `Composer.export_formats`
 
 Possibly backwards incompatible changes (more or less internal API changes):
 
@@ -66,9 +74,6 @@ Possibly backwards incompatible changes (more or less internal API changes):
     - `ItemFieldsExtractor`
     - `ItemTypeFacetExtractor`
     - `ItemTypeLabelExtractor`
-- Notable renames:
-    - `Composer.bib_formats` → `Composer.export_formats`
-    - `BibFormatSpec` → `ExportFormatSpec`
 - `BaseFieldSpec.extract_to_document()` is removed.
 - Custom exceptions are now in the `exceptions` module and should be raised
   without passing a message argument.

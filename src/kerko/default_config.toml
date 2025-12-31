@@ -871,15 +871,15 @@ whoosh_language = "en"
     enabled = true
     weight = 31
 
-[kerko.bib_formats]
+[kerko.export_formats]
 
-    [kerko.bib_formats.ris]
+    [kerko.export_formats.ris]
     enabled = true
     weight = 10
     extension = "ris"
     mime_type = "application/x-research-info-systems"
 
-    [kerko.bib_formats.bibtex]
+    [kerko.export_formats.bibtex]
     enabled = true
     weight = 20
     extension = "bib"
