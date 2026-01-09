@@ -8,7 +8,7 @@ from werkzeug.datastructures import MultiDict
 from kerko.criteria import create_feed_criteria
 from kerko.index import load_object, open_index
 from kerko.searcher import Searcher
-from kerko.shortcuts import composer, config
+from kerko.shortcuts import composer, config, search_result_fields
 from kerko.views import breadbox, pager, sorter
 from kerko.views.item import build_item_context, inject_item_data
 
@@ -245,10 +245,7 @@ def search_list(criteria, form):
                 context["atom_feed_title"] = gettext("Main feed")
 
         # Prepare search result items.
-        field_specs = composer().select_fields(
-            config("kerko.search.result_fields")
-            + [badge.field.key for badge in composer().badges.values()],
-        )
+        field_specs = composer().select_fields(search_result_fields())
         items = results.items(field_specs)
         results_facets = results.facets(composer().facets, criteria)
         context["search_results"] = zip(items, _build_item_search_urls(items, criteria))

@@ -54,6 +54,18 @@ class CacheHooks:
         """
 
 
+class SearchHooks:
+    @hookspec
+    def extra_search_result_fields(self) -> list[str]:
+        """
+        Return a list of extra item fields to retrieve for search results.
+
+        Values in this list are keys identifying fields defined in the `kerko.composer.Composer`
+        instance. This hook can be used to retrieve custom fields added to `Composer`, making field
+        values available as attributes of search result items.
+        """
+
+
 class ViewHooks:
     @hookspec
     def search_single_alter_context(self, criteria: Criteria, context: dict[str, Any]) -> None:

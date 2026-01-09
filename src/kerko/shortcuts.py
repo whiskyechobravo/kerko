@@ -48,3 +48,13 @@ def zotero_export_formats() -> list[str]:
         # Each plugin returns a list, so we chain them into a single list.
         + list(itertools.chain(*current_app.plugin_manager.hook.extra_zotero_export_formats()))
     )
+
+
+def search_result_fields() -> list[str]:
+    """Get the list of fields to retrieve for search results based on config and plugins."""
+    return (
+        config("kerko.search.result_fields")
+        + [badge.field.key for badge in composer().badges.values()]
+        # Each plugin returns a list, so we chain them into a single list.
+        + list(itertools.chain(*current_app.plugin_manager.hook.extra_search_result_fields()))
+    )
