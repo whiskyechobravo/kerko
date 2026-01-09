@@ -1,7 +1,6 @@
 """Synchronize the Zotero library into a local cache."""
 
 import datetime
-import itertools
 from pathlib import Path
 from urllib.parse import quote
 
@@ -13,7 +12,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from kerko.exceptions import CacheEmptyError, CacheSyncError
-from kerko.shortcuts import composer, config, data_path
+from kerko.shortcuts import config, data_path, zotero_csl_styles, zotero_export_formats
 
 
 def get_cache_dir() -> Path:
@@ -53,17 +52,8 @@ def sync_cache(full: bool = False) -> None:
         max_errors=config("kerko.zotero.max_attempts"),
         full=full,
         locales=[config("kerko.zotero.locale")],
-        styles=(
-            [config("kerko.zotero.csl_style")]
-            # Each plugin returns a list, so we chain them into a single list.
-            + list(itertools.chain(*current_app.plugin_manager.hook.extra_zotero_csl_styles()))
-        ),
-        export_formats=(
-            ["coins"]
-            # Each plugin returns a list, so we chain them into a single list.
-            + list(itertools.chain(*current_app.plugin_manager.hook.extra_zotero_export_formats()))
-        )
-        + list(composer().export_formats.keys()),  # TODO:R5770: Exclude disabled formats.
+        styles=zotero_csl_styles(),
+        export_formats=zotero_export_formats(),
         fulltext=config("kerko.search.fulltext"),
         files=config("kerko.zotero.files"),
         media_types=config(

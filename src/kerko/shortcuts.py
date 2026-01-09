@@ -1,3 +1,4 @@
+import itertools
 from pathlib import Path
 from typing import Any
 
@@ -28,3 +29,22 @@ def config(path: str) -> Any:
     Retrieve an arbitrarily nested setting from the current_app's configuration.
     """
     return config_get(current_app.config, path)
+
+
+def zotero_csl_styles() -> list[str]:
+    """Get the list of CSL styles to retrieve from Zotero based on config and plugins."""
+    return (
+        [config("kerko.zotero.csl_style")]
+        # Each plugin returns a list, so we chain them into a single list.
+        + list(itertools.chain(*current_app.plugin_manager.hook.extra_zotero_csl_styles()))
+    )
+
+
+def zotero_export_formats() -> list[str]:
+    """Get the list of export formats to retrieve from Zotero based on config and plugins."""
+    return (
+        ["coins"]
+        + list(composer().export_formats.keys())  # TODO:R5770: Exclude disabled formats.
+        # Each plugin returns a list, so we chain them into a single list.
+        + list(itertools.chain(*current_app.plugin_manager.hook.extra_zotero_export_formats()))
+    )
