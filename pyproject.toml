@@ -41,6 +41,7 @@ dependencies = [
     "Flask-WTF >= 0.14.2",
     "Jinja2 >= 3.0.1",
     "Karboni",
+    "pluggy >= 1.6.0",
     "pycountry >= 24",
     "pydantic >= 2.11.5",
     "python-dotenv >= 0.21.1",

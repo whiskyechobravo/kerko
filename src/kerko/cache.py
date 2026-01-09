@@ -1,6 +1,7 @@
 """Synchronize the Zotero library into a local cache."""
 
 import datetime
+import itertools
 from pathlib import Path
 from urllib.parse import quote
 
@@ -52,8 +53,16 @@ def sync_cache(full: bool = False) -> None:
         max_errors=config("kerko.zotero.max_attempts"),
         full=full,
         locales=[config("kerko.zotero.locale")],
-        styles=[config("kerko.zotero.csl_style")],
-        export_formats=["coins"]
+        styles=(
+            [config("kerko.zotero.csl_style")]
+            # Each plugin returns a list, so we chain them into a single list.
+            + list(itertools.chain(*current_app.plugin_manager.hook.extra_zotero_csl_styles()))
+        ),
+        export_formats=(
+            ["coins"]
+            # Each plugin returns a list, so we chain them into a single list.
+            + list(itertools.chain(*current_app.plugin_manager.hook.extra_zotero_export_formats()))
+        )
         + list(composer().export_formats.keys()),  # TODO:R5770: Exclude disabled formats.
         fulltext=config("kerko.search.fulltext"),
         files=config("kerko.zotero.files"),

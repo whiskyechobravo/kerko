@@ -10,6 +10,10 @@ New features:
 - Add a `kerko.zotero.files` configuration parameter for enabling or disabling
   file attachments (this is more direct than other parameters that can have the
   same effect).
+- Add a plugin system based on Pluggy. See module `kerko.hooks` for the list of
+  hooks that can be implemented. Hook implementations will be automatically
+  detected for plugins that define a `kerko.plugins` entry point in their
+  `pyproject.toml` or `setup.py`.
 
 Other changes:
 
@@ -19,8 +23,8 @@ Other changes:
   line interface (CLI) command.
 - Improve command line interface help texts.
 - The "Last update from database" message is now simply "Last update", because
-  it no longer indicate the last time the library was synchronized with Zotero,
-  but the last time actual changes were synchronized.
+  it no longer indicates the last time the library was synchronized with Zotero,
+  but the last time synchronization brought actual data changes.
 - Configuration parameter changes:
     - `kerko.zotero.batch_size` now has a default (and maximum) value of `50`.
     - `kerko.zotero.max_attempts` now has a maximum value of `25`.

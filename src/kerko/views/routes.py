@@ -134,32 +134,32 @@ def atom_feed():
     else:
         context["feed_title"] = gettext("Main feed")
 
-    response = make_response(
-        render_template(
-            config("kerko.templates.atom_feed"),
-            pager=pager.build_pager(
-                pager_sections, criteria, endpoint="kerko.atom_feed", _external=True
-            ),
-            page_len=config("kerko.pagination.page_len"),
-            feed_url=url_for(
-                ".atom_feed",
-                _external=True,
-                **criteria.params(
-                    options={
-                        "page": criteria.options["page"] if criteria.options["page"] > 1 else None
-                    }
-                ),
-            ),
-            html_url=url_for(
-                ".search",
-                _external=True,
-                **criteria.params(options={"page": None}),
-            ),
-            is_searching=criteria.is_searching(),
-            locale=get_locale(),
-            **context,
-        )
+    context["pager"] = pager.build_pager(
+        pager_sections,
+        criteria,
+        endpoint="kerko.atom_feed",
+        _external=True,
     )
+    context["page_len"] = config("kerko.pagination.page_len")
+    context["feed_url"] = url_for(
+        ".atom_feed",
+        _external=True,
+        **criteria.params(
+            options={"page": criteria.options["page"] if criteria.options["page"] > 1 else None}
+        ),
+    )
+    context["html_url"] = url_for(
+        ".search",
+        _external=True,
+        **criteria.params(options={"page": None}),
+    )
+    context["is_searching"] = criteria.is_searching()
+    context["locale"] = get_locale()
+
+    # Let plugins alter the context.
+    current_app.plugin_manager.hook.atom_feed_alter_context(criteria=criteria, context=context)
+
+    response = make_response(render_template(config("kerko.templates.atom_feed"), **context))
     response.headers["Content-Type"] = "application/atom+xml; charset=utf-8"
     return response
 
@@ -191,12 +191,15 @@ def item_view(item_id):
         if fellback:
             return redirect(url_for(".item_view", item_id=item["id"]), 301)
     inject_item_data(item)
-    return render_template(
-        config("kerko.templates.item"),
-        **build_item_context(item),
-        time=time.process_time() - start_time,
-        locale=get_locale(),
-    )
+
+    context = build_item_context(item)
+    context["locale"] = get_locale()
+
+    # Let plugins alter the context.
+    current_app.plugin_manager.hook.item_view_alter_context(item=item, context=context)
+
+    context["time"] = time.process_time() - start_time
+    return render_template(config("kerko.templates.item"), **context)
 
 
 @except_abort(IndexSchemaError, 500)
@@ -215,12 +218,17 @@ def page(item_id, title):
             return abort(404)
         item = results.items(composer().select_fields(["id", "data"]))[0]
         note = item["data"].get("note", "")
-    return render_template(
-        config("kerko.templates.page"),
-        title=title,
-        content=Markup(note),
-        locale=get_locale(),
-    )
+
+    context = {
+        "title": title,
+        "content": Markup(note),
+        "locale": get_locale(),
+    }
+
+    # Let plugins alter the context.
+    current_app.plugin_manager.hook.page_alter_context(item=item, context=context)
+
+    return render_template(config("kerko.templates.page"), **context)
 
 
 @except_abort(IndexSchemaError, 500)
