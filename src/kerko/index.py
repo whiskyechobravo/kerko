@@ -349,7 +349,7 @@ def _find_documents_to_update(
     )
     new_items = set(cache_session.scalars(stmt).all())
     dirty |= new_items
-    current_app.logger.debug("Marking %d item(s) as dirty based on new items", len(new_items))
+    current_app.logger.debug("Marking %d item(s) as new", len(new_items))
 
     return dirty
 
