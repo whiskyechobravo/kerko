@@ -45,12 +45,22 @@ class CacheHooks:
     def extra_zotero_csl_styles(self) -> list[str]:
         """
         Return a list of additional CSL styles to retrieve from Zotero when synchronizing cache.
+
+        This is similar to the `kerko.zotero.csl_styles` configuration parameter.
+
+        Plugins may implement to hook for adding CSL styles without requiring specific configuration
+        changes.
         """
 
     @hookspec
     def extra_zotero_export_formats(self) -> list[str]:
         """
         Return a list of additional export formats to retrieve from Zotero when synchronizing cache.
+
+        This is similar to the `kerko.zotero.export_formats` configuration parameter.
+
+        Plugins may implement to hook for adding export formats without requiring specific
+        configuration changes.
         """
 
 
@@ -60,9 +70,11 @@ class SearchHooks:
         """
         Return a list of extra item fields to retrieve for search results.
 
+        This is similar to the `kerko.search.result_fields` configuration parameter.
+
         Values in this list are keys identifying fields defined in the `kerko.composer.Composer`
-        instance. This hook can be used to retrieve custom fields added to `Composer`, making field
-        values available as attributes of search result items.
+        instance. Plugins may implement this hook to make the values of custom fields available as
+        attributes of search result items, without requiring specific configuration changes.
         """
 
 
