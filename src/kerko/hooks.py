@@ -21,6 +21,7 @@ def create_plugin_manager() -> pluggy.PluginManager:
     pm = pluggy.PluginManager(PLUGIN_NAMESPACE)
     pm.add_hookspecs(AppHooks)
     pm.add_hookspecs(CacheHooks)
+    pm.add_hookspecs(SearchHooks)
     pm.add_hookspecs(ViewHooks)
     pm.load_setuptools_entrypoints(PLUGIN_ENTRYPOINTS)
     return pm
