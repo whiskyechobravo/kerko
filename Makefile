@@ -1,4 +1,4 @@
-# This Makefile provides targets for helping development (POSIX-only).
+# This Makefile aims to facilitate common development tasks (POSIX-only).
 
 .DEFAULT_GOAL := help
 

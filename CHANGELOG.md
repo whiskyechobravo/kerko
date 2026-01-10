@@ -12,8 +12,8 @@ New features:
   same effect).
 - Add a plugin system based on Pluggy. See module `kerko.hooks` for the list of
   hooks that can be implemented. Hook implementations will be automatically
-  detected for plugins that define a `kerko.plugins` entry point in their
-  `pyproject.toml` or `setup.py`.
+  detected for installed plugins that expose a `kerko.plugins` entry point in
+  their `pyproject.toml` or `setup.py`.
 
 Other changes:
 
@@ -35,6 +35,7 @@ Other changes:
 - Use a distinct icon for the "Read documents" button when multiple attachments
   are available.
 - Fix Pydantic deprecation warning (use `min_length` instead of `min_items`).
+- Add a `Makefile` to facilitate common development tasks.
 
 Bug fixes:
 
