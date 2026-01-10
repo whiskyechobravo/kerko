@@ -83,7 +83,11 @@ Issues = "https://github.com/whiskyechobravo/kerko/issues"
 kerko = "kerko.cli:cli"
 
 [build-system]
-requires = ["hatchling>=1.26.1", "hatch-vcs"]
+requires = [
+    "hatchling>=1.26.1",
+    "hatch-vcs",
+    "Babel >= 2.14.0",
+]
 build-backend = "hatchling.build"
 
 [tool.hatch.build]

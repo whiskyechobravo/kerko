@@ -45,6 +45,7 @@ Bug fixes:
   SameSite attribute).
 - Fix incorrect version requirement for the `pre-commit` package (issue
   affected `dev` requirements only).
+- Fix missing requirement for hatch build.
 
 Removed features:
 
