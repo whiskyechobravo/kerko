@@ -4,6 +4,71 @@
 of all of your code, configuration files, data files, and Python virtual
 environment.
 
+## From 1.3.x to 1.4.x
+
+### KerkoApp
+
+The instructions below make the assumption that you have cloned KerkoApp from
+its Git repository.
+
+- Go to your KerkoApp directory.
+- Activate your Python [virtual environment][venv].
+- Clean your existing cache and search index:
+
+    ```
+    flask kerko clean cache && flask kerko clean index
+    ```
+
+- Get the desired version of KerkoApp. You may check the list of [available
+  versions][KerkoApp versions]. To retrieve version 1.4.0, use the command
+  below:
+
+    ```
+    git fetch && git checkout 1.4.0
+    ```
+
+- Install Python dependencies:
+
+    ```
+    pip install --force-reinstall -r requirements/run.txt
+    ```
+
+- Synchronize from Zotero:
+
+    ```
+    flask kerko sync
+    ```
+
+- Restart the application.
+- If you have created shell scripts that use Kerko commands, check the
+  [changelog](changelog.md) for commands that have been removed. Adapt your
+  scripts accordingly.
+
+
+### Custom applications
+
+If you have a custom application, the following changes will need to be applied:
+
+- Kerko requires the application to initialize its plugin system, even if you do
+  not plan to use plugins. Insert the following code in your application
+  factory after `app` is the `Flask` object:
+
+    ```python
+    from kerko.hooks import create_plugin_manager
+
+    # Initialize the plugin system.
+    app.plugin_manager = create_plugin_manager()
+
+    ... # app config initialization code.
+
+    # Call plugins' init_app hook implementations.
+    app.plugin_manager.hook.init_app(app=app)
+    ```
+
+- Refer to the [changelog](changelog.md) for API changes that may affect your
+  custom code.
+
+
 ## From 1.2.x to 1.3.x
 
 ### KerkoApp
@@ -11,7 +76,7 @@ environment.
 The instructions below make the assumption that you have cloned KerkoApp from
 its Git repository.
 
-- Go to the KerkoApp directory.
+- Go to your KerkoApp directory.
 - Get the desired version of KerkoApp. You may check the list of [available
   versions][KerkoApp versions]. To retrieve version 1.3.0, use the command
   below:
@@ -37,7 +102,7 @@ its Git repository.
 The instructions below make the assumption that you have cloned KerkoApp from
 its Git repository.
 
-- Go to the KerkoApp directory.
+- Go to your KerkoApp directory.
 - Get the desired version of KerkoApp. You may check the list of [available
   versions][KerkoApp versions]. To retrieve version 1.2.0, use the command
   below:
@@ -63,7 +128,7 @@ its Git repository.
 The instructions below make the assumption that you have cloned KerkoApp from
 its Git repository.
 
-- Go to the KerkoApp directory.
+- Go to your KerkoApp directory.
 - Get the desired version of KerkoApp. You may check the list of [available
   versions][KerkoApp versions]. To retrieve version 1.1.0, use the command
   below:
@@ -121,7 +186,7 @@ must.
 The instructions below make the assumption that you have cloned KerkoApp from
 its Git repository.
 
-- Go to the KerkoApp directory.
+- Go to your KerkoApp directory.
 - Rename the default branch of your local KerkoApp repository:
 
     ```
