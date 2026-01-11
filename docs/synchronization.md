@@ -79,6 +79,10 @@ Some frequently used commands are:
 
 : Synchronizes just the search index (from the cache).
 
+    While this process runs, the Kerko web interface continues to use the
+    preexisting search index (if any), and will automatically switch to the
+    updated one after synchronization finishes.
+
 `flask kerko sync index --full`
 
 : Whenever possible, the synchronization process performs an incremental update
@@ -86,7 +90,8 @@ Some frequently used commands are:
   full update of the search index, even if no or just some items have changed
   since last time.
 
-    This can be useful after changing certain configuration parameters.
+    This can be useful after changing configuration parameters that alter the
+    data stored in the search index.
 
 `flask kerko clean --help`
 
@@ -105,11 +110,20 @@ Some frequently used commands are:
 `flask kerko clean index`
 
 : Deletes just the search index. The bibliography will become unavailable to the
-  Kerko web interface until the index gets synchronized again.
+  Kerko web interface until the search index gets re-synchronized.
 
-    It can be necessary to use this command after changing certain configuration
-    parameters, and you will usually want to run `flask kerko sync index`
-    immediately after.
+    Cleaning the search index can be necessary after changing certain
+    configuration parameters that have deeper consequences, altering not only
+    what is stored in the search index, but also its structure (schema). A
+    simple `flask kerko sync index --full` would fail at rebuilding the search
+    index because it would be trying to use a schema that was designed for the
+    previous configuration.
+
+    The [configuration parameters documentation](config-params.md) indicates
+    whether changing a given parameter requires a `clean` or a `sync --full`.
+    If neither is mentioned, then neither `clean` nor `sync` are required, and
+    restarting the application will be sufficient for the parameter change to
+    become effective.
 
 `flask kerko clean everything --files`
 
@@ -117,9 +131,9 @@ Some frequently used commands are:
 
 `flask kerko config`
 
-: Output a consolidated view of all configuration parameters, from all of your
-  configuration files, and including the defaults provided by Kerko that you may
-  not have explicitly configured.
+: Shows a consolidated view of all configuration parameters, from all of your
+  configuration files, also including the defaults provided by Kerko that you
+  may not have explicitly configured.
 
 
 ## Monitoring data synchronization

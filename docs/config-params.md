@@ -259,9 +259,10 @@ through any download link.
 
 Type: Boolean
 
-!!! warning "Modifies the cache and the search index"
+!!! warning "Modifies the cache and the search index schema"
 
-    Changing this parameter will require that you run the `sync --full` command.
+    Changing this parameter will require that you run the
+    `flask kerko clean everything && flask kerko sync` command.
     See [synchronization commands] for details.
 
 ### `extension`
@@ -362,11 +363,11 @@ The default facets are:
 
 You may define additional facets. See [Defining custom facets based on Zotero collections].
 
-!!! warning "Modifies the search index"
+!!! warning "Modifies the search index schema"
 
     Most of the `kerko.facets.*` parameters require that you run the
-    `sync index --full` command after you have changed them.
-    See [synchronization commands] for details.
+    `flask kerko clean index && flask kerko sync index` command after you have
+    changed them. See [synchronization commands] for details.
 
 ### `collection_key`
 
@@ -1068,7 +1069,8 @@ Default value: `true`
 
 !!! warning "Modifies the cache and the search index"
 
-    Changing this parameter will require that you run the `sync --full` command.
+    Changing this parameter will require that you run the
+    `flask kerko sync --full` command.
     See [synchronization commands] for details.
 
 ### `result_fields`
@@ -1119,12 +1121,12 @@ different tables:
 
 The configuration system does not allow adding new fields.
 
-!!! warning "Modifies the search index"
+!!! warning "Modifies the search index schema"
 
     Changing any of the `kerko.search_fields.*` parameters will require that you
-    run the `sync index --full` command, except if you are just disabling a
-    field or changing its `scopes` parameter. See [synchronization commands] for
-    details.
+    run the `flask kerko clean index && flask kerko sync index` command, except
+    if you are just disabling a field or changing its `scopes` parameter.
+    See [synchronization commands] for details.
 
 ### `analyzer`
 
@@ -1275,8 +1277,9 @@ Default value: `["application/pdf"]`
 
 !!! warning "Modifies the cache"
 
-    Changing this parameter will require that you run the `sync --full` command.
-    See [synchronization commands] for details.
+    Changing this parameter will require that you run the
+    `flask kerko sync --full` command. See [synchronization commands] for
+    details.
 
 ### `csl_style`
 
@@ -1291,7 +1294,8 @@ Default value: `"apa"`.
 
 !!! warning "Modifies the cache and the search index"
 
-    Changing this parameter will require that you run the `sync --full` command.
+    Changing this parameter will require that you run the
+    `flask kerko clean everything && flask kerko sync` command.
     See [synchronization commands] for details.
 
 ### `batch_size`
@@ -1315,8 +1319,9 @@ Default value: `""`
 
 !!! warning "Modifies the search index"
 
-    Changing this parameter will require that you run the `sync index --full`
-    command. See [synchronization commands] for details.
+    Changing this parameter will require that you run the
+    `flask kerko sync index --full` command.
+    See [synchronization commands] for details.
 
 ### `child_exclude_re`
 
@@ -1332,8 +1337,9 @@ Default value: `"^_"`
 
 !!! warning "Modifies the search index"
 
-    Changing this parameter will require that you run the `sync index --full`
-    command. See [synchronization commands] for details.
+    Changing this parameter will require that you run the
+    `flask kerko sync index --full` command.
+    See [synchronization commands] for details.
 
 ### `files`
 
@@ -1348,7 +1354,8 @@ Default value: `true`
 
 !!! warning "Modifies the cache and the search index"
 
-    Changing this parameter will require that you run the `sync --full` command.
+    Changing this parameter will require that you run the
+    `flask kerko sync --full` command.
     See [synchronization commands] for details.
 
 ### `item_include_re`
@@ -1363,8 +1370,9 @@ Default value: `""`
 
 !!! warning "Modifies the search index"
 
-    Changing this parameter will require that you run the `sync index --full`
-    command. See [synchronization commands] for details.
+    Changing this parameter will require that you run the
+    `flask kerko sync index --full` command.
+    See [synchronization commands] for details.
 
 ### `item_exclude_re`
 
@@ -1379,8 +1387,9 @@ Default value: `""`
 
 !!! warning "Modifies the search index"
 
-    Changing this parameter will require that you run the `sync index --full`
-    command. See [synchronization commands] for details.
+    Changing this parameter will require that you run the
+    `flask kerko sync index --full` command.
+    See [synchronization commands] for details.
 
 ### `locale`
 
@@ -1393,7 +1402,8 @@ Default value: `"en-US"`
 
 !!! warning "Modifies the cache and the search index"
 
-    Changing this parameter will require that you run the `sync --full` command.
+    Changing this parameter will require that you run the
+    `flask kerko sync --full` command.
     See [synchronization commands] for details.
 
 ### `max_attempts`
@@ -1417,8 +1427,9 @@ Default value: `""`
 
 !!! warning "Modifies the search index"
 
-    Changing this parameter will require that you run the `sync index --full`
-    command. See [synchronization commands] for details.
+    Changing this parameter will require that you run the
+    `flask kerko sync index --full` command.
+    See [synchronization commands] for details.
 
 ### `tag_exclude_re`
 
@@ -1434,8 +1445,9 @@ Default value: `"^_"`
 
 !!! warning "Modifies the search index"
 
-    Changing this parameter will require that you run the `sync index --full`
-    command. See [synchronization commands] for details.
+    Changing this parameter will require that you run the
+    `flask kerko sync index --full` command.
+    See [synchronization commands] for details.
 
 ### `wait`
 
