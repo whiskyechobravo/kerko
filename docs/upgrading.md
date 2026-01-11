@@ -59,9 +59,9 @@ If you have a custom application, the following changes will need to be applied:
     # Initialize the plugin system.
     app.plugin_manager = create_plugin_manager()
 
-    ... # app config initialization code.
+    ... # app configuration and initialization code.
 
-    # Call plugins' init_app hook implementations.
+    # Call init_app hook implementations in plugins.
     app.plugin_manager.hook.init_app(app=app)
     ```
 

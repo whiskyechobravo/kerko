@@ -315,15 +315,21 @@ Let's now build a minimal app:
     from flask_bootstrap import Bootstrap4
     from kerko.composer import Composer
     from kerko.config_helpers import config_set, config_update, validate_config
+    from kerko.hooks import create_plugin_manager
 
     app = Flask(__name__)
+
+    # Initialize the plugin system.
+    app.plugin_manager = create_plugin_manager()
     ```
 
-    The above imports required modules and creates the Flask application object
-    (`app`). Then, load the default Kerko configuration, and update it from
-    values set in `.env`:
+    The above imports required modules, creates the Flask application object
+    (`app`) and initializes the plugin system used by Kerko.
 
-    ```python title="wsgi.py" linenums="9"
+    Next, load the default Kerko configuration, and update it from values set in
+    `.env`:
+
+    ```python title="wsgi.py" linenums="14"
     # Initialize app configuration with Kerko's defaults.
     config_update(app.config, kerko.DEFAULTS)
 
@@ -336,7 +342,7 @@ Let's now build a minimal app:
     application to `"My App"`. This function can be called each time you wish to
     set a [configuration option](config-basics.md).
 
-    ```python title="wsgi.py" linenums="14"
+    ```python title="wsgi.py" linenums="20"
     # Make changes to the Kerko configuration here, if desired.
     config_set(app.config, "kerko.meta.title", "My App")
     ```
@@ -346,7 +352,7 @@ Let's now build a minimal app:
     the fields to display and search, and the facets made available for
     filtering:
 
-    ```python title="wsgi.py" linenums="16"
+    ```python title="wsgi.py" linenums="23"
     # Validate configuration and save its parsed version.
     parse_config(app.config)
 
@@ -365,11 +371,14 @@ Let's now build a minimal app:
     [Bootstrap-Flask][Bootstrap-Flask documentation] for more details), and
     register the Kerko blueprint with the application object:
 
-    ```python title="wsgi.py" linenums="23"
+    ```python title="wsgi.py" linenums="31"
     babel = Babel(app)
     bootstrap = Bootstrap4(app)
 
     app.register_blueprint(kerko.make_blueprint(), url_prefix="/bibliography")
+
+    # Call init_app hook implementations in plugins.
+    app.plugin_manager.hook.init_app(app=app)
     ```
 
     The `url_prefix` argument given above defines the base path for every URL
