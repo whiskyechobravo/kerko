@@ -28,20 +28,24 @@ def create_plugin_manager() -> pluggy.PluginManager:
 
 
 class AppHooks:
+    """Defines plugin hooks related to the application lifecycle."""
+
     @hookspec
     def init_app(self, app: Flask) -> None:
         """
         Called by the application factory.
 
-        This hook is called after the app is created and its configuration loaded, before any
-        extensions or blueprints are registered.
+        This hook is called after the app is created and its configuration loaded.
 
-        Plugins may implement this hook to modify the application object or the configuration, or
-        even register extra extensions or blueprints.
+        Plugins may implement this hook to modify the application object or configuration, alter the
+        `Composer` object (perhaps for adding custom facets), or even register Flask extensions or
+        blueprints.
         """
 
 
 class CacheHooks:
+    """Defines plugin hooks related to the cache synchronization process."""
+
     @hookspec
     def extra_zotero_csl_styles(self) -> list[str]:
         """
@@ -66,6 +70,8 @@ class CacheHooks:
 
 
 class SearchHooks:
+    """Defines plugin hooks related to search queries and results."""
+
     @hookspec
     def extra_search_result_fields(self) -> list[str]:
         """
@@ -80,6 +86,8 @@ class SearchHooks:
 
 
 class ViewHooks:
+    """Defines plugin hooks related to view context variables."""
+
     @hookspec
     def search_single_alter_context(self, criteria: Criteria, context: dict[str, Any]) -> None:
         """Alter the context variables of the search_single view."""
