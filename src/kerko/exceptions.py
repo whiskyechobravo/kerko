@@ -49,7 +49,7 @@ class CacheReadError(CacheError):
 
 class CacheEmptyError(CacheError):
     def get_message(self) -> str:
-        return "The cache is empty. Please sync cache."
+        return "The cache is empty. Please sync cache"
 
 
 class SearchIndexError(KerkoError, ABC):
@@ -68,7 +68,7 @@ class IndexEmptyError(SearchIndexError):
         self.index_dir = index_dir
 
     def get_message(self) -> str:
-        return f"Empty index in directory '{self.index_dir}'."
+        return f"Empty index in directory '{self.index_dir}'"
 
 
 class IndexOpenError(SearchIndexError):
@@ -80,7 +80,7 @@ class IndexOpenError(SearchIndexError):
     def get_message(self) -> str:
         message = f"Could not open index from directory '{self.index_dir}'"
         if not self.writing:
-            message = f"{message}. Please sync index."
+            message = f"{message}. Please sync index"
         return message
 
 
@@ -95,7 +95,7 @@ class IndexEngineError(SearchIndexError):
 
 class IndexSchemaError(SearchIndexError):
     def get_message(self) -> str:
-        return "Schema changes are required. Please clean index."
+        return "Schema changes are required. Please clean index"
 
 
 class AttachmentsError(KerkoError, ABC):
