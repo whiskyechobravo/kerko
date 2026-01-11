@@ -28,6 +28,11 @@ class KerkoError(Exception, ABC):
         return "An error occurred"
 
 
+class LockError(KerkoError):
+    def get_message(self) -> str:
+        return "Another synchronization process appears to be running"
+
+
 class CacheError(KerkoError, ABC):
     def get_message(self) -> str:
         return "A cache error occurred"

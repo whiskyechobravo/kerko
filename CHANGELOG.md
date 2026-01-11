@@ -35,6 +35,7 @@ Other changes:
 - Use a distinct icon for the "Read documents" button when multiple attachments
   are available.
 - Fix Pydantic deprecation warning (use `min_length` instead of `min_items`).
+- Use lock to prevent concurrent sync processes.
 - Add a `Makefile` to facilitate common development tasks.
 
 Bug fixes:

@@ -36,6 +36,7 @@ dependencies = [
     "Bootstrap-Flask >= 2.0.1",
     "click >= 8.0.1",
     "dpath >= 2.1.0",
+    "filelock >= 3.19.0",
     "Flask >= 2.2.5",
     "Flask-Babel >= 3.0.1",
     "Flask-WTF >= 0.14.2",

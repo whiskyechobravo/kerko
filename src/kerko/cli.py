@@ -11,6 +11,7 @@ from kerko.cache import delete_cache, sync_cache
 from kerko.config_helpers import is_toml_serializable
 from kerko.exceptions import KerkoError, except_raise
 from kerko.index import delete_index, doc_count, sync_index
+from kerko.lock import require_lock
 
 
 @wrapt.decorator
@@ -39,10 +40,10 @@ def cli() -> None:
 )
 @except_raise(KerkoError, click.Abort)
 @with_appcontext
+@require_lock
 @execution_time_logger
 def sync(target: str, full: bool) -> None:
     """Synchronize the cache and/or the search index."""
-    # TODO:R5770:R6388: Lock whole sync process (use a context manager?).
     if target in ["everything", "cache"]:
         sync_cache(full)
     if target in ["everything", "index"]:
@@ -60,6 +61,7 @@ def sync(target: str, full: bool) -> None:
     help="Whether to delete the file attachments.",
 )
 @with_appcontext
+@require_lock
 def clean(target: str, files: bool) -> None:
     """Delete the cache and/or the search index."""
     if target in ["everything", "cache"]:
