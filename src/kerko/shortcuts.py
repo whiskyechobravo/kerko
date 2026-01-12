@@ -1,6 +1,6 @@
 import itertools
 from pathlib import Path
-from typing import Any
+from typing import Any, Protocol
 
 from flask import current_app
 
@@ -31,12 +31,54 @@ def config(path: str) -> Any:
     return config_get(current_app.config, path)
 
 
+class PluginManagerProtocol(Protocol):
+    """Protocol for objects that provide plugin hooks."""
+
+    hook: Any
+
+
+class _NullHook:
+    """A hook that does nothing and returns an empty list."""
+
+    def __call__(self, *_args, **_kwargs) -> list:
+        return []
+
+
+class _NullHookRelay:
+    """A hook relay that returns no-op hooks for any attribute access."""
+
+    def __getattr__(self, name: str) -> _NullHook:
+        current_app.logger.warning(
+            f"Plugin hook '{name}' does nothing because the application has no plugin manager"
+        )
+        return _NullHook()
+
+
+class _NullPluginManager:
+    """A mock plugin manager that does a no-op when any hook is called."""
+
+    hook = _NullHookRelay()
+
+
+_null_plugin_manager: PluginManagerProtocol = _NullPluginManager()
+
+
+def plugin_manager() -> PluginManagerProtocol:
+    """
+    Get the plugin manager for the current Flask application.
+
+    If the application hasn't initialized a plugin manager, return a null plugin
+    manager so that hook calls don't fail.
+    """
+    return current_app.extensions.get("plugin_manager", _null_plugin_manager)
+
+
 def zotero_csl_styles() -> list[str]:
     """Get the list of CSL styles to retrieve from Zotero based on config and plugins."""
     return (
         [config("kerko.zotero.csl_style")]
         # Each plugin returns a list, so we chain them into a single list.
-        + list(itertools.chain(*current_app.plugin_manager.hook.extra_zotero_csl_styles()))
+        + list(itertools.chain(*plugin_manager().hook.extra_zotero_csl_styles()))
     )
 
 
@@ -46,7 +88,7 @@ def zotero_export_formats() -> list[str]:
         ["coins"]
         + list(composer().export_formats.keys())  # TODO:R5770: Exclude disabled formats.
         # Each plugin returns a list, so we chain them into a single list.
-        + list(itertools.chain(*current_app.plugin_manager.hook.extra_zotero_export_formats()))
+        + list(itertools.chain(*plugin_manager().hook.extra_zotero_export_formats()))
     )
 
 
@@ -56,5 +98,5 @@ def search_result_fields() -> list[str]:
         config("kerko.search.result_fields")
         + [badge.field.key for badge in composer().badges.values()]
         # Each plugin returns a list, so we chain them into a single list.
-        + list(itertools.chain(*current_app.plugin_manager.hook.extra_search_result_fields()))
+        + list(itertools.chain(*plugin_manager().hook.extra_search_result_fields()))
     )

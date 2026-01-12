@@ -1,14 +1,14 @@
 import time
 
 from babel.numbers import format_decimal
-from flask import current_app, redirect, render_template, url_for
+from flask import redirect, render_template, url_for
 from flask_babel import get_locale, gettext, ngettext
 from werkzeug.datastructures import MultiDict
 
 from kerko.criteria import create_feed_criteria
 from kerko.index import load_object, open_index
 from kerko.searcher import Searcher
-from kerko.shortcuts import composer, config, search_result_fields
+from kerko.shortcuts import composer, config, plugin_manager, search_result_fields
 from kerko.views import breadbox, pager, sorter
 from kerko.views.item import build_item_context, inject_item_data
 
@@ -63,7 +63,7 @@ def empty_results(criteria, form):
     context["is_searching"] = criteria.is_searching()
 
     # Let plugins alter the context.
-    current_app.plugin_manager.hook.search_empty_alter_context(criteria=criteria, context=context)
+    plugin_manager().hook.search_empty_alter_context(criteria=criteria, context=context)
 
     return render_template(config("kerko.templates.search"), **context)
 
@@ -142,7 +142,7 @@ def search_single(criteria, form):
     context["is_searching"] = criteria.is_searching()
 
     # Let plugins alter the context.
-    current_app.plugin_manager.hook.search_single_alter_context(criteria=criteria, context=context)
+    plugin_manager().hook.search_single_alter_context(criteria=criteria, context=context)
 
     context["time"] = time.process_time() - start_time
     return render_template(config("kerko.templates.search_item"), **context)
@@ -258,7 +258,7 @@ def search_list(criteria, form):
     context["is_searching"] = criteria.is_searching()
 
     # Let plugins alter the context.
-    current_app.plugin_manager.hook.search_list_alter_context(criteria=criteria, context=context)
+    plugin_manager().hook.search_list_alter_context(criteria=criteria, context=context)
 
     context["time"] = time.process_time() - start_time
     return render_template(config("kerko.templates.search"), **context)

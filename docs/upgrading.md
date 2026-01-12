@@ -47,22 +47,17 @@ its Git repository.
 
 ### Custom applications
 
-If you have a custom application, the following changes will need to be applied:
+The following changes are relevant if you have a custom application:
 
-- Kerko requires the application to initialize its plugin system, even if you do
-  not plan to use plugins. Insert the following code in your application
-  factory after `app` is the `Flask` object:
+- If you wish to enable Kerko's plugin system, insert the following code in your
+  application factory, where `app` is the `Flask` object:
 
     ```python
-    from kerko.hooks import create_plugin_manager
+    from kerko.hooks import PluginManager
 
-    # Initialize the plugin system.
-    app.plugin_manager = create_plugin_manager()
-
-    ... # app configuration and initialization code.
-
-    # Call init_app hook implementations in plugins.
-    app.plugin_manager.hook.init_app(app=app)
+    # Initialize and register the plugin manager extension.
+    plugin_manager = PluginManager()
+    plugin_manager.init_app(app)
     ```
 
 - Refer to the [changelog](changelog.md) for API changes that may affect your

@@ -13,7 +13,7 @@ import kerko
 from kerko import extractors, transformers
 from kerko.cache import get_cache_database_url, get_cache_dir
 from kerko.config_helpers import config_update, parse_config
-from kerko.hooks import create_plugin_manager
+from kerko.hooks import PluginManager
 from kerko.index import sync_index
 
 _fixtures_dir = Path(__file__).parent.parent / "fixtures"
@@ -22,9 +22,6 @@ _fixtures_dir = Path(__file__).parent.parent / "fixtures"
 def _create_app(data_path: Path, url_prefix: str) -> Flask:
     """Create a Flask application for integration tests."""
     app = Flask(__name__)
-
-    # Initialize the plugin system.
-    app.plugin_manager = create_plugin_manager()
 
     # Initialize with default Kerko configuration.
     config_update(app.config, kerko.DEFAULTS)
@@ -61,9 +58,6 @@ def _create_app(data_path: Path, url_prefix: str) -> Flask:
         )
     )
 
-    # Call plugins' init_app hook implementations.
-    app.plugin_manager.hook.init_app(app=app)
-
     # Register the Kerko blueprint.
     app.register_blueprint(kerko.make_blueprint(), url_prefix=url_prefix)
 
@@ -73,6 +67,8 @@ def _create_app(data_path: Path, url_prefix: str) -> Flask:
     babel.init_app(app)
     bootstrap = Bootstrap4()
     bootstrap.init_app(app)
+    plugin_manager = PluginManager()
+    plugin_manager.init_app(app)
 
     return app
 

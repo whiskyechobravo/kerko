@@ -22,7 +22,7 @@ from kerko.exceptions import IndexSchemaError, SearchIndexError, except_abort
 from kerko.forms import SearchForm
 from kerko.index import doc_count, get_attachments_dir, load_object, open_index
 from kerko.searcher import Searcher
-from kerko.shortcuts import composer, config
+from kerko.shortcuts import composer, config, plugin_manager
 from kerko.specs import SortSpec
 from kerko.views import pager
 from kerko.views.item import build_item_context, creators, inject_item_data
@@ -157,7 +157,7 @@ def atom_feed():
     context["locale"] = get_locale()
 
     # Let plugins alter the context.
-    current_app.plugin_manager.hook.atom_feed_alter_context(criteria=criteria, context=context)
+    plugin_manager().hook.atom_feed_alter_context(criteria=criteria, context=context)
 
     response = make_response(render_template(config("kerko.templates.atom_feed"), **context))
     response.headers["Content-Type"] = "application/atom+xml; charset=utf-8"
@@ -196,7 +196,7 @@ def item_view(item_id):
     context["locale"] = get_locale()
 
     # Let plugins alter the context.
-    current_app.plugin_manager.hook.item_view_alter_context(item=item, context=context)
+    plugin_manager().hook.item_view_alter_context(item=item, context=context)
 
     context["time"] = time.process_time() - start_time
     return render_template(config("kerko.templates.item"), **context)
@@ -226,7 +226,7 @@ def page(item_id, title):
     }
 
     # Let plugins alter the context.
-    current_app.plugin_manager.hook.page_alter_context(item=item, context=context)
+    plugin_manager().hook.page_alter_context(item=item, context=context)
 
     return render_template(config("kerko.templates.page"), **context)
 

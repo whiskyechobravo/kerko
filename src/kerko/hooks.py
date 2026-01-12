@@ -17,14 +17,37 @@ hookimpl = pluggy.HookimplMarker(PLUGIN_NAMESPACE)
 """Decorator for plugin hook implementations."""
 
 
-def create_plugin_manager() -> pluggy.PluginManager:
-    pm = pluggy.PluginManager(PLUGIN_NAMESPACE)
-    pm.add_hookspecs(AppHooks)
-    pm.add_hookspecs(CacheHooks)
-    pm.add_hookspecs(SearchHooks)
-    pm.add_hookspecs(ViewHooks)
-    pm.load_setuptools_entrypoints(PLUGIN_ENTRYPOINTS)
-    return pm
+class PluginManager(pluggy.PluginManager):
+    """
+    Plugin manager extension for Flask applications.
+
+    This follows the Flask extension pattern, allowing each Flask app instance to have its own
+    plugin manager with independently loaded plugins.
+    """
+
+    def __init__(self, app: Flask | None = None) -> None:
+        super().__init__(PLUGIN_NAMESPACE)
+
+        # Register hook specifications.
+        self.add_hookspecs(AppHooks)
+        self.add_hookspecs(CacheHooks)
+        self.add_hookspecs(SearchHooks)
+        self.add_hookspecs(ViewHooks)
+
+        # Register hook implementations in installed plugins.
+        self.load_setuptools_entrypoints(PLUGIN_ENTRYPOINTS)
+
+        if app:
+            self.init_app(app)
+
+    def init_app(self, app: Flask) -> None:
+        """Register self as an app extension."""
+        if not hasattr(app, "extensions"):
+            app.extensions = {}
+        app.extensions["plugin_manager"] = self
+
+        # Call init_app hook implementations in plugins.
+        self.hook.init_app(app=app)
 
 
 class AppHooks:
@@ -35,7 +58,8 @@ class AppHooks:
         """
         Called by the application factory.
 
-        This hook is called after the app is created and its configuration loaded.
+        This hook is called after the app is created and its configuration loaded, and the plugin
+        manager registered.
 
         Plugins may implement this hook to modify the application object or configuration, alter the
         `Composer` object (perhaps for adding custom facets), or even register Flask extensions or
@@ -47,7 +71,7 @@ class CacheHooks:
     """Defines plugin hooks related to the cache synchronization process."""
 
     @hookspec
-    def extra_zotero_csl_styles(self) -> list[str]:
+    def extra_zotero_csl_styles(self) -> list[str]:  # type: ignore[empty-body]
         """
         Return a list of additional CSL styles to retrieve from Zotero when synchronizing cache.
 
@@ -58,7 +82,7 @@ class CacheHooks:
         """
 
     @hookspec
-    def extra_zotero_export_formats(self) -> list[str]:
+    def extra_zotero_export_formats(self) -> list[str]:  # type: ignore[empty-body]
         """
         Return a list of additional export formats to retrieve from Zotero when synchronizing cache.
 
@@ -73,7 +97,7 @@ class SearchHooks:
     """Defines plugin hooks related to search queries and results."""
 
     @hookspec
-    def extra_search_result_fields(self) -> list[str]:
+    def extra_search_result_fields(self) -> list[str]:  # type: ignore[empty-body]
         """
         Return a list of extra item fields to retrieve for search results.
 
