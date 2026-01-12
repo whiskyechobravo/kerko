@@ -5,12 +5,12 @@ import shutil
 from collections.abc import Iterable
 from itertools import chain
 from pathlib import Path
-from typing import TypeVar
+from typing import Any, TypeVar
 
 import whoosh
 from flask import current_app
 from karboni.database import schema as cache
-from sqlalchemy import create_engine, select
+from sqlalchemy import Select, create_engine, select
 from sqlalchemy.exc import DatabaseError
 from sqlalchemy.orm import Session, joinedload, selectinload
 from whoosh.fields import FieldConfigurationError, UnknownFieldError
@@ -142,6 +142,7 @@ def sync_index(full: bool = False) -> None:
                     "Indexing started. Mode: incremental indexing from version %s",
                     index_version,
                 )
+                assert index_version is not None
                 _sync_index_incremental(cache_session, index_version)
             else:
                 current_app.logger.info("Index is already up-to-date")
@@ -178,7 +179,7 @@ def doc_count():
 
 def _sync_index_full(cache_session: Session) -> None:
     """Full indexing from the cache."""
-    documents_to_update = {}
+    documents_to_update: set[str] = set()
 
     # Index all items.
     try:
@@ -210,9 +211,9 @@ def _sync_index_full(cache_session: Session) -> None:
 
 def _sync_index_incremental(cache_session: Session, since_version: int) -> None:
     """Incremental indexing from the cache."""
-    documents_to_delete = {}
-    documents_to_update = {}
-    files_to_update = {}
+    documents_to_delete: set[str] = set()
+    documents_to_update: set[str] = set()
+    files_to_update: set[str] = set()
 
     # Update changed items.
     try:
@@ -256,14 +257,17 @@ def _sync_index_incremental(cache_session: Session, since_version: int) -> None:
         raise AttachmentsSyncError from exc
 
 
-def _find_top_level_items(cache_session: Session) -> list[str]:
+def _find_top_level_items(cache_session: Session) -> set[str]:
     """Return ids of all top-level, non-trashed items in the cache."""
 
     stmt = select(cache.Item.item_key).where(
         cache.Item.parent_item.is_(None),
         cache.Item.trashed.is_not(True),
     )
-    return cache_session.scalars(stmt).all()
+    result = cache_session.scalars(stmt).all()
+    if result:
+        return set(result)
+    return set()
 
 
 def _find_documents(
@@ -296,7 +300,9 @@ def _find_documents_to_update(
     dirty: set[str] = set()
 
     # Mark existing documents that depend on collections that have changed.
-    stmt = select(cache.Collection.collection_key).where(cache.Collection.version > index_version)
+    stmt: Select[tuple[str]] = select(cache.Collection.collection_key).where(
+        cache.Collection.version > index_version
+    )
     changed_collections = cache_session.scalars(stmt).all()
 
     # Mark existing documents that depend on collections that have been deleted.
@@ -319,7 +325,7 @@ def _find_documents_to_update(
     changed_items = cache_session.scalars(stmt).all()
 
     # Mark existing documents having new children.
-    stmt = select(cache.Item.parent_item).where(
+    stmt: Select[tuple[str]] = select(cache.Item.parent_item).where(  # type: ignore[no-redef]
         cache.Item.version > index_version,
         cache.Item.parent_item.is_not(None),
         cache.Item.trashed.is_not(True),
@@ -460,7 +466,7 @@ def _update_documents(
         )
 
         # Assign document fields.
-        document = {}
+        document: dict[str, Any] = {}
         for spec in list(composer().fields.values()) + list(composer().facets.values()):
             assert isinstance(spec, BaseFieldSpec)
             spec.extractor.extract_and_store(document, item, cache_session, spec)
@@ -524,7 +530,7 @@ def _remove_files(keys: set[str]) -> bool:
     return changes
 
 
-def _add_files(source_dir: str, keys: set[str]) -> bool:
+def _add_files(source_dir: Path, keys: set[str]) -> bool:
     """
     Add the specified attachment files from the source directory to the attachments directory.
 

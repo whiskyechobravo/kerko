@@ -1,5 +1,6 @@
 import logging
 import pathlib
+import tomllib
 from abc import ABC, abstractmethod
 from datetime import date, datetime, time
 from decimal import Decimal
@@ -28,11 +29,6 @@ from kerko.specs import (
     PageLinkSpec,
     PageSpec,
 )
-
-try:
-    import tomllib
-except ModuleNotFoundError:
-    import tomli as tomllib
 
 logger = logging.getLogger(__name__)
 

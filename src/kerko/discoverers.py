@@ -51,11 +51,14 @@ class CollectionAncestorsDiscoverer(CollectionDependencyDiscoverer):
         if not self._cache_session.scalar(stmt):
             return []
 
-        current = collection.collection_key
+        current: str | None = collection.collection_key
+        assert current is not None
         ancestors = [current]
         while current:
             stmt = select(cache.Collection).where(cache.Collection.collection_key == current)
             result = self._cache_session.scalar(stmt)
+            if not result:
+                return []
             if not self.include_trashed and result.trashed:
                 return []
             current = result.parent_collection

@@ -24,11 +24,12 @@ Before reporting an issue, please consider the following guidelines:
 Clone the [Kerko repository][Kerko] into a local directory. Set up a [virtual
 environment][venv], then install that local version of Kerko in the virtual
 environment, including development and testing dependencies by running the
-following command from Kerko's root directory, i.e., where `pyproject.toml`
+following commands from Kerko's root directory, i.e., where `pyproject.toml`
 resides:
 
 ```bash
 pip install -e .[dev,docs,tests]
+pre-commit install
 ```
 
 

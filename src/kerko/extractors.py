@@ -6,7 +6,7 @@ import gettext
 import itertools
 import re
 from abc import ABC, abstractmethod
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from datetime import datetime
 from typing import Any
 
@@ -20,7 +20,7 @@ from sqlalchemy.orm import Session, joinedload, selectinload
 from kerko.datetime import maximize_partial_date, parse_partial_date
 from kerko.discoverers import CollectionAncestorsDiscoverer
 from kerko.richtext import richtext_striptags
-from kerko.specs import BaseFieldSpec
+from kerko.specs import BaseFieldSpec, CollectionFacetSpec
 from kerko.tags import TagGate
 from kerko.text import sort_normalize
 from kerko.transformers import find_item_id_in_zotero_uri_links, find_item_id_in_zotero_uris_str
@@ -39,7 +39,7 @@ def encode_multiple(value, spec):
 
 
 def is_link_attachment(item: cache.Item) -> bool:
-    return item.data.get("linkMode") == "linked_url" and item.data.get("url")
+    return item.data.get("linkMode") == "linked_url" and bool(item.data.get("url"))
 
 
 class Extractor(ABC):
@@ -139,7 +139,7 @@ class MultiExtractor(Extractor):
         self.extractors = extractors
 
     def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:
-        values = []
+        values: list[Any] = []
         for extractor in self.extractors:
             value = extractor.extract(item, cache_session, spec)
             if isinstance(value, Iterable) and not isinstance(value, str):
@@ -214,7 +214,7 @@ class ItemTitleExtractor(Extractor):
             .limit(1)
         )
         title_field = cache_session.scalars(stmt).first()
-        return item.data.get(title_field, "")
+        return item.data.get(title_field, "") if title_field else ""
 
 
 class RawDataExtractor(Extractor):
@@ -235,7 +235,7 @@ class ItemRelationsExtractor(Extractor):
         relations = item.relations.get(self.predicate, [])
         if relations and isinstance(relations, str):
             relations = [relations]
-        # FIXME:R5770: Filter relations to exclude trashed items (assuming trashed items can end up here; that is to verify).
+        # FIXME:R5770: Filter relations to exclude trashed items (assuming trashed items can end up here; that is to verify).  # noqa: E501
         return relations
 
 
@@ -362,8 +362,11 @@ class ZoteroAppItemURLExtractor(Extractor):
             .order_by(cache.SyncHistory.history_id.desc())
             .limit(1)
         )
-        library_prefix, library_id = cache_session.execute(stmt).first()
+        result = cache_session.execute(stmt).first()
+        if not result:
+            return None
 
+        library_prefix, library_id = result
         if library_prefix == "users":
             return f"zotero://select/library/items/{item.item_key}"
         return f"zotero://select/groups/{library_id}/items/{item.item_key}"
@@ -503,7 +506,7 @@ class LanguageExtractor(Extractor):
         normalize: bool = True,
         locale: str = "en",
         allow_invalid: bool = True,
-        normalize_invalid: bool = None,
+        normalize_invalid: Callable[[str], str] | None = None,
         **kwargs,
     ):
         """
@@ -531,7 +534,7 @@ class LanguageExtractor(Extractor):
         self.locale = locale
         self.allow_invalid = allow_invalid
         self.normalize_invalid = normalize_invalid or str.title
-        self.translations = None
+        self.translations: gettext.GNUTranslations | None = None
         self.translations_initialized = False
 
     def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
@@ -819,6 +822,9 @@ class CollectionFacetTreeExtractor(Extractor):
         super().__init__(encode=encode, **kwargs)
 
     def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:
+        if not isinstance(spec, CollectionFacetSpec):
+            raise TypeError
+
         # Set prevent duplication when multiple item collections share common ancestors.
         encoded_ancestors = set()
 

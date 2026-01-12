@@ -87,13 +87,13 @@ def _create_database(fixture_path: Path, dest_db_dir: Path, dest_db_url: str) ->
 class SyncIndexTestCase(unittest.TestCase, ABC):
     """Base for integration tests, where an index is synchronized from a cache fixture."""
 
-    fixture_name = None  # Subclasses must set this.
+    fixture_name = ""  # Subclasses must set this.
     url_prefix = "/bibliography"
     sync_on_setup_class = True
 
     @classmethod
     def setUpClass(cls):
-        if cls.fixture_name is None:
+        if not cls.fixture_name:
             raise ValueError(f"{cls.__name__} must set 'fixture_name' class attribute")  # noqa: EM102
 
         cls.tmp_dir = TemporaryDirectory(prefix=f"kerko-tests-{cls.fixture_name}-")

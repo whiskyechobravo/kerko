@@ -2,13 +2,18 @@
 
 import re
 from collections.abc import Iterable
+from re import Pattern
 from typing import Any
 
 
 class TagGate:
     """Determine whether an object is included or excluded based on its tags."""
 
-    def __init__(self, include_re: str | Iterable[str] = "", exclude_re: str | Iterable[str] = ""):
+    def __init__(
+        self,
+        include_re: str | Iterable[str] | None = None,
+        exclude_re: str | Iterable[str] | None = None,
+    ):
         """
         Initialize the instance.
 
@@ -28,19 +33,17 @@ class TagGate:
             matches it will be excluded. When passing a list, every pattern of
             the list must match at least a tag for the object to be excluded.
         """
+        self.include_re: list[Pattern[str]] | None = None
         if include_re:
             if isinstance(include_re, str):
                 include_re = [include_re]
             self.include_re = [re.compile(pattern) for pattern in include_re]
-        else:
-            self.include_re = None
 
+        self.exclude_re: list[Pattern[str]] | None = None
         if exclude_re:
             if isinstance(exclude_re, str):
                 exclude_re = [exclude_re]
             self.exclude_re = [re.compile(pattern) for pattern in exclude_re]
-        else:
-            self.exclude_re = None
 
     def check(self, obj: dict[str, Any]) -> bool:
         """

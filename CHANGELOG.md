@@ -37,6 +37,7 @@ Other changes:
 - Fix Pydantic deprecation warning (use `min_length` instead of `min_items`).
 - Use lock to prevent concurrent sync processes.
 - Add a `Makefile` to facilitate common development tasks.
+- Add some type checking with mypy.
 
 Bug fixes:
 
