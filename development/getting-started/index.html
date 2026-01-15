@@ -19,7 +19,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -27,7 +27,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -897,9 +897,9 @@ pip install -r requirements\run.txt
 command may take a while to complete. Wait until the command finishes. In
 production use, this command is usually added to the crontab file for regular
 execution.</p>
-<p>The <code>--debug</code> switch is optional. If you use it, some messages will give you
-an idea of the sync process' progress. If you omit it, the command will run
-silently unless there are warnings or errors.</p>
+<p>The <code>--debug</code> switch is optional and causes additional messages to be
+displayed during the process. In general this option can be omitted, but it
+can be useful if you wish to get a better idea of what's happening.</p>
 <p>To list all commands provided by Kerko:</p>
 <div class="highlight"><pre><span></span><code>flask<span class="w"> </span>kerko<span class="w"> </span>--help
 </code></pre></div>
@@ -1117,23 +1117,25 @@ hosted, and to never push it to a code repository.</p>
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span>
-<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">kerko</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">kerko</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">Flask</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">flask_babel</span><span class="w"> </span><span class="kn">import</span> <span class="n">Babel</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">flask_bootstrap</span><span class="w"> </span><span class="kn">import</span> <span class="n">Bootstrap4</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">kerko.composer</span><span class="w"> </span><span class="kn">import</span> <span class="n">Composer</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">kerko.config_helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">config_set</span><span class="p">,</span> <span class="n">config_update</span><span class="p">,</span> <span class="n">validate_config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">kerko.config_helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">config_set</span><span class="p">,</span> <span class="n">config_update</span><span class="p">,</span> <span class="n">parse_config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">kerko.hooks</span><span class="w"> </span><span class="kn">import</span> <span class="n">PluginManager</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
 <p>The above imports required modules and creates the Flask application object
 (<code>app</code>). Then, load the default Kerko configuration, and update it from
 values set in <code>.env</code>:</p>
-<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">wsgi.py</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">wsgi.py</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
 <span class="normal">12</span>
-<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># Initialize app configuration with Kerko&#39;s defaults.</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># Initialize app configuration with Kerko&#39;s defaults.</span>
 <span class="n">config_update</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">kerko</span><span class="o">.</span><span class="n">DEFAULTS</span><span class="p">)</span>
 
 <span class="c1"># Update app configuration from environment variables.</span>
@@ -1143,21 +1145,21 @@ values set in <code>.env</code>:</p>
 can use the <code>config_set</code> function to set the main title of the web
 application to <code>"My App"</code>. This function can be called each time you wish to
 set a <a href="../config-basics/">configuration option</a>.</p>
-<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">wsgi.py</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">14</span>
-<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># Make changes to the Kerko configuration here, if desired.</span>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">wsgi.py</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">17</span>
+<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># Make changes to the Kerko configuration here, if desired.</span>
 <span class="n">config_set</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="s2">&quot;kerko.meta.title&quot;</span><span class="p">,</span> <span class="s2">&quot;My App&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
 <p>Next, have Kerko parse and validate the configuration. Then create the
 <code>kerko_composer</code> object, which provides key elements needed by Kerko such as
 the fields to display and search, and the facets made available for
 filtering:</p>
-<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">wsgi.py</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">wsgi.py</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">20</span>
 <span class="normal">21</span>
-<span class="normal">22</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># Validate configuration and save its parsed version.</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># Validate configuration and save its parsed version.</span>
 <span class="n">parse_config</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
 
 <span class="c1"># Initialize the Composer object.</span>
@@ -1170,13 +1172,16 @@ filtering:</p>
 sort options, search scopes, record download formats, or badges.</p>
 <p>Finally, initialize extensions required by Kerko (see the respective
 documentations of <a href="https://python-babel.github.io/flask-babel/">Flask-Babel</a> and
-<a href="https://bootstrap-flask.readthedocs.io/en/latest/basic.html">Bootstrap-Flask</a> for more details), and
-register the Kerko blueprint with the application object:</p>
-<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">wsgi.py</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">babel</span> <span class="o">=</span> <span class="n">Babel</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+<a href="https://bootstrap-flask.readthedocs.io/en/latest/basic.html">Bootstrap-Flask</a> for more details).
+Adding the <code>PluginManager</code> is actually optional, but allows plugins to
+extend Kerko. Then register the Kerko blueprint with the application object:</p>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">wsgi.py</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">babel</span> <span class="o">=</span> <span class="n">Babel</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
 <span class="n">bootstrap</span> <span class="o">=</span> <span class="n">Bootstrap4</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+<span class="n">plugin_manager</span> <span class="o">=</span> <span class="n">PluginManager</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
 
 <span class="n">app</span><span class="o">.</span><span class="n">register_blueprint</span><span class="p">(</span><span class="n">kerko</span><span class="o">.</span><span class="n">make_blueprint</span><span class="p">(),</span> <span class="n">url_prefix</span><span class="o">=</span><span class="s2">&quot;/bibliography&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -1330,10 +1335,10 @@ files, translations loading, a syslog logging handler, and error pages.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "header.autohide", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.action.view", "content.action.edit"], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "header.autohide", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.action.view", "content.action.edit"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>

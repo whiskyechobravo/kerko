@@ -19,7 +19,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -27,7 +27,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -1138,12 +1138,97 @@
 <p>Before doing an upgrade, please check the "How to upgrade" section of the Kerko
 documentation.</p>
 <h2 id="unreleased">Unreleased<a class="headerlink" href="#unreleased" title="Permanent link">&para;</a></h2>
+<p>New features:</p>
+<ul>
+<li>Add a <code>kerko.zotero.files</code> configuration parameter for enabling or disabling
+  file attachments (this is more direct than other parameters that can have the
+  same effect).</li>
+<li>Add a plugin system based on Pluggy. See module <code>kerko.hooks</code> for the list of
+  hooks that can be implemented. Hook implementations will be automatically
+  detected for installed plugins that expose a <code>kerko.plugins</code> entry point in
+  their <code>pyproject.toml</code> or <code>setup.py</code>.</li>
+</ul>
+<p>Other changes:</p>
+<ul>
+<li>Much faster synchronization from Zotero (using Karboni).</li>
+<li>Much faster updating of the search index (through incremental indexing).</li>
+<li>Add a <code>--files</code> option for deleting file attachments with the <code>clean</code> command
+  line interface (CLI) command.</li>
+<li>Improve command line interface help texts.</li>
+<li>The "Last update from database" message is now simply "Last update", because
+  it no longer indicates the last time the library was synchronized with Zotero,
+  but the last time synchronization brought actual data changes.</li>
+<li>Configuration parameter changes:<ul>
+<li><code>kerko.zotero.batch_size</code> now has a default (and maximum) value of <code>50</code>.</li>
+<li><code>kerko.zotero.max_attempts</code> now has a maximum value of <code>25</code>.</li>
+<li><code>kerko.zotero.wait</code> now has a default value of <code>2</code> and a maximum value of
+  <code>600</code>.</li>
+<li><code>kerko.bib_formats.*</code> parameters are deprecated. Use
+  <code>kerko.export_formats.*</code>.</li>
+</ul>
+</li>
+<li>Use a distinct icon for the "Read documents" button when multiple attachments
+  are available.</li>
+<li>Fix Pydantic deprecation warning (use <code>min_length</code> instead of <code>min_items</code>).</li>
+<li>Use lock to prevent concurrent sync processes.</li>
+<li>Add a <code>Makefile</code> to facilitate common development tasks.</li>
+<li>Add some type checking with mypy.</li>
+</ul>
 <p>Bug fixes:</p>
 <ul>
+<li>Fix sometimes inconsistent item version when the Zotero library changes while
+  Kerko synchronizes its cache.</li>
 <li>Fix "Open in Zotero" preferences not getting saved (changed the cookie
   SameSite attribute).</li>
 <li>Fix incorrect version requirement for the <code>pre-commit</code> package (issue
-  affected dev requirements only).</li>
+  affected <code>dev</code> requirements only).</li>
+<li>Fix missing requirement for hatch build.</li>
+</ul>
+<p>Removed features:</p>
+<ul>
+<li>Remove the <code>attachments</code> target from all CLI commands (such as <code>sync
+  attachments</code> and <code>clean attachments</code>). File attachments are now automatically
+  handled by the <code>sync cache</code> and <code>sync index</code> commands.</li>
+<li>Remove development CLI commands:<ul>
+<li><code>count cache</code></li>
+<li><code>count index</code> (the <code>count</code> command remains and applies just to the index)</li>
+<li><code>zotero-item</code></li>
+<li><code>zotero-item-fields</code></li>
+<li><code>zotero-item-types</code></li>
+<li><code>zotero-item-type-creator-types</code></li>
+<li><code>zotero-item-type-fields</code></li>
+<li><code>zotero-top-level-collections</code></li>
+</ul>
+</li>
+</ul>
+<p>Backwards incompatible changes:</p>
+<ul>
+<li>Drop support for Python 3.9 (EOL) and 3.10 (not supported by Karboni).</li>
+<li>Rename the following classes and attributes:<ul>
+<li><code>BibFormatSpec</code> → <code>ExportFormatSpec</code></li>
+<li><code>Composer.bib_formats</code> → <code>Composer.export_formats</code></li>
+</ul>
+</li>
+</ul>
+<p>Possibly backwards incompatible changes (more or less internal API changes):</p>
+<ul>
+<li><code>kerko.shortcuts.data_path()</code> now returns a <code>pathlib.Path</code> instead of a <code>str</code>.</li>
+<li>New modules <code>cache</code> and <code>index</code> replace the <code>storage</code> and <code>sync.*</code> modules.</li>
+<li>Extractors now retrieve data from cache using the SQLAlchemy ORM, with models
+  imported from <code>karboni.database.schema</code>. Class <code>LibraryContext</code> is removed.
+  The signature of <code>Extractor.extract()</code> is changed.</li>
+<li>Some extractors must now be initialized with a <code>locale</code> argument:<ul>
+<li><code>CreatorTypesExtractor</code></li>
+<li><code>ItemFieldsExtractor</code></li>
+<li><code>ItemTypeFacetExtractor</code></li>
+<li><code>ItemTypeLabelExtractor</code></li>
+</ul>
+</li>
+<li><code>BaseFieldSpec.extract_to_document()</code> is removed.</li>
+<li>Custom exceptions are now in the <code>exceptions</code> module and should be raised
+  without passing a message argument.</li>
+<li><code>config_helpers.load_toml()</code> takes a <code>logging.Logger</code> object as argument
+  instead of the <code>verbose</code> boolean argument.</li>
 </ul>
 <h2 id="130-2025-06-17">1.3.0 (2025-06-17)<a class="headerlink" href="#130-2025-06-17" title="Permanent link">&para;</a></h2>
 <p>New features:</p>
@@ -2114,10 +2199,10 @@ flask<span class="w"> </span>kerko<span class="w"> </span>sync
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "header.autohide", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.action.view", "content.action.edit"], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "header.autohide", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.action.view", "content.action.edit"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>

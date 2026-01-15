@@ -19,7 +19,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -27,7 +27,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -654,6 +654,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#updating-the-test-fixtures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Updating the test fixtures
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#running-the-pre-commit-hooks" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -816,6 +827,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#updating-the-test-fixtures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Updating the test fixtures
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#running-the-pre-commit-hooks" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -934,8 +956,10 @@
 <p>Clone the <a href="https://github.com/whiskyechobravo/kerko">Kerko repository</a> into a local directory. Set up a <a href="https://docs.python.org/3.11/tutorial/venv.html">virtual
 environment</a>, then install that local version of Kerko in the virtual
 environment, including development and testing dependencies by running the
-following command from Kerko's root directory, i.e., where <code>setup.cfg</code> resides:</p>
+following commands from Kerko's root directory, i.e., where <code>pyproject.toml</code>
+resides:</p>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="o">[</span>dev,docs,tests<span class="o">]</span>
+pre-commit<span class="w"> </span>install
 </code></pre></div>
 <h2 id="running-the-tests">Running the tests<a class="headerlink" href="#running-the-tests" title="Permanent link">&para;</a></h2>
 <p>To run the test suite:</p>
@@ -954,6 +978,37 @@ Python interpreters available on your machine):</p>
 <p>Test coverage is still low at the moment. You are welcome to contribute
 new tests!</p>
 </div>
+<h2 id="updating-the-test-fixtures">Updating the test fixtures<a class="headerlink" href="#updating-the-test-fixtures" title="Permanent link">&para;</a></h2>
+<p>Some tests rely on fixtures that were generated from actual Zotero libraries.
+Each fixture is like a pre-built Kerko cache, allowing complex integration tests
+to run without any connection to Zotero.</p>
+<p>The sources for those fixtures are publicly accessible Zotero group libraries.
+To rebuild the fixtures from zotero.org, use the following commands, replacing
+<code>MY_ZOTERO_API_KEY</code> with your actual Zotero API key:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">ZOTERO_API_KEY</span><span class="o">=</span>MY_ZOTERO_API_KEY
+make<span class="w"> </span>fixtures
+</code></pre></div>
+<p>For more details about the test fixtures, including the URLs of the source
+libraries:</p>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span><span class="nb">help</span>
+</code></pre></div>
+<p>If you need to write new tests and need to add items to a source library, you
+could:</p>
+<ol>
+<li>Clone the source Zotero library;</li>
+<li>Add your new item(s);</li>
+<li>Temporarily set the clone's id for the fixture in the <code>Makefile</code>;</li>
+<li>Rebuild the fixture with <code>make</code>.</li>
+</ol>
+<p>Any new test item must have a line in the form of <code>KerkoTestID: MY-UNIQUE-ID</code> in
+its <code>Extra</code> field, where <code>MY-UNIQUE-ID</code> is a unique key for this item. Any test
+must use this key wherever a Zotero item ID would normally be used. This way,
+the test will still pass even if the item is copied into a different library and
+has gotten a different item ID.</p>
+<p>For examples of such tests, look for test cases that inherit
+<code>SyncIndexTestCase</code>.</p>
+<p>Once your tests are implemented, we will be able to copy your new item(s) into
+the original fixture library, update the fixtures, and the tests will pass.</p>
 <h2 id="running-the-pre-commit-hooks">Running the pre-commit hooks<a class="headerlink" href="#running-the-pre-commit-hooks" title="Permanent link">&para;</a></h2>
 <p>Pre-commit checks should be performed automatically whenever you perform a <code>git
 commit</code>. If you wish to run the checks manually, use this command:</p>
@@ -1123,10 +1178,10 @@ hire us for an unrelated project, please <a href="mailto:kerko@whiskyechobravo.c
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "header.autohide", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.action.view", "content.action.edit"], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "header.autohide", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.action.view", "content.action.edit"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>

@@ -19,7 +19,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -27,7 +27,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -583,7 +583,18 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="kerko.bib_formats.*.">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kerkoexport_formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        kerko.export_formats.*.
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="kerko.export_formats.*.">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1864,6 +1875,17 @@
     <span class="md-ellipsis">
       
         child_exclude_re
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        files
       
     </span>
   </a>
@@ -2439,7 +2461,18 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="kerko.bib_formats.*.">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kerkoexport_formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        kerko.export_formats.*.
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="kerko.export_formats.*.">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -3727,6 +3760,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        files
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#item_include_re" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4024,8 +4068,7 @@ Default value: <code>"/dev/log"</code></p>
 <h2 id="logging_format"><code>LOGGING_FORMAT</code><a class="headerlink" href="#logging_format" title="Permanent link">&para;</a></h2>
 <p>Log message format string, with %-style placeholders. Refer to the <a href="https://docs.python.org/3/library/logging.html">Python
 logging documentation</a> for allowed attributes.</p>
-<p>Type: String <br>
-Default value: <code>"[%(asctime)s] %(levelname)s in %(module)s: %(message)s"</code></p>
+<p>Type: String <br></p>
 <hr />
 <h2 id="logging_handler"><code>LOGGING_HANDLER</code><a class="headerlink" href="#logging_handler" title="Permanent link">&para;</a></h2>
 <p>Logging handler to use. At this time, the sole allowed value is <code>"syslog"</code>. If
@@ -4101,8 +4144,11 @@ the URL of the library (e.g., the <em>groupID</em> of the library at
 <p>Type: String</p>
 <hr />
 <h2 id="kerkobib_formats"><code>kerko.bib_formats.*.</code><a class="headerlink" href="#kerkobib_formats" title="Permanent link">&para;</a></h2>
+<p>Deprecated. Use <a href="#kerkoexport_formats"><code>kerko.export_formats.*</code></a>.</p>
+<hr />
+<h2 id="kerkoexport_formats"><code>kerko.export_formats.*.</code><a class="headerlink" href="#kerkoexport_formats" title="Permanent link">&para;</a></h2>
 <p>Bibliographic record download formats, where <code>*</code> is a format key.</p>
-<p>The default formats are:</p>
+<p>The supported format keys are:</p>
 <ul>
 <li><code>bibtex</code></li>
 <li><code>ris</code></li>
@@ -4113,10 +4159,10 @@ the URL of the library (e.g., the <em>groupID</em> of the library at
 through any download link.</p>
 <p>Type: Boolean</p>
 <div class="admonition warning">
-<p class="admonition-title">Modifies the cache and the search index</p>
-<p>Changing this parameter from <code>false</code> to <code>true</code> will require that you run the
-<code>sync cache --full</code> and <code>sync index</code> commands. See <a href="../synchronization/#command-line-interface-cli">synchronization
-commands</a> for details.</p>
+<p class="admonition-title">Modifies the cache and the search index schema</p>
+<p>Changing this parameter will require that you run the
+<code>flask kerko clean everything &amp;&amp; flask kerko sync</code> command.
+See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
 </div>
 <h3 id="extension"><code>extension</code><a class="headerlink" href="#extension" title="Permanent link">&para;</a></h3>
 <p>File extension of the downloadable file.</p>
@@ -4180,10 +4226,10 @@ key is used internally by Kerko to identify the facet.</p>
 </ul>
 <p>You may define additional facets. See <a href="../config-guides/#defining-custom-facets-based-on-zotero-collections">Defining custom facets based on Zotero collections</a>.</p>
 <div class="admonition warning">
-<p class="admonition-title">Modifies the search index</p>
+<p class="admonition-title">Modifies the search index schema</p>
 <p>Most of the <code>kerko.facets.*</code> parameters require that you run the
-<code>clean index</code> and <code>sync index</code> commands after you have changed them.
-See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
+<code>flask kerko clean index &amp;&amp; flask kerko sync index</code> command after you have
+changed them. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
 </div>
 <h3 id="collection_key"><code>collection_key</code><a class="headerlink" href="#collection_key" title="Permanent link">&para;</a></h3>
 <p>Key of the Zotero collection to map the facet to. This must refer to a
@@ -4312,15 +4358,15 @@ attribute to attachment links.</p>
 <p>Type: Boolean <br>
 Default value: <code>false</code></p>
 <h3 id="download_item"><code>download_item</code><a class="headerlink" href="#download_item" title="Permanent link">&para;</a></h3>
-<p>Provide a record download button on item pages.</p>
-<p>To configure the bibliographic formats made available for downloading, see
-<a href="#kerkobib_formats"><code>kerko.bib_formats</code></a>.</p>
+<p>Provide a bibliographic record download button on item pages.</p>
+<p>To configure the formats made available for downloading, see
+<a href="#kerkoexport_formats"><code>kerko.export_formats</code></a>.</p>
 <p>Type: Boolean <br>
 Default value: <code>true</code></p>
 <h3 id="download_results"><code>download_results</code><a class="headerlink" href="#download_results" title="Permanent link">&para;</a></h3>
-<p>Provide a record download button on search results pages.</p>
-<p>To configure the bibliographic formats made available for downloading, see
-<a href="#kerkobib_formats"><code>kerko.bib_formats</code></a>.</p>
+<p>Provide a bibliographic record download button on search results pages.</p>
+<p>To configure the formats made available for downloading, see
+<a href="#kerkoexport_formats"><code>kerko.export_formats</code></a>.</p>
 <p>Type: Boolean <br>
 Default value: <code>true</code></p>
 <h3 id="download_results_max_count"><code>download_results_max_count</code><a class="headerlink" href="#download_results_max_count" title="Permanent link">&para;</a></h3>
@@ -4400,6 +4446,7 @@ truncation).</p>
 Default value: <code>0</code> (i.e., no tolerance margin).</p>
 <h3 id="results_attachment_links"><code>results_attachment_links</code><a class="headerlink" href="#results_attachment_links" title="Permanent link">&para;</a></h3>
 <p>Provide links to attachments in search results.</p>
+<p>This parameter has no effect if <code>kerko.zotero.files</code> is set to <code>false</code>.</p>
 <p>Type: Boolean <br>
 Default value: <code>true</code></p>
 <h3 id="results_url_links"><code>results_url_links</code><a class="headerlink" href="#results_url_links" title="Permanent link">&para;</a></h3>
@@ -4637,8 +4684,9 @@ useless, and the <code>metadata</code> scope gives the same results as the <code
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Modifies the cache and the search index</p>
-<p>Changing this parameter will require that you run the <code>sync cache --full</code>
-and <code>sync index</code> commands. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
+<p>Changing this parameter will require that you run the
+<code>flask kerko sync --full</code> command.
+See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
 </div>
 <h3 id="result_fields"><code>result_fields</code><a class="headerlink" href="#result_fields" title="Permanent link">&para;</a></h3>
 <p>List of item fields to retrieve for search results (most notably used by the
@@ -4677,11 +4725,11 @@ different tables:</p>
 </ul>
 <p>The configuration system does not allow adding new fields.</p>
 <div class="admonition warning">
-<p class="admonition-title">Modifies the search index</p>
+<p class="admonition-title">Modifies the search index schema</p>
 <p>Changing any of the <code>kerko.search_fields.*</code> parameters will require that you
-run the <code>clean index</code> and <code>sync index</code> commands, except if you are just
-disabling a field or changing its <code>scopes</code> parameter. See <a href="../synchronization/#command-line-interface-cli">synchronization
-commands</a> for details.</p>
+run the <code>flask kerko clean index &amp;&amp; flask kerko sync index</code> command, except
+if you are just disabling a field or changing its <code>scopes</code> parameter.
+See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
 </div>
 <h3 id="analyzer"><code>analyzer</code><a class="headerlink" href="#analyzer" title="Permanent link">&para;</a></h3>
 <p>Type of analysis to apply to the field value when building the search index.</p>
@@ -4774,12 +4822,14 @@ Default value: <code>"kerko/base.html.jinja2"</code></p>
 <h2 id="kerkozotero"><code>kerko.zotero.</code><a class="headerlink" href="#kerkozotero" title="Permanent link">&para;</a></h2>
 <h3 id="attachment_mime_types"><code>attachment_mime_types</code><a class="headerlink" href="#attachment_mime_types" title="Permanent link">&para;</a></h3>
 <p>List of allowed MIME types for attachments.</p>
+<p>This parameter has no effect if <code>files</code> is set to <code>false</code>.</p>
 <p>Type: Array of strings <br>
 Default value: <code>["application/pdf"]</code></p>
 <div class="admonition warning">
-<p class="admonition-title">Modifies the attachments</p>
-<p>Changing this parameter will require that you run the <code>sync attachments</code>
-command. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
+<p class="admonition-title">Modifies the cache</p>
+<p>Changing this parameter will require that you run the
+<code>flask kerko sync --full</code> command. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for
+details.</p>
 </div>
 <h3 id="csl_style"><code>csl_style</code><a class="headerlink" href="#csl_style" title="Permanent link">&para;</a></h3>
 <p>The citation style to use for formatted references.</p>
@@ -4790,13 +4840,15 @@ a remote CSL file.</p>
 Default value: <code>"apa"</code>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Modifies the cache and the search index</p>
-<p>Changing this parameter will require that you run the <code>sync cache --full</code>
-and <code>sync index</code> commands. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
+<p>Changing this parameter will require that you run the
+<code>flask kerko clean everything &amp;&amp; flask kerko sync</code> command.
+See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
 </div>
 <h3 id="batch_size"><code>batch_size</code><a class="headerlink" href="#batch_size" title="Permanent link">&para;</a></h3>
-<p>Number of items to request on each call to the Zotero API.</p>
+<p>Number of items to request on a single call to the Zotero API. Actual batch
+sizes can get reduced based on responses received from the Zotero API.</p>
 <p>Type: Integer <br>
-Default value: <code>100</code> (this is the maximum currently allowed by the Zotero API)</p>
+Default value: <code>50</code> (this is the maximum currently allowed)</p>
 <h3 id="child_include_re"><code>child_include_re</code><a class="headerlink" href="#child_include_re" title="Permanent link">&para;</a></h3>
 <p><a href="https://docs.python.org/3/library/re.html">Regular expression</a> to use to include children (e.g. notes, attachments) based
 on their tags. Any child which does not have a tag that matches this regular
@@ -4806,9 +4858,10 @@ causes some to be rejected.</p>
 <p>Type: String <br>
 Default value: <code>""</code></p>
 <div class="admonition warning">
-<p class="admonition-title">Modifies the search index and attachments</p>
-<p>Changing this parameter will require that you run the <code>sync index --full</code>
-and <code>sync attachments</code> commands. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
+<p class="admonition-title">Modifies the search index</p>
+<p>Changing this parameter will require that you run the
+<code>flask kerko sync index --full</code> command.
+See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
 </div>
 <h3 id="child_exclude_re"><code>child_exclude_re</code><a class="headerlink" href="#child_exclude_re" title="Permanent link">&para;</a></h3>
 <p><a href="https://docs.python.org/3/library/re.html">Regular expression</a> to use to exclude children (e.g. notes, attachments) based
@@ -4820,9 +4873,24 @@ underscore character (<code>_</code>) is rejected.</p>
 <p>Type: String <br>
 Default value: <code>"^_"</code></p>
 <div class="admonition warning">
-<p class="admonition-title">Modifies the search index and attachments</p>
-<p>Changing this parameter will require that you run the <code>sync index --full</code>
-and <code>sync attachments</code> commands. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
+<p class="admonition-title">Modifies the search index</p>
+<p>Changing this parameter will require that you run the
+<code>flask kerko sync index --full</code> command.
+See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
+</div>
+<h3 id="files"><code>files</code><a class="headerlink" href="#files" title="Permanent link">&para;</a></h3>
+<p>Enable file attachments. If set to <code>true</code>, files are downloaded from Zotero and
+saved on the server as part of the cache. Files may be made available for
+download by end users depending on other configuration parameters
+<code>kerko.zotero.attachments_mime_types</code>, <code>kerko.zotero.item_include_re</code>,
+<code>kerko.zotero.item_exclude_re</code>.</p>
+<p>Type: Boolean <br>
+Default value: <code>true</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Modifies the cache and the search index</p>
+<p>Changing this parameter will require that you run the
+<code>flask kerko sync --full</code> command.
+See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
 </div>
 <h3 id="item_include_re"><code>item_include_re</code><a class="headerlink" href="#item_include_re" title="Permanent link">&para;</a></h3>
 <p><a href="https://docs.python.org/3/library/re.html">Regular expression</a> to use to include items based on their tags. Any item which
@@ -4832,9 +4900,10 @@ this value is empty (which is the default), all items will be accepted unless
 <p>Type: String <br>
 Default value: <code>""</code></p>
 <div class="admonition warning">
-<p class="admonition-title">Modifies the search index and attachments</p>
-<p>Changing this parameter will require that you run the <code>sync index --full</code>
-and <code>sync attachments</code> commands. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
+<p class="admonition-title">Modifies the search index</p>
+<p>Changing this parameter will require that you run the
+<code>flask kerko sync index --full</code> command.
+See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
 </div>
 <h3 id="item_exclude_re"><code>item_exclude_re</code><a class="headerlink" href="#item_exclude_re" title="Permanent link">&para;</a></h3>
 <p><a href="https://docs.python.org/3/library/re.html">Regular expression</a> to use to exclude items based on their tags. Any item that
@@ -4845,9 +4914,10 @@ tag that matches it will be excluded.</p>
 <p>Type: String <br>
 Default value: <code>""</code></p>
 <div class="admonition warning">
-<p class="admonition-title">Modifies the search index and attachments</p>
-<p>Changing this parameter will require that you run the <code>sync index --full</code>
-and <code>sync attachments</code> commands. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
+<p class="admonition-title">Modifies the search index</p>
+<p>Changing this parameter will require that you run the
+<code>flask kerko sync index --full</code> command.
+See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
 </div>
 <h3 id="locale_1"><code>locale</code><a class="headerlink" href="#locale_1" title="Permanent link">&para;</a></h3>
 <p>The locale to use with Zotero API calls. This dictates the locale of Zotero item
@@ -4857,12 +4927,13 @@ Supported locales are listed at https://api.zotero.org/schema, under "locales".<
 Default value: <code>"en-US"</code></p>
 <div class="admonition warning">
 <p class="admonition-title">Modifies the cache and the search index</p>
-<p>Changing this parameter will require that you run the <code>sync cache --full</code>
-and <code>sync index</code> commands. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
+<p>Changing this parameter will require that you run the
+<code>flask kerko sync --full</code> command.
+See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
 </div>
 <h3 id="max_attempts"><code>max_attempts</code><a class="headerlink" href="#max_attempts" title="Permanent link">&para;</a></h3>
-<p>Maximum number of tries after the Zotero API has returned an error or has not
-responded during indexing.</p>
+<p>Maximum number of tries for a Zotero API call that returns an error or that does
+not respond.</p>
 <p>Type: Integer <br>
 Default value: <code>10</code></p>
 <h3 id="tag_include_re"><code>tag_include_re</code><a class="headerlink" href="#tag_include_re" title="Permanent link">&para;</a></h3>
@@ -4874,8 +4945,9 @@ generated by the Zotero API, not by Kerko).</p>
 Default value: <code>""</code></p>
 <div class="admonition warning">
 <p class="admonition-title">Modifies the search index</p>
-<p>Changing this parameter will require that you run the <code>sync index --full</code>
-command. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
+<p>Changing this parameter will require that you run the
+<code>flask kerko sync index --full</code> command.
+See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
 </div>
 <h3 id="tag_exclude_re"><code>tag_exclude_re</code><a class="headerlink" href="#tag_exclude_re" title="Permanent link">&para;</a></h3>
 <p><a href="https://docs.python.org/3/library/re.html">Regular expression</a> to use to exclude tags. The default value causes any tag
@@ -4887,13 +4959,16 @@ generated by the Zotero API, not by Kerko).</p>
 Default value: <code>"^_"</code></p>
 <div class="admonition warning">
 <p class="admonition-title">Modifies the search index</p>
-<p>Changing this parameter will require that you run the <code>sync index --full</code>
-command. See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
+<p>Changing this parameter will require that you run the
+<code>flask kerko sync index --full</code> command.
+See <a href="../synchronization/#command-line-interface-cli">synchronization commands</a> for details.</p>
 </div>
 <h3 id="wait"><code>wait</code><a class="headerlink" href="#wait" title="Permanent link">&para;</a></h3>
-<p>Time to wait (in seconds) between failed attempts to call the Zotero API.</p>
+<p>Time to wait (in seconds) between failed attempts to call the Zotero API. The
+delay between attempts might increase based on responses received from the
+Zotero API.</p>
 <p>Type: Integer <br>
-Default value: <code>120</code></p>
+Default value: <code>2</code></p>
 <hr />
 <h2 id="kerkoappproxy_fix"><code>kerkoapp.proxy_fix.</code><a class="headerlink" href="#kerkoappproxy_fix" title="Permanent link">&para;</a></h2>
 <p>When an application is running behind a proxy server, WSGI may see the request
@@ -5046,10 +5121,10 @@ Default value: <code>0</code></p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "header.autohide", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.action.view", "content.action.edit"], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "header.autohide", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.action.view", "content.action.edit"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>
