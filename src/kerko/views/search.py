@@ -1,5 +1,4 @@
 import time
-from datetime import datetime
 
 from babel.numbers import format_decimal
 from flask import redirect, render_template, url_for
@@ -7,9 +6,9 @@ from flask_babel import get_locale, gettext, ngettext
 from werkzeug.datastructures import MultiDict
 
 from kerko.criteria import create_feed_criteria
+from kerko.index import load_object, open_index
 from kerko.searcher import Searcher
-from kerko.shortcuts import composer, config
-from kerko.storage import load_object, open_index
+from kerko.shortcuts import composer, config, plugin_manager, search_result_fields
 from kerko.views import breadbox, pager, sorter
 from kerko.views.item import build_item_context, inject_item_data
 
@@ -49,8 +48,7 @@ def empty_results(criteria, form):
         # separate search query for each active facet, each time ignoring all
         # other search criteria. Unless a given facet value alone leads to empty
         # results, we'll be able to get to build that facet.
-        index = open_index("index")
-        with Searcher(index) as searcher:
+        with Searcher(open_index()) as searcher:
             for key, value in criteria.filters.lists():
                 results = searcher.search(
                     filters=MultiDict({key: value}),
@@ -60,21 +58,21 @@ def empty_results(criteria, form):
                 )
                 facets.update(results.facets(composer().facets, criteria, active_only=True))
     context["breadbox"] = breadbox.build_breadbox(criteria, facets)
-    return render_template(
-        config("kerko.templates.search"),
-        form=form,
-        locale=get_locale(),
-        is_searching=criteria.is_searching(),
-        **context,
-    )
+    context["form"] = form
+    context["locale"] = get_locale()
+    context["is_searching"] = criteria.is_searching()
+
+    # Let plugins alter the context.
+    plugin_manager().hook.search_empty_alter_context(criteria=criteria, context=context)
+
+    return render_template(config("kerko.templates.search"), **context)
 
 
 def search_single(criteria, form):
     """Perform search, and prepare template context for a results page containing a single item."""
     start_time = time.process_time()
     context = {}
-    index = open_index("index")
-    with Searcher(index) as searcher:
+    with Searcher(open_index()) as searcher:
         results = searcher.search_page(
             page=criteria.options.get("page", 1),
             page_len=1,
@@ -138,22 +136,23 @@ def search_single(criteria, form):
                 }
             ),
         )
-    return render_template(
-        config("kerko.templates.search_item"),
-        form=form,
-        time=time.process_time() - start_time,
-        locale=get_locale(),
-        is_searching=criteria.is_searching(),
-        **context,
-    )
+
+    context["form"] = form
+    context["locale"] = get_locale()
+    context["is_searching"] = criteria.is_searching()
+
+    # Let plugins alter the context.
+    plugin_manager().hook.search_single_alter_context(criteria=criteria, context=context)
+
+    context["time"] = time.process_time() - start_time
+    return render_template(config("kerko.templates.search_item"), **context)
 
 
 def search_list(criteria, form):
     """Perform search, and prepare the template context variables for a list of search results."""
     start_time = time.process_time()
     context = {}
-    index = open_index("index")
-    with Searcher(index) as searcher:
+    with Searcher(open_index()) as searcher:
         page_len = criteria.options.get("page-len", config("kerko.pagination.page_len"))
         common_search_args = {
             "keywords": criteria.keywords,
@@ -228,7 +227,7 @@ def search_list(criteria, form):
                     }
                 ),
             )
-            for key in composer().bib_formats.keys()
+            for key in composer().export_formats.keys()
         }
         if "atom" in config("kerko.feeds.formats"):
             context["atom_feed_url"] = url_for(
@@ -246,27 +245,20 @@ def search_list(criteria, form):
                 context["atom_feed_title"] = gettext("Main feed")
 
         # Prepare search result items.
-        field_specs = composer().select_fields(
-            config("kerko.search.result_fields")
-            + [badge.field.key for badge in composer().badges.values()],
-        )
+        field_specs = composer().select_fields(search_result_fields())
         items = results.items(field_specs)
         results_facets = results.facets(composer().facets, criteria)
         context["search_results"] = zip(items, _build_item_search_urls(items, criteria))
         context["facet_results"] = results_facets
         context["breadbox"] = breadbox.build_breadbox(criteria, results_facets)
+        context["last_sync"] = load_object("cache_timestamp")
 
-        last_sync = load_object("index", "last_update_from_zotero")
-        if last_sync:
-            context["last_sync"] = datetime.fromtimestamp(
-                last_sync,
-                tz=datetime.now().astimezone().tzinfo,
-            )
-    return render_template(
-        config("kerko.templates.search"),
-        form=form,
-        time=time.process_time() - start_time,
-        locale=get_locale(),
-        is_searching=criteria.is_searching(),
-        **context,
-    )
+    context["form"] = form
+    context["locale"] = get_locale()
+    context["is_searching"] = criteria.is_searching()
+
+    # Let plugins alter the context.
+    plugin_manager().hook.search_list_alter_context(criteria=criteria, context=context)
+
+    context["time"] = time.process_time() - start_time
+    return render_template(config("kerko.templates.search"), **context)

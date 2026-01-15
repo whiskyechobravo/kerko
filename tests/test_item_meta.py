@@ -8,7 +8,7 @@ import elementpath  # For XPath 2.0 selectors.
 from lxml import etree
 
 from kerko.views.item.creators import format_creator_name
-from tests.integration_testing import SynchronizedTestCase
+from tests.base import SyncIndexTestCase
 
 
 class CreatorNameTestCase(unittest.TestCase):
@@ -45,14 +45,16 @@ class CreatorNameTestCase(unittest.TestCase):
         )
 
 
-class ItemMetaTestCase(SynchronizedTestCase):
+class ItemMetaTestCase(SyncIndexTestCase):
     """Integration tests for item meta tags."""
+
+    fixture_name = "dummy"
 
     def test_highwire_press_book(self):
         """Test Highwire Press tags for a 'book' item."""
 
         with self.app.test_client() as client:
-            response = client.get(f"{self.URL_PREFIX}/2351708-TAQ6HCSL", follow_redirects=True)
+            response = client.get(f"{self.url_prefix}/2351708-TAQ6HCSL", follow_redirects=True)
             self.assertEqual(response.status_code, 200)
 
             parser = etree.HTMLParser()
@@ -125,7 +127,7 @@ class ItemMetaTestCase(SynchronizedTestCase):
         """Test Highwire Press tags for a 'conferencePaper' item."""
 
         with self.app.test_client() as client:
-            response = client.get(f"{self.URL_PREFIX}/2351708-99VVIN8V", follow_redirects=True)
+            response = client.get(f"{self.url_prefix}/2351708-99VVIN8V", follow_redirects=True)
             self.assertEqual(response.status_code, 200)
 
             parser = etree.HTMLParser()
@@ -198,7 +200,7 @@ class ItemMetaTestCase(SynchronizedTestCase):
         """Test Highwire Press tags for a 'journalArticle' item."""
 
         with self.app.test_client() as client:
-            response = client.get(f"{self.URL_PREFIX}/2351708-NW89E453", follow_redirects=True)
+            response = client.get(f"{self.url_prefix}/2351708-NW89E453", follow_redirects=True)
             self.assertEqual(response.status_code, 200)
 
             parser = etree.HTMLParser()
@@ -259,7 +261,7 @@ class ItemMetaTestCase(SynchronizedTestCase):
                 elementpath.select(
                     tree,
                     f'/html/head/meta[@name="citation_pdf_url"][matches(@content, '
-                    f'"https?://[^/]+{self.URL_PREFIX}/[A-Z0-9]+/download/[A-Z0-9]+/Fernandez'
+                    f'"https?://[^/]+{self.url_prefix}/[A-Z0-9]+/download/[A-Z0-9]+/Fernandez'
                     f'%20-%202011%20-%20Zotero%20information%20management%20software%202.0.pdf")]',
                 ),
                 "Incorrect PDF URL",
@@ -287,7 +289,7 @@ class ItemMetaTestCase(SynchronizedTestCase):
         """Test Highwire Press tags for a 'report' item."""
 
         with self.app.test_client() as client:
-            response = client.get(f"{self.URL_PREFIX}/2351708-DNFRSHFB", follow_redirects=True)
+            response = client.get(f"{self.url_prefix}/2351708-DNFRSHFB", follow_redirects=True)
             self.assertEqual(response.status_code, 200)
 
             parser = etree.HTMLParser()
@@ -355,7 +357,7 @@ class ItemMetaTestCase(SynchronizedTestCase):
         """Test Highwire Press tags for a 'thesis' item."""
 
         with self.app.test_client() as client:
-            response = client.get(f"{self.URL_PREFIX}/2351708-9TCEM5BE", follow_redirects=True)
+            response = client.get(f"{self.url_prefix}/2351708-9TCEM5BE", follow_redirects=True)
             self.assertEqual(response.status_code, 200)
 
             parser = etree.HTMLParser()
@@ -415,7 +417,7 @@ class ItemMetaTestCase(SynchronizedTestCase):
         """Test Highwire Press tags for a 'webpage' item."""
 
         with self.app.test_client() as client:
-            response = client.get(f"{self.URL_PREFIX}/4507457-YE4WVE35", follow_redirects=True)
+            response = client.get(f"{self.url_prefix}/4507457-YE4WVE35", follow_redirects=True)
             self.assertEqual(response.status_code, 200)
 
             parser = etree.HTMLParser()

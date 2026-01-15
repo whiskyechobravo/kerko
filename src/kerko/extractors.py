@@ -1,20 +1,26 @@
 """
-Functions for extracting data from Zotero items.
+Data extraction from cached Zotero items.
 """
 
 import gettext
 import itertools
 import re
 from abc import ABC, abstractmethod
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from datetime import datetime
+from typing import Any
 
 import pycountry
 from flask import current_app
+from karboni.database import schema as cache
 from markupsafe import Markup
+from sqlalchemy import select
+from sqlalchemy.orm import Session, joinedload, selectinload
 
 from kerko.datetime import maximize_partial_date, parse_partial_date
+from kerko.discoverers import CollectionAncestorsDiscoverer
 from kerko.richtext import richtext_striptags
+from kerko.specs import BaseFieldSpec, CollectionFacetSpec
 from kerko.tags import TagGate
 from kerko.text import sort_normalize
 from kerko.transformers import find_item_id_in_zotero_uri_links, find_item_id_in_zotero_uris_str
@@ -32,85 +38,61 @@ def encode_multiple(value, spec):
     return [spec.encode(item) for item in value]
 
 
-def is_file_attachment(item, mime_types=None):
-    """
-    Return `True` if a given item is a file attachment.
-
-    :param mime_types: If a list is provided, the item must also match one of
-        the given MIME types. If empty or `None`, the MIME type is not checked.
-    """
-    if not item.get("data"):
-        return False
-    if not item["data"].get("key"):
-        return False
-    if item["data"].get("linkMode") not in ["imported_file", "imported_url"]:
-        return False
-    if mime_types and item["data"].get("contentType", "octet-stream") not in mime_types:
-        return False
-    return True
-
-
-def is_link_attachment(item):
-    """
-    Return `True` if a given item is a link attachment.
-    """
-    if not item.get("data"):
-        return False
-    if not item["data"].get("key"):
-        return False
-    if item["data"].get("linkMode") != "linked_url":
-        return False
-    if not item["data"].get("url"):
-        return False
-    return True
+def is_link_attachment(item: cache.Item) -> bool:
+    return item.data.get("linkMode") == "linked_url" and bool(item.data.get("url"))
 
 
 class Extractor(ABC):
     """
     Data extractor.
 
-    An extractor can retrieve elements from item or ``LibraryContext`` objects,
-    and add elements to a document. The document is represented by a `dict`. A
-    ``BaseFieldSpec`` object provides both an ``encode()`` method that may
-    transform the data before its assignment into the document, and the key to
-    assign the resulting data to.
+    An extractor retrieves data from a given item, from the cache or from the
+    Kerko configuration, and stores data to a document to be indexed.
     """
 
-    def __init__(self, format_="data", encode=encode_single, **kwargs):
+    def __init__(self, encode=encode_single, **kwargs):
         """
         Initialize the extractor.
-
-        :param str format_: Format to retrieve when performing the Zotero item
-            read, e.g., 'data', 'bib', 'ris', to ensure that the data required
-            by this extractor is requested from Zotero to become available in
-            the item at extraction time.
 
         :param callable encode: Function that can encode a value using a
             ``FieldSpec``.
         """
-        self.format = format_
         self.encode = encode
         assert not kwargs  # Subclasses should have consumed every keyword arg.
 
     @abstractmethod
-    def extract(self, item, library_context, spec):
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:
         """
-        Retrieve the value from context.
+        Retrieve a value from the cache.
 
         :return: Extracted value, or `None` if no value could be extracted.
         """
 
-    def extract_and_store(self, document, item, library_context, spec):
+    def extract_and_store(
+        self,
+        document: dict[str, Any],
+        item: cache.Item,
+        cache_session: Session,
+        spec: BaseFieldSpec,
+    ) -> None:
         """
         Extract value from context and store its encoded version in document.
+
+        The document is represented by a dict. A spec object provides an
+        encode() method that may transform the data before its assignment into
+        the document, and specifies the key to assign the resulting data to.
         """
-        extracted_value = self.extract(item, library_context, spec)
+        extracted_value = self.extract(item, cache_session, spec)
         if extracted_value is not None:
             document[spec.key] = self.encode(extracted_value, spec)
 
-    def warning(self, message, item=None):
-        item_ref = f"({item.get('key')})" if item else ""
-        current_app.logger.warning(f"{self.__class__.__name__}: {message} {item_ref}")
+    def warning(self, message: str, item: cache.Item | None = None) -> None:
+        current_app.logger.warning(
+            "%s: %s %s",
+            self.__class__.__name__,
+            message,
+            f"({item.item_key})" if item else "",
+        )
 
 
 class TransformerExtractor(Extractor):
@@ -131,7 +113,7 @@ class TransformerExtractor(Extractor):
         :param bool skip_none_value: If ``true`` (which is the default),
             transformers will not be applied on a ``None`` value.
         """
-        super().__init__(format_=extractor.format, **kwargs)
+        super().__init__(**kwargs)
         self.extractor = extractor
         self.transformers = transformers
         self.skip_none_value = skip_none_value
@@ -142,8 +124,8 @@ class TransformerExtractor(Extractor):
                 value = transformer(value)
         return value
 
-    def extract(self, item, library_context, spec):
-        value = self.extractor.extract(item, library_context, spec)
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:
+        value = self.extractor.extract(item, cache_session, spec)
         return self.apply_transformers(value)
 
 
@@ -156,11 +138,10 @@ class MultiExtractor(Extractor):
         super().__init__(encode=encode, **kwargs)
         self.extractors = extractors
 
-    def extract(self, item, library_context, spec):
-        values = []
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:
+        values: list[Any] = []
         for extractor in self.extractors:
-            assert self.format == extractor.format  # Extractors can only use same format as parent.
-            value = extractor.extract(item, library_context, spec)
+            value = extractor.extract(item, cache_session, spec)
             if isinstance(value, Iterable) and not isinstance(value, str):
                 values.extend(value)
             elif value:
@@ -181,18 +162,17 @@ class ChainExtractor(Extractor):
         super().__init__(**kwargs)
         self.extractors = extractors
 
-    def extract(self, item, library_context, spec):
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:
         value = None
         for extractor in self.extractors:
-            assert self.format == extractor.format  # Extractors can only use same format as parent.
-            value = extractor.extract(item, library_context, spec)
+            value = extractor.extract(item, cache_session, spec)
             if value is not None:
                 break
         return value
 
 
 class KeyExtractor(Extractor):
-    def __init__(self, *, key, **kwargs):
+    def __init__(self, *, key: str, **kwargs):
         """
         Initialize the extractor.
 
@@ -205,15 +185,15 @@ class KeyExtractor(Extractor):
 class ItemExtractor(KeyExtractor):
     """Extract a value from an item."""
 
-    def extract(self, item, library_context, spec):  # noqa: ARG002
-        return item.get(self.key)
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
+        return getattr(item, self.key)
 
 
 class ItemDataExtractor(KeyExtractor):
     """Extract a value from item data."""
 
-    def extract(self, item, library_context, spec):  # noqa: ARG002
-        return item.get("data", {}).get(self.key)
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
+        return item.data.get(self.key)
 
 
 class ItemTitleExtractor(Extractor):
@@ -226,74 +206,140 @@ class ItemTitleExtractor(Extractor):
     getting the title, instead of using hardcoded field names.
     """
 
-    def extract(self, item, library_context, spec):  # noqa: ARG002
-        item_data = item.get("data", {})
-        item_type = item_data.get("itemType")
-        if item_type not in ["annotation", "note"] and (
-            item_fields := library_context.item_fields.get(item_type)
-        ):
-            return item_data.get(item_fields[0].get("field"), "")
-        return ""
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
+        stmt = (
+            select(cache.ItemTypeField.field)
+            .filter_by(item_type=item.item_type)
+            .order_by(cache.ItemTypeField.position.asc())
+            .limit(1)
+        )
+        title_field = cache_session.scalars(stmt).first()
+        return item.data.get(title_field, "") if title_field else ""
 
 
 class RawDataExtractor(Extractor):
-    def extract(self, item, library_context, spec):  # noqa: ARG002
-        return item.get("data")
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
+        return item.data
 
 
 class ItemRelationsExtractor(Extractor):
     """Extract a list of item's relations corresponding to a given predicate."""
 
-    def __init__(self, predicate, **kwargs):
+    def __init__(self, predicate: str, **kwargs):
         super().__init__(**kwargs)
         self.predicate = predicate
 
-    def extract(self, item, library_context, spec):  # noqa: ARG002
-        relations = item.get("data", {}).get("relations", {}).get(self.predicate, [])
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
+        if not item.relations:  # If None or empty.
+            return []
+        relations = item.relations.get(self.predicate, [])
         if relations and isinstance(relations, str):
             relations = [relations]
-        assert isinstance(relations, Iterable)
+        # FIXME:R5770: Filter relations to exclude trashed items (assuming trashed items can end up here; that is to verify).  # noqa: E501
         return relations
 
 
 class ItemTypeLabelExtractor(Extractor):
     """Extract the label of the item's type."""
 
-    def extract(self, item, library_context, spec):  # noqa: ARG002
-        item_type = item.get("data", {}).get("itemType")
-        if item_type and item_type in library_context.item_types:
-            return library_context.item_types[item_type]
-        if item_type != "attachment":  # Attachment has no label, no need to warn.
-            self.warning(f"Missing or unknown item type '{item_type}'", item)
-        return None
+    def __init__(self, locale: str, **kwargs):
+        super().__init__(**kwargs)
+        self.locale = locale
+
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
+        stmt = select(cache.ItemTypeLocale.localized).filter_by(
+            item_type=item.item_type, locale=self.locale
+        )
+        label = cache_session.scalar(stmt)
+
+        if not label and item.item_type != "attachment":
+            self.warning(
+                f"No label found for item type '{item.item_type}' and locale '{self.locale}'", item
+            )
+            return None
+
+        return label
 
 
 class ItemFieldsExtractor(Extractor):
-    """Extract field metadata."""
+    """
+    Extract field metadata for an item's specific item type.
 
-    def extract(self, item, library_context, spec):  # noqa: ARG002
-        item_type = item.get("data", {}).get("itemType")
-        if item_type and item_type in library_context.item_fields:
-            fields = library_context.item_fields[item_type]
-            # Retain metadata for fields that are actually present in the item.
-            item_fields = [f for f in fields if f.get("field") in item["data"]]
-            return item_fields
-        if item_type != "attachment":  # Attachment has no field metadata, no need to warn.
-            self.warning(f"Missing or unknown item type '{item_type}'", item)
-        return None
+    Returns:
+        A list of dicts with fields 'field', 'locale', and 'localized'.
+    """
+
+    def __init__(self, locale: str, **kwargs):
+        super().__init__(**kwargs)
+        self.locale = locale
+
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
+        stmt = (
+            select(
+                cache.ItemTypeFieldLocale.field,
+                cache.ItemTypeFieldLocale.locale,
+                cache.ItemTypeFieldLocale.localized,
+            )
+            .join(
+                cache.ItemTypeField,
+                (cache.ItemTypeField.item_type == cache.ItemTypeFieldLocale.item_type)
+                & (cache.ItemTypeField.field == cache.ItemTypeFieldLocale.field),
+            )
+            .where(cache.ItemTypeFieldLocale.item_type == item.item_type)
+            .order_by(cache.ItemTypeField.position.asc())
+        )
+        result = cache_session.execute(stmt).mappings()
+        fields = [dict(row) for row in result]
+
+        if not fields and item.item_type not in ["attachment", "note"]:
+            self.warning(f"No fields found for item type '{item.item_type}'", item)
+
+        return fields
+
+
+class ItemBibExtractor(Extractor):
+    """Extract an item's formatted reference."""
+
+    def __init__(self, *, style: str, locale: str, **kwargs):
+        super().__init__(**kwargs)
+        self.style = style
+        self.locale = locale
+
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
+        stmt = select(cache.ItemBib.bib).filter_by(
+            item_key=item.item_key,
+            style=self.style,
+            locale=self.locale,
+        )
+        return cache_session.scalar(stmt)
+
+
+class ItemExportFormatExtractor(Extractor):
+    """Extract an item's exported bibliographic records."""
+
+    def __init__(self, format: str, **kwargs):  # noqa: A002
+        super().__init__(**kwargs)
+        self.format = format
+
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
+        stmt = select(cache.ItemExportFormat.content).filter_by(
+            item_key=item.item_key,
+            format=self.format,
+        )
+        return cache_session.scalar(stmt)
 
 
 class ItemLinkExtractor(Extractor):
-    """Extract an item link from the 'links' element."""
+    """Extract the URL of a link retrieved from an item's 'links' element."""
 
-    def __init__(self, *, link_key, link_type, **kwargs):
+    def __init__(self, *, link_key: str, link_type: str, **kwargs):
         super().__init__(**kwargs)
         self.link_key = link_key
         self.link_type = link_type
 
-    def extract(self, item, library_context, spec):  # noqa: ARG002
-        link = item.get("links", {}).get(self.link_key, {})
-        if link and link.get("type") == self.link_type:
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
+        link = item.links.get(self.link_key, {})
+        if link.get("type") == self.link_type:
             return link.get("href")
         return None
 
@@ -308,42 +354,78 @@ class ZoteroWebItemURLExtractor(ItemLinkExtractor):
 class ZoteroAppItemURLExtractor(Extractor):
     """Extract a link for opening the item in the Zotero app."""
 
-    def extract(self, item, library_context, spec):  # noqa: ARG002
-        if library_context.library_type == "group":
-            return f"zotero://select/groups/{library_context.library_id}/items/{item.get('key')}"
-        return f"zotero://select/library/items/{item.get('key')}"
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
+        # It would be easier to just get the library type and id from the Kerko config, but
+        # conceptually those config settings are not supposed to serve at indexing time.
+        stmt = (
+            select(cache.SyncHistory.library_prefix, cache.SyncHistory.library_id)
+            .order_by(cache.SyncHistory.history_id.desc())
+            .limit(1)
+        )
+        result = cache_session.execute(stmt).first()
+        if not result:
+            return None
+
+        library_prefix, library_id = result
+        if library_prefix == "users":
+            return f"zotero://select/library/items/{item.item_key}"
+        return f"zotero://select/groups/{library_id}/items/{item.item_key}"
 
 
 class CreatorTypesExtractor(Extractor):
-    """Extract creator types metadata."""
+    """
+    Extract creator types metadata for an item's specific item type.
 
-    def extract(self, item, library_context, spec):  # noqa: ARG002
-        item_type = item.get("data", {}).get("itemType")
-        if item_type and item_type in library_context.creator_types:
-            library_creator_types = library_context.creator_types[item_type]
-            # Retain metadata for creator types that are actually present in the item.
-            item_creator_types = []
-            for library_creator_type in library_creator_types:
-                for item_creator in item["data"].get("creators", []):
-                    creator_type = item_creator.get("creatorType")
-                    if creator_type and creator_type == library_creator_type.get("creatorType"):
-                        item_creator_types.append(library_creator_type)
-                        break
-            if item_creator_types:
-                return item_creator_types
-            if item["data"].get("creators", False):
-                self.warning(f"Missing creator types for item type '{item_type}'.", item)
-        elif item_type != "attachment":  # Attachment has no creator types, no need to warn.
-            self.warning(f"Missing or unknown item type '{item_type}'", item)
-        return None
+    Returns:
+        A list of dicts with fields 'creator_type', 'locale', and 'localized'.
+    """
+
+    def __init__(self, locale: str, **kwargs):
+        super().__init__(**kwargs)
+        self.locale = locale
+
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
+        stmt = (
+            select(
+                cache.ItemTypeCreatorTypeLocale.creator_type,
+                cache.ItemTypeCreatorTypeLocale.locale,
+                cache.ItemTypeCreatorTypeLocale.localized,
+            )
+            .join(
+                cache.ItemTypeCreatorType,
+                (cache.ItemTypeCreatorType.item_type == cache.ItemTypeCreatorTypeLocale.item_type)
+                & (
+                    cache.ItemTypeCreatorType.creator_type
+                    == cache.ItemTypeCreatorTypeLocale.creator_type
+                ),
+            )
+            .where(cache.ItemTypeCreatorTypeLocale.item_type == item.item_type)
+            .order_by(cache.ItemTypeCreatorType.position.asc())
+        )
+        result = cache_session.execute(stmt).mappings()
+
+        # Extract just the creator types that are actually present in the item.
+        creator_types = [
+            dict(row)
+            for row in result
+            if any(
+                item_creator.get("creatorType") == row["creator_type"]
+                for item_creator in item.data.get("creators", [])
+            )
+        ]
+
+        if not creator_types and item.data.get("creators"):
+            self.warning(f"No creator types found for item type '{item.item_type}'", item)
+
+        return creator_types
 
 
 class CreatorsExtractor(Extractor):
     """Flatten and extract creator data."""
 
-    def extract(self, item, library_context, spec):  # noqa: ARG002
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
         creators = []
-        for creator in item.get("data", {}).get("creators", []):
+        for creator in item.data.get("creators", []):
             fullname = creator.get("name")
             if fullname:
                 creators.append(richtext_striptags(fullname).strip())
@@ -364,18 +446,17 @@ class CreatorsExtractor(Extractor):
 class CollectionNamesExtractor(Extractor):
     """Extract item collections for text search."""
 
-    def extract(self, item, library_context, spec):  # noqa: ARG002
-        names = set()
-        for k in item.get("data", {}).get("collections", []):
-            if k in library_context.collections:
-                name = library_context.collections[k].get("data", {}).get("name", "").strip()
-                if name:
-                    names.add(name)
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
+        names = [
+            name
+            for collection in item.collections
+            if not collection.trashed and (name := collection.name.strip())
+        ]
         return RECORD_SEPARATOR.join(sorted(names, key=sort_normalize)) if names else None
 
 
 class BaseTagsExtractor(Extractor):
-    def __init__(self, *, include_re="", exclude_re="", **kwargs):
+    def __init__(self, *, include_re: str = "", exclude_re: str = "", **kwargs):
         """
         Initialize the extractor.
 
@@ -391,24 +472,22 @@ class BaseTagsExtractor(Extractor):
         self.include = re.compile(include_re) if include_re else None
         self.exclude = re.compile(exclude_re) if exclude_re else None
 
-    def extract(self, item, library_context, spec):  # noqa: ARG002
-        tags = set()
-        for tag_data in item.get("data", {}).get("tags", []):
-            tag = tag_data.get("tag", "").strip()
-            if (
-                tag
-                and (not self.include or self.include.match(tag))
-                and (not self.exclude or not self.exclude.match(tag))
-            ):
-                tags.add(tag)
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
+        tags = {
+            tag
+            for item_tag in item.tags
+            if (tag := item_tag.tag.strip())
+            and (not self.include or self.include.match(tag))
+            and (not self.exclude or not self.exclude.match(tag))
+        }
         return tags or None
 
 
 class TagsTextExtractor(BaseTagsExtractor):
     """Extract item tags for text search."""
 
-    def extract(self, item, library_context, spec):
-        tags = super().extract(item, library_context, spec)
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:
+        tags = super().extract(item, cache_session, spec)
         return RECORD_SEPARATOR.join(sorted(tags, key=sort_normalize)) if tags else None
 
 
@@ -423,11 +502,11 @@ class LanguageExtractor(Extractor):
     def __init__(
         self,
         *,
-        values_separator_re=r";",
-        normalize=True,
-        locale="en",
-        allow_invalid=True,
-        normalize_invalid=None,
+        values_separator_re: str = r";",
+        normalize: bool = True,
+        locale: str = "en",
+        allow_invalid: bool = True,
+        normalize_invalid: Callable[[str], str] | None = None,
         **kwargs,
     ):
         """
@@ -455,16 +534,16 @@ class LanguageExtractor(Extractor):
         self.locale = locale
         self.allow_invalid = allow_invalid
         self.normalize_invalid = normalize_invalid or str.title
-        self.translations = None
+        self.translations: gettext.GNUTranslations | None = None
         self.translations_initialized = False
 
-    def extract(self, item, library_context, spec):  # noqa: ARG002
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
         """
         Extract item language(s) into (value, label) tuples.
 
         Multiple values are separated using the `self.values_separator` regex.
         """
-        values = self.values_separator.split(item.get("data", {}).get("language", ""))
+        values = self.values_separator.split(item.data.get("language", ""))
         if self.normalize:
             values = [self.normalize_language(value) for value in values]
         else:
@@ -472,7 +551,7 @@ class LanguageExtractor(Extractor):
         # Going through a dict.fromkeys() to eliminate duplicates while preserving ordering.
         return [value for value in dict.fromkeys(values).keys() if value] or None
 
-    def normalize_language(self, value):
+    def normalize_language(self, value: str) -> tuple[str, str] | None:
         """
         Given a str value, return a corresponding (language code, name) tuple.
 
@@ -512,7 +591,7 @@ class LanguageExtractor(Extractor):
             return (value.lower(), self.normalize_invalid(value))
         return None
 
-    def translate_language(self, name):
+    def translate_language(self, name: str) -> str:
         if not self.translations_initialized:
             locale = self.locale.replace("-", "_")
             try:
@@ -531,20 +610,27 @@ class LanguageExtractor(Extractor):
 
 
 class BaseChildrenExtractor(Extractor):
-    def __init__(self, *, item_type, include_re="", exclude_re="", **kwargs):
+    def __init__(
+        self,
+        *,
+        item_type: str,
+        include_re: str | Iterable[str] = "",
+        exclude_re: str | Iterable[str] = "",
+        **kwargs,
+    ):
         """
         Initialize the extractor.
 
         :param str item_type: The type of child items to extract, either 'note'
             or 'attachment'.
 
-        :param [str,list] include_re: Any child which does not have a tag that
+        :param include_re: Any child which does not have a tag that
             matches this regular expression will be ignored by the extractor. If
             empty, all children will be accepted unless `exclude_re` is set and
             causes some to be rejected. When passing a list, every pattern of
             the list must match at least a tag for the child to be included.
 
-        :param [str,list] exclude_re: Any child that have a tag that matches
+        :param exclude_re: Any child that have a tag that matches
             this regular expression will be ignored by the extractor. If empty,
             all children will be accepted unless `include_re` is set and causes
             some to be rejected. When passing a list, every pattern of the list
@@ -554,14 +640,24 @@ class BaseChildrenExtractor(Extractor):
         self.item_type = item_type
         self.gate = TagGate(include_re, exclude_re)
 
-    def extract(self, item, library_context, spec):  # noqa: ARG002
-        accepted_children = []
-        for child in item.get("children", []):
-            if child.get("data", {}).get("itemType") == self.item_type and self.gate.check(
-                child.get("data", {})
-            ):
-                accepted_children.append(child)
-        return accepted_children or None
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
+        stmt = (
+            select(cache.Item)
+            .where(
+                cache.Item.parent_item == item.item_key,
+                cache.Item.item_type == self.item_type,
+                cache.Item.trashed.is_not(True),
+            )
+            .options(
+                # Load some relations eagerly.
+                selectinload(cache.Item.collections),
+                selectinload(cache.Item.tags),
+                joinedload(cache.Item.file),
+                joinedload(cache.Item.fulltext),
+            )
+        )
+        children = [child for child in cache_session.scalars(stmt) if self.gate.check(child.data)]
+        return children or None
 
 
 class BaseChildAttachmentsExtractor(BaseChildrenExtractor):
@@ -574,29 +670,46 @@ class ChildFileAttachmentsExtractor(BaseChildAttachmentsExtractor):
     Extract the metadata of stored copies of files into a list of dicts.
     """
 
-    def __init__(self, *, mime_types=None, **kwargs):
+    def __init__(self, *, files: bool = True, mime_types: Iterable[str] | None = None, **kwargs):
+        """
+        Initialize the extractor.
+
+        Args:
+            files:
+                Whether file attachments are enabled.
+            mime_types:
+                Only extract files whose media type have a match in this list. If None, extract all.
+            kwargs:
+                Additional keyword arguments for the base class.
+        """
         super().__init__(**kwargs)
+        self.files = files
         self.mime_types = mime_types
 
-    def extract(self, item, library_context, spec):
-        children = super().extract(item, library_context, spec)
-        return (
-            [
-                {
-                    "id": child["key"],
-                    "data": {
-                        "contentType": child["data"].get("contentType"),
-                        "filename": child["data"].get("filename"),
-                        "md5": child["data"].get("md5"),
-                        "mtime": child["data"].get("mtime"),
-                    },
-                }
-                for child in children
-                if is_file_attachment(child, self.mime_types)
-            ]
-            if children
-            else None
-        )
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:
+        if not self.files:
+            return None
+
+        children = super().extract(item, cache_session, spec)
+        if not children:
+            return None
+
+        files = [
+            {
+                "id": child.file.item_key,
+                "data": {
+                    "contentType": child.file.content_type,
+                    "charset": child.file.charset,
+                    "filename": child.file.filename,
+                    "md5": child.file.md5,
+                    "mtime": child.file.mtime,
+                },
+                "download_status": child.file.download_status,  # TODO:R5770: Use this to avoid exposing links to files that are actually unavailable.  # noqa: E501
+            }
+            for child in children
+            if child.file and (not self.mime_types or child.file.content_type in self.mime_types)
+        ]
+        return files or None
 
 
 class ChildLinkedURIAttachmentsExtractor(BaseChildAttachmentsExtractor):
@@ -604,38 +717,42 @@ class ChildLinkedURIAttachmentsExtractor(BaseChildAttachmentsExtractor):
     Extract attached links to URIs into a list of dicts.
     """
 
-    def extract(self, item, library_context, spec):
-        children = super().extract(item, library_context, spec)
-        if children:
-            return [
-                {
-                    "title": child["data"].get("title", child["data"].get("url")),
-                    "url": child["data"].get("url"),
-                }
-                for child in children
-                if is_link_attachment(child)
-            ]
-        return None
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:
+        children = super().extract(item, cache_session, spec)
+        if not children:
+            return None
+
+        links = [
+            {
+                "title": child.data.get("title", child.data.get("url")),
+                "url": child.data.get("url"),
+            }
+            for child in children
+            if is_link_attachment(child) and child.data.get("url")
+        ]
+        return links or None
 
 
 class ChildAttachmentsFulltextExtractor(BaseChildAttachmentsExtractor):
-    """Extract the text content of attachments."""
+    """Extract the text content of file attachments."""
 
-    def __init__(self, *, mime_types=None, **kwargs):
+    def __init__(self, *, mime_types: Iterable[str] | None = None, **kwargs):
         super().__init__(**kwargs)
         self.mime_types = mime_types
 
-    def extract(self, item, library_context, spec):
-        children = super().extract(item, library_context, spec)
-        if children:
-            return RECORD_SEPARATOR.join(
-                [
-                    Markup(child["fulltext"]).striptags()
-                    for child in children
-                    if is_file_attachment(child, self.mime_types) and child.get("fulltext")
-                ]
-            )
-        return None
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:
+        children = super().extract(item, cache_session, spec)
+        if not children:
+            return None
+
+        texts = [
+            Markup(child.fulltext.content).striptags()
+            for child in children
+            if child.file
+            and child.fulltext
+            and (not self.mime_types or child.file.content_type in self.mime_types)
+        ]
+        return RECORD_SEPARATOR.join(texts) if texts else None
 
 
 class BaseChildNotesExtractor(BaseChildrenExtractor):
@@ -646,40 +763,40 @@ class BaseChildNotesExtractor(BaseChildrenExtractor):
 class ChildNotesTextExtractor(BaseChildNotesExtractor):
     """Extract notes for text search."""
 
-    def extract(self, item, library_context, spec):
-        children = super().extract(item, library_context, spec)
-        if children:
-            return RECORD_SEPARATOR.join(
-                [
-                    Markup(child["data"]["note"]).striptags()
-                    for child in children
-                    if child.get("data", {}).get("note")
-                ]
-            )
-        return None
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:
+        children = super().extract(item, cache_session, spec)
+        if not children:
+            return None
+
+        texts = [
+            Markup(child.data.get("note", "")).striptags()
+            for child in children
+            if child.data.get("note")
+        ]
+        return RECORD_SEPARATOR.join(texts) if texts else None
 
 
 class RawChildNotesExtractor(BaseChildNotesExtractor):
     """Extract raw notes for storage."""
 
-    def extract(self, item, library_context, spec):
-        children = super().extract(item, library_context, spec)
-        if children:
-            return [
-                child["data"]["note"] for child in children if child.get("data", {}).get("note")
-            ]
-        return None
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:
+        children = super().extract(item, cache_session, spec)
+        if not children:
+            return None
+
+        notes = [child.data.get("note") for child in children if child.data.get("note")]
+        return notes or None
 
 
 class RelationsInChildNotesExtractor(BaseChildNotesExtractor):
     """Extract item references specified in child notes."""
 
-    def extract(self, item, library_context, spec):
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:
         refs = set()
-        children = super().extract(item, library_context, spec)
+        children = super().extract(item, cache_session, spec)
         if children:
             for child in children:
-                note = child.get("data", {}).get("note", "")
+                note = child.data.get("note", "")
                 # Find in the href attribute of <a> elements.
                 refs.update(find_item_id_in_zotero_uri_links(note))
                 # Find in plain text.
@@ -704,32 +821,41 @@ class CollectionFacetTreeExtractor(Extractor):
     def __init__(self, encode=encode_multiple, **kwargs):
         super().__init__(encode=encode, **kwargs)
 
-    def extract(self, item, library_context, spec):
-        # Sets prevent duplication when multiple collections share common ancestors.
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:
+        if not isinstance(spec, CollectionFacetSpec):
+            raise TypeError
+
+        # Set prevent duplication when multiple item collections share common ancestors.
         encoded_ancestors = set()
-        for collection_key in item.get("data", {}).get("collections", []):
-            if collection_key not in library_context.collections:
-                continue  # Skip unknown collection.
-            ancestors = library_context.collections.ancestors(collection_key)
+
+        discoverer = CollectionAncestorsDiscoverer(cache_session)
+        for collection in item.collections:
+            if collection.trashed:
+                continue
+
+            ancestors = discoverer.discover(collection)
             if len(ancestors) <= 1 or ancestors[0] != spec.collection_key:
-                continue  # Skip collection, unrelated to this facet.
+                continue  # Skip; path has no subcollections or is unrelated to this facet.
 
             ancestors = ancestors[1:]  # Facet values come from subcollections.
             for path in _expand_paths(ancestors):
-                label = (
-                    library_context.collections.get(path[-1], {})
-                    .get("data", {})
-                    .get("name", "")
-                    .strip()
-                )
-                encoded_ancestors.add((tuple(path), label))  # Cast path to make it hashable.
+                stmt = select(cache.Collection.name).filter_by(collection_key=path[-1])
+                label = cache_session.scalar(stmt) or ""
+                encoded_ancestors.add((tuple(path), label.strip()))  # Tuple makes path hashable.
         return encoded_ancestors or None
 
 
 class InCollectionExtractor(Extractor):
     """Extract the boolean membership of an item into a collection."""
 
-    def __init__(self, *, collection_key, true_only=True, check_subcollections=True, **kwargs):
+    def __init__(
+        self,
+        *,
+        collection_key: str,
+        true_only: bool = True,
+        check_subcollections: bool = True,
+        **kwargs,
+    ):
         """
         Initialize the extractor.
 
@@ -749,12 +875,15 @@ class InCollectionExtractor(Extractor):
         self.true_only = true_only
         self.check_subcollections = check_subcollections
 
-    def extract(self, item, library_context, spec):  # noqa: ARG002
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
+        discoverer = CollectionAncestorsDiscoverer(cache_session)
         item_collections = list(
+            # Flatten the list of collections, including ancestors if needed.
             itertools.chain(
                 *[
-                    library_context.collections.ancestors(c) if self.check_subcollections else c
-                    for c in item.get("data", {}).get("collections", [])
+                    discoverer.discover(c) if self.check_subcollections else [c.collection_key]
+                    for c in item.collections
+                    if not c.trashed
                 ]
             )
         )
@@ -767,28 +896,32 @@ class InCollectionExtractor(Extractor):
 
 
 class TagsFacetExtractor(BaseTagsExtractor):
-    """Index the Zotero item's tags for faceting."""
+    """Extract the tags of an item for faceting."""
 
     def __init__(self, encode=encode_multiple, **kwargs):
         super().__init__(encode=encode, **kwargs)
 
 
 class ItemTypeFacetExtractor(Extractor):
-    """Index the Zotero item's type for faceting."""
+    """Extract the item type for faceting."""
 
-    def extract(self, item, library_context, spec):  # noqa: ARG002
-        item_type = item.get("data", {}).get("itemType")
-        if item_type:
-            return (item_type, library_context.item_types.get(item_type, item_type))
-        self.warning("Missing itemType", item)
-        return None
+    def __init__(self, locale: str, **kwargs):
+        super().__init__(**kwargs)
+        self.locale = locale
+
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
+        stmt = select(cache.ItemTypeLocale.localized).filter_by(
+            item_type=item.item_type, locale=self.locale
+        )
+        label = cache_session.scalar(stmt)
+        return (item.item_type, label or item.item_type)
 
 
 class YearExtractor(Extractor):
     """Parse the Zotero item's publication date to get just the year."""
 
-    def extract(self, item, library_context, spec):  # noqa: ARG002
-        parsed_date = item.get("meta", {}).get("parsedDate", "")
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
+        parsed_date = item.meta.get("parsedDate")
         if parsed_date:
             year, _month, _day = parse_partial_date(parsed_date)
             return str(year)
@@ -796,13 +929,13 @@ class YearExtractor(Extractor):
 
 
 class YearFacetExtractor(Extractor):
-    """Index the Zotero item's publication date for faceting by year."""
+    """Parse the Zotero item's publication date for faceting by year."""
 
     def __init__(self, encode=encode_multiple, **kwargs):
         super().__init__(encode=encode, **kwargs)
 
-    def extract(self, item, library_context, spec):  # noqa: ARG002
-        parsed_date = item.get("meta", {}).get("parsedDate", "")
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
+        parsed_date = item.meta.get("parsedDate")
         if parsed_date:
             year, _month, _day = parse_partial_date(parsed_date)
             decade = int(int(year) / 10) * 10
@@ -811,16 +944,18 @@ class YearFacetExtractor(Extractor):
         return None
 
 
-class ItemDataLinkFacetExtractor(ItemDataExtractor):
-    def extract(self, item, library_context, spec):  # noqa: ARG002
-        return item.get("data", {}).get(self.key, "").strip() != ""
+class ItemDataLinkFacetExtractor(Extractor):
+    """Extract a boolean indicating whether the item has a non-empty URL field."""
+
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
+        return item.data.get("url", "").strip() != ""
 
 
 class MaximizeParsedDateExtractor(Extractor):
     """Extract and "maximize" a `datetime` object from the item's `parsedDate` meta field."""
 
-    def extract(self, item, library_context, spec):  # noqa: ARG002
-        parsed_date = item.get("meta", {}).get("parsedDate", None)
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
+        parsed_date = item.meta.get("parsedDate", None)
         if parsed_date:
             try:
                 return datetime(*maximize_partial_date(*parse_partial_date(parsed_date)))
@@ -841,17 +976,17 @@ def _prepare_sort_text(text):
 
 
 class SortItemDataExtractor(ItemDataExtractor):
-    def extract(self, item, library_context, spec):
-        return _prepare_sort_text(super().extract(item, library_context, spec))
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
+        return _prepare_sort_text(super().extract(item, cache_session, spec))
 
 
 class SortTitleExtractor(ItemTitleExtractor):
-    def extract(self, item, library_context, spec):
-        return _prepare_sort_text(super().extract(item, library_context, spec))
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
+        return _prepare_sort_text(super().extract(item, cache_session, spec))
 
 
 class SortCreatorExtractor(Extractor):
-    def extract(self, item, library_context, spec):  # noqa: ARG002
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
         creators = []
 
         def append_creator(creator):
@@ -868,9 +1003,14 @@ class SortCreatorExtractor(Extractor):
         # only by primary creators in order to avoid sorting with data that may
         # be invisible to the user. Only when an item has no primary creator do
         # we fallback to lesser creators.
-        for creator_type in library_context.get_creator_types(item.get("data", {})):
-            for creator in item.get("data", {}).get("creators", []):
-                if creator.get("creatorType", "") == creator_type.get("creatorType"):
+        stmt = (
+            select(cache.ItemTypeCreatorType)
+            .filter_by(item_type=item.item_type)
+            .order_by(cache.ItemTypeCreatorType.position.asc())
+        )
+        for creator_type in cache_session.scalars(stmt):
+            for creator in item.data.get("creators", []):
+                if creator.get("creatorType", "") == creator_type.creator_type:
                     append_creator(creator)
             if creators:
                 break  # No need to include lesser creator types.
@@ -878,7 +1018,7 @@ class SortCreatorExtractor(Extractor):
 
 
 class SortDateExtractor(Extractor):
-    def extract(self, item, library_context, spec):  # noqa: ARG002
-        parsed_date = item.get("meta", {}).get("parsedDate", "")
+    def extract(self, item: cache.Item, cache_session: Session, spec: BaseFieldSpec) -> Any:  # noqa: ARG002
+        parsed_date = item.meta.get("parsedDate", "")
         year, month, day = parse_partial_date(parsed_date)
         return int(f"{year:04d}{month:02d}{day:02d}")

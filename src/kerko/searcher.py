@@ -9,9 +9,8 @@ from whoosh.query import And, Every, Not, Or, Term
 from whoosh.query.ranges import DateRange
 from whoosh.sorting import Count, Facets, FieldFacet
 
-from kerko.exceptions import except_raise
+from kerko.exceptions import IndexSchemaError, except_raise
 from kerko.shortcuts import composer
-from kerko.storage import SchemaError
 
 
 class Searcher:
@@ -47,7 +46,7 @@ class Searcher:
     def __exit__(self, *exc_info):
         self.close()
 
-    @except_raise(KeyError, SchemaError, "Schema changes are required. Please clean index.")
+    @except_raise(KeyError, IndexSchemaError)
     def search(self, *, limit=None, **kwargs):
         self._prepare_search_args(**kwargs)
         return UnpagedResults(
@@ -58,7 +57,7 @@ class Searcher:
             )
         )
 
-    @except_raise(KeyError, SchemaError, "Schema changes are required. Please clean index.")
+    @except_raise(KeyError, IndexSchemaError)
     def search_page(self, *, page, page_len, **kwargs):
         self._prepare_search_args(**kwargs)
         return PagedResults(

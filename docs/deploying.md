@@ -279,13 +279,12 @@ is left to the reader.
     parameter](config-params.md) to check if specific actions need to be taken
     after a change.
 
-    The commands below, for example, will allow you to clean and rebuild the
-    search index, and to restart KerkoApp:
+    The commands below, for example, will stop KerkoApp, delete and rebuild both
+    the cache and the search index, and then restart the application:
 
     ```bash
-    sudo -iu kerkoapp bash -c 'cd /home/kerkoapp/kerkoapp && /home/kerkoapp/venv/bin/flask kerko clean index'
-    sudo -iu kerkoapp bash -c 'cd /home/kerkoapp/kerkoapp && /home/kerkoapp/venv/bin/flask kerko sync'
     sudo systemctl stop kerkoapp.socket
+    sudo -iu kerkoapp bash -c 'cd /home/kerkoapp/kerkoapp && /home/kerkoapp/venv/bin/flask kerko clean everything && /home/kerkoapp/venv/bin/flask kerko sync'
     sudo systemctl start kerkoapp.socket
     ```
 

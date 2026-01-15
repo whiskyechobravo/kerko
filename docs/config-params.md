@@ -132,7 +132,6 @@ Log message format string, with %-style placeholders. Refer to the [Python
 logging documentation] for allowed attributes.
 
 Type: String <br>
-Default value: `"[%(asctime)s] %(levelname)s in %(module)s: %(message)s"`
 
 ---
 
@@ -238,9 +237,15 @@ Type: String
 
 ## `kerko.bib_formats.*.`
 
+Deprecated. Use [`kerko.export_formats.*`](#kerkoexport_formats).
+
+---
+
+## `kerko.export_formats.*.`
+
 Bibliographic record download formats, where `*` is a format key.
 
-The default formats are:
+The supported format keys are:
 
 - `bibtex`
 - `ris`
@@ -254,11 +259,11 @@ through any download link.
 
 Type: Boolean
 
-!!! warning "Modifies the cache and the search index"
+!!! warning "Modifies the cache and the search index schema"
 
-    Changing this parameter from `false` to `true` will require that you run the
-    `sync cache --full` and `sync index` commands. See [synchronization
-    commands] for details.
+    Changing this parameter will require that you run the
+    `flask kerko clean everything && flask kerko sync` command.
+    See [synchronization commands] for details.
 
 ### `extension`
 
@@ -358,11 +363,11 @@ The default facets are:
 
 You may define additional facets. See [Defining custom facets based on Zotero collections].
 
-!!! warning "Modifies the search index"
+!!! warning "Modifies the search index schema"
 
     Most of the `kerko.facets.*` parameters require that you run the
-    `clean index` and `sync index` commands after you have changed them.
-    See [synchronization commands] for details.
+    `flask kerko clean index && flask kerko sync index` command after you have
+    changed them. See [synchronization commands] for details.
 
 ### `collection_key`
 
@@ -554,20 +559,20 @@ Default value: `false`
 
 ### `download_item`
 
-Provide a record download button on item pages.
+Provide a bibliographic record download button on item pages.
 
-To configure the bibliographic formats made available for downloading, see
-[`kerko.bib_formats`](#kerkobib_formats).
+To configure the formats made available for downloading, see
+[`kerko.export_formats`](#kerkoexport_formats).
 
 Type: Boolean <br>
 Default value: `true`
 
 ### `download_results`
 
-Provide a record download button on search results pages.
+Provide a bibliographic record download button on search results pages.
 
-To configure the bibliographic formats made available for downloading, see
-[`kerko.bib_formats`](#kerkobib_formats).
+To configure the formats made available for downloading, see
+[`kerko.export_formats`](#kerkoexport_formats).
 
 Type: Boolean <br>
 Default value: `true`
@@ -688,6 +693,8 @@ Default value: `0` (i.e., no tolerance margin).
 ### `results_attachment_links`
 
 Provide links to attachments in search results.
+
+This parameter has no effect if `kerko.zotero.files` is set to `false`.
 
 Type: Boolean <br>
 Default value: `true`
@@ -1062,8 +1069,9 @@ Default value: `true`
 
 !!! warning "Modifies the cache and the search index"
 
-    Changing this parameter will require that you run the `sync cache --full`
-    and `sync index` commands. See [synchronization commands] for details.
+    Changing this parameter will require that you run the
+    `flask kerko sync --full` command.
+    See [synchronization commands] for details.
 
 ### `result_fields`
 
@@ -1113,12 +1121,12 @@ different tables:
 
 The configuration system does not allow adding new fields.
 
-!!! warning "Modifies the search index"
+!!! warning "Modifies the search index schema"
 
     Changing any of the `kerko.search_fields.*` parameters will require that you
-    run the `clean index` and `sync index` commands, except if you are just
-    disabling a field or changing its `scopes` parameter. See [synchronization
-    commands] for details.
+    run the `flask kerko clean index && flask kerko sync index` command, except
+    if you are just disabling a field or changing its `scopes` parameter.
+    See [synchronization commands] for details.
 
 ### `analyzer`
 
@@ -1262,13 +1270,16 @@ Default value: `"kerko/base.html.jinja2"`
 
 List of allowed MIME types for attachments.
 
+This parameter has no effect if `files` is set to `false`.
+
 Type: Array of strings <br>
 Default value: `["application/pdf"]`
 
-!!! warning "Modifies the attachments"
+!!! warning "Modifies the cache"
 
-    Changing this parameter will require that you run the `sync attachments`
-    command. See [synchronization commands] for details.
+    Changing this parameter will require that you run the
+    `flask kerko sync --full` command. See [synchronization commands] for
+    details.
 
 ### `csl_style`
 
@@ -1283,15 +1294,17 @@ Default value: `"apa"`.
 
 !!! warning "Modifies the cache and the search index"
 
-    Changing this parameter will require that you run the `sync cache --full`
-    and `sync index` commands. See [synchronization commands] for details.
+    Changing this parameter will require that you run the
+    `flask kerko clean everything && flask kerko sync` command.
+    See [synchronization commands] for details.
 
 ### `batch_size`
 
-Number of items to request on each call to the Zotero API.
+Number of items to request on a single call to the Zotero API. Actual batch
+sizes can get reduced based on responses received from the Zotero API.
 
 Type: Integer <br>
-Default value: `100` (this is the maximum currently allowed by the Zotero API)
+Default value: `50` (this is the maximum currently allowed)
 
 ### `child_include_re`
 
@@ -1304,10 +1317,11 @@ causes some to be rejected.
 Type: String <br>
 Default value: `""`
 
-!!! warning "Modifies the search index and attachments"
+!!! warning "Modifies the search index"
 
-    Changing this parameter will require that you run the `sync index --full`
-    and `sync attachments` commands. See [synchronization commands] for details.
+    Changing this parameter will require that you run the
+    `flask kerko sync index --full` command.
+    See [synchronization commands] for details.
 
 ### `child_exclude_re`
 
@@ -1321,10 +1335,28 @@ underscore character (`_`) is rejected.
 Type: String <br>
 Default value: `"^_"`
 
-!!! warning "Modifies the search index and attachments"
+!!! warning "Modifies the search index"
 
-    Changing this parameter will require that you run the `sync index --full`
-    and `sync attachments` commands. See [synchronization commands] for details.
+    Changing this parameter will require that you run the
+    `flask kerko sync index --full` command.
+    See [synchronization commands] for details.
+
+### `files`
+
+Enable file attachments. If set to `true`, files are downloaded from Zotero and
+saved on the server as part of the cache. Files may be made available for
+download by end users depending on other configuration parameters
+`kerko.zotero.attachments_mime_types`, `kerko.zotero.item_include_re`,
+`kerko.zotero.item_exclude_re`.
+
+Type: Boolean <br>
+Default value: `true`
+
+!!! warning "Modifies the cache and the search index"
+
+    Changing this parameter will require that you run the
+    `flask kerko sync --full` command.
+    See [synchronization commands] for details.
 
 ### `item_include_re`
 
@@ -1336,10 +1368,11 @@ this value is empty (which is the default), all items will be accepted unless
 Type: String <br>
 Default value: `""`
 
-!!! warning "Modifies the search index and attachments"
+!!! warning "Modifies the search index"
 
-    Changing this parameter will require that you run the `sync index --full`
-    and `sync attachments` commands. See [synchronization commands] for details.
+    Changing this parameter will require that you run the
+    `flask kerko sync index --full` command.
+    See [synchronization commands] for details.
 
 ### `item_exclude_re`
 
@@ -1352,10 +1385,11 @@ tag that matches it will be excluded.
 Type: String <br>
 Default value: `""`
 
-!!! warning "Modifies the search index and attachments"
+!!! warning "Modifies the search index"
 
-    Changing this parameter will require that you run the `sync index --full`
-    and `sync attachments` commands. See [synchronization commands] for details.
+    Changing this parameter will require that you run the
+    `flask kerko sync index --full` command.
+    See [synchronization commands] for details.
 
 ### `locale`
 
@@ -1368,13 +1402,14 @@ Default value: `"en-US"`
 
 !!! warning "Modifies the cache and the search index"
 
-    Changing this parameter will require that you run the `sync cache --full`
-    and `sync index` commands. See [synchronization commands] for details.
+    Changing this parameter will require that you run the
+    `flask kerko sync --full` command.
+    See [synchronization commands] for details.
 
 ### `max_attempts`
 
-Maximum number of tries after the Zotero API has returned an error or has not
-responded during indexing.
+Maximum number of tries for a Zotero API call that returns an error or that does
+not respond.
 
 Type: Integer <br>
 Default value: `10`
@@ -1392,8 +1427,9 @@ Default value: `""`
 
 !!! warning "Modifies the search index"
 
-    Changing this parameter will require that you run the `sync index --full`
-    command. See [synchronization commands] for details.
+    Changing this parameter will require that you run the
+    `flask kerko sync index --full` command.
+    See [synchronization commands] for details.
 
 ### `tag_exclude_re`
 
@@ -1409,15 +1445,18 @@ Default value: `"^_"`
 
 !!! warning "Modifies the search index"
 
-    Changing this parameter will require that you run the `sync index --full`
-    command. See [synchronization commands] for details.
+    Changing this parameter will require that you run the
+    `flask kerko sync index --full` command.
+    See [synchronization commands] for details.
 
 ### `wait`
 
-Time to wait (in seconds) between failed attempts to call the Zotero API.
+Time to wait (in seconds) between failed attempts to call the Zotero API. The
+delay between attempts might increase based on responses received from the
+Zotero API.
 
 Type: Integer <br>
-Default value: `120`
+Default value: `2`
 
 ---
 

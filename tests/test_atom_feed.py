@@ -10,14 +10,16 @@ from lxml import etree
 from werkzeug.datastructures import MultiDict
 
 from kerko.criteria import create_feed_criteria
+from kerko.index import open_index
 from kerko.searcher import Searcher
 from kerko.shortcuts import config
-from kerko.storage import open_index
-from tests.integration_testing import SynchronizedTestCase
+from tests.base import SyncIndexTestCase
 
 
-class AtomFeedTestCase(SynchronizedTestCase):
+class AtomFeedTestCase(SyncIndexTestCase):
     """Test the Atom feed."""
+
+    fixture_name = "dummy"
 
     TEST_ITEMS_COUNT = 6  # Update when number of records in test dataset changes.
 
@@ -33,7 +35,7 @@ class AtomFeedTestCase(SynchronizedTestCase):
         # TODO: Test multipage feed (need more entries in test dataset).
 
         with self.app.test_client() as client:
-            response = client.get(f"{self.URL_PREFIX}/atom.xml")
+            response = client.get(f"{self.url_prefix}/atom.xml")
             self.assertEqual(response.status_code, 200)
 
             # Check feed elements.
@@ -93,7 +95,7 @@ class AtomFeedTestCase(SynchronizedTestCase):
                 )
                 self.assertEqual(entry_id, entry_href)
                 self.assertFalse(
-                    Searcher(open_index("index"))
+                    Searcher(open_index())
                     .search(
                         require_all={"id": re.search(r"/([A-Z0-9]+)$", entry_id).groups(1)},
                         limit=1,
@@ -147,7 +149,7 @@ class AtomFeedTestCase(SynchronizedTestCase):
         """Test a search feed."""
 
         with self.app.test_client() as client:
-            response = client.get(f"{self.URL_PREFIX}/atom.xml?all=4507457-YE4WVE35")
+            response = client.get(f"{self.url_prefix}/atom.xml?all=4507457-YE4WVE35")
             self.assertEqual(response.status_code, 200)
 
             root = etree.fromstring(response.get_data(as_text=True).encode("utf-8"))
@@ -177,7 +179,7 @@ class AtomFeedTestCase(SynchronizedTestCase):
         """Test an empty search feed."""
 
         with self.app.test_client() as client:
-            response = client.get(f"{self.URL_PREFIX}/atom.xml?all=qwertyasdfghzxcvbn")
+            response = client.get(f"{self.url_prefix}/atom.xml?all=qwertyasdfghzxcvbn")
             self.assertEqual(response.status_code, 200)
 
             root = etree.fromstring(response.get_data(as_text=True).encode("utf-8"))

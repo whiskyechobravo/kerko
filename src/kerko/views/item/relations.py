@@ -1,6 +1,6 @@
+from kerko.index import open_index
 from kerko.searcher import Searcher
-from kerko.shortcuts import composer, config
-from kerko.storage import open_index
+from kerko.shortcuts import composer, config, search_result_fields
 
 
 def _get_forward_rel_filters(item, relation_spec):
@@ -54,15 +54,10 @@ def inject_relations(item):
     # lists, except for the COinS field because we don't want it to get rendered
     # when displaying relations.
     related_item_fields = composer().select_fields(
-        [
-            key
-            for key in config("kerko.search.result_fields")
-            + [badge.field.key for badge in composer().badges.values()]
-            if key != "coins"
-        ],
+        [key for key in search_result_fields() if key != "coins"]
     )
-    index = open_index("index")
-    with Searcher(index) as searcher:
+
+    with Searcher(open_index()) as searcher:
         for relation_spec in composer().relations.values():
             if relation_spec.directed:
                 item[relation_spec.field.key] = searcher.search(

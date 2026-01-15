@@ -84,9 +84,9 @@ your computer.
     production use, this command is usually added to the crontab file for regular
     execution.
 
-    The `--debug` switch is optional. If you use it, some messages will give you
-    an idea of the sync process' progress. If you omit it, the command will run
-    silently unless there are warnings or errors.
+    The `--debug` switch is optional and causes additional messages to be
+    displayed during the process. In general this option can be omitted, but it
+    can be useful if you wish to get a better idea of what's happening.
 
     To list all commands provided by Kerko:
 
@@ -314,7 +314,8 @@ Let's now build a minimal app:
     from flask_babel import Babel
     from flask_bootstrap import Bootstrap4
     from kerko.composer import Composer
-    from kerko.config_helpers import config_set, config_update, validate_config
+    from kerko.config_helpers import config_set, config_update, parse_config
+    from kerko.hooks import PluginManager
 
     app = Flask(__name__)
     ```
@@ -323,7 +324,7 @@ Let's now build a minimal app:
     (`app`). Then, load the default Kerko configuration, and update it from
     values set in `.env`:
 
-    ```python title="wsgi.py" linenums="9"
+    ```python title="wsgi.py" linenums="11"
     # Initialize app configuration with Kerko's defaults.
     config_update(app.config, kerko.DEFAULTS)
 
@@ -336,7 +337,7 @@ Let's now build a minimal app:
     application to `"My App"`. This function can be called each time you wish to
     set a [configuration option](config-basics.md).
 
-    ```python title="wsgi.py" linenums="14"
+    ```python title="wsgi.py" linenums="17"
     # Make changes to the Kerko configuration here, if desired.
     config_set(app.config, "kerko.meta.title", "My App")
     ```
@@ -346,7 +347,7 @@ Let's now build a minimal app:
     the fields to display and search, and the facets made available for
     filtering:
 
-    ```python title="wsgi.py" linenums="16"
+    ```python title="wsgi.py" linenums="20"
     # Validate configuration and save its parsed version.
     parse_config(app.config)
 
@@ -362,12 +363,14 @@ Let's now build a minimal app:
 
     Finally, initialize extensions required by Kerko (see the respective
     documentations of [Flask-Babel][Flask-Babel documentation] and
-    [Bootstrap-Flask][Bootstrap-Flask documentation] for more details), and
-    register the Kerko blueprint with the application object:
+    [Bootstrap-Flask][Bootstrap-Flask documentation] for more details).
+    Adding the `PluginManager` is actually optional, but allows plugins to
+    extend Kerko. Then register the Kerko blueprint with the application object:
 
-    ```python title="wsgi.py" linenums="23"
+    ```python title="wsgi.py" linenums="28"
     babel = Babel(app)
     bootstrap = Bootstrap4(app)
+    plugin_manager = PluginManager(app)
 
     app.register_blueprint(kerko.make_blueprint(), url_prefix="/bibliography")
     ```

@@ -5,12 +5,89 @@ documentation.
 
 ## Unreleased
 
+New features:
+
+- Add a `kerko.zotero.files` configuration parameter for enabling or disabling
+  file attachments (this is more direct than other parameters that can have the
+  same effect).
+- Add a plugin system based on Pluggy. See module `kerko.hooks` for the list of
+  hooks that can be implemented. Hook implementations will be automatically
+  detected for installed plugins that expose a `kerko.plugins` entry point in
+  their `pyproject.toml` or `setup.py`.
+
+Other changes:
+
+- Much faster synchronization from Zotero (using Karboni).
+- Much faster updating of the search index (through incremental indexing).
+- Add a `--files` option for deleting file attachments with the `clean` command
+  line interface (CLI) command.
+- Improve command line interface help texts.
+- The "Last update from database" message is now simply "Last update", because
+  it no longer indicates the last time the library was synchronized with Zotero,
+  but the last time synchronization brought actual data changes.
+- Configuration parameter changes:
+    - `kerko.zotero.batch_size` now has a default (and maximum) value of `50`.
+    - `kerko.zotero.max_attempts` now has a maximum value of `25`.
+    - `kerko.zotero.wait` now has a default value of `2` and a maximum value of
+      `600`.
+    - `kerko.bib_formats.*` parameters are deprecated. Use
+      `kerko.export_formats.*`.
+- Use a distinct icon for the "Read documents" button when multiple attachments
+  are available.
+- Fix Pydantic deprecation warning (use `min_length` instead of `min_items`).
+- Use lock to prevent concurrent sync processes.
+- Add a `Makefile` to facilitate common development tasks.
+- Add some type checking with mypy.
+
 Bug fixes:
 
+- Fix sometimes inconsistent item version when the Zotero library changes while
+  Kerko synchronizes its cache.
 - Fix "Open in Zotero" preferences not getting saved (changed the cookie
   SameSite attribute).
 - Fix incorrect version requirement for the `pre-commit` package (issue
-  affected dev requirements only).
+  affected `dev` requirements only).
+- Fix missing requirement for hatch build.
+
+Removed features:
+
+- Remove the `attachments` target from all CLI commands (such as `sync
+  attachments` and `clean attachments`). File attachments are now automatically
+  handled by the `sync cache` and `sync index` commands.
+- Remove development CLI commands:
+    - `count cache`
+    - `count index` (the `count` command remains and applies just to the index)
+    - `zotero-item`
+    - `zotero-item-fields`
+    - `zotero-item-types`
+    - `zotero-item-type-creator-types`
+    - `zotero-item-type-fields`
+    - `zotero-top-level-collections`
+
+Backwards incompatible changes:
+
+- Drop support for Python 3.9 (EOL) and 3.10 (not supported by Karboni).
+- Rename the following classes and attributes:
+    - `BibFormatSpec` → `ExportFormatSpec`
+    - `Composer.bib_formats` → `Composer.export_formats`
+
+Possibly backwards incompatible changes (more or less internal API changes):
+
+- `kerko.shortcuts.data_path()` now returns a `pathlib.Path` instead of a `str`.
+- New modules `cache` and `index` replace the `storage` and `sync.*` modules.
+- Extractors now retrieve data from cache using the SQLAlchemy ORM, with models
+  imported from `karboni.database.schema`. Class `LibraryContext` is removed.
+  The signature of `Extractor.extract()` is changed.
+- Some extractors must now be initialized with a `locale` argument:
+    - `CreatorTypesExtractor`
+    - `ItemFieldsExtractor`
+    - `ItemTypeFacetExtractor`
+    - `ItemTypeLabelExtractor`
+- `BaseFieldSpec.extract_to_document()` is removed.
+- Custom exceptions are now in the `exceptions` module and should be raised
+  without passing a message argument.
+- `config_helpers.load_toml()` takes a `logging.Logger` object as argument
+  instead of the `verbose` boolean argument.
 
 
 ## 1.3.0 (2025-06-17)
