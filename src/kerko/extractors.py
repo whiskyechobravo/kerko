@@ -285,7 +285,10 @@ class ItemFieldsExtractor(Extractor):
                 (cache.ItemTypeField.item_type == cache.ItemTypeFieldLocale.item_type)
                 & (cache.ItemTypeField.field == cache.ItemTypeFieldLocale.field),
             )
-            .where(cache.ItemTypeFieldLocale.item_type == item.item_type)
+            .where(
+                cache.ItemTypeFieldLocale.item_type == item.item_type,
+                cache.ItemTypeFieldLocale.locale == self.locale,
+            )
             .order_by(cache.ItemTypeField.position.asc())
         )
         result = cache_session.execute(stmt).mappings()
@@ -399,7 +402,10 @@ class CreatorTypesExtractor(Extractor):
                     == cache.ItemTypeCreatorTypeLocale.creator_type
                 ),
             )
-            .where(cache.ItemTypeCreatorTypeLocale.item_type == item.item_type)
+            .where(
+                cache.ItemTypeCreatorTypeLocale.item_type == item.item_type,
+                cache.ItemTypeCreatorTypeLocale.locale == self.locale,
+            )
             .order_by(cache.ItemTypeCreatorType.position.asc())
         )
         result = cache_session.execute(stmt).mappings()
