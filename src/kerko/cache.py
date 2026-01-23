@@ -12,7 +12,13 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from kerko.exceptions import CacheEmptyError, CacheSyncError
-from kerko.shortcuts import config, data_path, zotero_csl_styles, zotero_export_formats
+from kerko.shortcuts import (
+    config,
+    data_path,
+    zotero_csl_styles,
+    zotero_export_formats,
+    zotero_locales,
+)
 
 
 def get_cache_dir() -> Path:
@@ -51,7 +57,7 @@ def sync_cache(full: bool = False) -> None:
         # TODO:R5770: Add Kerko param for max_requests (concurrency)
         max_errors=config("kerko.zotero.max_attempts"),
         full=full,
-        locales=[config("kerko.zotero.locale")],
+        locales=zotero_locales(),
         styles=zotero_csl_styles(),
         export_formats=zotero_export_formats(),
         fulltext=config("kerko.search.fulltext"),

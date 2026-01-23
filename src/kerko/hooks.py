@@ -41,7 +41,12 @@ class PluginManager(pluggy.PluginManager):
             self.init_app(app)
 
     def init_app(self, app: Flask) -> None:
-        """Register self as an app extension."""
+        """
+        Register self as an app extension.
+
+        CAUTION: Plugins must be registered with the plugin manager *before* this method is called,
+        otherwise their `init_app` hook implementations will not be called.
+        """
         if not hasattr(app, "extensions"):
             app.extensions = {}
         app.extensions["plugin_manager"] = self
@@ -71,14 +76,19 @@ class CacheHooks:
     """Defines plugin hooks related to the cache synchronization process."""
 
     @hookspec
+    def extra_zotero_locale(self) -> list[str]:  # type: ignore[empty-body]
+        """
+        Return a list of additional locales to retrieve from Zotero when synchronizing cache.
+
+        This is similar to the `kerko.zotero.locale` configuration parameter.
+        """
+
+    @hookspec
     def extra_zotero_csl_styles(self) -> list[str]:  # type: ignore[empty-body]
         """
         Return a list of additional CSL styles to retrieve from Zotero when synchronizing cache.
 
         This is similar to the `kerko.zotero.csl_styles` configuration parameter.
-
-        Plugins may implement to hook for adding CSL styles without requiring specific configuration
-        changes.
         """
 
     @hookspec
@@ -87,9 +97,6 @@ class CacheHooks:
         Return a list of additional export formats to retrieve from Zotero when synchronizing cache.
 
         This is similar to the `kerko.zotero.export_formats` configuration parameter.
-
-        Plugins may implement to hook for adding export formats without requiring specific
-        configuration changes.
         """
 
 
@@ -105,7 +112,7 @@ class SearchHooks:
 
         Values in this list are keys identifying fields defined in the `kerko.composer.Composer`
         instance. Plugins may implement this hook to make the values of custom fields available as
-        attributes of search result items, without requiring specific configuration changes.
+        attributes of search result items.
         """
 
 

@@ -73,6 +73,15 @@ def plugin_manager() -> PluginManagerProtocol:
     return current_app.extensions.get("plugin_manager", _null_plugin_manager)
 
 
+def zotero_locales() -> list[str]:
+    """Get the list of locales to retrieve from Zotero based on config and plugins."""
+    return (
+        [config("kerko.zotero.locale")]
+        # Each plugin returns a list, so we chain them into a single list.
+        + list(itertools.chain(*plugin_manager().hook.extra_zotero_locale()))
+    )
+
+
 def zotero_csl_styles() -> list[str]:
     """Get the list of CSL styles to retrieve from Zotero based on config and plugins."""
     return (
