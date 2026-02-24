@@ -17,8 +17,11 @@ New features:
 
 Other changes:
 
-- Much faster synchronization from Zotero (using Karboni).
-- Much faster updating of the search index (through incremental indexing).
+- Significantly faster synchronization from Zotero:
+    - Rewrite cache synchronization to use Karboni.
+    - Implement incremental search index synchronization. Identify the documents
+      affected by collection and item changes in cache, and process just those
+      instead of rebuilding the whole search index.
 - Add a `--files` option for deleting file attachments with the `clean` command
   line interface (CLI) command.
 - Improve command line interface help texts.
@@ -38,9 +41,13 @@ Other changes:
 - Use lock to prevent concurrent sync processes.
 - Add a `Makefile` to facilitate common development tasks.
 - Add some type checking with mypy.
+- Add support for Python 3.14.
 
 Bug fixes:
 
+- Fix zero search results when a keywords argument is present but is empty:
+  Prevent search form submission when the keywords field is empty (client side
+  validation), and ignore empty keywords (server side).
 - Fix sometimes inconsistent item version when the Zotero library changes while
   Kerko synchronizes its cache.
 - Fix "Open in Zotero" preferences not getting saved (changed the cookie

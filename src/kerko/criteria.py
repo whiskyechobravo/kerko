@@ -138,13 +138,13 @@ class Criteria:
 
     def initialize_keywords(self, initial):
         for scope in composer().scopes.values():
-            values = initial.getlist(scope.key)
+            values = [v for v in initial.getlist(scope.key) if v.strip()]
             if values:
                 self.keywords.setlist(scope.key, values)
 
     def initialize_filters(self, initial):
         for spec in composer().facets.values():
-            values = initial.getlist(spec.filter_key)
+            values = [v for v in initial.getlist(spec.filter_key) if v.strip()]
             if values:
                 self.filters.setlist(spec.filter_key, values)
 

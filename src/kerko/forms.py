@@ -7,7 +7,7 @@ from kerko.shortcuts import composer
 
 class SearchForm(FlaskForm):
     scope = SelectField()
-    keywords = SearchField(validators=[validators.optional(), validators.length(max=1000)])
+    keywords = SearchField(validators=[validators.input_required(), validators.length(max=1000)])
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
