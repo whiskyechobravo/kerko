@@ -19,7 +19,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.3">
     
     
       
@@ -1150,8 +1150,13 @@ documentation.</p>
 </ul>
 <p>Other changes:</p>
 <ul>
-<li>Much faster synchronization from Zotero (using Karboni).</li>
-<li>Much faster updating of the search index (through incremental indexing).</li>
+<li>Significantly faster synchronization from Zotero:<ul>
+<li>Rewrite cache synchronization to use Karboni.</li>
+<li>Implement incremental search index synchronization. Identify the documents
+  affected by collection and item changes in cache, and process just those
+  instead of rebuilding the whole search index.</li>
+</ul>
+</li>
 <li>Add a <code>--files</code> option for deleting file attachments with the <code>clean</code> command
   line interface (CLI) command.</li>
 <li>Improve command line interface help texts.</li>
@@ -1173,9 +1178,13 @@ documentation.</p>
 <li>Use lock to prevent concurrent sync processes.</li>
 <li>Add a <code>Makefile</code> to facilitate common development tasks.</li>
 <li>Add some type checking with mypy.</li>
+<li>Add support for Python 3.14.</li>
 </ul>
 <p>Bug fixes:</p>
 <ul>
+<li>Fix zero search results when a keywords argument is present but is empty:
+  Prevent search form submission when the keywords field is empty (client side
+  validation), and ignore empty keywords (server side).</li>
 <li>Fix sometimes inconsistent item version when the Zotero library changes while
   Kerko synchronizes its cache.</li>
 <li>Fix "Open in Zotero" preferences not getting saved (changed the cookie
