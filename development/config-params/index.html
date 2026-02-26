@@ -1937,6 +1937,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#max_concurrent_requests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        max_concurrent_requests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#tag_include_re" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3815,6 +3826,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#max_concurrent_requests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        max_concurrent_requests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#tag_include_re" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4936,6 +4958,12 @@ See <a href="../synchronization/#command-line-interface-cli">synchronization com
 not respond.</p>
 <p>Type: Integer <br>
 Default value: <code>10</code></p>
+<h3 id="max_concurrent_requests"><code>max_concurrent_requests</code><a class="headerlink" href="#max_concurrent_requests" title="Permanent link">&para;</a></h3>
+<p>Maximum number of allowed connections to the Zotero API at any given time. When
+the limit is reached, any new request is queued and will wait until a prior
+connection finishes.</p>
+<p>Type: Integer <br>
+Default value: <code>20</code></p>
 <h3 id="tag_include_re"><code>tag_include_re</code><a class="headerlink" href="#tag_include_re" title="Permanent link">&para;</a></h3>
 <p><a href="https://docs.python.org/3/library/re.html">Regular expression</a> to use to include tags. By default, all tags are accepted.</p>
 <p>Note that record exports (downloads) always include all tags regardless of this

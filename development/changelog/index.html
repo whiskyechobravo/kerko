@@ -1163,6 +1163,8 @@ documentation.</p>
 <li>The "Last update from database" message is now simply "Last update", because
   it no longer indicates the last time the library was synchronized with Zotero,
   but the last time synchronization brought actual data changes.</li>
+<li>Use a distinct icon for the "Read documents" button when multiple attachments
+  are available.</li>
 <li>Configuration parameter changes:<ul>
 <li><code>kerko.zotero.batch_size</code> now has a default (and maximum) value of <code>50</code>.</li>
 <li><code>kerko.zotero.max_attempts</code> now has a maximum value of <code>25</code>.</li>
@@ -1172,8 +1174,7 @@ documentation.</p>
   <code>kerko.export_formats.*</code>.</li>
 </ul>
 </li>
-<li>Use a distinct icon for the "Read documents" button when multiple attachments
-  are available.</li>
+<li>Add configuration parameter <code>kerko.zotero.max_concurrent_requests</code>.</li>
 <li>Fix Pydantic deprecation warning (use <code>min_length</code> instead of <code>min_items</code>).</li>
 <li>Use lock to prevent concurrent sync processes.</li>
 <li>Add a <code>Makefile</code> to facilitate common development tasks.</li>
