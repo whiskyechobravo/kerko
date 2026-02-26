@@ -62,9 +62,7 @@ def sync_cache(full: bool = False) -> None:
         export_formats=zotero_export_formats(),
         fulltext=config("kerko.search.fulltext"),
         files=config("kerko.zotero.files"),
-        media_types=config(
-            "kerko.zotero.attachment_mime_types"  # TODO:R5770: Rename for consistency with Karboni?
-        ),
+        media_types=config("kerko.zotero.attachment_mime_types"),
     ):
         current_app.logger.info("Cache synchronization completed")
     else:

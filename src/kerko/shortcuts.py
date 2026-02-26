@@ -95,7 +95,7 @@ def zotero_export_formats() -> list[str]:
     """Get the list of export formats to retrieve from Zotero based on config and plugins."""
     return (
         ["coins"]
-        + list(composer().export_formats.keys())  # TODO:R5770: Exclude disabled formats.
+        + list(composer().export_formats.keys())
         # Each plugin returns a list, so we chain them into a single list.
         + list(itertools.chain(*plugin_manager().hook.extra_zotero_export_formats()))
     )

@@ -235,7 +235,6 @@ class ItemRelationsExtractor(Extractor):
         relations = item.relations.get(self.predicate, [])
         if relations and isinstance(relations, str):
             relations = [relations]
-        # FIXME:R5770: Filter relations to exclude trashed items (assuming trashed items can end up here; that is to verify).  # noqa: E501
         return relations
 
 
@@ -710,10 +709,14 @@ class ChildFileAttachmentsExtractor(BaseChildAttachmentsExtractor):
                     "md5": child.file.md5,
                     "mtime": child.file.mtime,
                 },
-                "download_status": child.file.download_status,  # TODO:R5770: Use this to avoid exposing links to files that are actually unavailable.  # noqa: E501
+                "download_status": child.file.download_status,
             }
             for child in children
             if child.file and (not self.mime_types or child.file.content_type in self.mime_types)
+            # TODO: It would be nice to filter out files whose download_status is not "ok", thus
+            # preventing users from getting exposed to erroneous or missing files. However, that
+            # would require the incremental index sync process to discover download_status changes
+            # in order to update the affected index documents.
         ]
         return files or None
 

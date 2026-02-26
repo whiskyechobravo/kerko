@@ -119,6 +119,3 @@ class ItemCollectionsDiscoverer(ItemDependencyDiscoverer):
         for collection in item.collections:
             collections |= set(discoverer.discover(collection))
         return list(collections)
-
-
-# TODO:R5770: Implement discoverer for updating item on fulltext changes.
