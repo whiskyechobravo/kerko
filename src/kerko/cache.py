@@ -2,7 +2,6 @@
 
 import datetime
 from pathlib import Path
-from urllib.parse import quote
 
 import karboni
 from flask import current_app
@@ -30,7 +29,7 @@ def get_cache_attachments_dir() -> Path:
 
 
 def get_cache_database_url() -> str:
-    return f"sqlite:///{quote(str(get_cache_dir()))}/library.sqlite"
+    return f"sqlite:///{str(get_cache_dir())}/library.sqlite"
 
 
 def sync_cache(full: bool = False) -> None:
