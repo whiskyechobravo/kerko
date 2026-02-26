@@ -54,7 +54,7 @@ def sync_cache(full: bool = False) -> None:
         api_key=config("ZOTERO_API_KEY"),
         initial_batch_size=config("kerko.zotero.batch_size"),
         initial_retry_wait=config("kerko.zotero.wait"),
-        # TODO:R5770: Add Kerko param for max_requests (concurrency)
+        max_concurrent_requests=config("kerko.zotero.max_concurrent_requests"),
         max_errors=config("kerko.zotero.max_attempts"),
         full=full,
         locales=zotero_locales(),

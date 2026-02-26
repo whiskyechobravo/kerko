@@ -1414,6 +1414,15 @@ not respond.
 Type: Integer <br>
 Default value: `10`
 
+### `max_concurrent_requests`
+
+Maximum number of allowed connections to the Zotero API at any given time. When
+the limit is reached, any new request is queued and will wait until a prior
+connection finishes.
+
+Type: Integer <br>
+Default value: `20`
+
 ### `tag_include_re`
 
 [Regular expression] to use to include tags. By default, all tags are accepted.

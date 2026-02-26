@@ -145,6 +145,7 @@ class ZoteroModel(BaseModel):
 
     batch_size: int = Field(ge=20, le=50)
     max_attempts: int = Field(ge=1, le=25)
+    max_concurrent_requests: int = Field(ge=1, le=50)
     wait: int = Field(ge=1, le=600)
     csl_style: str
     locale: str = Field(pattern=r"^[a-z]{2,3}-[A-Za-z]+$")
