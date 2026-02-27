@@ -168,8 +168,10 @@ The main features provided by Kerko are:
   you may simply install [KerkoApp].
 - **Customizable front-end**: applications may partly or fully replace the
   default templates, scripts and stylesheets with their own.
-- **Command line interface (CLI)**: Kerko provides commands for synchronizing or
-  deleting its data.
+- **Plugin system**: more advanced customizations can be implemented through
+  plugins.
+- **Command line interface (CLI)**: commands for synchronizing with Zotero,
+  deleting Kerko data, and reviewing configuration.
 
 [KerkoApp] is a standalone application built around Kerko. It inherits all of
 Kerko's features and it provides a few additions of its own:

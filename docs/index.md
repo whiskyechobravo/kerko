@@ -206,8 +206,10 @@ The main features provided by Kerko are:
   KerkoApp](getting-started.md#getting-started-with-kerkoapp).
 - **Customizable front-end**: applications may partly or fully replace the
   default templates, scripts and stylesheets with their own.
-- **Command line interface (CLI)**: Kerko provides commands for synchronizing or
-  deleting its data.
+- **Plugin system**: more advanced customizations can be implemented through
+  plugins.
+- **Command line interface (CLI)**: commands for synchronizing with Zotero,
+  deleting Kerko data, and reviewing configuration.
 
 [KerkoApp] is a standalone application built around Kerko. It inherits all of
 Kerko's features and it provides a few additions of its own:
@@ -235,6 +237,7 @@ The main ones are:
 - [Flask-WTF]: integration of Flask and WTForms.
 - [Jinja2]: template engine.
 - [Karboni]: mirror a Zotero library into a SQL database.
+- [Pluggy]: plugin management and hook calling.
 - [Pydantic]: configuration parsing and validation.
 - [w3lib]: URL and HTML manipulation utilities.
 - [Werkzeug]: WSGI web application library (also required by Flask).
@@ -294,6 +297,7 @@ known limitations of Kerko:
 [KerkoApp]: https://github.com/whiskyechobravo/kerkoapp
 [KerkoApp_demo]: https://demo.kerko.whiskyechobravo.com
 [Popper.js]: https://popper.js.org/
+[Pluggy]: https://pypi.org/project/pluggy/
 [Pydantic]: https://pypi.org/project/pydantic/
 [Python]: https://www.python.org/
 [Snowball]: https://snowballstem.org/

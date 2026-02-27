@@ -3,7 +3,7 @@
 Before doing an upgrade, please check the "How to upgrade" section of the Kerko
 documentation.
 
-## Unreleased
+## 1.4.0alpha0 (2026-02-27)
 
 New features:
 
