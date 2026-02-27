@@ -48,8 +48,7 @@ Python packages required by KerkoApp:
 ```bash
 python3 -m venv ~/venv
 source ~/venv/bin/activate
-pip3 install -r ~/kerkoapp/requirements/run.txt
-pip3 install gunicorn
+pip install -r ~/kerkoapp/requirements/serve.txt
 ```
 
 Always as user `kerkoapp`, create the `~/.secrets.toml` file. This is where you

@@ -131,16 +131,15 @@ your computer.
 
 ### Docker installation
 
-This procedure requires that [Docker] is installed on your computer.
+This procedure requires that [Docker Engine] is installed on your computer.
 
 1. Copy the `Makefile`, `sample.secrets.toml`, and `sample.config.toml` files
-   from the most recent stable branch of the [KerkoApp] repository (e.g.
-   <https://github.com/whiskyechobravo/kerkoapp/tree/stable/1.0.x>) to an empty
-   directory on your computer.
+   from the last released version of [KerkoApp] to an empty directory on your
+   computer. For example, if the latest release of KerkoApp is 1.3.0, you may
+   take the files from <https://github.com/whiskyechobravo/kerkoapp/tree/1.3.0>.
 
-2. Under the same directory, create a subdirectory named `instance`. This is
-   where you will put your configuration files, and where Kerko will save its
-   data.
+2. Under that directory, create a subdirectory named `instance`. This is where
+   you will put your configuration files, and where Kerko will save its data.
 
 3. Copy `sample.secrets.toml` as `.secrets.toml` into the `instance`
    subdirectory. Open `instance/.secrets.toml` in a text editor to assign proper
@@ -171,50 +170,50 @@ This procedure requires that [Docker] is installed on your computer.
     liking. For now, we suggest that you proceed to the next step and get it
     running.
 
-5. From the same directory as `Makefile`, run KerkoApp:
+5. From the directory that contains the `Makefile` created at step 1, run
+   KerkoApp:
 
     ```bash
-    make run
+    make docker-kerko-run
     ```
 
-    This command should do many things:
+    This command will do many things:
 
     - Download and install the latest KerkoApp Docker image from DockerHub.
-    - Run the Docker container to have KerkoApp retrieve your data from
+    - Run the Docker container to have KerkoApp synchronize your data from
       zotero.org.
     - Run the Docker container to launch the KerkoApp server.
 
-    If your configuration files have errors, the process may be interrupted; if
-    that happens, retry `make run` after correcting the problem. Otherwise, if
-    all goes well, you will only have to wait a bit for the data synchronization
-    process to complete. This may take a long time if you have a large Zotero
-    library.
+    If this process fails, check the error messages, correct your
+    `.secrets.toml` and `config.toml` files, and then retry the `make
+    docker-kerko-run` command. If all goes well, you will only have to wait a
+    bit until the data synchronization process finishes. This can take a long
+    time if you have a large Zotero library.
 
-    Kerko's data will be stored in the `instance` subdirectory.
-
-    KerkoApp should launch once the synchronization process has completed. When
-    you see the following message in the terminal, proceed to the next step:
+    After synchronization completes, KerkoApp will launch and wait for HTTP
+    requests. When you see the following message in the terminal, proceed to the
+    next step:
 
     ```
     [INFO] Listening at: http://0.0.0.0:80
     ```
 
-6. Open <http://localhost:8080/> in your browser and explore the bibliography!
+6. Open <http://localhost:8080/> in your browser and explore your bibliography!
 
 To stop the KerkoApp server, press ++ctrl+c++ in the terminal where the
 container is running.
 
-The next time you execute `make run`, it will find that the image has been
-already been downloaded and the data synchronized, and thus it will just launch
-the server.
+The next time you execute `make docker-kerko-run`, Docker will find that the
+image has been already been downloaded and the data synchronized, and thus it
+will just launch the server.
 
 !!! tip "Using the Kerko command line interface (CLI) with Docker"
 
-    To use Kerko's command line interface, enter this command from the same
-    directory as `Makefile`:
+    To use Kerko's command line interface, enter this command from the
+    directory that contains the `Makefile`:
 
     ```bash
-    make shell
+    make docker-shell
     ```
 
     This will start an interactive shell within the Docker container. From
@@ -229,15 +228,13 @@ the server.
     To exit the interactive shell, enter `exit` or press ++ctrl+d++ at the
     command prompt.
 
-!!! tip "Building a Docker image for production"
+!!! tip "Customizing the Docker image"
 
-    The `Makefile` is just an example that shows how to build and interact with
-    a dockerized KerkoApp. For production use, you might want to clone the full
-    [KerkoApp repository][KerkoApp], make some changes to its `Dockerfile`, and
-    build your own image.
+    The `Makefile` shows a way of building and interacting with a dockerized
+    KerkoApp. However, there is no single way to setting up Docker containers.
 
-    For full documentation on how to run Docker containers, including port mapping
-    and volume binding, see the [Docker documentation].
+    For full documentation on how to run Docker containers, including port
+    mapping and volume binding, see the [Docker documentation].
 
 
 ## Creating a custom application
@@ -422,7 +419,7 @@ files, translations loading, a syslog logging handler, and error pages.
 
 [Bootstrap-Flask documentation]: https://bootstrap-flask.readthedocs.io/en/latest/basic.html
 [Docker documentation]: https://docs.docker.com/
-[Docker]: https://www.docker.com/
+[Docker Engine]: https://docs.docker.com/engine/
 [Flask production]: https://flask.palletsprojects.com/en/latest/deploying/
 [Flask-Babel documentation]: https://python-babel.github.io/flask-babel/
 [Flask]: https://pypi.org/project/Flask/
