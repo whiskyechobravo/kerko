@@ -207,6 +207,6 @@ class YearTreeFacetCodec(BaseFacetCodec):
             end = int(path[1]) + 9
         if end >= datetime.datetime.now().year:
             end = datetime.datetime.now().year
-            if start == end:
+            if int(start) == end:
                 return encoded_value, _("In {}").format(end)
         return encoded_value, _("Between {} and {}").format(start, end)
