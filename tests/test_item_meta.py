@@ -5,9 +5,13 @@ Tests for item meta tags.
 import unittest
 
 import elementpath  # For XPath 2.0 selectors.
+from flask import Flask
 from lxml import etree
 
+import kerko
+from kerko.config_helpers import config_update
 from kerko.views.item.creators import format_creator_name
+from kerko.views.item.meta import build_highwirepress_tags
 from tests.base import SyncIndexTestCase
 
 
@@ -43,6 +47,41 @@ class CreatorNameTestCase(unittest.TestCase):
             format_creator_name({"firstName": "", "lastName": ""}),
             "",
         )
+
+
+class HighwirePressPagesTestCase(unittest.TestCase):
+    """Unit tests for the page range in Highwire Press tags."""
+
+    def setUp(self):
+        self.app = Flask(__name__)
+        config_update(self.app.config, kerko.DEFAULTS)
+        self.app.register_blueprint(kerko.make_blueprint(), url_prefix="/bibliography")
+        ctx = self.app.app_context()
+        ctx.push()
+
+    def get_pages(self, pages):
+        """Return the (firstpage, lastpage) tags for an item with the given Pages field."""
+        tags = dict(
+            build_highwirepress_tags(
+                {
+                    "id": "ITEM0001",
+                    "data": {"itemType": "journalArticle", "title": "Test item", "pages": pages},
+                }
+            )
+        )
+        return tags.get("citation_firstpage"), tags.get("citation_lastpage")
+
+    def test_hyphen(self):
+        self.assertEqual(self.get_pages("5-7"), ("5", "7"))
+
+    def test_en_dash(self):
+        self.assertEqual(self.get_pages("5–7"), ("5", "7"))
+
+    def test_en_dash_with_spaces(self):
+        self.assertEqual(self.get_pages("5 – 7"), ("5", "7"))
+
+    def test_single_page(self):
+        self.assertEqual(self.get_pages("5"), ("5", None))
 
 
 class ItemMetaTestCase(SyncIndexTestCase):
