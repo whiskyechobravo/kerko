@@ -10,6 +10,22 @@ Changes:
 
 - Add Galician (gl) translation. Thanks to Gonçalo Cordeiro.
 
+Bug fixes:
+
+- Escape and sanitize the URLs of an item's attached links before inserting
+  them into the `href` attribute on item pages.
+- Report the underlying error when the cache database engine cannot be created
+  during an index synchronization, instead of failing with an
+  `UnboundLocalError` from the cleanup code.
+- Correctly split page ranges that use an en-dash, e.g., "5–7", in the Highwire
+  Press meta tags. Such ranges yielded an erroneous `citation_firstpage` and no
+  `citation_lastpage`.
+- Use the "In {year}" label instead of "Between {year} and {year}" for a
+  publication year facet whose range is truncated to a single year.
+- Reset the search arguments between successive searches performed with a same
+  `Searcher` instance, preventing the filters, sorting, or faceting of a search
+  from applying to the next one.
+
 
 ## 1.4.0alpha0 (2026-02-27)
 
