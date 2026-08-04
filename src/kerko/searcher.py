@@ -86,6 +86,10 @@ class Searcher:
         :param bool faceting: Whether to compute groupings along with the search
             results.
         """
+        # Start from a clean slate, otherwise arguments prepared for an earlier
+        # search on this instance (filters, sorting, faceting) would silently
+        # apply to this one as well.
+        self.search_args = {}
         self._prepare_keywords(keywords)
         self._prepare_filters(filters, require_all, require_any, require_date_ranges, reject_any)
         self._prepare_sorting(sort_spec)
