@@ -173,7 +173,7 @@
                     <div class="col-md-8 col-lg-9 break-word">
                         <ul class="list-unstyled">
                             {%- for link in item.links %}
-                                <li><a href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link.title|escape }}</a></li>
+                                <li><a href="{{ link.url|kerko_url_sanitize|escape }}" target="_blank" rel="noopener noreferrer">{{ link.title|escape }}</a></li>
                             {%- endfor %}
                         </ul>
                     </div>
