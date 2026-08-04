@@ -2,8 +2,10 @@
 Integration tests for data synchronization.
 """
 
+from unittest import mock
+
 from kerko.exceptions import CacheEmptyError
-from kerko.index import doc_count
+from kerko.index import doc_count, sync_index
 from tests.base import SyncIndexTestCase
 
 
@@ -33,3 +35,13 @@ class SyncIndexEmptyLibraryTestCase(SyncIndexTestCase):
     def test_sync(self):
         with self.assertRaises(CacheEmptyError):
             self.sync_index()
+
+    def test_sync_reports_engine_creation_failure(self):
+        """A failure to create the engine must not be masked by the cleanup code."""
+        error = RuntimeError("could not create engine")
+        with (
+            mock.patch("kerko.index.create_engine", side_effect=error),
+            self.assertRaises(RuntimeError) as context,
+        ):
+            sync_index(full=True)
+        self.assertIs(context.exception, error)

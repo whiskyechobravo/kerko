@@ -130,8 +130,8 @@ def sync_index(full: bool = False) -> None:
     index_version = load_object("index_version", default=None)
     index_cache_timestamp = load_object("cache_timestamp", default=None)
 
+    cache_engine = create_engine(cache_url)
     try:
-        cache_engine = create_engine(cache_url)
         with Session(cache_engine) as cache_session:
             cache_status = CacheStatus(cache_session)
             if full or cache_status.is_fresh(index_version, index_cache_timestamp):
